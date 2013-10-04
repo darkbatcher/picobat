@@ -1,0 +1,102 @@
+{{IF command}}
+
+	The {IF} command allows {spec/cond|conditional processing} of  commands.
+	
+	This command is very important for creating advanced batch scripts.
+
+	You might also prefer multilines {IF} to {IF}-{goto|GOTO} combination,
+	which are a little bit disordered.
+	
+{{Synopsis}}
+
+	There is several syntaxs for {IF} command :
+	
+${	IF [/i] [NOT] string1==string2 (
+	:: code to be ran
+	...
+	)}
+	
+	Check whether {string1} and {string2} are the same strings and run
+	the code to be run if it is true. The behaviour can be modified by
+	the following switches :
+		
+		- {/i}  : Comparison is case-insensitive. (ie. ``Dos9'' will be equal to ``DOS9'') 
+		
+		- {NOT} : Negation. The code is ran if {string1} and {string2} are different;
+		
+${	IF [/i] string1 cmp string2 (
+	:: code to be ran
+	...
+	)}
+	
+	Apply comparison specified by {cmp} to strings {string1} and {string2} and run
+	the code to be executed if the specified comparison is true.
+	   
+	   Values of {cmp} are :
+
+		- {EQU} : (EQUal). String {string1} is equal to {string2}.
+		
+		- {NEQ} : (Not EQual). String {string1} differs from {string2}.
+		
+		- {LEQ} : (Less or EQual). String {string1} is lesser or equal to {string2}.
+		
+		- {LSS} : (LeSS). String {string1} is strictly lesser to {string2}.
+		
+		- {GTR} : (GreaTeR). String {string1} is strictly greater to {string2}.
+		
+		- {GEQ} : (Greater or EQual). String {string1} is greater or equal to {chaine2}.
+		
+	Comparisons {LSS}, {GTR}, {LEQ} and {GEQ} requires both {string1} and
+	{string2} to be numbers, otherwise, comparisons results are undefined.
+	
+	Comparisons {LSS}, {GTR}, {LEQ} and {GEQ} expects the numbers {string1} and {string2} 
+	to be intergers, but if they are floating numbers, they will be truncated to the greater
+	interger value lower than the numbers (floored).
+	
+	The {/i} switch makes comparison case insensitive. Affects only {EQU} and {NEQ} comparisons.	   
+	
+${	IF [NOT] [DEFINED | EXIST | ERRORLEVEL] object (
+	:: code to be ran
+	...
+	)}
+	
+	Checks whether the condition stated about {object} is true, and then executes
+	the code to be executed if the condition is true. The conditions can be :
+		
+		- {DEFINED} : The condition is true if the variable named by {object} is
+		defined.
+		
+		- {EXIST} : The condition is true if a file named by {object} exists. The string {object}
+		can contain {spec/regexp|regulars expressions}.
+		
+		- {ERRORLEVEL} : {Deprecated} The condition is true if the environment variable {errorlevel|%ERRORLEVEL%}
+		is equal to {object}. Its use is deprecated, use :
+
+${			IF %ERRORLEVEL%==value}
+		
+	If you specify operator {NOT}, then the code to be executed is ran if
+	the condition is false.
+	
+	After any kind of {IF}, you can insert an {if|ELSE} command that specify code
+	to be ran if the comparison is false.
+	
+	Example:
+	
+${	IF /i %var1%==%var2% (
+	:: code to be executed if the condition is true
+	) ELSE (
+	:: code to be executed if the condition is false
+	)}
+	
+{{Compatibility}}
+
+	Mostly compatible with {cmd.exe}. Indeed, the use of {IF ERRORLEVEL}
+	is not guaranted to be compatible with {cmd.exe}, as the behaviour of
+	{cmd.exe} is a little strange.
+	
+	Supported since version {0.4}.
+	
+{{See also}}
+
+	{for|FOR command}, {goto|GOTO command}, {call|CALL command},
+	{commands|Command list}

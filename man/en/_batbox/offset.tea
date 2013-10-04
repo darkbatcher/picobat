@@ -1,0 +1,25 @@
+{{BatBox (/o)}}
+
+	Moves console's origin (ie. the point that {BatBox} considers as the point of coordiates {(0,0)}). This command
+	affects later {goto|BatBox (/g)} behaviours.
+	
+{{Synopsis}}
+
+${	BATBOX /o OffsetX OffsetY}
+
+	Moves console's origin.
+	
+	- {OffsetX} : Column number of the new origin (starts at 0 (leftmost column)).
+	
+	- {OffsetY} : Line number of the new origin (starts at 0 (top)).
+	
+	Later commands {goto|BatBox(/g)} will behave like they moved the cursor to the point of coordinates
+	{(X+OffsetX,Y+OffsetY)}
+	
+{{Compatibility}}
+
+	This command is avaliable since version {2.3}.
+	
+{{See Also}}
+
+	{goto|BatBox (/g)}, {ascii|BatBox (/a)}, {color|BatBox (/c)}, {../batbox|BatBox}

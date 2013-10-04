@@ -1,0 +1,69 @@
+{{List of Dos9 internal and external commands}}
+
+	This is a list containing all the name of {dos9|Dos9} internal and external
+	commands. The command tagged with {[int]} are internal, and those tagged with
+	{[ext]} are external.
+	
+	An internal command is a command which is directly intergrated on {dos9|Dos9}, so
+	that it does not need any additional binaries to work. These commands are the faster
+	and the most compatible.
+
+	An external command is a command which needs an additionnal binaries. These commands
+	provide more flexibility to batch programs.
+
+{{User-interface command}}
+
+	- {agraf|AGraf}  {[ext]} : Enables to make {GUI} rather than using the traditionnnal
+	console interface. This command is no more develloped and is only provided for
+	legacy support under windows.
+	
+	- {batbox|BatBox} {[ext]} : Allows to use console in a {graphical} way and extend basic
+	user interraction through mouse, keys etc.
+	
+	- {bg|BG}     {[ext]} : Allows to use console in a {graphical} way. Slightly equivalent
+	to {batbox|BatBox}.
+	
+	- {color|COLOR}  {[int]} : Changes the console screen color.
+	
+	- {cls|CLS}    {[int]} : Clear the console screen.
+	
+	- {echo|ECHO}   {[int]} : Display text in the console.
+	
+	- {pause|PAUSE}  {[int]} : Make a pause in a batch script
+	
+	- {set|SET}    {[int]} : Modify an environment variable. Either through a string litteral,
+	a mathematical expression or an user input.
+	
+	- {title|TITLE}  {[int]} : Change console title.
+	
+{{Scripting command}}
+
+	- {for|FOR}      {[int]} : Loop in a script.
+	
+	- {goto|GOTO}     {[int]} : Jump to a label in a script.
+	
+	- {if|IF}       {[int]} : Make a conditionnnal execution within a script.
+	
+	- {setlocal|SETLOCAL} {[int]} - Changes {dos9|Dos9} mode.
+	
+{{File commands}}
+
+	- {copy|COPY}       {[int]} : Copy files.
+	
+	- {cd|CD, CHDIR}  {[int]} : Changes current directory.
+	
+	- {dir|DIR}        {[int]} : Browse a subdirectory.
+	
+	- {del|DEL, ERASE} {[int]} : Deletes files. 
+	
+	- {md|MD, MKDIR}  {[int]} : Creates a directory.
+	
+	- {more|MORE, TYPE} {[int]} : Types files content.
+	
+	- {move|MOVE}       {[int]} : Move files.
+	
+	- {rd|RD, RMDIR}  {[int]} : Deletes a directory.
+	
+	- {tree|TREE}       {[ext]} : show a tree of file
+	
+	- {xcopy|XCOPY}      {[ext]} : Copy a folder tree.

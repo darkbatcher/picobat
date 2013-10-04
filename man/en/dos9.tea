@@ -1,0 +1,53 @@
+{{Dos9 command}}
+
+	{Dos9} is a free, cross-platform command prompt used for batch scripts
+	and command processing.
+
+	{Dos9} is a free software, designed to be as compatible as possible with
+	{cmd.exe} proprietary software from {microsoft}.
+	 
+{{Synopsis}}
+
+${	DOS9 [/v] [/n] [/f] [/e] [file]}
+
+	Run a command file or wait for an user input.
+
+		- {file} : Path of the batch script to be run.
+		
+		- {/v}	  : Enables {spec/var|delayed expansion}.
+		
+		- {/n}	  : Enables {spec/ext|dos9's extension}.
+		
+		- {/f}	  : Enables {spec/exp|floating numbers}.
+		
+		- {/e}	  : Disable current directory echoing.
+
+{{Compatibility}}
+
+	   Compatible with any version of {Dos9}. Incompatible with
+	   {cmd.exe}.
+	   
+	   Dos9 is cross-platform so that it can be run either on {MS-WINDOWS}
+	   or {GNU/Linux}. Theorically, a port of Dos9 should be possible in any
+	   POSIX-compatible system just by recompiling sources using a C89 compiler.
+
+{{License}}
+
+	{Dos9} is a free software distributed under
+	{http://www.gnu.org/licenses/gpl.html|GNU General Public License} terms. For more
+	informations about free software's philosophy, see
+	{http://www.fsf.org|Free Software Fundation's} website.
+	   
+{{Author}}
+
+	{Dos9} have been written since 2010 by {Darkbatcher (Romain Garbi)}. It uses severals
+	helpful free libraries from the {http://www.gnu.org/|GNU operating system}, mostly 
+	{http://www.gnu.org/software/libmatheval/|libmatheval}, {https://www.gnu.org/software/gettext/|gettext}.
+
+	Dos9's windows packages also distribute some binaries from the {http://gnuwin32.sourceforge.net/|GnuWin project}.
+	These binaries are {iconv|GNU iconv} and {nano|GNU nano}.
+	
+{{See Also}}
+
+	{echo|ECHO Command}, {script|Command scripts},
+	{commands|Commands list}	

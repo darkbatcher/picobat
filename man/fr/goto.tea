@@ -1,0 +1,32 @@
+{{Commande GOTO}}
+
+	   Effectue un saut dans un script de commande. Cette commande est une
+	des premières ayant permise les {spec/cond|traitements conditionnels},
+	cependant il ne faut pas en abuser.
+	   
+	   Il est parfois préférable d'utiliser {if|Les IF multilignes},
+	particulièrement dans le cas d'une suite d'instructions relativement
+	courtes.
+
+{{Synopsis}}
+	
+${	GOTO [:]étiquette [fichier]}
+
+        - {étiquette} : étiquette à laquelle l'exécution se poursuivra.
+		
+        - {fichier} : fichier de commande dans lequel on doit trouver
+          {étiquette}, nécessite le mode spécial Dos9 (voir
+          {spec/new|Nouvelles fonctions de Dos9}).
+
+{{Compatibilité}}
+
+	   Cette commande est compatible avec {cmd.exe}, mis à part le
+	paramètre {fichier} qui n'est pas supporté par {cmd.exe}.
+	   
+	   Le paramètre {fichier} est supporté par {dos9|Dos9} depuis la
+	version {0.7}.
+	
+{{A voir aussi}}
+
+	{if|Commande IF}, {for|Boucle FOR}, {spec/cond|Exécution conditionnelle}
+	{commands|Liste des commandes}

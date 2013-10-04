@@ -1,0 +1,47 @@
+{{BatBox (/m)}}
+
+	Gets a mouse input from the user.
+	
+{{Synopsis}}
+
+${	BATBOX /m}
+
+	Wait until user clicks on the console and then output a string like {X:Y:Type}.
+	Thus, decoding the click result needs a {../for|FOR} loop.
+	
+	- {X} : Click's column (start at 0)
+	
+	- {Y} : Click's line (start à 0)
+	
+	- {Type} : The click type:
+	
+		-- {1} : left click
+		
+		-- {2} : right click
+		
+		-- {3} : left double-click (returns first a left click)
+		
+		-- {4} : right double-click (returns first a right click)
+	
+{{Notes}}
+	
+	{Type} values are for {../batbox|BatBox} since version 2.2. Before, the
+	returned {TYPE} is undefined because of bug.
+	   
+	To ease use of switch {/m} you can use the following script :
+	
+${	:: Mouse ptrX ptrY ptrType
+	:: ptrX : pointer to X
+	:: ptrY : pointer to Y
+	:: ptrType : pointer to Type
+	:Mouse_
+	FOR /F "tokens=1,2,3 delims=:" %%A in ('BatBox /m') DO (
+		SET %3=%%C
+		SET %2=%%B
+		SET %1=%%A
+	)
+	GOTO:EOF}
+	
+{{See also}}
+
+	{key|BatBox (/k)}, {wait|BatBox (/w)}, {color|BatBox (/c)}, {../batbox|BatBox}

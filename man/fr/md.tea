@@ -1,0 +1,33 @@
+{{Commandes MD et MKDIR}}
+
+	Les commandes {MD} et {MKDIR} permettent de créer un dossier.
+	
+{{Synopsis}}
+
+${	MD dossier
+	MKDIR dossier}
+	
+	Crée un dossier.
+	
+		- {dossier} :  chemin du dossier à créer.
+		
+{{Compatibilité}}
+
+	Disponible depuis la version {0.4}.
+	
+	   Partiellement compatible avec {cmd.exe}. En effet cette commande ne
+	permet pas de créer simutanément. Par exemple, il est possible avec 
+	{cmd.exe} de faire, si le dossier {dossier1} n'existe pas:
+	
+${	md dossier1/dossier2/dossier3}
+
+	alors qu'avec {dos9|Dos9} le code équivalent est :
+	
+${	md dossier1
+	md dossier1/dossier2
+	md dossier1/dossier2/dossier3}
+	
+{{A voir aussi}}
+
+	{rd|Commandes RD et RMDIR}, {del|Commandes DEL et ERASE},
+	{move|Commande MOVE}, {copy|Commande COPY}

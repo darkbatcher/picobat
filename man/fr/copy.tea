@@ -1,0 +1,38 @@
+{{Commande COPY}}
+
+	   La commande {COPY} permet de copier  un ou plusieurs fichiers sur
+	un autre emplacement.
+
+{{Synopsis}}
+
+${	COPY [/-Y | /Y] [/A[:]attributs] source destination}
+
+	   Copie un ou plusieurs fichiers d'un dossier à un autre. Pour copier
+	une arboressence complète, utilisez la commande {xcopy|XCOPY}.
+	
+		- {/-Y} : provoque la demande de confirmation à l'utilisateur.
+		
+		- {/Y} : supprimme la demande de confirmation
+
+		- {source} : Le chemin du ou des fichiers à copier. Ce chemin
+		  peut comporter des {spec/regexp|caractères génériques}.
+		  
+		- {destination} : Le chemin de destination des fichiers copiés.
+		  Il ne peut pas contenir de {spec/regexp|caractères génériques}.
+		  
+		- {/A[:]attributs} : Ne copie que les fichiers ayant les 
+		  attributs correspondants, pour consulter la liste des 
+		  attributs disponibles, voir la page : {spec/attr|Les attributs de fichier}
+
+{{Compatibilité}}
+
+	Disponible depuis la version {0.4}.
+	
+	   Partiellement compatible avec {cmd.exe}. En effet, certains
+	commutateurs sont ignorés car ils ne présentent qu'un intérêt relatif
+	d'autre part, le fonctionnement des {_spec/regexp|caractères génériques} n'est
+	pas clair pour {cmd.exe}
+
+{{A voir aussi}}
+
+	{del|Commandes DEL et ERASE}, {move|Comande MOVE}, {xcopy|Commande XCOPY}

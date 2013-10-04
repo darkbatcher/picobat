@@ -1,0 +1,29 @@
+{{SETLOCAL command}}
+
+	{SETLOCAL} command changes {dos9|Dos9} interpretor's mode. For example
+	It allow enabling the {spec/exp|delayed expansion}.
+
+{{Synopsis}}
+
+${	SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] [ENABLEFLOATS | DISABLEFLOATS] [ENABLEDOS9MODE | DISABLEDOS9MODE]}
+	
+	Enables/Disables the following modes:
+	
+		- {DELAYEDEXPANSION} : Enables/Disables {spec/exp|delayed expansion}.
+		
+		- {FLOATS} : Enables/Disables {spec/floats|floating numbers}.
+		
+		- {DOS9MODE} : Enable/Disables {spec/new|Dos9's new features}.
+
+{{Compatibility}}
+
+	Fully compatible with {cmd.exe}. Both {ENABLEEXTENSION} and {DISABLEEXTENSIONS}
+	are simply ignored.
+
+	{ENABLEFLOATS} and {DISABLEFLOATS} parameters are avaliable since version {0.5}.
+
+    {DISABLEDOS9MODE} and {DISAABLEDOS9MODE} are avaliable since version {0.7}.
+	
+{{See also}}
+
+	{set|SET Command}, {commands|Command list}

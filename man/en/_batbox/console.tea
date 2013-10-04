@@ -1,0 +1,43 @@
+{{BatBox (/p)}}
+
+	Changes command prompt's window display mode. For exemple, maximizes of minimizes the window.
+	
+{{Synopsis}}
+
+${	BatBox /p mode}
+
+	Changes command prompt's window display mode.
+
+	- {mode} : Specify the display mode that will be set for the command prompt's window.
+
+		-- {0} : Hides the window.
+		
+		-- {1} : Activate and show the window, restoring it to its original size. This value should not be used because
+		it's reserved to first call to show window. You should use value {9} instead.
+		
+		-- {2} : Activate the window and minimizes it (show it in task bar).
+		
+		-- {3} : Activate the window and make it maximized. 
+
+		-- {4} : Shows the window restored to its original size. Same result as value {1}, execpt that the window does not obtain
+		focus.
+		
+		-- {5} : Activate the window without modifiing it.
+		
+		-- {6} : Minimizes the window and activate another window. 
+		
+		-- {7} : Minimizes the window. Same result as value {2} except that the window is not activated.
+	
+		-- {8} : Shows the window without modifing it. Same result as value {1}, except that the window does not obtain focus.
+		
+		-- {9} : Activate the window and set its size and its position to the initial values if the window was either maximized or minimized.
+		
+		-- {10} : Show the windows and set its size and its postion to the default values.
+		
+		-- {11} : Minimizes the windows, even if the command prompt does not respond. This value is not suposed
+		to be used, as it would be surprising that {../batbox|BatBox} continue running even if the command prompt
+		does not respond.
+	
+{{See also}}
+
+	{ascii|BatBox (/a)}, {mouse|BatBox (/m)}, {fullscr|BatBox (/f)}, {../batbox|BatBox}

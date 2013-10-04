@@ -1,0 +1,110 @@
+# page d'aide de TEA
+{{Processeur de texte TEA}}
+
+	{TEA (Tea Expands Ascii)} est un processeur de texte, un peu à la manière de nroff ou groff sur
+les systèmes {UNIX}. Il est léger, rapide et simple d'utilisation, et libre, ce
+qui en fait un bon processeur de texte. {TEA} n'a pas été conçu pour pouvoir produire des documents
+élaborés, mais plutôt pour produire des documents simples, de manière simple et intuitive pour
+l'utilisateur. Les possibilités de {TEA} sont volontairement minimalistes, car {TEA} a été conçu pour
+produire des documents relativement simples comportant uniquement du texte, de manière à ce que le code
+du document soit simple et facile d'utilisation pour l'utilisateur, lui permettant de formatter un document
+en un minimum de temps et avec un minimum d'aprentissage. Ces possibilitées limitées permettent par exemple
+d'en faire un excellent processeur de texte embarqué dans une application. De plus, {TEA} est facilement portable
+sur les systèmes possèdant un compilateur C compatible avec la norme {C89}.
+
+	{TEA} est orienté vers la génération de documents text bruts, de documents xml,
+ou de pages de manuels pour la commande {hlp|HLP}
+mais peut être étendu pour faire de nombreuses choses.
+
+	Si vous désirez produire des documents plus élaborés, comportant par exemple des formules mathématiques, ou des
+images, il est nécessaire de vous orienter vers un logiciel plus adapté comme {http://www.latex-project.org/|LaTeX},
+ou {http://www.gnu.org/software/groff/|GNU groff}, qui sont tous les deux des logiciels libres.
+
+{{Synopsis}}
+
+${	TEA [fichier] [sortie] [/O[:]Mode] [/E[:]Encodage] [/F paramètres]}
+
+	Produit le fichier {sortie}, correctement typographié, à partir du fichier
+{fichier} formaté pour le processeur de texte {TEA}.
+
+	- {sortie} : Chemin du fichier formaté devant être produit par {TEA}. Si aucun
+	fichier n'est spécifié, {TEA} affichera la sortie à l'écran
+
+	- {fichier} : Chemin du fichier à utiliser pour produire le fichier
+	formaté {sortie}. Ce fichier doit contenir du texte agrémenté 
+	d'instructions conformes au {lang|langage TEA}.
+
+	- {/O[:]Mode} : Spécifie le type de fichier à produire, {Mode} doit être
+	parmi les valeurs suivantes :
+
+			-- {Text} : Le fichier à produire est un fichier texte brut. Ceci
+			est le mode par défaut.
+			
+			-- {xml} : Le fichier à produire est un fichier XML. Le fichier ainsi généré respecte les normes
+			éditées par le {W3C}. Cette option nécessite que le front-end {tea_html|tea_html} soit disponible
+			sur votre système. L'activation de ce mode de sortie spécifie par défaut le commutateur {/E:UTF-8}.
+			La sortie obtenue est formée uniquement du contenu du modèle TEA, mais ne contient aucune métadonnée.
+			
+			-- {html} : Le fichier à produire est un fichier HTML. Le fichier généré
+			respecte les normes éditées par le {W3C}. Cette option nécessite que le
+			front-end {tea_html|tea_html} soit disponible sur votre système. L'activation
+			de ce mode de sortie spécifie par défaut le commutateur {/E:UTF-8}. La sortie obtenu est conforme à la
+			norme {W3C}, elle contient donc des métadonnées, sur l'encodage en particulier, ainsi que le titre de
+			la page. Il est possible de limiter la sortie uniquement au contenu de l'entrée {fichier}, ou d'insérer
+			du code HTML, pour de plus amples informations, veuillez consulter la page dédiée au front-end {tea_html|tea_html}.
+			
+			-- {hlp-man} : Le fichier produit est un fichier formaté pour une utilisation
+			via le visionneur de pages de manuel {hlp|HLP}.
+	
+	- {/E[:]Encodage} : Spécifie le type d'encodage a utiliser pour le
+	fichier d'entrée {fichier} et donc du fichier de sortie {sortie}.
+	{Encodage} doit être une valeur parmi les suivantes :
+
+			-- {byte} : L'encodage du fichier est un encodage simple en mode 8 bits,
+			comme les encodages {OEM}, {ASCII}, {ANSI (Windows-1252)}, 
+			{latin-9 (ISO 8859-15)} ou n'importe quelle autre page de code, pour peu que 
+			cette page soit compatible avec le jeu de caractère {ASCII}.
+
+			-- {UTF-8} : L'encodage du fichier est l'encodage standardisé {UTF-8} utilisant
+			le jeu de caractère {UNICODE}. La présence d'un {BOM} dans le fichier source n'a
+			aucune influence sur la sortie produite, il sera de toute manière ignoré.
+
+			-- {UTF-16} : L'encodage du fichier est l'encodage standardisé {UTF-16}. Cette
+			option nécessite que la commande {iconv|GNU iconv} soit disponible sur votre système.
+			La présence d'un {BOM} dans le fichier est utile si vous ne spécifiez pas le type d'endianess
+			du fichier source. Dans le cas contraire, il suffit de spécifier {UTF-16LE}, si le fichier
+			utilise l'encodage petit-boutien (little-endian), ou {UTF-16BE} si le fichier utilise l'encodage 
+			grand-boutien (big-endian).
+
+			-- {UTF-32} : L'encodage du fichier est l'encodage standardisé {UTF-32}. Cette
+			option nécessite que la commande {iconv|GNU iconv} soit disponible sur votre système.
+			La présence d'un {BOM} dans le fichier est utile si vous ne spécifiez pas le type d'endianess
+			du fichier source. Dans le cas contraire, il suffit de spécifier {UTF-32LE}, si le fichier
+			utilise l'encodage petit-boutien (little-endian), ou {UTF-32BE} si le fichier utilise l'encodage 
+			grand-boutien (big-endian).
+
+	- {/F paramètres} : spécifie des paramètres à passer au front-end, si un front-end est utilisé.
+	Pour le choix de ces paramètres, veuillez vous référer à la page spécifique à chaque front-end.
+
+{{Compatiblité}}
+
+	{TEA} est multiplate-forme (spécialement disponible pour {MS-WINDOWS} et
+{GNU/Linux}).
+
+	Le portage de {TEA} sur toute autre plate-forme est une chose aisée si cette plate-forme possède un
+compilateur C respectant la norme {C89 (ANSI-C)}, moyennant une réimplémentation de la fonction {strdup()} et
+en utilisant le code {C89 strict} de la bibliothèque {LibDos9.a}.
+
+{{Licence}}
+
+	{TEA} est un logiciel libre distribué sous la
+{http://www.gnu.org/licenses/gpl.html|Licence Publique Générale GNU}. Pour plus
+d'information à propos de la philosophie du logiciel libre, visitez le site de
+{http://www.fsf.org|la Free Software Fundation}.
+
+{{Auteur}}
+
+	{TEA} a été dévellopé par {Romain GARBI (DarkBatcher)}, en 2013, et est maintenu
+par l'équipe du {Projet Dos9}.
+
+

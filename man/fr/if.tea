@@ -1,0 +1,119 @@
+{{Commande IF}}
+
+	   La commande {IF} permet le traitement conditionnel des 
+	information et {spec/cond|l'exécution conditionnelle} de commandes.
+	
+	   Cette commande est très importante dans la création de 
+	script batch avancés.
+	   
+	   Il faut aussi préférer les {IF} multilignes à la combinaison 
+	{IF}-{goto|GOTO}, dans la mesure du possible
+	
+{{Synopsis}}
+
+	Il existe plusieurs syntaxes de la commande {IF}, les voici :
+	
+${	IF [/i] [NOT] chaine1==chaine2 (
+	:: code à exécuter
+	...
+	)}
+	
+	   Vérifie si la chaîne {chaine1} est égale à la chaîne {chaine2}
+	et exécute le code à exécuter si c'est le cas. Le comportement est
+	changé comme suit :
+		
+		- {/i}  : La comparaison ne tient pas en compte la casse. 
+		('Dos9' sera égal à 'dOs9')
+		
+		- {NOT} : Négation. Le code a exécuter le sera si {chaine1}
+		 n'est pas égale à {chaine2}
+		
+${	IF [/i] chaine1 cmp chaine2 (
+	:: code à exécuter
+	...
+	)}
+	
+	   Applique la comparaison induite par {cmp} aux chaînes {chaine1} et
+	{chaine2} et exécute le code à exécuter si la condition est vraie.
+	   
+	   Les valeurs possibles de {cmp} sont:
+
+		- {EQU} : (EQUal). la chaîne {chaine1} est égale à la 
+		  chaîne {chaine2}
+		
+		- {NEQ} : (Not EQual). la chaîne {chaine1} est différente de
+		  la chaîne {chaine2}
+		
+		- {LEQ} : (Less or EQual). la chaîne {chaine1} est inférieure
+		  ou égale à la chaîne {chaine2}
+		
+		- {LSS} : (LeSS). la chaîne {chaine1} est inférieure à la
+		  chaîne {chaine2}
+		
+		- {GTR} : (GreaTeR). la chaîne {chaine1} est supérieure à 
+		  la chaîne {chaine2}
+		
+		- {GEQ} : (Greater or EQual). la chaîne {chaine1} est 
+		  supérieure ou égale à la chaîne {chaine2}
+		
+	   Les comparants {LSS}, {GTR}, {LEQ} et {GEQ} supposent que {chaine1}
+	et {chaine2} soient des nombres, sinon le résultat de la comparaison
+	est indéfini (i.e. le comportement peut changer d'une version à une 
+	autre ou d'un os à un autre)
+	   
+	   Si les nombres spécifiés pour les comparants {LSS}, {GTR}, {LEQ}
+	et {GEQ} sont des nombres flottants (à virgule), alors ils seront
+	tronqués à l'entier inférieur.
+	   
+	   L'utilisation du commutateur {/i} permet d'ignorer la casse (utile
+	uniquement pour les comparants {EQU} et {NEQ})
+	
+${	IF [NOT] [DEFINED | EXIST | ERRORLEVEL] objet (
+	:: code à exécuter
+	...
+	)}
+	
+	   Vérifie si la condition induite sur la chaine {objet} est respectée
+	et exécute le code à  exécuter si c'est le cas. Les conditions induites
+	peuvent être :
+		
+		- {DEFINED} : Condition vraie s'il existe une variable
+		  d'environnement nommée {objet}
+		
+		- {EXIST} : Condition vraie s'il existe un fichier dont le nom
+		  est {objet}. Dans ce cas, {objet} peut contenir des
+		  caractères génériques ('*' et '?').
+		
+		- {ERRORLEVEL} : {Déprécié} Condition vraie si la variable
+		  d'environnement {errolevel|%ERRORLEVEL%} est égale à {objet}.
+		  Son usage est déprécié, utilisez plutôt :
+
+${			IF %ERRORLEVEL%==valeur}
+		
+	   Si vous spécifiez l'opérateur {NOT} alors le code à exécuter est
+	exécuté si la condition est fausse
+	
+	   Après chaque type de {IF}, vous pouvez insérer une commande {if|ELSE}
+	qui indique le code a exécuter si la comparaison est fausse.
+	
+	Exemple:
+	
+${	IF /i %var1%==%var2% (
+	:: code à executer si la condition est vraie
+	) ELSE (
+	:: code à exécuter si la condition est fausse
+	)}
+	
+{{Compatibilité}}
+
+	   Partiellement compatible avec {cmd.exe}. En effet, le résultat de
+	l'utilisation de {IF ERRORLEVEL} n'est pas garanti comme compatible
+	avec {cmd.exe} dans la mesure où le comportement de cette comparaison
+	n'est pas très claire avec {cmd.exe}
+	
+	Disponible depuis la version {0.4}
+	
+{{A voir aussi}}
+
+	{for|Commande FOR}, {goto|Commande GOTO}, {call|Commande CALL},
+	{commands|Liste des commandes}

@@ -1,0 +1,52 @@
+{{Les variables spéciales}}
+
+	   Les variables spéciales sont des variables internes à {dos9|Dos9}:
+	Les commandes lancées avec {Dos9} n'héritent pas des variables
+	spéciales, ces variables sont donc locales.
+	
+{{Utilisation des variables spéciales}}
+
+	   Les variables d'environement ne sont pas modifiables, elles sont
+	uniquement définies par {../dos9|Dos9} ou par {../for|FOR}.
+
+{{L'expansion des variables spéciales}}
+
+	   Le nom des variables spéciales est constitué d'une lettre ou d'un
+	chiffre. Tous les caractères ASCII supérieurs à 32 peuvent être
+	utilisés cepandant pour préserver la lisibilité du code il est
+	préférable de se limiter au lettres, au chiffres et aux symboles.
+	
+	Les variables spéciales doivent être précédés d'un seul {%}
+
+	   On peut aussi utiliser les options suivantes pour le dévelloppement
+	des variables spéciales, pour cela il faut insérer un tilde {~} après
+	le {%}, et combiner les options suivantes puis mettre le caractère
+	correspondant à la variables a la fin.
+	
+	Les options disponibles sont (en prenant l'exemple de la variable {%I}):
+	
+		- {%~dI} : dévellope {%I} en lettre de lecteur
+		
+		- {%~pI} : dévellope {%I} en chemin d'accès
+		
+		- {%~nI} : dévellope {%I} en nom de ficher 
+		
+		- {%~xI} : dévellope {%I} en extension de fichier
+		
+		- {%~zI} : dévellope {%I} en taille de fichier
+		
+		- {%~aI} : dévellope {%I} en attribut de fichier
+		
+		- {%~tI} : dévellope {%I} en date et heure d'accès
+		
+	On peut biensûr combiner les options (jusqu'a 16 simultanément).
+	
+{{Note}}
+
+	   {Dos9} est sensible à la casse pour les options et les noms de
+	{variables spéciales}
+		
+{{A voir aussi}}
+
+	{var|Les variables d'environnement}, {exp|L'expansion des variables},
+	{index|Index des spécification}

@@ -1,0 +1,25 @@
+{{BatBox (/s) (OLD)}}
+
+	Plays a sound in a batch script.
+	
+{{Synopsis}}
+
+${	BatBox /s frequency duration}
+
+	{Warning ! This command is no more avaliable since version 2.3}
+
+	Plays a sound.
+	
+	- {frequency} : Sound's frequency in {Hertz}. {frequency} must be between 37 Hz and 32767 Hz, corresponding
+	to almost any audible sound by humains. 
+	
+	- {duration} : Sound's duration in {milliseconds}.
+	
+{{Note}}
+
+	Function used by {BatBox} to play sound has been rewritten for {windows vista}. Thus it's likely
+	not to work in previous versions of windows.
+	
+{{See also}}
+
+	{ascii|BatBox (/a)}, {mouse|BatBox (/m)}, {fullscr|BatBox (/f)}, {../batbox|BatBox}

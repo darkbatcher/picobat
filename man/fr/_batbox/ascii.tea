@@ -1,0 +1,32 @@
+{{BatBox (/a)}}
+
+	Affiche le caractère correspondant à un code pour un encodage de caractère.
+	Ce code peut être {ASCII}, {UTF-8} ou n'importe quel encodage multi-octet.
+
+{{Synopsis}}
+
+${	BATBOX /a code}
+
+	- {code} : Code du caractère à afficher. S'il s'agit d'un caractère d'un encodage
+	multi-octets comme {UTF-8}, il est nécessaire d'utiliser tous les octets du caractère
+	et de renverser l'ordre des octets, comme les processeurs x86 sont petit-boutiens. Par
+	exemple, le caractère {UTF-8} ``█'' se code normalement {0xE2 0x96 0x88} ce qui donne
+	finalement le code {0x8898E2} pour {../batbox|BatBox}.
+	
+{{Notes}}
+
+	   Pour obtenir facilement la table des codes {ASCII} et des caractères
+	correspondants, vous pouvez utiliser le script suivant:
+
+${	@ECHO OFF
+	SET code=0
+	:Boucle
+	BATBOX /d "code %code% : " /a %code% /a 10 /a 13
+	:: les caracteres ASCII 10 et 13 forment un retour a la ligne
+	SET /a code=%code%+1
+	IF NOT %code%==256 GOTO :Boucle
+	PAUSE}
+	
+{{A voir aussi}}
+
+	{disp|BatBox (/d)}, {fullscr|BatBox (/f)}, {sound|BatBox (/s)}, {../batbox|BatBox}

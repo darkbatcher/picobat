@@ -1,0 +1,34 @@
+{{DEL and ERASE commands}}
+
+	The {DEL} and {ERASE} commands delete files or lists of files in a drive.
+	
+{{Synopsis}}
+
+${	DEL [/P] [/F] [/S] [/Q] [/A[:]attributes] name
+	ERASE [/P] [/F] [/S] [/Q] [/A[:]attributes] name}
+	
+	Deletes one or more files.
+	
+		- {/P} : Prompts a confirmation message before deleting file.
+		
+		- {/F} : Forces read-only files to be deleted.
+		
+		- {/Q} : Does not prompt confirmation messages before deleting files
+		use {spec/regexp|regular expressions}.
+		
+		- {/A[:]attributes} : Delete only files with attribute {attributes}. 
+		Where {attribute} is a list of {spec/attr|files attributes}.
+			
+		- {name} : Path to the file to be deleted. This path can contain
+		{spec/regexp|regular expressions}.
+	
+{{Compatibility}}
+
+	Available since version {0.4}.
+	Fully compatible with {cmd.exe}. Except for attributes under {GNU/Linux} or
+	any other {UNIX-like} oses.
+	
+{{See also}}
+
+	{rd|RD and RMDIR commands},  {md|MD and MKDIR commands},
+	{move|MOVE commands}

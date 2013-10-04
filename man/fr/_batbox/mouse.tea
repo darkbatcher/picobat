@@ -1,0 +1,51 @@
+{{BatBox (/m)}}
+
+	Permet de récupérer les clics à la souris de l'utilisateur
+	
+{{Synopsis}}
+
+${	BATBOX /m}
+
+	   Attend que l'utilisateur clique sur la console, puis affiche une
+        chaîne du type {X:Y:Type}. Il faut donc utiliser une boucle {for|FOR}
+        pour décoder le resultat.
+	
+	- {X} : Contient la colonne du clic (commence à 0)
+	
+	- {Y} : Contient la ligne du clic (commence à 0)
+	
+	- {Type} : Permet d'obtenir le type de clic, choix parmi ces valeurs
+	
+		-- {1} : clic gauche
+		
+		-- {2} : clic droit
+		
+		-- {3} : double-clic gauche (retourne d'abord un clic gauche)
+		
+		-- {4} : double-clic droit (retourne d'abord un clic gauche)
+	
+{{Notes}}
+
+	   Pour le parametre {Type} les valeurs indiquées ne sont valables que
+	pour les versions de {batbox|BatBox} supérieures ou égales a 2.2.
+	Pour les versions précédentes, le résultat de {Type} est totalement
+	indéfini à cause d'un bug.
+	   
+	   Pour faciliter l'utilisation de l'option {/m} vous pouvez utiliser
+	la fonction suivante dans vos batchs:
+	
+${	:: Mouse ptrX ptrY ptrType
+	:: ptrX : pointeur sur la variable qui recevra la colone
+	:: ptrY : pointeur sur la variable qui recevra la ligne
+	:: ptrType : pointeur sur la variable qui recevra le Type
+	:Mouse_
+	FOR /F "tokens=1,2,3 delims=:" %%A in ('BatBox /m') DO (
+		SET %3=%%C
+		SET %2=%%B
+		SET %1=%%A
+	)
+	GOTO:EOF}
+	
+{{A voir aussi}}
+
+	{key|BatBox (/k)}, {wait|BatBox (/w)}, {color|BatBox (/c)}, {../batbox|BatBox}

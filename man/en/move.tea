@@ -1,0 +1,40 @@
+{{Commande MOVE}}
+
+	   La commande {MOVE} permet de déplacer un fichier dans un nouveau
+	répertoire. A l'inverse de la commande {copy|COPY}, aucune copie n'est
+	conservée dans le répertoire d'origine. Il est aussi possible renommer
+	des répertoire via cette commande.
+	
+{{Synopsis}}
+
+${	MOVE [/Y | /-Y] chemin destination}
+
+	Déplace un fichier ou un dossier.
+	
+		- {chemin} : chemin du fichier ou du fichier à déplacer. Ce
+		  chemin peut contenir des {spec/regexp|caractères génériques}.
+		  Au quel cas, le chemin {destination} doit être le chemin d'un
+		  répertoire.
+		  
+		- {destination} : chemin du dossier ou du fichier d'arrivée. Si
+		  il s'agit d'un nom de fichier, alors le chemin {chemin} doit
+		  se référer à un unique fichier et ne pas contenir de
+		  {spec/regexp|caractères génériques}. Il est alors possible de
+		  modifier le nom du fichier dans son répertoire d'arrivée.
+		  
+		- {/Y} : Force l'affichage d'un message de confirmation avant
+		  le déplacemen du fichier.
+		  
+		- {/-Y} : Supprime l'affichage d'une demande de confirmation.
+		  paramètre obsolète.
+		  
+{{Compatibilité}}
+
+	Disponible depuis la version {0.4}
+	
+	Parfaitement compatible avec {cmd.exe}.
+	
+{{A voir aussi}}
+
+	{ren|Commandes REN et RENAME}, {del|Commandes DEL et ERASE},
+	{copy|Commande COPY}

@@ -33,15 +33,15 @@ TEAOUTPUT teaTextOutput = {
         /* code styles */
     {
         79,
-        2,
-        -1 /* for code blocks, indent is a little bit particular becauses
+        8,
+        10 /* for code blocks, indent is a little bit particular becauses
         it causes indentation of wrapped lines */
     },
         /* paragraph styles */
     {
         79, /* the width of text */
         5, /* the width of left margin */
-        3 /* the width of indentation */
+        0 /* the width of indentation */
     },
         /* block spacing */
     "\n\n"
@@ -117,15 +117,15 @@ TEAOUTPUT teaHlpOutput = {
         /* code styles */
     {
         79,
-        2,
-        -1 /* for code blocks, indent is a little bit particular becauses
+        8,
+        10 /* for code blocks, indent is a little bit particular becauses
         it causes indentation of wrapped lines */
     },
         /* paragraph styles */
     {
         79, /* the width of text */
         5, /* the width of left margin */
-        3 /* the width of indentation */
+        0 /* the width of indentation */
     },
         /* block spacing */
     "\n\n"

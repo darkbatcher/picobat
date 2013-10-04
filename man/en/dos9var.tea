@@ -1,0 +1,35 @@
+{{%DOS9_VER%, %DOS9_OS%, %DOS9_PATH% variables}}
+
+	   {%DOS9_VER%} contains the version number of {dos9|Dos9}.
+	
+	   {%DOS9_OS%} contains the os type on which {dos9|Dos9} is runing.
+	
+	{%DOS9_PATH%} contains the path to the {dos9|Dos9} executable.
+	
+	All these variables are directly defined by {Dos9}.
+	
+{{Synopsis}}
+
+${	%DOS9_VER%}
+
+	Contains {dos9|Dos9} version number.
+	
+${	%DOS9_OS%}
+
+	Contains the os type on which {dos9|Dos9} is runing. This varibable does not make different between different oses, but
+	it contains its kind (either {WINDOWS} or {LINUX}).
+
+${	%DOS9_PATH%}
+
+	{%DOS9_PATH%} contains the path to the {dos9|Dos9} executable. This path is dinamically generated, so that the path will be 
+	correct even from non conventionnal paths.
+
+{{Compatibilité}}
+
+	Uncompatible with {cmd.exe}, these variable are not defined.
+	
+	Availiable since version {0.7}.
+	
+{{See also}}
+
+	{spec/var|Environment variables}, {spec/index|Specifications index}

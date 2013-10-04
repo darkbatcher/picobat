@@ -1,0 +1,40 @@
+{{COPY Command}}
+
+	The {COPY} command copies one or more files from one location to
+	another.
+
+	   La commande {COPY} permet de copier  un ou plusieurs fichiers sur
+	un autre emplacement.
+
+{{Synopsis}}
+
+${	COPY [/-Y | /Y] [/A[:]attributes] source destination}
+
+	Copies one or more files from a location to another. To copie a tree,
+	use {xcopy|XCOPY} command.
+	
+		- {/-Y} : Asks the user for confirmation.
+		
+		- {/Y} : Do not ask for confirmation.
+
+		- {source} : The path to the files to be copied. This path can contain some
+		{spec/regexp|regular expressions}.
+		  
+		- {destination} : The path were the file will be copied. This pas can not contain
+		{spec/regexp|regular expressions}.
+		  
+		- {/A[:]attributes} : Copy only files with attribute {attributes}. Where {attribute} is
+		a list of {spec/attr|files attributes}.
+
+{{Compatibility}}
+
+	Avaliable since version {0.4}.
+	
+	Partly compatible with {cmd.exe}. Indeed, some switch are ignored because they dont have
+	any interest. In addition, the way {spec/regexp|regular expressions} work under {cmd.exe}
+	is not clear.
+	
+
+{{See also}}
+
+	{del|DEL and ERASE commands}, {move|MOVE command}, {xcopy|XCOPY command}

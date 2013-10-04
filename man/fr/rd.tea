@@ -1,0 +1,37 @@
+{{Commandes RD, RMDIR}}
+
+	Permet de supprimer un répertoire.
+	
+{{Synopsis}}
+
+${	RMDIR [/S] [/Q] dossier
+	RD [/S] [/Q] dossier}
+	
+	
+	Supprime un répertoire.
+	
+		- {dossier} : Chemin du répertoire à supprimer.
+		
+		- {/Q} : Active le mode silencieux. Ne demandande pas de
+		  confimartion pour supprimer l'arboressence avec {/S}. N'a
+		  aucun effet si le commutateur {/S} n'est pas activé.
+		
+		- {/S} : Supprime tous les dossiers et les sous dossiers
+		  contenus dans le dossier {dossier}.
+		  
+{{Notes}}
+
+	   Par défaut, les commandes {RD} et {RMDIR} ne suppriment pas les
+	dossiers non-vides. Pour forcer la suppression du dossier, il faut
+	utiliser le commutateur {/S}
+	
+{{Compatibilité}}
+
+	Disponible depuis la version {0.4}.
+	
+	Parfaitement compatible avec {cmd.exe}.
+
+{{A voir aussi}}
+
+	{md|Commandes MD, MKDIR}, {del|Commanndes DEL, ERASE},
+	{move|Commande MOVE}

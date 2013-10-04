@@ -1,0 +1,38 @@
+{{Commandes CD, CHDIR et Variable %CD%}}
+
+	   La commande {CD} permet de changer et d'afficher le dossier courrant
+        de l'invité de commande {dos9|Dos9}.
+		
+		
+	   La variable {%CD%} permet d'accèder au chemin courrant de l'invité
+	de commande.
+	
+{{Synopsis}}
+
+${	CD  [[/d] chemin]
+	CHDIR [[/d] chemin]}
+
+	Change ou affiche le chemin courrant de l'invité de commande.
+	
+		- {/d} : Commutateur obsolète, uniquement pour la compatibilité
+		  avec {cmd.exe}
+		
+		- {chemin} : Chemin du nouveau dossier courrant
+		
+	   Si vous ne spécifiez ni {/d} ni {chemin}, alors la commande {CD}
+	affichera le chemin courrant.
+	
+${	%CD%}
+
+	Se dévellope en le chemin courrant actuel.
+	
+{{Compatibilité}}
+
+	Complètement compatible avec {cmd.exe}.
+	
+	Disponible depuis la version {0.4}
+	
+{{A voir aussi}}
+
+	{spec/var|Les variables}, {spec/index|Index des spécifications},
+	{commands|Liste des commandes}

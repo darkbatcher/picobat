@@ -1,0 +1,37 @@
+{{Commande SET}}
+
+	   La commande {SET} permet d'affecter des variables d'environement,
+	que l'on peut ensuite récuperer via {spec/exp|l'expansion des variables}
+	
+{{Synopsis}}
+
+${	SET variable=contenu}
+
+	Affecte le contenu {contenu} à la variable {variable}.
+	
+${	SET /a variable=expression}
+
+	   Affecte la valeur de {spec/maths|l'expression mathématique}
+	{expression} à la variable {variable}.
+	
+	   Les opérateurs suivants sont tolérés (rangés par ordre de
+	priorité):
+
+		- {(},{)} : Priorité supérieure
+		- {*},{/} : multiplication, division
+		- {+},{-} : addition, soustraction
+		
+	   Note : Si {dos9|Dos9} rencontre une chaine qui n'est ni un
+	opérateur, ni un nombre, alors {Dos9} considère qu'il s'agit du nom
+	d'une variable et le remplace par son contenu.
+	
+${	SET /p variable=question}
+	
+	   Affiche le texte {question} à l'invité de commande, puis attend
+	que l'utilisateur entre quelque chose au clavier, puis affecte ce que
+	l'utilisateur a entré à la variable {variable}.
+
+{{A voir aussi}}
+	
+	{commands|Liste des commandes}, {echo|Commande ECHO},
+	{pause|Commande PAUSE}

@@ -1,0 +1,55 @@
+{{Commande Dos9}}
+
+	   {Dos9} est un interpréteur de commande utilisé pour les scripts
+	batch et les entrées de commandes.
+	
+	{Dos9} est un logiciel libre conçu pour être le plus compatible possible
+	avec {cmd.exe} de {Microsoft}.
+	
+{{Synopsis}}
+
+${	DOS9 [/v] [/n] [/f] [/e] [fichier]}
+
+	   Exécute un fichier de commande ou attend une entrée de commande de
+	l'utilisateur.
+
+		- {fichier} : Chemin du script de commande a exécuter
+		
+		- {/v}	  : Active {dos9/exp|l'expansion retardée de variable}
+		
+		- {/n}	  : Active les {dos9/ext|extensions de dos9}
+		
+		- {/f}	  : Active les {dos9/floats|nombres flotants}
+		
+		- {/e}	  : Désactive l'affichage du chemin courant.
+
+{{Compatibilite}}
+
+	   Compatible avec toutes les versions de {Dos9}. Incompatible avec
+	   {cmd.exe}.
+	   
+	   {Dos9} est multiplate-forme, et peut donc fonction à la fois sous {MS-WINDOWS} et
+	   sous {GNU/Linux}. En théorie, un portage de {Dos9} sur un système d'exploitation
+	   compatible {POSIX} nécessite juste une recompilation via un compilateur {C89}.
+
+{{Licence}}
+
+	{Dos9} est un logiciel libre distribué sous les termes de la 
+	{http://www.gnu.org/licenses/gpl.html|Licence Publique Générale GNU}.
+	Pour plus d'information à propose de la philosophie du logiciel libre, consultez le
+	site web de la {http://www.fsf.org|Free Software Fundation}.
+	   
+{{Auteur}}
+
+	{Dos9} a été écrit par {DarkBatcher (Romain Garbi)} depuis 2010. Il
+	utilise plusieur bibliothèques provenant du {http://www.gnu.org/|Système d'exploitation GNU},
+	principalement {http://www.gnu.org/software/libmatheval/|libmatheval} et {https://www.gnu.org/software/gettext/|gettext}.
+
+	Les paquets de {Dos9} pour windows incluent aussi des binaires provenant du
+	{http://gnuwin32.sourceforge.net/|projet GnuWin}. Ces binaires sont {iconv|GNU iconv}
+	ete {nano|GNU Nano}.
+	 
+{{A voir aussi}}
+
+	{echo|Commande ECHO}, {scripts|Scripts de commandes},
+	{commands|Liste des commandes}	

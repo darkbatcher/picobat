@@ -1,0 +1,61 @@
+{{Front-end tea_html}}
+
+	{tea_html} est le front-end utilisé par {tea|TEA} pour finaliser la production de documents
+	au format {HTML}.
+	
+	Il gère de même la finalisation de de production de documents {XML}.
+	
+{{Synopsis}}
+
+${	tea_html fichier [/X | /H] [/C] [/E:Encodage] [/T Titre] [/M fichierMeta] [/H fichierHeader] [/F fichierFooter]}
+
+	Finalise un document {HTML} ou {XML} produit par {tea|TEA}.
+	
+	- {fichier} : Le fichier produit par {tea|TEA} à finaliser.
+	
+	- {/X} : Produit un fichier {XML} conforme à la norme {XML} du {W3C}. L'élément racine du document XML ainsi généré est l'élement
+	{body}.
+	
+	- {/H} : Produit un document {HTML} conforme à la spécification {HTML5} du {W3C}. Le document généré est agrémenté
+	d'une en-tête et d'un doctype {HTML5}. Le contenu de cette en-tête peut être modifié, soit par l'utilisation
+	des commutateurs {/E}, {/T} et {/M}.
+	
+	- {/C} : Ne conserve que le véritable contenu {HTML} résultant du traitement de la page par le processeur de texte {tea|TEA},
+	c'est a dire, que les en-tête et les inclusions d'autres fichiers ne sont pas prises en compte. Le fichier ansi otenu ne contient pas 
+	d'élement racine et est indiférent du choix de {XML} ou {HTML}. Le fichier généré ne respecte cependant plus aucune spécification, 
+	que ce soit {XML} ou {HTML}, que ce soient celles du {W3C} ou celles d'un autre organisme de standardisation.
+	
+	- {/E:Encodage} : Définit le type d'encodage du fichier. Par défaut, celui-ci est {UTF-8}. Il vous pouvez spécifier toutes
+	sortes d'encodages, cepandant, les encodages non-{UNICODE} sont très fortement déconseillés pour assurer la portabilité
+	du fichier. 
+	
+	- {/T Titre} : spécifie le titre à donner au document {HTML} crée. Ce paramètre est ignoré dans le cas d'un document {XML}.
+	
+	- {/M fichierMeta} : Désigne un fichier à inclure dans l'en-tête du fichier HTML produit. Dans le cas d'un document {HTML},
+	ce fichier ne doit contenir que des balise valides dans une balise {<head>} selon la norme {HTML} du {W3C} pour que le document demeure
+	valide.
+	
+	- {/H fichierHeader} : Désigne un fichier à inclure avant le code produit par {tea|TEA} dans le fichier. Dans le cas d'un document {HTML},
+	ce fichier ne doit contenir que des balise valides dans une balise {<body>} selon la norme {HTML} du {W3C} pour que le document demeure
+	valide.
+	
+	- {/H fichierFooter} : Désigne un fichier à inclure après le code produit par {tea|TEA} dans le fichier. Idem que pour le fichier précédent.
+	
+{{Compatiblité}}
+
+	{tea_html} est multiplate-forme (spécialement disponible pour {MS-WINDOWS} et
+{GNU/Linux}).
+
+{{Licence}}
+
+	{tea_html} est un logiciel libre distribué sous la
+{http://www.gnu.org/licenses/gpl.html|Licence Publique Générale GNU}. Pour plus
+d'information a propos de la philosophie du logiciel libre, visitez le site de
+{http://www.fsf.org|la Free Software Fundation}.
+
+{{Auteur}}
+
+	{tea_html} a été dévellopé par {Romain GARBI (DarkBatcher)}, en 2013, et est maintenu
+par l'équipe du {Projet Dos9}.
+
+	

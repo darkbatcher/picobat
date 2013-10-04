@@ -1,0 +1,39 @@
+{{SpriteBox command}}
+
+	{Spritebox} is a command to be used with {batbox|BatBox}. Indeed, it generates {batbox|BatBox} command
+	lines from text files containing an {ASCII-Art}.
+	
+{{Synopsis}}
+
+${	SPRITEBOX [/O] [/E[:]encoding] file}
+
+	Generates a {BatBox} command line.
+
+	- {file} : the path of the file containing the {ASCII-Art} to be converted to a {batbox|BatBox} command-line.
+	
+	- {/E[:]encoding} : specifies the encoding of the file containing the {ASCII-Art}. {Encoding} can be one of
+	the following values:
+	
+		-- {byte} : the encoding is byte based. Then {spritebox} processes the file like it was encoded in a single byte
+		charset, regardless of which charset it is.
+		
+		-- {utf-8} : the encoding is {utf-8}. Then it writes compatible command lines for utf-8 characters.
+	
+	- {/O} : the background of the sprite will be opaque (ie. space will not be ignored).
+	
+	The command line is printed to {standard output} (by default the console, but it can be redirected)
+
+{{Compatibility}}
+
+	{SpriteBox} is compatible with any batbox version since {version 1.1}. It is easily portable to other
+	operating systems.
+
+{{License}}
+
+	{SpriteBox} is a free software distributed under {GNU General Public License version 3}.
+	
+{{Author}}
+
+	{SpriteBox} has been written by {DarkBatcher}. The project is no more develloped
+	actually.
+	

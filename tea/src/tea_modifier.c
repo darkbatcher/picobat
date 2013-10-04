@@ -22,7 +22,7 @@ char*   tea_TextModifierLink(char* lpContent, char* lpTarget)
         exit(-1);
     }
 
-    sprintf(lpModifier, "%s (-> `%s')", lpContent, lpTarget);
+    sprintf(lpModifier, "%s (-> `%s')", lpTarget, lpContent);
 
     return lpModifier;
 }

@@ -1,0 +1,31 @@
+{{GOTO command}}
+
+	   
+	Jump to a label in a batch script. This command is among the first
+	commands learned while learning batch script, and it is usefull since
+	it allow {conditional execution}.	
+
+	It might be preferable to use {if|multiline if}, especially in the case
+	of a quite short piece of instructions.
+
+{{Synopsis}}
+	
+${	GOTO [:]label [file]}
+
+        - {label} : the label where {dos9|Dos9} will jump. A {label} is a word, or even
+	a couple of words, which are used to identify the different pieces of codes, and
+	this couple of words must be preceded by a column {:}. It is not necessary for 
+	labels to start at colum 1.
+		
+        - {fichier} : The file in which {dos9|Dos9} will seek the specified {label}. This
+	option requires the {spec/ext|dos9 extensions} to be enabled.
+
+{{Compatibility}}
+
+	This command is compatible with {cmd.exe}, excepted the {file} parameter
+	which is only supported by {Dos9}, since version {0.7}
+	
+{{See also}}
+
+	{if|IF command}, {for|FOR loop}, {spec/cond|Conditional running}
+	{commands|Command list}

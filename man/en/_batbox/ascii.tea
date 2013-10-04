@@ -1,0 +1,33 @@
+{{BatBox (/a)}}
+
+	Outputs the character associated with a code, for a charset. This charset might
+	be either a single-byte charset (like {ASCII}, {ANSI}) or any kind of multi-byte
+	charset (like {UTF-8}), provided that the size of a multibyte characted will not
+	exceed 4 byte length.
+
+{{Synopsis}}
+
+${	BATBOX /a code}
+
+	- {code} : Code of the character to output. If you use a multibyte charset, (like {UTF-8}),
+	you must specify all byte used to code the character, in a reversed order. For example the character
+	``█'' is coded by {0xE2 0x96 0x88} in {UTF-8}, so that the {code} to be passed to {../batbox|BatBox}
+	should be {0x8898E2}.
+	
+{{Notes}}
+
+	To get easely a table of characters and their associated codes, you can
+	use the following script.
+
+${	@ECHO OFF
+	SET code=0
+	:Boucle
+	BATBOX /d "code %code% : " /a %code% /a 10 /a 13
+	:: les caracteres ASCII 10 et 13 are used for new line
+	SET /a code=%code%+1
+	IF NOT %code%==256 GOTO :Boucle
+	PAUSE}
+	
+{{See also}}
+
+	{disp|BatBox (/d)}, {fullscr|BatBox (/f)}, {sound|BatBox (/s)}, {../batbox|BatBox}

@@ -1,0 +1,18 @@
+{{%ERRORLEVEL% variable}}
+
+	{%ERRORLEVEL%} is an environment variable definie automatically by {dos9|Dos9} at end of command runing. It enables checking
+	if the previous command failed. With most commands, if {%ERRORLEVEL%} is equal to 0, then no error as occured.
+
+{{Synopsis}}
+
+${	%ERRORLEVEL%}
+
+	The value of {%ERRORLEVEL%} makes no sense because any command is able to set its own {%ERRORLEVEL%} return values.
+	Thus you should just consider if %ERRORLEVEL% is null to determine if errors have occured. 
+
+	In a general way, signification of error codes in {%ERRORLEVEL%} is not important as long as most commands print
+	an error message on failure.
+	
+{{See also}}
+
+	{spec/var|Variables}, {home|home}
