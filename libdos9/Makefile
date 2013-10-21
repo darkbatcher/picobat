@@ -15,7 +15,7 @@
 # the -B switch.
 
 # flags pour  c compiler
-CFLAGS=-Wall -O3 -g
+CFLAGS=-Wall -O3
 
 # flags for lib compiler
 AFLAGS=-r -s
@@ -30,7 +30,7 @@ TARGET=../libs/libDos9.a
 SRC=./cmdlist/Dos9_CmdList.c ./console/linux/Dos9_Console.c \
 	./console/win/Dos9_Console.c ./dir/Dos9_Attr.c ./dir/Dos9_Dir.c ./enc/Dos9_Enc.c \
     ./estr/Dos9_Estr.c stack/Dos9_Stack.c ./thread/Dos9_Thread.c ./file/Dos9_StdFile.c \
-	./file/Dos9_Win32File.c ./init/Dos9_Init.c
+	./file/Dos9_Win32File.c
 		
 OBJ=$(SRC:.c=.o)
 

@@ -77,7 +77,7 @@ DOS9_CMDLIB char* Dos9_GetNextBlockEs(char* lpLine, ESTR* lpReturn)
     if (*lpNext != '\0')
         lpNext++;
 
-    return lpNext;
+    return lpNext+1;
 
 }
 
@@ -124,97 +124,56 @@ DOS9_CMDLIB char* Dos9_GetNextParameterEs(char* lpLine, ESTR* lpReturn)
                                                         peformed after the line first buffering from the file,
                                                         thus, it includes also expansion of special-local vars,
                                                         such as %1 */
-     return lpLine+1;
+     return lpLine;
 }
 
 DOS9_CMDLIB int   Dos9_GetParamArrayEs(char* lpLine, ESTR** lpArray, size_t iLenght)
-/* gets command-line argument in an array of extended string
-
-    Note: The function assumes that lpArray array doesn't contain
-    non-NULL pointers to extended strings
-
-    This code must be refreshed as it make extensive use of various character
-    oriented loop that are already implemented in the previous function. The refreshed
-    code must be an iteration of the previous function. This makes things easier to read,
-    easier to maintain, easier to upgrade, and less buggy.
+/*
+    gets command-line argument in an array of extended string
 */
 {
-    int iSeekQuote=FALSE, i=0, j=0;
-    char* lpStartPos;
+    size_t iIndex=0;
+    ESTR* lpParam=Dos9_EsInit();
+    ESTR* lpTemp=Dos9_EsInit();
+    char* lpNext;
 
-    while (*lpLine==' ' || *lpLine=='\t') lpLine++;
-    lpStartPos=lpLine;
+    while (iIndex < iLenght && (lpNext = Dos9_GetNextParameterEs(lpLine, lpParam))) {
 
-    if (*lpLine=='"') {
-        iSeekQuote=TRUE;
-        i++;
-        lpLine++;
-    }
+        while (lpLine=='\t' || lpLine==' ') lpLine++;
 
-    while (*lpLine!='\0' && j<iLenght-1) {
-        i++;
-        if ((*lpLine==' ') & (!iSeekQuote)) {
-            /* if we found a new element */
-            lpArray[j]=Dos9_EsInit();
-            Dos9_EsCpyN(lpArray[j], lpStartPos, i);
-            Dos9_DelayedExpand(lpArray[j], bDelayedExpansion);
-            i=0;
+        if (*lpLine == '"') {
 
-            while (*lpLine==' ' || *lpLine=='\t') lpLine++;
-            lpStartPos=lpLine;
-            if (*lpLine=='"') {
-                iSeekQuote=TRUE;
-                i++;
-                lpLine++;
-            }
+            /* if the first character are '"', then
+               report it back in the command arguments,
+               since some microsoft commands would not
+               work without these */
 
-            j++;
+            Dos9_EsCpy(lpTemp, "\"");
+            Dos9_EsCatE(lpTemp, lpParam);
+            Dos9_EsCat(lpTemp, "\"");
 
-        } else if (*lpLine=='"' && iSeekQuote) {
-
-            if (*(lpLine+1)==' ' || *(lpLine+1)=='\t') {
-                lpArray[j]=Dos9_EsInit();
-                Dos9_EsCpyN(lpArray[j], lpStartPos, i+1);
-                Dos9_DelayedExpand(lpArray[j], bDelayedExpansion);
-                i=0;
-
-                lpLine++;
-                while (*lpLine==' ' || *lpLine=='\t') lpLine++;
-                lpStartPos=lpLine;
-                if (*lpLine=='"') {
-                    iSeekQuote=TRUE;
-                    i++;
-                    lpLine++;
-                } else {
-                    iSeekQuote=FALSE;
-                }
-
-                j++;
-
-            } else {
-
-                lpLine++;
-                i=0;
-
-            }
-
-        } else {
-
-            lpLine++;
+            Dos9_EsCpyE(lpParam, lpTemp);
 
         }
+
+        lpArray[iIndex]=lpParam;
+
+        lpParam=Dos9_EsInit();
+
+        lpLine=lpNext;
+
+        iIndex++;
     }
 
-    if (*lpStartPos!='\0') {
+    Dos9_EsFree(lpParam);
+    Dos9_EsFree(lpTemp);
 
-        lpArray[j]=Dos9_EsInit();
-        Dos9_EsCpyN(lpArray[j], lpStartPos, i+1);
-        Dos9_DelayedExpand(lpArray[j], bDelayedExpansion);
-        j++;
+    while (iIndex < iLenght) {
+
+        lpArray[iIndex] = NULL;
 
     }
 
-    lpArray[j]=NULL;
     return 0;
 }
 

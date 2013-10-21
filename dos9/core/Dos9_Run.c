@@ -111,6 +111,9 @@ int Dos9_RunBlock(char* lpToken)
     Dos9_SetStreamStackLockState(lppsStreamStack, TRUE);
 
     while (*lpToken) {
+
+        while (*lpToken==' ' || *lpToken=='\t') lpToken++;
+
         lpBeginToken=lpToken;
 
         for (;*lpToken && (*lpToken!='\n' || iParentheseNb);lpToken++) {
@@ -134,6 +137,7 @@ int Dos9_RunBlock(char* lpToken)
         if (*lpToken) {
 
             *lpToken='\0';
+
             Dos9_EsCpy(lpEsLine, lpBeginToken);
             Dos9_RunLine(lpEsLine);
 
@@ -144,10 +148,12 @@ int Dos9_RunBlock(char* lpToken)
             Dos9_EsCpy(lpEsLine, lpBeginToken);
             Dos9_RunLine(lpEsLine);
         }
+
     }
 
     Dos9_SetStreamStackLockState(lppsStreamStack, iOldState);
     Dos9_EsFree(lpEsLine);
+
     return 0;
 }
 

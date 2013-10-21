@@ -45,15 +45,15 @@ BUILDING DOS9
      download sources package from DOS9's sourceforge page, or just get them 
      from the git repository using :
 
-          git clone ssh://darkbatcher@git.code.sf.net/p/dos9/code dos9-code
+        git clone ssh://darkbatcher@git.code.sf.net/p/dos9/code dos9-code
 
      When you have downloaded sources, you just need to compile them using any 
      C compiler. For WINDOWS system, it is more complicated than getting 
      precompiled binaries because you need to have gcc and gmake installed on 
      your system. For *NIX system, doing so is as simple as typing :
 
-          export TARGET_OS=linux 
-          make -B
+        export TARGET_OS=linux 
+        make -B
 
      WINDOWS users just have to remove the first line, obviously. Windows 
      users also need to move non native dependencies *.dll from the folder 
@@ -81,7 +81,7 @@ CHANGING THE LANGUAGE
      ``Dos9_Auto.bat'' script that DOS9 launches at startup. Modify the 
      following line :
 
-           SET LANGUAGE=en_US
+         SET LANGUAGE=en_US
 
      Replace EN_US by the name of your local. It is still possible that the 
      langage does not work though, this means that DOS9 is not translated yet 

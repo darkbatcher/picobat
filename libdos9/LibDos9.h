@@ -33,13 +33,30 @@
     #include <process.h>
     #define stat _stat
 
+   /** \defgroup FILE_ATTRIBUTES File attributes constants
+        \{ */
+    /** The file is an archive */
     #define DOS9_FILE_ARCHIVE FILE_ATTRIBUTE_ARCHIVE
+
+    /** The file compressed */
     #define DOS9_FILE_COMPRESSED FILE_ATTRIBUTE_COMPRESSED
+
+    /** The file is hidden */
     #define DOS9_FILE_HIDDEN FILE_ATTRIBUTE_HIDDEN
+
+    /** The file has offline attribute */
     #define DOS9_FILE_OFFLINE FILE_ATTRIBUTE_OFFLINE
+
+    /** The file is read-only */
     #define DOS9_FILE_READONLY FILE_ATTRIBUTE_READONLY
+
+    /** The file has system attribute */
     #define DOS9_FILE_SYSTEM FILE_ATTRIBUTE_SYSTEM
+
+    /** The file is a directory */
     #define DOS9_FILE_DIR FILE_ATTRIBUTE_DIRECTORY
+
+    /** \} */
     #include <io.h>
 
     #define flushall() _flushall()
@@ -66,7 +83,7 @@
     #define Dos9_GetThreadExitCode(a,b) GetExitCodeThread((HANDLE) a , (PDWORD) b)
     #define _Dos9_Pipe(descriptors, size, mode) _pipe(descriptors, size, mode)
 
-#elif defined _POSIX_C_SOURCE
+#else
 
     #include <unistd.h>
 	#include <pthread.h>
@@ -101,69 +118,11 @@
 
 #endif
 
-#ifdef DOS9_DOXIGEN_GENERATION
-
-    #define DOS9_FILE_DIR
-    #define DOS9_FILE_EXECUTE
-    #define DOS9_FILE_READ
-    #define DOS9_FILE_WRITE
-    #define DOS9_FILE_REGULAR
-    #define DOS9_FILE_ARCHIVE
-    #define DOS9_FILE_COMPRESSED
-    #define DOS9_FILE_HIDDEN
-    #define DOS9_FILE_OFFLINE
-    #define DOS9_FILE_READONLY
-    #define DOS9_FILE_SYSTEM
-
-    #define DOS9_FOREGROUND_RED
-    #define DOS9_FOREGROUND_BLUE
-    #define DOS9_FOREGROUND_GREEN
-    #define DOS9_BACKGROUND_GREEN
-    #define DOS9_BACKGROUND_BLUE
-    #define DOS9_BACKGROUND_RED
-
-    #define DOS9_BACKGROUND_INT
-    #define DOS9_FOREGROUND_INT
-
-    #define DOS9_BACKGROUND_DEFAULT
-    #define DOS9_FOREGROUND_DEFAULT
-
-    #define DOS9_GET_FOREGROUND(a) (a & 0x0F)
-    #define DOS9_GET_BACKGROUND(a) (a & 0xF0)
-    #define DOS9_GET_BACKGROUND_(a) ((a & 0xF0)>>4)
-
-    typedef THREAD;
-
-    LIBDOS9 THREAD Dos9_BeginThread(void(*lpFunction)(void*) , int iMemAmount, void* lpArgList);
-    LIBDOS9 void Dos9_EndThread(void);
-    LIBDOS9 void Dos9_EndThreadEx(void* lpExitCode);
-    LIBDOS9 void Dos9_WaitForThread(THREAD hThread);
-    LIBDOS9 void Dos9_GetThreadExitCode(THREAD hThread, void* lpResult)
-
-#endif
-
-
 
 #define LIBDOS9
 
 #define TRUE 1
 #define FALSE 0
-
-
-/** \defgroup INIT_REF Initialisation function
-    \{ */
-
-    /** Initialises the Dos9 Lib. This allocate a few ressources
-    to ensure the library will work properly. This function should be called
-    at each startup of an application using this lib, even though some features
-    work without calling it. It is absolutely needed for \link ESTR_REF extended string \endlink .
-    \note The ressources used by the Lib have no need to be released as it is done automatically at
-    program's exit. */
-    LIBDOS9 int Dos9_LibInit(void);
-/** \} */
-
-LIBDOS9 void _Dos9_LibClose(void);
-
 
 /** \defgroup THREAD_REF Thread reference
     \{ */
@@ -362,9 +321,7 @@ LIBDOS9 void _Dos9_LibClose(void);
         LIBDOS9 int             Dos9_EsCatN(ESTR* ptrESTR, const char* ptrChaine, size_t iSize);
 
         /** \brief Frees an extended string
-            \param ptrESTR: A pointer to an extended string to be freed. If this parameter is NULL,
-            then the Dos9_EsFree() function will clear buffer remembered by the function (e.g. that
-            would probably be reused by Dos9_EsInit();
+            \param ptrESTR: A pointer to an extended string to be freed
             \return Returns 0 if the function succeded, or 1 otherwise */
         LIBDOS9 int             Dos9_EsFree(ESTR* ptrESTR);
 
@@ -414,10 +371,6 @@ LIBDOS9 void _Dos9_LibClose(void);
         size_t          _Dos9_EsTotalLen3(const char* ptrChaine, size_t iSize);
         size_t          _Dos9_EsTotalLen4(const size_t iSize);
 
-        int _Dos9_Estr_Init(void);
-        void _Dos9_EstrFreeBuffer_LockMutex(void);
-        void _Dos9_EstrFreeBuffer_ReleaseMutex(void);
-        void _Dos9_Estr_Close(void);
 
 /** \defgroup CMD_REF Command search reference
     \{ */
@@ -512,7 +465,7 @@ int                     _Dos9_Sort(const void* ptrS, const void* ptrD);
     #define DOS9_GET_BACKGROUND(a) (a & 0xF0)
     #define DOS9_GET_BACKGROUND_(a) ((a & 0xF0)>>4)
 
-#elif defined _POSIX_C_SOURCE
+#else
 
 
     #define DOS9_FOREGROUND_RED 0x01

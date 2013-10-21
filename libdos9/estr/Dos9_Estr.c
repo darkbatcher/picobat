@@ -70,7 +70,6 @@ ESTR* Dos9_EsInit(void)
 {
     ESTR* ptrESTR=NULL;
 
-
     _Dos9_EstrFreeBuffer_LockMutex();
 
     if ((_Dos9_EstrFreeBuffer_MaxElement >= 0) && (_Dos9_EstrFreeBuffer_MaxElement < (DOS9_MAX_FREEBUFFER_SIZE -1))) {
