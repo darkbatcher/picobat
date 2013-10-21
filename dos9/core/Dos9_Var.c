@@ -42,6 +42,7 @@ int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
                 *lpNextToken=NULL, /* a pointer used to tokenize '=' or ',' in vars like %var:a=b% */
                 *lpNameCpy, /* a pointer used to duplicate lpName (because function should avoid bordering effect)*/
                 *lpZeroPos=NULL;; /* a pointer to the zero put in the environment string */
+
     char        lpBuf[12];
     int         iVarState=0, /* the status of the var interpreter
                                 1 means replace
@@ -75,8 +76,13 @@ int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
             iVarState=2;
         }
     }
-    #ifndef WIN32
+
+    #ifndef _POSIX_C_SOURCE
+
+        /* Non windows systems are case sensitive, and thus,
+           capitalization of charcter is needed */
         strupr(lpNameCpy);
+
     #endif
 
     if (!stricmp(lpNameCpy, "RANDOM")) {
@@ -96,8 +102,11 @@ int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
     } else if (!(lpVarContent=getenv(lpNameCpy))) {
         free(lpNameCpy);
         return FALSE;
+
     }
+
     iTotalLen=strlen(lpVarContent);
+
     if (iVarState==2) {
         if (iBegin<0 || iBegin>= iTotalLen) {
             /* skip because these values are not valid
@@ -121,14 +130,19 @@ int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
             }
         }
     }
+
     Dos9_EsCpy(lpRecieve, lpVarContent);
+
     if (iVarState==1) {
         Dos9_EsReplace(lpRecieve, lpToken, lpNextToken);
     }
+
     if (iVarState==2) {
         *lpZeroPos=cCharSave;
     }
+
     free(lpNameCpy);
+
     return TRUE;
 }
 
@@ -144,8 +158,17 @@ void Dos9_FreeLocalBlock(LOCAL_VAR_BLOCK* lpBlock)
 
 int Dos9_SetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char cVarName, char* cVarContent)
 {
+
+    DOS9_TEST_VARNAME(cVarName);
+        /* Perform test on value cName, to test its
+        specification conformance, i.e. the character must be
+        a strict ASCII character, exculuding control characters
+        and space (code range from 0x00 to 0x30 included) */
+
     if (lpvBlock[(int)cVarName]) free(lpvBlock[(int)cVarName]);
+
     lpvBlock[(int)cVarName]=strdup(cVarContent);
+
     return 0;
 }
 
@@ -166,12 +189,17 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
     Dos9_EsCpy(lpRecieve, "");
 
     if (*lpName!='~') {
+
+        DOS9_TEST_VARNAME(*lpName);
+
         if (!lpvBlock[(int)*lpName]) return NULL;
         Dos9_EsCpy(lpRecieve, lpvBlock[(int)*lpName]);
         return lpName+1;
     }
+
     lpName++;
     if (!*lpName) return NULL;
+
     for (;*(lpName+1) && !isblank(*(lpName+1)) && i<DOS9_VAR_MAX_OPTION;lpName++) {
         if (isdigit(*lpName)) {
             break;
@@ -218,9 +246,14 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
                 return NULL;
         }
     }
+
+    DOS9_TEST_VARNAME(*lpName);
+
     if (!lpvBlock[(int)*lpName]) return NULL;
+
     Dos9_EsCpy(lpRecieve, lpvBlock[(int)*lpName]);
     lpPos=Dos9_EsToChar(lpRecieve);
+
     if (*lpPos=='"') lpPos++;
     if ((lpNext=strchr(lpPos, '"'))) *lpNext='\0';
 
@@ -230,6 +263,7 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
             stFileInfo.st_mode=Dos9_GetFileAttributes(lpPos);
         #endif
     }
+
     if (bSplitPath) Dos9_SplitPath(lpPos, lpDrive, lpDir, lpFileName, lpExt);
 
     if (cFlag[0]!=DOS9_ALL_PATH) {

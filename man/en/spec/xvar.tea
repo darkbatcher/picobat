@@ -1,4 +1,4 @@
-{{Les variables spéciales}}
+﻿{{Les variables spéciales}}
 
 	   Les variables spéciales sont des variables internes à {dos9|Dos9}:
 	Les commandes lancées avec {Dos9} n'héritent pas des variables
@@ -25,6 +25,9 @@
 	
 	Les options disponibles sont (en prenant l'exemple de la variable {%I}):
 	
+		- {%~I} : dévellope {%I} en supprimant les guillemets
+		éventuels	
+	
 		- {%~dI} : dévellope {%I} en lettre de lecteur
 		
 		- {%~pI} : dévellope {%I} en chemin d'accès
@@ -44,7 +47,9 @@
 {{Note}}
 
 	   {Dos9} est sensible à la casse pour les options et les noms de
-	{variables spéciales}
+	{variables spéciales}. Il est absolument nécessaire que le caractère
+	du nom de la variable soit en {ASCII strict}, sinon, {Dos9} affichera
+	une erreur.
 		
 {{A voir aussi}}
 

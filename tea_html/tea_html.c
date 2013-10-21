@@ -8,14 +8,23 @@
 
 int main(int argc, char *argv[])
 {
-    ESTR *lpEsContent=Dos9_EsInit(), *lpEsTmp=Dos9_EsInit();
-    ESTR *lpTitle=Dos9_EsInit();
+
     FILE* pFile;
 
     char *lpFileName=NULL, *lpFileMeta=NULL, *lpFileHeader=NULL, *lpFileFooter=NULL, *lpEncoding="utf-8";
     int iFlag=0;
 
     int i=1;
+
+    if (Dos9_LibInit() == -1) {
+
+        puts("Error : Unable to load LibDos9. Exiting ...");
+        exit(-1);
+    }
+
+    ESTR *lpEsContent=Dos9_EsInit(), *lpEsTmp=Dos9_EsInit();
+    ESTR *lpTitle=Dos9_EsInit();
+
 
     if (argc<1) {
         fprintf(stderr ,"tea_html :: erreur : ligne de commande incorrecte");

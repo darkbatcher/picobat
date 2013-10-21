@@ -1,31 +1,172 @@
 #include "../LibDos9.h"
 
+#ifndef DOS9_MAX_FREEBUFFER_SIZE
+    #define DOS9_MAX_FREEBUFFER_SIZE 64
+    /*
+        defines the size of string garbage collection
+    */
+#endif // DOS9_MAX_FREEBUFFER_SIZE
+
 int _Dos9_NewLine=DOS9_NEWLINE_WINDOWS;
+
+
+ESTR* _Dos9_EstrFreeBuffer_Array[DOS9_MAX_FREEBUFFER_SIZE];
+int   _Dos9_EstrFreeBuffer_MaxElement=0;
+
+#ifdef _POSIX_C_SOURCE
+
+    /* what to do if we are running under a *NIX system */
+
+
+#elif defined WIN32
+
+    /* what to do if we are running undef windows */
+
+    #include <windows.h>
+
+    HANDLE _Dos9_EstrFreeBuffer_Mutex;
+
+    int _Dos9_Estr_Init(void)
+    {
+
+        if (!(_Dos9_EstrFreeBuffer_Mutex=CreateMutex(NULL, FALSE, NULL))) {
+
+            return -1;
+
+        }
+
+
+        Dos9_EsFree(NULL);
+        return 0;
+
+    }
+
+    inline void _Dos9_EstrFreeBuffer_LockMutex(void)
+    {
+
+        WaitForSingleObject(_Dos9_EstrFreeBuffer_Mutex, INFINITE);
+
+    }
+
+    inline void _Dos9_EstrFreeBuffer_ReleaseMutex(void)
+    {
+
+        if (!ReleaseMutex(_Dos9_EstrFreeBuffer_Mutex)) {
+            puts("Error : Unable to release Mutex");
+            exit(-1);
+        }
+
+    }
+
+    void _Dos9_Estr_Close(void) {
+
+        CloseHandle(_Dos9_EstrFreeBuffer_Mutex);
+
+    }
+
+#endif // _POSIX_C_SOURCE
 
 ESTR* Dos9_EsInit(void)
 {
     ESTR* ptrESTR=NULL;
-    ptrESTR=malloc(sizeof(ESTR));
-    if (ptrESTR)
-    {
-        ptrESTR->ptrString=malloc(DEFAULT_ESTR);
-        if (ptrESTR->ptrString) ptrESTR->iLenght=DEFAULT_ESTR;
-        else return NULL;
-        *(ptrESTR->ptrString)='\0';
-        return ptrESTR;
+
+
+    _Dos9_EstrFreeBuffer_LockMutex();
+
+    if ((_Dos9_EstrFreeBuffer_MaxElement >= 0) && (_Dos9_EstrFreeBuffer_MaxElement < (DOS9_MAX_FREEBUFFER_SIZE -1))) {
+
+        /* just pick the last element on the array */
+
+        ptrESTR=_Dos9_EstrFreeBuffer_Array[_Dos9_EstrFreeBuffer_MaxElement];
+
+        _Dos9_EstrFreeBuffer_MaxElement--;
+
+
     } else {
-        puts("Error : Not Enough memory to run Dos9. Exiting...");
-        getchar();
-        exit(-1);
-        return NULL;
+
+        ptrESTR=malloc(sizeof(ESTR));
+
+        if (ptrESTR)
+        {
+
+            ptrESTR->ptrString=malloc(DEFAULT_ESTR);
+            if (ptrESTR->ptrString) {
+
+                ptrESTR->iLenght=DEFAULT_ESTR;
+
+            } else {
+
+                goto Dos9_EsInit_Error;
+
+            }
+
+
+        } else {
+
+            Dos9_EsInit_Error:
+
+            puts("Error : Not Enough memory to run Dos9. Exiting...");
+            getchar();
+            exit(-1);
+
+            _Dos9_EstrFreeBuffer_ReleaseMutex();
+            /* Release the lock */
+
+            return NULL;
+            /* if exist fails */
+
+        }
     }
+
+    *(ptrESTR->ptrString)='\0';
+
+    _Dos9_EstrFreeBuffer_ReleaseMutex();
+    /* Release the lock */
+
+    return ptrESTR;
 }
 
 LIBDOS9 int Dos9_EsFree(ESTR* ptrESTR)
 {
+    int i;
 
-    free(ptrESTR->ptrString);
-    free(ptrESTR);
+    _Dos9_EstrFreeBuffer_LockMutex();
+
+    if (ptrESTR == NULL) {
+
+        /* if the program asked for freeing all
+           old ESTR that have been saved in memeory
+        */
+
+        for (i=0;i<_Dos9_EstrFreeBuffer_MaxElement;i++) {
+
+            free(_Dos9_EstrFreeBuffer_Array[i]->ptrString);
+            free(_Dos9_EstrFreeBuffer_Array[i]);
+
+        }
+
+        _Dos9_EstrFreeBuffer_MaxElement=-1;
+
+
+    } else if (_Dos9_EstrFreeBuffer_MaxElement < (DOS9_MAX_FREEBUFFER_SIZE - 1)) {
+
+        /* we don't free the memory, just store it in the array */
+
+        _Dos9_EstrFreeBuffer_MaxElement++;
+
+        _Dos9_EstrFreeBuffer_Array[_Dos9_EstrFreeBuffer_MaxElement]=ptrESTR;
+        /* Note : we should check that ptrEstr is a valid pointer */
+
+    } else {
+
+        free(ptrESTR->ptrString);
+        free(ptrESTR);
+
+    }
+
+    _Dos9_EstrFreeBuffer_ReleaseMutex();
+        /* Release the lock */
+
     return 0;
 }
 
@@ -241,12 +382,14 @@ LIBDOS9 int Dos9_EsReplace(ESTR* ptrESTR, const char* ptrPattern, const char* pt
     char* lpBuffer=Dos9_EsToChar(ptrESTR), *lpToken;
     int iLength=strlen(ptrPattern);
     ESTR *lpReturn=Dos9_EsInit();
+
     while ((lpToken=strstr(lpBuffer, ptrPattern))) {
         *lpToken='\0';
         Dos9_EsCat(lpReturn, lpBuffer);
         Dos9_EsCat(lpReturn, ptrReplace);
         lpBuffer=lpToken+iLength;
     }
+
     Dos9_EsCat(lpReturn, lpBuffer);
     Dos9_EsCpyE(ptrESTR, lpReturn);
     Dos9_EsFree(lpReturn);

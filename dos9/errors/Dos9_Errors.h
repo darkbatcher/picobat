@@ -18,9 +18,6 @@
 void Dos9_ShowErrorMessage(unsigned int iErrorNumber, char* lpComplement, int iExitCode);
 void Dos9_LoadErrors(void);
 
-extern const char* lpErrorMsg[14];
-extern const char* lpQuitMessage;
-
 #define DOS9_FILE_ERROR 0
 #define DOS9_DIRECTORY_ERROR 1
 #define DOS9_COMMAND_ERROR 2
@@ -36,6 +33,12 @@ extern const char* lpQuitMessage;
 #define DOS9_MKDIR_ERROR 12
 #define DOS9_RMDIR_ERROR 13
 #define DOS9_STREAM_MODULE_ERROR 14
+#define DOS9_SPECIAL_VAR_NON_ASCII 15
+#define DOS9_ARGUMENT_NOT_BLOCK 16
 
+#define DOS9_ERROR_MESSAGE_NUMBER 17
+
+extern const char* lpErrorMsg[DOS9_ERROR_MESSAGE_NUMBER];
+extern const char* lpQuitMessage;
 
 #endif

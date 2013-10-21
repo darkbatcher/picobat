@@ -20,7 +20,7 @@
 
 #endif
 
-const char* lpErrorMsg[14];
+const char* lpErrorMsg[DOS9_ERROR_MESSAGE_NUMBER];
 const char* lpQuitMessage;
 
 void Dos9_LoadErrors(void)
@@ -38,46 +38,54 @@ void Dos9_LoadErrors(void)
 	bind_textdomain_codeset("Dos9-errors", lpEncoding);
     textdomain("Dos9-errors");
 
-    lpErrorMsg[0]=gettext("Error : Unable to acces to file \"%s\"\n");
+    lpErrorMsg[DOS9_FILE_ERROR]=gettext("Error : Unable to acces to file \"%s\"\n");
     // TRANSLATORS : Don't remove the %s because the program needs it
 
-    lpErrorMsg[1]=gettext("Error : Can't find folder \"%s\"\n");
+    lpErrorMsg[DOS9_DIRECTORY_ERROR]=gettext("Error : Can't find folder \"%s\"\n");
     // TRANSLATORS : Don't remove the %s because the program needs it
 
-    lpErrorMsg[2]=gettext("Error : \"%s\" is not recognized as an internal or external command, an operable program or a batch file\n");
+    lpErrorMsg[DOS9_COMMAND_ERROR]=gettext("Error : \"%s\" is not recognized as an internal or external command, an operable program or a batch file\n");
     // TRANSLATORS : Don't remove the %s because the program needs it
 
-    lpErrorMsg[3]=gettext("Error : \"%s\" was unexpected\n");
+    lpErrorMsg[DOS9_UNEXPECTED_ELEMENT]=gettext("Error : \"%s\" was unexpected\n");
     // TRANSLATORS : Don't remove the %s because the program needs it
 
-    lpErrorMsg[4]=gettext("Error : Invalid command line\n");
+    lpErrorMsg[DOS9_BAD_COMMAND_LINE]=gettext("Error : Invalid command line\n");
 
-    lpErrorMsg[5]=gettext("Error : Unable to find label \"%s\"\n");
+    lpErrorMsg[DOS9_LABEL_ERROR]=gettext("Error : Unable to find label \"%s\"\n");
     // TRANSLATORS : Don't remove the %s because the program needs it
 
-    lpErrorMsg[6]=gettext("Warning : This requires Dos9's extensions to be enabled\n");
+    lpErrorMsg[DOS9_EXTENSION_DISABLED_ERROR]=gettext("Warning : This requires Dos9's extensions to be enabled\n");
 
-    lpErrorMsg[7]=gettext("Error : \"%s\" expected more arguments\n");
+    lpErrorMsg[DOS9_EXPECTED_MORE]=gettext("Error : \"%s\" expected more arguments\n");
     // TRANSLATORS : Don't remove the %s because the program needs it
 
-    lpErrorMsg[8]=gettext("Error : Uncompatible arguments %s\n");
+    lpErrorMsg[DOS9_INCOMPATIBLE_ARGS]=gettext("Error : Uncompatible arguments %s\n");
     // TRANSLATORS : Don't remove the %s because the program needs it
 
-    lpErrorMsg[9]=gettext("Error : Unable to rename \"%s\"\n");
+    lpErrorMsg[DOS9_UNABLE_RENAME]=gettext("Error : Unable to rename \"%s\"\n");
     // TRANSLATORS : Don't remove the %s because the program needs it
 
-    lpErrorMsg[10]=gettext("Error : Overflowed maximum value\n");
+    lpErrorMsg[DOS9_MATH_OUT_OF_RANGE]=gettext("Error : Overflowed maximum value\n");
 
-    lpErrorMsg[11]=gettext("Error : Divide by 0\n");
+    lpErrorMsg[DOS9_MATH_DIVIDE_BY_0]=gettext("Error : Divide by 0\n");
 
-    lpErrorMsg[12]=gettext("Error : Unable to create folder \"%s\"\n");
+    lpErrorMsg[DOS9_MKDIR_ERROR]=gettext("Error : Unable to create folder \"%s\"\n");
     // TRANSLATORS : Don't remove the %s because the program needs it
 
-    lpErrorMsg[13]=gettext("Error : Unable to delete folder \"%s\"\n");
+    lpErrorMsg[DOS9_RMDIR_ERROR]=gettext("Error : Unable to delete folder \"%s\"\n");
     // TRANSLATORS : Don't remove the %s because the program needs it
 
-    lpErrorMsg[13]=gettext("Error : Stream module : \"%s\"\n");
+    lpErrorMsg[DOS9_STREAM_MODULE_ERROR]=gettext("Error : Stream module : \"%s\"\n");
     // TRANSLATORS : Don't remove the %s because the program needs it
+
+    lpErrorMsg[DOS9_SPECIAL_VAR_NON_ASCII]=gettext("Error : \"%c\" is an invalid character for special variables. "
+                           "Special variables require their name to be strict ascii characters,"
+                           " exluding controls characters and space (0x00 - 0x30)\n");
+    // TRANSLATORS : Don't remove the %s because the program needs it
+
+    lpErrorMsg[DOS9_ARGUMENT_NOT_BLOCK]=gettext("Error : \"%s\" is not a valid block (should at least be enclosed"
+                                                " within parenthesis).");
 
     lpQuitMessage=gettext("\nDos9 will abort current command and quit, hit any key to continue...");
 

@@ -3,9 +3,11 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
+
 #include "LibDos9.h"
 
-#define LOCAL_VAR_BLOCK_SIZE 256
+#define LOCAL_VAR_BLOCK_SIZE 128
 
 #ifndef WIN32
     #define _MAX_DRIVE FILENAME_MAX
@@ -41,5 +43,14 @@ LOCAL_VAR_BLOCK* Dos9_GetLocalBlock(void);
 void Dos9_FreeLocalBlock(LOCAL_VAR_BLOCK* lpBlock);
 char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve);
 int  Dos9_GetVar(char* lpName, ESTR* lpRecieve);
+
+#define DOS9_TEST_VARNAME(cVar) \
+        if ((cVar & 0x80) || (cVar <= 0x20)) { \
+            /* if cVarName appears to be non-strict ascii format, execpted white
+               spaces, and nul character */ \
+            if (!(isspace(cVar)) && cVar) \
+                Dos9_ShowErrorMessage(DOS9_SPECIAL_VAR_NON_ASCII, cVar, FALSE); \
+            return NULL; \
+        }
 
 #endif

@@ -62,6 +62,13 @@ int main(int argc, char *argv[])
     int j;
     int c;
     int bSave;
+
+    if (Dos9_LibInit() == -1) {
+
+        puts("Error : Unable to load LibDos9. Exiting ...");
+        exit(-1);
+    }
+
     lpvLocalVars=Dos9_GetLocalBlock();
     Dos9_InitConsole();
     Dos9_ExpandInit();
@@ -112,7 +119,7 @@ int main(int argc, char *argv[])
         } else {
             if (lpFileName) {
                 /* set parameters for the file currently runned */
-                for (j=i ,  c='1';argv[j] && c<='9';i++, c++) {
+                for (j=i ,  c='1';argv[j] && c<='9';i++, c++ , j++ ) {
                     Dos9_SetLocalVar(lpvLocalVars, c, argv[j]);
                 }
                 break;

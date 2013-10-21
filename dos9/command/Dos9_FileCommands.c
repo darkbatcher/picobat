@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-#ifdef __linux
+#ifdef _POSIX_C_SOURCE
 
     #define Dos9_Mkdir(name, mode) mkdir(name, mode)
 

@@ -218,6 +218,13 @@ void hlp_make_LoadContent(char *lpName, ESTR* lpContent)
 
 int main(int argc, char *argv[])
 {
+
+    if (Dos9_LibInit() == -1) {
+
+        puts("Error : Unable to load LibDos9. Exiting ...");
+        exit(-1);
+    }
+
     ESTR* lpHead=Dos9_EsInit();
     ESTR* lpContent=Dos9_EsInit();
 

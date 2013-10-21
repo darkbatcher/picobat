@@ -16,6 +16,12 @@ int main(int argc, char *argv[])
     TEAMODIFIERS* lpTeaMods=&teaTextMods;
     TEAOUTPUT* lpTeaOutput=&teaTextOutput;
 
+    if (Dos9_LibInit() == -1) {
+
+        puts("Error : Unable to load LibDos9. Exiting ...");
+        exit(-1);
+    }
+
     ESTR* lpEncodingStartCommandLine=Dos9_EsInit();
     ESTR* lpEncodingEndCommandLine=Dos9_EsInit();
 

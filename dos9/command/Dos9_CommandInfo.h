@@ -4,6 +4,7 @@
 #include "Dos9_ScriptCommands.h"
 #include "Dos9_FileCommands.h"
 #include "Dos9_Conditions.h"
+#include "Dos9_For.h"
 
 #define DOS9_COMMANDINFO_DEXPANDALL 1
 
@@ -36,7 +37,8 @@ COMMANDINFO lpCmdInfo[]={
                             {"MKDIR", Dos9_CmdMkdir, 0},
                             {"RD", Dos9_CmdRmdir, 0},
                             {"RMDIR", Dos9_CmdRmdir, 0},
-                            {"COPY", Dos9_CmdCopy, 0}
+                            {"COPY", Dos9_CmdCopy, 0},
+                            {"FOR", Dos9_CmdFor, 0}
                         };
 
 #endif

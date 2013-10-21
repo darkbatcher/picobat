@@ -20,6 +20,7 @@ int Dos9_CmdIf(char* lpParam)
             IF [NOT] ERRORLEVEL code (...) -> DEPRECATED !
     */
     lpParam+=2;
+
     if ((lpNext=Dos9_GetNextParameter(lpParam, lpArgument, 11))) {
         if (!strcmp(lpArgument, "/?")) {
             puts(lpHlpDeprecated);
@@ -178,6 +179,7 @@ int Dos9_CmdIf(char* lpParam)
         Dos9_EsFree(lpComparison);
 
     }
+
     if ((lpToken=Dos9_GetNextBlock(lpParam, &lpNext))) {
         if (iResult) {
             cCharSave=*lpNext;
@@ -187,12 +189,15 @@ int Dos9_CmdIf(char* lpParam)
 
             *lpNext=cCharSave;
         } else {
+
             //puts("COMMAND[IF] ::  Looking for an else ");
             //printf("COMMAND[IF] :: Next content {%s}\n", lpNext);
             if (!strnicmp(lpNext, ") ELSE (", sizeof(") ELSE (")-1)) {
+
                 lpNext+=(sizeof(") ELSE (")-2);
                 //puts("COMMAND[IF] :: Else found");
                 if ((lpToken=Dos9_GetNextBlock(lpNext, &lpNext))) {
+
                     cCharSave=*lpNext;
                     *lpNext='\0';
                     //printf("Runing block {%s}\n", lpToken);

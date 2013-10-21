@@ -54,6 +54,12 @@ int main (int argc, char* argv[])
     int iLoadFromFile=FALSE;
     char* lpName=NULL;
 
+	if (Dos9_LibInit() == -1) {
+
+        puts("Error : Unable to load LibDos9. Exiting ...");
+        exit(-1);
+    }
+	
     /* initializing gettext lib */
     Dos9_SetNewLineMode(DOS9_NEWLINE_LINUX);
     Dos9_GetConsoleEncoding(lpEnc, sizeof(lpEnc));

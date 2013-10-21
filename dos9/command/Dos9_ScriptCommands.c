@@ -295,6 +295,7 @@ int Dos9_CmdCd(char* lpLine)
         Dos9_ShowErrorMessage(DOS9_BAD_COMMAND_LINE, NULL, FALSE);
         return -1;
     }
+
     if ((lpNext=Dos9_GetNextParameter(lpLine, lpArg, 4))) {
         if (!strcmp(lpArg, "/?")) {
             puts(lpHlpDeprecated);
@@ -302,16 +303,47 @@ int Dos9_CmdCd(char* lpLine)
         } else if (!stricmp(lpArg, "/d")) {
             lpLine=lpNext;
         }
+
         while (*lpLine==' ' || *lpLine=='\t') lpLine++;
+
         if ((lpNext=strrchr(lpLine, ' '))) *lpNext='\0';
-        if (chdir(lpLine)!=-1) {
+        /* FIX ME :
+            A common bug occurs when specifying path with
+            extra spaces at the end of the line. In windows,
+            this does not changes the current path but do
+            not returns errors though.
+
+            This is not a real problem, but we need to compare
+            with *nix behaviours about spaces left in paths, to
+            find the right to handle this.
+        */
+
+        errno=0;
+        chdir(lpLine);
+
+        if (errno ==  0) {
+
             Dos9_UpdateCurrentDir();
             return 0;
+
         } else {
+
+            /* do not perform errno checking
+               as long as the most important reason for
+               chdir to fail is obviously the non existence
+               or the specified directory
+
+               However, it appears that this is inconsistant
+               using windows as it does not returns on failure
+               every time a non-existing folder is passed to the
+               function, tried with '.. ' on my system
+            */
+
             Dos9_ShowErrorMessage(DOS9_DIRECTORY_ERROR, lpLine, FALSE);
             return -1;
         }
     }
+
     puts(Dos9_GetCurrentDir());
     return 0;
 }

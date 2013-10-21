@@ -17,9 +17,8 @@
 DOS9_CMDLIB char* Dos9_GetNextParameterEs(char* lpLine, ESTR* lpReturn);
 DOS9_CMDLIB char* Dos9_GetNextParameter(char* lpLine, char* lpResponseBuffer, int iLength);
 DOS9_CMDLIB int   Dos9_GetParamArrayEs(char* lpLine, ESTR** lpArray, size_t iLenght);
+DOS9_CMDLIB char* Dos9_GetNextBlockEs(char* lpLine, ESTR* lpReturn);
 DOS9_CMDLIB char* Dos9_GetNextBlock(char* lpLine, char** lpNextPart);
 DOS9_CMDLIB char* Dos9_GetEndOfLine(char* lpLine, ESTR* lpReturn);
-
-//#include "cmdlib/Dos9_CmdLibFiles.c"
 
 #endif

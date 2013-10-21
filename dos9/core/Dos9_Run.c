@@ -112,6 +112,7 @@ int Dos9_RunBlock(char* lpToken)
 
     while (*lpToken) {
         lpBeginToken=lpToken;
+
         for (;*lpToken && (*lpToken!='\n' || iParentheseNb);lpToken++) {
             switch (*lpToken) {
                 case '^':
@@ -124,17 +125,21 @@ int Dos9_RunBlock(char* lpToken)
                     break;
             }
         }
+
         if (lpToken==lpBeginToken)  {
             if (*lpToken) lpToken++;
             continue;
         }
+
         if (*lpToken) {
+
             *lpToken='\0';
             Dos9_EsCpy(lpEsLine, lpBeginToken);
             Dos9_RunLine(lpEsLine);
 
             *lpToken='\n';
             lpToken++;
+
         } else {
             Dos9_EsCpy(lpEsLine, lpBeginToken);
             Dos9_RunLine(lpEsLine);
