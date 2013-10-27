@@ -65,6 +65,7 @@ int Dos9_RunLine(ESTR* lpLine)
 
 int Dos9_RunCommand(ESTR* lpCommand)
 {
+
     int (*lpProc)(char*);
     char lpErrorlevel[]="ERRORLEVEL=-3000000000";
     static int lastErrorLevel=0;
@@ -100,17 +101,25 @@ int Dos9_RunCommand(ESTR* lpCommand)
 }
 
 
-int Dos9_RunBlock(char* lpToken)
+int Dos9_RunBlock(BLOCKINFO* lpbkInfo)
 {
-    char *lpBeginToken;
     ESTR*  lpEsLine=Dos9_EsInit();
+
+    char *lpBeginToken;
+    char *lpToken = lpbkInfo->lpBegin;
+    char *lpEnd = lpbkInfo->lpEnd;
+
     int iParentheseNb=0;
     int iOldState;
 
+    size_t iSize;
+
+    /* Save old lock state and lock the
+       level, definitely */
     iOldState=Dos9_GetStreamStackLockState(lppsStreamStack);
     Dos9_SetStreamStackLockState(lppsStreamStack, TRUE);
 
-    while (*lpToken) {
+    while (*lpToken && (lpToken < lpEnd)) {
 
         while (*lpToken==' ' || *lpToken=='\t') lpToken++;
 
@@ -136,22 +145,29 @@ int Dos9_RunBlock(char* lpToken)
 
         if (*lpToken) {
 
-            *lpToken='\0';
+            /* Do not modify the value of the string passed
+               as argument, just take the character that interest
+               you */
+            iSize = lpToken - lpBeginToken+1;
 
-            Dos9_EsCpy(lpEsLine, lpBeginToken);
+            Dos9_EsCpyN(lpEsLine, lpBeginToken, iSize);
             Dos9_RunLine(lpEsLine);
 
-            *lpToken='\n';
             lpToken++;
 
         } else {
+
             Dos9_EsCpy(lpEsLine, lpBeginToken);
             Dos9_RunLine(lpEsLine);
+
         }
 
     }
 
+
+    /* releases the lock */
     Dos9_SetStreamStackLockState(lppsStreamStack, iOldState);
+
     Dos9_EsFree(lpEsLine);
 
     return 0;
@@ -159,10 +175,12 @@ int Dos9_RunBlock(char* lpToken)
 
 int Dos9_RunExternalCommand(char* lpCommandLine)
 {
+
     char* lpArguments[FILENAME_MAX];
     ESTR* lpEstr[FILENAME_MAX];
     int i=0;
     pid_t iPid;
+
 
     Dos9_GetParamArrayEs(lpCommandLine, lpEstr, FILENAME_MAX);
 

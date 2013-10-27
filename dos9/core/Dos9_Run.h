@@ -14,9 +14,20 @@
     #define P_WAIT _P_WAIT
 #endif
 
+#ifndef DOS9_BLOCKINFO_DEFINED
+#define DOS9_BLOCKINFO_DEFINED
+
+/* a structure that contains boundaries of a block */
+typedef struct BLOCKINFO {
+    char* lpBegin;
+    char* lpEnd;
+} BLOCKINFO;
+
+#endif
+
 int Dos9_RunCommand(ESTR* lpCommand); // the fucbtions that run every command
 int Dos9_RunLine(ESTR* lpLine);
-int Dos9_RunBlock(char* lpToken); // the function that run blocks
+int Dos9_RunBlock(BLOCKINFO* lpbkInfo); // the function that run blocks
 int Dos9_RunBatch(int isScript); // the function that runs the batch
 int Dos9_RunExternalCommand(char* lpCommandLine);
 

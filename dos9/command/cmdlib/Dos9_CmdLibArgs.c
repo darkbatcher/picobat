@@ -22,7 +22,7 @@ DOS9_CMDLIB char* Dos9_GetNextParameter(char* lpLine, char* lpResponseBuffer, in
      return lpLine;
  }
 
-DOS9_CMDLIB char* Dos9_GetNextBlock(char* lpLine, char** lpNextPart)
+DOS9_CMDLIB char* Dos9_GetNextBlock(char* lpLine, BLOCKINFO* lpbkInfo)
 {
     char* lpBlockBegin;
     char cSave;
@@ -48,34 +48,33 @@ DOS9_CMDLIB char* Dos9_GetNextBlock(char* lpLine, char** lpNextPart)
 
         }
 
-        *lpNextPart=lpLine;
-
     } else {
 
         /* The blocks continues until the next carriage return */
         lpBlockBegin=lpLine;
         while (*lpLine && *lpLine!='\n') lpLine++;
-        *lpNextPart=lpLine;
     }
 
-    return lpBlockBegin;
+    lpbkInfo->lpBegin=lpBlockBegin;
+    lpbkInfo->lpEnd=lpLine;
+
+    return lpLine;
+
 }
 
 DOS9_CMDLIB char* Dos9_GetNextBlockEs(char* lpLine, ESTR* lpReturn)
 {
     char* lpNext;
+    BLOCKINFO bkInfo;
+
     size_t iNbBytes;
 
-    lpLine = Dos9_GetNextBlock(lpLine, &lpNext);
+    lpNext = Dos9_GetNextBlock(lpLine, &bkInfo);
 
 
-    iNbBytes = lpNext - lpLine + 1;
+    iNbBytes = bkInfo.lpEnd - bkInfo.lpBegin + 1;
 
-    Dos9_EsCpyN(lpReturn, lpLine, iNbBytes);
-
-
-    if (*lpNext != '\0')
-        lpNext++;
+    Dos9_EsCpyN(lpReturn, bkInfo.lpBegin, iNbBytes);
 
     return lpNext+1;
 
@@ -87,8 +86,7 @@ DOS9_CMDLIB char* Dos9_GetNextParameterEs(char* lpLine, ESTR* lpReturn)
      int i=0;
      char* lpStartParameter=NULL;
 
-     for (;*lpLine==' ' || *lpLine=='\t';lpLine++);
-
+     while (*lpLine==' ' || *lpLine=='\t') lpLine++;
 
      if (*lpLine=='"') {
          iSeekQuote=1;
@@ -124,7 +122,7 @@ DOS9_CMDLIB char* Dos9_GetNextParameterEs(char* lpLine, ESTR* lpReturn)
                                                         peformed after the line first buffering from the file,
                                                         thus, it includes also expansion of special-local vars,
                                                         such as %1 */
-     return lpLine;
+     return lpLine+1;
 }
 
 DOS9_CMDLIB int   Dos9_GetParamArrayEs(char* lpLine, ESTR** lpArray, size_t iLenght)
@@ -139,7 +137,7 @@ DOS9_CMDLIB int   Dos9_GetParamArrayEs(char* lpLine, ESTR** lpArray, size_t iLen
 
     while (iIndex < iLenght && (lpNext = Dos9_GetNextParameterEs(lpLine, lpParam))) {
 
-        while (lpLine=='\t' || lpLine==' ') lpLine++;
+        while (*lpLine=='\t' || *lpLine==' ') lpLine++;
 
         if (*lpLine == '"') {
 
@@ -156,7 +154,10 @@ DOS9_CMDLIB int   Dos9_GetParamArrayEs(char* lpLine, ESTR** lpArray, size_t iLen
 
         }
 
+
         lpArray[iIndex]=lpParam;
+
+        Dos9_DelayedExpand(lpParam, bDelayedExpansion);
 
         lpParam=Dos9_EsInit();
 
@@ -168,9 +169,12 @@ DOS9_CMDLIB int   Dos9_GetParamArrayEs(char* lpLine, ESTR** lpArray, size_t iLen
     Dos9_EsFree(lpParam);
     Dos9_EsFree(lpTemp);
 
+
     while (iIndex < iLenght) {
 
         lpArray[iIndex] = NULL;
+
+        iIndex++;
 
     }
 

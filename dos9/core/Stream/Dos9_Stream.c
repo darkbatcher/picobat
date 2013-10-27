@@ -113,32 +113,39 @@ int Dos9_OpenOutput(LPSTREAMSTACK lpssStreamStack, char* lpName, int iDescriptor
 
 int Dos9_OpenPipe(LPSTREAMSTACK lpssStreamStack)
 {
-    int iPipeFileDescriptor, iOldInputDescriptor;
+    int iPipeDescriptors[2], iOldInputDescriptor;
     LPSTREAMLVL lpLvl;
+
+    if (_Dos9_Pipe(iPipeDescriptors, 1024, O_TEXT) == -1)
+        return NULL;
 
     Dos9_GetStack(lppsStreamStack, (void**)&lpLvl);
     if (!lpLvl->iPipeIndicator) {
         lppsStreamStack=Dos9_PushStreamStack(lppsStreamStack);
     }
 
-    if ((iPipeFileDescriptor=creat(tmpnam(NULL), O_RDWR | O_APPEND))) {
-        Dos9_GetStack(lppsStreamStack, (void**)&lpLvl);
-        if (lpLvl) {
-            iOldInputDescriptor=lpLvl->iStandardDescriptors[DOS9_STDIN];
-            lpLvl->iFreeDescriptors[DOS9_STDIN]=iPipeFileDescriptor;
-            lpLvl->iStandardDescriptors[DOS9_STDIN]=iPipeFileDescriptor;
-            lpLvl->iPipeIndicator=TRUE;
-        }
-        lppsStreamStack=Dos9_PushStreamStack(lppsStreamStack);
-        Dos9_GetStack(lppsStreamStack, (void**)&lpLvl);
-        if (lpLvl) {
-            lpLvl->iStandardDescriptors[DOS9_STDIN]=iOldInputDescriptor;
-            lpLvl->iStandardDescriptors[DOS9_STDOUT]=iPipeFileDescriptor;
-            lpLvl->iPipeIndicator=TRUE;
-            Dos9_FlushDescriptor(iPipeFileDescriptor, DOS9_STDOUT);
-            return 0;
-        }
+    Dos9_GetStack(lppsStreamStack, (void**)&lpLvl);
+    if (lpLvl) {
+        iOldInputDescriptor=lpLvl->iStandardDescriptors[DOS9_STDIN];
+        lpLvl->iFreeDescriptors[DOS9_STDIN]=iPipeDescriptors[0];
+        lpLvl->iStandardDescriptors[DOS9_STDIN]=iPipeDescriptors[0];
+        lpLvl->iPipeIndicator=TRUE;
     }
+
+    lppsStreamStack=Dos9_PushStreamStack(lppsStreamStack);
+    Dos9_GetStack(lppsStreamStack, (void**)&lpLvl);
+
+    if (lpLvl) {
+        lpLvl->iStandardDescriptors[DOS9_STDIN]=iOldInputDescriptor;
+        lpLvl->iStandardDescriptors[DOS9_STDOUT]=iPipeDescriptors[1];
+        lpLvl->iFreeDescriptors[DOS9_STDOUT]=iPipeDescriptors[1];
+        lpLvl->iPipeIndicator=TRUE;
+
+        Dos9_FlushDescriptor(iPipeDescriptors[1], DOS9_STDOUT);
+        return 0;
+    }
+
+
     Dos9_ShowErrorMessage(DOS9_STREAM_MODULE_ERROR, strerror(errno), TRUE);
     return -1;
 }
@@ -150,7 +157,6 @@ LPSTREAMSTACK Dos9_Pipe(LPSTREAMSTACK lppsStreamStack)
 
 
     Dos9_GetStack(lppsStreamStack, (void**)&lpLvl); // on récupère le contenu du niveau courrant;
-
 
     DEBUG("In Pipe callback function");
     DEBUG_(lpLvl->iPipeIndicator);

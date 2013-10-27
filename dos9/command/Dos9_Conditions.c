@@ -8,7 +8,6 @@ int Dos9_CmdIf(char* lpParam)
 {
     char lpArgument[FILENAME_MAX], *lpNext, *lpToken;
     int iFlag=0, iResult;
-    char cCharSave;
     CMPTYPE cmpCompType;
     ESTR *lpComparison, *lpOtherPart;
     LPFILELIST lpflFileList;
@@ -19,6 +18,9 @@ int Dos9_CmdIf(char* lpParam)
             IF [NOT] DEFINED var (...)
             IF [NOT] ERRORLEVEL code (...) -> DEPRECATED !
     */
+
+    BLOCKINFO bkInfo;
+
     lpParam+=2;
 
     if ((lpNext=Dos9_GetNextParameter(lpParam, lpArgument, 11))) {
@@ -180,38 +182,34 @@ int Dos9_CmdIf(char* lpParam)
 
     }
 
-    if ((lpToken=Dos9_GetNextBlock(lpParam, &lpNext))) {
+    if ((lpNext=Dos9_GetNextBlock(lpParam, &bkInfo))) {
         if (iResult) {
-            cCharSave=*lpNext;
-            *lpNext='\0';
 
-            Dos9_RunBlock(lpToken);
+            Dos9_RunBlock(&bkInfo);
 
-            *lpNext=cCharSave;
         } else {
 
-            //puts("COMMAND[IF] ::  Looking for an else ");
-            //printf("COMMAND[IF] :: Next content {%s}\n", lpNext);
             if (!strnicmp(lpNext, ") ELSE (", sizeof(") ELSE (")-1)) {
 
                 lpNext+=(sizeof(") ELSE (")-2);
-                //puts("COMMAND[IF] :: Else found");
-                if ((lpToken=Dos9_GetNextBlock(lpNext, &lpNext))) {
 
-                    cCharSave=*lpNext;
-                    *lpNext='\0';
-                    //printf("Runing block {%s}\n", lpToken);
-                    Dos9_RunBlock(lpToken);
+                if ((lpToken=Dos9_GetNextBlock(lpNext, &bkInfo))) {
 
-                    *lpNext=cCharSave;
+                    /* if we found an else */
+                    Dos9_RunBlock(&bkInfo);
+
                 } else {
+
                     Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
+
                 }
             }
         }
     } else {
+
         Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
         return -1;
+
     }
 
     return 0;

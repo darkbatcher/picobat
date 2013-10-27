@@ -124,6 +124,12 @@
 #define TRUE 1
 #define FALSE 0
 
+
+LIBDOS9 int Dos9_LibInit(void);
+LIBDOS9 void _Dos9_LibClose(void);
+void _Dos9_Estr_Close(void);
+int _Dos9_Estr_Init(void);
+
 /** \defgroup THREAD_REF Thread reference
     \{ */
 

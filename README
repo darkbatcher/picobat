@@ -35,17 +35,17 @@ BUILDING DOS9
 
      To get DOS9 binaries, you have two options :
 
-     * Download precompiled binaries package from DOS9's sourceforge page. 
-     Then you just have to unpack the package on your computer. This method is 
-     only availiable for WINDOWS. Indeed, for *NIX systems, it about going 
-     mad to make distribution-portable binaries, for *NIX users, the second 
-     solution must be used.
+        - Download precompiled binaries package from DOS9's sourceforge page. 
+          Then you just have to unpack the package on your computer. This 
+          method is only availiable for WINDOWS. Indeed, for *NIX systems, it
+          about going mad to make distribution-portable binaries, for *NIX 
+          users, the second solution must be used.
 
-     * Download sources and then build them yourself. To eases this work, just 
-     download sources package from DOS9's sourceforge page, or just get them 
-     from the git repository using :
+        - Download sources and then build them yourself. To eases this work, 
+          just download sources package from DOS9's sourceforge page, or just 
+          get them from the git repository using :
 
-        git clone ssh://darkbatcher@git.code.sf.net/p/dos9/code dos9-code
+             git clone ssh://darkbatcher@git.code.sf.net/p/dos9/code dos9-code
 
      When you have downloaded sources, you just need to compile them using any 
      C compiler. For WINDOWS system, it is more complicated than getting 

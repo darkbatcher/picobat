@@ -22,6 +22,8 @@ int main(int argc, char *argv[])
         exit(-1);
     }
 
+    Dos9_SetNewLineMode(DOS9_NEWLINE_LINUX);
+
     ESTR *lpEsContent=Dos9_EsInit(), *lpEsTmp=Dos9_EsInit();
     ESTR *lpTitle=Dos9_EsInit();
 

@@ -58,7 +58,6 @@ int MODULE_MAIN Dos9_ParseModule(int iMsg, void* param1, void* param2)
             }
 
             DEBUG(Dos9_EsToChar(lpesCommandLine));
-            Dos9_AdjustStringNl(Dos9_EsToChar(lpesCommandLine));
 
             if ((*Dos9_EsToChar(lpesCommandLine)=='\0'  || *Dos9_EsToChar(lpesCommandLine)=='\n' || *Dos9_EsToChar(lpesCommandLine)=='\r')) {
                 return ((int)NULL);
@@ -417,25 +416,3 @@ void Dos9_FreeParsedStream(PARSED_STREAM* lppsStream)
     if (lppsLast) free(lppsLast);
 }
 
-void Dos9_AdjustStringNl(char* lpLine) {
-    int i, j;
-    for (i=0, j=0;lpLine[i+j];i++) {
-        switch (lpLine[i+j]) {
-            case '\r' :
-                j++;
-            default:;
-        }
-        switch (j) {
-            default:
-                lpLine[i]=lpLine[i+j];
-            case 0:;
-        }
-        /* if (lpLine[i]>=32) {
-            printf("%c", lpLine[i]);
-        } else {
-           printf("0x%X", lpLine[i]);
-        } */
-    }
-    lpLine[i]='\0';
-    //printf("\n");
-}

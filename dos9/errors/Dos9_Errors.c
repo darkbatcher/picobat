@@ -95,7 +95,7 @@ void Dos9_ShowErrorMessage(unsigned int iErrorNumber,  char* lpComplement, int i
 {
 
     Dos9_SetConsoleTextColor(DOS9_BACKGROUND_DEFAULT | DOS9_FOREGROUND_IRED);
-    if (iErrorNumber < sizeof(lpErrorMsg)) printf(lpErrorMsg[iErrorNumber], lpComplement);
+    if (iErrorNumber < sizeof(lpErrorMsg)) fprintf(stderr, lpErrorMsg[iErrorNumber], lpComplement);
     if (iExitCode) {
         puts(lpQuitMessage);
         getch();

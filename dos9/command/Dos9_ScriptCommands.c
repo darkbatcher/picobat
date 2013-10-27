@@ -100,7 +100,9 @@ int Dos9_CmdSet(char *lpLine)
     char* lpNextToken;
     char *lpVarName, *lpEqual;
     int i;
+
     if ((lpNextToken=Dos9_GetNextParameter(lpLine+3, lpArg, 4))) {
+
         if (!stricmp(lpArg,"/a")) {
             Dos9_GetNextParameterEs(lpNextToken, lpesParameter);
             if ((lpNextToken=strchr(Dos9_EsToChar(lpesParameter), '='))) {
@@ -114,7 +116,9 @@ int Dos9_CmdSet(char *lpLine)
                 Dos9_EsCat(lpesParameter, lpResult);
                 Dos9_PutEnv(Dos9_EsToChar(lpesParameter));
             }
+
         } else if (!stricmp(lpArg, "/p")) {
+
             while (*lpNextToken==' ' || *lpNextToken=='\t') lpNextToken++;
             Dos9_EsCpy(lpesParameter, lpNextToken);
 
@@ -133,16 +137,23 @@ int Dos9_CmdSet(char *lpLine)
             }
 
         } else if (!stricmp(lpArg, "/?")) {
+
             puts(lpHlpDeprecated);
+
         } else {
+
             lpLine=lpLine+3;
             while (*lpLine==' ' || *lpLine=='\t') lpLine++;
             if ((lpNextToken=strrchr(lpLine,' '))) *lpNextToken='\0';
             return Dos9_PutEnv(lpLine);
+
         }
+
     } else {
+
         for (i=0;environ[i];i++) puts(environ[i]);
         return 0;
+
     }
     return -1;
 }

@@ -18,12 +18,14 @@ int         Tea_OutputParagraph(FILE* pOutput, TEASTYLE* lpTeaStyle, TEAOUTPUTMO
     int iOldMarginWidth;
     int iIndentedWidth=0;
     int iFirstLoop=TRUE;
+    int iNextNodeWLength=0;
 
     int iMarginWidth=lpTeaStyle->iMarginWidth; /* the margin left to paragraph */
     int iTotalWidth=lpTeaStyle->iWidth; /* la largeur totale du paragraphe */
     int iIndentWidth=lpTeaStyle->iIndentWidth; /* la largueur de l'indentation de début de paragraphe */
 
     /* on recherche des puces pour savoir si il faut modifier la marge */
+
 
     if (*(lpTeaNode->lpContent)=='-') {
         iIndentWidth=-2;
@@ -89,7 +91,9 @@ int         Tea_OutputParagraph(FILE* pOutput, TEASTYLE* lpTeaStyle, TEAOUTPUTMO
                 iNbCharsWritten++;
             }
 
-            if (*lpToken==' ' && (iNbCharsWritten== iTotalWidth)) {
+            iNextNodeWLength = Hlp_GetNextNodeWLenght(lpTeaNode);
+
+            if (*lpToken==' ' && (iNbCharsWritten == iTotalWidth)) {
 
                 while (lpLastWord != lpToken) {
                     fputc(*lpLastWord, pOutput);
@@ -101,7 +105,8 @@ int         Tea_OutputParagraph(FILE* pOutput, TEASTYLE* lpTeaStyle, TEAOUTPUTMO
             }
 
             /* si le mot dépasse de la ligne */
-            else if (iNbCharsWritten >= iTotalWidth || (*lpToken=='\0' && ((iNbCharsWritten+Hlp_GetNextNodeWLenght(lpTeaNode)+1)>= iTotalWidth)) ) {
+            else if (((iNbCharsWritten >= iTotalWidth)) ||
+                     (*lpToken=='\0' &&  iNextNodeWLength && (iNbCharsWritten+iNextNodeWLength >= iTotalWidth))) {
 
                 /* on termine la ligne */
                 fputc('\n', pOutput);
@@ -161,7 +166,8 @@ int         Tea_OutputCode(FILE* pOutput, TEASTYLE* lpTeaStyle, char* lpContent)
 
     int iMarginWidth=lpTeaStyle->iMarginWidth; /* the margin left to paragraph */
     int iTotalWidth=lpTeaStyle->iWidth; /* la largeur totale du paragraphe */
-    int iIndentWidth=lpTeaStyle->iIndentWidth; /* la largueur de l'indentation de début de paragraphe */
+    int iIndentWidth=lpTeaStyle->iIndentWidth;
+                    /* la largueur de l'indentation de début de paragraphe */
 
     if ((iMarginWidth + iIndentWidth) >= iTotalWidth)
     {
@@ -358,6 +364,7 @@ int         Hlp_GetNextNodeWLenght(TEANODE* lpNode)
         }
 
         if (*lpToken==' ') {
+             iReturn++;
              break;
         }
 
