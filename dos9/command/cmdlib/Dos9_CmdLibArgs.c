@@ -117,12 +117,24 @@ DOS9_CMDLIB char* Dos9_GetNextParameterEs(char* lpLine, ESTR* lpReturn)
 
      }
 
+     if (*lpLine=='\0' & !iSeekQuote) {
+
+        i++;
+
+     } else {
+
+        lpLine++;
+
+     }
+
      Dos9_EsCpyN(lpReturn, lpStartParameter, i);
+
      Dos9_DelayedExpand(lpReturn, bDelayedExpansion); /* Note : delayed expansion means here all vars expansion
                                                         peformed after the line first buffering from the file,
                                                         thus, it includes also expansion of special-local vars,
                                                         such as %1 */
-     return lpLine+1;
+
+     return lpLine;
 }
 
 DOS9_CMDLIB int   Dos9_GetParamArrayEs(char* lpLine, ESTR** lpArray, size_t iLenght)

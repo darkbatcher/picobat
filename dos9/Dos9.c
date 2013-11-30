@@ -1,15 +1,23 @@
-/*  Dos9 - copyleft (c) DarkBatcher
-
-    This source is a part of Darkbatchr's Dos9 interpreter
-
-    Permission granted to modify and distribute copy of this software, whether modified or not, provided that the
-    following condition are respected
-
-        * Any copy, either of an modified version or not, must retain the above copyright and this license
-        * Modified versions of this software must be redistributed under the same conditions as this executable,
-          without any license change, or term add
-
+/*
+ *
+ *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
+ *   Copyright (C) 2010-2013 DarkBatcher
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -61,7 +69,8 @@ int main(int argc, char *argv[])
     int i;
     int j;
     int c;
-    int bSave;
+    int bSave,
+        bQuiet=FALSE;
 
     if (Dos9_LibInit() == -1) {
 
@@ -71,14 +80,13 @@ int main(int argc, char *argv[])
 
     lpvLocalVars=Dos9_GetLocalBlock();
     Dos9_InitConsole();
-    Dos9_ExpandInit();
     Dos9_ScriptCommandInit();
 
     #ifdef WINDOWS
 
         SetThreadLocale(LOCALE_USER_DEFAULT);
 
-    #elif defined __linux
+    #elif defined _POSIX_C_SOURCE
 
         setlocale(LC_ALL, "");
 
@@ -97,6 +105,7 @@ int main(int argc, char *argv[])
         if (*argv[i]=='/') {
             argv[i]++;
             switch(toupper(*argv[i])) {
+
                 case 'V': // enables expansion
                     bDelayedExpansion=TRUE;
                     break;
@@ -109,10 +118,16 @@ int main(int argc, char *argv[])
                 case 'N': // enables new commands
                     bDos9Extension=TRUE;
                     break;
+
+                case 'Q':
+                    bQuiet=TRUE; // run silently
+                    break;
+
                 case '?':
                     printf("DOS9 [version 0.7] - Released %s\nCopyleft (c) DarkBatcher 2010-2012 - some rights reserved\n\n", __DATE__);
                     puts(lpHlpMain);
                     return 0;
+
                 default:
                     Dos9_ShowErrorMessage(DOS9_BAD_COMMAND_LINE, NULL, -1);
             }
@@ -136,18 +151,30 @@ int main(int argc, char *argv[])
     colColor=DOS9_COLOR_DEFAULT;
     /* messages affichés */
 
-    if (!lpFileName){
-        Dos9_PrintIntroduction(); //on affiche le message d'accueil
+    if (!lpFileName) {
+
+        if (!bQuiet) Dos9_PrintIntroduction(); //on affiche le message d'accueil
         strcat(lpTitle, "Invite de commande");
         Dos9_PutEnv("DOS9_IS_SCRIPT=false");
+
     } else if (!Dos9_FileExists(lpFileName)) {
+
         Dos9_ShowErrorMessage(DOS9_FILE_ERROR, lpFileName, -1); // ou le message d'erreur si le fichier n'existe pas
+
     } else {
+
         strncat(lpTitle, lpFileName, sizeof(lpTitle)-sizeof("Dos9 [version 0.7] - "));
-         Dos9_PutEnv("DOS9_IS_SCRIPT=true");
+        Dos9_PutEnv("DOS9_IS_SCRIPT=true");
+
     }
-    Dos9_SetConsoleTextColor(DOS9_COLOR_DEFAULT);
-    Dos9_SetConsoleTitle(lpTitle);
+
+    if (!bQuiet) {
+
+        Dos9_SetConsoleTextColor(DOS9_COLOR_DEFAULT);
+        Dos9_SetConsoleTitle(lpTitle);
+
+    }
+
     strcpy(lpTitle, "DOS9_PATH=");
 
     Dos9_GetExePath(lpTitle+10, FILENAME_MAX);
@@ -188,7 +215,6 @@ int main(int argc, char *argv[])
     Dos9_FreeCommandList(lpclCommands);
     Dos9_FreeStreamStack(lppsStreamStack);
     Dos9_FreeLocalBlock(lpvLocalVars);
-    Dos9_ExpandEnd();
     Dos9_ScriptCommandEnd();
 
     return 0;

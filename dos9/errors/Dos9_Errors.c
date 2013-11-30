@@ -85,9 +85,26 @@ void Dos9_LoadErrors(void)
     // TRANSLATORS : Don't remove the %s because the program needs it
 
     lpErrorMsg[DOS9_ARGUMENT_NOT_BLOCK]=gettext("Error : \"%s\" is not a valid block (should at least be enclosed"
-                                                " within parenthesis).");
+                                                " within parenthesis).\n");
 
-    lpQuitMessage=gettext("\nDos9 will abort current command and quit, hit any key to continue...");
+    lpErrorMsg[DOS9_FOR_BAD_TOKEN_SPECIFIER]=gettext("Error : \"%s\" is not a valid token specifier.\n");
+
+    lpErrorMsg[DOS9_FOR_TOKEN_OVERFLOW]=gettext("Error : Attempted to specify more than."
+                                            "TOKEN_NB_MAX (%d) different tokens\n.");
+
+    lpErrorMsg[DOS9_FOR_USEBACKQ_VIOLATION]=gettext("Error : \"%s\" violates the ``Usebackq'' syntax.\n");
+
+    lpErrorMsg[DOS9_FAILED_ALLOCATION]=gettext("Error : Unable to allocate memory for ``%s''.\n");
+
+    lpErrorMsg[DOS9_CREATE_PIPE]=gettext("Error : Can't create a pipe (%s).\n");
+
+    lpErrorMsg[DOS9_FOR_LAUNCH_ERROR]=gettext("Error : unable to run a subprocess of Dos9 to process "
+                                             "the given input (\"%s\")");
+
+    lpErrorMsg[DOS9_FOR_BAD_INPUT_SPECIFIER]=gettext("Error : Invalid token specifier. \"%s\" breaks input "
+                                                     "specifying rules.");
+
+    lpQuitMessage=gettext("\nAborting current command, press any key to end Dos9\n");
 
 }
 
@@ -95,13 +112,27 @@ void Dos9_ShowErrorMessage(unsigned int iErrorNumber,  char* lpComplement, int i
 {
 
     Dos9_SetConsoleTextColor(DOS9_BACKGROUND_DEFAULT | DOS9_FOREGROUND_IRED);
-    if (iErrorNumber < sizeof(lpErrorMsg)) fprintf(stderr, lpErrorMsg[iErrorNumber], lpComplement);
-    if (iExitCode) {
+
+    if ((iErrorNumber & ~DOS9_PRINT_C_ERROR) < sizeof(lpErrorMsg))
+        fprintf(stderr, lpErrorMsg[iErrorNumber & ~DOS9_PRINT_C_ERROR], lpComplement);
+
+    if (iErrorNumber & DOS9_PRINT_C_ERROR) {
+
+        perror("");
+
+    }
+
+    if (iExitCode == TRUE) {
+
+        Dos9_SetConsoleColor(DOS9_COLOR_DEFAULT);
         puts(lpQuitMessage);
         getch();
         exit(iExitCode);
+
     } else {
+
         Dos9_SetConsoleTextColor(DOS9_COLOR_DEFAULT);
+
     }
 
 }

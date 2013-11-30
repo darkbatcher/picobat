@@ -1,10 +1,28 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2013  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
 {{Dos9 command}}
 
 	{Dos9} is a free, cross-platform command prompt used for batch scripts
 	and command processing.
 
 	{Dos9} is a free software, designed to be as compatible as possible with
-	{cmd.exe} proprietary software from {microsoft}.
+	{cmd.exe} proprietary software from {Microsoft}.
 	 
 {{Synopsis}}
 
@@ -21,15 +39,24 @@ ${	DOS9 [/v] [/n] [/f] [/e] [file]}
 		- {/f}	  : Enables {spec/exp|floating numbers}.
 		
 		- {/e}	  : Disable current directory echoing.
+		
+		- {/q} : Run Dos9 quietly (ie. does not show the intro screen
+		at startup).
+		
+		- {/d} : Specify a file descriptor that should be used by Dos9
+		as a standard input. This should not be used, it is used for
+		evaluating complexs statements by {for|FOR loops}.
 
 {{Compatibility}}
 
 	   Compatible with any version of {Dos9}. Incompatible with
 	   {cmd.exe}.
 	   
-	   Dos9 is cross-platform so that it can be run either on {MS-WINDOWS}
-	   or {GNU/Linux}. Theorically, a port of Dos9 should be possible in any
-	   POSIX-compatible system just by recompiling sources using a C89 compiler.
+	   {Dos9} is cross-platform so that it can be run either on {MS-WINDOWS}
+	   or {GNU/Linux}. Moreover, Dos9 should be easily portable to operating
+	   systems that support either {POSIX} (and define {_POSIX_C_SOURCE}) or
+	   a {MS-WINDOWS} compatible API, including any POSIX-compatible function
+	   that is provided by it.
 
 {{License}}
 
@@ -44,7 +71,7 @@ ${	DOS9 [/v] [/n] [/f] [/e] [file]}
 	helpful free libraries from the {http://www.gnu.org/|GNU operating system}, mostly 
 	{http://www.gnu.org/software/libmatheval/|libmatheval}, {https://www.gnu.org/software/gettext/|gettext}.
 
-	Dos9's windows packages also distribute some binaries from the {http://gnuwin32.sourceforge.net/|GnuWin project}.
+	Dos9's {MS-WINDOWS} packages also distribute some binaries from the {http://gnuwin32.sourceforge.net/|GnuWin project}.
 	These binaries are {iconv|GNU iconv} and {nano|GNU nano}.
 	
 {{See Also}}

@@ -235,7 +235,8 @@ IF !my_var! EQU test (
 
 	Mostly compatible with {cmd.exe}. Indeed, the use of {IF ERRORLEVEL}
 	is not guaranted to be compatible with {cmd.exe}, as the behaviour of
-	{cmd.exe} is a little bit strange.
+	{cmd.exe} is weird (it tests  if {ERRORLEVEL} is greater than the specified
+	number) and causes numbers of mistakes.
 	
 	Supported since version {0.4}.
 	

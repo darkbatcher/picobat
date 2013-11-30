@@ -1,3 +1,23 @@
+/*
+ *
+ *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
+ *   Copyright (C) 2010-2013 DarkBatcher
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -56,14 +76,14 @@ int Dos9_CmdFor(char* lpLine)
      BLOCKINFO bkCode;
 
      FORINFO forInfo={
-         " \n,;", /* the default line-break characters
-                   */
-         "", /* no tokens delimiters, since only one
+         " ", /* no tokens delimiters, since only one
                 token is taken account */
          "", /* no end-of-line delimiters */
          0, /* no skipped line */
          0, /* this is to be fullfiled later (the
                 name letter of loop special var) */
+         FALSE,
+         0, /* the last index of lpToken */
          {TOKENNB_ALL_REMAINING} /* get all the token
                                     back */
 
@@ -74,7 +94,6 @@ int Dos9_CmdFor(char* lpLine)
      char* lpVarName;
 
      int iForType=FOR_LOOP_SIMPLE;
-     int iUsebackq=FALSE;
 
      while ((lpToken = Dos9_GetNextParameterEs(lpToken, lpParam))) {
 
@@ -120,13 +139,13 @@ int Dos9_CmdFor(char* lpLine)
             /* get back the var name */
             lpVarName=Dos9_EsToChar(lpParam)+1;
 
-            if (lpVarName=='%') lpVarName++;
+            if (*lpVarName=='%') lpVarName++;
 
             cVarName=*lpVarName;
 
             /* test conformance
 
-            FIXME : This is a memory sailing away to sea */
+            FIXME : This is memory sailing away to sea */
             // DOS9_TEST_VARNAME(cVarName);
 
             /* just get out of that loop */
@@ -155,21 +174,36 @@ int Dos9_CmdFor(char* lpLine)
                        the tokens that contains for-loop parameter.
                        This parameter can be dispatched in many different
                        parameter, as long are they're in a row */
-                    switch (Dos9_ForMakeInfo(Dos9_EsToChar(lpParam), &forInfo)) {
+                    if ((Dos9_ForMakeInfo(Dos9_EsToChar(lpParam), &forInfo)))  {
 
-                        case -1:
-                            goto error;
+                        return -1;
 
-                        case 1:
-                            iUsebackq=TRUE;
                     }
             }
 
+            printf("Dos9_GetNextParameterEs(\"%s\", lpParam);\n", lpToken);
+
             lpToken=Dos9_GetNextParameterEs(lpToken, lpParam);
+
+            printf("\tllpParam=\"%s\"\n"
+                   "\treturn=\"%s\"\n\n",
+                   Dos9_EsToChar(lpParam),
+                   lpToken);
 
          }
 
      }
+
+     /* if the for uses either /F or /R or even /D
+        store cVarName in the FORINFO structure
+     */
+
+     if (FOR_LOOP_F == iForType || FOR_LOOP_R == iForType) {
+
+        forInfo.cFirstVar=cVarName;
+
+     }
+
 
      /* Now the next parameter should be IN */
 
@@ -181,6 +215,7 @@ int Dos9_CmdFor(char* lpLine)
         goto error;
 
      }
+
 
      /* Now, the program expect to be given the list of argument
         of the FOR loop, i.e. the part that should be enclosed
@@ -201,7 +236,6 @@ int Dos9_CmdFor(char* lpLine)
      }
 
      /* So just get back the block */
-
      lpToken=Dos9_GetNextBlockEs(lpToken, lpInputBlock);
 
      /* Now we check if ``DO'' is used */
@@ -237,7 +271,13 @@ int Dos9_CmdFor(char* lpLine)
             /* this handles simple for */
             Dos9_CmdForSimple(lpInputBlock, &bkCode, cVarName);
 
+            break;
+
         case FOR_LOOP_R:
+            break;
+
+        case FOR_LOOP_F:
+            Dos9_CmdForF(lpInputBlock, &bkCode, &forInfo);
             break;
 
         case FOR_LOOP_L:
@@ -346,6 +386,55 @@ int Dos9_CmdForSimple(ESTR* lpInput, BLOCKINFO* lpbkCommand, char cVarName)
 
 }
 
+int Dos9_CmdForF(ESTR* lpInput, BLOCKINFO* lpbkInfo, FORINFO* lpfrInfo)
+{
+    int iSkip=lpfrInfo->iSkip;
+
+    ESTR* lpInputToP=Dos9_EsInit();
+
+    INPUTINFO inputInfo;
+
+
+    if (Dos9_ForMakeInputInfo(lpInput, &inputInfo, lpfrInfo) == -1)
+        return -1;
+
+    while (Dos9_ForGetInputLine(lpInputToP, &inputInfo)) {
+
+        //printf("Processing :\n \"%s\"\n", Dos9_EsToChar(lpInputToP));
+
+        if (iSkip > 0) {
+
+            iSkip--;
+            /* skip the n-th first lines, as specifiied by
+               ``skip=n'' in the command line */
+
+        } else {
+
+            //printf("Splitting Token !\n");
+
+            Dos9_ForSplitTokens(lpInputToP, lpfrInfo);
+            /* split the block on subtokens */
+
+            //printf("Running Block !\n");
+            Dos9_RunBlock(lpbkInfo);
+            /* split the input into tokens and then run the
+                block */
+        }
+
+    }
+
+    Dos9_ForCloseInputInfo(&inputInfo);
+
+    Dos9_EsFree(lpInputToP);
+
+    return 0;
+
+}
+
+/* ************************************************************
+    FORINFO functions
+*/
+
 int Dos9_ForMakeInfo(char* lpOptions, FORINFO* lpfiInfo)
 /*
     Fill the FORINFO structure with the appropriate
@@ -359,10 +448,14 @@ int Dos9_ForMakeInfo(char* lpOptions, FORINFO* lpfiInfo)
     while ((lpOptions = Dos9_GetNextParameterEs(lpOptions, lpParam)))
     {
 
-        if (!(stricmp(Dos9_EsToChar(lpParam), "usebackq")))
+        if (!(stricmp(Dos9_EsToChar(lpParam), "usebackq"))) {
             /* if the script specifies "usebackq" it will change dos9 behaviour
             of the for /f loop */
-            iReturn=1;
+            lpfiInfo->bUsebackq=TRUE;
+
+            continue;
+
+        }
 
 
 
@@ -375,8 +468,7 @@ int Dos9_ForMakeInfo(char* lpOptions, FORINFO* lpfiInfo)
             /* if no '=' was found, then the entry are just
                wrong */
             Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, Dos9_EsToChar(lpParam), FALSE);
-            Dos9_EsFree(lpParam);
-            return -1;
+            goto error;
         }
 
         /* switching to choice the appropriate parameter */
@@ -406,25 +498,152 @@ int Dos9_ForMakeInfo(char* lpOptions, FORINFO* lpfiInfo)
 
         } else if (!(stricmp(Dos9_EsToChar(lpParam), "tokens"))) {
 
-            /* if (Dos9_ForMakeTokens(lpToken, lpfiInfo)) {
+            /* make the options */
+            if (Dos9_ForMakeTokens(lpToken, lpfiInfo)==-1) {
 
-            } */
+                goto error;
+
+            }
 
 
 
         } else {
 
             Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, Dos9_EsToChar(lpParam), FALSE);
-            Dos9_EsFree(lpParam);
-            return -1;
+            goto error;
 
         }
 
     }
 
+    Dos9_ForVarUnassign(lpfiInfo);
     Dos9_EsFree(lpParam);
 
     return iReturn;
+
+    error:
+        Dos9_ForVarUnassign(lpfiInfo);
+        Dos9_EsFree(lpParam);
+        return -1;
+
+}
+
+int  Dos9_ForMakeTokens(char* lpToken, FORINFO* lpfrInfo)
+{
+    /* this is used to determine the useffull tokens for
+       the parsing */
+
+    char* const lpOriginTok=lpToken;
+    char* lpNextToken;
+    int iTokenNb;
+    int isCat=FALSE;
+    int i=0;
+
+    lpfrInfo->lpToken[0]=0;
+
+    while (lpToken) {
+
+        iTokenNb=strtol(lpToken, &lpNextToken, 10);
+
+        switch (*lpNextToken) {
+
+            case ',':
+                /* just save the token to high low order word */
+
+                if (!isCat) {
+
+                    lpfrInfo->lpToken[i]|=TOHIGH(iTokenNb);
+
+                } else {
+
+                    lpfrInfo->lpToken[i]|=TOLOW(iTokenNb);
+                    isCat=FALSE;
+                    break;
+                }
+
+                if (i >= TOKENINFO_NB_MAX ) {
+
+                    Dos9_ShowErrorMessage(DOS9_FOR_TOKEN_OVERFLOW, (char*)TOKENINFO_NB_MAX, FALSE);
+                    return -1;
+
+                }
+
+
+
+                lpfrInfo->lpToken[++i]=0;
+
+                lpNextToken++;
+
+                break;
+
+
+            case '-':
+
+                if (isCat) {
+
+                    Dos9_ShowErrorMessage(DOS9_FOR_BAD_TOKEN_SPECIFIER, lpOriginTok, FALSE);
+                    return -1;
+
+                }
+
+
+                isCat=TRUE;
+
+                lpfrInfo->lpToken[i]|=TOHIGH(iTokenNb);
+
+                lpNextToken++;
+
+                break;
+
+            case '\0':
+
+                if (!isCat) {
+
+                    lpfrInfo->lpToken[i]=TOHIGH(iTokenNb);
+
+                } else {
+
+                    lpfrInfo->lpToken[i]|=TOLOW(iTokenNb);
+
+                }
+
+                lpfrInfo->lpToken[++i]=0;
+
+                lpNextToken=NULL;
+                break;
+
+            case '*':
+
+                if (!isCat) {
+
+                    lpfrInfo->lpToken[i]|=TOHIGH(-1);
+
+                } else {
+
+                    lpfrInfo->lpToken[i]|=TOLOW(-1);
+
+                }
+
+                lpNextToken=NULL;
+
+                break;
+
+            default:
+
+                Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpToken, FALSE);
+                return -1;
+
+        }
+
+        lpToken=lpNextToken;
+
+    }
+
+
+    lpfrInfo->iTokenNb=i;
+
+
+    return 0;
 
 }
 
@@ -448,7 +667,7 @@ void Dos9_ForAdjustParameter(char* lpOptions, ESTR* lpParam)
 
             lpTemp[0]=*lpOptions;
 
-            Dos9_EsCpy(lpParam, lpOptions);
+            Dos9_EsCpy(lpParam, lpTemp);
 
             if (*(lpOptions+2) == ' ' || *(lpOptions+2) == '\t') {
 
@@ -459,4 +678,469 @@ void Dos9_ForAdjustParameter(char* lpOptions, ESTR* lpParam)
             }
        }
     }
+}
+
+
+/* ************************************************************
+    tokenization function
+*/
+
+
+void Dos9_ForSplitTokens(ESTR* lpContent, FORINFO* lpfrInfo)
+{
+
+    ESTR* lpVarContent=Dos9_EsInit();
+
+    int i;
+    char *lpToken,
+         *lpEol=lpfrInfo->lpEol;
+
+    char cVarName=lpfrInfo->cFirstVar;
+
+
+    if ((lpToken=strpbrk(Dos9_EsToChar(lpContent), lpEol))) {
+
+        *lpToken='\0';
+
+    }
+    /* Truncate line at the first apparition of a end-of-line
+       charcaters
+
+       As specified by ``eol=;'' for example
+
+       */
+
+    for (i=0; i<lpfrInfo->iTokenNb; i++) {
+
+
+         //printf("Getting token n. %d \n", i);
+         Dos9_ForGetToken(lpContent, lpfrInfo, i, lpVarContent);
+         //printf("Returned : \"%s\"\n", Dos9_EsToChar(lpVarContent));
+            /* get the token descibed by the token info number i */
+
+         Dos9_SetLocalVar(lpvLocalVars, cVarName, Dos9_EsToChar(lpVarContent));
+            /* set the variable */
+
+         cVarName++;
+
+         if (cVarName & 0x80) {
+
+            cVarName=0x21;
+
+         }
+
+    }
+
+    Dos9_EsFree(lpVarContent);
+
+}
+
+void Dos9_ForGetToken(ESTR* lpContent, FORINFO* lpfrInfo, int iPos, ESTR* lpReturn)
+{
+    char  *lpToken=Dos9_EsToChar(lpContent),
+          *lpDelims=lpfrInfo->lpDelims,
+          *lpNextToken,
+          *lpBeginToken=NULL,
+          *lpEndToken=NULL;
+
+    int   iLength,
+          iTokenPos=1,
+          iTokenBegin=HIGHWORD(lpfrInfo->lpToken[iPos]),
+          iTokenEnd=LOWWORD(lpfrInfo->lpToken[iPos]);
+
+    Dos9_EsCpy(lpReturn, "");
+
+    /*  the type of line that arrives here is already truncated
+        at the first character specified in eof parameter */
+
+    if (iTokenEnd==0) {
+
+        iTokenEnd=iTokenBegin;
+
+    }
+
+    if (iTokenBegin==-1) {
+
+        iTokenBegin=1;
+
+    }
+
+    /* printf("Getting token nb. %d\n"
+           "\t* iTokenBegin = %d\n"
+           "\t* iTokenEnd   = %d\n"
+           "\t* lpDelims    = \"%s\"\n\n", iPos, iTokenBegin, iTokenEnd, lpDelims); */
+
+    while ((lpNextToken=strpbrk(lpToken, lpDelims))) {
+
+        //printf("Current token ::  \"%s\"\n", lpToken);
+
+        if (lpNextToken == lpToken) {
+
+            /* the current token is already a delimiter
+               just ignore it */
+
+            lpToken++;
+            continue;
+
+        }
+
+        /* both characters are distinct */
+        if (iTokenPos == iTokenBegin) {
+
+            lpBeginToken=lpToken;
+
+        }
+
+        if (iTokenPos == iTokenEnd) {
+
+            lpEndToken=lpNextToken;
+
+            break;
+
+        }
+
+        lpToken=lpNextToken+1;
+
+        iTokenPos++;
+
+    }
+
+    if (iTokenPos==1 && iTokenBegin==1) {
+
+        lpBeginToken=lpToken;
+
+    }
+
+    if (lpBeginToken) {
+
+        if (NULL==lpEndToken) {
+
+            Dos9_EsCpy(lpReturn, lpBeginToken);
+
+        } else {
+
+            iLength = lpEndToken - lpBeginToken +1;
+            Dos9_EsCpyN(lpReturn, lpBeginToken, iLength);
+        }
+    }
+
+}
+
+void Dos9_ForVarUnassign(FORINFO* lpfrInfo)
+{
+    int i,
+        iMax=lpfrInfo->iTokenNb;
+    char cVarName=lpfrInfo->cFirstVar;
+
+    for (i=0;i<iMax;i++) {
+
+        Dos9_SetLocalVar(lpvLocalVars, cVarName, NULL);
+
+        if (cVarName & 0x80)
+            break;
+    }
+}
+
+/* ******************************************************************
+   INPUTINFO Functions
+*/
+
+int Dos9_ForMakeInputInfo(ESTR* lpInput, INPUTINFO* lpipInfo, FORINFO* lpfrInfo)
+{
+    int bUsebackq=lpfrInfo->bUsebackq,
+        iInputType,
+        iPipeFd[2];
+
+    char *lpToken=Dos9_EsToChar(lpInput);
+
+
+    switch (*lpToken) {
+
+        case '\'':
+            /* the given input is a command line to be executed */
+
+            if (!bUsebackq) {
+
+                iInputType=INPUTINFO_TYPE_STRING;
+
+            } else {
+
+                iInputType=INPUTINFO_TYPE_COMMAND;
+
+            }
+
+            break;
+
+        case '`':
+            /* the given input is a command line using Usebackq */
+            if (!bUsebackq) {
+
+                Dos9_ShowErrorMessage(DOS9_FOR_USEBACKQ_VIOLATION, "`", FALSE);
+                return -1;
+
+            }
+
+            iInputType=INPUTINFO_TYPE_COMMAND;
+
+            break;
+
+        case '"':
+            /* the given input is a string */
+            if (bUsebackq) {
+
+                Dos9_ShowErrorMessage(DOS9_FOR_USEBACKQ_VIOLATION, "\"", FALSE);
+                return -1;
+
+            }
+
+            iInputType=INPUTINFO_TYPE_STRING;
+
+            break;
+
+        default:
+            /* the input given is a filename */
+            iInputType=INPUTINFO_TYPE_STREAM;
+    }
+
+    if (iInputType!=INPUTINFO_TYPE_STREAM) {
+
+        if (Dos9_ForAdjustInput(lpToken))
+            return -1;
+
+    }
+
+    switch (iInputType) {
+
+        case INPUTINFO_TYPE_STREAM:
+
+            lpipInfo->cType=INPUTINFO_TYPE_STREAM;
+
+            printf("FILENAME=%s\n", lpToken);
+
+            if (!(lpipInfo->Info.pInputFile=fopen(lpToken, "r"))) {
+
+                printf("The bug should not be coming from here...");
+                Dos9_ShowErrorMessage(DOS9_FILE_ERROR | DOS9_PRINT_C_ERROR, lpToken, FALSE);
+                return -1;
+
+            }
+
+            break;
+
+        case INPUTINFO_TYPE_STRING:
+
+            lpipInfo->cType=INPUTINFO_TYPE_STRING;
+
+            if (!(lpipInfo->Info.StringInfo.lpString=strdup(lpToken))) {
+
+                Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION | DOS9_PRINT_C_ERROR,
+                                      __FILE__ "/Dos9_MakeInputInfo()",
+                                      TRUE);
+
+            }
+
+            lpipInfo->Info.StringInfo.lpToken=lpipInfo->Info.StringInfo.lpString;
+
+            break;
+
+        case INPUTINFO_TYPE_COMMAND:
+            /* this is a litte bit more difficult (indeed, platform dependent)
+               the program should open a pipe, print the script and then get the output
+
+               The command is
+
+                    Dos9 /Q /N /E /V /D n
+
+               The /Q avoid the presentation to be printed and the title to be change
+
+            */
+
+            lpipInfo->cType=INPUTINFO_TYPE_COMMAND;
+
+
+            if (_Dos9_Pipe(iPipeFd, 1024, O_TEXT) == -1)
+            {
+                Dos9_ShowErrorMessage(DOS9_CREATE_PIPE | DOS9_PRINT_C_ERROR , __FILE__ "/Dos9_MakeInputInfo()", FALSE);
+                return -1;
+            }
+
+            if (Dos9_ForInputProcess(lpInput, lpipInfo, iPipeFd)==-1) {
+
+                close(iPipeFd[0]);
+                close(iPipeFd[2]);
+                return -1;
+
+            }
+
+    }
+
+    return 0;
+
+}
+
+int Dos9_ForAdjustInput(char* lpInput)
+{
+    const char* lpBegin=lpInput;
+    char* lpToken=lpInput+1;
+    char cBeginToken=*lpInput;
+
+    if (cBeginToken!='"' && cBeginToken!='\'' && cBeginToken!='`') {
+
+        Dos9_ShowErrorMessage(DOS9_FOR_BAD_INPUT_SPECIFIER, lpBegin, FALSE);
+
+        return -1;
+
+    }
+
+    while (*lpToken)
+        *(lpInput++)=*(lpToken++);
+
+    if (*lpInput!=cBeginToken) {
+
+        *lpInput='\0';
+        return 0;
+
+    } else {
+
+        Dos9_ShowErrorMessage(DOS9_FOR_BAD_INPUT_SPECIFIER, lpBegin, FALSE);
+
+        return -1;
+
+    }
+
+}
+
+int Dos9_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFd)
+{
+    char* lpArgs[8];
+    char lpLastArg[16];
+    FILE* pFile;
+
+    int i=0;
+
+    lpArgs[i++]="Dos9";
+    lpArgs[i++]="/Q";
+
+    if (!bEchoOn)
+        lpArgs[i++]="/E";
+
+    if (bDelayedExpansion)
+        lpArgs[i++]="/V";
+
+    if (bDos9Extension)
+        lpArgs[i++]="/N";
+
+    snprintf(lpLastArg, sizeof(lpLastArg),  "/D %d", iPipeFd[0]);
+        /* give the input descriptor to the child*/
+
+    #ifdef WIN32
+
+        spawnvp(_P_NOWAIT, lpArgs[0], (DOS9_SPAWN_CAST)lpArgs);
+
+        if (errno == ENOENT)
+        {
+
+            Dos9_ShowErrorMessage(DOS9_FOR_LAUNCH_ERROR | DOS9_PRINT_C_ERROR, Dos9_EsToChar(lpInput), FALSE);
+
+            return -1;
+        }
+
+    #elif defined _POSIX_C_SOURCE
+
+        iPid=fork();
+        if (iPid == 0 ) {
+          /* if we are in the son */
+
+          if ( execvp(lpArguments[0], lpArguments) == -1) {
+
+            Dos9_ShowErrorMessage(DOS9_FOR_LAUNCH_ERROR | DOS9_PRINT_C_ERROR, Dos9_EsToChar(lpInput), FALSE);
+            return -1;
+
+          }
+
+          exit(0);
+
+        } else {
+          /* if we are in the father */
+
+          if (iPid == (pid_t)-1) {
+
+            /* the execution failed */
+            Dos9_ShowErrorMessage(DOS9_FOR_LAUNCH_ERROR | DOS9_PRINT_C_ERROR, Dos9_EsToChar(lpInput), FALSE);
+            return -1;
+
+          }
+
+        }
+
+    #endif // WIN32
+
+    if (!(pFile=fdopen(iPipeFd[1], "r")))
+    {
+
+        return -1;
+
+    }
+
+    fputs(Dos9_EsToChar(lpInput), pFile);
+        /* write the command given on the for command */
+
+    lpipInfo->Info.StreamInfo.pInputStream=pFile;
+    lpipInfo->Info.StreamInfo.iPipeFds[1]=iPipeFd[1];
+    lpipInfo->Info.StreamInfo.iPipeFds[0]=iPipeFd[0];
+
+    return 0;
+}
+
+int Dos9_ForGetInputLine(ESTR* lpReturn, INPUTINFO* lpipInfo)
+{
+
+    int iReturn=0;
+    char* lpToken;
+
+    switch (lpipInfo->cType) {
+
+        case INPUTINFO_TYPE_COMMAND:
+            iReturn=!Dos9_EsGet(lpReturn, lpipInfo->Info.StreamInfo.pInputStream);
+            break;
+
+        case INPUTINFO_TYPE_STREAM:
+            iReturn=!Dos9_EsGet(lpReturn, lpipInfo->Info.pInputFile);
+            break;
+
+        case INPUTINFO_TYPE_STRING:
+            /* MUCH MORE */
+            ;
+
+    }
+
+    if ((lpToken=strchr(Dos9_EsToChar(lpReturn), '\n')))
+        *lpToken='\0';
+
+    return iReturn;
+}
+
+void Dos9_ForCloseInputInfo(INPUTINFO* lpipInfo)
+{
+
+    switch(lpipInfo->cType) {
+
+        case INPUTINFO_TYPE_STREAM:
+
+            fclose(lpipInfo->Info.pInputFile);
+            break;
+
+
+        case INPUTINFO_TYPE_STRING:
+
+            free(lpipInfo->Info.StringInfo.lpString);
+            break;
+
+        case INPUTINFO_TYPE_COMMAND:
+            fclose(lpipInfo->Info.StreamInfo.pInputStream);
+            close(lpipInfo->Info.StreamInfo.iPipeFds[0]);
+            close(lpipInfo->Info.StreamInfo.iPipeFds[1]);
+
+    }
+
 }

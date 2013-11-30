@@ -57,12 +57,14 @@ int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
     if (!(lpNameCpy=strdup(lpName))) return FALSE;
     if ((lpToken=strchr(lpNameCpy, ':'))) {
         if ((lpNextToken=strchr(lpToken, '='))) {
+
             /* char are about to be replaced */
             *lpToken='\0';
             lpToken++;
             *lpNextToken='\0';
             lpNextToken++;
             iVarState=1;
+
         } else if (*(lpToken+1)=='~') {
             /* string is about to be truncated */
             *lpToken='\0';
@@ -75,6 +77,7 @@ int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
             iBegin=atol(lpToken);
             iVarState=2;
         }
+
     }
 
     #ifndef _POSIX_C_SOURCE
@@ -85,21 +88,28 @@ int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
 
     #endif
 
-    if (!stricmp(lpNameCpy, "RANDOM")) {
-            /* requested TIME */
+    if (!(stricmp(lpNameCpy, "RANDOM"))) {
+
+        /* requested RANDOM */
         lpVarContent=lpBuf;
         sprintf(lpBuf, "%d", rand());
-    } else if (!stricmp(lpNameCpy, "DATE")) {
+
+    } else if (!(stricmp(lpNameCpy, "DATE"))) {
+
         iTime=time(NULL);
         lTime=localtime(&iTime);
         lpVarContent=lpBuf;
         sprintf(lpBuf, "%02d/%02d/%02d", lTime->tm_mday, lTime->tm_mon+1, lTime->tm_year+1900);
-    } else if (!stricmp(lpNameCpy, "TIME")) {
+
+    } else if (!(stricmp(lpNameCpy, "TIME"))) {
+
         iTime=time(NULL);
         lTime=localtime(&iTime);
         lpVarContent=lpBuf;
         sprintf(lpBuf, "%02d:%02d:%02d,00", lTime->tm_hour, lTime->tm_min, lTime->tm_sec);
+
     } else if (!(lpVarContent=getenv(lpNameCpy))) {
+
         free(lpNameCpy);
         return FALSE;
 
@@ -108,32 +118,49 @@ int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
     iTotalLen=strlen(lpVarContent);
 
     if (iVarState==2) {
+
         if (iBegin<0 || iBegin>= iTotalLen) {
+
             /* skip because these values are not valid
                 indeed iBegin must not be negative and
                 must not overflow the buffer */
+
         } else if (iLen>=0) {
+
             if ((iBegin+iLen)<= iTotalLen) {
                 /* if the strings is right */
+
                 lpZeroPos=lpVarContent+iBegin+iLen;
                 cCharSave=*lpZeroPos;
                 *lpZeroPos='\0';
                 lpVarContent+=iBegin;
+
             }
+
         } else if (iLen < 0) {
+
             if (abs(iLen) <= iTotalLen-iBegin){
-                /* if the string is reight too */
+
+                /* if the string is right too
+                   but the lenght given is negative, such as -3
+                   (ie. truncate 3 characters before the end of
+                   the string)
+                */
+
                 lpZeroPos=lpVarContent+iTotalLen+iLen;
                 cCharSave=*lpZeroPos;
                 *lpZeroPos='\0';
                 lpVarContent+=iBegin;
+
             }
+
         }
     }
 
     Dos9_EsCpy(lpRecieve, lpVarContent);
 
     if (iVarState==1) {
+        /* FIXME : This should be case insensitive */
         Dos9_EsReplace(lpRecieve, lpToken, lpNextToken);
     }
 
@@ -344,6 +371,7 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
             }
         }
     }
+
     return lpName+1;
 }
 
