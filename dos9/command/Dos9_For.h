@@ -6,6 +6,7 @@
 #define TOKENINFO_NB_MAX 128-32
 #define MAX_UNICODE_CHAR 5
 #define TOKENNB_ALL_REMAINING 0xFFFF
+#define ALL_TOKEN 0xFFFF
 
 #define HIGHWORD(nb) ((nb & 0xFFFF0000) >> 16)
 #define LOWWORD(nb) (nb & 0xFFFF)

@@ -11,7 +11,7 @@ int _Dos9_NewLine=DOS9_NEWLINE_WINDOWS;
 
 
 ESTR* _Dos9_EstrFreeBuffer_Array[DOS9_MAX_FREEBUFFER_SIZE];
-int   _Dos9_EstrFreeBuffer_MaxElement=0;
+int   _Dos9_EstrFreeBuffer_MaxElement=-1;
 
 #ifdef _POSIX_C_SOURCE
 

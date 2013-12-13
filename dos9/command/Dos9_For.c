@@ -83,8 +83,8 @@ int Dos9_CmdFor(char* lpLine)
          0, /* this is to be fullfiled later (the
                 name letter of loop special var) */
          FALSE,
-         0, /* the last index of lpToken */
-         {TOKENNB_ALL_REMAINING} /* get all the token
+         1, /* the number of tokens we were given */
+         {TOHIGH(1)|1} /* get all the token
                                     back */
 
      };
@@ -94,6 +94,9 @@ int Dos9_CmdFor(char* lpLine)
      char* lpVarName;
 
      int iForType=FOR_LOOP_SIMPLE;
+
+     printf("Input line :\n"
+            "%s\n\n", lpLine);
 
      while ((lpToken = Dos9_GetNextParameterEs(lpToken, lpParam))) {
 
@@ -156,6 +159,7 @@ int Dos9_CmdFor(char* lpLine)
             /* It appears that the users does not specify a variable
                but try rather to path options, that are obviously inconsistent
                in this case */
+            printf("ERREUR : 1\n");
             Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, Dos9_EsToChar(lpParam), FALSE);
             goto error;
 
@@ -174,6 +178,7 @@ int Dos9_CmdFor(char* lpLine)
                        the tokens that contains for-loop parameter.
                        This parameter can be dispatched in many different
                        parameter, as long are they're in a row */
+                    printf("lpParam=\"%s\"\n", Dos9_EsToChar(lpParam));
                     if ((Dos9_ForMakeInfo(Dos9_EsToChar(lpParam), &forInfo)))  {
 
                         return -1;
@@ -250,7 +255,7 @@ int Dos9_CmdFor(char* lpLine)
      if ((stricmp(Dos9_EsToChar(lpParam), "DO"))) {
 
         /* if ``DO'' is not used */
-
+        printf("Error 2 is trigered !");
         Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, Dos9_EsToChar(lpParam), FALSE);
         goto error;
 
@@ -394,13 +399,15 @@ int Dos9_CmdForF(ESTR* lpInput, BLOCKINFO* lpbkInfo, FORINFO* lpfrInfo)
 
     INPUTINFO inputInfo;
 
+    printf("Starting for LOOP \n");
+
 
     if (Dos9_ForMakeInputInfo(lpInput, &inputInfo, lpfrInfo) == -1)
         return -1;
 
     while (Dos9_ForGetInputLine(lpInputToP, &inputInfo)) {
 
-        //printf("Processing :\n \"%s\"\n", Dos9_EsToChar(lpInputToP));
+        printf("Processing :\n \"%s\"\n", Dos9_EsToChar(lpInputToP));
 
         if (iSkip > 0) {
 
@@ -424,6 +431,7 @@ int Dos9_CmdForF(ESTR* lpInput, BLOCKINFO* lpbkInfo, FORINFO* lpfrInfo)
     }
 
     Dos9_ForCloseInputInfo(&inputInfo);
+    Dos9_ForVarUnassign(lpfrInfo);
 
     Dos9_EsFree(lpInputToP);
 
@@ -516,13 +524,12 @@ int Dos9_ForMakeInfo(char* lpOptions, FORINFO* lpfiInfo)
 
     }
 
-    Dos9_ForVarUnassign(lpfiInfo);
+
     Dos9_EsFree(lpParam);
 
     return iReturn;
 
     error:
-        Dos9_ForVarUnassign(lpfiInfo);
         Dos9_EsFree(lpParam);
         return -1;
 
@@ -537,6 +544,7 @@ int  Dos9_ForMakeTokens(char* lpToken, FORINFO* lpfrInfo)
     char* lpNextToken;
     int iTokenNb;
     int isCat=FALSE;
+    int iPrevTok;
     int i=0;
 
     lpfrInfo->lpToken[0]=0;
@@ -552,7 +560,7 @@ int  Dos9_ForMakeTokens(char* lpToken, FORINFO* lpfrInfo)
 
                 if (!isCat) {
 
-                    lpfrInfo->lpToken[i]|=TOHIGH(iTokenNb);
+                    lpfrInfo->lpToken[i]|=TOHIGH(iTokenNb)+TOLOW(iTokenNb);
 
                 } else {
 
@@ -597,15 +605,29 @@ int  Dos9_ForMakeTokens(char* lpToken, FORINFO* lpfrInfo)
 
             case '\0':
 
-                if (!isCat) {
+                if (iTokenNb) {
 
-                    lpfrInfo->lpToken[i]=TOHIGH(iTokenNb);
+                    if (!isCat) {
+
+                        lpfrInfo->lpToken[i]=TOHIGH(iTokenNb)+TOLOW(iTokenNb);
+
+                    } else {
+
+                        lpfrInfo->lpToken[i]|=TOLOW(iTokenNb);
+
+                    }
 
                 } else {
 
-                    lpfrInfo->lpToken[i]|=TOLOW(iTokenNb);
+                    if (isCat) {
+
+                        Dos9_ShowErrorMessage(DOS9_FOR_BAD_TOKEN_SPECIFIER, lpOriginTok, FALSE);
+                        return -1;
+
+                    }
 
                 }
+
 
                 lpfrInfo->lpToken[++i]=0;
 
@@ -614,17 +636,53 @@ int  Dos9_ForMakeTokens(char* lpToken, FORINFO* lpfrInfo)
 
             case '*':
 
+                /* some unlawful syntax as allowed
+
+                    4-* -> in this case isCat is TRUE
+                    4* -> in this case isCat is set to false and iTokenNb=4
+                    3,* ->
+
+                */
+
                 if (!isCat) {
 
-                    lpfrInfo->lpToken[i]|=TOHIGH(-1);
+                    if (iTokenNb != 0) {
 
-                } else {
+                        lpfrInfo->lpToken[i]|=TOHIGH(iTokenNb);
 
-                    lpfrInfo->lpToken[i]|=TOLOW(-1);
+
+                    } else if (i > 0) {
+
+                        iPrevTok=LOWWORD(lpfrInfo->lpToken[i-1]);
+
+                        if (iPrevTok == -1) iPrevTok=0;
+
+                        lpfrInfo->lpToken[i]|=TOHIGH(iPrevTok+1);
+
+                    } else {
+
+                        lpfrInfo->lpToken[i]|=TOHIGH(1);
+
+                    }
 
                 }
 
-                lpNextToken=NULL;
+                lpfrInfo->lpToken[i]|=TOLOW(ALL_TOKEN);
+
+                lpfrInfo->lpToken[++i]=0;
+
+                lpNextToken++;
+
+                if (!*lpNextToken) break;
+
+                if (*lpNextToken!=',') {
+
+                    Dos9_ShowErrorMessage(DOS9_FOR_BAD_TOKEN_SPECIFIER, lpNextToken, FALSE);
+                    return -1;
+
+                }
+
+                lpNextToken++;
 
                 break;
 
@@ -715,7 +773,7 @@ void Dos9_ForSplitTokens(ESTR* lpContent, FORINFO* lpfrInfo)
 
          //printf("Getting token n. %d \n", i);
          Dos9_ForGetToken(lpContent, lpfrInfo, i, lpVarContent);
-         //printf("Returned : \"%s\"\n", Dos9_EsToChar(lpVarContent));
+         printf("Returned : \"%s\"\n", Dos9_EsToChar(lpVarContent));
             /* get the token descibed by the token info number i */
 
          Dos9_SetLocalVar(lpvLocalVars, cVarName, Dos9_EsToChar(lpVarContent));
@@ -753,38 +811,27 @@ void Dos9_ForGetToken(ESTR* lpContent, FORINFO* lpfrInfo, int iPos, ESTR* lpRetu
     /*  the type of line that arrives here is already truncated
         at the first character specified in eof parameter */
 
-    if (iTokenEnd==0) {
-
-        iTokenEnd=iTokenBegin;
-
-    }
-
-    if (iTokenBegin==-1) {
-
-        iTokenBegin=1;
-
-    }
-
-    /* printf("Getting token nb. %d\n"
+    printf("Getting token nb. %d\n"
            "\t* iTokenBegin = %d\n"
            "\t* iTokenEnd   = %d\n"
-           "\t* lpDelims    = \"%s\"\n\n", iPos, iTokenBegin, iTokenEnd, lpDelims); */
+           "\t* lpDelims    = \"%s\"\n\n", iPos, iTokenBegin, iTokenEnd, lpDelims);
 
-    while ((lpNextToken=strpbrk(lpToken, lpDelims))) {
-
-        //printf("Current token ::  \"%s\"\n", lpToken);
+    while ((lpNextToken = strpbrk(lpToken, lpDelims)))
+    {
+        /* get next first occurence of a lpDelims character */
 
         if (lpNextToken == lpToken) {
 
-            /* the current token is already a delimiter
+            /* this is already a delimiter
                just ignore it */
 
-            lpToken++;
-            continue;
+               lpToken=lpNextToken+1;
 
         }
 
-        /* both characters are distinct */
+        /* we skipped all delimiters we are now in
+           processing */
+
         if (iTokenPos == iTokenBegin) {
 
             lpBeginToken=lpToken;
@@ -794,35 +841,39 @@ void Dos9_ForGetToken(ESTR* lpContent, FORINFO* lpfrInfo, int iPos, ESTR* lpRetu
         if (iTokenPos == iTokenEnd) {
 
             lpEndToken=lpNextToken;
-
             break;
 
         }
 
-        lpToken=lpNextToken+1;
-
         iTokenPos++;
+        lpToken=lpNextToken+1;
 
     }
 
-    if (iTokenPos==1 && iTokenBegin==1) {
+    if (iTokenPos == iTokenBegin) {
 
         lpBeginToken=lpToken;
-
     }
 
     if (lpBeginToken) {
 
-        if (NULL==lpEndToken) {
+        if (lpEndToken) {
 
-            Dos9_EsCpy(lpReturn, lpBeginToken);
+            iLength = lpEndToken - lpBeginToken+1;
+
+            Dos9_EsCpyN(lpReturn, lpBeginToken, iLength);
+
 
         } else {
 
-            iLength = lpEndToken - lpBeginToken +1;
-            Dos9_EsCpyN(lpReturn, lpBeginToken, iLength);
+            Dos9_EsCpy(lpReturn, lpBeginToken);
+
         }
+
+
+
     }
+
 
 }
 
@@ -859,7 +910,7 @@ int Dos9_ForMakeInputInfo(ESTR* lpInput, INPUTINFO* lpipInfo, FORINFO* lpfrInfo)
         case '\'':
             /* the given input is a command line to be executed */
 
-            if (!bUsebackq) {
+            if (bUsebackq) {
 
                 iInputType=INPUTINFO_TYPE_STRING;
 
@@ -915,11 +966,8 @@ int Dos9_ForMakeInputInfo(ESTR* lpInput, INPUTINFO* lpipInfo, FORINFO* lpfrInfo)
 
             lpipInfo->cType=INPUTINFO_TYPE_STREAM;
 
-            printf("FILENAME=%s\n", lpToken);
-
             if (!(lpipInfo->Info.pInputFile=fopen(lpToken, "r"))) {
 
-                printf("The bug should not be coming from here...");
                 Dos9_ShowErrorMessage(DOS9_FILE_ERROR | DOS9_PRINT_C_ERROR, lpToken, FALSE);
                 return -1;
 
@@ -995,7 +1043,7 @@ int Dos9_ForAdjustInput(char* lpInput)
     while (*lpToken)
         *(lpInput++)=*(lpToken++);
 
-    if (*lpInput!=cBeginToken) {
+    if (*lpInput==cBeginToken) {
 
         *lpInput='\0';
         return 0;
@@ -1019,6 +1067,7 @@ int Dos9_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFd)
     int i=0;
 
     lpArgs[i++]="Dos9";
+    lpArgs[i++]="tst.bat";
     lpArgs[i++]="/Q";
 
     if (!bEchoOn)
@@ -1030,8 +1079,10 @@ int Dos9_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFd)
     if (bDos9Extension)
         lpArgs[i++]="/N";
 
-    snprintf(lpLastArg, sizeof(lpLastArg),  "/D %d", iPipeFd[0]);
+    //snprintf(lpLastArg, sizeof(lpLastArg),  "/D %d", iPipeFd[0]);
         /* give the input descriptor to the child*/
+
+    lpArgs[i]=NULL;
 
     #ifdef WIN32
 

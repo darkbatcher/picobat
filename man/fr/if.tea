@@ -1,3 +1,21 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2013  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
 {{Commande IF}}
 
 	   La commande {IF} permet le traitement conditionnel des 
@@ -9,29 +27,39 @@
 	   Il faut aussi préférer les {IF} multilignes à la combinaison 
 	{IF}-{goto|GOTO}, dans la mesure du possible
 	
-{{Synopsis}}
+{{Synopsis - Première syntaxe}}
 
-	Il existe plusieurs syntaxes de la commande {IF}, les voici :
+	La première syntaxe de la commande {IF} permet uniquement de comparer
+	deux chaînes de caractères et d'exécuter une liste de commandes si
+	elles sont égales. La syntaxe est :
 	
-${	IF [/i] [NOT] chaine1==chaine2 (
+${IF [/i] [NOT] chaine1==chaine2 (
 	:: code à exécuter
 	...
-	)}
+)}
 	
-	   Vérifie si la chaîne {chaine1} est égale à la chaîne {chaine2}
-	et exécute le code à exécuter si c'est le cas. Le comportement est
-	changé comme suit :
+	Vérifie si {chaine1} et {chaine2} sont égales et exécute le code
+	spécifié si c'est le cas. Le comportement de la commande peut être
+	modifié comme suit:
 		
 		- {/i}  : La comparaison ne tient pas en compte la casse. 
 		('Dos9' sera égal à 'dOs9')
 		
 		- {NOT} : Négation. Le code a exécuter le sera si {chaine1}
 		 n'est pas égale à {chaine2}
-		
-${	IF [/i] chaine1 cmp chaine2 (
+
+{{Synopsis - Seconde syntaxe}}
+
+	La seconde syntaxe est utilisée pour comparer à la fois des chaines
+	et des nombres. Elle permet aussi d'effectuer des tests plus diversifiés
+	sur les opérandes. Cette syntaxe doit aussi être préférée à la précédente
+	car elle est plus résistante aux bogues d'{expansion|spec/exp} (pour cela
+	voir les sections suivantes sur les bogues).
+		 
+${IF [/i] chaine1 cmp chaine2 (
 	:: code à exécuter
 	...
-	)}
+)}
 	
 	   Applique la comparaison induite par {cmp} aux chaînes {chaine1} et
 	{chaine2} et exécute le code à exécuter si la condition est vraie.
@@ -68,10 +96,12 @@ ${	IF [/i] chaine1 cmp chaine2 (
 	   L'utilisation du commutateur {/i} permet d'ignorer la casse (utile
 	uniquement pour les comparants {EQU} et {NEQ})
 	
-${	IF [NOT] [DEFINED | EXIST | ERRORLEVEL] objet (
+{{Synopsis - Troisième syntaxe}}
+	
+${IF [NOT] [DEFINED | EXIST | ERRORLEVEL] objet (
 	:: code à exécuter
 	...
-	)}
+)}
 	
 	   Vérifie si la condition induite sur la chaine {objet} est respectée
 	et exécute le code à  exécuter si c'est le cas. Les conditions induites
@@ -93,16 +123,94 @@ ${			IF %ERRORLEVEL%==valeur}
 	   Si vous spécifiez l'opérateur {NOT} alors le code à exécuter est
 	exécuté si la condition est fausse
 	
-	   Après chaque type de {IF}, vous pouvez insérer une commande {if|ELSE}
-	qui indique le code a exécuter si la comparaison est fausse.
+{{Synopsis - sous commande ELSE}}
 	
-	Exemple:
+	À la suite de n'importe quel type de {if} précédemment décrit, un mot-clé
+	{ELSE} peut être inséré. Dans ce cas, le code spécifié après le {ELSE}
+	sera exécuté.
 	
-${	IF /i %var1%==%var2% (
+${IF /i %var1%==%var2% (
 	:: code à executer si la condition est vraie
-	) ELSE (
+) ELSE (
 	:: code à exécuter si la condition est fausse
-	)}
+)}
+
+	Chaque code correspondant au corps du {IF} et du {ELSE} doit être obligatoiremnt
+	entouré de parenthèses. Dans le cas contraire, l'interpréteur l'exécutera
+	comme une unique ligne.
+	
+	Les deux codes suivant fonctionneront comme prévu :
+	
+${IF /i %var1%==%var2% (
+	ECHO %var1% est égal à %var2%
+) ELSE (
+	ECHO %var1% diffère de %var2%
+)
+        
+IF /i %var1%==%var2% (ECHO %var1% est égal à %var2%) ELSE (ECHO %var1% diffère de %var2%)
+        
+:: La sortie sera:
+::  - ``%var1% est égal à %var2%''
+::    quand %var1% sera égal à %var2%
+:: - ``%var1% diffère de %var2%''
+::    quand %var1% sera différent de %var2%}
+
+	Alors que le code suivant ne marchera pas:
+
+${IF /i %var1%==%var2% ECHO %var1% est égal à %var2% ELSE ECHO %var1% est différent de %var2%
+
+:: Affichera 
+:: ``ECHO %var1% est égal à %var2% ELSE ECHO %var1% est différent de %var2%''
+:: seulement quand %var1% sera égal à %var2%}
+
+{{Régler les problèmes d'espaces}}
+
+	A peut près n'importe qui a déjà obtenu le message suivant depuis
+	l'invité de commande (que ce soit {Dos9} ou cmd.exe):
+	
+${Erreur : ``Truc'' était innatendu.}
+
+	Cette erreur à deux causes principales. D'une part, ce bug est assez
+	souvent causé par une erreur de synthaxe (ce qui rend la commande
+	impossible à exécuter). Ce type d'erreur est la cause d'une grande
+	partie de ces messages d'erreurs. D'autre part, cet erreur apparaît
+	quand une variable est dévellopée alors qu'elle contient un caractère de
+	type espace. Prenons un exemple :
+	
+${IF %ma_var%==test (
+	ECHO Le test est correct
+}
+
+	Tant que {ma_var} ne contient pas d'espace, ni de caractère interpreté
+	(comme {&} ou {|}), cet exemple va admirablement bien marcher.
+	Malheureusement, si {ma_var} contient bien de tels caractères, l'exemple
+	ne va plus fonctionner correctement. Cet effet est causé par le fait que
+	{ma_var} esy dévellopée avant que la ligne soit exécutée, si bien que les
+	caractères contenus dans {ma_var} seront interprétés. Il y a plusieurs
+	manières de résoudre ce bogue.
+	
+		- On peut entourer {ma_var} avec des guillemets (doubles ou simples),
+		ce qui empêche les
+		caractères blancs d'être interprétés. Cepandant, les caractères tels
+		que {&} et {|} contenus dans {ma_var} seront toujours interprétés, et 
+		{ma_var} ne poura plus contenir de guillemets (doubles ou simples).
+
+		- La seconde, et meilleure des solutions est d'utiliser l'{expansion retardée|spec/exp}
+		plutôt que l'{expansion conventionnelle|spec/exp}. De cette façon, aucun
+		des caractères contenus dans {ma_var} ne peut causer de problème.
+		
+	Ainsi, lors de création de scripts qui doivent nécessairement être robustes
+	comme les scripts modifiant le registre, utilisez la syntaxe suivante:
+	
+${SETLOCAL EnableDelayedExpansion
+
+IF !my_var!==test (
+	ECHO Le test est correct 
+)}
+
+{{Le bogue des ==}}
+
+
 	
 {{Compatibilité}}
 

@@ -1,0 +1,146 @@
+﻿#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2013  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+{{FOR Command}}
+
+	The {FOR} loop is the most powerfull tool provided by batch language
+	to process various types of data, from integers, text files, command
+	outputs and even directories. Thus, the {FOR} loop is an important
+	piece to eleborate advanced and complex batch scripts and commands.
+	
+	The {FOR} loops may seem difficult to understand and mysty for
+	beginners, however, it is a very powerfull tool for batch programmers.
+
+{{Synopsis - First Syntax}}
+
+	The first syntax, allows processing strings.
+
+${FOR %%A IN (string) DO (
+	:: some commands
+)}
+	
+	Split {string} in tokens and processes specified commands for each 
+	token.
+	
+		- {%%A} : The name of the special var that will recieve the token to
+		be processed with specified commands. The proprietary software {cmd.exe}
+		used to force the user to use two differents syntax, depending if the
+		user was typing the command from the command prompt or if the command
+		was processed from a script. In the first case, ``%A'' should be used
+		instead of ``%%A'' (ie. removing the first ``%''). In the second case,
+		``%%A'' should be used. This difference is no more relevant using {dos9|Dos9},
+		since both syntax are supported. Note that, using dos9, ``%%A'' and
+		``%A'' both expand to the same text, as the interpreter will consider
+		it as the same variables.
+		
+		- {string} : The string to be splitted in tokens. The delimiters used
+		split the string in tokens are :
+		
+			-- {' '} : Spaces.
+			
+			-- {'	'} : Tabs.
+			
+			-- {'\\n'} : Line feeds or new lines.
+			
+			-- {:} : Columns.
+			
+			-- {;} : Semi-culumns.
+			
+			-- {,} : Coma.
+			
+	Note that you can discard any of the previous delimiters (experts line feeds or
+	new lines) just by enclosing the token between single or double quotes. Note
+	also that the double or single quote will remain in the tokens processed.
+	
+{{Synopsis - Second syntax}}
+
+	The second syntax is based on the use of the {/f} switch. It can process either
+	strings, command or files. Note that strings are not processed the same way as 
+	the previous syntax.
+	
+${FOR /F [options] %%A IN (object) DO (
+	:: some commands
+)}
+
+	Processes either a string, a command output or a file. For convienience, and to
+	ease reading of the page, none of the previously describded parameters will
+	describded again.
+	
+		- {object} : The object to be processed by the {FOR} loop. This parameters
+		consist of a string that can be (or not) enclosed in only one type of the following
+		delimiters :
+		
+			-- {'} : The object {object} is considered as a command line. The {FOR} loop
+			will run the given command line and then process the output of the command line.
+			The command line are runned asynchroniously, (ie. both commands in the for loop
+			and the command line are ran at the same time. Using {cmd.exe},
+			if the command line include line feeds or new lines, then they were splitted
+			from the command line and the command line was considered as a single-line
+			command line, preventing user from using complex script as command line. This
+			is no more restricted in {dos9|Dos9}, you can include multiline command lines,
+			and even complex commands (including {FOR} loops}, although it is not
+			recommended.
+			
+			-- {"} : The object {object} is considered as a simple string. The {FOR} loop
+			will so process the string. If the string include either line feeds or new
+			lines, then they will not be splitted from the processed string, and will
+			process the string line-by-line.
+			
+			-- If neither of the previous delimiters encloses {object}, then object will
+			be considered as a filename. The {FOR} loop will open the file named by {object}
+			and read all its content, and finally process what have been read. The file
+			can obviously be multiline, but it is expected to be a {text-mode} file. (ie.
+			the file should not contain any {NUL} characters). If the file is not a
+			{text-mode} file, then the result is undefined.
+			
+		- {options} : The options that must be used by {FOR} to process {object}. This must
+		be, either a single parameter that gathers all options or a combinations of short
+		parameters that contain a part of the overall options. Each options must be specified
+		by using the name of the option followed by an equal sign and finally by the value that
+		is specified for these options. The options name are :
+		
+			-- {eol} : Specify characters that will be used as end-of line delimiters. The
+			use of this option does not discard the use of line feeds and new lines as eol 
+			delimiters. You can specify {FILENAME_MAX-1} (exactly {259} in windows.
+			distinct ASCII characters. The default  value of this option is the empty 
+			string, (ie. "").
+			
+			-- {skip} : Specify the number of lines to be skipped at the beginning of the processed
+			text. The default value is 0, obviously.
+			
+			-- {tokens} : A list describing which tokens will be assigned to special (local) 
+			variables, such as {%%A}. Each token will be assigned to a different special var,
+			starting from the specified variable (in the previous code {%%A}) and incrementing
+			the ASCII code of the starting variable (roughly corresponding to alphabetical order
+			first for capitalized characters and then for normal characters) and repeating that
+			algorithm for each new token. If the the ascii code fall out the bounds of ASCII
+			characters codes (ie. 0x7F) then, the algorithm restart at the 0x21 codepoint (ie. ``!'').
+			If the algorithm try to assign a value already assigned before, then this value
+			will be overwritten. The token description must conform to the following rules,
+			separated by a comma :
+			
+				--- {n} : Where {n} is a number. Select the n-th token.
+		
+				--- {n-p} : Where both {n} and {p} are numbers. Cast all the tokens from
+				a range starting at the n-th token up to the p-th token.
+				
+				--- {*} : Select all the remaining tokens. This could be used for the {p}
+				parameter of the syntax {n-p}.
+				
+			-- {delims} : Specify characters that will be used 
+			
