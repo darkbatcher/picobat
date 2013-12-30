@@ -1,7 +1,7 @@
 #ifndef TEA_MODE_H
 #define TEA_MODE_H
 
-#include "LibDos9.h"
+#include "libDos9.h"
 #include "Tea_Lib.h"
 
 extern TEAMODIFIERS teaTextMods;

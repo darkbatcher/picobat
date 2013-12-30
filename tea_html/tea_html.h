@@ -2,7 +2,7 @@
 #define TEA_HTML_H
 
 #include <stdio.h>
-#include "LibDos9.h"
+#include "libDos9.h"
 
 #define TEA_HTML_MODE_HTML 1
 #define TEA_HTML_MODE_XML 2

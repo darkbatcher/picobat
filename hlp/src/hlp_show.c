@@ -16,7 +16,7 @@
 
 #include "hlp_showconst.h"
 
-#include "LibDos9.h"
+#include "libDos9.h"
 #include "hlp_load.h"
 #include "hlp_show.h"
 

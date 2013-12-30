@@ -1,3 +1,23 @@
+/*
+ *
+ *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
+ *   Copyright (C) 2010-2013 DarkBatcher
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -5,7 +25,7 @@
 #include "matheval.h"
 #include "inteval.h"
 
-#include "LibDos9.h"
+#include "libDos9.h"
 
 #include "Dos9_CmdLib.h"
 
@@ -36,6 +56,7 @@ int Dos9_CmdEcho(char* lpLine)
 
     lpLine+=4;
     if (*lpLine==' ') {
+
          if (Dos9_GetNextParameterEs(lpLine, lpesParameter)) {
             if (!stricmp(Dos9_EsToChar(lpesParameter), "OFF")) {
                 bEchoOn=FALSE;
@@ -53,6 +74,7 @@ int Dos9_CmdEcho(char* lpLine)
             else puts(lpMsgEchoOff);
             return 0;
          }
+
     }
 
     Dos9_GetEndOfLine(lpLine+1, lpesParameter);
@@ -104,7 +126,18 @@ double _Dos9_SetGetVarFloat(const char* lpName)
 
     if (lpContent) {
 
-        return atof(lpContent);
+        if (!strcmp(lpContent, "nan")){
+
+            return NAN;
+
+        } else if (!strcmp(lpContent, "inf")) {
+
+            return INFINITY;
+
+        } else {
+
+            return atof(lpContent);
+        }
 
     } else {
 
@@ -346,7 +379,7 @@ int Dos9_CmdSetEvalFloat(ESTR* lpExpression)
 
     }
 
-    snprintf(lpResult, sizeof(lpResult), "=%.10g", dVal);
+    snprintf(lpResult, sizeof(lpResult), "=%.16g", dVal);
 
     Dos9_EsCat(lpExpression, lpResult);
 
@@ -358,9 +391,159 @@ int Dos9_CmdSetEvalFloat(ESTR* lpExpression)
         return -1;
 }
 
+/* evaluate an interger expression */
 int Dos9_CmdSetEvalInt(ESTR* lpExpression)
 {
+    char *lpVarName,
+         *lpEqual,
+          lpResult[30];
+    char  cLeftAssign=0;
+    int   iResult,
+          iVal,
+          bDouble=FALSE;
+
+    Dos9_EsCat(lpExpression, "\n");
+
+    lpVarName=Dos9_EsToChar(lpExpression);
+
+    while (*lpVarName==' ' || *lpVarName=='\t') lpVarName++;
+
+    /* if we don't have expression, end-up with an error */
+    if (!*lpVarName) {
+
+        Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "SET", FALSE);
+        goto error;
+
+    }
+
+    /* seek an '=' sign */
+    if (!(lpEqual=strchr(lpVarName, '='))) {
+
+        Dos9_ShowErrorMessage(DOS9_INVALID_EXPRESSION, lpVarName, FALSE);
+        goto error;
+
+    }
+
+    *lpEqual='\0';
+
+    if (lpEqual != lpVarName) {
+
+        cLeftAssign=*(lpEqual-1);
+
+    }
+
+    iResult=IntEval_Eval(lpEqual+1);
+
+    if (IntEval_Error != INTEVAL_NOERROR) {
+
+        printf("Exception Number : %d\n", IntEval_Error);
+
+        Dos9_ShowErrorMessage(DOS9_INVALID_EXPRESSION, lpEqual+1, FALSE);
+        goto error;
+
+    }
+
+    switch(cLeftAssign) {
+
+        case '*':
+        case '/':
+        case '+':
+        case '-':
+        case '^':
+
+            *(lpEqual-1)='\0';
+            iVal=_Dos9_SetGetVarInt(lpVarName);
+
+            switch(cLeftAssign) {
+
+                case '*':
+                    iVal*=iResult;
+                    break;
+
+                case '/':
+                    iVal/=iResult;
+                    break;
+
+                case '+':
+                    iVal+=iResult;
+                    break;
+
+                case '-':
+                    iVal/=iResult;
+                    break;
+
+                case '^':
+                    iVal^=iResult;
+                    break;
+
+            }
+
+            break;
+
+        case '&':
+        case '|':
+
+            /* more complicated, it need to be
+               resolved */
+
+            *(lpEqual-1)='\0';
+            iVal=_Dos9_SetGetVarInt(lpVarName);
+
+            if (lpVarName != (lpEqual-1)) {
+
+                if (*(lpEqual-2) == cLeftAssign) {
+
+                    bDouble=TRUE;
+                    *(lpEqual-2)='\0';
+
+                }
+
+            }
+
+            switch (cLeftAssign) {
+
+                case '|':
+                    if (bDouble){
+
+                        iVal=iVal || iResult;
+
+                    } else {
+
+                        iVal|=iResult;
+
+                    }
+
+                    break;
+
+                case '&':
+                    if (bDouble){
+
+                        iVal=iVal && iResult;
+
+                    } else {
+
+                        iVal&=iResult;
+
+                    }
+
+            }
+
+            break;
+
+        default:
+            iVal=iResult;
+
+    }
+
+    snprintf(lpResult, sizeof(lpResult), "=%d", iVal);
+
+    Dos9_EsCat(lpExpression, lpResult);
+    Dos9_PutEnv(Dos9_EsToChar(lpExpression));
+
     return 0;
+
+    error:
+        return -1;
 }
 
 int Dos9_CmdSetLocal(char* lpLine)

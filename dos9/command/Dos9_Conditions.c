@@ -1,3 +1,27 @@
+/*
+ *
+ *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
+ *   Copyright (C) 2010-2013 DarkBatcher
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
 #include "Dos9_CmdLib.h"
 #include "Dos9_Conditions.h"
 #include "../lang/Dos9_Lang.h"
@@ -7,7 +31,10 @@
 int Dos9_CmdIf(char* lpParam)
 {
     char lpArgument[FILENAME_MAX], *lpNext, *lpToken;
-    int iFlag=0, iResult;
+    int iFlag=0,
+        iResult,
+        iExp1,
+        iExp2;
     CMPTYPE cmpCompType;
     ESTR *lpComparison, *lpOtherPart;
     LPFILELIST lpflFileList;
@@ -21,9 +48,13 @@ int Dos9_CmdIf(char* lpParam)
 
     BLOCKINFO bkInfo;
 
+    double x1,
+           x2;
+
     lpParam+=2;
 
     if ((lpNext=Dos9_GetNextParameter(lpParam, lpArgument, 11))) {
+
         if (!strcmp(lpArgument, "/?")) {
             puts(lpHlpDeprecated);
             return 0;
@@ -64,6 +95,7 @@ int Dos9_CmdIf(char* lpParam)
     }
 
     if (iFlag & DOS9_IF_ERRORLEVEL) {
+
         /* the script used 'ERRORLEVEL' Keyword */
         if (!(lpNext=Dos9_GetNextParameter(lpParam, lpArgument, FILENAME_MAX))) {
             Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
@@ -75,6 +107,7 @@ int Dos9_CmdIf(char* lpParam)
 
 
     } else if (iFlag & DOS9_IF_EXIST) {
+
         /* the script used 'EXIST' keyWord */
         if (!(lpNext=Dos9_GetNextParameter(lpParam, lpArgument, FILENAME_MAX))) {
             Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
@@ -87,6 +120,7 @@ int Dos9_CmdIf(char* lpParam)
         lpParam=lpNext;
 
     } else if (iFlag & DOS9_IF_DEFINED) {
+
         /* the script used 'DEFINED' */
         if (!(lpNext=Dos9_GetNextParameter(lpParam, lpArgument, FILENAME_MAX))) {
             Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
@@ -95,7 +129,9 @@ int Dos9_CmdIf(char* lpParam)
         iResult=(int)getenv(lpArgument);
         if (iFlag & DOS9_IF_NEGATION) iResult=!iResult;
         lpParam=lpNext;
+
     } else {
+
         /* the script uses normal comparisons */
         lpComparison=Dos9_EsInit();
         if ((lpNext=Dos9_GetNextParameterEs(lpParam, lpComparison))) {
@@ -131,6 +167,8 @@ int Dos9_CmdIf(char* lpParam)
                     cmpCompType=CMP_LESSER_OR_EQUAL;
                 } else if (!stricmp(lpArgument, "LSS")) {
                     cmpCompType=CMP_LESSER_OR_EQUAL;
+                } else if (!stricmp(lpArgument, "FEQ")) {
+                    cmpCompType=CMP_FLOAT_EQUAL;
                 } else {
                     Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpArgument, FALSE);
                     return -1;
@@ -155,21 +193,30 @@ int Dos9_CmdIf(char* lpParam)
                         break;
 
                     case CMP_GREATER:
-                        iResult = (atoi(Dos9_EsToChar(lpComparison)) > atoi(Dos9_EsToChar(lpOtherPart)));
+                        iResult = (atof(Dos9_EsToChar(lpComparison)) > atof(Dos9_EsToChar(lpOtherPart)));
                         break;
 
                     case CMP_GREATER_OR_EQUAL:
-                        iResult = (atoi(Dos9_EsToChar(lpComparison)) >= atoi(Dos9_EsToChar(lpOtherPart)));
+                        iResult = (atof(Dos9_EsToChar(lpComparison)) >= atof(Dos9_EsToChar(lpOtherPart)));
                         break;
 
                     case CMP_LESSER:
-                        iResult = (atoi(Dos9_EsToChar(lpComparison)) < atoi(Dos9_EsToChar(lpOtherPart)));
+                        iResult = (atof(Dos9_EsToChar(lpComparison)) < atof(Dos9_EsToChar(lpOtherPart)));
                         break;
 
                     case CMP_LESSER_OR_EQUAL:
-                        iResult = (atoi(Dos9_EsToChar(lpComparison)) <= atoi(Dos9_EsToChar(lpOtherPart)));
+                        iResult = (atof(Dos9_EsToChar(lpComparison)) <= atof(Dos9_EsToChar(lpOtherPart)));
                         break;
+
+                    case CMP_FLOAT_EQUAL:
+                        x1 = frexp(atof(Dos9_EsToChar(lpComparison)), &iExp1);
+                        x2 = frexp(atof(Dos9_EsToChar(lpOtherPart)), &iExp2);
+
+                        /* majorate the error */
+                        iResult=(fabs(x1-x2*pow(2, iExp2-iExp1)) <= DOS9_FLOAT_EQUAL_PRECISION);
+
                 }
+
                 Dos9_EsFree(lpOtherPart);
             }
         } else {

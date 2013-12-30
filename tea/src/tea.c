@@ -5,7 +5,7 @@
 
 #include "Tea_Lib.h"
 #include "tea_modes.h"
-#include "LibDos9.h"
+#include "libDos9.h"
 
 ESTR* lpFrontEndCommandLine;
 

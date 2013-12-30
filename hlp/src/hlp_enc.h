@@ -1,7 +1,7 @@
 #ifndef HLP_ENC_H
 #define HLP_ENC_H
 
-#include "LibDos9.h"
+#include "libDos9.h"
 
 #ifdef WIN32
 

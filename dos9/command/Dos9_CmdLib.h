@@ -6,7 +6,7 @@
 #include <dirent.h>
 #include <stdlib.h>
 
-#include "LibDos9.h"
+#include "libDos9.h"
 #ifndef DOS9API_INCLUDED
     #define TRUE 1
     #define FALSE 0

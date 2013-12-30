@@ -1,7 +1,7 @@
 #ifndef DOS9_CORE_H_INCLUDED
 #define DOS9_CORE_H_INCLUDED
 
-#include "LibDos9.h"
+#include "libDos9.h"
 
 #include "Dos9_Context.h"
 

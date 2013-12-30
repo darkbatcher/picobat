@@ -13,7 +13,7 @@
 
 #endif
 
-#include "LibDos9.h"
+#include "libDos9.h"
 
 const char* lpIntroduction;
 

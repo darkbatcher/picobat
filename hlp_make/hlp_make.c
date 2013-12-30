@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <errno.h>
 
-#include "LibDos9.h"
+#include "libDos9.h"
 
 #define UNICODE_FOLOWING_BYTE_MASK 0x80
 #define UNICODE_BYTE 0x80

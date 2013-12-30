@@ -1,7 +1,7 @@
 #ifndef HLP_LOAD_H_INCLUDED
 #define HLP_LOAD_H_INCLUDED
 
-#include "LibDos9.h"
+#include "libDos9.h"
 
 #define HLP_ELEMENT_TEXT 0
 #define HLP_ELEMENT_HEADING 1

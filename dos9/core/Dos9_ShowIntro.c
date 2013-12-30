@@ -1,4 +1,4 @@
-#include "LibDos9.h"
+#include "libDos9.h"
 #include "Dos9_ShowIntro.h"
 #include "../lang/Dos9_Lang.h"
 

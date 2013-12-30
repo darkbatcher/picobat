@@ -34,7 +34,7 @@
     #define getch(a)
 #endif
 
-#include "LibDos9.h"
+#include "libDos9.h"
 
 #include "errors/Dos9_Errors.h"
 

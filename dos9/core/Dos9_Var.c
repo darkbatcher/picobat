@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "LibDos9.h"
+#include "libDos9.h"
 
 #include "Dos9_Core.h"
 

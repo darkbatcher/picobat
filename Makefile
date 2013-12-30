@@ -8,7 +8,7 @@
 #
 
 # define a list of components to be build
-DOS9_COMPONENTS=./libdos9 ./libmatheval-dos9 ./libinteval ./dos9 ./tea ./tea_html \
+DOS9_COMPONENTS=./libDos9 ./libmatheval-dos9 ./libinteval ./dos9 ./tea ./tea_html \
 				./hlp ./hlp_make
 				
 # define first part of build bash scripts

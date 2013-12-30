@@ -7,7 +7,7 @@
     #define getch() getchar()
 #endif
 
-#include "LibDos9.h"
+#include "libDos9.h"
 #include "Dos9_Errors.h"
 
 #ifdef WIN32

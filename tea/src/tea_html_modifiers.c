@@ -4,7 +4,7 @@
 
 #include "tea_modes.h"
 #include "tea_modifier.h"
-#include "LibDos9.h"
+#include "libDos9.h"
 
 void   tea_HtmlHeadingStart(FILE* pOut, char* pTitle)
 {

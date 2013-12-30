@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-#include "LibDos9.h"
+#include "libDos9.h"
 
 char* tea_Strupr(char* lpChar)
 {

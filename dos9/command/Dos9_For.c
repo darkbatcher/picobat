@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include <errno.h>
 
-#include "LibDos9.h"
+#include "libDos9.h"
 #include "Dos9_For.h"
 
 #include "../errors/Dos9_Errors.h"

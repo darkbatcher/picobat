@@ -66,32 +66,33 @@ ${IF [/i] chaine1 cmp chaine2 (
 	   
 	   Les valeurs possibles de {cmp} sont:
 
-		- {EQU} : (EQUal). la chaîne {chaine1} est égale à la 
+		- {EQU} : (EQUal). La chaîne {chaine1} est égale à la 
 		  chaîne {chaine2}
 		
-		- {NEQ} : (Not EQual). la chaîne {chaine1} est différente de
+		- {NEQ} : (Not EQual). La chaîne {chaine1} est différente de
 		  la chaîne {chaine2}
 		
-		- {LEQ} : (Less or EQual). la chaîne {chaine1} est inférieure
-		  ou égale à la chaîne {chaine2}
+		- {LEQ} : (Less or EQual). La chaîne {chaine1} est inférieure
+		  ou égale à la chaîne {chaine2}.
 		
-		- {LSS} : (LeSS). la chaîne {chaine1} est inférieure à la
-		  chaîne {chaine2}
+		- {LSS} : (LeSS). La chaîne {chaine1} est inférieure à la
+		  chaîne {chaine2}.
 		
-		- {GTR} : (GreaTeR). la chaîne {chaine1} est supérieure à 
-		  la chaîne {chaine2}
+		- {GTR} : (GreaTeR). La chaîne {chaine1} est supérieure à 
+		  la chaîne {chaine2}.
 		
-		- {GEQ} : (Greater or EQual). la chaîne {chaine1} est 
-		  supérieure ou égale à la chaîne {chaine2}
+		- {GEQ} : (Greater or EQual). La chaîne {chaine1} est 
+		  supérieure ou égale à la chaîne {chaine2}.
+		  
+	    - {FEQ} : (Float EQual) (Extension de {Dos9}). Les chaînes {chaine1} et {chaine2}
+		sont égale, à la précision relative de {10^-13}. Utilisé pour comparer des
+		nombres flotants, voir {setaf|Commande SET(/A)(flotants)}.
 		
-	   Les comparants {LSS}, {GTR}, {LEQ} et {GEQ} supposent que {chaine1}
-	et {chaine2} soient des nombres, sinon le résultat de la comparaison
+	   Les comparants {LSS}, {GTR}, {LEQ} et {GEQ} et {FEQ} supposent que {chaine1}
+	et {chaine2} soient des nombres (flotants ou non), sinon le résultat de la comparaison
 	est indéfini (i.e. le comportement peut changer d'une version à une 
-	autre ou d'un os à un autre)
-	   
-	   Si les nombres spécifiés pour les comparants {LSS}, {GTR}, {LEQ}
-	et {GEQ} sont des nombres flottants (à virgule), alors ils seront
-	tronqués à l'entier inférieur.
+	autre ou d'un os à un autre). Toutes ces comparants acceptent aussi bien les
+	entiers que les nombres flotants.
 	   
 	   L'utilisation du commutateur {/i} permet d'ignorer la casse (utile
 	uniquement pour les comparants {EQU} et {NEQ})
@@ -210,8 +211,37 @@ IF !my_var!==test (
 
 {{Le bogue des ==}}
 
-
+	Le fait que la seconde syntaxe est plus résistante au bogues d'{spec/exp|expansion}
+	a été abordé plus haut. En effet, si un script respecte toute les règles qui
+	ont été données précedemmment pour les éviter, il n'est pas garanti qu'il
+	résiste à tous les bogues. Ce script serait en effet sensible au ``bogue des ==''.
+	Le code suivant est sujet à ce bogue :
 	
+${SETLOCAL EnableDelayedExpansion
+
+IF !ma_var!==test (
+	ECHO Le Test est bon 
+)		
+}
+
+	Comme précisé plus haut, ce script est tout à fait invulnérable au bogues
+	d'{expansion}. Cependant, un bogue est rencontré si {ma_var} contient ``==''.
+	dans ce cas, le comportement de la comparaison est modifié puisque le premier
+	``=='' rencontré est utilisé pour la comparaison. Dans la plupart des cas, ce
+	bogue n'est pas important pour le fonctionnement du script, mais il quand même
+	rendre la comparaison mauvaise.
+	
+	Si un tel scénario est possible à l'exécution du script, préférez la syntaxe
+	suivante :
+	
+${SETLOCAL EnableDelayedExpansion
+
+IF !ma_var! EQU test (
+	ECHO Le test est bon
+)		
+}
+	
+
 {{Compatibilité}}
 
 	   Partiellement compatible avec {cmd.exe}. En effet, le résultat de
@@ -219,7 +249,9 @@ IF !my_var!==test (
 	avec {cmd.exe} dans la mesure où le comportement de cette comparaison
 	n'est pas très claire avec {cmd.exe}
 	
-	Disponible depuis la version {0.4}
+	Disponible depuis la version {0.4}.
+	
+	Le comparant {FEQ} est disponible depuis la version {0.7.0.1}
 	
 {{A voir aussi}}
 

@@ -14,7 +14,7 @@
 
 #include "../errors/Dos9_Errors.h"
 #include "Dos9_FileCommands.h"
-#include "LibDos9.h"
+#include "libDos9.h"
 
 int Dos9_CmdDel(char* lpLine)
 {

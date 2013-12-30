@@ -17,7 +17,7 @@
 #endif
 
 #include "hlp_load.h"
-#include "LibDos9.h"
+#include "libDos9.h"
 
 int Hlp_StringConvert(iconv_t cd, ESTR* lpEsReturn, char* lpToken)
 {

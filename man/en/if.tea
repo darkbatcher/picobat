@@ -76,12 +76,12 @@ ${	IF [/i] string1 cmp string2 (
 		
 		- {GEQ} : (Greater or EQual). String {string1} is greater or equal to {string2}.
 		
-	Comparisons {LSS}, {GTR}, {LEQ} and {GEQ} requires both {string1} and
-	{string2} to be numbers, otherwise, comparisons results are undefined.
-	
-	Comparisons {LSS}, {GTR}, {LEQ} and {GEQ} expects the numbers {string1} and {string2} 
-	to be intergers, but if they are floating numbers, they will be truncated to the greater
-	interger value lower than the numbers (floored).
+		- {FEQ} : (Float EQual) (Dos9 extension). String {string1} is equal to {string2},
+		with a relative precision of {10^-13}. This comparison is used to compare floating
+		number, wich cannot be compared by {EQU}, as explained in {setaf|SET(/A) Command (floats)} manual.
+		
+	Comparisons {LSS}, {GTR}, {LEQ}, {FEQ} and {GEQ}  requires both {string1} and
+	{string2} to be numbers (intergers or floating numbers), otherwise, comparisons results are undefined.
 	
 	The {/i} switch makes comparison case insensitive. Note that this switch only affects 
 	{EQU} and {NEQ} comparisons.
@@ -239,6 +239,8 @@ IF !my_var! EQU test (
 	number) and causes numbers of mistakes.
 	
 	Supported since version {0.4}.
+	
+	{FEQ} comparison is supported since version {0.7.0.1}
 	
 {{See also}}
 

@@ -32,7 +32,7 @@
 
 #endif
 
-#include "LibDos9.h"
+#include "libDos9.h"
 
 /** \defgroup DESCRIPTORS_CONSTANT Descriptors constants
     \{

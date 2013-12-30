@@ -3,7 +3,7 @@
 #include <errno.h>
 #include <string.h>
 
-#include "LibDos9.h"
+#include "libDos9.h"
 #include "Tea_Lib.h"
 #include "tea_modes.h"
 

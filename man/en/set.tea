@@ -1,3 +1,76 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2013  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+##
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2013  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+{{Commande SET}}
+
+	   La commande {SET} permet d'affecter des variables d'environement,
+	que l'on peut ensuite récuperer via {spec/exp|l'expansion des variables}
+	
+{{Synopsis}}
+
+${	SET variable=contenu}
+
+	Affecte le contenu {contenu} à la variable {variable}.
+	
+${	SET /a[[:][i|f]] variable=expression}
+
+	   Affecte la valeur d'une {expression mathématique} à la variable
+	   {variable}. Cette command à un comportement dépendent du mode fixé par
+	   la commande {setlocal|SETLOCAL} avec le paramètre {ENABLEFLOATS}.
+	   
+	   Des options peuvent être spécifiées en plus de {/a}. Ces options sont:
+	   
+			- {i} : Force la commande {SET} à utiliser le mode {entiers}, peu
+			importe le mode spécifié avec la commannde {setlocal|SETLOCAL}.
+	   
+			- {f} : Force la commande {SET} à utiliser le {flotants}.
+	   
+	   Pour de plus amples information à propos des {expressions mathématiques},
+	   consultez le manuel {setai|SET (/a)(entiers)} et {setaf|SET (/a)(flotants)}.
+	
+${	SET /p variable=question}
+	
+	   Affiche le texte {question} à l'invité de commande, puis attend
+	que l'utilisateur entre quelque chose au clavier, puis affecte ce que
+	l'utilisateur a entré à la variable {variable}.
+
+{{A voir aussi}}
+	
+	{commands|Liste des commandes}, {echo|Commande ECHO},
+	{pause|Commande PAUSE}, {seta|Commande SET (/A)}
+
+
 {{Commande SET}}
 
 	   La commande {SET} permet d'affecter des variables d'environement,

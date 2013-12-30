@@ -3,7 +3,7 @@
 #include <string.h>
 #include <errno.h>
 
-#include "LibDos9.h"
+#include "libDos9.h"
 #include "tea_html.h"
 
 int main(int argc, char *argv[])

@@ -43,7 +43,7 @@ OBJ=$(SRC:.c=.o)
 all: $(TARGET)
 
 # build the main lib
-$(TARGET) : $(OBJ)
+$(TARGET) : $(OBJ) $(LIB)
 			$(CC) $(CFLAGS) -o $@ $^ $(LIB)
 
 %.o : %.c

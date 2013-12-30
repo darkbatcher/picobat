@@ -20,8 +20,8 @@ AR=ar
 
 TARGET=../$(LIB_DIR)/libDos9.a
 
-INCLUDE_FILE=../$(INC_DIR)/LibDos9.h
-ORIGIN_FILE=./LibDos9.h
+INCLUDE_FILE=../$(INC_DIR)/libDos9.h
+ORIGIN_FILE=./libDos9.h
 
 #the list of the sources
 SRC=./cmdlist/Dos9_CmdList.c ./console/linux/Dos9_Console.c \

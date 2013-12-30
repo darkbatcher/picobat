@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <errno.h>
 
-#include "LibDos9.h"
+#include "libDos9.h"
 #include "tea_html.h"
 
 void tea_html_AdjustHtmlCode(ESTR* lpEsContent)

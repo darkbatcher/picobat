@@ -3,7 +3,7 @@
 #include <string.h>
 
 #include "Tea_Lib.h"
-#include "LibDos9.h"
+#include "libDos9.h"
 
 const char* lpDelimsInlineOpen[]={"\\{","{", NULL};
 const char* lpDelimsInlineClose[]={"\\}","}", NULL};
