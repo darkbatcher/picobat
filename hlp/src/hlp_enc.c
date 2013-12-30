@@ -24,7 +24,7 @@ int Hlp_StringConvert(iconv_t cd, ESTR* lpEsReturn, char* lpToken)
     char lpTmpBuf[128];
     char *lpTmpToken=lpTmpBuf;
     size_t tmpSize=sizeof(lpTmpBuf);
-    size_t originSize=strlen(lpToken)+1;
+    size_t originSize=strlen(lpToken);
     size_t nCount;
 
     Dos9_EsCpy(lpEsReturn, "");

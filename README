@@ -9,27 +9,28 @@ THE DOS9 PROJECT
      <darkbatcher@dos9.org> with a description of the bug, or even a fix if you
      want to contribute.
 
-     To get information about the license, see the license file (-> 
-     `license.txt').
+     To get information about the license, see the license.txt (-> `license 
+     file').
 
 LEGAL NOTICE
 
-     Dos9 - Command prompt and interpreter for windows batch files Copyright 
-     (C) 2013 DarkBatcher (Romain Garbi)
-
-     This program is free software; you can redistribute it and/or modify it 
-     under the terms of the GNU General Public License as published by the Free
-     Software Foundation; either version 2 of the License, or (at your option) 
-     any later version.
-
-     This program is distributed in the hope that it will be useful, but 
-     WITHOUT ANY WARRANTY; without even the implied warranty of 
-     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
-     Public License for more details.
-
-     You should have received a copy of the GNU General Public License along 
-     with this program; if not, write to the Free Software Foundation, Inc., 51
-     Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+        Dos9 - Command prompt and interpreter for windows batch files
+        Copyright (C) 2013 DarkBatcher (Romain Garbi)
+         
+        This program is free software; you can redistribute it and/or modify 
+        it under the terms of the GNU General Public License as published by 
+        the Free Software Foundation; either version 2 of the License, or 
+        (at your option) any later version.
+             
+        This program is distributed in the hope that it will be useful,
+        but WITHOUT ANY WARRANTY; without even the implied warranty of
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        GNU General Public License for more details.
+                 
+        You should have received a copy of the GNU General Public License 
+        along with this program; if not, write to the Free Software 
+        Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
+        02110-1301 USA
 
 BUILDING DOS9
 
@@ -45,19 +46,25 @@ BUILDING DOS9
           just download sources package from DOS9's sourceforge page, or just 
           get them from the git repository using :
 
-             git clone ssh://darkbatcher@git.code.sf.net/p/dos9/code dos9-code
+        git clone ssh://darkbatcher@git.code.sf.net/p/dos9/code dos9-code
 
      When you have downloaded sources, you just need to compile them using any 
      C compiler. For WINDOWS system, it is more complicated than getting 
      precompiled binaries because you need to have gcc and gmake installed on 
-     your system. For *NIX system, doing so is as simple as typing :
+     your system. On WINDOWS, you should also have a *NIX compatible shell. 
+     If not, you can get one from the MINGW project. For *NIX system, doing 
+     so is as simple as typing :
 
-        export TARGET_OS=linux 
-        make -B
+        make *nix
 
-     WINDOWS users just have to remove the first line, obviously. Windows 
-     users also need to move non native dependencies *.dll from the folder 
-     ``depend'' to the folder ``bin''. 
+     WINDOWS users just have to specify ``win'' target instead ``*nix''. 
+     Windows users also need to move non native dependencies *.dll from the 
+     folder ``depend'' to the folder ``bin''.
+
+     A list of needed programs and tools to be able to build DOS9 properly can
+     be obtained by typing:
+
+        make
 
 FIRST STEPS
 
@@ -76,24 +83,27 @@ FIRST STEPS
 
 CHANGING THE LANGUAGE
 
-     If the language of the interpretor or of the documentation might not be in
-     your langage under MS-WINDOWS, thus you should configure the 
-     ``Dos9_Auto.bat'' script that DOS9 launches at startup. Modify the 
-     following line :
+     If the language of the interpretor or of the documentation is in your 
+     langage under MS-WINDOWS, then you should configure the ``Dos9_Auto.bat''
+     script that DOS9 launches at startup. Normally this is not necessary as 
+     GNU GETTEXT automatically chose your langage. Modify the following line 
+     :
 
-         SET LANGUAGE=en_US
+         :: SET LANGUAGE=en_US
 
-     Replace EN_US by the name of your local. It is still possible that the 
-     langage does not work though, this means that DOS9 is not translated yet 
-     in your language. Note that dos9 might be translated into your language, 
-     and manual page can be not translated, so if you use HLP, it might crash.
-     Nevertheless, this should'nt occur as HLP failsback to english. 
+     Uncomment the line and replace EN_US by the name of your locale. It is 
+     still possible that the langage does not work though, this means that 
+     DOS9 is not translated yet in your language. Note that dos9 might be 
+     translated into your language, and manual page can be not translated, so 
+     if you use HLP, it might crash. Nevertheless, this should'nt occur as 
+     HLP failsback to english.
 
 MAKING TRANSLATION
 
      Translations uses the GNU GETTEXT tool. To make translation, run the 
-     ``dos9-build-gettext.bat'' script to produce .PO files for your language,
-     and then, translate it via a po editor like POEDIT or KBABEL.
+     ``dos9-build-gettext.bat'' script to produce .PO files (avaliable from 
+     the sources) for your language, and then, translate it via a po editor 
+     like POEDIT or KBABEL.
 
      To submit translation, send it to : <darkbatcher@dos9.org>
 

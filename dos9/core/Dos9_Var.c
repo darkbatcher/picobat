@@ -183,6 +183,14 @@ void Dos9_FreeLocalBlock(LOCAL_VAR_BLOCK* lpBlock)
     return free(lpBlock);
 }
 
+char* Dos9_GetLocalVarPointer(LOCAL_VAR_BLOCK* lpvBlock, char cVarName)
+{
+    DOS9_TEST_VARNAME(cVarName);
+
+    return lpvBlock[(int)cVarName];
+
+}
+
 int Dos9_SetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char cVarName, char* cVarContent)
 {
 

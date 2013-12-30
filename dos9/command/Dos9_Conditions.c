@@ -183,6 +183,7 @@ int Dos9_CmdIf(char* lpParam)
     }
 
     if ((lpNext=Dos9_GetNextBlock(lpParam, &bkInfo))) {
+
         if (iResult) {
 
             Dos9_RunBlock(&bkInfo);
@@ -205,6 +206,7 @@ int Dos9_CmdIf(char* lpParam)
                 }
             }
         }
+
     } else {
 
         Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);

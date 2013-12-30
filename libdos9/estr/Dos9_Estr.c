@@ -236,70 +236,57 @@ int Dos9_EsGet(ESTR* ptrESTR, FILE* ptrFile)
 int Dos9_EsCpy(ESTR* ptrESTR, const char* ptrChaine)
 {
     size_t iLen=_Dos9_EsTotalLen(ptrChaine);
-    char* ptrBuf;
-    if (ptrESTR->iLenght < iLen)
-    {
-        if ((ptrBuf=malloc(iLen))) {
-            free(ptrESTR->ptrString);
-            ptrESTR->ptrString=ptrBuf;
-        } else {
-            return -1;
-        }
+    char* ptrBuf=ptrESTR->ptrString;
+    if (ptrESTR->iLenght < iLen) {
 
+        if (!(ptrBuf=realloc(ptrBuf, iLen)))
+            return -1;
+
+        ptrESTR->ptrString=ptrBuf;
         ptrESTR->iLenght=iLen;
     }
-    strcpy(ptrESTR->ptrString, ptrChaine);
+
+    strcpy(ptrBuf, ptrChaine);
+
     return 0;
 }
 
 int Dos9_EsCpyN(ESTR* ptrESTR, const char* ptrChaine, size_t iSize)
 {
     size_t iLen=_Dos9_EsTotalLen4(iSize);
-    char* ptrBuf;
+    char* ptrBuf=ptrESTR->ptrString;
     if (ptrESTR->iLenght < iLen)
     {
-        if ((ptrBuf=malloc(iLen))) {
-            free(ptrESTR->ptrString);
-            ptrESTR->ptrString=ptrBuf;
-        } else {
+        if (!(ptrBuf=realloc(ptrBuf, iLen)))
             return -1;
-        }
 
+        ptrESTR->ptrString=ptrBuf;
         ptrESTR->iLenght=iLen;
+
     }
 
-    ptrBuf=ptrESTR->ptrString;
-    while(*ptrChaine && iSize>1) {
-        *ptrBuf=*ptrChaine;
-        ptrBuf++;
-        ptrChaine++;
-        iSize--;
-    }
-    *ptrBuf='\0';
+
+    strncpy(ptrBuf, ptrChaine, iSize);
+    ptrBuf[iSize]='\0';
+
     return 0;
 }
 
 int Dos9_EsCat(ESTR* ptrESTR, const char* ptrChaine)
 {
    int iLen=_Dos9_EsTotalLen2(ptrESTR->ptrString,ptrChaine);
-   char *lpBuf;
-   if ((ptrESTR->iLenght<iLen))
-   {
-        lpBuf=realloc(ptrESTR->ptrString,iLen);
-        if (lpBuf==NULL) return -1;
+   char *lpBuf=ptrESTR->ptrString;
+
+   if ((ptrESTR->iLenght<iLen)) {
+
+        if (!(lpBuf=realloc(lpBuf,iLen)))
+            return -1;
+
         ptrESTR->ptrString=lpBuf;
         ptrESTR->iLenght=iLen;
    }
 
-   lpBuf=ptrESTR->ptrString;
-   while (*lpBuf) lpBuf++;
-
-   while (*ptrChaine) {
-        *lpBuf=*ptrChaine;
-        ptrChaine++;
-        lpBuf++;
-   }
-   *lpBuf='\0';
+   strcat(lpBuf, ptrChaine);
 
    return 0;
 }
@@ -307,25 +294,17 @@ int Dos9_EsCat(ESTR* ptrESTR, const char* ptrChaine)
 int Dos9_EsCatN(ESTR* ptrESTR, const char* ptrChaine, size_t iSize)
 {
    int iLen=_Dos9_EsTotalLen3(ptrESTR->ptrString,iSize+1);
-   char *lpBuf;
-   if (ptrESTR->iLenght<iLen)
-   {
-        lpBuf=realloc(ptrESTR->ptrString,iLen);
-        if (lpBuf==NULL) return -1;
+   char *lpBuf=ptrESTR->ptrString;
+   if (ptrESTR->iLenght<iLen) {
+
+        if (!(lpBuf=realloc(lpBuf,iLen)))
+            return -1;
+
         ptrESTR->ptrString=lpBuf;
         ptrESTR->iLenght=iLen;
    }
 
-   lpBuf=ptrESTR->ptrString;
-   while (*lpBuf) lpBuf++;
-
-   while (*ptrChaine  && iSize) {
-        *lpBuf=*ptrChaine;
-        ptrChaine++;
-        lpBuf++;
-        iSize--;
-   }
-   *lpBuf='\0';
+   strncat(lpBuf, ptrChaine, iSize);
 
    return 0;
 }
@@ -333,19 +312,18 @@ int Dos9_EsCatN(ESTR* ptrESTR, const char* ptrChaine, size_t iSize)
 int Dos9_EsCpyE(ESTR* ptrDest, const ESTR* ptrSource)
 {
     int iLen=_Dos9_EsTotalLen(ptrSource->ptrString);
-    char* ptrBuf;
+    char* ptrBuf=ptrDest->ptrString;
+
     if (iLen > ptrDest->iLenght)
     {
-        if ((ptrBuf=malloc(iLen))) {
-            free(ptrDest->ptrString);
-            ptrDest->ptrString=ptrBuf;
-        } else {
-            return 1;
-        }
+        if (!(ptrBuf=realloc(ptrBuf, iLen)))
+            return -1;
+
+        ptrDest->ptrString=ptrBuf;
         ptrDest->iLenght=iLen;
     }
 
-    strcpy(ptrDest->ptrString, ptrSource->ptrString);
+    strcpy(ptrBuf, ptrSource->ptrString);
 
     return 0;
 }
@@ -353,25 +331,18 @@ int Dos9_EsCpyE(ESTR* ptrDest, const ESTR* ptrSource)
 int Dos9_EsCatE(ESTR* ptrDest, const ESTR* ptrSource)
 {
     int iLen=_Dos9_EsTotalLen2(ptrDest->ptrString, ptrSource->ptrString);
-    char* lpBuf, *lpSource;
-    if (ptrDest->iLenght<iLen)
-    {
-        lpBuf=realloc(ptrDest->ptrString,iLen);
-        if (lpBuf==NULL) return -1;
+    char* lpBuf=ptrDest->ptrString;
+
+    if (ptrDest->iLenght<iLen) {
+
+        if (!(lpBuf=realloc(lpBuf,iLen)))
+            return -1;
+
         ptrDest->ptrString=lpBuf;
         ptrDest->iLenght=iLen;
     }
 
-    lpSource=ptrSource->ptrString;
-    lpBuf=ptrDest->ptrString;
-    while(*lpBuf) lpBuf++;
-
-    while (*lpSource) {
-        *lpBuf=*lpSource;
-        lpSource++;
-        lpBuf++;
-    }
-    *lpBuf='\0';
+    strcat(lpBuf, ptrSource->ptrString);
 
     return 0;
 }

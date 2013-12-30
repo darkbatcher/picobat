@@ -25,7 +25,6 @@ DOS9_CMDLIB char* Dos9_GetNextParameter(char* lpLine, char* lpResponseBuffer, in
 DOS9_CMDLIB char* Dos9_GetNextBlock(char* lpLine, BLOCKINFO* lpbkInfo)
 {
     char* lpBlockBegin;
-    char cSave;
     int iParentheseLvl=0;
 
     while (*lpLine=='\t' || *lpLine==' ') lpLine++;
@@ -72,9 +71,11 @@ DOS9_CMDLIB char* Dos9_GetNextBlockEs(char* lpLine, ESTR* lpReturn)
     lpNext = Dos9_GetNextBlock(lpLine, &bkInfo);
 
 
-    iNbBytes = bkInfo.lpEnd - bkInfo.lpBegin + 1;
+    iNbBytes = bkInfo.lpEnd - bkInfo.lpBegin;
 
     Dos9_EsCpyN(lpReturn, bkInfo.lpBegin, iNbBytes);
+
+    Dos9_DelayedExpand(lpReturn, bDelayedExpansion);
 
     return lpNext+1;
 
@@ -117,13 +118,11 @@ DOS9_CMDLIB char* Dos9_GetNextParameterEs(char* lpLine, ESTR* lpReturn)
 
      }
 
-     if (*lpLine=='\0' & !iSeekQuote) {
-
-        i++;
-
-     } else {
+     if (!((*lpLine=='\0') & !iSeekQuote)) {
 
         lpLine++;
+        i--; /* i is obviously strictly greater
+                than 1 */
 
      }
 

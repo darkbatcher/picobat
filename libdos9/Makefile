@@ -5,17 +5,11 @@
 # Foundation, either version 3 of the License, or (at your option) any later
 # version.
 #
-#Please report bugs, and mistakes at : <darkbatcher at gmail dot com>
+# Please report bugs, and mistakes at : <darkbatcher at dos9 dot org>
 #
-# To Choose the right OS, us the var $TARGET_OS (win for WINDOWS, linux for
-# GNU/Linux)
-#
-# Other targets than all seems  not to be
-# supported in windows, so if you want rebuild, use
-# the -B switch.
 
 # flags pour  c compiler
-CFLAGS=-Wall -O3
+CFLAGS=-Wall -O3 -g
 
 # flags for lib compiler
 AFLAGS=-r -s
@@ -24,7 +18,10 @@ AFLAGS=-r -s
 CC=gcc
 AR=ar
 
-TARGET=../libs/libDos9.a
+TARGET=../$(LIB_DIR)/libDos9.a
+
+INCLUDE_FILE=../$(INC_DIR)/LibDos9.h
+ORIGIN_FILE=./LibDos9.h
 
 #the list of the sources
 SRC=./cmdlist/Dos9_CmdList.c ./console/linux/Dos9_Console.c \
@@ -34,7 +31,10 @@ SRC=./cmdlist/Dos9_CmdList.c ./console/linux/Dos9_Console.c \
 		
 OBJ=$(SRC:.c=.o)
 
-all: $(TARGET)
+all: $(TARGET) $(INCLUDE_FILE)
+
+$(INCLUDE_FILE): $(ORIGIN_FILE)
+	cp $(ORIGIN_FILE) $(INCLUDE_FILE)
 
 # build the main lib
 $(TARGET): $(OBJ)

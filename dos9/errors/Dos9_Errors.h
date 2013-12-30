@@ -15,7 +15,7 @@
     #define DEBUG1_(a) fprintf( stderr, "$ %s (line %d) * %d\n", __func__, __LINE__, a)
 #endif
 
-void Dos9_ShowErrorMessage(unsigned int iErrorNumber, char* lpComplement, int iExitCode);
+void Dos9_ShowErrorMessage(unsigned int iErrorNumber, const char* lpComplement, int iExitCode);
 void Dos9_LoadErrors(void);
 
 #define DOS9_FILE_ERROR 0
@@ -42,8 +42,10 @@ void Dos9_LoadErrors(void);
 #define DOS9_CREATE_PIPE 21
 #define DOS9_FOR_LAUNCH_ERROR 22
 #define DOS9_FOR_BAD_INPUT_SPECIFIER 23
+#define DOS9_FOR_TRY_REASSIGN_VAR 24
+#define DOS9_INVALID_EXPRESSION 25
 
-#define DOS9_ERROR_MESSAGE_NUMBER 25
+#define DOS9_ERROR_MESSAGE_NUMBER 26
 
 #define DOS9_PRINT_C_ERROR 0x80
 

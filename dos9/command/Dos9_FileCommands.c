@@ -263,6 +263,7 @@ int Dos9_CmdRen(char* lpLine)
             return 0;
         }
     }
+
     Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "REN / RENAME", FALSE);
     Dos9_EsFree(lpEstr);
     return -1;
@@ -272,40 +273,70 @@ int Dos9_CmdRmdir(char* lpLine)
 {
     ESTR* lpEstr=Dos9_EsInit();
 
+    if (!(lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
+
+        Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "MD/MKDIR", FALSE);
+        goto error;
+
+    }
+
     if ((lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
         if (!strcmp(Dos9_EsToChar(lpEstr), "/?")) {
-            // on affiche le message d'aide
+
+            puts(lpHlpDeprecated);
+
         } else if (!stricmp(Dos9_EsToChar(lpEstr),"/Q")) {
             // on affiche ta mère blah
         } else {
-            if (!rmdir(Dos9_EsToChar(lpEstr))) {
+
+            if (rmdir(Dos9_EsToChar(lpEstr))) {
                 Dos9_ShowErrorMessage(DOS9_MKDIR_ERROR, Dos9_EsToChar(lpEstr), FALSE);
-                Dos9_EsFree(lpEstr);
-                return -1;
+                goto error;
             }
+
         }
     }
 
     Dos9_EsFree(lpEstr);
     return 0;
+
+    error:
+        Dos9_EsFree(lpEstr);
+        return -1;
 }
 
 int Dos9_CmdMkdir(char* lpLine)
 {
     ESTR* lpEstr=Dos9_EsInit();
 
+    if (!(lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
+
+        Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "MD/MKDIR", FALSE);
+        goto error;
+
+    }
+
     if ((lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
         if (!strcmp(Dos9_EsToChar(lpEstr), "/?")) {
-            //! on affiche le message d'aide
+
+            puts(lpHlpDeprecated);
+
         } else {
-            if (!Dos9_Mkdir(Dos9_EsToChar(lpEstr), 0777)) {
+
+            if (Dos9_Mkdir(Dos9_EsToChar(lpEstr), 0777)) {
+
                 Dos9_ShowErrorMessage(DOS9_MKDIR_ERROR, Dos9_EsToChar(lpEstr), FALSE);
-                Dos9_EsFree(lpEstr);
-                return -1;
+                goto error;
+
             }
         }
     }
 
     Dos9_EsFree(lpEstr);
     return 0;
+
+    error:
+        Dos9_EsFree(lpEstr);
+        return -1;
+
 }

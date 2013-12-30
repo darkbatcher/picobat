@@ -1,0 +1,211 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2013  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+
+{{Commande SET (/A)(flotants)}} 
+
+	La commande {SET /A} permet d'assigner la valeur d'une expression mathématique à
+	une variable.
+	
+	Ce manuel traite uniquement de l'option {/A} de la commande {SET}, dans le cas
+	particulier des expressions utilisant des nombres flotants. Pour
+	consulter le manuel de la commande {SET}, rendez vous sur le manuel {set|SET}.
+	Vous pouvez aussi consulter le manuel traitant des expression a nombres entiers
+	à la page {setai|SET (/A)(entiers)}.
+	
+{{Synopsis}}
+
+${	SET [/a | /a[:]f] variable=expression}
+
+	   Affecte la valeur d'une {expression mathématique} à la variable
+	   {variable}. Cette command à un comportement dépendent du mode fixé par
+	   la commande {setlocal|SETLOCAL} avec le paramètre {ENABLEFLOATS}.
+	   
+	   L'opérateur {=} peut être remplacé dans cet exemple par les opérateurs suivants:
+	   
+			- {+=} : Addition du résultat à {variable}.
+			
+			- {-=} : Soustraction du résultat à {variable}.
+			
+			- {*=} : Multiplication de {variable} par le résultat.
+			
+			- {/=} : Division de {variable} par le résultat.
+			
+	  
+{{Les Opérateurs}}
+	   
+	   L'expression mathématique doit être constitué d'une suite d'opérateurs et d'opérandes. Chaque opérande
+	   doît être séparé de l'opérande suivant par un opérateur.
+	   
+	   Les opérateurs utilisables avec les nombres {flotants} sont:
+	   
+			- {+} : Addition.
+	   
+			- {-} : Soustraction.
+	   
+			- {*} : Mutiplication.
+	   
+			- {/} : Division.
+			
+			- {^} : Elevation à une puissance.
+			
+			- {%} : Modulo (Reste de la division Euclidienne étendue aux nombres flotants).
+		
+		La multiplication, la division et le modulo sont tous prioritaires sur l'addition et la soustraction.
+		Il est néamoins possible de modifier la priorité des opérations en utilisant les parenthèse {(} et {)}.
+			
+		Il est également possible d'utiliser des opérateurs unaires, c'est-à-dire des opérateur affectant
+		uniquement l'opérande qui le suit à droite. Ces opérateurs sont :
+		
+			- {-} : Signe négatif.
+			
+		Les opérateurs unaires ont la priorité la plus haute.
+			
+{{Les fonctions mathématiques}}
+			
+			
+		En plus de contenir des opérateurs, l'{expression mathématique} peut contenir des 
+		fonctions mathématiques. Pour spécifier une fonction mathématique, 
+		il faut entourer son argument par des parenthèses. Par exemple :
+		
+${fonction(expression)}
+
+		Les fonction fouenies sont :
+		
+			- {exp} : Fonction exponnentielle.
+			
+			- {ln} : Fonction logarithme népérien.
+			
+			- {log} : Fonction logarithme décimal.
+			
+			- {sqrt} : Fonction racine carrée.
+			
+			- Fonctions trigonométiques :
+			
+			-- {sin} : Fonction sinus.
+			
+			-- {cos} : Fonction cosinus.
+			
+			-- {tan} : Fonction tangente.
+			
+			-- {cot} : Fonction cotangente.
+			
+			-- {sec} : Fonction sécante.
+			
+			-- {csc} : Fonction cosécante.
+			
+			- Fonction trigonométiques inverses :
+			
+			-- {asin} : Fonction arc sinus.
+			
+			-- {acos} : Fonction arc cosinus.
+			
+			-- {atan} : Fonction arc tangente.
+			
+			-- {acot} : Fonction arc cotangente.
+			
+			-- {acec} : Fonction arc sécante.
+			
+			-- {acsc} : Fonction arc cosécante.
+			
+			- Fonctions trigonométiques hyperboliques :
+			
+			-- {sinh} : Fonction sinus hyperbolique.
+			
+			-- {cosh} : Fonction cosinus hyperbolique.
+			
+			-- {tanh} : Fonction tangente hyperbolique.
+			
+			-- {coth} : Fonction cotangente hyperbolique.
+			
+			-- {sech} : Fonction sécante hyperbolique.
+			
+			-- {csch} : Fonction cosécante hyperbolique.
+			
+			- Fonction trigonométiques hyperboliques inverses :
+			
+			-- {asinh} : Fonction argument sinus hyperbolique.
+			
+			-- {acosh} : Fonction argument cosinus hyperbolique.
+			
+			-- {atanh} : Fonction argument tangente hyperbolique.
+			
+			-- {acoth} : Fonction argument cotangente hyperbolique.
+			
+			-- {acech} : Fonction argument sécante hyperbolique.
+			
+			-- {acsch} : Fonction argument cosécante hyperbolique.
+			
+			- {abs} : Fonction valeur absolue.
+			
+			- {step} : Fonction échelon unitaire (fonction de Heaviside). La fonction
+			vaut {0} si {x < 0} et {1} sinon.
+			
+			- {delta} : Fonction de Dirac. Cette fonction vaut l'infini si {x = 0} et
+			{0} sinon.
+			
+			- {nandelta} : Fonction de Dirac avec {NAN}. Cette fonction vaut {NAN} (Not A Number)
+			si {x=0} et {0} sinon.
+			
+{{Les Constantes}}
+
+			Enfin, des constantes mathématiques sont aussi définies. Ces constantes sont :
+			
+			- {e}
+			
+			- {log2e} : log2(e)
+			
+			- {log10e} : log10(e)
+
+			- {ln2} : ln(2)
+			
+			- {ln10} : ln(10)
+			
+			- {pi}
+			
+			- {pi_2} : pi/2
+			
+			- {pi_4} : pi/4
+			
+			- {1_pi} : 1/pi
+			
+			- {2_pi} : 2/pi
+			
+			- {2_sqrtpi} : 2/sqrt(pi}
+			
+			- {sqrt2} : sqrt(2)
+			
+			- {sqrt1_2} : sqrt(1/2), ou bien 1/sqrt(2) ou sqrt(2)/2.
+			
+{{Notes}}
+	
+	Cette commande utilise une version modifiée de la bibliothèque {GNU libmatheval}.
+
+{{Compatibilité}}
+
+	Disponible depuis la version {0.7.1.0}. Auparavant, le support des expression n'était
+	pas complet. La version {0.7.0.0} ne supportait pas l'opérateur {%} ni la fonction {ln}.
+	Les versions précédentes ne supportaient quant à elles qu'une version simplifiée des expressions.	
+    ne supportaient quant à elles qu'une version simplifiée des expressions.	
+	
+	Non compatible avec {cmd.exe}. En effet, {cmd.exe} ne supporte pas les expression expressions
+	avec des nombres flotants.
+	
+{{A voir aussi}}
+
+	{set|Commande SET}

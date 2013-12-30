@@ -205,6 +205,9 @@ int main(int argc, char *argv[])
     Dos9_SendMessage(DOS9_READ_MODULE, MODULE_READ_SETFILE, lpTitle+10, NULL);
     Dos9_RunBatch(TRUE);
 
+    Dos9_LoadErrors();
+    Dos9_LoadStrings();
+
     bEchoOn=bSave;
     /* then run batch mode */
     Dos9_SendMessage(DOS9_READ_MODULE, MODULE_READ_SETFILE, lpFileName, NULL);

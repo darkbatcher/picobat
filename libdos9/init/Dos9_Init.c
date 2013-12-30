@@ -4,7 +4,7 @@ LIBDOS9 int Dos9_LibInit(void)
 {
     /* instanciation routine */
 
-    if (_Dos9_Estr_Init() != NULL)
+    if (_Dos9_Estr_Init() != 0)
         return -1;
 
     atexit(_Dos9_LibClose);

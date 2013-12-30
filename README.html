@@ -1,201 +1,148 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>The Dos9 Project</title>
+	<title>The dos9 Project :: The Dos9 Project</title>
 	<meta charset="utf-8" />
 </head>
 <body>
-<h1>The Dos9 Project</h1>
+<h1>The Dos9 Project</h1>
+
+<p>This is a litte document that describes first steps with the Dos9 command 
+prompt. This is an <strong>experimental work</strong> (as it is a beta) so it might be possible 
+that some aspect described here, or in the documentation might be buggy, or 
+would'nt simply work.</p>
 
-
+<p>If you encounter such bugs or issues, feel free to send an email to 
+&lt;darkbatcher@dos9.org&gt; with a description of the bug, or even a fix if you
+want to contribute.</p>
 
-<p>This is a litte document that describes first steps with the Dos9 command 
+<p>To get information about the license, see the <a href="license file.html" >license.txt</a>.</p>
 
-prompt. This is an <strong>experimental work</strong> (as it is a beta) so it might be possible 
+<h2>Legal notice</h2>
 
-that some aspect described here, or in the documentation might be buggy, or 
+<code>Dos9 - Command prompt and interpreter for windows batch files
+Copyright (C) 2013 DarkBatcher (Romain Garbi)
+ 
+This program is free software; you can redistribute it and/or modify 
+it under the terms of the GNU General Public License as published by 
+the Free Software Foundation; either version 2 of the License, or 
+(at your option) any later version.
+     
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+         
+You should have received a copy of the GNU General Public License 
+along with this program; if not, write to the Free Software 
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
+02110-1301 USA</code>
 
-would'nt simply work.</p>
+<h2>Building dos9</h2>
 
-
+<p>To get <strong>Dos9</strong> binaries, you have two options :</p>
 
-<p>If you encounter such bugs or issues, feel free to send an email to 
+<ul><li> Download precompiled binaries package from <strong>Dos9</strong>'s sourceforge page. Then you 
+just have to unpack the package on your computer. This method is only availiable
+for <strong>windows</strong>. Indeed, for <strong>*nix</strong> systems, it about going mad to make 
+distribution-portable binaries, for <strong>*nix</strong> users, the second solution must be 
+used.</li>
 
-&lt;darkbatcher@dos9.org&gt; with a description of the bug, or even a fix if you
+<li> Download sources and then build them yourself. To eases this work, just 
+download sources package from <strong>Dos9</strong>'s sourceforge page, or just get them from 
+the git repository using :</li></ul>
 
-want to contribute.</p>
+<code>git clone ssh://darkbatcher@git.code.sf.net/p/dos9/code dos9-code</code>
 
-
+<p>When you have downloaded sources, you just need to compile them using any C 
+compiler. For <strong>windows</strong> system, it is more complicated than getting precompiled 
+binaries because you need to have gcc and gmake installed on your system. On <strong>
+Windows</strong>, you should also have a <strong>*nix</strong> compatible shell. If not, you can get one
+from the <strong>MinGW</strong> project. For <strong>*nix</strong> system, doing so is as simple as typing :</p>
 
-<p>To get information about the license, see the <a href="license file.html" >license.txt</a>.</p>
+<code>make *nix</code>
 
-
+<p><strong>Windows</strong> users just have to specify ``win'' target instead ``*nix''. Windows 
+users also need to move non native dependencies *.dll from the folder ``depend''
+to the folder ``bin''.</p>
 
-<h2>Legal notice</h2>
+<p>A list of needed programs and tools to be able to build <strong>Dos9</strong> properly can be 
+obtained by typing:</p>
 
-
+<code>make</code>
 
-<p>Dos9 - Command prompt and interpreter for windows batch files Copyright (C) 2013
+<h2>First steps</h2>
 
-DarkBatcher (Romain Garbi)</p>
+<p>Once you have binaries, you can run <strong>Dos9</strong> since it has no need to be installed 
+in order to work. If you want to associate it with <strong>.bat</strong> or <strong>.cmd</strong> files though, 
+do not associate it with both file types, as <strong>Dos9</strong> is still an unstable 
+software.</p>
 
-
+<p>Once you launched <strong>Dos9</strong>, you can type batch commands lines. Remember that if you
+need some help, the help program is <strong>HLP</strong>. Note that if you can not browse the 
+documentation due to the lack of translation or else, you can still read the 
+different translations of the documentation in several languages and formats in 
+the subfolder ``share/doc''.</p>
 
-<p>This program is free software; you can redistribute it and/or modify it under 
+<p>If the executable crash, please send a mail to : &lt;darkbatcher@dos9.org&gt;.</p>
 
-the terms of the GNU General Public License as published by the Free Software 
+<h2>Changing the language</h2>
 
-Foundation; either version 2 of the License, or (at your option) any later 
+<p>If the language of the interpretor or of the documentation is in your langage 
+under <strong>MS-WINDOWS</strong>, then you should configure the ``Dos9_Auto.bat'' script that <strong>
+Dos9</strong> launches at startup. Normally this is not necessary as <strong>GNU gettext</strong> 
+automatically chose your langage. Modify the following line :</p>
 
-version.</p>
+<code> :: SET LANGUAGE=en_US</code>
 
-
+<p>Uncomment the line and replace <strong>en_US</strong> by the name of your locale. It is still 
+possible that the langage does not work though, this means that <strong>Dos9</strong> is not 
+translated yet in your language. Note that dos9 might be translated into your 
+language, and manual page can be not translated, so if you use <strong>HLP</strong>, it might 
+crash. Nevertheless, this should'nt occur as <strong>HLP</strong> failsback to english.</p>
 
-<p>This program is distributed in the hope that it will be useful, but <strong>WITHOUT ANY 
+<h2>Making translation</h2>
 
-WARRANTY</strong>; without even the implied warranty of <strong>MERCHANTABILITY</strong> or <strong>FITNESS FOR 
+<p>Translations uses the <strong>GNU gettext</strong> tool. To make translation, run the 
+``dos9-build-gettext.bat'' script to produce <strong>.po</strong> files (avaliable from the 
+sources) for your language, and then, translate it via a po editor like <strong>poedit</strong> 
+or <strong>kbabel</strong>.</p>
 
-A PARTICULAR PURPOSE</strong>. See the GNU General Public License for more details.</p>
+<p>To submit translation, send it to : &lt;darkbatcher@dos9.org&gt;</p>
 
-
+<hr/>
 
-<p>You should have received a copy of the GNU General Public License along with 
+<!-- Copyright notice don't remove it !
+     this is part of the Dos9 project manual pages -->
 
-this program; if not, write to the Free Software Foundation, Inc., 51 Franklin 
+<p>Pages de manuels Dos9, Le Projet dos9 - Copyright &copy; 2010-2013  Darkbatcher </p>
 
-Street, Fifth Floor, Boston, MA 02110-1301 USA</p>
+<p>Ceci est un logiciel libre : vous pouvez le redistribuer et/ou le modifier
+sous les termes de la Licence Publique Générale GNU telle que publiée par la
+Free Software Fundation, soit sous la version 3 ou, (selon votre volonté) n'importe
+quelle version postérieure</p> 
 
-
+<p>Merci de reporter les bogues et les erreurs à : &lt;darkbatcher at dos9 dot org&gt;</p>
 
-<h2>Building dos9</h2>
+<script type="text/javascript">
 
-
+	var codeBlocs=document.querySelectorAll('code');
+	
+	for (var i=0;i<codeBlocs.length;i++) {
+		codeBlocs[i].innerHTML = codeBlocs[i].innerHTML.replace(/\n/gim, '<br />', 'm');
+	}
+	
+</script>
 
-<p>To get <strong>Dos9</strong> binaries, you have two options :</p>
+<!-- if the user is connectedt to internet, then, it can activate the
+	 syntax highlighting -->
 
-
+<script type="text/javascript" src="http://www.dos9.org/js/h.js" >
+</script>
 
-<p>* Download precompiled binaries package from <strong>Dos9</strong>'s sourceforge page. Then you 
-
-just have to unpack the package on your computer. This method is only availiable
-
-for <strong>windows</strong>. Indeed, for <strong>*nix</strong> systems, it about going mad to make 
-
-distribution-portable binaries, for <strong>*nix</strong> users, the second solution must be 
-
-used.</p>
-
-
-
-<p>* Download sources and then build them yourself. To eases this work, just 
-
-download sources package from <strong>Dos9</strong>'s sourceforge page, or just get them from 
-
-the git repository using :</p>
-
-
-
-<code>git clone ssh://darkbatcher@git.code.sf.net/p/dos9/code dos9-code</code>
-
-
-
-<p>When you have downloaded sources, you just need to compile them using any C 
-
-compiler. For <strong>windows</strong> system, it is more complicated than getting precompiled 
-
-binaries because you need to have gcc and gmake installed on your system. For <strong>
-
-*nix</strong> system, doing so is as simple as typing :</p>
-
-
-
-<code>export TARGET_OS=linux 
-
-make -B</code>
-
-
-
-<p><strong>Windows</strong> users just have to remove the first line, obviously. Windows users also
-
-need to move non native dependencies *.dll from the folder ``depend'' to the 
-
-folder ``bin''. </p>
-
-
-
-<h2>First steps</h2>
-
-
-
-<p>Once you have binaries, you can run <strong>Dos9</strong> since it has no need to be installed 
-
-in order to work. If you want to associate it with <strong>.bat</strong> or <strong>.cmd</strong> files though, 
-
-do not associate it with both file types, as <strong>Dos9</strong> is still an unstable 
-
-software.</p>
-
-
-
-<p>Once you launched <strong>Dos9</strong>, you can type batch commands lines. Remember that if you
-
-need some help, the help program is <strong>HLP</strong>. Note that if you can not browse the 
-
-documentation due to the lack of translation or else, you can still read the 
-
-different translations of the documentation in several languages and formats in 
-
-the subfolder ``share/doc''.</p>
-
-
-
-<p>If the executable crash, please send a mail to : &lt;darkbatcher@dos9.org&gt;.</p>
-
-
-
-<h2>Changing the language</h2>
-
-
-
-<p>If the language of the interpretor or of the documentation might not be in your 
-
-langage under <strong>MS-WINDOWS</strong>, thus you should configure the ``Dos9_Auto.bat'' 
-
-script that <strong>Dos9</strong> launches at startup. Modify the following line :</p>
-
-
-
-<code> SET LANGUAGE=en_US</code>
-
-
-
-<p>Replace <strong>en_US</strong> by the name of your local. It is still possible that the langage 
-
-does not work though, this means that <strong>Dos9</strong> is not translated yet in your 
-
-language. Note that dos9 might be translated into your language, and manual page
-
-can be not translated, so if you use <strong>HLP</strong>, it might crash. Nevertheless, this 
-
-should'nt occur as <strong>HLP</strong> failsback to english. </p>
-
-
-
-<h2>Making translation</h2>
-
-
-
-<p>Translations uses the <strong>GNU gettext</strong> tool. To make translation, run the 
-
-``dos9-build-gettext.bat'' script to produce <strong>.po</strong> files for your language, and 
-
-then, translate it via a po editor like <strong>poedit</strong> or <strong>kbabel</strong>.</p>
-
-
-
-<p>To submit translation, send it to : &lt;darkbatcher@dos9.org&gt;</p>
-
-
-
+<script type='text/javascript'>
+var Coloration = new Highlighter('dos', 'code');
+Coloration.Highlight();
+</script>
 </body>
 </html>

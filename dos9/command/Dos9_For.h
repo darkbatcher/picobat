@@ -8,11 +8,10 @@
 #define TOKENNB_ALL_REMAINING 0xFFFF
 #define ALL_TOKEN 0xFFFF
 
-#define HIGHWORD(nb) ((nb & 0xFFFF0000) >> 16)
-#define LOWWORD(nb) (nb & 0xFFFF)
-
-#define TOHIGH(nb) (nb <<16)
-#define TOLOW(nb) (nb & 0xFFFF)
+#define HIGHWORD(nb) (((nb) & 0xFFFF0000) >> 16)
+#define LOWWORD(nb) ((nb) & 0xFFFF)
+#define TOHIGH(nb) ((nb) <<16)
+#define TOLOW(nb) ((nb) & 0xFFFF)
 
 #define FOR_LOOP_SIMPLE 0
 #define FOR_LOOP_R 1
@@ -82,7 +81,6 @@ typedef struct INPUTINFO {
 } INPUTINFO;
 
 
-
 int Dos9_CmdFor(char* lpCommand);
 	/* This is the function used for running
 	   ``for'' loops */
@@ -132,6 +130,9 @@ int Dos9_ForGetInputLine(ESTR* lpReturn, INPUTINFO* lpipInfo);
 
 void Dos9_ForCloseInputInfo(INPUTINFO* lpipInfo);
 
+int Dos9_ForGetStringInput(ESTR* lpReturn, STRINGINFO* lpsiInfo);
+
 void Dos9_ForVarUnassign(FORINFO* lpfrInfo);
+int  Dos9_ForVarCheckAssignment(FORINFO* lpfrInfo);
 
 #endif /* DOS9_FOR_H */

@@ -10,10 +10,19 @@ CC=gcc
 SRC=hlp_make.c
 OBJ=$(SRC:.c=.o)
 
-LIB=../libs/libDos9.a
+LIB=../$(LIB_DIR)/libDos9.a
 
-TARGET=../bin/cmd/hlp_make
-CFLAGS=-Wall -g -pthread -I ../libdos9
+TARGET=../$(CMD_DIR)/hlp_make
+
+ifeq ($(BUILD_OS),WINDOWS)
+
+CFLAGS=-Wall -g -I ../libdos9
+
+else
+
+CFLAGS=-Wall -g -I ../libdos9 -pthread
+
+endif
 
 all: $(TARGET)
 

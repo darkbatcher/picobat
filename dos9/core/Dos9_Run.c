@@ -74,6 +74,7 @@ int Dos9_RunCommand(ESTR* lpCommand)
     lpCmdLine=Dos9_EsToChar(lpCommand);
     Dos9_RemoveEscapeChar(lpCmdLine);
     while (*lpCmdLine==' ' || *lpCmdLine=='\t') lpCmdLine++;
+
     switch (*lpCmdLine) {
         case ':' :
             return 0;
@@ -81,22 +82,26 @@ int Dos9_RunCommand(ESTR* lpCommand)
             lpCmdLine++;
         default:;
     }
+
     switch(Dos9_GetCommandProc(lpCmdLine, lpclCommands, (void**)&lpProc))
     {
        case 0:
             DEBUG("Running Command");
             iErrorLevel=lpProc(lpCmdLine);
             break;
+
        case -1:
             DEBUG("NO command found");
             Dos9_RunExternalCommand(lpCmdLine);
     }
 
     if (iErrorLevel!=lastErrorLevel) {
+
         snprintf(lpErrorlevel+11, sizeof(lpErrorlevel)-11, "%d", iErrorLevel);
         Dos9_PutEnv(lpErrorlevel);
         lastErrorLevel=iErrorLevel;
     }
+
     return 0;
 }
 
@@ -148,7 +153,7 @@ int Dos9_RunBlock(BLOCKINFO* lpbkInfo)
             /* Do not modify the value of the string passed
                as argument, just take the character that interest
                you */
-            iSize = lpToken - lpBeginToken+1;
+            iSize = lpToken - lpBeginToken;
 
             Dos9_EsCpyN(lpEsLine, lpBeginToken, iSize);
             Dos9_RunLine(lpEsLine);

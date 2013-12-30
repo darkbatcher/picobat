@@ -5,14 +5,8 @@
 # Foundation, either version 3 of the License, or (at your option) any later
 # version.
 #
-# Please report bugs, and mistakes at : <darkbatcher at gmail dot com>
+# Please report bugs, and mistakes at : <darkbatcher at dos9 dot org>
 #
-# For GNU/linux or any other *nix use TARGET_OS=linux
-# For Windows, TARGET_OS=win
-#
-# Other targets than all seems  not to be
-# supported in windows, so if you want rebuild, use
-# the -B switch.
 
 # the compilers vars
 CC=gcc
@@ -23,16 +17,19 @@ SRC= ./src/tea.c ./src/tea_hlp_modifers.c ./src/tea_html_modifiers.c \
      ./src/Tea_Output.c ./src/tea_strupr.c
 
 #the list of the libs
-LIB=../libs/libDos9.a 
+LIB=../$(LIB_DIR)/libDos9.a 
 
-ifeq ($(TARGET_OS),linux)
+TARGET=../$(CMD_DIR)/tea
 
-LIB=../libs/libDos9.a
+ifeq ($(BUILD_OS),WINDOWS)
+
+CFLAGS=-Wall -g -I ../$(INC_DIR)
+
+else
+ 
+CFLAGS=-Wall -g -pthread -I ../$(INC_DIR)
 
 endif
-
-TARGET=../bin/cmd/tea
-CFLAGS=-Wall -g -pthread -I ../libdos9
 
 OBJ=$(SRC:.c=.o)
 

@@ -53,11 +53,11 @@ void Dos9_LoadStrings(void)
 
     /* texte de la commande DIR */
     lpDirNoFileFound=gettext("\tNo files found\n");
-    lpDirListTitle=gettext("\nLast change\t Size\t Attr.\tName\n");
-    lpDirFileDirNb=gettext("\t\t\t\t\t\t%d Files\n\t\t\t\t\t\t%d folders\n");
+    lpDirListTitle=gettext("\nLast change\t\tSize\tAttr.\tName\n");
+    lpDirFileDirNb=gettext("\t\t\t\t\t\t%d Files\n\t\t\t\t\t\t%d Folders\n");
     // TRANSLATORS : Don't remove the %s because the program needs it
 
-    lpHlpDeprecated=gettext("Dos9 does not support ``/?'' switch for help anymore, use ``hlp command'' instead.");
+    lpHlpDeprecated=gettext("Dos9 does not support ``/?'' switch for help anymore, use ``HLP command'' instead.");
 
 
 

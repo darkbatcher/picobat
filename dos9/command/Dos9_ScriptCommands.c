@@ -2,13 +2,16 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include "matheval.h"
+#include "inteval.h"
+
 #include "LibDos9.h"
 
 #include "Dos9_CmdLib.h"
 
 #include "../core/Dos9_Core.h"
 
-
+#include "Dos9_ScriptCommands.h"
 
 #include "../lang/Dos9_Lang.h"
 
@@ -93,29 +96,84 @@ int Dos9_CmdPause(char* lpLine)
     return 0;
 }
 
+double _Dos9_SetGetVarFloat(const char* lpName)
+{
+    char* lpContent;
+
+    lpContent=getenv(lpName);
+
+    if (lpContent) {
+
+        return atof(lpContent);
+
+    } else {
+
+        return 0.0;
+
+    }
+
+}
+
+int _Dos9_SetGetVarInt(const char* lpName)
+{
+    char* lpContent;
+
+    lpContent=getenv(lpName);
+
+    if (lpContent) {
+
+        return atoi(lpContent);
+
+    } else {
+
+        return 0;
+
+    }
+
+}
+
 int Dos9_CmdSet(char *lpLine)
 {
-    char lpArg[4], lpResult[20];
-    EVALRES evResult;
-    char* lpNextToken;
-    char *lpVarName, *lpEqual;
-    int i;
+    char lpArgBuf[5],
+         *lpArg=lpArgBuf;
 
-    if ((lpNextToken=Dos9_GetNextParameter(lpLine+3, lpArg, 4))) {
+    char *lpNextToken,
+         *lpVarName,
+         *lpEqual;
 
-        if (!stricmp(lpArg,"/a")) {
-            Dos9_GetNextParameterEs(lpNextToken, lpesParameter);
-            if ((lpNextToken=strchr(Dos9_EsToChar(lpesParameter), '='))) {
-                Dos9_EvalMath(lpNextToken+1, &evResult, getenv, bUseFloats);
-                if (bUseFloats) {
-                    sprintf(lpResult, "%g", evResult.dResult);
-                } else {
-                    sprintf(lpResult, "%d", evResult.iResult);
-                }
-                *(lpNextToken+1)='\0';
-                Dos9_EsCat(lpesParameter, lpResult);
-                Dos9_PutEnv(Dos9_EsToChar(lpesParameter));
+    int i,
+        bFloats;
+
+    if ((lpNextToken=Dos9_GetNextParameter(lpLine+3, lpArgBuf, sizeof(lpArgBuf)))) {
+
+        if (!stricmp(lpArg, "/?")) {
+
+            /* help is deprecated */
+            puts(lpHlpDeprecated);
+            goto error;
+
+        } else if (!strnicmp(lpArg,"/a", 2)) {
+
+            lpArg+=2;
+
+            bFloats=bUseFloats;
+            /* use mode set through setlocal */
+
+            if (*lpArg==':') lpArg++;
+
+            switch (toupper(*lpArg)) {
+
+                case 'F' :
+                    bFloats=TRUE;
+                    break;
+
+                case 'I' :
+                    bFloats=FALSE;
             }
+
+            /* get the floats */
+            if (!(Dos9_CmdSetA(lpNextToken, bFloats)))
+                goto error;
 
         } else if (!stricmp(lpArg, "/p")) {
 
@@ -133,29 +191,176 @@ int Dos9_CmdSet(char *lpLine)
                 Dos9_PutEnv(Dos9_EsToChar(lpesParameter));
 
             } else {
+
                 Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpVarName, FALSE);
+                goto error;
+
             }
 
-        } else if (!stricmp(lpArg, "/?")) {
-
-            puts(lpHlpDeprecated);
-
         } else {
+
+            /* simple set */
 
             lpLine=lpLine+3;
             while (*lpLine==' ' || *lpLine=='\t') lpLine++;
             if ((lpNextToken=strrchr(lpLine,' '))) *lpNextToken='\0';
-            return Dos9_PutEnv(lpLine);
+            Dos9_PutEnv(lpLine);
 
         }
 
     } else {
 
+        /* in default cases, print environment */
         for (i=0;environ[i];i++) puts(environ[i]);
-        return 0;
 
     }
-    return -1;
+
+    return 0;
+
+    error:
+        return -1;
+}
+
+int Dos9_CmdSetA(char* lpLine, int bFloats)
+{
+
+    ESTR* lpExpression=Dos9_EsInit();
+
+    /* get the expression back */
+    Dos9_GetNextParameterEs(lpLine, lpExpression);
+
+    switch(bFloats) {
+
+        case TRUE:
+            /* evaluate floating expression */
+            if ((Dos9_CmdSetEvalFloat(lpExpression)))
+                goto error;
+
+            break;
+
+        case FALSE:
+            /* evaluate integer expression */
+            if ((Dos9_CmdSetEvalInt(lpExpression)))
+                goto error;
+
+            break;
+
+    }
+
+
+    Dos9_EsFree(lpExpression);
+    return 0;
+
+    error:
+        Dos9_EsFree(lpExpression);
+        return -1;
+}
+
+int Dos9_CmdSetEvalFloat(ESTR* lpExpression)
+{
+    void* evaluator; /* an evaluator for libmatheval-Dos9 */
+    char *lpVarName,
+         *lpEqual,
+          lpResult[30];
+    char  cLeftAssign=0;
+    double dResult,
+           dVal;
+
+    lpVarName=Dos9_EsToChar(lpExpression);
+
+    while (*lpVarName==' ' || *lpVarName=='\t') lpVarName++;
+
+    /* if we don't have expression, end-up with an error */
+    if (!*lpVarName) {
+
+        Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "SET", FALSE);
+        goto error;
+
+    }
+
+    /* seek an '=' sign */
+    if (!(lpEqual=strchr(lpVarName, '='))) {
+
+        Dos9_ShowErrorMessage(DOS9_INVALID_EXPRESSION, lpVarName, FALSE);
+        goto error;
+
+    }
+
+    *lpEqual='\0';
+
+    /* seek a sign like '+=', however, '' might be a valid environment
+       variable name depending on platform */
+    if (lpEqual != lpVarName) {
+
+        cLeftAssign=*(lpEqual-1);
+
+    }
+
+    /* create evaluator */
+    if (!(evaluator=evaluator_create(lpEqual+1))) {
+
+        Dos9_ShowErrorMessage(DOS9_INVALID_EXPRESSION, lpEqual+1, FALSE);
+        goto error;
+
+    }
+
+    dResult=evaluator_evaluate2(evaluator, _Dos9_SetGetVarFloat);
+
+    evaluator_destroy(evaluator);
+
+    /* clear if operator is recognised */
+
+    switch (cLeftAssign) {
+
+        case '*':
+        case '/':
+        case '+':
+        case '-':
+            *(lpEqual-1)='\0';
+            /* get the value of the variable */
+            dVal=_Dos9_SetGetVarFloat(lpVarName);
+
+            switch(cLeftAssign) {
+
+                case '*':
+                    dVal*=dResult;
+                    break;
+
+                case '/':
+                    dVal/=dResult;
+                    break;
+
+                case '+':
+                    dVal+=dResult;
+                    break;
+
+                case '-':
+                    dVal-=dResult;
+
+            }
+
+            break;
+
+        default:
+            dVal=dResult;
+
+    }
+
+    snprintf(lpResult, sizeof(lpResult), "=%.10g", dVal);
+
+    Dos9_EsCat(lpExpression, lpResult);
+
+    Dos9_PutEnv(Dos9_EsToChar(lpExpression));
+
+    return 0;
+
+    error:
+        return -1;
+}
+
+int Dos9_CmdSetEvalInt(ESTR* lpExpression)
+{
+    return 0;
 }
 
 int Dos9_CmdSetLocal(char* lpLine)

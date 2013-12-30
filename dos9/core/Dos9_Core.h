@@ -8,7 +8,6 @@
 #include "Dos9_Var.h"
 #include "Dos9_Expand.h"
 #include "Dos9_Run.h"
-#include "Exp/Dos9_Exp.h"
 #include "Dos9_Modules.h"
 #include "Dos9_Jump.h"
 #include "Dos9_ShowIntro.h"
