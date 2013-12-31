@@ -21,7 +21,7 @@
 
 int Hlp_StringConvert(iconv_t cd, ESTR* lpEsReturn, char* lpToken)
 {
-    char lpTmpBuf[128];
+    char lpTmpBuf[128]="";
     char *lpTmpToken=lpTmpBuf;
     size_t tmpSize=sizeof(lpTmpBuf);
     size_t originSize=strlen(lpToken);
@@ -29,7 +29,7 @@ int Hlp_StringConvert(iconv_t cd, ESTR* lpEsReturn, char* lpToken)
 
     Dos9_EsCpy(lpEsReturn, "");
 
-    iconv(cd, NULL, NULL, NULL, NULL);
+    iconv(cd, NULL, NULL, &lpTmpToken, &tmpSize);
 
     while (1) {
 
@@ -40,14 +40,15 @@ int Hlp_StringConvert(iconv_t cd, ESTR* lpEsReturn, char* lpToken)
             switch(errno) {
 
                 case E2BIG: /* not sufficient space */
-                    Dos9_EsCpyN(lpEsReturn, lpTmpBuf, sizeof(lpTmpBuf));
+                    Dos9_EsCpyN(lpEsReturn, lpTmpBuf, sizeof(lpTmpBuf)+1);
                     lpTmpToken=lpTmpBuf;
                     tmpSize=sizeof(lpTmpBuf);
                     break;
 
                 case EILSEQ:
                 case EINVAL:
-                    HANDLE_ERROR(gettext("HLP :: Error, Encoutered invalid charset sequence"));
+                    HANDLE_ERROR(gettext("HLP :: Error, Encoutered invalid charset sequence:\n"
+                                         "%s"), lpToken);
                     return -1;
                     break;
 

@@ -10,7 +10,7 @@
 #define HLP_ELEMENT_LINK 4
 
 #define HANDLE_ERROR(Msg, ...) Dos9_SetConsoleTextColor(DOS9_COLOR_DEFAULT);\
-                               Dos9_ClearConsoleScreen();\
+                               /* Dos9_ClearConsoleScreen(); */\
                                puts("");\
                                fprintf(stderr, Msg, ##__VA_ARGS__ ); \
                                puts("\n"); \

@@ -18,61 +18,61 @@
 
 {{Commande SET (/A)(flotants)}} 
 
-	La commande {SET /A} permet d'assigner la valeur d'une expression mathématique à
+	La commande {SET /A} permet d'assigner la valeur d'une expression mathÃ©matique Ã 
 	une variable.
 	
 	Ce manuel traite uniquement de l'option {/A} de la commande {SET}, dans le cas
 	particulier des expressions utilisant des nombres flotants. Pour
 	consulter le manuel de la commande {SET}, rendez vous sur le manuel {set|SET}.
 	Vous pouvez aussi consulter le manuel traitant des expression a nombres entiers
-	à la page {setai|SET (/A)(entiers)}.
+	Ã  la page {setai|SET (/A)(entiers)}.
 	
 {{Synopsis}}
 
 ${	SET [/a | /a[:]f] variable=expression}
 
-	   Affecte la valeur d'une {expression mathématique} à la variable
-	   {variable}. Cette command à un comportement dépendent du mode fixé par
-	   la commande {setlocal|SETLOCAL} avec le paramètre {ENABLEFLOATS}.
+	   Affecte la valeur d'une {expression mathÃ©matique} Ã  la variable
+	   {variable}. Cette command Ã  un comportement dÃ©pendent du mode fixÃ© par
+	   la commande {setlocal|SETLOCAL} avec le paramÃ¨tre {ENABLEFLOATS}.
 	   
-	   L'opérateur {=} peut être remplacé dans cet exemple par les opérateurs suivants:
+	   L'opÃ©rateur {=} peut Ãªtre remplacÃ© dans cet exemple par les opÃ©rateurs suivants:
 	   
-		  - Opérateurs arithmétiques :
+		  - OpÃ©rateurs arithmÃ©tiques :
 	   
-			-- {+=} : Addition du résultat à {variable}.
+			-- {+=} : Addition du rÃ©sultat Ã  {variable}.
 			
-			-- {-=} : Soustraction du résultat à {variable}.
+			-- {-=} : Soustraction du rÃ©sultat Ã  {variable}.
 			
-			-- {*=} : Multiplication de {variable} par le résultat.
+			-- {*=} : Multiplication de {variable} par le rÃ©sultat.
 			
-			-- {/=} : Division de {variable} par le résultat.
+			-- {/=} : Division de {variable} par le rÃ©sultat.
 		
-		 - Opérateurs logiques :
+		 - OpÃ©rateurs logiques :
 		 
-			-- {&&=} : Et logique entre {variable} et le résultat.
+			-- {&&=} : Et logique entre {variable} et le rÃ©sultat.
 			
-			-- {||=} : Ou logique entre {variable} et le résultat.
+			-- {||=} : Ou logique entre {variable} et le rÃ©sultat.
 			
-		 - Opérateurs binaires :
+		 - OpÃ©rateurs binaires :
 		 
-			-- {&=} : Et bit-à-bit entre {variable} et le résultat.
+			-- {&=} : Et bit-Ã -bit entre {variable} et le rÃ©sultat.
 			
-			-- {|=} : Ou bit-à-bit entre {variable} et le résultat.
+			-- {|=} : Ou bit-Ã -bit entre {variable} et le rÃ©sultat.
 			
-			-- {^=} : Ou exclusif bit-à-bit entre {variable} et le résultat.
+			-- {^=} : Ou exclusif bit-Ã -bit entre {variable} et le rÃ©sultat.
 			
-			-- {>>=} : Décallage des bits de {variable} de résultat bit vers la gauche.
+			-- {>>=} : DÃ©callage des bits de {variable} de rÃ©sultat bit vers la gauche.
 			
-			-- {<<=} : Décallage des bits de {variable} de résultat bit vers la droite.
+			-- {<<=} : DÃ©callage des bits de {variable} de rÃ©sultat bit vers la droite.
 			
-{{Opérateurs}}
+{{OpÃ©rateurs}}
 
-	   L'expression mathématique doit être constitué d'une suite d'opérateurs et d'opérandes. Chaque opérande
-	   doît être séparé de l'opérande suivant par un opérateur.
+	   L'expression mathÃ©matique doit Ãªtre constituÃ© d'une suite d'opÃ©rateurs et d'opÃ©randes. Chaque opÃ©rande
+	   doÃ®t Ãªtre sÃ©parÃ© de l'opÃ©rande suivant par un opÃ©rateur.
 	   
-	   Les opérateurs utilisables avec les nombres {entiers} sont:
+	   Les opÃ©rateurs utilisables avec les nombres {entiers} sont:
 			
-			- Opérateurs arithmétiques:
+			- OpÃ©rateurs arithmÃ©tiques:
 			
 			-- {*} : Multiplication.
 			
@@ -84,25 +84,25 @@ ${	SET [/a | /a[:]f] variable=expression}
 			
 			-- {-} : Soustraction.
 			
-			- Opérateurs bit-à-bit:
+			- OpÃ©rateurs bit-Ã -bit:
 			
-			-- {\|} : Ou inclusif bit-à-bit.
+			-- {\|} : Ou inclusif bit-Ã -bit.
 			
-			-- {^} : Ou exclusif bit-à-bit.
+			-- {^} : Ou exclusif bit-Ã -bit.
 			
-			-- {&} : Et bit-à-bit.
+			-- {&} : Et bit-Ã -bit.
 			
-			-- {>>} : Décalage des bits vers la droite.
+			-- {>>} : DÃ©calage des bits vers la droite.
 			
-			-- {<<} : Décalage des bits vers la gauche.
+			-- {<<} : DÃ©calage des bits vers la gauche.
 			
-			- Opérateurs logiques:
+			- OpÃ©rateurs logiques:
 			
 			-- {\|\|} : Ou logique.
 			
 			-- {&&} : Et logique.
 		
-		La priorité des opérateurs est la suivante :
+		La prioritÃ© des opÃ©rateurs est la suivante :
 
 			- {*}, {/}, {%}
 			
@@ -116,31 +116,31 @@ ${	SET [/a | /a[:]f] variable=expression}
 			
 			- {\|\|}, {\|}
 			
-		La priorité des opérateurs peut cepandent être modifiée en utilisant les
-		parenthèses {(} et {)}.
+		La prioritÃ© des opÃ©rateurs peut cepandent Ãªtre modifiÃ©e en utilisant les
+		parenthÃ¨ses {(} et {)}.
 		
-		Il est également possible d'utiliser des opérateurs unaires, c'est-à-dire des opérateur affectant
-		uniquement l'opérande qui le suit à droite. Ces opérateurs sont :
+		Il est Ã©galement possible d'utiliser des opÃ©rateurs unaires, c'est-Ã -dire des opÃ©rateur affectant
+		uniquement l'opÃ©rande qui le suit Ã  droite. Ces opÃ©rateurs sont :
 		
-			- {-} : Signe négatif.
+			- {-} : Signe nÃ©gatif.
 			
-			- {~} : Non bit-à-bit.
+			- {~} : Non bit-Ã -bit.
 			
 			- {!} : Non logique.
 			
-		Les opérateurs unaires ont la priorité la plus haute.
+		Les opÃ©rateurs unaires ont la prioritÃ© la plus haute.
 		
 {{Note}}
 
 	Cette commande utilise {libinteval}, un parseur produit avec
 	{YACC}.
 	
-{{Compatibilité}}
+{{CompatibilitÃ©}}
 		
-	Parfaitement compatible avec {cmd.exe}. Néanmoins Dos9 à apporté les opérateurs logiques {&&} et 
+	Parfaitement compatible avec {cmd.exe}. NÃ©anmoins Dos9 Ã  apportÃ© les opÃ©rateurs logiques {&&} et 
 	{\|\|}.
 	
-	Disponible depuis la version {0.7.1.0}. Auparavant, le support des expression était beaucoup plus sommaire.
+	Disponible depuis la version {0.7.1.0}. Auparavant, le support des expression Ã©tait beaucoup plus sommaire.
 	
 {{A voir aussi}}
 

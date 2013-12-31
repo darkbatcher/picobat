@@ -244,6 +244,7 @@ void        Hlp_FreeHlpElement(HLPELEMENT* lpElement)
     free(lpElement);
 }
 
+
 HLPELEMENT* Hlp_ParseLine(char* lpLine)
 {
     /* this function parses each line */
@@ -306,7 +307,8 @@ HLPELEMENT* Hlp_ParseLine(char* lpLine)
 
         } else {
 
-            HANDLE_ERROR(gettext("HLP :: %s : %d : Invalid text section (Can't find ``DLE'' character)"), lpFile, iLine);
+            HANDLE_ERROR(gettext("HLP :: %s : %d : Invalid text section (Can't find ``DLE'' character)\n"
+								 "%s\n"), lpFile, iLine);
 
         }
 
