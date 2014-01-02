@@ -106,7 +106,7 @@ int         Tea_OutputParagraph(FILE* pOutput, TEASTYLE* lpTeaStyle, TEAOUTPUTMO
 
             /* si le mot dépasse de la ligne */
             else if (((iNbCharsWritten >= iTotalWidth)) ||
-                     (*lpToken=='\0' &&  iNextNodeWLength && (iNbCharsWritten+iNextNodeWLength >= iTotalWidth))) {
+                     (*lpToken=='\0' &&  iNextNodeWLength && ((iNbCharsWritten+iNextNodeWLength+1) >= iTotalWidth))) {
 
                 /* on termine la ligne */
                 fputc('\n', pOutput);

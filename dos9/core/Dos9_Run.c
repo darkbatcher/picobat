@@ -130,7 +130,7 @@ int Dos9_RunBlock(BLOCKINFO* lpbkInfo)
 
         lpBeginToken=lpToken;
 
-        for (;*lpToken && (*lpToken!='\n' || iParentheseNb);lpToken++) {
+        for (;*lpToken && ((*lpToken!='\n' && *lpToken!=')') || iParentheseNb);lpToken++) {
             switch (*lpToken) {
                 case '^':
                     lpToken++;
@@ -144,8 +144,10 @@ int Dos9_RunBlock(BLOCKINFO* lpbkInfo)
         }
 
         if (lpToken==lpBeginToken)  {
+
             if (*lpToken) lpToken++;
             continue;
+
         }
 
         if (*lpToken) {

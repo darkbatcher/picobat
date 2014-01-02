@@ -22,6 +22,8 @@ DOS9_CMDLIB char* Dos9_GetNextParameter(char* lpLine, char* lpResponseBuffer, in
      return lpLine;
  }
 
+/* the returning pointer is on the parenthesis */
+
 DOS9_CMDLIB char* Dos9_GetNextBlock(char* lpLine, BLOCKINFO* lpbkInfo)
 {
     char* lpBlockBegin;
@@ -195,6 +197,7 @@ DOS9_CMDLIB int   Dos9_GetParamArrayEs(char* lpLine, ESTR** lpArray, size_t iLen
 DOS9_CMDLIB char* Dos9_GetEndOfLine(char* lpLine, ESTR* lpReturn)
 /* this returns fully expanded line from the lpLine Buffer */
 {
+
     Dos9_EsCpy(lpReturn, lpLine); /* Copy the content of the line in the buffer */
     Dos9_DelayedExpand(lpReturn, bDelayedExpansion); /* Expands the content of the specified  line */
 

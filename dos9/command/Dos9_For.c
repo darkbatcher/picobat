@@ -272,7 +272,7 @@ int Dos9_CmdFor(char* lpLine)
         case FOR_LOOP_SIMPLE:
 
             /* this handles simple for */
-            Dos9_CmdForSimple(lpInputBlock, &bkCode, cVarName);
+            Dos9_CmdForSimple(lpInputBlock, &bkCode, cVarName, " ,:;\n\t");
 
             break;
 
@@ -284,8 +284,7 @@ int Dos9_CmdFor(char* lpLine)
             break;
 
         case FOR_LOOP_L:
-            break;
-
+            Dos9_CmdForL(lpInputBlock, &bkCode, cVarName);
      }
 
      Dos9_EsFree(lpParam);
@@ -302,9 +301,9 @@ int Dos9_CmdFor(char* lpLine)
         return -1;
 }
 
-int Dos9_CmdForSimple(ESTR* lpInput, BLOCKINFO* lpbkCommand, char cVarName)
+int Dos9_CmdForSimple(ESTR* lpInput, BLOCKINFO* lpbkCommand, char cVarName, char* lpDelimiters)
 {
-    char  lpDelimiters[]=" ,:;\n\t";
+
     char* lpToken=Dos9_EsToChar(lpInput);
     char* lpNextToken;
 
@@ -386,6 +385,66 @@ int Dos9_CmdForSimple(ESTR* lpInput, BLOCKINFO* lpbkCommand, char cVarName)
 
 
     return 0;
+
+}
+
+int Dos9_CmdForL(ESTR* lpInput, BLOCKINFO* lpbkCommand, char cVarName)
+{
+    int iLoopInfo[3]={0,0,0}, /* loop information */
+        i;
+
+    char lpValue[]="-3000000000",
+         *lpToken;
+
+    lpToken=Dos9_EsToChar(lpInput);
+    i=0;
+
+    while (*lpToken && i < sizeof(iLoopInfo)) {
+
+        iLoopInfo[i]=strtol(lpToken, &lpToken, 10); /* works only for
+                                                       base 10 */
+        if (*lpToken!=',') {
+
+            lpToken++;
+
+        } else {
+
+            Dos9_ShowErrorMessage(DOS9_FOR_BAD_INPUT_SPECIFIER, Dos9_EsToChar(lpInput), FALSE);
+            goto error;
+
+        }
+
+        i++;
+
+    }
+
+    if (*lpToken) {
+
+        Dos9_ShowErrorMessage(DOS9_FOR_BAD_INPUT_SPECIFIER, Dos9_EsToChar(lpInput), FALSE);
+        goto error;
+
+    }
+
+    /* execute loop */
+    for (i=iLoopInfo[DOS9_FORL_BEGIN]; i+=iLoopInfo[DOS9_FORL_INC]; i<=iLoopInfo[DOS9_FORL_END]) {
+
+        snprintf(lpValue, sizeof(lpValue), "%d", i);
+
+        Dos9_SetLocalVar(lpvLocalVars, cVarName, lpValue);
+
+        /* execute the code */
+
+        Dos9_RunBlock(lpbkCommand);
+
+    }
+
+    Dos9_SetLocalVar(lpvLocalVars, cVarName, NULL);
+
+    return 0;
+
+    error:
+
+        return -1;
 
 }
 

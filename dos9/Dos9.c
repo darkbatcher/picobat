@@ -62,6 +62,7 @@ int main(int argc, char *argv[])
     /*  a function which initializes Dos9's engine,
         parses the command line argumments,
         And display starting message
+
     */
 
     char* lpFileName=NULL;
@@ -78,9 +79,11 @@ int main(int argc, char *argv[])
         exit(-1);
     }
 
+    /* Set new line Mode to UNIX */
+    Dos9_SetNewLineMode(DOS9_NEWLINE_UNIX);
+
     lpvLocalVars=Dos9_GetLocalBlock();
     Dos9_InitConsole();
-    Dos9_ScriptCommandInit();
 
     #ifdef WINDOWS
 
@@ -92,10 +95,9 @@ int main(int argc, char *argv[])
 
     #endif // WINDOWS
 
+    /* Load Messages (including errors) */
     Dos9_LoadStrings();
     Dos9_LoadErrors();
-
-    Dos9_SetNewLineMode(DOS9_NEWLINE_LINUX);
 
     /* **********************************
        *   getting Dos9's parameters    *
@@ -109,12 +111,15 @@ int main(int argc, char *argv[])
                 case 'V': // enables expansion
                     bDelayedExpansion=TRUE;
                     break;
+
                 case 'F': // enables floats
                     bUseFloats=TRUE;
                     break;
+
                 case 'E':
                     bEchoOn=FALSE;
                     break;
+
                 case 'N': // enables new commands
                     bDos9Extension=TRUE;
                     break;
@@ -218,7 +223,6 @@ int main(int argc, char *argv[])
     Dos9_FreeCommandList(lpclCommands);
     Dos9_FreeStreamStack(lppsStreamStack);
     Dos9_FreeLocalBlock(lpvLocalVars);
-    Dos9_ScriptCommandEnd();
 
     return 0;
 

@@ -108,6 +108,8 @@ void Dos9_LoadErrors(void)
 
     lpErrorMsg[DOS9_INVALID_EXPRESSION]=gettext("Error : \"%s\" is not a valid mathematical expression.\n");
 
+    lpErrorMsg[DOS9_INVALID_TOP_BLOCK]=gettext("Error : \"%s\" is not a valid top-level block.\n");
+
     lpQuitMessage=gettext("\nAborting current command, press any key to end Dos9.\n");
 
 }

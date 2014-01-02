@@ -266,7 +266,10 @@ int _Dos9_Estr_Init(void);
         #define DOS9_NEWLINE_WINDOWS 0
 
         /** the newlines will be converted to '\n' */
-        #define DOS9_NEWLINE_LINUX 1
+        #define DOS9_NEWLINE_UNIX 1
+		#define DOS9_NEWLINE_LINUX DOS9_NEWLINE_UNIX
+		/* defined only for compatibility purpose */
+
 
         /** the newlines will be converted to '\r' */
         #define DOS9_NEWLINE_MAC 2

@@ -21,10 +21,11 @@ char* lpInitVar[]={
     "DOS9_VERSION=0.7.01",
 #ifdef WIN32
     "DOS9_OS=WINDOWS",
-    NULL,
+#elif defined _POSIX_C_SOURCE
+    "DOS9_OS=*NIX",
 #else
-    "DOS9_OS=LINUX",
-    NULL,
+    "DOS9_OS=UNKNOWN"
 #endif
+    NULL,
     NULL
 };

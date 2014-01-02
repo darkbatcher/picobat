@@ -8,20 +8,33 @@
 	
 {{Synopsis}}
 
-${	DOS9 [/v] [/n] [/f] [/e] [fichier]}
+${	DOS9 [/v] [/n] [/f] [/e] [/q] [/i entrée] [/o sortie] [fichier]}
 
 	   Exécute un fichier de commande ou attend une entrée de commande de
 	l'utilisateur.
 
-		- {fichier} : Chemin du script de commande a exécuter
+		- {fichier} : Chemin du script de commande a exécuter.
 		
-		- {/v}	  : Active {dos9/exp|l'expansion retardée de variable}
+		- {/v}	  : Active {dos9/exp|l'expansion retardée de variable}.
 		
-		- {/n}	  : Active les {dos9/ext|extensions de dos9}
+		- {/n}	  : Active les {dos9/ext|extensions de dos9}.
 		
-		- {/f}	  : Active les {dos9/floats|nombres flotants}
+		- {/f}	  : Active les {dos9/floats|nombres flotants}.
 		
 		- {/e}	  : Désactive l'affichage du chemin courant.
+		
+		- {/q} : N'affiche pas l'écran de bienvenue.
+		
+		- {/i entrée} : redirige le descripteur de fichier {entrée} vers
+		l'entrée standard.
+		
+		- {/o sortie} : redirige la sortie standard vers le descripteur de
+		fichier {sortie}.
+		
+{{Notes}}
+
+	Les commuttateurs {/o} et {/i} ne sont pas destinés à être utilisés d'eux même,
+	ils sont conçus pour être utilisé par les boucles {for|FOR}.
 
 {{Compatibilite}}
 

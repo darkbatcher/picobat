@@ -85,13 +85,17 @@ int Dos9_CmdFor(char* lpCommand);
 	/* This is the function used for running
 	   ``for'' loops */
 
-int Dos9_CmdForSimple(ESTR* lpInput, BLOCKINFO* lpbkCommand, char cVarName);
+int Dos9_CmdForSimple(ESTR* lpInput, BLOCKINFO* lpbkCommand, char cVarName, char* lpDelimiters);
     /* this handles simple ``for'' loops */
 
 int Dos9_CmdForF(ESTR* lpInput, BLOCKINFO* lpbkCommand, FORINFO* lpfrInfo);
     /* this handles more comple ``for'' loops
        ie. For /F
     */
+
+#define DOS9_FORL_BEGIN 0
+#define DOS9_FORL_INC   1
+#define DOS9_FORL_END   2
 
 int Dos9_CmdForL(ESTR* lpInput, BLOCKINFO* lpbkCommand, char cVarName);
     /* this handle the ``for /L'' loop */
@@ -133,6 +137,8 @@ void Dos9_ForCloseInputInfo(INPUTINFO* lpipInfo);
 int Dos9_ForGetStringInput(ESTR* lpReturn, STRINGINFO* lpsiInfo);
 
 void Dos9_ForVarUnassign(FORINFO* lpfrInfo);
+
 int  Dos9_ForVarCheckAssignment(FORINFO* lpfrInfo);
+
 
 #endif /* DOS9_FOR_H */

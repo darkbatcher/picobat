@@ -38,7 +38,8 @@ COMMANDINFO lpCmdInfo[]={
                             {"RD", Dos9_CmdRmdir, 0},
                             {"RMDIR", Dos9_CmdRmdir, 0},
                             {"COPY", Dos9_CmdCopy, 0},
-                            {"FOR", Dos9_CmdFor, 0}
+                            {"FOR", Dos9_CmdFor, 0},
+                            {"(", Dos9_CmdBlock, 0}
                         };
 
 #endif

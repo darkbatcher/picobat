@@ -37,48 +37,53 @@
 
 #include "../errors/Dos9_Errors.h"
 
-ESTR *lpesParameter, *lpesComplement;
-
-void Dos9_ScriptCommandInit(void)
-{
-    lpesParameter=Dos9_EsInit();
-    lpesComplement=Dos9_EsInit();
-}
-
-void Dos9_ScriptCommandEnd(void)
-{
-    Dos9_EsFree(lpesComplement);
-    Dos9_EsFree(lpesParameter);
-}
-
 int Dos9_CmdEcho(char* lpLine)
 {
 
+    ESTR* lpEsParameter=Dos9_EsInit();
+
     lpLine+=4;
+
     if (*lpLine==' ') {
 
-         if (Dos9_GetNextParameterEs(lpLine, lpesParameter)) {
-            if (!stricmp(Dos9_EsToChar(lpesParameter), "OFF")) {
+         if (Dos9_GetNextParameterEs(lpLine, lpEsParameter)) {
+
+            if (!stricmp(Dos9_EsToChar(lpEsParameter), "OFF")) {
+
                 bEchoOn=FALSE;
-                return 0;
-            } else if (!stricmp(Dos9_EsToChar(lpesParameter) , "ON")) {
+
+            } else if (!stricmp(Dos9_EsToChar(lpEsParameter) , "ON")) {
+
                 bEchoOn=TRUE;
-                return 0;
-            } else if (!strcmp(Dos9_EsToChar(lpesParameter), "/?")) {
+
+            } else if (!strcmp(Dos9_EsToChar(lpEsParameter), "/?")) {
+
                 puts(lpHlpDeprecated);
-                return 0;
+
+            } else {
+
+                goto print;
+
             }
+
          } else {
+
             /* si rien n'est entré on affiche l'état de la commannd echo */
             if (bEchoOn) puts(lpMsgEchoOn);
             else puts(lpMsgEchoOff);
-            return 0;
+
          }
+
+    } else {
+
+        print:
+
+        Dos9_GetEndOfLine(lpLine+1, lpEsParameter);
+        puts(Dos9_EsToChar(lpEsParameter));
 
     }
 
-    Dos9_GetEndOfLine(lpLine+1, lpesParameter);
-    puts(Dos9_EsToChar(lpesParameter));
+    Dos9_EsFree(lpEsParameter);
 
     return 0;
 }
@@ -87,20 +92,32 @@ int Dos9_CmdExit(char* lpLine)
 {
     char lpArg[]="-3000000000";
     char* lpNextToken;
+
     if ((lpNextToken=Dos9_GetNextParameter(lpLine+4, lpArg, 11))) {
+
         if (!stricmp(lpArg, "/?")) {
+
             puts(lpHlpDeprecated);
             return 0;
+
         } else if (!stricmp(lpArg, "/b")) {
+
             if ((lpNextToken=Dos9_GetNextParameter(lpNextToken, lpArg, 11))) {
+
                 exit(atoi(lpArg));
+
             } else {
+
                 Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, "/b", FALSE);
                 return 1;
+
             }
+
         } else {
+
             Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpArg, FALSE);
             return 1;
+
         }
     }
     exit(0);
@@ -110,11 +127,14 @@ int Dos9_CmdExit(char* lpLine)
 int Dos9_CmdPause(char* lpLine)
 {
     if (!strcmp(lpLine+6, "/? ")) {
+
         puts(lpHlpDeprecated);
         return 0;
     }
+
     puts(lpMsgPause);
     getch();
+
     return 0;
 }
 
@@ -170,9 +190,7 @@ int Dos9_CmdSet(char *lpLine)
     char lpArgBuf[5],
          *lpArg=lpArgBuf;
 
-    char *lpNextToken,
-         *lpVarName,
-         *lpEqual;
+    char *lpNextToken;
 
     int i,
         bFloats;
@@ -210,25 +228,8 @@ int Dos9_CmdSet(char *lpLine)
 
         } else if (!stricmp(lpArg, "/p")) {
 
-            while (*lpNextToken==' ' || *lpNextToken=='\t') lpNextToken++;
-            Dos9_EsCpy(lpesParameter, lpNextToken);
-
-            lpVarName=Dos9_EsToChar(lpesParameter);
-            if ((lpEqual=strchr(lpVarName, '='))) {
-
-                lpEqual++;
-                puts(lpEqual);
-                Dos9_EsGet(lpesComplement, stdin);
-                *lpEqual='\0';
-                Dos9_EsCatE(lpesParameter, lpesComplement);
-                Dos9_PutEnv(Dos9_EsToChar(lpesParameter));
-
-            } else {
-
-                Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpVarName, FALSE);
+            if ((Dos9_CmdSetP(lpNextToken)))
                 goto error;
-
-            }
 
         } else {
 
@@ -254,13 +255,55 @@ int Dos9_CmdSet(char *lpLine)
         return -1;
 }
 
+int Dos9_CmdSetP(char* lpLine)
+{
+
+    ESTR* lpEsVar=Dos9_EsInit();
+    ESTR* lpEsInput=Dos9_EsInit();
+    char* lpEqual;
+
+    while (*lpLine==' ' || *lpLine=='\t') lpLine++;
+
+    Dos9_GetEndOfLine(lpLine, lpEsVar);
+
+    if ((lpEqual=strchr(Dos9_EsToChar(lpEsVar), '='))) {
+
+        lpEqual='\0';
+        lpEqual++;
+
+        puts(lpEqual);
+
+        Dos9_EsGet(lpEsInput, stdin);
+
+        Dos9_EsCat(lpEsVar, "=");
+        Dos9_EsCatE(lpEsVar, lpEsInput);
+
+        Dos9_PutEnv(Dos9_EsToChar(lpEsVar));
+
+    } else {
+
+        Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, Dos9_EsToChar(lpEsVar), FALSE);
+        goto error;
+
+    }
+
+    Dos9_EsFree(lpEsVar);
+    Dos9_EsFree(lpEsInput);
+    return 0;
+
+    error:
+        Dos9_EsFree(lpEsVar);
+        Dos9_EsFree(lpEsInput);
+        return -1;
+}
+
 int Dos9_CmdSetA(char* lpLine, int bFloats)
 {
 
     ESTR* lpExpression=Dos9_EsInit();
 
     /* get the expression back */
-    Dos9_GetNextParameterEs(lpLine, lpExpression);
+    Dos9_GetEndOfLine(lpLine, lpExpression);
 
     switch(bFloats) {
 
@@ -436,8 +479,6 @@ int Dos9_CmdSetEvalInt(ESTR* lpExpression)
 
     if (IntEval_Error != INTEVAL_NOERROR) {
 
-        printf("Exception Number : %d\n", IntEval_Error);
-
         Dos9_ShowErrorMessage(DOS9_INVALID_EXPRESSION, lpEqual+1, FALSE);
         goto error;
 
@@ -552,40 +593,65 @@ int Dos9_CmdSetLocal(char* lpLine)
     char* lpNext=lpLine+8;
 
     while ((lpNext=Dos9_GetNextParameter(lpNext, lpName, FILENAME_MAX))) {
+
         if (!strcmp(lpName, "/?")) {
+
             puts(lpHlpDeprecated);
             return 0;
+
         } else if (!stricmp(lpName, "ENABLEDELAYEDEXPANSION")) {
+
             bDelayedExpansion=TRUE;
+
         } else if (!stricmp(lpName, "ENABLEFLOATS")) {
+
             bUseFloats=TRUE;
+
         } else if (!stricmp(lpName, "ENABLEDOS9MODE")) {
+
             bDos9Extension=TRUE;
+
         } else if (!stricmp(lpName, "DISABLEDOS9MODE")) {
+
             bDos9Extension=FALSE;
+
         } else if (!stricmp(lpName, "DISABLEFLOATS")) {
+
             bUseFloats=FALSE;
+
         } else if (!stricmp(lpName, "DISABLEDELAYEDEXPANSION")) {
+
             bDelayedExpansion=FALSE;
+
         } else if (!stricmp(lpName, "ENABLEEXTENSIONS") || !stricmp(lpName, "DISABLEEXTENSION")) {
+
             // provided for backward compatibility
+
         } else {
+
             Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpName, FALSE);
             return 1;
+
         }
+
     }
+
     return 0;
 }
 
 int Dos9_CmdHelp(char* lpLine)
 {
+
     puts(lpHlpDeprecated);
     return 0;
+
 }
 
 int Dos9_CmdRem(char* lpLine)
 {
+
     return 0;
+
 }
 
 
@@ -625,14 +691,28 @@ int Dos9_CmdColor(char* lpLine)
 int Dos9_CmdTitle(char* lpLine)
 {
     char lpArg[3];
+    ESTR* lpEsTitle=Dos9_EsInit();
+
     if (Dos9_GetNextParameter(lpLine+5, lpArg, 3)) {
+
         if (!strcmp(lpArg, "/?")) {
+
             puts(lpHlpDeprecated);
+
         } else {
-            Dos9_SetConsoleTitle(lpLine+6);
+
+            Dos9_GetEndOfLine(lpLine, lpEsTitle);
+            Dos9_SetConsoleTitle(Dos9_EsToChar(lpEsTitle));
+
         }
+
+        Dos9_EsFree(lpEsTitle);
+
         return 0;
     }
+
+    Dos9_EsFree(lpEsTitle);
+
     return -1;
 }
 
@@ -660,27 +740,48 @@ int Dos9_CmdGoto(char* lpLine)
     char lpLabelName[FILENAME_MAX];
     char lpFileName[FILENAME_MAX];
     char* lpFile=NULL;
+    int bEchoError=TRUE;
+
     lpLine+=4;
     *lpLine=':';
+
     if (*(lpLine+1)==':') lpLine++;
     if ((lpLine=Dos9_GetNextParameter(lpLine, lpLabelName, FILENAME_MAX))) {
         DEBUG("Found label Name");
+
         if (!strcmp(lpLabelName, ":/?")) {
+
             puts(lpHlpDeprecated);
             return 0;
+
         }
-        if (Dos9_GetNextParameter(lpLine ,lpFileName, FILENAME_MAX)){
+
+        if ((lpLine=Dos9_GetNextParameter(lpLine ,lpFileName, FILENAME_MAX))) {
+
+            if (!stricmp(lpFileName, "/Q")) {
+                /* on a choisi de rendre l'erreux muette */
+                bEchoError=FALSE;
+
+                if (!(Dos9_GetNextParameter(lpLine, lpFileName, FILENAME_MAX)))
+                    goto next;
+            }
+
             if (bDos9Extension == FALSE) Dos9_ShowErrorMessage(DOS9_EXTENSION_DISABLED_ERROR, NULL, FALSE);
             else lpFile=lpFileName;
         }
+
+        next:
+
         /* Now we have a valid label name, thus  we are about to find a label in the specified file */
         /* if we do have a valid file name, the search will be made in specified file */
         DEBUG("Jump to Label [(name) and (filename) nexts line]");
         DEBUG(lpLabelName);
         DEBUG(lpFile);
-        if (Dos9_JumpToLabel(lpLabelName, lpFile)==-1) {
+
+        if (Dos9_JumpToLabel(lpLabelName, lpFile)==-1 && bEchoError) {
             Dos9_ShowErrorMessage(DOS9_LABEL_ERROR, lpLabelName, FALSE);
         }
+
         DEBUG("Jump made");
     }
     return 0;
@@ -689,41 +790,62 @@ int Dos9_CmdGoto(char* lpLine)
 int Dos9_CmdCd(char* lpLine)
 {
     char* lpNext;
-    char lpArg[4];
+    ESTR* lpEsDir=Dos9_EsInit();
+
     if (!(lpLine=strchr(lpLine, ' '))) {
         Dos9_ShowErrorMessage(DOS9_BAD_COMMAND_LINE, NULL, FALSE);
-        return -1;
+        goto error;
     }
 
-    if ((lpNext=Dos9_GetNextParameter(lpLine, lpArg, 4))) {
-        if (!strcmp(lpArg, "/?")) {
+    if ((lpNext=Dos9_GetNextParameterEs(lpLine, lpEsDir))) {
+
+        if (!strcmp(Dos9_EsToChar(lpEsDir), "/?")) {
+
             puts(lpHlpDeprecated);
-            return 0;
-        } else if (!stricmp(lpArg, "/d")) {
+            goto error;
+
+        } else if (!stricmp(Dos9_EsToChar(lpEsDir), "/d")) {
+
             lpLine=lpNext;
+
         }
 
         while (*lpLine==' ' || *lpLine=='\t') lpLine++;
 
-        if ((lpNext=strrchr(lpLine, ' '))) *lpNext='\0';
-        /* FIX ME :
-            A common bug occurs when specifying path with
-            extra spaces at the end of the line. In windows,
-            this does not changes the current path but do
-            not returns errors though.
+        Dos9_GetEndOfLine(lpLine, lpEsDir);
 
-            This is not a real problem, but we need to compare
-            with *nix behaviours about spaces left in paths, to
-            find the right to handle this.
-        */
+        lpLine=Dos9_EsToChar(lpEsDir);
+
+        lpNext=NULL;
+
+        while (*lpLine) {
+
+            switch(*lpLine) {
+                case '\t':
+                case ' ':
+
+                    if (!lpNext) lpNext=lpLine;
+                    break;
+
+                default:
+                    lpNext=NULL;
+            }
+
+            lpLine++;
+
+        }
+
+        if (lpNext) *lpNext='\0';
 
         errno=0;
+
+        lpLine=Dos9_EsToChar(lpEsDir);
+
         chdir(lpLine);
 
         if (errno ==  0) {
 
             Dos9_UpdateCurrentDir();
-            return 0;
 
         } else {
 
@@ -736,13 +858,64 @@ int Dos9_CmdCd(char* lpLine)
                using windows as it does not returns on failure
                every time a non-existing folder is passed to the
                function, tried with '.. ' on my system
+
             */
 
             Dos9_ShowErrorMessage(DOS9_DIRECTORY_ERROR, lpLine, FALSE);
-            return -1;
+            goto error;
+
         }
+
+    } else {
+
+        puts(Dos9_GetCurrentDir());
+
     }
 
-    puts(Dos9_GetCurrentDir());
+    Dos9_EsFree(lpEsDir);
     return 0;
+
+    error:
+
+        Dos9_EsFree(lpEsDir);
+        return -1;
+}
+
+int Dos9_CmdBlock(char* lpLine)
+{
+    BLOCKINFO bkCode;
+    char* lpToken,
+          *lpEnv;
+
+    lpEnv=GetEnvironmentStrings();
+
+    if (lpEnv) {
+
+        FreeEnvironmentStrings(lpEnv);
+
+    }
+
+    lpToken=Dos9_GetNextBlock(lpLine, &bkCode);
+
+    if (*lpToken!=')') {
+
+        Dos9_ShowErrorMessage(DOS9_INVALID_TOP_BLOCK, lpLine, FALSE);
+        return -1;
+
+    }
+
+    lpToken++;
+
+    while (*lpToken==' ' || *lpToken=='\t') lpToken++;
+
+    if (*lpToken) {
+
+        Dos9_ShowErrorMessage(DOS9_INVALID_TOP_BLOCK, lpLine, FALSE);
+        return -1;
+
+    }
+
+    Dos9_RunBlock(&bkCode);
+
+    return iErrorLevel;
 }

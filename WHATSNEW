@@ -2,7 +2,11 @@ WHAT'S NEW ?
 
      This a list of fixed bugs and improvements made :
 
-FRIDAY 11TH, OCTOBER
+     NOTE : This list is not a complete list of improovements. The changes 
+     made before october 2012 were not included since the version started in 
+     this dates used almost new code.
+
+FRIDAY 11TH, OCTOBER 2012
 
         - Added welcome screen (Two versions)
 
@@ -25,7 +29,7 @@ THURSDAY 6TH, DECEMBER
 
         - Sorted code files for a better understandability
 
-FRIDAY 4TH, JUNUARY
+FRIDAY 4TH, JUNUARY, 2013
 
         - added severals commands (TYPE/MORE, CLS, COLOR, TITLE, GOTO)
 
@@ -148,4 +152,26 @@ SUNDAY 27, OCTOBER
 
         - Added primary support of FOR loops (ie. simple for loop without 
           options).
+
+FRIDAY 13, DECEMBER
+
+        - Solved some bugs in libDos9 (a hazardous non initialized var)
+
+        - Added support FOR /F loops with files as input.
+
+THURSDAY 2, JUNARY , 2014
+
+        - Corrected DOS9_SCRIPTCOMMAND.C bugs in which the delayed expansion 
+          was not executed even if it was enabled.
+
+        - Corrected some manual page
+
+        - added some translated pages
+
+        - added new MAKE system.
+
+        - added expressions (both INTERGER and FLOAT mode) for the SET /A 
+          command.
+
+        - added FOR /F loop support with string as input.
 
