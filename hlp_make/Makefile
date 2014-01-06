@@ -1,4 +1,5 @@
-# hlp_make , The dos9 project (c) darkbatcher 2013
+# hlp_make , The dos9 project
+# Copyright (c) 2013-2014 Romain Garbi (DarkBatcher)
 #
 # to set the target operating system set the evironment variable to either
 # ``win'' or ``linux''. The default build is for windows
@@ -10,17 +11,17 @@ CC=gcc
 SRC=hlp_make.c
 OBJ=$(SRC:.c=.o)
 
-LIB=../$(LIB_DIR)/libDos9.a
+LIB=$(LIB_DIR)/libDos9.a
 
-TARGET=../$(CMD_DIR)/hlp_make
+TARGET=$(CMD_DIR)/hlp_make
 
 ifeq ($(BUILD_OS),WINDOWS)
 
-CFLAGS=-Wall -g -I ../libdos9
+CFLAGS=-Wall -g -I $(INC_DIR)
 
 else
 
-CFLAGS=-Wall -g -I ../libdos9 -pthread
+CFLAGS=-Wall -g -I $(INC_DIR) -pthread
 
 endif
 

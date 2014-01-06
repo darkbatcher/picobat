@@ -23,19 +23,19 @@ SRC=./Dos9.c ./command/Dos9_Conditions.c ./command/Dos9_FileCommands.c \
 ifeq ($(BUILD_OS),WINDOWS)
 
 # libs for windows
-LIB=../$(LIB_DIR)/libDos9.a ../$(LIB_DIR)/libintl.lib \
-    ../$(LIB_DIR)/libmatheval.a ../$(LIB_DIR)/libfl.a ../$(LIB_DIR)/libinteval.a
+LIB=$(LIB_DIR)/libDos9.a $(LIB_DIR)/libintl.lib $(LIB_DIR)/libmatheval.a \
+	 $(LIB_DIR)/libfl.a $(LIB_DIR)/libinteval.a
 	
-CFLAGS=-Wall -g -I ../$(INC_DIR)
+CFLAGS=-Wall -g -I $(INC_DIR)
 
 else
 
 # libs for *nix
-LIB=../$(LIB_DIR)/libDos9.a ../$(LIB_DIR)/libmatheval.a ../$(LIB_DIR)/libinteval -lfl -lm
-CFLAGS=-Wall -g -pthread -I ../$(INC_DIR)
+LIB=$(LIB_DIR)/libDos9.a $(LIB_DIR)/libmatheval.a $(LIB_DIR)/libinteval -lfl -lm
+CFLAGS=-Wall -g -pthread -I $(INC_DIR)
 endif
 	
-TARGET=../$(BIN_DIR)/Dos9
+TARGET=$(BIN_DIR)/Dos9
 
 OBJ=$(SRC:.c=.o)
 

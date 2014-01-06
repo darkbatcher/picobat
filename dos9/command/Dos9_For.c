@@ -399,13 +399,17 @@ int Dos9_CmdForL(ESTR* lpInput, BLOCKINFO* lpbkCommand, char cVarName)
     lpToken=Dos9_EsToChar(lpInput);
     i=0;
 
-    while (*lpToken && i < sizeof(iLoopInfo)) {
+    while (*lpToken && (i < sizeof(iLoopInfo))) {
 
         iLoopInfo[i]=strtol(lpToken, &lpToken, 10); /* works only for
                                                        base 10 */
-        if (*lpToken!=',') {
+
+
+        if (*lpToken==',') {
 
             lpToken++;
+
+        } else if (!*lpToken) {
 
         } else {
 
@@ -426,7 +430,9 @@ int Dos9_CmdForL(ESTR* lpInput, BLOCKINFO* lpbkCommand, char cVarName)
     }
 
     /* execute loop */
-    for (i=iLoopInfo[DOS9_FORL_BEGIN]; i+=iLoopInfo[DOS9_FORL_INC]; i<=iLoopInfo[DOS9_FORL_END]) {
+    for (i=iLoopInfo[DOS9_FORL_BEGIN];
+         i<=iLoopInfo[DOS9_FORL_END];
+         i+=iLoopInfo[DOS9_FORL_INC]) {
 
         snprintf(lpValue, sizeof(lpValue), "%d", i);
 

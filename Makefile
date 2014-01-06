@@ -12,10 +12,10 @@ DOS9_COMPONENTS=./libDos9 ./libmatheval-dos9 ./libinteval ./dos9 ./tea ./tea_htm
 				./hlp ./hlp_make
 				
 # define first part of build bash scripts
-DOS9_VAR_EXPORT= export LIB_DIR=libs; \
-				 export CMD_DIR=bin/cmd; \
-				 export BIN_DIR=bin; \
-				 export INC_DIR=include;
+DOS9_VAR_EXPORT= export LIB_DIR=../libs; \
+				 export CMD_DIR=../bin/cmd; \
+				 export BIN_DIR=../bin; \
+				 export INC_DIR=../include;
 	
 all:
 	# Dos9 overall makefile.

@@ -1,4 +1,4 @@
-# hlp_make , The dos9 project (c) darkbatcher 2013
+# hlp_make , The dos9 project (c) 2013-2014 Romain Garbi (DarkBatcher)
 #
 # This is free software: you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software 
@@ -13,17 +13,17 @@ CC=gcc
 SRC=tea_html.c tea_html_funcs.c
 OBJ=$(SRC:.c=.o)
 
-LIB=../$(LIB_DIR)/libDos9.a
+LIB=$(LIB_DIR)/libDos9.a
 
-TARGET=../$(CMD_DIR)/tea_html
+TARGET=$(CMD_DIR)/tea_html
 
 ifeq ($(BUILD_OS),WINDOWS)
 
-CFLAGS=-Wall -g -I ../$(INC_DIR)
+CFLAGS=-Wall -g -I $(INC_DIR)
 
 else
 
-CFLAGS=-Wall -g -pthread -I ../$(INC_DIR)
+CFLAGS=-Wall -g -pthread -I $(INC_DIR)
 
 endif
 

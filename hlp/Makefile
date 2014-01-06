@@ -1,4 +1,5 @@
-# Hlp, The Dos9 Project - Copyright © 2010-2013 Darkbatcher
+# Hlp, The Dos9 Project
+# Copyright © 2010-2014 Darkbatcher
 #
 # This is free software: you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software 
@@ -16,16 +17,16 @@ SRC= ./src/hlp.c ./src/hlp_show.c ./src/hlp_load.c ./src/hlp_enc.c
 
 ifeq ($(BUILD_OS),WINDOWS)
 	
-LIB=../$(LIB_DIR)/libDos9.a ../$(LIB_DIR)/libiconv.dll.a ../$(LIB_DIR)/libintl.lib
+LIB=$(LIB_DIR)/libDos9.a $(LIB_DIR)/libiconv.dll.a $(LIB_DIR)/libintl.lib
 
 else
 
-LIB=../$(LIB_DIR)/libDos9.a 
+LIB=$(LIB_DIR)/libDos9.a 
 
 endif
 
-TARGET=../$(CMD_DIR)/hlp
-CFLAGS=-Wall -g -I ../libdos9
+TARGET=$(CMD_DIR)/hlp
+CFLAGS=-Wall -g -I $(INC_DIR)
 
 OBJ=$(SRC:.c=.o)
 

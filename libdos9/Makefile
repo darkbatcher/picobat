@@ -1,4 +1,4 @@
-# libDos9, The Dos9 Project - Copyright © 2010-2013 Darkbatcher
+# libDos9, The Dos9 Project - Copyright © 2010-2014 Darkbatcher
 #
 # This is free software: you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software 
@@ -18,9 +18,9 @@ AFLAGS=-r -s
 CC=gcc
 AR=ar
 
-TARGET=../$(LIB_DIR)/libDos9.a
+TARGET=$(LIB_DIR)/libDos9.a
 
-INCLUDE_FILE=../$(INC_DIR)/libDos9.h
+INCLUDE_FILE=$(INC_DIR)/libDos9.h
 ORIGIN_FILE=./libDos9.h
 
 #the list of the sources
