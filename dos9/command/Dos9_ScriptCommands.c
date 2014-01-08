@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2013 DarkBatcher
+ *   Copyright (C) 2010-2014 DarkBatcher
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -884,18 +884,10 @@ int Dos9_CmdCd(char* lpLine)
 int Dos9_CmdBlock(char* lpLine)
 {
     BLOCKINFO bkCode;
-    char* lpToken,
-          *lpEnv;
-
-    lpEnv=GetEnvironmentStrings();
-
-    if (lpEnv) {
-
-        FreeEnvironmentStrings(lpEnv);
-
-    }
+    char* lpToken;
 
     lpToken=Dos9_GetNextBlock(lpLine, &bkCode);
+	
 
     if (*lpToken!=')') {
 
@@ -908,6 +900,7 @@ int Dos9_CmdBlock(char* lpLine)
 
     while (*lpToken==' ' || *lpToken=='\t') lpToken++;
 
+	
     if (*lpToken) {
 
         Dos9_ShowErrorMessage(DOS9_INVALID_TOP_BLOCK, lpLine, FALSE);

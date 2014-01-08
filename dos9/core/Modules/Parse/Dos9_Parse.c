@@ -13,7 +13,6 @@ int MODULE_MAIN Dos9_ParseModule(int iMsg, void* param1, void* param2)
    PARSED_STREAM* lppsParsedStream;
    PARSED_STREAM_START* lppssStreamStart;
    int iLastParentNb;
-   char* lpLastCr=NULL;
 
    switch(iMsg) {
 
@@ -53,19 +52,21 @@ int MODULE_MAIN Dos9_ParseModule(int iMsg, void* param1, void* param2)
                     Dos9_ReplaceVars(lpesLine);
                     Dos9_EsCatE(lpesCommandLine, lpesLine);
 
-                } while ((iLastParentNb=Dos9_CountParenthese(Dos9_EsToChar(lpesLine),iLastParentNb)) && !Dos9_SendMessage(DOS9_READ_MODULE, MODULE_READ_ISEOF, NULL, NULL));
+                } while ((iLastParentNb=Dos9_CountParenthese(Dos9_EsToChar(lpesLine),iLastParentNb)) 
+						 && !Dos9_SendMessage(DOS9_READ_MODULE, MODULE_READ_ISEOF, NULL, NULL));
+						 
+						 
 
             }
 
             DEBUG(Dos9_EsToChar(lpesCommandLine));
 
-            if ((*Dos9_EsToChar(lpesCommandLine)=='\0'  || *Dos9_EsToChar(lpesCommandLine)=='\n' || *Dos9_EsToChar(lpesCommandLine)=='\r')) {
+			Dos9_RmTrailingNl(Dos9_EsToChar(lpesCommandLine));
+			
+            if ((*Dos9_EsToChar(lpesCommandLine)=='\0')) {
                 return ((int)NULL);
             }
 
-            if ((lpLastCr=strrchr(Dos9_EsToChar(lpesCommandLine), '\n'))) *lpLastCr='\0';
-
-            if ((lpLastCr=strrchr(Dos9_EsToChar(lpesCommandLine), '\r'))) *lpLastCr='\0';
 
             if (bEchoOn && param2 && *(Dos9_EsToChar(lpesCommandLine))!='@') {
 
@@ -416,3 +417,17 @@ void Dos9_FreeParsedStream(PARSED_STREAM* lppsStream)
     if (lppsLast) free(lppsLast);
 }
 
+void Dos9_RmTrailingNl(char* lpLine)
+{
+	char cLastChar=0;
+	
+	while (*lpLine) {
+
+		cLastChar=*(lpLine++);
+	
+	}
+	
+	if (cLastChar=='\n') 
+		*(lpLine-1)='\0';
+
+}

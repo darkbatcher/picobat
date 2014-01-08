@@ -14,11 +14,11 @@ CC=gcc
 SRC=./Dos9.c ./command/Dos9_Conditions.c ./command/Dos9_FileCommands.c \
 	./command/Dos9_ScriptCommands.c ./command/cmdlib/Dos9_CmdLibArgs.c \
 	./core/Dos9_Expand.c ./core/Dos9_Globals.c ./core/Dos9_Jump.c \
-	./core/Dos9_Run.c ./core/Dos9_ShowIntro.c ./core/Dos9_SplitPath.c \
+	./core/Dos9_Run.c ./core/Dos9_SplitPath.c ./core/Dos9_ShowIntro.c \
 	./core/Dos9_Var.c ./command/Dos9_For.c \
 	./core/Modules/Parse/Dos9_Parse.c ./core/Modules/Read/Dos9_Read.c \
 	./core/Stream/Dos9_Stream.c ./errors/Dos9_Errors.c \
-	./lang/Dos9_Lang.c 
+	./lang/Dos9_Lang.c
 
 ifeq ($(BUILD_OS),WINDOWS)
 

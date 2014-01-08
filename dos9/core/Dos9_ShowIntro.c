@@ -1,4 +1,5 @@
 #include "libDos9.h"
+#include "Dos9_Core.h"
 #include "Dos9_ShowIntro.h"
 #include "../lang/Dos9_Lang.h"
 
@@ -24,9 +25,9 @@ void Dos9_PrintIntroduction(void)
 {
     Dos9_SetConsoleTextColor(DOS9_BACKGROUND_IBLUE | DOS9_FOREGROUND_IYELLOW);
     puts("  ______   _______  _______   _____                                            \n\
- (  __  \\ (  ___  )(  ____ \\ / ___ \\  Dos9 [version 0.7] - beta version        \n\
- | (  \\  )| (   ) || (    \\/( (   ) )                                          \n\
- | |   ) || |   | || (_____ ( (___) | Dos9 copyright (c) Darkbatcher 2010-2013 \n\
+ (  __  \\ (  ___  )(  ____ \\ / ___ \\  Dos9 [" DOS9_VERSION "] " DOS9_BUILDCOMMENTS "\n\
+ | (  \\  )| (   ) || (    \\/( (   ) ) Copyright (c) 2010-" DOS9_BUILDYEAR "                  \n\
+ | |   ) || |   | || (_____ ( (___) |   " DOS9_AUTHORS D0S9_AUTHORSPAD "\n\
  | |   | || |   | |(_____  ) \\____  |                                          \n\
  | |   ) || |   | |      ) |      ) | This is free software, you can modify    \n\
  | (__/  )| (___) |/\\____) |/\\____) ) and/or redistribute it under the terms   \n\

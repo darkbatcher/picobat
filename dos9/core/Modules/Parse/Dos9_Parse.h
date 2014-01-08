@@ -64,7 +64,7 @@ Reads  and parse line */
 int MODULE_MAIN Dos9_ParseModule(int iMsg, void* param1, void* param2);
 
 int Dos9_CountParenthese(char* lpLine, int iLastNb);
-void Dos9_AdjustStringNl(char* lpLine);
+void Dos9_RmTrailingNl(char* lpLine);
 
 void Dos9_AdjustString(char* lpBegin, char* lpEnd);
 char* Dos9_GetPathToken(char* lpBegin, char* lpAdjust);

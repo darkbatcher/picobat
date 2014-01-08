@@ -18,7 +18,7 @@ COLOR colColor;
 #endif
 
 char* lpInitVar[]={
-    "DOS9_VERSION=0.7.01",
+    "DOS9_VERSION=" DOS9_VERSION,
 #ifdef WIN32
     "DOS9_OS=WINDOWS",
 #elif defined _POSIX_C_SOURCE

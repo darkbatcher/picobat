@@ -10,6 +10,7 @@
 #include "Dos9_Run.h"
 #include "Dos9_Modules.h"
 #include "Dos9_Jump.h"
+#include "Dos9_VersionInfo.h"
 #include "Dos9_ShowIntro.h"
 
 extern int bDelayedExpansion;
