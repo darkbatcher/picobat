@@ -1,6 +1,27 @@
+/*
+ *
+ *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
+ *   Copyright (C) 2010-2014 DarkBatcher
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <libDos9.h>
 
 #ifdef _POSIX_C_SOURCE
 
@@ -14,7 +35,7 @@
 
 #include "../errors/Dos9_Errors.h"
 #include "Dos9_FileCommands.h"
-#include "libDos9.h"
+
 
 int Dos9_CmdDel(char* lpLine)
 {
@@ -36,13 +57,21 @@ int Dos9_CmdDel(char* lpLine)
         lpToken=Dos9_EsToChar(lpEstr);
 
         if (!stricmp(lpToken, "/P")) { /* Demande une confirmation avant la suppression */
+
             bParam|=DOS9_ASK_CONFIRMATION;
+
         } else if (!stricmp(lpToken, "/F")) { /* supprime les fichiers en lecture seule */
+
             bParam|=DOS9_DELETE_READONLY;
+
         } else if (!stricmp(lpToken, "/S")) { /* procède récursivement */
+
             iFlag|=DOS9_SEARCH_RECURSIVE;
+
         } else if (!stricmp(lpToken, "/Q")) { /* pas de confirmation pour suppression avec caractères génériques */
+
             bParam|=DOS9_DONT_ASK_GENERIC;
+
         } else if (!strnicmp(lpToken, "/A", 2)) {
             /* gestion des attributs */
             lpToken+=2;
@@ -51,26 +80,37 @@ int Dos9_CmdDel(char* lpLine)
             wAttr=Dos9_MakeFileAttributes(lpToken);
 
             iFlag^=DOS9_SEARCH_NO_STAT;
+
         } else {
+
             if (*lpName != '\0') { /* si un nom a été donné, on affiche, l'erreur */
+
                 Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpToken, FALSE);
                 Dos9_EsFree(lpEstr);
                 return -1;
+
             }
+
             strncpy(lpName, lpToken, FILENAME_MAX);
         }
+
         lpLine=lpNextToken;
+
     }
 
     if (*lpName== '\0') { /* si aucun nom n'a été donné */
+
         Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "DEL / ERASE", FALSE);
         Dos9_EsFree(lpEstr);
         return -1;
+
     }
 
     if (!(bParam & DOS9_DELETE_READONLY)) {
+
         /* par défaut, la recherche ne prend pas en compte la recherche des fichiers en lecture seule */
         wAttr|=DOS9_CMD_ATTR_READONLY_N | DOS9_CMD_ATTR_READONLY;
+
     }
 
     wAttr|=DOS9_CMD_ATTR_DIR | DOS9_CMD_ATTR_DIR_N; /* ne sélectionne que le fichiers */
@@ -127,77 +167,115 @@ int Dos9_CmdDel(char* lpLine)
 
 int Dos9_CmdDir(char* lpLine)
 {
-    char *lpNext, *lpToken;
-    char lpType[]="D RHSA ";
-    int iDirNb=0, iFileNb=0, iFlag=DOS9_SEARCH_DEFAULT;
-    char lpFileName[FILENAME_MAX]={0};
+    char *lpNext,
+         *lpToken,
+         lpType[]="D RHSA ",
+         lpFileName[FILENAME_MAX]={0};
+
+    int iDirNb=0,
+        iFileNb=0,
+        iFlag=DOS9_SEARCH_DEFAULT;
+
     short wAttr=DOS9_CMD_ATTR_ALL;
+
     char bSimple=FALSE;
     ESTR* lpParam=Dos9_EsInit();
+
     struct tm* lTime;
     LPFILELIST lpflList;
 
      //if (lpNext=strchr(lpLine, ' ')) *lpNext='\0';
     lpNext=lpLine+3;
+
     while ((lpNext=Dos9_GetNextParameterEs(lpNext, lpParam))) {
+
         lpToken=Dos9_EsToChar(lpParam);
+
         if (!strcmp(lpToken, "/?")) {
+
             puts(lpHlpDeprecated);
             return 0;
+
         } else if (!stricmp("/b", lpToken)) {
+
             /* use the simple dir output */
             bSimple=TRUE;
             if (!wAttr) iFlag|=DOS9_SEARCH_NO_STAT;
+            iFlag|=DOS9_SEARCH_NO_CURRENT_DIR;
+
         } else if (!stricmp("/s", lpToken)) {
+
             /* set the command to recusive */
             iFlag|=DOS9_SEARCH_RECURSIVE;
+
         } else if (!strnicmp("/a", lpToken,2)) {
+
             /* uses the attributes command */
             lpToken+=2;
             if (*lpToken==':') lpToken++;
             wAttr=Dos9_MakeFileAttributes(lpToken);
             iFlag&=~DOS9_SEARCH_NO_STAT;
+
         } else {
+
             if (*lpFileName) {
                    Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpToken, FALSE);
                    Dos9_EsFree(lpParam);
                    return -1;
             }
             strncpy(lpFileName, lpToken, FILENAME_MAX);
+
         }
     }
+
     lpflList=Dos9_GetMatchFileList(lpFileName, iFlag);
+
     if (!bSimple) puts(lpDirListTitle);
     if (!lpflList) {
         if (!bSimple) puts(lpDirNoFileFound);
         Dos9_EsFree(lpParam);
         return 0;
     }
+
     for (;lpflList;lpflList=lpflList->lpflNext) {
         if (Dos9_CheckFileAttributes(wAttr, lpflList)) {
+
             if (!bSimple) {
+
                 strcpy(lpType, "       ");
                 if (Dos9_GetFileMode(lpflList) & DOS9_FILE_DIR) {
                     lpType[0]='D';
                     iDirNb++;
+
                 } else {
+
                     iFileNb++;
+
                 }
+
                 if (Dos9_GetFileMode(lpflList) & DOS9_FILE_READONLY) lpType[2]='R';
+
                 if (Dos9_GetFileMode(lpflList) & DOS9_FILE_HIDDEN) lpType[3]='H';
+
                 if (Dos9_GetFileMode(lpflList) & DOS9_FILE_SYSTEM) lpType[4]='S';
+
                 if (Dos9_GetFileMode(lpflList) & DOS9_FILE_ARCHIVE) lpType[5]='A';
 
                 /* !! Recyclage de la variable lpFilename pour afficher la taille du fichier */
                 Dos9_FormatFileSize(lpFileName, 16, Dos9_GetFileSize(lpflList));
 
                 lTime=localtime(&Dos9_GetModifTime(lpflList));
+
                 printf("%02d/%02d/%02d %02d:%02d\t%s\t%s\t%s\n",lTime->tm_mday , lTime->tm_mon+1, 1900+lTime->tm_year, lTime->tm_hour, lTime->tm_min, lpFileName, lpType, lpflList->lpFileName);
+
             } else {
+
                 printf("%s\n", lpflList->lpFileName);
+
             }
         }
     }
+
     if (!bSimple) printf(lpDirFileDirNb, iFileNb, iDirNb);
 
     Dos9_EsFree(lpParam);

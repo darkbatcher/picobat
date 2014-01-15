@@ -17,37 +17,24 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "libDos9.h"
-#include "Dos9_Core.h"
+ #include <stdio.h>
+ #include <stdlib.h>
 
-int bDelayedExpansion=FALSE;
-int bUseFloats=FALSE;
-int bDos9Extension=FALSE;
-int bEchoOn=TRUE;
-int iErrorLevel=0;
-LPCOMMANDLIST lpclCommands;
-LOCAL_VAR_BLOCK* lpvLocalVars;
-LPSTREAMSTACK lppsStreamStack;
-COLOR colColor;
+ #include "Dos9_Core.h"
 
-int iInputD=0,
-    iOutputD=0;
 
-#ifdef WIN32
-    #define environ _environ
-#else
-    extern char** environ;
-#endif
+void Dos9_Exit(void)
+{
 
-char* lpInitVar[]={
-    "DOS9_VERSION=" DOS9_VERSION,
-#ifdef WIN32
-    "DOS9_OS=WINDOWS",
-#elif defined _POSIX_C_SOURCE
-    "DOS9_OS=*NIX",
-#else
-    "DOS9_OS=UNKNOWN"
-#endif
-    NULL,
-    NULL
-};
+    Dos9_FreeCommandList(lpclCommands);
+    Dos9_FreeStreamStack(lppsStreamStack);
+    Dos9_FreeLocalBlock(lpvLocalVars);
+
+    if (iInputD)
+        close(iInputD);
+
+    if (iOutputD)
+        close(iOutputD);
+
+
+}

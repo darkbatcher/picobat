@@ -22,10 +22,10 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "matheval.h"
-#include "inteval.h"
+#include <matheval.h>
+#include <inteval.h>
 
-#include "libDos9.h"
+#include <libDos9.h>
 
 #include "Dos9_CmdLib.h"
 
@@ -658,33 +658,51 @@ int Dos9_CmdRem(char* lpLine)
 int Dos9_CmdCls(char* lpLine)
 {
     char lpArg[4];
+
     if (Dos9_GetNextParameter(lpLine+3, lpArg, 4)) {
+
         if (!strcmp(lpArg, "/?")) {
+
             puts(lpHlpDeprecated);
             return 0;
+
         } else {
+
             Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpArg, FALSE);
             return -1;
+
         }
+
     }
+
     Dos9_ClearConsoleScreen();
+
     return 0;
 }
 
 int Dos9_CmdColor(char* lpLine)
 {
     char lpArg[4];
+
     if (Dos9_GetNextParameter(lpLine+5, lpArg, 4)) {
+
         if (!strcmp(lpArg, "/?")) {
+
             puts(lpHlpDeprecated);
+
         } else {
+
             colColor=strtol(lpArg, NULL, 16);
             Dos9_SetConsoleColor(colColor);
+
         }
         return 0;
+
     }
+
     colColor=DOS9_COLOR_DEFAULT;
     Dos9_SetConsoleColor(DOS9_COLOR_DEFAULT);
+
     return 0;
 }
 
@@ -887,7 +905,7 @@ int Dos9_CmdBlock(char* lpLine)
     char* lpToken;
 
     lpToken=Dos9_GetNextBlock(lpLine, &bkCode);
-	
+
 
     if (*lpToken!=')') {
 
@@ -900,7 +918,7 @@ int Dos9_CmdBlock(char* lpLine)
 
     while (*lpToken==' ' || *lpToken=='\t') lpToken++;
 
-	
+
     if (*lpToken) {
 
         Dos9_ShowErrorMessage(DOS9_INVALID_TOP_BLOCK, lpLine, FALSE);

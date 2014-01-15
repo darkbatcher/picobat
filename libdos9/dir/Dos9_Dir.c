@@ -120,7 +120,7 @@ LIBDOS9 LPFILELIST  Dos9_GetMatchFileList(char* lpPathMatch, int iFlag)
 
     _Dos9_SeekFiles(lpStaticPart, lpPathMatch, iBaseLvl, iDepth+iBaseLvl, &iThreadNb, iFileDescriptors[1], iFlag);
 	/* start file research */
-	
+
     if (write(iFileDescriptors[1], "\1", 1)==-1) return NULL;
 
     Dos9_WaitForThread(hThread);
@@ -148,48 +148,55 @@ LPFILELIST _Dos9_SeekFiles(char* lpDir, char* lpRegExp, int iLvl, int iMaxLvl, i
         iFlag=(iLvl == iMaxLvl);
             /*  verfify wether the research on the path is ended (i.e. the top level at least been reached) */
     }
-	
+
     _Dos9_GetMatchPart(lpRegExp, lpRegExpLvl, FILENAME_MAX, iLvl);
         /* returns the part of path that must the file must match */
-		
+
     if ((pDir=opendir(lpDir))) {
         while ((lpDirElement=readdir(pDir))) {
-		
+
 			if (iFlag) {
-			
+
 				_Dos9_MakePath(lpDir, lpDirElement->d_name, lpFilePath, FILENAME_MAX);
-				
+
 				/* if the DOS9_FILE_RECURSIVE has been checked and if we reached the top level */
 		        if (strcmp(lpDirElement->d_name, ".") && strcmp(lpDirElement->d_name, "..")) {
-								
+
 					/* if the current dir element is neither '.' nor '..' then try to browse element's
 					children */
 					_Dos9_SeekFiles(lpFilePath, lpRegExp, iLvl, iMaxLvl, iThreadNb, iOutDescriptor, iSearchFlag);
-                        
+
 				}
-			
+
 			}
-			
+
             if (Dos9_RegExpCaseMatch(lpRegExpLvl, lpDirElement->d_name)) {
-                    
-					_Dos9_MakePath(lpDir, lpDirElement->d_name, lpFilePath, FILENAME_MAX);    
-					
+
+					_Dos9_MakePath(lpDir, lpDirElement->d_name, lpFilePath, FILENAME_MAX);
+
 					if ((iLvl < iMaxLvl) && strcmp(lpDirElement->d_name, ".") && strcmp(lpDirElement->d_name, "..")) {
-					
+
 						/* if the top of the regexp has not been reached, then we have to browse
 						the subfolder */
 						_Dos9_SeekFiles(lpFilePath, lpRegExp, iLvl+1, iMaxLvl, iThreadNb, iOutDescriptor, iSearchFlag);
-					
+
 					} else if (iLvl == iMaxLvl) {
-				
+
 						/* else we just write its name in the pipe... */
-						if (write(iOutDescriptor, lpFilePath, FILENAME_MAX)==-1) return NULL;
-						if (iSearchFlag & DOS9_SEARCH_GET_FIRST_MATCH) {
-							return NULL;
+						if ((!(iSearchFlag & DOS9_SEARCH_NO_CURRENT_DIR))
+                              || (strcmp(lpDirElement->d_name, ".")
+                                  && strcmp(lpDirElement->d_name, "..")) ) {
+
+                            if (write(iOutDescriptor, lpFilePath, FILENAME_MAX)==-1) return NULL;
+
+                            if (iSearchFlag & DOS9_SEARCH_GET_FIRST_MATCH) {
+                                return NULL;
+                            }
 						}
 					}
             }
         }
+
         closedir(pDir);
     }
     return NULL;

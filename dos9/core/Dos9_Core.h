@@ -1,3 +1,22 @@
+/*
+ *
+ *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
+ *   Copyright (C) 2010-2014 DarkBatcher
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef DOS9_CORE_H_INCLUDED
 #define DOS9_CORE_H_INCLUDED
 
@@ -13,28 +32,9 @@
 #include "Dos9_VersionInfo.h"
 #include "Dos9_ShowIntro.h"
 
-extern int bDelayedExpansion;
-extern int bUseFloats;
-extern int bDos9Extension;
-extern int bEchoOn;
-extern int iErrorLevel;
-extern LPCOMMANDLIST lpclCommands;
-extern LOCAL_VAR_BLOCK* lpvLocalVars;
-extern LPSTREAMSTACK lppsStreamStack;
-extern COLOR colColor;
+#include "Dos9_Globals.h"
 
-#ifdef WIN32
-    #define environ _environ
-#else
-    extern char** environ;
-#endif
-
-extern char* lpInitVar[];
-
-
-#define DEBUG(a)
-#define DOS9_DEBUG(a)
-#define DEBUG_(a)
+#include "Dos9_Exit.h"
 
 #ifndef WIN32
     #define getch() getchar()

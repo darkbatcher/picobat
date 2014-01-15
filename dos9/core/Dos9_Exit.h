@@ -17,37 +17,9 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "libDos9.h"
-#include "Dos9_Core.h"
+#ifndef DOS9_EXIT_H
+#define DOS9_EXIT_H
 
-int bDelayedExpansion=FALSE;
-int bUseFloats=FALSE;
-int bDos9Extension=FALSE;
-int bEchoOn=TRUE;
-int iErrorLevel=0;
-LPCOMMANDLIST lpclCommands;
-LOCAL_VAR_BLOCK* lpvLocalVars;
-LPSTREAMSTACK lppsStreamStack;
-COLOR colColor;
+void Dos9_Exit(void);
 
-int iInputD=0,
-    iOutputD=0;
-
-#ifdef WIN32
-    #define environ _environ
-#else
-    extern char** environ;
-#endif
-
-char* lpInitVar[]={
-    "DOS9_VERSION=" DOS9_VERSION,
-#ifdef WIN32
-    "DOS9_OS=WINDOWS",
-#elif defined _POSIX_C_SOURCE
-    "DOS9_OS=*NIX",
-#else
-    "DOS9_OS=UNKNOWN"
-#endif
-    NULL,
-    NULL
-};
+#endif // DOS9_EXIT_H

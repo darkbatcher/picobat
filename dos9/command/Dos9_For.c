@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2013 DarkBatcher
+ *   Copyright (C) 2010-2014 DarkBatcher
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -110,6 +110,10 @@ int Dos9_CmdFor(char* lpLine)
 
             iForType=FOR_LOOP_R;
 
+        } else if (!stricmp(Dos9_EsToChar(lpParam), "/D")) {
+
+            iForType=FOR_LOOP_D;
+
         } else {
 
             break;
@@ -144,10 +148,7 @@ int Dos9_CmdFor(char* lpLine)
 
             cVarName=*lpVarName;
 
-            /* test conformance
-
-            FIXME : This is memory sailing away to sea */
-            // DOS9_TEST_VARNAME(cVarName);
+            /* FIXME : Add a conformance test on cVarName */
 
             /* just get out of that loop */
             break;
@@ -164,6 +165,7 @@ int Dos9_CmdFor(char* lpLine)
 
             switch(iForType) {
 
+                case FOR_LOOP_D:
                 case FOR_LOOP_R:
                     /* In that case, this is must be the
                        directory parameter */
@@ -277,6 +279,11 @@ int Dos9_CmdFor(char* lpLine)
             break;
 
         case FOR_LOOP_R:
+            Dos9_CmdForDeprecatedWrapper(lpInputBlock, lpDirectory, "/A:-D",&bkCode, cVarName);
+            break;
+
+        case FOR_LOOP_D:
+            Dos9_CmdForDeprecatedWrapper(lpInputBlock, lpDirectory, "/A:D",&bkCode, cVarName);
             break;
 
         case FOR_LOOP_F:
@@ -307,23 +314,24 @@ int Dos9_CmdForSimple(ESTR* lpInput, BLOCKINFO* lpbkCommand, char cVarName, char
     char* lpToken=Dos9_EsToChar(lpInput);
     char* lpNextToken;
 
-    char  cContinue=TRUE;
+    char  cInc=TRUE;
 
-    while (*lpToken && cContinue) {
+    while (*lpToken) {
 
-        while ((strchr(lpDelimiters, *lpToken))) lpToken++;
+        while (*lpToken && (strchr(lpDelimiters, *lpToken))) lpToken++;
+
+        if (!*lpToken)
+            break;
         /* skip in raw delimiters */
 
         if (*lpToken=='\''  || *lpToken=='"') {
 
             /* the tokens begins with either a "'" or a '"'
-               then we try to find the closing delimiter*/
+               then we try to find the closing delimiter */
 
             /* no need to increment lpToken since quotes are
                preserved, as stated by the documentation */
             lpNextToken=lpToken+1;
-
-            cContinue=FALSE;
 
             while (*lpNextToken) {
 
@@ -332,9 +340,11 @@ int Dos9_CmdForSimple(ESTR* lpInput, BLOCKINFO* lpbkCommand, char cVarName, char
 
                     if ((strchr(lpDelimiters, *(lpNextToken+1)))) {
 
-                        cContinue=TRUE;
                         lpNextToken++;
-                        *lpNextToken='\0';
+                        if (*lpNextToken)
+                            *(lpNextToken++)='\0';
+
+                        cInc=FALSE;
 
                         break;
 
@@ -359,9 +369,12 @@ int Dos9_CmdForSimple(ESTR* lpInput, BLOCKINFO* lpbkCommand, char cVarName, char
 
             }
 
-            if (*lpNextToken=='\0') cContinue=FALSE;
+            if (*lpNextToken) {
 
-            *lpNextToken='\0';
+                *(lpNextToken++)='\0';
+                cInc=FALSE;
+
+            }
 
         }
 
@@ -376,7 +389,16 @@ int Dos9_CmdForSimple(ESTR* lpInput, BLOCKINFO* lpbkCommand, char cVarName, char
         /* run the block */
         Dos9_RunBlock(lpbkCommand);
 
-        lpToken=lpNextToken+1;
+        if (*lpNextToken && cInc) {
+
+            lpToken=lpNextToken+1;
+
+        } else {
+
+            lpToken=lpNextToken;
+            cInc=TRUE;
+
+        }
 
     }
 
@@ -994,7 +1016,8 @@ int Dos9_ForMakeInputInfo(ESTR* lpInput, INPUTINFO* lpipInfo, FORINFO* lpfrInfo)
 {
     int bUsebackq=lpfrInfo->bUsebackq,
         iInputType,
-        iPipeFd[2];
+        iPipeFdIn[2],
+        iPipeFdOut[2];
 
     char *lpToken=Dos9_EsToChar(lpInput);
 
@@ -1100,16 +1123,20 @@ int Dos9_ForMakeInputInfo(ESTR* lpInput, INPUTINFO* lpipInfo, FORINFO* lpfrInfo)
             lpipInfo->cType=INPUTINFO_TYPE_COMMAND;
 
 
-            if (_Dos9_Pipe(iPipeFd, 1024, O_TEXT) == -1)
+            if (_Dos9_Pipe(iPipeFdIn, 1024, O_TEXT) == -1)
             {
                 Dos9_ShowErrorMessage(DOS9_CREATE_PIPE | DOS9_PRINT_C_ERROR , __FILE__ "/Dos9_MakeInputInfo()", FALSE);
                 return -1;
             }
 
-            if (Dos9_ForInputProcess(lpInput, lpipInfo, iPipeFd)==-1) {
+            if (_Dos9_Pipe(iPipeFdOut, 1024, O_TEXT) == -1)
+            {
+                Dos9_ShowErrorMessage(DOS9_CREATE_PIPE | DOS9_PRINT_C_ERROR , __FILE__ "/Dos9_MakeInputInfo()", FALSE);
+                return -1;
+            }
 
-                close(iPipeFd[0]);
-                close(iPipeFd[2]);
+            if (Dos9_ForInputProcess(lpInput, lpipInfo, iPipeFdIn, iPipeFdOut)==-1) {
+
                 return -1;
 
             }
@@ -1153,20 +1180,18 @@ int Dos9_ForAdjustInput(char* lpInput)
 
 }
 
-int Dos9_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFd)
+int Dos9_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn, int* iPipeFdOut)
 {
-    char* lpArgs[8];
-    char lpLastArg[16];
+    char* lpArgs[10];
+    char lpInArg[16],
+         lpOutArg[16];
     FILE* pFile;
 
     int i=0;
 
     lpArgs[i++]="Dos9";
-    lpArgs[i++]="tst.bat";
     lpArgs[i++]="/Q";
-
-    if (!bEchoOn)
-        lpArgs[i++]="/E";
+    lpArgs[i++]="/E";
 
     if (bDelayedExpansion)
         lpArgs[i++]="/V";
@@ -1174,8 +1199,19 @@ int Dos9_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFd)
     if (bDos9Extension)
         lpArgs[i++]="/N";
 
-    //snprintf(lpLastArg, sizeof(lpLastArg),  "/D %d", iPipeFd[0]);
-        /* give the input descriptor to the child*/
+    lpArgs[i++]="/I";
+
+    snprintf(lpInArg, sizeof(lpInArg), "%d", iPipeFdIn[0]);
+
+    lpArgs[i++]=lpInArg;
+
+    lpArgs[i++]="/O";
+
+    snprintf(lpOutArg, sizeof(lpOutArg), "%d", iPipeFdOut[1]);
+
+    lpArgs[i++]=lpOutArg;
+
+        /* give the input descriptor to the child */
 
     lpArgs[i]=NULL;
 
@@ -1189,11 +1225,13 @@ int Dos9_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFd)
             Dos9_ShowErrorMessage(DOS9_FOR_LAUNCH_ERROR | DOS9_PRINT_C_ERROR, Dos9_EsToChar(lpInput), FALSE);
 
             return -1;
+
         }
 
     #elif defined _POSIX_C_SOURCE
 
         iPid=fork();
+
         if (iPid == 0 ) {
           /* if we are in the son */
 
@@ -1221,21 +1259,41 @@ int Dos9_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFd)
 
     #endif // WIN32
 
-    if (!(pFile=fdopen(iPipeFd[1], "r")))
+    if (!(pFile=fdopen(iPipeFdIn[1], "w")))
     {
 
-        return -1;
+        close(iPipeFdIn[1]);
+        goto error;
 
     }
 
     fputs(Dos9_EsToChar(lpInput), pFile);
+    fputs("\nexit\n", pFile);
+    fflush(pFile);
         /* write the command given on the for command */
 
-    lpipInfo->Info.StreamInfo.pInputStream=pFile;
-    lpipInfo->Info.StreamInfo.iPipeFds[1]=iPipeFd[1];
-    lpipInfo->Info.StreamInfo.iPipeFds[0]=iPipeFd[0];
+    fclose(pFile);
+
+    if (!(pFile=fdopen(iPipeFdOut[0], "r")))
+    {
+
+        goto error;
+
+    }
+
+    close(iPipeFdIn[1]);
+    close(iPipeFdOut[1]);
+
+    lpipInfo->Info.pInputFile=pFile;
 
     return 0;
+
+    error:
+        close(iPipeFdIn[0]);
+        close(iPipeFdOut[1]);
+        close(iPipeFdOut[0]);
+
+        return -1;
 }
 
 int Dos9_ForGetStringInput(ESTR* lpReturn, STRINGINFO* lpsiInfo)
@@ -1271,13 +1329,6 @@ int Dos9_ForGetInputLine(ESTR* lpReturn, INPUTINFO* lpipInfo)
     switch (lpipInfo->cType) {
 
         case INPUTINFO_TYPE_COMMAND:
-            /*
-                iReturn=!Dos9_EsGet(lpReturn, lpipInfo->Info.StreamInfo.pInputStream);
-            */
-
-            iReturn=0;
-            break;
-
         case INPUTINFO_TYPE_STREAM:
             iReturn=!Dos9_EsGet(lpReturn, lpipInfo->Info.pInputFile);
             break;
@@ -1299,6 +1350,7 @@ void Dos9_ForCloseInputInfo(INPUTINFO* lpipInfo)
     switch(lpipInfo->cType) {
 
         case INPUTINFO_TYPE_STREAM:
+        case INPUTINFO_TYPE_COMMAND:
 
             fclose(lpipInfo->Info.pInputFile);
             break;
@@ -1307,13 +1359,49 @@ void Dos9_ForCloseInputInfo(INPUTINFO* lpipInfo)
         case INPUTINFO_TYPE_STRING:
 
             free(lpipInfo->Info.StringInfo.lpString);
-            break;
-
-        case INPUTINFO_TYPE_COMMAND:
-            fclose(lpipInfo->Info.StreamInfo.pInputStream);
-            close(lpipInfo->Info.StreamInfo.iPipeFds[0]);
-            close(lpipInfo->Info.StreamInfo.iPipeFds[1]);
 
     }
+
+}
+
+/* Wrapper for deprecated old FOR /R */
+int  Dos9_CmdForDeprecatedWrapper(ESTR* lpMask, ESTR* lpDir, char* lpAttribute, BLOCKINFO* lpbkCode, char cVarName)
+{
+    FORINFO forInfo={
+         " ", /* no tokens delimiters, since only one
+                token is taken account */
+         "", /* no end-of-line delimiters */
+         0, /* no skipped line */
+         cVarName, /* this is to be fullfiled later (the
+                name letter of loop special var) */
+         FALSE,
+         1, /* the number of tokens we were given */
+         {TOHIGH(1)|TOLOW(-1)} /* get all the token
+                                    back */
+
+     };
+
+     ESTR* lpCommandLine=Dos9_EsInit();
+
+     /* create equivalent for loop using for / */
+     Dos9_EsCpy(lpCommandLine, "'DIR /b /s ");
+     Dos9_EsCat(lpCommandLine, lpAttribute);
+     Dos9_EsCat(lpCommandLine, " ");
+     Dos9_EsCatE(lpCommandLine, lpDir);
+     Dos9_EsCat(lpCommandLine, "/");
+     Dos9_EsCatE(lpCommandLine, lpMask);
+     Dos9_EsCat(lpCommandLine, "'");
+
+     printf("Command Line : %s\n", Dos9_EsToChar(lpCommandLine));
+
+     Dos9_CmdForF(lpCommandLine, lpbkCode, &forInfo);
+
+     Dos9_EsFree(lpCommandLine);
+     return 0;
+
+     error:
+
+         Dos9_EsFree(lpCommandLine);
+         return -1;
 
 }

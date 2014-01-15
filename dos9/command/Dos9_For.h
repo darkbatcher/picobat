@@ -1,3 +1,22 @@
+/*
+ *
+ *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
+ *   Copyright (C) 2010-2014 DarkBatcher
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef DOS9_FOR_H
 #define DOS9_FOR_H
 
@@ -17,6 +36,7 @@
 #define FOR_LOOP_R 1
 #define FOR_LOOP_F 2
 #define FOR_LOOP_L 4
+#define FOR_LOOP_D 3
 
 typedef struct FORINFO {
 	char lpDelims[FILENAME_MAX];
@@ -60,18 +80,12 @@ typedef struct STRINGINFO {
         /* a token to be processed */
 } STRINGINFO;
 
-typedef struct STREAMINFO {
-    int iPipeFds[2];
-    FILE* pInputStream;
-} STREAMINFO;
-
 #define INPUTINFO_TYPE_STREAM 0
 #define INPUTINFO_TYPE_STRING 1
 #define INPUTINFO_TYPE_COMMAND 2 // unused in the struct
 
 union _INPUTINFO_UNION {
         STRINGINFO StringInfo;
-        STREAMINFO StreamInfo;
         FILE* pInputFile;
 };
 
@@ -128,7 +142,7 @@ int Dos9_ForMakeInputInfo(ESTR* lpInput, INPUTINFO* lpipInfo, FORINFO* lpfrInfo)
 
 int Dos9_ForAdjustInput(char* lpInput);
 
-int Dos9_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFd);
+int Dos9_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn, int* iPipeFdOut);
 
 int Dos9_ForGetInputLine(ESTR* lpReturn, INPUTINFO* lpipInfo);
 
@@ -139,6 +153,8 @@ int Dos9_ForGetStringInput(ESTR* lpReturn, STRINGINFO* lpsiInfo);
 void Dos9_ForVarUnassign(FORINFO* lpfrInfo);
 
 int  Dos9_ForVarCheckAssignment(FORINFO* lpfrInfo);
+
+int  Dos9_CmdForDeprecatedWrapper(ESTR* lpMask, ESTR* lpDir, char* lpAttribute, BLOCKINFO* lpbkCode, char cVarName);
 
 
 #endif /* DOS9_FOR_H */

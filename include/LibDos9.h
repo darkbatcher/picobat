@@ -753,7 +753,11 @@ int                     _Dos9_Sort(const void* ptrS, const void* ptrD);
 
             /** Search does not return information about file */
             #define DOS9_SEARCH_NO_STAT 0x04
-        /** \} */
+			
+			/** Search does not return the '..' and '.' directories */
+			#define DOS9_SEARCH_NO_CURRENT_DIR 0x08
+        
+		/** \} */
     /** \} */
     /** \defgroup MATCH_STRUCT File matching structures
         \{ */

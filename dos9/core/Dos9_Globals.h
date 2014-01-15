@@ -1,26 +1,38 @@
+/*
+ *
+ *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
+ *   Copyright (C) 2010-2014 DarkBatcher
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef DOS9_GLOBALS_H
 #define DOS9_GLOBALS_H
 
-int bDelayedExpansion=FALSE;
-int bUseFloats=FALSE;
-int bDos9Extension=FALSE;
-int bEchoOn=TRUE;
-int iErrorLevel=0;
-LPCOMMANDLIST lpclCommands;
-LOCAL_VAR_BLOCK* lpvLocalVars;
-LPSTREAMSTACK lppsStreamStack;
-COLOR colColor;
+extern int bDelayedExpansion;
+extern int bUseFloats;
+extern int bDos9Extension;
+extern int bEchoOn;
+extern int iErrorLevel;
+extern LPCOMMANDLIST lpclCommands;
+extern LOCAL_VAR_BLOCK* lpvLocalVars;
+extern LPSTREAMSTACK lppsStreamStack;
+extern COLOR colColor;
 
-char* lpInitVar[]={
-    "DOS9_VERSION=0.7.01",
-#ifdef WIN32
-    "DOS9_OS=WINDOWS",
-    NULL,
-#else
-    "DOS9_OS=LINUX",
-    NULL,
-#endif
-    NULL
-};
+extern char* lpInitVar[];
+
+extern int iInputD,
+           iOutputD;
 
 #endif

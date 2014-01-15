@@ -1,3 +1,22 @@
+/*
+ *
+ *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
+ *   Copyright (C) 2010-2014 DarkBatcher
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include <errno.h>
 
 #include "Dos9_Stream.h"
@@ -53,21 +72,41 @@ void Dos9_FreeStreamStack(LPSTREAMSTACK lpssStream)
     Dos9_GetStack(lppsStack, (void**)&lpStream);
     if (lpStream)
         return lpStream->iPopLock;
+
     return FALSE;
  }
+
+int Dos9_OpenOutputD(LPSTREAMSTACK lpssStreamStack, int iNewDescriptor, int iDescriptor)
+{
+
+    LPSTREAMLVL lpStream;
+    int  *iStd, /* the descriptor listing current standard descriptors */
+         *iFreeStd; /* the buffer listing descriptor to be freeed on pop */
+
+    Dos9_GetStack(lpssStreamStack, (void**)&lpStream);
+
+    iStd=lpStream->iStandardDescriptors;
+    iFreeStd=lpStream->iFreeDescriptors;
+
+    iFreeStd[iDescriptor]=iNewDescriptor;
+    iStd[iDescriptor]=iNewDescriptor;
+    Dos9_FlushDescriptor(iStd[iDescriptor], iDescriptor);
+
+    return 0;
+}
 
 int Dos9_OpenOutput(LPSTREAMSTACK lpssStreamStack, char* lpName, int iDescriptor, int iMode)
 {
     LPSTREAMLVL lpStream;
-    int* iStd, *iFreeStd;
+    int  *iStd, /* the descriptor listing current standard descriptors */
+         *iFreeStd; /* the buffer listing descriptor to be freeed on pop */
+
     int iRedirectBoth=FALSE;
 
     Dos9_GetStack(lpssStreamStack, (void**)&lpStream);
 
     iStd=lpStream->iStandardDescriptors;
     iFreeStd=lpStream->iFreeDescriptors;
-    DEBUG("Openning a file");
-    DEBUG(lpName);
 
     if (!lpName || iDescriptor>3){
             DEBUG("INVALID ARGUMENT");
@@ -126,16 +165,19 @@ int Dos9_OpenPipe(LPSTREAMSTACK lpssStreamStack)
 
     Dos9_GetStack(lppsStreamStack, (void**)&lpLvl);
     if (lpLvl) {
+
         iOldInputDescriptor=lpLvl->iStandardDescriptors[DOS9_STDIN];
         lpLvl->iFreeDescriptors[DOS9_STDIN]=iPipeDescriptors[0];
         lpLvl->iStandardDescriptors[DOS9_STDIN]=iPipeDescriptors[0];
         lpLvl->iPipeIndicator=TRUE;
+
     }
 
     lppsStreamStack=Dos9_PushStreamStack(lppsStreamStack);
     Dos9_GetStack(lppsStreamStack, (void**)&lpLvl);
 
     if (lpLvl) {
+
         lpLvl->iStandardDescriptors[DOS9_STDIN]=iOldInputDescriptor;
         lpLvl->iStandardDescriptors[DOS9_STDOUT]=iPipeDescriptors[1];
         lpLvl->iFreeDescriptors[DOS9_STDOUT]=iPipeDescriptors[1];

@@ -1,18 +1,39 @@
+/*
+ *
+ *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
+ *   Copyright (C) 2010-2014 DarkBatcher
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef DOS9_MESSAGES_H
 #define DOS9_MESSAGES_H
 
 
 
 #ifdef DOS9_DEBUG_MODE
-    #define DEBUG(a) fprintf( stderr, "$ %s (line %d) * %s\n", __func__, __LINE__, a)
+
+    #define DEBUG(Msg,...) fprintf(stderr, __FILE__ "\t" __func__ ":%d\n\t" Msg "\n", __LINE__, ##__VA_ARGS__)
+
     #define DEBUG_(a) fprintf( stderr, "$ %s (line %d) * %d\n", __func__, __LINE__, a)
     #define DOS9_DEBUG(a) fprintf( stderr, "$ %s (line %d) * %s\n", __func__, __LINE__, a)
 #else
-    #define DOS9_DEBUG(a)
-    #define DEBUG(a)
+
+    #define DEBUG(Msg, ...)
     #define DEBUG_(a)
-    #define DEBUG1(a) fprintf( stdout, "$ %s (line %d) * %s\n", __func__, __LINE__, a)
-    #define DEBUG1_(a) fprintf( stderr, "$ %s (line %d) * %d\n", __func__, __LINE__, a)
+    #define DOS9_DEBUG(a)
+
 #endif
 
 void Dos9_ShowErrorMessage(unsigned int iErrorNumber, const char* lpComplement, int iExitCode);

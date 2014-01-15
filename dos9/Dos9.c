@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2013 DarkBatcher
+ *   Copyright (C) 2010-2014 DarkBatcher
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@
     #define getch(a)
 #endif
 
-#include "libDos9.h"
+#include <libDos9.h>
 
 #include "errors/Dos9_Errors.h"
 
@@ -46,15 +46,8 @@
 
 #include "command/Dos9_ScriptCommands.h"
 #include "command/Dos9_Conditions.h"
+#include "command/Dos9_For.h"
 #include "command/Dos9_CommandInfo.h"
-
-
-/*
-#include "commands/Dos9_FolderCommands.h" // CHDIR, DIR, MKDIR, RMDIR
-#include "commands/Dos9_FileCommands.h" // MOVE, DEL, COPY, REN, TYPE
-#include "commands/Dos9_ScriptCommands.h" // ECHO, SETLOCAL, SET, GOTO, PAUSE, CLS
-#include "commands/Dos9_Conditions.h" // IF, FOR
-*/
 
 
 int main(int argc, char *argv[])
@@ -84,7 +77,7 @@ int main(int argc, char *argv[])
     lpvLocalVars=Dos9_GetLocalBlock();
     Dos9_InitConsole();
 
-    #ifdef WINDOWS
+    #ifdef WIN32
 
         SetThreadLocale(LOCALE_USER_DEFAULT);
 
@@ -125,6 +118,26 @@ int main(int argc, char *argv[])
 
                 case 'Q':
                     bQuiet=TRUE; // run silently
+                    break;
+
+                case 'I':
+                    if (!argv[++i]) {
+
+                        Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "Dos9", -1);
+
+                    }
+
+                    iInputD=atoi(argv[i]); // select input descriptor
+                    break;
+
+                case 'O':
+                    if (!argv[++i]) {
+
+                        Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "Dos9", -1);
+
+                    }
+
+                    iOutputD=atoi(argv[i]); // select input descriptor
                     break;
 
                 case '?':
@@ -193,20 +206,37 @@ int main(int argc, char *argv[])
 
     lpInitVar[2]=lpTitle;
     Dos9_InitVar(lpInitVar);
+
+    atexit(Dos9_Exit);
+
       /**********************************************
        *         Initialization of Modules          *
        **********************************************/
 
     putenv("ERRORLEVEL=0");
+
     lpclCommands=Dos9_MapCommandInfo(lpCmdInfo, sizeof(lpCmdInfo)/sizeof(COMMANDINFO));
-    //printf("CommandList=%d\n",lpclCommands);
+
     Dos9_SendMessage(DOS9_READ_MODULE, MODULE_READ_INIT, NULL, NULL);
     Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_INIT, NULL, NULL);
-    //Dos9_SendMessage(DOS9_VAR_MODULE, MODULE_VAR_INIT, NULL, NULL);
-    DEBUG("Initializing stream environment pointer");
+
     lppsStreamStack=Dos9_InitStreamStack();
+
+    /* getting input intialised (if they are specified) */
+
+    if (iInputD) {
+
+        Dos9_OpenOutputD(lppsStreamStack, iInputD, DOS9_STDIN);
+
+    }
+
+    if (iOutputD) {
+
+        Dos9_OpenOutputD(lppsStreamStack, iOutputD, DOS9_STDOUT);
+
+    }
+
     DEBUG("Done");
-    //Dos9_SendMessage(DOS9_CALL_MODULE, MODULE_CALL_INIT, NULL,NULL);
 
     /* running auto batch initialisation */
     Dos9_UpdateCurrentDir();
@@ -223,10 +253,6 @@ int main(int argc, char *argv[])
     Dos9_SendMessage(DOS9_READ_MODULE, MODULE_READ_SETPOS, NULL, NULL);
 
     Dos9_RunBatch((int)lpFileName); // if we are actually running a script lpFileName is non-zero
-
-    Dos9_FreeCommandList(lpclCommands);
-    Dos9_FreeStreamStack(lppsStreamStack);
-    Dos9_FreeLocalBlock(lpvLocalVars);
 
     return 0;
 

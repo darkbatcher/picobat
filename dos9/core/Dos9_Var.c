@@ -220,6 +220,8 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
     char cFlag[DOS9_VAR_MAX_OPTION+1]={DOS9_ALL_PATH};
     char lpBuffer[FILENAME_MAX];
     char bSeekFile=FALSE, bSplitPath=FALSE;
+    char cVarName,
+         cValidName=TRUE;
 
     struct tm* lTime;
     struct stat stFileInfo;
@@ -241,82 +243,119 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 
     if (!*lpName) return NULL;
 
-    for (;*(lpName+1) && !isblank(*(lpName+1)) && i<DOS9_VAR_MAX_OPTION;lpName++) {
-
-        if (isdigit(*lpName)) {
-            break;
-        }
+    for (;*(lpName) && !strchr("dnpxzta", tolower(*(lpName))) && i<DOS9_VAR_MAX_OPTION;lpName++) {
 
         switch(*lpName | 32)
         {
             case 'd':
 
-                cFlag[i]=DOS9_DISK_LETTER;
+                cFlag[i]='d';
                 i++;
                 bSplitPath=TRUE;
                 break;
 
             case 'n':
 
-                cFlag[i]=DOS9_FILENAME;
+                cFlag[i]='n';
                 i++;
                 bSplitPath=TRUE;
                 break;
 
             case 'p':
 
-                cFlag[i]=DOS9_PATH_PART;
+                cFlag[i]='p';
                 i++;
                 bSplitPath=TRUE;
                 break;
 
             case 'x':
 
-                cFlag[i]=DOS9_EXTENSION;
+                cFlag[i]='x';
                 i++;
                 bSplitPath=TRUE;
                 break;
 
             case 'z':
 
-                cFlag[i]=DOS9_FILESIZE;
+                cFlag[i]='z';
                 i++;
                 bSeekFile=TRUE;
                 break;
 
             case 't':
 
-                cFlag[i]=DOS9_TIME;
+                cFlag[i]='t';
                 i++;
                 bSeekFile=TRUE;
                 break;
 
             case 'a':
 
-                cFlag[i]=DOS9_ATTR;
+                cFlag[i]='a';
                 i++;
                 bSeekFile=TRUE;
                 break;
 
-            default:
-
-                Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpName, FALSE);
-                return NULL;
-
         }
     }
 
-    DOS9_TEST_VARNAME(*lpName);
+    if ((*lpName & 0x80) || (*lpName <= 0x20)) {
 
-    if (!lpvBlock[(int)*lpName]) return NULL;
+        /* the varname is not valid */
+        cValidName=FALSE;
 
-    Dos9_EsCpy(lpRecieve, lpvBlock[(int)*lpName]);
+    } else if (!lpvBlock[(int)*lpName]) {
+
+        cValidName=FALSE;
+
+    }
+
+    if (!cValidName) {
+
+        cVarName=0;
+
+        /* if not, make a descending test */
+        while (i>0) {
+
+            i--;
+            lpName--;
+
+            if (lpvBlock[(int)cFlag[i]]) {
+                /* the flag are all valid varnames */
+
+                cVarName=cFlag[i];
+                break;
+
+            }
+
+        }
+
+        if (cVarName==0)
+            return NULL;
+
+    } else {
+
+        /* if the var is defined */
+        cVarName=*lpName;
+
+    }
+
+    Dos9_EsCpy(lpRecieve, lpvBlock[(int)cVarName]);
     lpPos=Dos9_EsToChar(lpRecieve);
 
-    if (*lpPos=='"') {
+    if (*lpPos=='"' || *lpPos=='\'') {
 
-        if ((lpNext=strrchr(lpPos, '"'))) *lpNext='\0';
-        while (*lpPos) *lpPos=*((lpPos++)+1);
+        if ((lpNext=strrchr(lpPos, *lpPos)))
+            *lpNext='\0';
+
+        while (*(lpPos+1)) {
+
+            *(lpPos)=*(lpPos+1);
+            lpPos++;
+
+        }
+
+        *lpPos='\0';
 
     }
 
@@ -336,38 +375,39 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
         Dos9_EsCpy(lpRecieve, "");
         for (i=0;cFlag[i]!=0; i++) {
             switch (cFlag[i]) {
-                case DOS9_DISK_LETTER:
+
+                case 'd':
                     Dos9_EsCat(lpRecieve, lpDrive);
                     if (cFlag[i+1]!=0) Dos9_EsCat(lpRecieve, "\t");
                     break;
 
-                case DOS9_PATH_PART:
+                case 'p':
                     Dos9_EsCat(lpRecieve, lpDir);
                     if (cFlag[i+1]!=0) Dos9_EsCat(lpRecieve, "\t");
                     break;
 
-                case DOS9_FILENAME:
+                case 'n':
                     Dos9_EsCat(lpRecieve, lpFileName);
                     if (cFlag[i+1]!=0) Dos9_EsCat(lpRecieve, "\t");
                     break;
 
-                case DOS9_EXTENSION:
+                case 'x':
                     Dos9_EsCat(lpRecieve, lpExt);
                     if (cFlag[i+1]!=0) Dos9_EsCat(lpRecieve, "\t");
                     break;
 
-                case DOS9_FILESIZE:
+                case 'z':
                     sprintf(lpBuffer, "%d%c", (int)stFileInfo.st_size, (cFlag[i+1]!=0 ? '\t' : '\0'));
                     Dos9_EsCat(lpRecieve, lpBuffer);
                     break;
 
-                case DOS9_TIME:
+                case 't':
                     lTime=localtime(&stFileInfo.st_atime);
                     sprintf(lpBuffer, "%02d/%02d/%02d %02d:%02d%c", lTime->tm_mday , lTime->tm_mon+1, 1900+lTime->tm_year, lTime->tm_hour, lTime->tm_min, (cFlag[i+1]!=0 ? '\t' : '\0'));
                     Dos9_EsCat(lpRecieve, lpBuffer);
                     break;
 
-                case DOS9_ATTR:
+                case 'a':
                     sprintf(lpBuffer, "       %c", (cFlag[i+1]!=0 ? '\t': '\0'));
                     if (stFileInfo.st_mode & DOS9_FILE_DIR) lpBuffer[0]='D';
                     if (stFileInfo.st_mode & DOS9_FILE_READONLY) lpBuffer[2]='R';
