@@ -1,0 +1,210 @@
+{{What's New ?}}
+
+This a list of fixed bugs and improvements made :
+
+{NOTE} : This list is not a complete list of improovements. The changes made before
+october 2012 were not included since the version started in this dates used almost
+new code.
+
+{{Friday 11th, October 2012}}
+	- Added welcome screen (Two versions)
+
+	- Fixed a parsing bug (The Function Dos9_ParseStream() always returned
+	  NULL)
+
+	- Added initialisation routine ( main() )
+
+	- Added support for testing existing files or dirs
+
+	- Added support for current directory
+
+{{Thursday 6th, December}}
+
+	- Added support of end of line
+
+	- Added commutator '/n' to the command line
+
+	- Added support for echoing
+
+	- Sorted code files for a better understandability
+
+{{Friday 4th, Junuary, 2013}}
+
+	- added severals commands (TYPE/MORE, CLS, COLOR, TITLE, GOTO)
+
+	- added support for english and french
+
+{{Thursday , February}}
+
+	- added api function for file matching (i.e. paths using '*' and '?')
+
+	- added function for cross-platform console management
+
+	- added function to extended strings	
+
+{{Wednesday 20th, February}}
+
+	- fixed many portabiility issues for api
+
+	- api is now cross-platform
+
+	- Dos9 now works pretty well on linux
+
+	- added lot of support for linux
+
+	- fixed a bug with vars under linux
+
+	- thought about use of dynamic files to easily change language
+
+	- Dos9 runs 'Dos9_Auto.bat' at launch, that initializes Variables to be 
+	  Cross-platform
+
+	- Dos9 has now 3 native variables :
+
+		-- %DOS9_OS% : The operating system that is currently running
+		  Dos9
+
+		-- %DOS9_VERSION% : The version of the running Dos9
+		
+		-- %DOS9_PATH% : The path of Dos9 interpreter
+		
+{{Monday 11th, March}}
+
+	- Solve many portability issues (i.e some programs did not work under
+	  Linux)
+
+	- Reprogrammed whole Man utility, which has been named "dman" to avoid
+	  confusion on POSIX-compatible Systems.
+
+		-- DMan is able to run on several platforms natively.
+
+		-- DMan is more simple to use, since it makes it possible to
+		  use links man pages.
+
+	- Fixed some bugs on BatMan
+
+	- BatMan is now mainly portable
+
+	- Fixed a bug in delayed variable expansion
+
+{{Thursday 11th, April}}
+
+	- Corected support of delayed expansion that didn't match to the way
+	  cmd.exe parses it
+
+	- Added support of expression evaluating (might migrate to GNU
+	  LibMathEval soon)
+
+	- Added new kind of page support for dMan, it uses now a zip-compressed 
+	  file that contains several pages and saves up disk
+
+	- Added a console-side text editor (an alternative to BatMan), GNU Nano.
+
+	- Modified nano to highlight batch code.
+
+	- Fixed a bug in a parameter for delayed expansion
+	  (cEnableDelayedExpansion was not taken account).
+	
+{{Thursday 12th, September}}
+
+	- Added UTF-8 support
+
+	- Added different packages :
+		- Dos9 Project HLP : A man page viewer
+		- Dos9 Project TEA : A simple, fast and tiny text processor
+		- Dos9 Project DUMP : A hex-dumper
+	
+	- Added i18n support (through GNU gettext)
+
+	- Added a README file.
+
+{{Tuesday 17th, September}}
+
+	- Fixed bug with the message ``Error : "..." is not recognized as ...'' 
+	  message in linux version.
+
+	- Fixed bug with the wait() function in that made the program hold
+	  indefinetly.
+
+{{Thursday 16th October}}
+
+	- Changed build architecture. Now, the package can be built through
+	a single commmand line, that build all dependencies, i.e.:
+	
+${Make -B}
+
+	- Added a lock specifier to the structure STREAMLVL that enables to fix
+	bugs with nested redirection levels. Like those that occured running the
+	following script:
+
+${IF 1==1 (
+	ECHO This goes to file2 
+	ECHO This goes to file1 > file 1
+	ECHO This goes to file2, again
+) > file 2}
+
+	- Added a kind of old allocated ESTR structure reuser, that avoid reallocating
+	new estr structures. (Saves up speed).
+	
+{{Sunday 27, October}}
+
+	- Some bug fixes, including a bug that appeared with ``%~A''.
+	
+	- Added primary support of {FOR} loops (ie. simple for loop without options).
+	
+{{Friday 13, December}}
+
+	- Solved some bugs in libDos9 (a hazardous non initialized var)
+	
+	- Added support {FOR /F} loops with files as input.
+	
+{{Thursday 2, Junuary , 2014}}
+
+	- Corrected {Dos9_ScriptCommand.c} bugs in which the delayed expansion was not executed
+	even if it was enabled.
+	
+	- Corrected some manual page
+	
+	- added some translated pages
+	
+	- added new {make} system.
+	
+	- added expressions (both {interger} and {float} mode) for the {SET /A} command.
+	
+	- added {FOR /F} loop support with string as input.
+	
+	- added support for top-level blocks.
+	
+{{Thursdat 14}}
+
+	- added final support of {FOR /F} including the use of command outputs as {FOR}
+	input.
+	
+	- added {DOS9_SEARCH_NO_CURRENT_DIR} which does not include the pseudo directories
+	'..' and '.'.
+	
+	- corrected a compatibility bug with {cmd.exe}: {DIR /b} returned the pseudo directories
+	'..' and '.'.
+	
+	- corrected an expansion bug with {%%~a} (and similar var because the interpretor missinterpreted
+	the command if, for example {%%~ax} was badly expanded if {%%x} was not defined). Now, the choosed varaible
+    is the largest match defined.
+	
+	- corrected bug with simple {FOR} processing.
+	
+	- added partial support of {FOR /R}. (Note: this is provided for compatibility purpose, and that new scripts
+	should not use theses switches anymore.)
+	
+	- added version information as a header file, making version management easier.
+	
+	- added a function to be executed automatically on exit.
+	
+	- some minor bugfixes.
+	
+	- some manual pages enhancement.
+	
+{{Wednesday 15, Junuary}}
+
+	- fixed a bug that prevented both {FOR /R} and {FOR /D} to be executed the right way.
+	
+	- fixed a bug with use of {.} in file searches.

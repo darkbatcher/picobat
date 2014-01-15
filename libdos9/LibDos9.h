@@ -753,10 +753,13 @@ int                     _Dos9_Sort(const void* ptrS, const void* ptrD);
 
             /** Search does not return information about file */
             #define DOS9_SEARCH_NO_STAT 0x04
-			
+
 			/** Search does not return the '..' and '.' directories */
-			#define DOS9_SEARCH_NO_CURRENT_DIR 0x08
-        
+			#define DOS9_SEARCH_NO_PSEUDO_DIR 0x08
+
+			/** Search complies with traditional dir behaviour */
+			#define DOS9_SEARCH_DIR_MODE 0x10
+
 		/** \} */
     /** \} */
     /** \defgroup MATCH_STRUCT File matching structures
@@ -811,16 +814,16 @@ typedef struct {
     int iInput;
 } FILEPARAMETER,*LPFILEPARAMETER;
 
-int                 _Dos9_GetMatchPart(char* lpRegExp, char* lpBuffer, int iLength, int iLvl);
+char*               _Dos9_SeekPatterns(char* lpSearch, char* lpPattern);
+char*               _Dos9_SeekCasePatterns(char* lpSearch, char* lpPattern);
+int                 _Dos9_SplitMatchPath(const char* lpPathMatch, char* lpStaticPart, size_t iStaticSize,  char* lpMatchPart, size_t iMatchSize);
+int                 _Dos9_GetMatchPart(const char* lpRegExp, char* lpBuffer, size_t iLength, int iLvl);
 int                 _Dos9_GetMatchDepth(char* lpRegExp);
 int                 _Dos9_MakePath(char* lpPathBase, char* lpPathEnd, char* lpBuffer, int iLength);
-int                 _Dos9_GetMatchInfo(char* lpRegExp, char* lpBuffer, int iLenght, int* lpDepth, int* lpBaseLvl);
 char*               _Dos9_GetFileName(char* lpPath);
-char*               _Dos9_SeekPatterns(char* lpSearch, char* lpPattern);
 int                 _Dos9_FreeFileList(LPFILELIST lpflFileList);
 LPFILELIST          _Dos9_WaitForFileList(LPFILEPARAMETER lpParam);
-LPFILELIST          _Dos9_SeekFiles(char* lpDir, char* lpRegExp, int iLvl, int iMaxLvl, int* iThreadNb, int iOutDescriptor, int iSearchFile);
-LPFILELIST          _Dos9_SeekFilesRecursive(char* lpDir, char* lpRegExp, int* iThreadNb, int iOutDescriptor);
+LPFILELIST          _Dos9_SeekFiles(char* lpDir, char* lpRegExp, int iLvl, int iMaxLvl, int iOutDescriptor, int iSearchFlag);
 
 
 /* declaration for attributes commands */

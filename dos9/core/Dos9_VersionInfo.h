@@ -1,7 +1,7 @@
 #ifndef DOS9_VERSION_INFO_H
 #define DOS9_VERSION_INFO_H
 
-#define DOS9_VERSION "0.7.0.1"
+#define DOS9_VERSION "0.7.2.0"
 #define DOS9_AUTHORS "Romain Garbi (DarkBatcher)"
 #define D0S9_AUTHORSPAD "             "
 #define DOS9_BUILDDATE __DATE__

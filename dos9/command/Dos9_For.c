@@ -1392,8 +1392,6 @@ int  Dos9_CmdForDeprecatedWrapper(ESTR* lpMask, ESTR* lpDir, char* lpAttribute, 
      Dos9_EsCatE(lpCommandLine, lpMask);
      Dos9_EsCat(lpCommandLine, "'");
 
-     printf("Command Line : %s\n", Dos9_EsToChar(lpCommandLine));
-
      Dos9_CmdForF(lpCommandLine, lpbkCode, &forInfo);
 
      Dos9_EsFree(lpCommandLine);

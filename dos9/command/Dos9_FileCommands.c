@@ -174,7 +174,7 @@ int Dos9_CmdDir(char* lpLine)
 
     int iDirNb=0,
         iFileNb=0,
-        iFlag=DOS9_SEARCH_DEFAULT;
+        iFlag=DOS9_SEARCH_DEFAULT | DOS9_SEARCH_DIR_MODE;
 
     short wAttr=DOS9_CMD_ATTR_ALL;
 
@@ -201,7 +201,7 @@ int Dos9_CmdDir(char* lpLine)
             /* use the simple dir output */
             bSimple=TRUE;
             if (!wAttr) iFlag|=DOS9_SEARCH_NO_STAT;
-            iFlag|=DOS9_SEARCH_NO_CURRENT_DIR;
+            iFlag|=DOS9_SEARCH_NO_PSEUDO_DIR;
 
         } else if (!stricmp("/s", lpToken)) {
 
@@ -228,16 +228,30 @@ int Dos9_CmdDir(char* lpLine)
         }
     }
 
+    if (!*lpFileName) {
+        /* if no file or directory name have been specified
+           the put a correct value on it */
+
+        *lpFileName='*';
+        lpFileName[1]='\0';
+
+    }
+
+    /* Get a list of file and directories matching to the
+       current filename and options set */
     lpflList=Dos9_GetMatchFileList(lpFileName, iFlag);
 
     if (!bSimple) puts(lpDirListTitle);
     if (!lpflList) {
+
         if (!bSimple) puts(lpDirNoFileFound);
         Dos9_EsFree(lpParam);
         return 0;
+
     }
 
     for (;lpflList;lpflList=lpflList->lpflNext) {
+
         if (Dos9_CheckFileAttributes(wAttr, lpflList)) {
 
             if (!bSimple) {
