@@ -52,17 +52,17 @@ int MODULE_MAIN Dos9_ParseModule(int iMsg, void* param1, void* param2)
                     Dos9_ReplaceVars(lpesLine);
                     Dos9_EsCatE(lpesCommandLine, lpesLine);
 
-                } while ((iLastParentNb=Dos9_CountParenthese(Dos9_EsToChar(lpesLine),iLastParentNb)) 
+                } while ((iLastParentNb=Dos9_CountParenthese(Dos9_EsToChar(lpesLine),iLastParentNb))
 						 && !Dos9_SendMessage(DOS9_READ_MODULE, MODULE_READ_ISEOF, NULL, NULL));
-						 
-						 
+
+
 
             }
 
             DEBUG(Dos9_EsToChar(lpesCommandLine));
 
 			Dos9_RmTrailingNl(Dos9_EsToChar(lpesCommandLine));
-			
+
             if ((*Dos9_EsToChar(lpesCommandLine)=='\0')) {
                 return ((int)NULL);
             }
@@ -364,7 +364,8 @@ PARSED_STREAM_START* Dos9_ParseStreamOutput(char *lpLine)
 char* Dos9_GetPathToken(char* lpBegin, char* lpAdjust)
 {
     char* lpToken;
-    char cSeekQuote=0;
+    char cSeekQuote=0,
+         cEscapeChar=FALSE;
     char cLastBegin;
     while (*lpBegin=='\t' || *lpBegin==' ') lpBegin++;
 
@@ -377,16 +378,43 @@ char* Dos9_GetPathToken(char* lpBegin, char* lpAdjust)
 
     while (*lpBegin)
     {
-        if (*lpBegin=='"' && cSeekQuote) break;
-        if ((*lpBegin==' ' || *lpBegin=='\t' || *lpBegin=='\n')&& !cSeekQuote) break;
+
+        if (cEscapeChar) {
+
+            cEscapeChar=FALSE;
+            lpBegin++;
+            continue;
+
+        }
+
+        if (*lpBegin=='^') {
+
+            cEscapeChar=TRUE;
+            lpBegin++;
+            continue;
+
+        }
+
+        if (*lpBegin=='"' && cSeekQuote)
+            break;
+
+        if ((*lpBegin==' ' || *lpBegin=='\t'
+             || *lpBegin=='\n' || *lpBegin==')'
+             || *lpBegin=='(' || *lpBegin=='|'
+             || *lpBegin=='&')&& !cSeekQuote)
+                break;
+
+
+
         lpBegin++;
     }
     *lpAdjust='\0';
     cLastBegin=*lpBegin;
     *lpBegin='\0';
     lpToken=strdup(lpToken);
+    *lpBegin=cLastBegin;
 
-    if (cLastBegin) Dos9_AdjustString(lpAdjust, lpBegin+1);
+    if (cLastBegin && cLastBegin) Dos9_AdjustString(lpAdjust, lpBegin);
 
     return lpToken;
 }
@@ -420,14 +448,14 @@ void Dos9_FreeParsedStream(PARSED_STREAM* lppsStream)
 void Dos9_RmTrailingNl(char* lpLine)
 {
 	char cLastChar=0;
-	
+
 	while (*lpLine) {
 
 		cLastChar=*(lpLine++);
-	
+
 	}
-	
-	if (cLastChar=='\n') 
+
+	if (cLastChar=='\n')
 		*(lpLine-1)='\0';
 
 }

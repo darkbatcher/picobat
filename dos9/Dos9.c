@@ -174,6 +174,7 @@ int main(int argc, char *argv[])
 
     Dos9_InitConsole();
 
+
     if (!lpFileName) {
 
         if (!bQuiet)

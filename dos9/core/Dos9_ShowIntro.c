@@ -23,16 +23,47 @@ void Dos9_InitConsole(void) {}
 
 void Dos9_PrintIntroduction(void)
 {
+    char lpDesc[]="                                         ";
+    char lpAuth[]="                                      ";
+
+    size_t iSize=sizeof(lpDesc);
+
+     #ifdef DOS9_BUILDCOMMENTS
+
+        #define DOS9_DESC_TOKEN "Dos9 [" DOS9_VERSION "] - " DOS9_BUILDCOMMENTS
+
+     #else
+
+        #define DOS9_DESC_TOKEN "Dos9 [" DOS9_VERSION "]"
+
+     #endif
+
+    if (sizeof(DOS9_DESC_TOKEN)-1 < iSize)
+        iSize=sizeof(DOS9_DESC_TOKEN)-1;
+
+    strncpy(lpDesc, DOS9_DESC_TOKEN , iSize);
+
+
+    iSize=sizeof(lpAuth);
+    if (sizeof(DOS9_AUTHORS)-1 < iSize)
+        iSize=sizeof(DOS9_AUTHORS)-1;
+
+    strncpy(lpAuth, DOS9_AUTHORS, iSize);
+
     Dos9_SetConsoleTextColor(DOS9_BACKGROUND_IBLUE | DOS9_FOREGROUND_IYELLOW);
-    puts("  ______   _______  _______   _____                                            \n\
- (  __  \\ (  ___  )(  ____ \\ / ___ \\  Dos9 [" DOS9_VERSION "] " DOS9_BUILDCOMMENTS "\n\
+
+    printf("  ______   _______  _______   _____                                            \n\
+ (  __  \\ (  ___  )(  ____ \\ / ___ \\  %s\n\
  | (  \\  )| (   ) || (    \\/( (   ) ) Copyright (c) 2010-" DOS9_BUILDYEAR "                  \n\
- | |   ) || |   | || (_____ ( (___) |   " DOS9_AUTHORS D0S9_AUTHORSPAD "\n\
+ | |   ) || |   | || (_____ ( (___) |    %s\n\
  | |   | || |   | |(_____  ) \\____  |                                          \n\
  | |   ) || |   | |      ) |      ) | This is free software, you can modify    \n\
  | (__/  )| (___) |/\\____) |/\\____) ) and/or redistribute it under the terms   \n\
  (______/ (_______)\\_______)\\______/  of the GNU Genaral Public License V3     \n\
-                                                                               ");
+                                                                               \n",
+           lpDesc,
+           lpAuth
+           );
     Dos9_SetConsoleTextColor(DOS9_COLOR_DEFAULT);
     printf("\n");
 }

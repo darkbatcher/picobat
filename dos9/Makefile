@@ -44,7 +44,7 @@ all: $(TARGET)
 
 # build the main lib
 $(TARGET) : $(OBJ) $(LIB)
-			$(CC) $(CFLAGS) -o $@ $^ $(LIB)
+			$(CC) $(CFLAGS) -o $@ $^
 
 %.o : %.c
 			$(CC) -o $@ -c $< $(CFLAGS)

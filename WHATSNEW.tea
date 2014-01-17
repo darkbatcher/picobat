@@ -208,3 +208,27 @@ ${IF 1==1 (
 	- fixed a bug that prevented both {FOR /R} and {FOR /D} to be executed the right way.
 	
 	- fixed a bug with use of {.} in file searches.
+	
+{{Friday 17, Junuary}}
+
+	- fixed a bug that caused some particular redirections to be misinterpreted, particularly,
+	in blocks ``(echo test>NUL)'' trigered an error, because the output was interpreted to be
+	a redirection to file ``NUL)''. This has been solved, and both '(' , '|' and '&' operators
+	are no prioritary.
+	
+	- modified version information management. Now version are numbered in the folowing way:
+	{YYYY.major.minor[tag]}. Where :
+	
+		- {YYYY} : Is the year the version was released.
+		
+		- {major} : The major version of {Dos9}.
+		
+		- {minor} : The minor version of {Dos9}.
+		
+		- {tag} : An optionnal character, meaning :
+		
+			- {d} : develloper version.
+			
+			- {b} : beta version.
+	
+	
