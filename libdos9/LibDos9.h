@@ -1,8 +1,25 @@
+/*
+ *
+ *   libDos9 - The Dos9 project
+ *   Copyright (C) 2010-2014 DarkBatcher
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 #ifndef LIBDOS9_INCLUDED
 #define LIBDOS9_INCLUDED
-
-/** \file LibDos9.h
-    \brief Dos9 API's header*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,14 +35,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-/* this code contains all the Dos9 API, this code
-    Modifiying these source could cause crash and memory leaks.
-    This code is provided as an open source software, you can modify, redistribute it and all of these components under the following condition:
-        - distribute with this code the name of all those contributited to it before you
-        - distribute under the same licenses conditions
-        - any commercial use of this code is strictly forbiden */
-
-/* Copyright (c) Romain Garbi 2009-2013 */
 
 #ifdef WIN32
 
@@ -800,6 +809,8 @@ int                     _Dos9_Sort(const void* ptrS, const void* ptrD);
             \return Returns a pointer to a FILELIST structure. If the function fails, it returns NULL */
         LIBDOS9 LPFILELIST  Dos9_GetMatchFileList(char* lpPathMatch, int iFlag);
 
+        LIBDOS9 int         Dos9_GetMatchFileCallback(char* lpPathMatch, int iFlag, void(*pCallBack)(FILELIST*));
+
         /** \brief Free a FILELIST structure
             \param lpflFileList : A pointer to the file list to be freed
             \return Returns 0 on success or 1 on failure */
@@ -812,6 +823,7 @@ int                     _Dos9_Sort(const void* ptrS, const void* ptrD);
 typedef struct {
     char bStat;
     int iInput;
+    void(*pCallBack)(FILELIST*);
 } FILEPARAMETER,*LPFILEPARAMETER;
 
 char*               _Dos9_SeekPatterns(char* lpSearch, char* lpPattern);
@@ -823,6 +835,7 @@ int                 _Dos9_MakePath(char* lpPathBase, char* lpPathEnd, char* lpBu
 char*               _Dos9_GetFileName(char* lpPath);
 int                 _Dos9_FreeFileList(LPFILELIST lpflFileList);
 LPFILELIST          _Dos9_WaitForFileList(LPFILEPARAMETER lpParam);
+int                 _Dos9_WaitForFileListCallBack(LPFILEPARAMETER lpParam);
 LPFILELIST          _Dos9_SeekFiles(char* lpDir, char* lpRegExp, int iLvl, int iMaxLvl, int iOutDescriptor, int iSearchFlag);
 
 
@@ -894,12 +907,12 @@ LPFILELIST          _Dos9_SeekFiles(char* lpDir, char* lpRegExp, int iLvl, int i
             \param lpContent : A pointer to a string character
             \return A pointer to the next string character
             \note if encoding is byte based, this is roughly equivalent to lpContent++ */
-        LIBDOS9 char* Dos9_GetNextChar(char* lpContent);
+        LIBDOS9 char* Dos9_GetNextChar(const char* lpContent);
 
     /** \} */
 /** \} */
 
-LIBDOS9 int _Dos9_IsFollowingByte(char* lpChar);
+int _Dos9_IsFollowingByte(const char* lpChar);
 
 LIBDOS9 int Dos9_GetConsoleEncoding(char* lpEnc, size_t iSize);
 

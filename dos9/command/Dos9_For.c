@@ -1392,7 +1392,8 @@ int  Dos9_CmdForDeprecatedWrapper(ESTR* lpMask, ESTR* lpDir, char* lpAttribute, 
      Dos9_EsCatE(lpCommandLine, lpMask);
      Dos9_EsCat(lpCommandLine, "'");
 
-     Dos9_CmdForF(lpCommandLine, lpbkCode, &forInfo);
+     if (Dos9_CmdForF(lpCommandLine, lpbkCode, &forInfo))
+        goto error;
 
      Dos9_EsFree(lpCommandLine);
      return 0;

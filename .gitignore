@@ -1,0 +1,7 @@
+# gitignore file :
+# ignore objects
+*.[o]
+# ignore documentation
+doc/*
+# ignore test
+test/*

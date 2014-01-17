@@ -1,3 +1,22 @@
+/*
+ *
+ *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
+ *   Copyright (C) 2010-2014 DarkBatcher
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 #include <sys/types.h>
 #include <string.h>
 #include <errno.h>
@@ -186,7 +205,9 @@ int Dos9_RunExternalCommand(char* lpCommandLine)
     char* lpArguments[FILENAME_MAX];
     ESTR* lpEstr[FILENAME_MAX];
     int i=0;
+#ifdef _POSIX_C_SOURCE
     pid_t iPid;
+#endif
 
 
     Dos9_GetParamArrayEs(lpCommandLine, lpEstr, FILENAME_MAX);

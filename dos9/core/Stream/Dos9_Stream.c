@@ -156,7 +156,7 @@ int Dos9_OpenPipe(LPSTREAMSTACK lpssStreamStack)
     LPSTREAMLVL lpLvl;
 
     if (_Dos9_Pipe(iPipeDescriptors, 1024, O_TEXT) == -1)
-        return NULL;
+        return -1;
 
     Dos9_GetStack(lppsStreamStack, (void**)&lpLvl);
     if (!lpLvl->iPipeIndicator) {

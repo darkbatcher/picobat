@@ -6,7 +6,7 @@ int _Dos9_TextMode=DOS9_BYTE_ENCODING;
 #define UNICODE_FOLOWING_BYTE_MASK 0xC0
 #define UNICODE_FOLOWING_BYTE_MARK 0x80
 
-int _Dos9_IsFollowingByte(char* lpChar)
+int _Dos9_IsFollowingByte(const char* lpChar)
 {
     if ( ((*lpChar) & UNICODE_FOLOWING_BYTE_MASK) == UNICODE_FOLOWING_BYTE_MARK ) {
 
@@ -19,7 +19,7 @@ int _Dos9_IsFollowingByte(char* lpChar)
     }
 }
 
-char* Dos9_GetNextChar(char* lpContent)
+LIBDOS9 char* Dos9_GetNextChar(const char* lpContent)
 {
 
     if (_Dos9_TextMode==DOS9_UTF8_ENCODING) {
@@ -27,7 +27,7 @@ char* Dos9_GetNextChar(char* lpContent)
 
         if (!(*lpContent & UNICODE_BYTE)) {
             /* il s'agit d'un caractère de la norme ASCII */
-            return lpContent+1;
+            return (char*)lpContent+1;
         }
 
         /* sinon on boucle pour parvenir au prochain caractère */
@@ -41,11 +41,11 @@ char* Dos9_GetNextChar(char* lpContent)
 
         }
 
-        return lpContent;
+        return (char*)lpContent;
 
     } else {
 
-        return lpContent+1;
+        return (char*)lpContent+1;
 
     }
 }

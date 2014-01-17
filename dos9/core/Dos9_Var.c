@@ -35,6 +35,24 @@ int Dos9_InitVar(char* lpArray[])
     return 0;
 }
 
+int Dos9_TestLocalVarName(char cVar)
+{
+    if ((cVar & 0x80) || (cVar <= 0x20)) {
+
+        /* if the name is not strict ASCII, it
+           is not conformant */
+
+        if (cVar && cVar!='\n' && cVar!='\t' && cVar!=' ')
+            Dos9_ShowErrorMessage(DOS9_SPECIAL_VAR_NON_ASCII,
+                                  (const char*)((int)cVar),
+                                  FALSE);
+
+        return -1;
+    }
+
+    return 0;
+}
+
 int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
 {
     char        *lpVarContent, /* a pointer to the environment var string */
@@ -185,7 +203,8 @@ void Dos9_FreeLocalBlock(LOCAL_VAR_BLOCK* lpBlock)
 
 char* Dos9_GetLocalVarPointer(LOCAL_VAR_BLOCK* lpvBlock, char cVarName)
 {
-    DOS9_TEST_VARNAME(cVarName);
+    if (Dos9_TestLocalVarName(cVarName))
+        return NULL;
 
     return lpvBlock[(int)cVarName];
 
@@ -194,13 +213,19 @@ char* Dos9_GetLocalVarPointer(LOCAL_VAR_BLOCK* lpvBlock, char cVarName)
 int Dos9_SetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char cVarName, char* cVarContent)
 {
 
-    DOS9_TEST_VARNAME(cVarName);
-        /* Perform test on value cName, to test its
+     /* Perform test on value cName, to test its
         specification conformance, i.e. the character must be
         a strict ASCII character, exculuding control characters
-        and space (code range from 0x00 to 0x30 included) */
+        and space (code range from 0x00 to 0x20 included) */
 
-    if (lpvBlock[(int)cVarName]) free(lpvBlock[(int)cVarName]);
+    if (Dos9_TestLocalVarName(cVarName))
+        return FALSE;
+
+     /* Free the current content of the variable if it is
+        already allocated */
+
+    if (lpvBlock[(int)cVarName])
+        free(lpvBlock[(int)cVarName]);
 
     if (cVarContent) {
             lpvBlock[(int)cVarName]=strdup(cVarContent);
@@ -232,14 +257,22 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 
     if (*lpName!='~') {
 
-        DOS9_TEST_VARNAME(*lpName);
+        /* this is a conventionnal special variable */
 
-        if (!lpvBlock[(int)*lpName]) return NULL;
+        if (Dos9_TestLocalVarName(*lpName))
+            return NULL;
+
+        if (!lpvBlock[(int)*lpName])
+            return NULL;
+
         Dos9_EsCpy(lpRecieve, lpvBlock[(int)*lpName]);
+
         return lpName+1;
     }
 
     lpName++;
+
+    /* this is an extended special variable */
 
     if (!*lpName) return NULL;
 
@@ -403,7 +436,17 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 
                 case 't':
                     lTime=localtime(&stFileInfo.st_atime);
-                    sprintf(lpBuffer, "%02d/%02d/%02d %02d:%02d%c", lTime->tm_mday , lTime->tm_mon+1, 1900+lTime->tm_year, lTime->tm_hour, lTime->tm_min, (cFlag[i+1]!=0 ? '\t' : '\0'));
+
+                    sprintf(lpBuffer,
+                            "%02d/%02d/%02d %02d:%02d%c",
+                            lTime->tm_mday ,
+                            lTime->tm_mon+1,
+                            1900+lTime->tm_year,
+                            lTime->tm_hour,
+                            lTime->tm_min,
+                            (cFlag[i+1]!=0 ? '\t' : '\0')
+                            );
+
                     Dos9_EsCat(lpRecieve, lpBuffer);
                     break;
 

@@ -1,3 +1,23 @@
+/*
+ *
+ *   HLP - A free cross platform manual manager - The Dos9 project
+ *   Copyright (C) 2010-2014 DarkBatcher
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <locale.h>
@@ -59,7 +79,7 @@ int main (int argc, char* argv[])
         puts("Error : Unable to load LibDos9. Exiting ...");
         exit(-1);
     }
-	
+
     /* initializing gettext lib */
     Dos9_SetNewLineMode(DOS9_NEWLINE_LINUX);
     Dos9_GetConsoleEncoding(lpEnc, sizeof(lpEnc));
@@ -128,7 +148,10 @@ int main (int argc, char* argv[])
 
     }
 
-    if (lpDos9Base=strchr(lpLang, '_')) {
+    if ((lpDos9Base=strchr(lpLang, '_'))) {
+
+        /* select only the first part
+           of the language */
 
         *lpDos9Base='\0';
 

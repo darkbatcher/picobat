@@ -2,10 +2,7 @@
 #include <stdlib.h>
 #include <errno.h>
 
-#include "libDos9.h"
-
-#define UNICODE_FOLOWING_BYTE_MASK 0x80
-#define UNICODE_BYTE 0x80
+#include <libDos9.h>
 
 int hlp_make_IsEncodingUtf8=1;
 
@@ -35,8 +32,6 @@ char hlp_make_SeekUnclosed(ESTR* lpEsContent)
     return cCurrentDelim;
 }
 
-
-
 void hlp_make_LoadHead(char *lpName, ESTR* lpContent)
 {
     FILE* pFile;
@@ -53,71 +48,6 @@ void hlp_make_LoadHead(char *lpName, ESTR* lpContent)
 
     fclose(pFile);
     Dos9_EsFree(lpEsTmp);
-}
-
-int         Tea_IsCharUtf8FolowingByte(char* lpChar)
-{
-    if ((*lpChar & UNICODE_FOLOWING_BYTE_MASK) == UNICODE_FOLOWING_BYTE_MASK) {
-        return TRUE;
-    } else {
-        return FALSE;
-    }
-}
-
-char*       Tea_OutputGetNextChar(char* lpContent) {
-
-    int iUnicodeState;
-
-    if (hlp_make_IsEncodingUtf8) {
-        /* système de gestion des caractères UTF-8 */
-
-        if (!(*lpContent & UNICODE_BYTE)) {
-            /* il s'agit d'un caractère de la norme ASCII */
-            return lpContent+1;
-        }
-
-        /* sinon on boucle pour parvenir au prochain caractère */
-
-        iUnicodeState=Tea_IsCharUtf8FolowingByte(lpContent);
-
-        lpContent++; /* si le code est conforme on devrait pas avoir de problème
-                        vu que le point doit être suivit par des caractères */
-        if (iUnicodeState) {
-            /* on part d'un octet suivant, c'est probablement du little-endian
-               donc on continue jusqu'au prochain octet non suivant */
-
-            while (Tea_IsCharUtf8FolowingByte(lpContent)==TRUE) {
-                lpContent++;
-            }
-
-            /* on arrive donc, soit sur octet de tête, ou sur un octet de
-                l'alphabet ascii, on vérifie les deux */
-
-            if (!(*lpContent & UNICODE_BYTE)) {
-                /* on retourne direct vu que c'est un caractère ascii
-                   même si en toute logique, il ne devrait pas être là il
-                   faut être prudent pour rattraper les erreurs d'encodage */
-                return lpContent;
-
-            } else {
-                /* on est bien dans le cas du petit-boutant, donc on passe au bloc suivant */
-                return lpContent+1;
-            }
-        } else {
-            /* on part d'un octet de tête, donc il s'agit surement de gros boutant */
-
-            /* on va jusqu'a prochain octet non suivant */
-            while (Tea_IsCharUtf8FolowingByte(lpContent)==TRUE) {
-                lpContent++;
-            }
-
-            return lpContent;
-        }
-
-    } else {
-        return lpContent+1;
-    }
-
 }
 
 int hlp_make_LineLength(const char* lpLine)
@@ -138,7 +68,7 @@ int hlp_make_LineLength(const char* lpLine)
                 i++;
         }
 
-        lpLine=Tea_OutputGetNextChar(lpLine);
+        lpLine=(const char*)Dos9_GetNextChar(lpLine);
     }
 
     return i;

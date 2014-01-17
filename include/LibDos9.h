@@ -800,6 +800,8 @@ int                     _Dos9_Sort(const void* ptrS, const void* ptrD);
             \return Returns a pointer to a FILELIST structure. If the function fails, it returns NULL */
         LIBDOS9 LPFILELIST  Dos9_GetMatchFileList(char* lpPathMatch, int iFlag);
 
+        LIBDOS9 int         Dos9_GetMatchFileCallback(char* lpPathMatch, int iFlag, void(*pCallBack)(FILELIST*));
+
         /** \brief Free a FILELIST structure
             \param lpflFileList : A pointer to the file list to be freed
             \return Returns 0 on success or 1 on failure */
@@ -812,6 +814,7 @@ int                     _Dos9_Sort(const void* ptrS, const void* ptrD);
 typedef struct {
     char bStat;
     int iInput;
+    void(*pCallBack)(FILELIST*);
 } FILEPARAMETER,*LPFILEPARAMETER;
 
 char*               _Dos9_SeekPatterns(char* lpSearch, char* lpPattern);
@@ -823,6 +826,7 @@ int                 _Dos9_MakePath(char* lpPathBase, char* lpPathEnd, char* lpBu
 char*               _Dos9_GetFileName(char* lpPath);
 int                 _Dos9_FreeFileList(LPFILELIST lpflFileList);
 LPFILELIST          _Dos9_WaitForFileList(LPFILEPARAMETER lpParam);
+int                 _Dos9_WaitForFileListCallBack(LPFILEPARAMETER lpParam);
 LPFILELIST          _Dos9_SeekFiles(char* lpDir, char* lpRegExp, int iLvl, int iMaxLvl, int iOutDescriptor, int iSearchFlag);
 
 
@@ -894,12 +898,12 @@ LPFILELIST          _Dos9_SeekFiles(char* lpDir, char* lpRegExp, int iLvl, int i
             \param lpContent : A pointer to a string character
             \return A pointer to the next string character
             \note if encoding is byte based, this is roughly equivalent to lpContent++ */
-        LIBDOS9 char* Dos9_GetNextChar(char* lpContent);
+        LIBDOS9 char* Dos9_GetNextChar(const char* lpContent);
 
     /** \} */
 /** \} */
 
-LIBDOS9 int _Dos9_IsFollowingByte(char* lpChar);
+int _Dos9_IsFollowingByte(const char* lpChar);
 
 LIBDOS9 int Dos9_GetConsoleEncoding(char* lpEnc, size_t iSize);
 

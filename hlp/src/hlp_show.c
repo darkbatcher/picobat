@@ -1,3 +1,23 @@
+/*
+ *
+ *   HLP - A free cross platform manual manager - The Dos9 project
+ *   Copyright (C) 2010-2014 DarkBatcher
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -221,7 +241,7 @@ int Hlp_RunCommand(char* lpCmd, char* lpPageName, size_t iNameSize, char* lpTitl
 
         lpCmd+=5;
 
-        if (lpToken=strchr(lpCmd,'\n')) {
+        if ((lpToken=strchr(lpCmd,'\n'))) {
             *lpToken='\0';
         }
 
@@ -252,6 +272,13 @@ int Hlp_RunCommand(char* lpCmd, char* lpPageName, size_t iNameSize, char* lpTitl
 
         }
 
+        /* fixme :
+
+            sometimes the text under the page
+            is not cleared
+
+        */
+
     } else if (!stricmp(lpCmd, "pgup\n")) {
 
         for (iLine=20;iLine && (*lpPage)->lpPreviousLine;iLine--) {
@@ -262,7 +289,7 @@ int Hlp_RunCommand(char* lpCmd, char* lpPageName, size_t iNameSize, char* lpTitl
 
     } else if (!stricmp(lpCmd, "info\n")) {
 
-        Dos9_SetConsoleCursorPosition((CONSOLECOORD){5,22});
+        Dos9_SetConsoleCursorPosition((CONSOLECOORD){5,HLP_BAR_Y});
 
         iLine=Hlp_GetLine(*lpPage);
         iTotalNb=Hlp_GetLineNb(*lpPage);
@@ -275,13 +302,14 @@ int Hlp_RunCommand(char* lpCmd, char* lpPageName, size_t iNameSize, char* lpTitl
 
     } else {
 
-        hlpRunCommandBad:
-
 
         Dos9_SetConsoleTextColor(DOS9_BACKGROUND_WHITE | DOS9_FOREGROUND_IRED);
         Dos9_SetConsoleCursorPosition((CONSOLECOORD){6,HLP_BAR_Y});
 
         printf(gettext("Error : bad command line (type ``HELP'' for avaliable commands)"));
+
+        tBegin=clock();
+        while (clock()-tBegin <= CLOCKS_PER_SEC);
 
     }
 

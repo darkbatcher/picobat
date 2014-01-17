@@ -20,7 +20,8 @@
 #ifndef DOS9_CORE_H_INCLUDED
 #define DOS9_CORE_H_INCLUDED
 
-#include "libDos9.h"
+#include <libDos9.h>
+#include "../errors/Dos9_Errors.h"
 
 #include "Dos9_Context.h"
 

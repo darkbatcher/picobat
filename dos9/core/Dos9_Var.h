@@ -1,3 +1,22 @@
+/*
+ *
+ *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
+ *   Copyright (C) 2010-2014 DarkBatcher
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 #ifndef DOS9_VAR_H
 #define DOS9_VAR_H
 
@@ -37,21 +56,12 @@
 
 typedef char* LOCAL_VAR_BLOCK;
 
-int Dos9_InitVar(char* lpArray[]);
-int Dos9_SetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char cVarName, char* cVarContent);
+int              Dos9_InitVar(char* lpArray[]);
+int              Dos9_SetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char cVarName, char* cVarContent);
 LOCAL_VAR_BLOCK* Dos9_GetLocalBlock(void);
-void Dos9_FreeLocalBlock(LOCAL_VAR_BLOCK* lpBlock);
-char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve);
-int  Dos9_GetVar(char* lpName, ESTR* lpRecieve);
-char* Dos9_GetLocalVarPointer(LOCAL_VAR_BLOCK* lpvBlock, char cVarName);
-
-#define DOS9_TEST_VARNAME(cVar) \
-        if (((cVar) & 0x80) || ((cVar) <= 0x20)) { \
-            /* if cVarName appears to be non-strict ascii format, execpted white
-               spaces, and nul character */ \
-            if (!(isspace(cVar)) && (cVar)) \
-                Dos9_ShowErrorMessage(DOS9_SPECIAL_VAR_NON_ASCII, cVar, FALSE); \
-            return NULL; \
-        }
+void             Dos9_FreeLocalBlock(LOCAL_VAR_BLOCK* lpBlock);
+char*            Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve);
+int              Dos9_GetVar(char* lpName, ESTR* lpRecieve);
+char*            Dos9_GetLocalVarPointer(LOCAL_VAR_BLOCK* lpvBlock, char cVarName);
 
 #endif

@@ -1,3 +1,23 @@
+/*
+ *
+ *   libDos9 - The Dos9 project
+ *   Copyright (C) 2010-2014 DarkBatcher
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 #include <ctype.h>
 #include "../LibDos9.h"
 
@@ -111,6 +131,110 @@ LIBDOS9 int Dos9_FormatFileSize(char* lpBuf, int iLength, unsigned int iFileSize
     }
 }
 
+LIBDOS9 int         Dos9_GetMatchFileCallback(char* lpPathMatch, int iFlag, void(*pCallBack)(FILELIST*))
+{
+    int iDepth; /* to store depth of  regexp */
+    char lpStaticPart[FILENAME_MAX],
+         lpMatchPart[FILENAME_MAX];
+
+    int iFileDescriptors[2],
+        iReturn;
+
+    THREAD hThread;
+
+    FILEPARAMETER fpParam={TRUE, /* include informations on the
+                                    FILEPARAMETER Structures returned */
+                           0,     /* defines the descriptor through which
+                                    the callback funtion will read */
+
+                           pCallBack /* the callback routine in order to benefit from
+                                        from the use of two thread. (this is somewhat
+                                        like asynchronious version of the next function
+                                     */
+                           };
+
+    if (iFlag & DOS9_SEARCH_NO_STAT) {
+        fpParam.bStat=FALSE;
+    }
+
+    _Dos9_SplitMatchPath(lpPathMatch, lpStaticPart, FILENAME_MAX, lpMatchPart, FILENAME_MAX);
+    /* Split the string in two blocks :
+        - lpStaticPart : Part that does not include any
+          regexp symbol.
+
+        - lpMatchPart : Part that include regexp symbols
+
+    */
+
+    iDepth=_Dos9_GetMatchDepth(lpMatchPart);
+
+    /* Set pipe arguments */
+    if (_Dos9_Pipe(iFileDescriptors, 1024, O_BINARY)==-1) return 0;
+    fpParam.iInput=iFileDescriptors[0];
+
+
+	/* start the thread that gather answers */
+    hThread=Dos9_BeginThread((void(*)(void*))_Dos9_WaitForFileListCallBack,
+                             0,
+                             (void*)(&fpParam)
+                             );
+
+	if (!*lpStaticPart && *lpMatchPart) {
+
+        /* add the current directory to the default
+           static path
+        */
+
+        *lpStaticPart='.';
+        lpStaticPart[1]='\0';
+
+	}
+
+	if (*lpStaticPart && !*lpMatchPart) {
+
+        if (Dos9_DirExists(lpStaticPart) && (iFlag & DOS9_SEARCH_DIR_MODE)) {
+
+            /* if the regexp is trivial but corresponds to a directory and
+               if the dir-compliant mode has been set, then the regexp will
+               browse the directory */
+
+            *lpMatchPart='*';
+            lpMatchPart[1]='\0';
+
+        } else if (Dos9_DirExists(lpStaticPart) || Dos9_FileExists(lpStaticPart)) {
+
+            /* if the regexp is trivial (ie. no regexp characters)
+               then perform direct test and add it if go to end */
+
+            write(iFileDescriptors[1], lpStaticPart, FILENAME_MAX);
+            goto Dos9_GetMatchFileList_End;
+
+        }
+
+	}
+
+    /* Start regexp-based file research */
+    _Dos9_SeekFiles(lpStaticPart,
+                    lpMatchPart,
+                    1,
+                    iDepth,
+                    iFileDescriptors[1],
+                    iFlag);
+
+	Dos9_GetMatchFileList_End:
+
+        if (write(iFileDescriptors[1], "\1", 1)==-1) return 0;
+
+        Dos9_WaitForThread(hThread);
+        Dos9_GetThreadExitCode(hThread, &iReturn);
+
+        close(iFileDescriptors[0]);
+        close(iFileDescriptors[1]);
+
+        return iReturn;
+
+}
+
 LIBDOS9 LPFILELIST  Dos9_GetMatchFileList(char* lpPathMatch, int iFlag)
 {
     int iDepth; /* to store depth of  regexp */
@@ -122,8 +246,9 @@ LIBDOS9 LPFILELIST  Dos9_GetMatchFileList(char* lpPathMatch, int iFlag)
 
     FILEPARAMETER fpParam={TRUE, /* include informations on the
                                     FILEPARAMETER Structures returned */
-                           0     /* defines the descriptor through which
+                           0,    /* defines the descriptor through which
                                     the callback funtion will read */
+                           NULL  /* no callback */
                            };
 
     if (iFlag & DOS9_SEARCH_NO_STAT) {
@@ -570,6 +695,55 @@ LPFILELIST _Dos9_WaitForFileList(LPFILEPARAMETER lpParam)
 
     Dos9_EndThreadEx(lpflCurrent);
     return lpflCurrent;
+}
+
+int                 _Dos9_WaitForFileListCallBack(LPFILEPARAMETER lpParam)
+{
+    char lpFileName[FILENAME_MAX];
+    char cUseStat=lpParam->bStat;
+    int iInDescriptor=lpParam->iInput,
+        i=0;
+    void(*pCallback)(FILELIST*)=lpParam->pCallBack;
+
+    FILELIST flElement;
+
+    while (TRUE) {
+
+        /* get data from the descriptor (take a large amount
+           of FILENAME_MAX bytes because of binary type of
+           the descriptor). */
+        if (read(iInDescriptor, lpFileName, FILENAME_MAX)) {
+
+            if (*lpFileName=='\1')
+                break;
+
+            strcpy(flElement.lpFileName, lpFileName);
+
+            if (cUseStat) {
+
+                stat(lpFileName, &(flElement.stFileStats));
+
+                #ifdef WIN32
+
+                    /* Using windows, more detailled directory information
+                       can be obtained */
+                    flElement.stFileStats.st_mode=Dos9_GetFileAttributes(lpFileName);
+
+                #endif // WIN32
+
+            }
+
+            /* use the callback function */
+            pCallback(&flElement);
+
+            i++;
+
+        }
+
+    }
+
+    Dos9_EndThreadEx(i);
+    return i;
 }
 
 int _Dos9_FreeFileList(LPFILELIST lpflFileList)
