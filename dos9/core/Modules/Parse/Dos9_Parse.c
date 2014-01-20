@@ -29,9 +29,12 @@ int MODULE_MAIN Dos9_ParseModule(int iMsg, void* param1, void* param2)
    static ESTR *lpesCommandLine, *lpesLine;
    ESTR* lpTmp;
    char* const lpCurrentDir=Dos9_GetCurrentDir();
+   char* lpCh;
    PARSED_STREAM* lppsParsedStream;
    PARSED_STREAM_START* lppssStreamStart;
-   int iLastParentNb;
+   int iLastParentNb,
+       iBlock=-1,
+       bEchoCommand=TRUE;
 
    switch(iMsg) {
 
@@ -59,11 +62,14 @@ int MODULE_MAIN Dos9_ParseModule(int iMsg, void* param1, void* param2)
             }
 
             if ((char*)param1!=NULL) {
+
                 Dos9_EsCpy(lpesCommandLine, (char*)param1);
                 DEBUG("Copy the content of the line");
+
             } else {
 
                 do {
+
                     Dos9_SendMessage(DOS9_READ_MODULE, MODULE_READ_GETLINE, lpesLine,NULL);
                     DEBUG("Reading line from the file");
                     DEBUG(Dos9_EsToChar(lpesLine));
@@ -71,8 +77,12 @@ int MODULE_MAIN Dos9_ParseModule(int iMsg, void* param1, void* param2)
                     Dos9_ReplaceVars(lpesLine);
                     Dos9_EsCatE(lpesCommandLine, lpesLine);
 
+                    if (iBlock == -1)
+                        iBlock=Dos9_CheckIfBlock(lpesLine);
+
                 } while ((iLastParentNb=Dos9_CountParenthese(Dos9_EsToChar(lpesLine),iLastParentNb))
-						 && !Dos9_SendMessage(DOS9_READ_MODULE, MODULE_READ_ISEOF, NULL, NULL));
+						 && !Dos9_SendMessage(DOS9_READ_MODULE, MODULE_READ_ISEOF, NULL, NULL)
+                         && iBlock);
 
 
 
@@ -80,14 +90,30 @@ int MODULE_MAIN Dos9_ParseModule(int iMsg, void* param1, void* param2)
 
             DEBUG(Dos9_EsToChar(lpesCommandLine));
 
+
+            /* remove the trailing new line */
 			Dos9_RmTrailingNl(Dos9_EsToChar(lpesCommandLine));
 
-            if ((*Dos9_EsToChar(lpesCommandLine)=='\0')) {
+			lpCh=Dos9_EsToChar(lpesCommandLine);
+
+			while (*lpCh==' ' || *lpCh=='\t' || *lpCh=='@') {
+
+                if (*lpCh=='@')
+                    bEchoCommand=FALSE;
+
+                lpCh++;
+
+			}
+
+            if (*lpCh=='\0' || *lpCh==':') {
+
+                /* don't process the line if it is either a commentary
+                   or a label */
                 return ((int)NULL);
             }
 
 
-            if (bEchoOn && param2 && *(Dos9_EsToChar(lpesCommandLine))!='@') {
+            if (bEchoOn && param2 && bEchoCommand) {
 
               DEBUG("Displaying cd for files");
               printf("\nDOS9  %s>", lpCurrentDir);
@@ -198,7 +224,9 @@ PARSED_STREAM* Dos9_ParseStream(char* lpLine)
     int iNbParenthese=0;
     PARSED_STREAM* lppsFirstParsedLine=NULL, *lppsParsedLine;
     lppsFirstParsedLine=lppsParsedLine=Dos9_AllocParsedStream(NULL);
+
     for (;*lpLine;lpLine++) {
+
         if (cLastEscape) {
             cLastEscape=0;
             continue;
@@ -279,7 +307,6 @@ PARSED_STREAM* Dos9_ParseStream(char* lpLine)
     }
 
     Dos9_EsCpy(lppsParsedLine->lpCmdLine, ptrToken);
-    Dos9_EsCat(lppsParsedLine->lpCmdLine, " ");
     DEBUG(ptrToken);
     return lppsFirstParsedLine;
 }
@@ -312,14 +339,16 @@ PARSED_STREAM_START* Dos9_AllocParsedStreamStart(void)
 PARSED_STREAM_START* Dos9_ParseStreamOutput(char *lpLine)
 {
     int iParentheseNb=0;
-    int iLastEscape=1;
+    int iLastEscape=0;
     char* lpLastLine;
     PARSED_STREAM_START* lppssStreamStart=Dos9_AllocParsedStreamStart();
     for (;*lpLine;lpLine++) {
+
         if (iLastEscape) {
             iLastEscape=0;
             continue;
         }
+
         if (iParentheseNb==0) {
 
             switch (*lpLine){
@@ -476,5 +505,42 @@ void Dos9_RmTrailingNl(char* lpLine)
 
 	if (cLastChar=='\n')
 		*(lpLine-1)='\0';
+
+}
+
+int Dos9_CheckIfBlock(ESTR* lpesLine)
+{
+    char* lpCh=Dos9_EsToChar(lpesLine);
+
+    /* this is for compatibility purpose */
+
+    do {
+
+        /* skip all blank symbols */
+        while (*lpCh==' ' || *lpCh=='\t' || *lpCh=='@')
+            lpCh++;
+
+        /* if a command or a top level block is found
+           then, return that we must look for a block */
+        if (!strnicmp(lpCh, "FOR ", 4)
+            || !strnicmp(lpCh, "IF ", 3)
+            || *lpCh=='(') {
+
+            return TRUE;
+
+        }
+
+        while (*lpCh && *lpCh!='|' && *lpCh!='&')
+            lpCh++;
+
+        if (*lpCh)
+            lpCh++;
+
+        if (*lpCh=='|' || *lpCh=='&')
+            lpCh++;
+
+    } while (*lpCh);
+
+    return FALSE;
 
 }

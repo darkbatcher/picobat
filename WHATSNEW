@@ -159,7 +159,7 @@ FRIDAY 13, DECEMBER
 
         - Added support FOR /F loops with files as input.
 
-THURSDAY 2, JUNARY , 2014
+THURSDAY 2, JUNUARY , 2014
 
         - Corrected DOS9_SCRIPTCOMMAND.C bugs in which the delayed expansion 
           was not executed even if it was enabled.
@@ -176,5 +176,71 @@ THURSDAY 2, JUNARY , 2014
         - added FOR /F loop support with string as input.
 
         - added support for top-level blocks.
-		
+
+THURSDAT 14
+
+        - added final support of FOR /F including the use of command outputs 
+          as FOR input.
+
+        - added DOS9_SEARCH_NO_CURRENT_DIR which does not include the pseudo 
+          directories '..' and '.'.
+
+        - corrected a compatibility bug with CMD.EXE: DIR /B returned the 
+          pseudo directories '..' and '.'.
+
+        - corrected an expansion bug with %%~A (and similar var because the 
+          interpretor missinterpreted the command if, for example %%~AX was 
+          badly expanded if %%X was not defined). Now, the choosed varaible is
+          the largest match defined.
+
+        - corrected bug with simple FOR processing.
+
+        - added partial support of FOR /R. (Note: this is provided for 
+          compatibility purpose, and that new scripts should not use theses 
+          switches anymore.)
+
+        - added version information as a header file, making version management
+          easier.
+
+        - added a function to be executed automatically on exit.
+
+        - some minor bugfixes.
+
+        - some manual pages enhancement.
+
+WEDNESDAY 15, JUNUARY
+
+        - fixed a bug that prevented both FOR /R and FOR /D to be executed 
+          the right way.
+
+        - fixed a bug with use of . in file searches.
+
+FRIDAY 17, JUNUARY
+
+        - fixed a bug that caused some particular redirections to be 
+          misinterpreted, particularly, in blocks ``(echo test>NUL)'' trigered 
+          an error, because the output was interpreted to be a redirection to 
+          file ``NUL)''. This has been solved, and both '(' , '|' and '&' 
+          operators are no prioritary.
+
+        - modified version information management. Now version are numbered in 
+          the folowing way: YYYY.MAJOR.MINOR[TAG]. Where :
+
+        - YYYY : Is the year the version was released.
+
+        - MAJOR : The major version of DOS9.
+
+        - MINOR : The minor version of DOS9.
+
+        - TAG : An optionnal character, meaning :
+
+        - D : develloper version.
+
+        - B : beta version.
+
+        - fixed problem with broken make.
+
+        - Enhanced features of FILELIST* functions of libDos9. Search is now 
+          quicker. It also resulted in better execution times of the FOR /R 
+          function (even though still deprecated).
 

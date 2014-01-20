@@ -44,9 +44,15 @@ int Dos9_CmdEcho(char* lpLine)
 
     lpLine+=4;
 
-    if (*lpLine==' ') {
+    if (*lpLine=='\0') {
 
-         if (Dos9_GetNextParameterEs(lpLine, lpEsParameter)) {
+        /* si rien n'est entré on affiche l'état de la commannd echo */
+        if (bEchoOn) puts(lpMsgEchoOn);
+        else puts(lpMsgEchoOff);
+
+    } else {
+
+        if (Dos9_GetNextParameterEs(lpLine, lpEsParameter)) {
 
             if (!stricmp(Dos9_EsToChar(lpEsParameter), "OFF")) {
 
@@ -62,7 +68,8 @@ int Dos9_CmdEcho(char* lpLine)
 
             } else {
 
-                goto print;
+                Dos9_GetEndOfLine(lpLine+1, lpEsParameter);
+                puts(Dos9_EsToChar(lpEsParameter));
 
             }
 
@@ -73,13 +80,6 @@ int Dos9_CmdEcho(char* lpLine)
             else puts(lpMsgEchoOff);
 
          }
-
-    } else {
-
-        print:
-
-        Dos9_GetEndOfLine(lpLine+1, lpEsParameter);
-        puts(Dos9_EsToChar(lpEsParameter));
 
     }
 

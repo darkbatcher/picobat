@@ -77,6 +77,8 @@ PARSED_STREAM* Dos9_ParseStream(char* lpLine);
 void Dos9_FreeParsedStream(PARSED_STREAM* lppsStream);
 void Dos9_FreeParsedStreamStart(PARSED_STREAM_START* lppssStart);
 
+int Dos9_CheckIfBlock(ESTR* lpesLine);
+
 
 void Dos9_ReplaceVars(ESTR* ptrCommandLine);
 char* Dos9_StrToken(char* lpString, char cToken);

@@ -6,39 +6,42 @@
 #include "Dos9_Conditions.h"
 #include "Dos9_For.h"
 
-#define DOS9_COMMANDINFO_DEXPANDALL 1
+#define STRLEN(str) (sizeof(str)-1)
+
+/* the flag paramater detemines wether a space should be
+   searched */
 
 COMMANDINFO lpCmdInfo[]={
-                            {"ECHO ", Dos9_CmdEcho, 0},
-                            {"ECHO.", Dos9_CmdEcho, 0},
-                            {"EXIT ", Dos9_CmdExit, 0},
-                            {"PAUSE ", Dos9_CmdPause, 0},
-                            {"SET ", Dos9_CmdSet, 0},
-                            {"SETLOCAL ", Dos9_CmdSetLocal, 0},
-                            {"HELP ", Dos9_CmdHelp, 0},
-                            {"REM ", Dos9_CmdRem, 0},
-                            {"CLS ", Dos9_CmdCls, 0},
-                            {"COLOR ", Dos9_CmdColor, 0},
-                            {"TITLE ", Dos9_CmdTitle, 0},
-                            {"TYPE ", Dos9_CmdType, 0},
-                            {"MORE ", Dos9_CmdType, 0},
-                            {"GOTO ", Dos9_CmdGoto, 0},
+                            {"ECHO", Dos9_CmdEcho, STRLEN("ECHO")},
+                            {"ECHO.", Dos9_CmdEcho,0},
+                            {"EXIT", Dos9_CmdExit, STRLEN("EXIT")},
+                            {"PAUSE", Dos9_CmdPause, STRLEN("PAUSE")},
+                            {"SET", Dos9_CmdSet, STRLEN("SET")},
+                            {"SETLOCAL", Dos9_CmdSetLocal, STRLEN("SETLOCAL")},
+                            {"HELP", Dos9_CmdHelp, STRLEN("HELP")},
+                            {"REM", Dos9_CmdRem, STRLEN("REM")},
+                            {"CLS", Dos9_CmdCls, STRLEN("CLS")},
+                            {"COLOR", Dos9_CmdColor, STRLEN("COLOR")},
+                            {"TITLE", Dos9_CmdTitle, STRLEN("TITLE")},
+                            {"TYPE", Dos9_CmdType, STRLEN("TITLE")},
+                            {"MORE", Dos9_CmdType, STRLEN("MORE")},
+                            {"GOTO", Dos9_CmdGoto, STRLEN("GOTO")},
                             {"GOTO:", Dos9_CmdGoto, 0},
-                            {"CD ", Dos9_CmdCd, 0},
-                            {"CHDIR ", Dos9_CmdCd, 0},
-                            {"DIR ", Dos9_CmdDir, 0},
-                            {"IF ", Dos9_CmdIf, 0},
-                            {"DEL", Dos9_CmdDel, 0},
-                            {"ERASE", Dos9_CmdDel, 0},
-                            {"REN", Dos9_CmdRen, 0},
-                            {"RENAME", Dos9_CmdRen, 0},
-                            {"MOVE", Dos9_CmdMove, 0},
-                            {"MD", Dos9_CmdMkdir, 0},
-                            {"MKDIR", Dos9_CmdMkdir, 0},
-                            {"RD", Dos9_CmdRmdir, 0},
-                            {"RMDIR", Dos9_CmdRmdir, 0},
-                            {"COPY", Dos9_CmdCopy, 0},
-                            {"FOR", Dos9_CmdFor, 0},
+                            {"CD", Dos9_CmdCd, STRLEN("CD")},
+                            {"CHDIR", Dos9_CmdCd, STRLEN("CHDIR")},
+                            {"DIR", Dos9_CmdDir, STRLEN("DIR")},
+                            {"IF", Dos9_CmdIf, STRLEN("IF")},
+                            {"DEL", Dos9_CmdDel, STRLEN("DEL")},
+                            {"ERASE", Dos9_CmdDel, STRLEN("ERASE")},
+                            {"REN", Dos9_CmdRen, STRLEN("REN")},
+                            {"RENAME", Dos9_CmdRen, STRLEN("RENAME")},
+                            {"MOVE", Dos9_CmdMove, STRLEN("MOVE")},
+                            {"MD", Dos9_CmdMkdir, STRLEN("MD")},
+                            {"MKDIR", Dos9_CmdMkdir, STRLEN("MKDIR")},
+                            {"RD", Dos9_CmdRmdir, STRLEN("RD")},
+                            {"RMDIR", Dos9_CmdRmdir, STRLEN("RMDIR")},
+                            {"COPY", Dos9_CmdCopy, STRLEN("COPY")},
+                            {"FOR", Dos9_CmdFor, STRLEN("FOR")},
                             {"(", Dos9_CmdBlock, 0}
                         };
 

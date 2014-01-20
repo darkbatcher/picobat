@@ -9,9 +9,15 @@
 #define TITLE_ON 0x08
 #define HEADERS_ON 0x10
 
+#define LITTLE_ENDIAN 0
+#define BIG_ENDIAN 1
+
+#define ENDIANESS LITTLE_ENDIAN
+/* the default endianness mode */
+
 /* Ce progrmamme est un essais pour lire une capteur ccD */
 
-char lpLicense[]="\n\n    Dos9 DUMP, a free file bynary dumper                                   \n\
+char lpLicense[]="\n\n    Dos9 DUMP, a free file bynary dumper, The Dos9 Project                 \n\
     Copyright (C) 2013 Darkbatcher (Romain Garbi)\n\
 \n\
     This program is free software: you can redistribute it and/or modify\n\
@@ -27,7 +33,7 @@ char lpLicense[]="\n\n    Dos9 DUMP, a free file bynary dumper                  
     You should have received a copy of the GNU General Public License\n\
     along with this program.  If not, see <http://www.gnu.org/licenses/>.\n\n";
 
-char lpHlpFr[]="Dump.exe [version 0.1] - copyright (c) 2013 Darkbatcher (Romain Garbi)\n\
+char lpHlpFr[]="Dump.exe [version 1.0] - copyright (c) 2013 Darkbatcher (Romain Garbi)\n\
 Cette commande fait partie du set de commandes Dos9\n\
 Ce programme est un logiciel Libre, pour plus d'information, tapez ``dump /l''\n\
 \n\
@@ -68,6 +74,29 @@ union InputData {
         short sCoord;
         char cCoord;
 };
+
+void Dump_ReverseBytes(union InputData* lpData, size_t iSize)
+{
+    char* lpBuffer=(char*)lpData;
+    int i;
+    size_t iMid;
+
+    /* simply don't do it if there are no need to do that */
+    if ((iSize % 2) != 0) return;
+
+    iMid=iSize/2-1;
+    iSize--;
+
+    for (i=0;i<=iMid;i++) {
+
+        /* swap byte (i) and (iSize-i) */
+        lpBuffer[i]^=lpBuffer[iSize-i];
+        lpBuffer[iSize-i]^=lpBuffer[i];
+        lpBuffer[i]^=lpBuffer[iSize-i];
+
+    }
+
+}
 
 void Dump_ShowHelp(void)
 {
@@ -118,20 +147,25 @@ void Dump_PrintHeader(FILE* pData, size_t iNumberSize, int iLineTokenNb, size_t 
         if ( ((unsigned int)lpToken-(unsigned int)lpLine+(unsigned int)iNumberSize) >= 80) {
             break;
         }
+
         Dump_ProduceNumber(lpToken, iNumberSize, "%X", &uData);
         lpToken+=iNumberSize;;
         uData.iCoord+=iDatasize;
+
     }
+
     if (((unsigned int)lpToken-(unsigned int)lpLine+(unsigned int)iNumberSize) <= 80) {
         strcpy(lpToken, "Char dump");
         lpToken+=sizeof("Char dump");
     }
+
     *lpToken='\0';
     fputs(lpLine, pData); /* on affiche la ligne */
     fputs("\n\n", pData); /* on ajoute un retour à la ligne */
 }
 
-void Dump_DumpFile(FILE* pFile, FILE* pData, size_t iDataSize, size_t iNumberSize, int iLineTokenNb, int iLineNb, char* lpFormat, int iFlag)
+void Dump_DumpFile(FILE* pFile, FILE* pData, size_t iDataSize, size_t iNumberSize, int iLineTokenNb,
+                                int iLineNb, char* lpFormat, char iEndianess, int iFlag)
 {
     int i=0;
     int j=0;
@@ -155,7 +189,15 @@ void Dump_DumpFile(FILE* pFile, FILE* pData, size_t iDataSize, size_t iNumberSiz
 
 
     while (1) {
+
         iAddress+=fread(&uData, 1, iDataSize, pFile);
+
+        if (iEndianess != ENDIANESS) {
+
+            Dump_ReverseBytes(&uData, iDataSize);
+
+        }
+
         if (feof(pFile)) {
             break;
         }
@@ -178,12 +220,14 @@ void Dump_DumpFile(FILE* pFile, FILE* pData, size_t iDataSize, size_t iNumberSiz
         j++;
 
         if (i==21) { /* screen pause */
+
                 if (iFlag & PAGE_MODE_ON) {
                         printf("\nPress ``ENTER'' to continue dumping");
                         while (getchar()!='\n');
                         Dump_PrintHeader(pData,iNumberSize , iLineTokenNb, iDataSize ,iFlag & ADDRESSES_ON);
                 }
                 i=0;
+
         }
 
         if (j==iLineTokenNb) {
@@ -233,6 +277,7 @@ void Dump_DumpFile(FILE* pFile, FILE* pData, size_t iDataSize, size_t iNumberSiz
                     Dump_DumpChar(pData, lpCharDump, sizeof(lpCharDump));
         }
         fputc('\n', pData); /* on ajoute un retour à la ligne */
+
     }
 }
 
@@ -245,10 +290,13 @@ int main(int argc, char* argv[])
 
     size_t iNumberSize=3;
 
-    int i,j;
+    int i,j,
+        iHex=0;
 
     int iFlag=ADDRESSES_ON | CHARS_ON | TITLE_ON;
     int iLineTokenNb=16;
+
+    char iEndianness=ENDIANESS;
 
     char lpFormat[]="%02X";
     char *lpOutput=NULL, *lpInput=NULL;
@@ -258,8 +306,10 @@ int main(int argc, char* argv[])
     char* lpDataTypes[]={"","char","short","","int/float", "", "", "", "double"};
 
     for (i=1;argv[i];i++) {
+
         if (*argv[i]=='/') {
             switch(toupper(*(argv[i]+1))) {
+
                 case 'T':
                     argv[i]+=2;
                     if (*argv[i]==':') argv[i]++;
@@ -271,18 +321,21 @@ int main(int argc, char* argv[])
                             iNumberSize=13;
                             iLineTokenNb=4;
                             break;
+
                         case 'D':
                             iDataSize=sizeof(double);
                             strcpy(lpFormat, "%E");
                             iNumberSize=25;
                             iLineTokenNb=2;
                             break;
+
                         case 'I':
                             strcpy(lpFormat, "%d");
                             iDataSize=sizeof(int);
                             iNumberSize=13;
                             iLineTokenNb=4;
                             break;
+
                         case 'S':
                             strcpy(lpFormat, "%d");
                             iDataSize=sizeof(short);
@@ -298,19 +351,23 @@ int main(int argc, char* argv[])
                             break;
 
                         default:
-                            printf("Erreur ! ``%c'' n'est pas un type de donne valide\n", argv[i]);
+                            printf("Error ! ``%c'' is not a valid data type\n", argv[i]);
                     }
                     break;
 
                 case 'P': // attend confirmation avant d'afficher une nouvelle page
                     iFlag|=PAGE_MODE_ON;
                     break;
+
                 case 'B':
                     iFlag = 0;
-                    break;
+                    if (!iHex) break;
+
                 case 'H': // utilise le mode héxadécimal
+                    iHex=1;
                     switch(iDataSize) {
                         case 1:
+
                             if (iFlag) {
                                 iNumberSize=3;
                                 iLineTokenNb=16;
@@ -320,6 +377,7 @@ int main(int argc, char* argv[])
                             }
                             strcpy(lpFormat, "%02X");
                             break;
+
                         case 2:
                             if (iFlag) {
                                 iNumberSize=6;
@@ -346,25 +404,50 @@ int main(int argc, char* argv[])
                             strcpy(lpFormat, "%f");
                     }
                     break;
+
                 case '?':
                     Dump_ShowHelp();
                     return EXIT_SUCCESS;
+
                 case 'L':
                     Dump_ShowLicence();
                     return EXIT_SUCCESS;
+
+                case 'E':
+                    argv[i]+=2;
+                    if (*argv[i]==':') argv[i]++;
+
+                    switch (toupper(*argv[i])) {
+
+                        case 'L':
+                            iEndianness=LITTLE_ENDIAN;
+                            break;
+
+                        case 'B':
+                            iEndianness=BIG_ENDIAN;
+                            break;
+
+                        default:
+                            printf("Error : ``%c'' is not a valid endianness flavour.",
+                                   *argv[i]);
+                    }
+                    break;
+
                 default:
-                    printf("Erreur ! Commutateur incoret (``%s'')\n", argv[i]);
+                    printf("Error : Invalid switch (``%s'')\n", argv[i]);
                     return EXIT_FAILURE;
             }
         } else {
+
             if (!lpInput) {
                 lpInput=argv[i];
             } else if (!lpOutput) {
                 lpOutput=argv[i];
             } else {
-                printf("Erreur ! Argument invalide ``%s''\n", argv[i]);
+                printf("Error, invalid argument ``%s''\n", argv[i]);
                 return EXIT_FAILURE;
             }
+
         }
     }
 
@@ -374,13 +457,13 @@ int main(int argc, char* argv[])
         pData=stdout;
     } else {
         if (!(pData=fopen(lpOutput, "w+"))) {
-            printf("Erreur ! Impossible d'ouvrir le fichier ``%s''\n", lpOutput);
+            printf("Error : Can't find file ``%s''\n", lpOutput);
             return EXIT_FAILURE;
         }
     }
 
     if (!(pFile=fopen(lpInput, "rb"))) {
-        printf("Erreur !  impossible de trouver le fichier ``%s''", lpInput);
+        printf("Error : Can't find file ``%s''", lpInput);
         return EXIT_FAILURE;
     }
 
@@ -388,7 +471,7 @@ int main(int argc, char* argv[])
             fprintf(pData, "Dumping content of ``%s'' using data type ``%s'' and format ``%s''\nGenerated by Dos9 Dump.exe - copyleft (c) darkbatcher\n\n", lpInput, lpDataTypes[iDataSize], lpFormat);
     }
 
-    Dump_DumpFile(pFile, pData, iDataSize, iNumberSize, iLineTokenNb, 22, lpFormat, iFlag);
+    Dump_DumpFile(pFile, pData, iDataSize, iNumberSize, iLineTokenNb, 22, lpFormat, iEndianness, iFlag);
 
     fclose(pFile);
     fclose(pData);
