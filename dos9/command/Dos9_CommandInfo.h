@@ -23,7 +23,7 @@ COMMANDINFO lpCmdInfo[]={
                             {"CLS", Dos9_CmdCls, STRLEN("CLS")},
                             {"COLOR", Dos9_CmdColor, STRLEN("COLOR")},
                             {"TITLE", Dos9_CmdTitle, STRLEN("TITLE")},
-                            {"TYPE", Dos9_CmdType, STRLEN("TITLE")},
+                            {"TYPE", Dos9_CmdType, STRLEN("TYPE")},
                             {"MORE", Dos9_CmdType, STRLEN("MORE")},
                             {"GOTO", Dos9_CmdGoto, STRLEN("GOTO")},
                             {"GOTO:", Dos9_CmdGoto, 0},

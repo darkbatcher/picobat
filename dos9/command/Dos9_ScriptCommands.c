@@ -711,7 +711,9 @@ int Dos9_CmdTitle(char* lpLine)
     char lpArg[3];
     ESTR* lpEsTitle=Dos9_EsInit();
 
-    if (Dos9_GetNextParameter(lpLine+5, lpArg, 3)) {
+    lpLine+=5;
+
+    if (Dos9_GetNextParameter(lpLine, lpArg, 3)) {
 
         if (!strcmp(lpArg, "/?")) {
 

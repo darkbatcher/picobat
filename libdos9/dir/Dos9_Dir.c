@@ -507,6 +507,22 @@ int _Dos9_SplitMatchPath(const char* lpPathMatch, char* lpStaticPart, size_t iSt
 
         iSize=lpLastToken-lpPathMatch;
 
+
+        if ((iSize==1)) {
+
+                /* the token is just '/' which means
+                   volume root */
+                printf("Incrementing Size");
+                iSize++;
+
+        } else if ((iSize==3) && (*(lpPathMatch+1)==':'))  {
+
+                /* the token is a windows drive letter */
+                printf("Incrementing Size");
+                iSize++;
+
+        }
+
         if (iSize < iStaticSize)
             iStaticSize=iSize;
 
