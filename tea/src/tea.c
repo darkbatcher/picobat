@@ -61,7 +61,8 @@ int main(int argc, char *argv[])
             } else if (!stricmp("HTML", argv[i])) {
 
                 puts("TEA :: selection du mode HTML");
-                //pOutputHandler=Tea_HTMLOutputHandler
+                pOutputHandler=Tea_HtmlOutputHandler;
+                pParseHandler=Tea_HtmlParseHandler;
 
             } else {
 

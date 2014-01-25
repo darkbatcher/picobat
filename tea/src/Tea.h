@@ -10,6 +10,8 @@
 
 #define TEA_LIST_NO_MARK    (1)
 
+#define TEA_MSG_READ_FILE   (1)
+#define TEA_MSG_MAKE_NODE   (2)
 
 typedef struct TEANODE {
     int iNodeType;
@@ -31,7 +33,7 @@ typedef struct TEAPAGE {
     the modifier functions
  */
 typedef void(*LP_OUTPUT_HANDLER)(TEAPAGE*,FILE*,int,char**);
-typedef void(*LP_PARSE_HANDLER)(TEANODE*);
+typedef void(*LP_PARSE_HANDLER)(int,void*);
 
 TEAPAGE*    Tea_PageLoad(const char* lpFilename,  LP_PARSE_HANDLER pHandler);
 TEAPAGE*    Tea_ParseStringBlock(char* lpContent);

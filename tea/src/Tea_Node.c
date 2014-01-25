@@ -155,7 +155,7 @@ TEANODE*    Tea_ParseStringNode(char* lpContent, LP_PARSE_HANDLER pHandler)
 
         }
 
-        pHandler(lpTeaNode);
+        pHandler(TEA_MSG_MAKE_NODE, lpTeaNode);
 
 
         /* on prépare la ligne suivante */

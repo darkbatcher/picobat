@@ -9,6 +9,7 @@
 
 void Tea_TextOutputHandler(TEAPAGE* lpTeaPage, FILE* pFile, int i, char** argv)
 {
+
     int iLastLevel=0;
 
     while (lpTeaPage) {
@@ -52,7 +53,7 @@ void Tea_TextOutputHandler(TEAPAGE* lpTeaPage, FILE* pFile, int i, char** argv)
 
         }
 
-        printf("\n\n");
+        fputs("\n\n", pFile);
 
         lpTeaPage=lpTeaPage->lpTeaNext;
 
@@ -165,9 +166,15 @@ void Tea_TextOutputParagraph(size_t iMargin, size_t iFirstLine, size_t iLength, 
 
 }
 
-void Tea_TextParseHandler(TEANODE* lpTeaNode)
+void Tea_TextParseHandler(int iMsg ,void* lpData)
 {
     ESTR* lpEsStr=Dos9_EsInit();
+    TEANODE* lpTeaNode;
+
+    if (iMsg==TEA_MSG_READ_FILE)
+        return;
+
+    lpTeaNode=(TEANODE*)lpData;
 
     switch(lpTeaNode->iNodeType) {
 

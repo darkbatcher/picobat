@@ -105,7 +105,7 @@ char*       Tea_OutputLineT(char* lpBegin, FILE* pFile, TEANODE* lpTeaNode, size
         iNextWordLen=Tea_GetWordLengthT(lpBegin, lpTeaNode);
 
         /* the line is obviously far too big
-           le the user do what he want with new lines
+           let the user do what he want with new lines
         */
 
         if (iNextWordLen >= *iLeft) return lpBegin;

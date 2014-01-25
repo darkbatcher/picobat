@@ -46,6 +46,8 @@ TEAPAGE*    Tea_PageLoad(const char* lpFilename, LP_PARSE_HANDLER pHandler)
     /* fermeture du fichier */
     fclose(pFile);
 
+    pHandler(TEA_MSG_READ_FILE, lpTotalFile);
+
     /* on parse le fichier */
     lpTeaPage=Tea_ParseStringBlock(Dos9_EsToChar(lpTotalFile));
 
