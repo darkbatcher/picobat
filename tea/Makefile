@@ -12,8 +12,8 @@
 CC=gcc
 
 #the list of the sources
-SRC= ./src/tea.c ./src/tea_hlp_modifers.c ./src/tea_html_modifiers.c \
-     ./src/Tea_Load.c ./src/tea_modifier.c ./src/tea_modes.c ./src/Tea_Node.c \
+SRC= ./src/tea.c ./src/out/tea_hlp_out.c ./src/out/tea_html_out.c \
+     ./src/Tea_Load.c ./src/out/tea_text_out.c ./src/Tea_Node.c \
      ./src/Tea_Output.c ./src/tea_strupr.c
 
 #the list of the libs

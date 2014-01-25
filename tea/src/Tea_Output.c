@@ -1,376 +1,180 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "Tea_Lib.h"
-#include "libDos9.h"
+#include <libDos9.h>
+#include "Tea.h"
 
-#define UNICODE_BYTE 0x80
-#define UNICODE_FOLOWING_BYTE_MASK 0xC0
-#define UNICODE_FOLOWING_BYTE_MARK 0x80
-
-extern int teaIsEncodingUtf8=FALSE;
-
-int         Tea_OutputParagraph(FILE* pOutput, TEASTYLE* lpTeaStyle, TEAOUTPUTMODIFIERS* lpTeaMods, TEANODE* lpTeaNode)
+size_t         Tea_GetWordLengthT(char* lpBegin, TEANODE* lpTeaNode)
 {
-    char *lpToken, *lpLastWord;
-    int iNbCharsWritten=0;
+    size_t iLength=0;
 
-    int iOldMarginWidth;
-    int iIndentedWidth=0;
-    int iFirstLoop=TRUE;
-    int iNextNodeWLength=0;
-
-    int iMarginWidth=lpTeaStyle->iMarginWidth; /* the margin left to paragraph */
-    int iTotalWidth=lpTeaStyle->iWidth; /* la largeur totale du paragraphe */
-    int iIndentWidth=lpTeaStyle->iIndentWidth; /* la largueur de l'indentation de début de paragraphe */
-
-    /* on recherche des puces pour savoir si il faut modifier la marge */
+    while (*lpBegin!=' '
+           && *lpBegin!='\n') {
 
 
-    if (*(lpTeaNode->lpContent)=='-') {
-        iIndentWidth=-2;
-        iOldMarginWidth=iMarginWidth;
-        lpToken=lpTeaNode->lpContent;
+        if (*lpBegin=='\0') {
 
-        while (*lpToken=='-') {
-            iMarginWidth+=iOldMarginWidth;
-            lpToken++;
-            iIndentedWidth++;
-        }
+            /* on passe au noeud suivant */
 
-    }
+            do {
 
-    Tea_OutputRunModifier(lpTeaMods->lpParagraphStart, pOutput, (char*)iIndentedWidth);
+                lpTeaNode=lpTeaNode->lpTeaNodeNext;
 
-    if ((iMarginWidth + iIndentWidth) >= iTotalWidth)
-    {
-        printf("Erreur ! paramètres incoherents pour les paragraphes\n");
-        exit(-1);
-    }
+                if (lpTeaNode)
+                    lpBegin=lpTeaNode->lpContent;
 
-    /* on écrit la marge et l'indentation d'abord */
-    while (iNbCharsWritten<(iMarginWidth+iIndentWidth)) {
-        fputc(' ', pOutput);
-        iNbCharsWritten++;
-    }
+            } while (lpTeaNode && *lpBegin=='\0');
 
-    /* partie compliquée de l'affichage du paragraphe */
-    while (lpTeaNode) {
+            if (*lpBegin=='\0')
+                goto Tea_GetWordLength_End;
 
-
-        switch (lpTeaNode->iNodeType) {
-
-            case TEA_NODE_EMPHASIS:
-                Tea_OutputRunModifier(lpTeaMods->lpEmphasisStart, pOutput, lpTeaNode->lpContent);
-                break;
-
-            case TEA_NODE_LINK:
-                Tea_OutputRunModifier(lpTeaMods->lpLinkStart, pOutput, lpTeaNode->lpTarget);
-
-            default:;
-        }
-
-
-        /* on récupère le contenu du noeud */
-        lpToken=lpTeaNode->lpContent;
-
-        /* on supprimme les '-' en trop s'il s'agit du premier noeud */
-
-        if (iFirstLoop && *lpToken) {
-            while (*(lpToken+1)=='-') {
-                lpToken++;
-            }
-            iFirstLoop=FALSE;
-        }
-
-        while (*lpToken) {
-            lpLastWord=lpToken;
-
-            while (*lpToken && *lpToken!=' ') {
-                lpToken=Tea_OutputGetNextChar(lpToken); /* besoin du support d'unicode */
-                iNbCharsWritten++;
-            }
-
-            iNextNodeWLength = Hlp_GetNextNodeWLenght(lpTeaNode);
-
-            if (*lpToken==' ' && (iNbCharsWritten == iTotalWidth)) {
-
-                while (lpLastWord != lpToken) {
-                    fputc(*lpLastWord, pOutput);
-                    lpLastWord++;
-                }
-
-                if (*lpToken) lpToken++;
-
-            }
-
-            /* si le mot dépasse de la ligne */
-            else if (((iNbCharsWritten >= iTotalWidth)) ||
-                     (*lpToken=='\0' &&  iNextNodeWLength && ((iNbCharsWritten+iNextNodeWLength+1) >= iTotalWidth))) {
-
-                /* on termine la ligne */
-                fputc('\n', pOutput);
-                iNbCharsWritten=0;
-
-                /* on écrit la marge d'abord */
-                while (iNbCharsWritten<iMarginWidth) {
-                    fputc(' ', pOutput);
-                    iNbCharsWritten++;
-                }
-
-                lpToken=lpLastWord;
-
-            } else {
-                /* si le mot passe dans la ligne */
-
-                /* on l'affiche */
-                if (*lpToken) lpToken++;
-                iNbCharsWritten++;
-
-                while (lpLastWord != lpToken) {
-                    fputc(*lpLastWord, pOutput);
-                    lpLastWord++;
-                }
-
-            }
-
-        }
-
-        switch (lpTeaNode->iNodeType) {
-
-            case TEA_NODE_EMPHASIS:
-                Tea_OutputRunModifier(lpTeaMods->lpEmphasisEnd, pOutput, lpTeaNode->lpContent);
-                break;
-
-            case TEA_NODE_LINK:
-                Tea_OutputRunModifier(lpTeaMods->lpLinkEnd, pOutput, lpTeaNode->lpTarget);
-
-            default:;
-        }
-
-
-        lpTeaNode=lpTeaNode->lpTeaNodeNext;
-    }
-
-
-    Tea_OutputRunModifier(lpTeaMods->lpParagraphEnd, pOutput, iIndentedWidth);
-
-    return 0;
-}
-
-int         Tea_OutputCode(FILE* pOutput, TEASTYLE* lpTeaStyle, char* lpContent)
-{
-    char *lpLastWord;
-    int iNbCharsWritten=0;
-    int iNewLine=0;
-
-    int iMarginWidth=lpTeaStyle->iMarginWidth; /* the margin left to paragraph */
-    int iTotalWidth=lpTeaStyle->iWidth; /* la largeur totale du paragraphe */
-    int iIndentWidth=lpTeaStyle->iIndentWidth;
-                    /* la largueur de l'indentation de début de paragraphe */
-
-    if ((iMarginWidth + iIndentWidth) >= iTotalWidth)
-    {
-        printf("Erreur ! paramètres incoherents pour les paragraphes\n");
-        exit(-1);
-    }
-
-    /* on écrit la marge et l'indentation d'abord */
-    while (iNbCharsWritten<(iMarginWidth)) {
-        fputc(' ', pOutput);
-        iNbCharsWritten++;
-    }
-
-
-    while (*lpContent) {
-        lpLastWord=lpContent;
-
-        while (*lpContent && *lpContent!=' ' && *lpContent!='\n') {
-            lpContent=Tea_OutputGetNextChar(lpContent);
-            iNbCharsWritten++;
-        }
-
-        /* si le mot dépasse de la ligne */
-        if (iNbCharsWritten >= iTotalWidth) {
-
-            /* on termine la ligne */
-            fputc('\n', pOutput);
-            iNbCharsWritten=0;
-
-            /* on écrit la marge d'abord */
-            while (iNbCharsWritten<(iIndentWidth+iMarginWidth)) {
-                fputc(' ', pOutput);
-                iNbCharsWritten++;
-            }
-
-            lpContent=lpLastWord;
 
         } else {
-            /* si le mot passe dans la ligne */
-            if (*lpContent=='\n') {
-                iNewLine=TRUE;
-            } else if (*lpContent) {
-                lpContent++;
-            }
 
-            /* on l'affiche */
-            while (lpLastWord != lpContent) {
-                fputc(*lpLastWord, pOutput);
-                lpLastWord++;
-            }
+            lpBegin=Dos9_GetNextChar(lpBegin);
 
-            if (iNewLine) {
-                fputc('\n', pOutput);
-                iNbCharsWritten=0;
-
-                /* on écrit la marge d'abord */
-                while (iNbCharsWritten<iMarginWidth) {
-                    fputc(' ', pOutput);
-                    iNbCharsWritten++;
-                }
-
-                iNewLine=FALSE;
-                lpContent++;
-            }
-
-            iNbCharsWritten++;
         }
+
+        iLength++;
+
 
     }
 
-    return 0;
+    Tea_GetWordLength_End:
+
+    return iLength;
 
 }
 
-int         Tea_OutputPage(FILE* pOutput, TEAOUTPUT* lpTeaOutput, TEAPAGE* lpTeaPage)
+size_t      Tea_GetWordLength(char* lpBegin)
 {
-    while (lpTeaPage) {
-        switch (lpTeaPage->iBlockType) {
+    size_t iLength=0;
 
-            case TEA_BLOCK_PARAGRAPH:
-                Tea_OutputParagraph(pOutput , &(lpTeaOutput->teaParagraphStyle) , &(lpTeaOutput->teaOutputMod), lpTeaPage->lpTeaNode);
-                break;
+    while (*lpBegin
+           && *lpBegin!=' '
+           && *lpBegin!='\n') {
 
-            case TEA_BLOCK_CODE:
-                Tea_OutputRunModifier(lpTeaOutput->teaOutputMod.lpCodeStart, pOutput, NULL);
-                Tea_OutputCode(pOutput, &(lpTeaOutput->teaCodeStyle), lpTeaPage->lpBlockContent);
-                Tea_OutputRunModifier(lpTeaOutput->teaOutputMod.lpCodeEnd, pOutput, NULL);
-                break;
+        lpBegin=Dos9_GetNextChar(lpBegin);
+        iLength++;
 
-            case TEA_BLOCK_HEADING:
-                Tea_OutputRunModifier(lpTeaOutput->teaOutputMod.lpHeadingStart, pOutput, lpTeaPage->lpBlockContent);
-                fprintf(pOutput, "%s", lpTeaPage->lpBlockContent);
-                Tea_OutputRunModifier(lpTeaOutput->teaOutputMod.lpHeadingEnd, pOutput, NULL);
-                break;
-
-            default:
-                printf("Error !");
-
-        }
-        fprintf(pOutput, lpTeaOutput->lpBlockSpacing);
-        lpTeaPage=lpTeaPage->lpTeaNext;
     }
+
+    return iLength;
 }
 
-void         Tea_OutputRunModifier(LP_OUTPUT_MODIFIER lpModifier, FILE* pOutput, char* lpContent)
+void        Tea_MakeMargin(size_t iLength, size_t* iLeft, FILE* pFile)
 {
-    if (lpModifier) {
-        lpModifier(pOutput, lpContent);
+    while (iLength) {
+
+        putc(' ', pFile);
+
+        iLength--;
+        (*iLeft)--;
+
     }
+
 }
 
-char*       Tea_OutputGetNextChar(char* lpContent)
+char*       Tea_OutputWord(char* lpBegin, FILE* pFile, size_t* iLeft)
 {
+    while (*lpBegin
+           && *lpBegin!=' '
+           && *lpBegin!='\n'
+           && *iLeft) {
 
-    int iUnicodeState;
 
-    if (teaIsEncodingUtf8) {
-        /* système de gestion des caractères UTF-8 */
+        fputc(*lpBegin,pFile);
+        lpBegin++;
+        (*iLeft)--;
 
-        if (!(*lpContent & UNICODE_BYTE)) {
-            /* il s'agit d'un caractère de la norme ASCII */
-            return lpContent+1;
-        }
-
-        /* sinon on boucle pour parvenir au prochain caractère */
-
-        iUnicodeState=Tea_IsCharUtf8FolowingByte(lpContent);
-
-        lpContent++; /* si le code est conforme on devrait pas avoir de problème
-                        vu que le point doit être suivit par des caractères */
-        if (iUnicodeState) {
-            /* on part d'un octet suivant, c'est probablement du little-endian
-               donc on continue jusqu'au prochain octet non suivant */
-
-            while (Tea_IsCharUtf8FolowingByte(lpContent)==TRUE) {
-                lpContent++;
-            }
-
-            /* on arrive donc, soit sur octet de tête, ou sur un octet de
-                l'alphabet ascii, on vérifie les deux */
-
-            if (!(*lpContent & UNICODE_BYTE)) {
-                /* on retourne direct vu que c'est un caractère ascii
-                   même si en toute logique, il ne devrait pas être là il
-                   faut être prudent pour rattraper les erreurs d'encodage */
-                return lpContent;
-
-            } else {
-                /* on est bien dans le cas du petit-boutant, donc on passe au bloc suivant */
-                return lpContent+1;
-            }
-        } else {
-            /* on part d'un octet de tête, donc il s'agit surement de gros boutant */
-
-            /* on va jusqu'a prochain octet non suivant */
-            while (Tea_IsCharUtf8FolowingByte(lpContent)==TRUE) {
-                lpContent++;
-            }
-
-            return lpContent;
-        }
-
-    } else {
-        return lpContent+1;
     }
 
+    /* return that there's no more pending characters */
+    if (!*lpBegin)
+        return NULL;
+
+    return lpBegin;
 }
 
-int         Tea_IsCharUtf8FolowingByte(char* lpChar)
+char*       Tea_OutputLineT(char* lpBegin, FILE* pFile, TEANODE* lpTeaNode, size_t* iLeft)
 {
-    if ((*lpChar & UNICODE_FOLOWING_BYTE_MASK) == UNICODE_FOLOWING_BYTE_MARK) {
-        return TRUE;
-    } else {
-        return FALSE;
+    size_t iNextWordLen;
+
+    while (*lpBegin) {
+
+        iNextWordLen=Tea_GetWordLengthT(lpBegin, lpTeaNode);
+
+        /* the line is obviously far too big
+           le the user do what he want with new lines
+        */
+
+        if (iNextWordLen >= *iLeft) return lpBegin;
+
+        lpBegin=Tea_OutputWord(lpBegin, pFile, iLeft);
+
+        /* if there is no pending character */
+        if (!lpBegin)
+            return NULL;
+
+        /* if the line is finished, return */
+        if (*lpBegin=='\n')
+            return lpBegin;
+
+
+        if (1 <= *iLeft) {
+
+            fputc(' ', pFile);
+            (*iLeft)--;
+
+        }
+
+        /* any way, the words are separated by spaces */
+        lpBegin++;
+
     }
+
+    return NULL;
+
 }
 
-int         Hlp_GetNextNodeWLenght(TEANODE* lpNode)
+char*       Tea_OutputLine(char* lpBegin, FILE* pFile, size_t* iLeft)
 {
-    int iReturn=0;
-    char* lpToken;
+    size_t iNextWordLen;
 
-    lpNode=lpNode->lpTeaNodeNext;
+    while (*lpBegin) {
 
-    while (lpNode) {
+        iNextWordLen=Tea_GetWordLength(lpBegin);
 
-        lpToken=lpNode->lpContent;
+        /* the line is obviously far too big
+           le the user do what he want with new lines
+        */
 
-        while (*lpToken && *lpToken!=' ') {
+        if (iNextWordLen >= *iLeft) return lpBegin;
 
-            lpToken = Tea_OutputGetNextChar(lpToken);
-            iReturn++;
+        lpBegin=Tea_OutputWord(lpBegin, pFile, iLeft);
+
+        /* if there is no pending character */
+        if (!lpBegin)
+            return NULL;
+
+        /* if the line is finished, return */
+        if (*lpBegin=='\n')
+            return lpBegin;
+
+
+        if (1 <= *iLeft) {
+
+            fputc(' ', pFile);
+            (*iLeft)--;
 
         }
 
-        if (*lpToken==' ') {
-             iReturn++;
-             break;
-        }
-
-        lpNode=lpNode->lpTeaNodeNext;
+        /* any way, the words are separated by spaces */
+        lpBegin++;
 
     }
 
-    return iReturn;
+    return NULL;
+
 }
+

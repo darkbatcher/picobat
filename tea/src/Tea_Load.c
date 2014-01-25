@@ -4,15 +4,14 @@
 #include <string.h>
 
 #include "libDos9.h"
-#include "Tea_Lib.h"
-#include "tea_modes.h"
+#include "Tea.h"
 
 const char* lpTeaOpenDelimiters[]={"{{" , "${", NULL};
 const char* lpTeaCloseDelimiters[]={"}}", NULL};
 const char* lpNewParagraphMark[]={"\n", NULL};
 
 
-TEAPAGE*    Tea_PageLoad(const char* lpFilename, const TEAMODIFIERS* lpTeaMod)
+TEAPAGE*    Tea_PageLoad(const char* lpFilename, LP_PARSE_HANDLER pHandler)
 {
     FILE* pFile;
     ESTR* lpEstr=Dos9_EsInit();
@@ -27,33 +26,39 @@ TEAPAGE*    Tea_PageLoad(const char* lpFilename, const TEAMODIFIERS* lpTeaMod)
     /* récupération de tout le contenu du fichier */
     while (!(Dos9_EsGet(lpEstr, pFile))) {
 
-        if (teaIsEncodingUtf8==TRUE && !strncmp(Dos9_EsToChar(lpEstr), "\xEF\xBB\xBF", 3) && iFirstline) {
+        if ((_Dos9_TextMode==DOS9_UTF8_ENCODING)
+            && (!strncmp(Dos9_EsToChar(lpEstr), "\xEF\xBB\xBF", 3))
+            && (iFirstline)) {
 
-            if (*(Dos9_EsToChar(lpEstr)+3)!='#') Dos9_EsCat(lpTotalFile, Dos9_EsToChar(lpEstr)+3);
+            if (*(Dos9_EsToChar(lpEstr)+3)!='#')
+                Dos9_EsCat(lpTotalFile, Dos9_EsToChar(lpEstr)+3);
             iFirstline=0;
             continue;
 
         }
 
-        if (*Dos9_EsToChar(lpEstr)=='#') continue ; /* a line begining with '#' is a comment */
+        if (*Dos9_EsToChar(lpEstr)=='#')
+            continue ; /* a line begining with '#' is a comment */
+
         Dos9_EsCatE(lpTotalFile, lpEstr);
     }
 
     /* fermeture du fichier */
     fclose(pFile);
 
-    if (lpTeaMod==&teaHTMLMods) {
+    /* on parse le fichier */
+    lpTeaPage=Tea_ParseStringBlock(Dos9_EsToChar(lpTotalFile));
 
-        Dos9_EsReplace(lpTotalFile, "&", "&amp;");
-        Dos9_EsReplace(lpTotalFile, ">", "&gt;");
-        Dos9_EsReplace(lpTotalFile, "<", "&lt;");
+    /* on nettoie la page des espaces inutiles et on re-découpe les paragraphes */
+    Tea_PurifyPage(lpTeaPage);
 
-    }
+    Tea_MakeLevels(lpTeaPage);
 
-    lpTeaPage=Tea_ParseStringBlock(Dos9_EsToChar(lpTotalFile), lpTeaMod); /* on parse le fichier */
-    Tea_PurifyPage(lpTeaPage); /* on nettoie la page des espaces inutiles et on re-découpe les paragraphes */
-    lpTeaPage=Tea_RemoveVoidBlocks(lpTeaPage, lpTeaMod); /* on supprime les blocs vides */
-    Tea_ParseParagraphs(lpTeaPage, lpTeaMod);
+    /* on supprime les blocs vides */
+    lpTeaPage=Tea_RemoveVoidBlocks(lpTeaPage);
+
+    /* on parse les paragraphes */
+    Tea_ParseParagraphs(lpTeaPage, pHandler);
 
     Dos9_EsFree(lpTotalFile);
     Dos9_EsFree(lpEstr);
@@ -61,7 +66,7 @@ TEAPAGE*    Tea_PageLoad(const char* lpFilename, const TEAMODIFIERS* lpTeaMod)
     return lpTeaPage;
 }
 
-TEAPAGE*    Tea_ParseStringBlock(char* lpContent, const TEAMODIFIERS* lpTeaMod)
+TEAPAGE*    Tea_ParseStringBlock(char* lpContent)
 {
     char *lpNextToken;
     int iTokenFound;
@@ -71,8 +76,8 @@ TEAPAGE*    Tea_ParseStringBlock(char* lpContent, const TEAMODIFIERS* lpTeaMod)
     lpTeaPage=lpTeaPageBegin;
 
     while ((lpNextToken=Tea_SeekNextDelimiter(lpContent, lpTeaOpenDelimiters, &iTokenFound))) {
-        /* a chaque nouveau block trouvé, on effectue un parsage sur ce block */
 
+        /* a chaque nouveau block trouvé, on effectue un parsage sur ce block */
         /* on stocke la chaine précédente dans un bloc de type paragraphe */
         *lpNextToken='\0';
 
@@ -107,10 +112,6 @@ TEAPAGE*    Tea_ParseStringBlock(char* lpContent, const TEAMODIFIERS* lpTeaMod)
                 if (!(lpTeaPage->lpBlockContent=strdup(lpContent))) {
                     perror("TEA :: impossible d'allouer de la mémoire ");
                     exit(-1);
-                }
-
-                if (lpTeaMod->lpHeadingModifier) {
-                    lpTeaPage->lpBlockContent=lpTeaMod->lpHeadingModifier(lpTeaPage->lpBlockContent);
                 }
 
                 /* on prépare lpCotent pour la prochaine boucle */
@@ -160,8 +161,10 @@ TEAPAGE* Tea_AllocTeaPage(void)
 {
     TEAPAGE* lpTeaPage;
 
-    if (lpTeaPage=malloc(sizeof(TEAPAGE))) {
+    if ((lpTeaPage=malloc(sizeof(TEAPAGE)))) {
         lpTeaPage->iBlockType=TEA_BLOCK_PARAGRAPH;
+        lpTeaPage->iBlockLevel=0;
+        lpTeaPage->iFlag=0;
         lpTeaPage->lpBlockContent=NULL;
         lpTeaPage->lpTeaNext=NULL;
         lpTeaPage->lpTeaNode=NULL;
@@ -174,17 +177,16 @@ TEAPAGE* Tea_AllocTeaPage(void)
     }
 }
 
-void   Tea_FreeTeaPage(TEAPAGE* lpTeaPage, const TEAMODIFIERS* lpTeaMod)
+void   Tea_FreeTeaPage(TEAPAGE* lpTeaPage)
 {
-    if (lpTeaPage->iBlockType==TEA_BLOCK_HEADING && lpTeaMod->lpHeadingFree) {
-        lpTeaMod->lpHeadingFree(lpTeaPage->lpBlockContent);
-    } else {
+
+    if (lpTeaPage->lpBlockContent)
         free(lpTeaPage->lpBlockContent);
-    }
+
     free(lpTeaPage);
 }
 
-int    Tea_PageFree(TEAPAGE* lpTeaPage, const TEAMODIFIERS* lpTeaMod)
+int    Tea_PageFree(TEAPAGE* lpTeaPage)
 {
     TEAPAGE* lpTeaTmp;
     TEANODE *lpTeaNode, *lpTeaNodeTmp;
@@ -197,16 +199,17 @@ int    Tea_PageFree(TEAPAGE* lpTeaPage, const TEAMODIFIERS* lpTeaMod)
 
             while (lpTeaNode) {
                 lpTeaNodeTmp=lpTeaNode->lpTeaNodeNext;
-                Tea_FreeTeaNode(lpTeaNode, lpTeaMod);
+                Tea_FreeTeaNode(lpTeaNode);
                 lpTeaNode=lpTeaNodeTmp;
             }
 
         }
 
         lpTeaTmp=lpTeaPage->lpTeaNext;
-        Tea_FreeTeaPage(lpTeaPage, lpTeaMod);
+        Tea_FreeTeaPage(lpTeaPage);
         lpTeaPage=lpTeaTmp;
     }
+
     return 0;
 }
 
@@ -264,39 +267,64 @@ char*       Tea_SeekNextClosingBrace(const char* lpBeginPos)
 int         Tea_PurifyPage(TEAPAGE* lpTeaPage)
 {
     while (lpTeaPage) {
+
         if (lpTeaPage->iBlockType==TEA_BLOCK_PARAGRAPH) {
-            Tea_BreakParagraph(lpTeaPage); /* découpe le paragraphe en sous paragraphe s'il y a lieu */
+
+            /* découpe le paragraphe en sous paragraphe s'il y a lieu */
+            Tea_BreakParagraph(lpTeaPage);
+
         } else if (lpTeaPage->iBlockType==TEA_BLOCK_HEADING) {
-            Tea_SweepSpace(lpTeaPage->lpBlockContent); /* on supprimme les espaces superflus */
+             /* on supprimme les espaces superflus */
+            Tea_SweepSpace(lpTeaPage->lpBlockContent);
+
         } else if (lpTeaPage->iBlockType==TEA_BLOCK_CODE) {
+
+             /* on supprimme les espaces superflus */
             Tea_SweepCodeTabs(lpTeaPage->lpBlockContent);
+
         }
+
         lpTeaPage=lpTeaPage->lpTeaNext;
     }
     return 0;
 }
 
-void        Tea_ParseParagraphs(TEAPAGE* lpTeaPage, const TEAMODIFIERS* lpTeaMod)
+void        Tea_ParseParagraphs(TEAPAGE* lpTeaPage, LP_PARSE_HANDLER pHandler)
 {
     while (lpTeaPage) {
+
         if (lpTeaPage->iBlockType==TEA_BLOCK_PARAGRAPH) {
-            lpTeaPage->lpTeaNode=Tea_ParseStringNode(lpTeaPage->lpBlockContent, lpTeaMod); /* on parse le contenu du bloc en sous chaine */
-            Tea_PurifyNode(lpTeaPage->lpTeaNode); /* on nettoie les espaces superflus */
-            lpTeaPage->lpTeaNode=Tea_RemoveVoidNode(lpTeaPage->lpTeaNode, lpTeaMod); /* on nettoie les noeuds vides */
+
+            /* on parse le contenu du bloc en sous chaine */
+            lpTeaPage->lpTeaNode=Tea_ParseStringNode(lpTeaPage->lpBlockContent, pHandler);
+
+            /* on nettoie les espaces superflus */
+            Tea_PurifyNode(lpTeaPage->lpTeaNode);
+
+             /* on nettoie les noeuds vides */
+            lpTeaPage->lpTeaNode=Tea_RemoveVoidNode(lpTeaPage->lpTeaNode);
         }
+
         lpTeaPage=lpTeaPage->lpTeaNext;
+
     }
+
 }
 
 int         Tea_BreakParagraph(TEAPAGE* lpTeaPage)
 {
-    char *lpContent=lpTeaPage->lpBlockContent, *lpNextToken, *lpBeginSearch, *lpToken;
+    char *lpContent=lpTeaPage->lpBlockContent,
+         *lpNextToken,
+         *lpBeginSearch,
+         *lpToken;
+
     int iTokenNb;
+
     TEAPAGE* lpTeaTemp;
 
     lpBeginSearch=lpContent;
 
-    while (lpNextToken=Tea_SeekNextDelimiter(lpBeginSearch, lpNewParagraphMark, &iTokenNb)) {
+    while ((lpNextToken=Tea_SeekNextDelimiter(lpBeginSearch, lpNewParagraphMark, &iTokenNb))) {
 
 
         /* on vérifie si le token correspond */
@@ -334,9 +362,11 @@ int         Tea_BreakParagraph(TEAPAGE* lpTeaPage)
     return 0;
 }
 
-TEAPAGE*    Tea_RemoveVoidBlocks(TEAPAGE* lpTeaPage, const TEAMODIFIERS* lpTeaMod)
+TEAPAGE*    Tea_RemoveVoidBlocks(TEAPAGE* lpTeaPage)
 {
-    TEAPAGE *lpTeaBegin=lpTeaPage, *lpTeaPrevious=NULL;
+    TEAPAGE *lpTeaBegin=lpTeaPage,
+            *lpTeaPrevious=NULL;
+
     char* lpContent;
 
     while (lpTeaPage) {
@@ -345,20 +375,24 @@ TEAPAGE*    Tea_RemoveVoidBlocks(TEAPAGE* lpTeaPage, const TEAMODIFIERS* lpTeaMo
         while (*lpContent==' ' || *lpContent=='\t' || *lpContent=='\n') lpContent++;
 
         if (*(lpContent)=='\0') {
+
             /* si le block est vide */
             if (lpTeaPage==lpTeaBegin) {
+
                 /* si il s'agit du premier block du document */
                 lpTeaBegin=lpTeaPage->lpTeaNext;
-                Tea_FreeTeaPage(lpTeaPage, lpTeaMod);
+                Tea_FreeTeaPage(lpTeaPage);
 
                 /* on reprend la boucle au début */
                 lpTeaPage=lpTeaBegin;
                 continue;
 
+
             } else {
+
                 lpTeaPrevious->lpTeaNext=lpTeaPage->lpTeaNext;
 
-                Tea_FreeTeaPage(lpTeaPage, lpTeaMod);
+                Tea_FreeTeaPage(lpTeaPage);
 
                 lpTeaPage=lpTeaPrevious->lpTeaNext;
 
@@ -366,8 +400,10 @@ TEAPAGE*    Tea_RemoveVoidBlocks(TEAPAGE* lpTeaPage, const TEAMODIFIERS* lpTeaMo
             }
 
         }
+
         lpTeaPrevious=lpTeaPage;
         lpTeaPage=lpTeaPage->lpTeaNext;
+
     }
 
     return lpTeaBegin;
@@ -379,35 +415,50 @@ int         Tea_SweepSpace(char* lpContent)
     char* lpNextContent=lpContent;
 
     while (*lpContent) {
+
         switch (*lpContent) {
+
             case '\\':
                 if (*(lpContent+1)) {
+
                     lpContent++;
+
                 } else {
+
                     return 0;
+
                 }
                 break;
 
             case '\n':
             case '\t':
+
                 *lpContent=' ';
 
             case ' ':
+
                 if (iSpaceGroup) {
+
                     lpContent++;
                     continue;
+
                 } else {
+
                     iSpaceGroup=TRUE;
+
                 }
                 break;
 
             default:
+
                 iSpaceGroup=FALSE;
         }
+
         *lpNextContent=*lpContent;
         lpNextContent++;
         lpContent++;
     }
+
     *lpNextContent=*lpContent;
     return 0;
 }
@@ -415,8 +466,91 @@ int         Tea_SweepSpace(char* lpContent)
 int Tea_SweepCodeTabs(char* lpContent)
 {
     while (*lpContent) {
+
         if (*lpContent=='\t') *lpContent=' ';
         lpContent++;
+
     }
+    return 0;
+}
+
+int Tea_MakeLevels(TEAPAGE* lpTeaPage)
+{
+
+    char *lpCh,
+         *lpFree,
+         *lpLastMark;
+
+    int iEscapeFound=FALSE,
+        iNoMark=FALSE,
+        iLastLevel=0;
+
+    while (lpTeaPage) {
+
+        if (lpTeaPage->iBlockType==TEA_BLOCK_PARAGRAPH) {
+
+            lpCh=lpTeaPage->lpBlockContent;
+
+            while (*lpCh==' '
+                   || *lpCh=='\t'
+                   || *lpCh=='\n')
+                    lpCh++;
+            if  (*lpCh) {
+
+                if (*lpCh=='@') {
+
+                    iNoMark=TRUE;
+                    lpTeaPage->iFlag|=TEA_LIST_NO_MARK;
+                    iEscapeFound=TRUE;
+                    lpCh++;
+
+                }
+
+                lpLastMark=lpCh;
+
+                while (*lpCh=='-') {
+
+                    (lpTeaPage->iBlockLevel)++;
+                    lpLastMark=lpCh++;
+
+                    iEscapeFound=TRUE;
+
+                }
+
+                if (!iNoMark)
+                    lpCh=lpLastMark;
+
+                if (iEscapeFound) {
+
+                    lpFree=lpTeaPage->lpBlockContent;
+
+                    if (!(lpTeaPage->lpBlockContent
+                          =strdup(lpCh))) {
+
+                        perror("TEA :: impossible d'allouer de la mémoire ");
+                        exit(-1);
+
+                    }
+
+                    free(lpFree);
+
+                }
+
+                iLastLevel=lpTeaPage->iBlockLevel;
+            }
+
+        } else if (lpTeaPage->iBlockType==TEA_BLOCK_CODE) {
+
+            lpTeaPage->iBlockLevel=iLastLevel;
+
+        } else {
+
+            iLastLevel=0;
+
+        }
+
+        lpTeaPage=lpTeaPage->lpTeaNext;
+    }
+
     return 0;
 }
