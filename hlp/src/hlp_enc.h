@@ -1,17 +1,8 @@
 #ifndef HLP_ENC_H
 #define HLP_ENC_H
 
-#include "libDos9.h"
-
-#ifdef WIN32
-
-    #include "iconv.h"
-
-#else
-
-    #include <iconv.h>
-
-#endif
+#include <libDos9.h>
+#include <iconv.h>
 
 int Hlp_StringConvert(iconv_t cd, ESTR* lpEsReturn, char* lpToken);
 

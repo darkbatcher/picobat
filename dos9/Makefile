@@ -23,8 +23,8 @@ SRC=./Dos9.c ./command/Dos9_Conditions.c ./command/Dos9_FileCommands.c \
 ifeq ($(BUILD_OS),WINDOWS)
 
 # libs for windows
-LIB=$(LIB_DIR)/libDos9.a $(LIB_DIR)/libintl.lib $(LIB_DIR)/libmatheval.a \
-	 $(LIB_DIR)/libfl.a $(LIB_DIR)/libinteval.a
+LIB=$(LIB_DIR)/libDos9.a $(LIB_DIR)/libinteval.a $(LIB_DIR)/libmatheval.a \
+	 -lfl -lintl 
 	
 CFLAGS=-Wall -g -I $(INC_DIR)
 
@@ -43,8 +43,8 @@ OBJ=$(SRC:.c=.o)
 all: $(TARGET)
 
 # build the main lib
-$(TARGET) : $(OBJ) $(LIB)
-			$(CC) $(CFLAGS) -o $@ $^
+$(TARGET) : $(OBJ)
+			$(CC) $(CFLAGS) -o $@ $^ $(LIB)
 
 %.o : %.c
 			$(CC) -o $@ -c $< $(CFLAGS)

@@ -221,7 +221,8 @@ PARSED_STREAM* Dos9_ParseStream(char* lpLine)
 {
     char *ptrToken=lpLine;
     char cLastEscape=0;
-    int iNbParenthese=0;
+    int iNbParenthese=0,
+        iInQuotes=FALSE;
     PARSED_STREAM* lppsFirstParsedLine=NULL, *lppsParsedLine;
     lppsFirstParsedLine=lppsParsedLine=Dos9_AllocParsedStream(NULL);
 
@@ -232,11 +233,28 @@ PARSED_STREAM* Dos9_ParseStream(char* lpLine)
             continue;
         }
 
+        if (*lpLine=='^') {
+
+            cLastEscape=TRUE;
+            continue;
+        }
+
+        if (iInQuotes
+            && (*lpLine=='"')) {
+
+            iInQuotes=FALSE;
+            continue;
+
+        }
+
+        if (iInQuotes) {
+
+            continue;
+
+        }
+
         if (iNbParenthese) {
             switch(*lpLine) {
-                case '^':
-                    cLastEscape=1;
-                    continue;
                 case '(':
                     iNbParenthese++;
                     continue;
@@ -254,9 +272,8 @@ PARSED_STREAM* Dos9_ParseStream(char* lpLine)
                 iNbParenthese++;
                 continue;
 
-            case '^':
-
-                cLastEscape=1;
+            case '"':
+                iInQuotes=TRUE;
                 continue;
 
             case '|':
@@ -338,10 +355,14 @@ PARSED_STREAM_START* Dos9_AllocParsedStreamStart(void)
 
 PARSED_STREAM_START* Dos9_ParseStreamOutput(char *lpLine)
 {
-    int iParentheseNb=0;
-    int iLastEscape=0;
+    int iParentheseNb=0,
+        iLastEscape=0,
+        iInQuotes=FALSE;
+
     char* lpLastLine;
+
     PARSED_STREAM_START* lppssStreamStart=Dos9_AllocParsedStreamStart();
+
     for (;*lpLine;lpLine++) {
 
         if (iLastEscape) {
@@ -349,15 +370,34 @@ PARSED_STREAM_START* Dos9_ParseStreamOutput(char *lpLine)
             continue;
         }
 
+        if (*lpLine=='^') {
+
+            iLastEscape=TRUE;
+            continue;
+        }
+
+        if ((*lpLine=='"')
+            && iInQuotes ) {
+
+            iInQuotes=FALSE;
+            continue;
+
+        }
+
+        if (iInQuotes)
+            continue;
+
         if (iParentheseNb==0) {
 
             switch (*lpLine){
                 case '(':
                     iParentheseNb++;
                     break;
-                case '^':
-                    iLastEscape=1;
+
+                case '\"':
+                    iInQuotes=TRUE;
                     break;
+
                 case '2':
                     if (!strncmp(lpLine, "2&>1", 4)) {
                         lppssStreamStart->cOutputMode|=PARSED_STREAM_START_MODE_ERROR;
@@ -369,6 +409,7 @@ PARSED_STREAM_START* Dos9_ParseStreamOutput(char *lpLine)
                         goto ChoseOutputMode;
                     }
                     break;
+
                 case '>':
                     lpLastLine=lpLine;
                     lppssStreamStart->cOutputMode=PARSED_STREAM_START_MODE_OUT;
@@ -383,6 +424,7 @@ PARSED_STREAM_START* Dos9_ParseStreamOutput(char *lpLine)
                     lppssStreamStart->lpOutputFile=Dos9_GetPathToken(lpLine, lpLastLine);
                     lpLine=lpLastLine-1;
                     break;
+
                 case '<':
                     lpLastLine=lpLine;
                     lpLine++;
@@ -415,6 +457,9 @@ char* Dos9_GetPathToken(char* lpBegin, char* lpAdjust)
     char cSeekQuote=0,
          cEscapeChar=FALSE;
     char cLastBegin;
+
+    ESTR* lpEsValue=Dos9_EsInit();
+
     while (*lpBegin=='\t' || *lpBegin==' ') lpBegin++;
 
     if (*lpBegin=='"') {
@@ -459,10 +504,16 @@ char* Dos9_GetPathToken(char* lpBegin, char* lpAdjust)
     *lpAdjust='\0';
     cLastBegin=*lpBegin;
     *lpBegin='\0';
-    lpToken=strdup(lpToken);
+
+    Dos9_EsCpy(lpEsValue, lpToken);
+    Dos9_DelayedExpand(lpEsValue, bDelayedExpansion);
+    lpToken=strdup(Dos9_EsToChar(lpEsValue));
+
     *lpBegin=cLastBegin;
 
     if (cLastBegin && cLastBegin) Dos9_AdjustString(lpAdjust, lpBegin);
+
+    Dos9_EsFree(lpEsValue);
 
     return lpToken;
 }

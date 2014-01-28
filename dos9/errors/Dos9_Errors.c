@@ -7,18 +7,11 @@
     #define getch() getchar()
 #endif
 
-#include "libDos9.h"
+#include <libDos9.h>
 #include "Dos9_Errors.h"
 
-#ifdef WIN32
+#include <libintl.h>
 
-    #include "libintl.h"
-
-#else
-
-    #include <libintl.h>
-
-#endif
 
 const char* lpErrorMsg[DOS9_ERROR_MESSAGE_NUMBER];
 const char* lpQuitMessage;

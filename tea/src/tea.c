@@ -29,7 +29,7 @@
 #include "out/tea_out.h"
 
 
-ESTR* lpFrontEndCommandLine;
+ESTR* lpEsEncoding;
 
 int main(int argc, char *argv[])
 {
@@ -41,6 +41,7 @@ int main(int argc, char *argv[])
 
         puts("Error : Unable to load LibDos9. Exiting ...");
         exit(-1);
+
     }
 
     FILE* pOutput;
@@ -51,10 +52,11 @@ int main(int argc, char *argv[])
     int i=1,
         iContinue=TRUE;
 
-    lpFrontEndCommandLine=Dos9_EsInit();
+    lpEsEncoding=Dos9_EsInit();
+    Dos9_EsCpy(lpEsEncoding, "US-ASCII");
 
     if (argc < 1) {
-        printf("TEA :: Mauvaise ligne de commande");
+        fputs("TEA :: Error : Invalid command line\n", stderr);
         return -1;
     }
 
@@ -67,36 +69,20 @@ int main(int argc, char *argv[])
             argv[i]+=2;
             if (*(argv[i])==':') argv[i]++;
 
-            if (!stricmp("text", argv[i])) {
+            if (!stricmp("TEXT", argv[i])) {
 
-                puts("TEA :: selection du mode TEXT");
                 pOutputHandler=Tea_TextOutputHandler;
                 pParseHandler=Tea_TextParseHandler;
 
-            } else if (!stricmp("hlp-man", argv[i])) {
-
-                puts("TEA :: selection du mode HLP-MAN");
-                //pOutputHandler=Tea_HlpOutputHandler;
-
             } else if (!stricmp("HTML", argv[i])) {
 
-                puts("TEA :: selection du mode HTML");
                 pOutputHandler=Tea_HtmlOutputHandler;
                 pParseHandler=Tea_HtmlParseHandler;
 
             } else {
 
-                printf("TEA :: ``%s'' n'est pas un mode de sortie correct\n",  argv[i]);
+                fprintf(stderr, "TEA :: Error : ``%s'' is not a valid output format.\n",  argv[i]);
                 exit(-1);
-            }
-        } else if (!stricmp("/F", argv[i])) {
-
-            /* on change les paramètres du front-end */
-            i++;
-
-            if (argv[i] && Dos9_EsToChar(lpFrontEndCommandLine)) {
-                Dos9_EsCat(lpFrontEndCommandLine, argv[i]);
-                Dos9_EsCat(lpFrontEndCommandLine, " ");
             }
 
         } else if (!strnicmp("/E", argv[i], 2)) {
@@ -106,19 +92,19 @@ int main(int argc, char *argv[])
 
             if (!stricmp("UTF-8" ,argv[i])) {
 
-                puts("TEA :: selection de l'encodage UTF-8");
                 Dos9_SetEncoding(DOS9_UTF8_ENCODING);
 
             } else {
 
-                puts("TEA :: selecton de l'encodage BYTE");
                 Dos9_SetEncoding(DOS9_BYTE_ENCODING);
 
             }
 
+            Dos9_EsCpy(lpEsEncoding, argv[i]);
+
         } else if (!strcmp("/?", argv[i])) {
 
-            puts("Consultez ``tea.txt'' ou entrez ``HLP TEA''");
+            puts("See file tea.txt\n");
             return 0;
 
         } else {
@@ -144,13 +130,13 @@ int main(int argc, char *argv[])
     }
 
     if (!(lpTeaPage=Tea_PageLoad(lpPagePath, pParseHandler))) {
-        printf("TEA :: Impossible d'ouvrir le modele TEA ``%s'' : %s", lpPagePath, strerror(errno));
+        printf("TEA :: Error : Unable to open TEA script ``%s'' : %s", lpPagePath, strerror(errno));
         return errno;
     }
 
     if (lpOutputPath) {
         if (!(pOutput=fopen(lpOutputPath, "w+"))) {
-            printf("TEA :: Impossible d'ouvrir la sortie TEA ``%s'' : %s", lpOutputPath, strerror(errno));
+            printf("TEA :: Error : Unable to open ``%s'' as output : %s", lpOutputPath, strerror(errno));
             return errno;
         }
     } else {

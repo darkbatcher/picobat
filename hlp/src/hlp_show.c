@@ -22,17 +22,8 @@
 #include <stdlib.h>
 #include <time.h>
 
-#ifdef WIN32
-
-    #include "libintl.h"
-    #include "iconv.h"
-
-#else
-
-    #include <libintl.h>
-    #include <iconv.h>
-
-#endif
+#include <libintl.h>
+#include <iconv.h>
 
 #include "hlp_showconst.h"
 

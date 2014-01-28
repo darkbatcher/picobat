@@ -55,6 +55,8 @@ typedef struct TEAPAGE {
 typedef void(*LP_OUTPUT_HANDLER)(TEAPAGE*,FILE*,int,char**);
 typedef void(*LP_PARSE_HANDLER)(int,void*);
 
+extern ESTR* lpEsEncoding;
+
 TEAPAGE*    Tea_PageLoad(const char* lpFilename,  LP_PARSE_HANDLER pHandler);
 TEAPAGE*    Tea_ParseStringBlock(char* lpContent);
 

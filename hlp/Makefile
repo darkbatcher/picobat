@@ -15,15 +15,8 @@ CC=gcc
 #the list of the sources
 SRC= ./src/hlp.c ./src/hlp_show.c ./src/hlp_load.c ./src/hlp_enc.c 
 
-ifeq ($(BUILD_OS),WINDOWS)
-	
-LIB=$(LIB_DIR)/libDos9.a $(LIB_DIR)/libiconv.dll.a $(LIB_DIR)/libintl.lib
+LIB=$(LIB_DIR)/libDos9.a -liconv -lintl
 
-else
-
-LIB=$(LIB_DIR)/libDos9.a 
-
-endif
 
 TARGET=$(CMD_DIR)/hlp
 CFLAGS=-Wall -g -I $(INC_DIR)

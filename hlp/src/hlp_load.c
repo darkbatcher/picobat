@@ -3,17 +3,9 @@
 #include <string.h>
 #include <errno.h>
 
-#ifdef WIN32
+#include <libintl.h>
+#include <iconv.h>
 
-    #include "libintl.h"
-    #include "iconv.h"
-
-#else
-
-    #include <libintl.h>
-    #include <iconv.h>
-
-#endif
 
 #include "hlp_load.h"
 #include "hlp_enc.h"

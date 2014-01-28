@@ -61,10 +61,12 @@ ${make}
 	
 {{First steps}}
 	
-	
 	Once you have binaries, you can run {Dos9} since it has no need to be installed in order to 
 	work. If you want to associate it with {.bat} or {.cmd} files though, do not associate it with both file types,
 	as {Dos9} is still an unstable software.
+	
+	To run {Dos9} you must execute the file {Dos9.exe} located in the ``bin'' directory of the folder where you
+	built files or where you extracted the archive you get.
 	
 	Once you launched {Dos9}, you can type batch commands lines. Remember that if you need some help, the help program is
 	{HLP}. Note that if you can not browse the documentation due to the lack of translation or else, you can still
@@ -84,7 +86,7 @@ ${	:: SET LANGUAGE=en_US}
 	{Dos9} is not translated yet in your language. Note that dos9 might be translated into your language, and manual page
 	can be not translated, so if you use {HLP}, it might crash. Nevertheless, this should'nt occur as {HLP} failsback to english.
 	
-{{Making translation}}
+{{Making translations}}
 
 	Translations uses the {GNU gettext} tool. To make translation, run the ``dos9-build-gettext.bat'' script to produce
 	{.po} files (avaliable from the sources) for your language, and then, translate it via a po editor like {poedit} or {kbabel}.

@@ -9,7 +9,7 @@
 
 # define a list of components to be build
 DOS9_COMPONENTS=./libDos9 ./libmatheval-dos9 ./libinteval ./dos9 ./tea \
-				./hlp ./hlp_make ./dump
+				./hlp ./dump
 				
 # define first part of build bash scripts
 DOS9_VAR_EXPORT= export LIB_DIR=../libs; \

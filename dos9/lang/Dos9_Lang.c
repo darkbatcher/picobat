@@ -3,17 +3,8 @@
 
 #include "Dos9_Lang.h"
 
-#ifdef WIN32
-
-    #include "libintl.h"
-
-#else
-
-    #include <libintl.h>
-
-#endif
-
-#include "libDos9.h"
+#include <libintl.h>
+#include <libDos9.h>
 
 const char* lpIntroduction;
 
