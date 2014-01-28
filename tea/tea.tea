@@ -1,0 +1,133 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+{{Commande TEA}}
+
+	La commande {TEA} (Tea Expands Ascii) est un {préprocesseur} de texte permettant
+	de générer {facilement} des documents {texte} formatés et des documents {html}
+	pour les pages web, nottament.
+	
+	Le langage de formatage {TEA} est volontairement réduit afin d'obtenir un langage
+	simple à apprendre et facile à mettre en oeuvre, et permet aussi à l'interpréteur
+	d'avoir une taille minimale, ce qui permet de l'embarquer dans n'importe quel type
+	de projet.
+	
+{{Synopsis}}
+
+${TEA fichier_source [fichier_destination] [/E[:]encodage] [/O[:]mode]}
+
+	Produit un document texte ou un document html à partir de la source tea {fichier_source}.
+	
+	- {fichier_source} : Le fichier source que {TEA} va mettre en forme (ce fichier doit respecter
+	la {tea_syntax|syntaxe TEA}).
+	
+	- {fichier_destination} : Le fichier que {TEA} va générer. Vous devez spécifier vous même l'extension
+	c'est-à-dire que si vous voulez créer un document texte, vous devrez spécifier l'extension {.txt},
+	et que si vous voulez créer un document html, il faudra spécifier l'extension {.html}. Néanmoins, {TEA}
+	n'utilise pas l'extension pour déterminer la nature du fichier à générer mais le commutateur {/O} décrit
+	ci-après, donc l'extension finale du fichier n'a que peu d'importance.
+	
+	- {/E[:]encodage} : Spécifie l'encodage de caractères à utiliser pour traiter le texte. En général, 
+	nous préconisons l'encodage {UTF-8} qui est un encodage universel et adapté au langages les
+	plus courrants. Les différents encodages peuvent être les suivants:
+	
+		-- {UTF-8} : Utilise l'encodage universel {UTF-8} utilisant le jeu de caractère {unicode}.
+		Si vous spécifiez cet encodage, alors le fichier peut commencer par un {BOM} (Byte Order Mark).
+		
+		-- N'importe quel autre encodage sera traité comme un encodage basé sur un octet de largeur.
+		Quand bien même il serait multi-octet, cela ne poserait de problème que si il y avait des octet
+		valant {NUL} et que les caractères {\{}, {\}}, {\|}, {@} et {-} ne sont pas placés au même endroit
+		que dans la table {ASCII}. Il se pourait aussi que la longueur des mots soit mal jugée pour le mode texte
+		mais, cela ne devrait pas avoir de répercussion pour le mode {html}.
+		
+		@- Les version précédentes permettaient à l'utilisateur de spécifier les encodages {UTF-32} et {UTF-16} (dans
+		les saveurs {LE} (petit boutien) et {BE} (grand boutien}) en utilisant un wrapper de la commande {iconv|GNU Iconv}.
+		Ce support a été supprimé, car il revient logiquement à l'utilisateur de convertir lui-même ses documents, car il
+		est plus à même de savoir quels sont les encodages de ses fichiers.
+		
+	- {/O[:]mode} : Spécifie le type de fichier que doit produire {TEA}. Le type de fichier {MODE}
+	peut être l'un des types suivants:
+	
+		-- {TEXT} : Le fichier produit sera un fichier texte, c'est a dire un fichier sans coloration
+		se servant des caractères du texte pour formatter le document.
+		
+		-- {HTML} : Le fichier produit sera un fichier {html}. Ce format est utilisé pour la création
+		(entre autres) de pages web. Il permet d'obtenir un résultat plus lisible et globalement mieux
+		présenté que le mode {TEXT}. La sortie produite par défaut est un fichier compatible avec la norme {HTML5}.
+		
+	@- Les versions précédentes de {TEA} autorisaient la création de deux formats supplémentaires, {xml} et {hlp-man}
+	(un format intermédiaire pour le gestionnaire de manuel {hlp|HLP}). Ces deux formats ont étés abandonnés à cause
+	que leur utilisation était trop restreinte, et alourdissait grandement {TEA}. De plus {hlp-man} va être abandonné
+	au profit d'un système basique d'affichage de texte, basé sur une recherche et un afficheur de fichier texte 
+	(du type de {more|MORE}).
+	
+{{Synopsis - Options supplémentaires pour le mode HTML}}
+
+	Si vous spécifiez {HTML} comme mode de sortie, alors il vous sera possible de spécifier les paramètres
+	suplémentaires suivants :
+	
+${TEA fichier_source fichier_destination /O:HTML [/M fichier_meta] [/H fichier_head] [/F fichier_foot] [/T préfixe_titre] [/C[:]mode]}
+
+	Où chaque option correspond à :
+	
+		- {/M fichier_meta} : Spécifie un fichier {fichier_meta} qui contient des lignes de codes
+		{HTML} qui seront placées entre les deux balises {<head>} et {</head>}  du document {HTML}.
+		Cette option peut être très utile pour ajouter une liaison à une feuille de style par exemple.
+		
+		- {/H fichier_head} : Spécifie un fichier {fichier_head} qui contient des lignes de code {HTML}
+		qui seront placées juste après la balise {<body>}, c'est-à-dire, avant que le code
+		{HTML} produit par {TEA} ne soit inséré. Cette option permet par exemple de placer une en-tête.
+		
+		- {/F fichier_foot} : Spécifie un fichier {fichier_foot} qui contient des lignes de code {HTML}
+		qui seront insérées entre la fin du code généré par {TEA} et la balise {</body>}. Cette option
+		peut être utilisée pour placer un pied de page avec un copyright par exemple.
+
+		- {/T préfixe_titre} : Spécifie un chaîne {préfixe_titre} qui sera utilisée pour préfixer le
+		titre du document (le titre du document est le titre de plus haut niveau, celui qui apparaît en
+		premier dans le fichier source). 
+		
+		- {/C[:]mode} : Active un mode de sortie différent que le mode par défaut qui respecte la norme
+		{HTML5}. Le mode {mode} peut avoir les valeurs suivantes :
+		
+			-- {HTML4} : Le fichier {HTML} généré respectera la norme {HTML 4.01}. Le fichier respectera
+			la version {stricte} de la norme. Si vous ajoutez du code à travers les commutateurs {/M}, {/F}
+			ou {/H}, il faut que ce code respecte aussi la norme en version stricte si vous désirez faire
+			en sorte que vos pages soient valides (du point de vue du {W3C})
+			
+			-- {XHTML} : Le fichier {HTML} généré respectera la norme {xHTML}. La même remarque concernant les
+			ajouts de codes s'applique ici.
+			
+{{Syntaxe des fichiers TEA}}
+
+	La syntaxe des fichiers {TEA} est expliquée dans le document suivant: {tea_syntax|Syntaxe des fichiers TEA}
+			
+{{Compatibilité}}
+
+	La ligne de commande de la version 2 n'est plus compatible avec celle de la version 1. Elle est cependant
+	bien mieux pensée.
+	
+	Les fichiers sources pour {TEA} sont toujours compatibles avec la version 2.
+
+{{Auteur}}
+
+	{TEA} a été écrit de 2013 à 2014 par {Romain GARBI} (Darkbatcher). {TEA} est un logiciel libre distribué
+	sous licence {GNU GPL}.
+
+{{À voir aussi}}
+
+	{dos9|Interpréteur Dos9}, {tea_syntax|Syntaxe des fichiers TEA}

@@ -33,11 +33,12 @@ ${	DOS9 [/v] [/n] [/f] [/e] [/q] [/i entrée] [/o sortie] [fichier]}
 
 		- {fichier} : Chemin du script de commande a exécuter.
 		
-		- {/v}	  : Active {dos9/exp|l'expansion retardée de variable}.
+		- {/v}	  : Active {dos9/spec/exp|l'expansion retardée de variable}.
 		
-		- {/n}	  : Active les {dos9/ext|extensions de dos9}.
+		- {/n}	  : Active les {dos9/spec/ext|extensions de dos9}.
 		
-		- {/f}	  : Active les {dos9/floats|nombres flotants}.
+		- {/f}	  : Active les nombres flotants dans la commande {SET}. Pour
+		plus d'information, consultez la page {setaf|Commande SET (nombres flotants)}.
 		
 		- {/e}	  : Désactive l'affichage du chemin courant.
 		
@@ -54,7 +55,7 @@ ${	DOS9 [/v] [/n] [/f] [/e] [/q] [/i entrée] [/o sortie] [fichier]}
 	Les commuttateurs {/o} et {/i} ne sont pas destinés à être utilisés d'eux même,
 	ils sont conçus pour être utilisé par les boucles {for|FOR}.
 
-{{Compatibilite}}
+{{Compatibilité}}
 
 	   Compatible avec toutes les versions de {Dos9}. Incompatible avec
 	   {cmd.exe}.
@@ -80,7 +81,7 @@ ${	DOS9 [/v] [/n] [/f] [/e] [/q] [/i entrée] [/o sortie] [fichier]}
 	{http://gnuwin32.sourceforge.net/|projet GnuWin}. Ces binaires sont {iconv|GNU iconv}
 	ete {nano|GNU Nano}.
 	 
-{{A voir aussi}}
+{{À voir aussi}}
 
 	{echo|Commande ECHO}, {scripts|Scripts de commandes},
 	{commands|Liste des commandes}	

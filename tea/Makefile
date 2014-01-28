@@ -12,7 +12,7 @@
 CC=gcc
 
 #the list of the sources
-SRC= ./src/tea.c ./src/out/tea_hlp_out.c ./src/out/tea_html_out.c \
+SRC= ./src/tea.c ./src/out/tea_html_out.c \
      ./src/Tea_Load.c ./src/out/tea_text_out.c ./src/Tea_Node.c \
      ./src/Tea_Output.c ./src/tea_strupr.c
 
@@ -37,7 +37,7 @@ OBJ=$(SRC:.c=.o)
 all: $(TARGET)
 
 $(TARGET) : $(OBJ)
-			$(CC) $(CFLAGS) -o $@ $^ $(LIB)
+			$(CC) $(CFLAGS) -s -o $@ $^ $(LIB)
 
 %.o : %.c
 			$(CC) -o $@ -c $< $(CFLAGS)

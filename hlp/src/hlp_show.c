@@ -150,8 +150,8 @@ void Hlp_GetCommand(char* lpCmd, size_t iSize)
     Dos9_SetConsoleCursorPosition((CONSOLECOORD){0,HLP_BAR_Y});
 
 
-    printf("Cmd :                                                                          \n");
-    printf(gettext("UP : scroll up    DOWN : scroll down    LNK : Follow link    HELP : Get help   "));
+    printf("    :                                                                          \n");
+    printf(gettext("U(P) : scroll up  D(OWN) : scroll down  L(NK) : Follow link  E(XIT) : exit     "));
 
 
     Dos9_SetConsoleTextColor(DOS9_BACKGROUND_WHITE | DOS9_FOREGROUND_BLACK);
@@ -186,7 +186,7 @@ int Hlp_RunCommand(char* lpCmd, char* lpPageName, size_t iNameSize, char* lpTitl
 
     HLPLINKS* lpLinksTmp, *lpNewLinks;
 
-    if (!stricmp(lpCmd, "down\n")) {
+    if (!stricmp(lpCmd, "down\n") || !stricmp(lpCmd, "d\n")) {
 
         if ((*lpPage)->lpNextLine) {
 
@@ -195,7 +195,7 @@ int Hlp_RunCommand(char* lpCmd, char* lpPageName, size_t iNameSize, char* lpTitl
         }
 
 
-    } else if (!stricmp(lpCmd, "up\n")) {
+    } else if (!stricmp(lpCmd, "up\n") || !stricmp(lpCmd, "u\n")) {
 
         if ((*lpPage)->lpPreviousLine) {
 
@@ -203,7 +203,7 @@ int Hlp_RunCommand(char* lpCmd, char* lpPageName, size_t iNameSize, char* lpTitl
 
         }
 
-    } else if (!strnicmp(lpCmd, "lnk ", 4)) {
+    } else if (!strnicmp(lpCmd, "lnk ", 4) || !strnicmp(lpCmd, "l ", 2)) {
 
         lpCmd+=4;
 
@@ -237,7 +237,7 @@ int Hlp_RunCommand(char* lpCmd, char* lpPageName, size_t iNameSize, char* lpTitl
 
         }
 
-    } else if (!strnicmp(lpCmd, "open ", 5)) {
+    } else if (!strnicmp(lpCmd, "open ", 5) || !strnicmp(lpCmd, "o ", 2)) {
 
         lpCmd+=5;
 
@@ -260,7 +260,9 @@ int Hlp_RunCommand(char* lpCmd, char* lpPageName, size_t iNameSize, char* lpTitl
         *lpLinks=lpNewLinks;
 
 
-    } else if (!stricmp(lpCmd, "exit\n")) {
+    } else if (!stricmp(lpCmd, "exit\n") || !stricmp(lpCmd, "e\n")
+               || !stricmp(lpCmd, "q\n")
+               ) {
 
         return 0;
 

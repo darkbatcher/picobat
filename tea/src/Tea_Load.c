@@ -1,3 +1,23 @@
+/*
+ *
+ *   TEA - A quick and simple text preprocessor
+ *   Copyright (C) 2010-2014 DarkBatcher
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
@@ -484,7 +504,6 @@ int Tea_MakeLevels(TEAPAGE* lpTeaPage)
          *lpLastMark;
 
     int iEscapeFound=FALSE,
-        iNoMark=FALSE,
         iLastLevel=0;
 
     while (lpTeaPage) {
@@ -497,11 +516,11 @@ int Tea_MakeLevels(TEAPAGE* lpTeaPage)
                    || *lpCh=='\t'
                    || *lpCh=='\n')
                     lpCh++;
+
             if  (*lpCh) {
 
                 if (*lpCh=='@') {
 
-                    iNoMark=TRUE;
                     lpTeaPage->iFlag|=TEA_LIST_NO_MARK;
                     iEscapeFound=TRUE;
                     lpCh++;
@@ -519,7 +538,7 @@ int Tea_MakeLevels(TEAPAGE* lpTeaPage)
 
                 }
 
-                if (!iNoMark)
+                if (!(lpTeaPage->iFlag & TEA_LIST_NO_MARK))
                     lpCh=lpLastMark;
 
                 if (iEscapeFound) {
@@ -550,6 +569,7 @@ int Tea_MakeLevels(TEAPAGE* lpTeaPage)
             iLastLevel=0;
 
         }
+
 
         lpTeaPage=lpTeaPage->lpTeaNext;
     }
