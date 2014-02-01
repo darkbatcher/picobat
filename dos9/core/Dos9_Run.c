@@ -26,30 +26,39 @@
 #endif
 
 #include "Dos9_Core.h"
+
+// #define DOS9_DBG_MODE
+
+#include "Dos9_Debug.h"
+
 #include "../command/Dos9_CmdLib.h"
 #include "../errors/Dos9_Errors.h"
+
 
 int Dos9_RunBatch(int isScript)
 {
     PARSED_STREAM_START* lppssStreamStart;
     PARSED_STREAM* lppsStream;
-    DEBUG("Runner initialized");
     while (!Dos9_SendMessage(DOS9_READ_MODULE, MODULE_READ_ISEOF, NULL, NULL))
     {
-        DEBUG("Start parsing");
+
+        DOS9_DBG("[*] %d : Parsing new line\n", __LINE__);
         Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_NEWLINE, NULL, NULL);
-        DEBUG("parses new line");
+
         lppssStreamStart=(PARSED_STREAM_START*)Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_READ_LINE_PARSE, NULL, (void*)isScript);
+
         if (!lppssStreamStart) {
-            DEBUG("Error : Unable to reparse the stream [next line : reason]");
-            DEBUG(strerror(errno));
+            DOS9_DBG("!!! Can't parse line : %s\n", strerror(errno));
             continue;
         }
-        DEBUG("Line roughly parsed");
+
         Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_PARSED_START_EXEC, lppssStreamStart, NULL);
-        DEBUG("Parsing succeded");
+        DOS9_DBG("\t[*] Global streams set\n.");
+
+
         lppsStream=lppssStreamStart->lppsStream;
-        DEBUG("Starting command loop !");
+
+
         do {
             Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_PIPE_OPEN, lppsStream, NULL);
             Dos9_RunCommand(lppsStream->lpCmdLine);
@@ -57,6 +66,9 @@ int Dos9_RunBatch(int isScript)
 
         Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_FREE_PARSED_LINE, lppssStreamStart, NULL);
         Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_ENDLINE, NULL, NULL);
+
+        DOS9_DBG("\t[*] Line run.\n");
+
     }
     return 0;
 }
@@ -100,6 +112,8 @@ int Dos9_RunCommand(ESTR* lpCommand)
 
     if (*lpCmdLine==':')
         return 0;
+
+    DOS9_DBG("*** Running  line '%s'\n", lpCmdLine);
 
     switch((iFlag=Dos9_GetCommandProc(lpCmdLine, lpclCommands, (void**)&lpProc)))
     {

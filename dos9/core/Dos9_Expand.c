@@ -7,6 +7,8 @@
 
 #include "Dos9_Core.h"
 
+#include "../errors/Dos9_Errors.h"
+
 /* function for replacing variable on commands line  */
 void Dos9_ReplaceVars(ESTR* ptrCommandLine)
 {

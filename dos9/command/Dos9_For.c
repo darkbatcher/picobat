@@ -1268,7 +1268,7 @@ int Dos9_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn, int
     }
 
     fputs(Dos9_EsToChar(lpInput), pFile);
-    fputs("\nexit\n", pFile);
+    fputs("& exit\n", pFile);
     fflush(pFile);
         /* write the command given on the for command */
 

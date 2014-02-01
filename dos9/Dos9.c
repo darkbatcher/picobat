@@ -208,8 +208,6 @@ int main(int argc, char *argv[])
     lpInitVar[2]=lpTitle;
     Dos9_InitVar(lpInitVar);
 
-    atexit(Dos9_Exit);
-
       /**********************************************
        *         Initialization of Modules          *
        **********************************************/
@@ -237,7 +235,9 @@ int main(int argc, char *argv[])
 
     }
 
-    DEBUG("Done");
+    pErrorHandler=Dos9_Exit;
+
+
 
     /* running auto batch initialisation */
     Dos9_UpdateCurrentDir();
@@ -254,6 +254,8 @@ int main(int argc, char *argv[])
     Dos9_SendMessage(DOS9_READ_MODULE, MODULE_READ_SETPOS, NULL, NULL);
 
     Dos9_RunBatch((int)lpFileName); // if we are actually running a script lpFileName is non-zero
+
+    Dos9_Exit();
 
     return 0;
 

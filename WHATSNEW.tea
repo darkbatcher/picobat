@@ -273,3 +273,21 @@ ${IF 1==1 (
 {{Friday 24th, Junuary}}
 
 	- Started working on an enhanced version of {TEA} text preprocessor.
+	
+{{Saturday 1st, February}}
+
+	- Final version of {TEAv2}. Added support for both {HTML 5}, {HTML 4.01} and
+	{xHTML}. Others formats have been dropped.
+	
+	- Fixed a bug with the parsing of command line parameter. If, the final parameter
+	was enclosed in quotes (simple or double), it resulted in undefined behaviour.
+	
+	- Fixed a bug that prevented user from include pipes in {FOR /F} command input.
+	
+	- Enhanced pipe features.
+	
+	- Fixed a bug that caused the following message
+	
+	${Error : Unable to release mutex}
+	
+	@- to be printed at exit, due to an undefined behavior with {atexit()} function.

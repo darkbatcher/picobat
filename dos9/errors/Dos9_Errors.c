@@ -9,12 +9,15 @@
 
 #include <libDos9.h>
 #include "Dos9_Errors.h"
+#include "../core/Dos9_Core.h"
 
 #include <libintl.h>
 
 
 const char* lpErrorMsg[DOS9_ERROR_MESSAGE_NUMBER];
 const char* lpQuitMessage;
+
+
 
 void Dos9_LoadErrors(void)
 {
@@ -103,6 +106,10 @@ void Dos9_LoadErrors(void)
 
     lpErrorMsg[DOS9_INVALID_TOP_BLOCK]=gettext("Error : \"%s\" is not a valid top-level block.\n");
 
+    lpErrorMsg[DOS9_UNABLE_DUPLICATE_FD]=gettext("Error : Unable to duplicate file descriptor (%d).\n");
+
+    lpErrorMsg[DOS9_UNABLE_CREATE_PIPE]=gettext("Error : Unable to create pipe at function (%s).\n");
+
     lpQuitMessage=gettext("\nAborting current command, press any key to end Dos9.\n");
 
 }
@@ -124,8 +131,14 @@ void Dos9_ShowErrorMessage(unsigned int iErrorNumber, const char* lpComplement, 
     if (iExitCode == TRUE) {
 
         Dos9_SetConsoleColor(DOS9_COLOR_DEFAULT);
+
+        if (pErrorHandler)
+            pErrorHandler();
+
         puts(lpQuitMessage);
+
         getch();
+
         exit(iExitCode);
 
     } else {

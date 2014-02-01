@@ -34,5 +34,6 @@ extern char* lpInitVar[];
 
 extern int iInputD,
            iOutputD;
+extern void(*pErrorHandler)(void);
 
 #endif

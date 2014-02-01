@@ -255,6 +255,7 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 
     Dos9_EsCpy(lpRecieve, "");
 
+
     if (*lpName!='~') {
 
         /* this is a conventionnal special variable */
@@ -276,9 +277,9 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 
     if (!*lpName) return NULL;
 
-    for (;*(lpName) && !strchr("dnpxzta", tolower(*(lpName))) && i<DOS9_VAR_MAX_OPTION;lpName++) {
+    for (;*(lpName) && strchr("dnpxzta", *(lpName)) && i<DOS9_VAR_MAX_OPTION;lpName++) {
 
-        switch(*lpName | 32)
+        switch(*lpName)
         {
             case 'd':
 
@@ -331,6 +332,9 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 
         }
     }
+
+
+
 
     if ((*lpName & 0x80) || (*lpName <= 0x20)) {
 
@@ -411,17 +415,26 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 
                 case 'd':
                     Dos9_EsCat(lpRecieve, lpDrive);
-                    if (cFlag[i+1]!=0) Dos9_EsCat(lpRecieve, "\t");
+
+                    if (cFlag[i+1]!=0 && cFlag[i+1]!='p')
+                        Dos9_EsCat(lpRecieve, "\t");
+
                     break;
 
                 case 'p':
                     Dos9_EsCat(lpRecieve, lpDir);
-                    if (cFlag[i+1]!=0) Dos9_EsCat(lpRecieve, "\t");
+
+                    if (cFlag[i+1]!=0 && cFlag[i+1]!='n')
+                        Dos9_EsCat(lpRecieve, "\t");
+
                     break;
 
                 case 'n':
                     Dos9_EsCat(lpRecieve, lpFileName);
-                    if (cFlag[i+1]!=0) Dos9_EsCat(lpRecieve, "\t");
+
+                    if (cFlag[i+1]!=0 && cFlag[i+1]!='x')
+                        Dos9_EsCat(lpRecieve, "\t");
+
                     break;
 
                 case 'x':

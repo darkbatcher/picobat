@@ -52,7 +52,7 @@ int   _Dos9_EstrFreeBuffer_MaxElement=-1;
     {
 
         if (!ReleaseMutex(_Dos9_EstrFreeBuffer_Mutex)) {
-            puts("Error : Unable to release Mutex");
+            fprintf(stderr, "Error : Unable to release Mutex : %d\n", (int)GetLastError());
             exit(-1);
         }
 

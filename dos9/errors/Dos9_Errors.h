@@ -66,8 +66,10 @@ void Dos9_LoadErrors(void);
 #define DOS9_FOR_TRY_REASSIGN_VAR           24
 #define DOS9_INVALID_EXPRESSION             25
 #define DOS9_INVALID_TOP_BLOCK              26
+#define DOS9_UNABLE_DUPLICATE_FD            27
+#define DOS9_UNABLE_CREATE_PIPE             28
 
-#define DOS9_ERROR_MESSAGE_NUMBER 27
+#define DOS9_ERROR_MESSAGE_NUMBER 29
 
 #define DOS9_PRINT_C_ERROR 0x80
 

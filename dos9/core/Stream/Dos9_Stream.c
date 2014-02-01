@@ -155,8 +155,10 @@ int Dos9_OpenPipe(LPSTREAMSTACK lpssStreamStack)
     int iPipeDescriptors[2], iOldInputDescriptor;
     LPSTREAMLVL lpLvl;
 
-    if (_Dos9_Pipe(iPipeDescriptors, 1024, O_TEXT) == -1)
-        return -1;
+    if (_Dos9_Pipe(iPipeDescriptors, 0x8000, O_TEXT) == -1)
+        Dos9_ShowErrorMessage(DOS9_UNABLE_CREATE_PIPE | DOS9_PRINT_C_ERROR,
+                              __FILE__ "/Dos9_OpenPipe()",
+                              TRUE);
 
     Dos9_GetStack(lppsStreamStack, (void**)&lpLvl);
     if (!lpLvl->iPipeIndicator) {
@@ -223,7 +225,7 @@ LPSTREAMSTACK Dos9_PopStreamStack(LPSTREAMSTACK lppsStack)
                 return lppsStack;
         }
 
-        flushall();
+        //flushall();
         Dos9_FlushStd();
         Dos9_CloseDescriptors(lpStream->iFreeDescriptors);
         free(lpStream);
@@ -272,22 +274,32 @@ int Dos9_GetDescriptors(int* Array)
     int i;
     for (i=0;i<3;i++) {
         Array[i]=dup(i);
+
+        if (Array[i]==-1) {
+
+            Dos9_ShowErrorMessage(DOS9_UNABLE_DUPLICATE_FD | DOS9_PRINT_C_ERROR
+                      , (const char*)i, TRUE);
+
+        }
+
     }
     return 0;
 }
 
-int Dos9_FlushDescriptors(int* Array)
+void Dos9_FlushDescriptors(int* Array)
 {
     int i;
     for (i=0;i<3;i++) {
-        DEBUG("New flush loop...");
         if (Array[i]) {
-            dup2(Array[i], i);
-            DEBUG("Flushing new descriptor !");
-            DEBUG_(Array[i]);
+            if (dup2(Array[i], i)==-1) {
+
+                Dos9_ShowErrorMessage(DOS9_UNABLE_DUPLICATE_FD | DOS9_PRINT_C_ERROR
+                                      , (const char*)i, TRUE);
+
+            }
         }
     }
-    return TRUE;
+    return;
 }
 
 void Dos9_CloseDescriptors(int* Array)
@@ -298,16 +310,23 @@ void Dos9_CloseDescriptors(int* Array)
     }
 }
 
-int Dos9_FlushDescriptor(int iDescriptor, unsigned int iStd)
+void Dos9_FlushDescriptor(int iDescriptor, unsigned int iStd)
 {
-    if (iStd>2 || !iDescriptor) return FALSE;
-    DEBUG("fushing descriptor");
-    return dup2(iDescriptor, iStd);
+    if (iStd>2 || !iDescriptor) return;
+    if (dup2(iDescriptor, iStd) == -1) {
+
+        /* if that fail, the only way to possibly recover from
+           it is exiting */
+        Dos9_ShowErrorMessage(DOS9_UNABLE_DUPLICATE_FD | DOS9_PRINT_C_ERROR
+                              , (const char*)iStd, TRUE);
+
+    }
+    return ;
 }
 
 void Dos9_FlushStd(void)
 {
-    fflush(stdin);
+    //fflush(stdin);
     fflush(stdout);
     fflush(stderr);
 }
@@ -323,8 +342,10 @@ LPSTREAMLVL Dos9_AllocStreamLvl(void)
     int i;
 
     if ((lpStreamLvl=malloc(sizeof(STREAMLVL)))) {
-        for (i=0;i<3;i++) lpStreamLvl->iStandardDescriptors[i]=0;
-        for (i=0;i<3;i++) lpStreamLvl->iFreeDescriptors[i]=0;
+        for (i=0;i<3;i++) {
+            lpStreamLvl->iStandardDescriptors[i]=0;
+            lpStreamLvl->iFreeDescriptors[i]=0;
+        }
     }
     lpStreamLvl->iPipeIndicator=0;
     lpStreamLvl->iPopLock=FALSE;

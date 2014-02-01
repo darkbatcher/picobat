@@ -285,3 +285,24 @@ FRIDAY 24TH, JUNUARY
 
         - Started working on an enhanced version of TEA text preprocessor.
 
+SATURDAY 1ST, FEBRUARY
+
+        - Final version of TEAV2. Added support for both HTML 5, HTML 4.01 and 
+          XHTML. Others formats have been dropped.
+
+        - Fixed a bug with the parsing of command line parameter. If, the 
+          final parameter was enclosed in quotes (simple or double), it 
+          resulted in undefined behaviour.
+
+        - Fixed a bug that prevented user from include pipes in FOR /F command 
+          input.
+
+        - Enhanced pipe features.
+
+        - Fixed a bug that caused the following message
+
+             Error : Unable to release mutex
+
+          to be printed at exit, due to an undefined behavior with ATEXIT() 
+          function.
+

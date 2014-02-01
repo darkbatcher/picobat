@@ -21,6 +21,8 @@
 #ifndef TEA_LIB_H
 #define TEA_LIB_H
 
+#include <libDos9.h>
+
 #define TEA_NODE_PLAIN_TEXT (0)
 #define TEA_NODE_LINK       (1)
 #define TEA_NODE_EMPHASIS   (2)

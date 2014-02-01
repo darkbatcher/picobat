@@ -33,6 +33,8 @@ COLOR colColor;
 int iInputD=0,
     iOutputD=0;
 
+void(*pErrorHandler)(void)=NULL;
+
 #ifdef WIN32
     #define environ _environ
 #else

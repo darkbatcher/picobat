@@ -57,11 +57,11 @@
     \{
 */
 /** the descriptor number of stdout */
-#define DOS9_STDIN 0
+#define DOS9_STDIN STDIN_FILENO
 /** The descriptor number of stdout */
-#define DOS9_STDOUT 1
+#define DOS9_STDOUT STDOUT_FILENO
 /** The descriptor number of stderr */
-#define DOS9_STDERR 2
+#define DOS9_STDERR STDERR_FILENO
 
 /** \} */
 
@@ -85,6 +85,7 @@ typedef struct STREAMLVL {
     int iFreeDescriptors[3];/**< stores the descriptors to be feed during poping from stack */
     int iPipeIndicator;
     int iPopLock;
+    int iResetStdBuff;
  } STREAMLVL,*LPSTREAMLVL;
 
 /** \typedef STACK STREAMSTACK,*LPSTREAMSTACK
@@ -144,8 +145,8 @@ int Dos9_GetStreamStackLockState(STREAMSTACK* lppsStack);
 
 
 int Dos9_GetDescriptors(int* Array);
-int Dos9_FlushDescriptor(int iDescriptor, unsigned int iStd);
-int Dos9_FlushDescriptors(int* Array);
+void Dos9_FlushDescriptor(int iDescriptor, unsigned int iStd);
+void Dos9_FlushDescriptors(int* Array);
 void Dos9_CloseDescriptors(int* Array);
 int Dos9_CreatePipe(int* Array);
 int Dos9_FlushPipeDescriptors(int* Array, int iLastDescriptor, int iStdOut);

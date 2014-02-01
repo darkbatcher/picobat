@@ -18,7 +18,7 @@ SRC=./Dos9.c ./command/Dos9_Conditions.c ./command/Dos9_FileCommands.c \
 	./core/Dos9_Exit.c ./core/Dos9_Var.c ./command/Dos9_For.c \
 	./core/Modules/Parse/Dos9_Parse.c ./core/Modules/Read/Dos9_Read.c \
 	./core/Stream/Dos9_Stream.c ./errors/Dos9_Errors.c \
-	./lang/Dos9_Lang.c
+	./lang/Dos9_Lang.c ./core/Dos9_Debug.c
 
 ifeq ($(BUILD_OS),WINDOWS)
 

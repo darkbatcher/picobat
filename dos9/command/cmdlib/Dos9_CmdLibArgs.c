@@ -120,9 +120,10 @@ DOS9_CMDLIB char* Dos9_GetNextParameterEs(char* lpLine, ESTR* lpReturn)
 
      }
 
-     if (!((*lpLine=='\0') & !iSeekQuote)) {
+     if (!(*lpLine=='\0') || iSeekQuote) {
 
-        lpLine++;
+        if (*lpLine)
+            lpLine++;
         i--; /* i is obviously strictly greater
                 than 1 */
 
@@ -148,7 +149,7 @@ DOS9_CMDLIB int   Dos9_GetParamArrayEs(char* lpLine, ESTR** lpArray, size_t iLen
     ESTR* lpTemp=Dos9_EsInit();
     char* lpNext;
 
-    while (iIndex < iLenght && (lpNext = Dos9_GetNextParameterEs(lpLine, lpParam))) {
+    while ((iIndex < iLenght) && (lpNext = Dos9_GetNextParameterEs(lpLine, lpParam))) {
 
         while (*lpLine=='\t' || *lpLine==' ') lpLine++;
 
