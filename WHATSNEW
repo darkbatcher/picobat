@@ -306,3 +306,8 @@ SATURDAY 1ST, FEBRUARY
           to be printed at exit, due to an undefined behavior with ATEXIT() 
           function.
 
+FRIDAY 7TH, FEBRUARY
+
+        - fixed a bug of SET /P subcommand. The bug caused a SEGFAULT to be 
+          raised on execution.
+

@@ -163,6 +163,7 @@ int main(int argc, char *argv[])
             lpFileName=argv[i];
             Dos9_SetLocalVar(lpvLocalVars, '0', lpFileName);
         }
+
     }
 
     /* initialisation du système de génération aléatoire */

@@ -291,3 +291,13 @@ ${IF 1==1 (
 	${Error : Unable to release mutex}
 	
 	@- to be printed at exit, due to an undefined behavior with {atexit()} function.
+	
+{{Friday 7th, February}}
+
+	- Fixed a bug of {SET /P} subcommand. The bug caused a SEGFAULT to be raised on
+	execution.
+	
+	- Fixed a major bug that prevented command search to be executed normally, it
+	returned the shortest match available instead of the largest available one.
+	
+	- Added an error message if the {SET} command is unable to set environment variable.

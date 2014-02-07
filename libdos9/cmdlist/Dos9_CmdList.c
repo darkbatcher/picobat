@@ -87,19 +87,66 @@ LIBDOS9 LPCOMMANDLIST Dos9_MapCommandInfo(LPCOMMANDINFO lpciCommandInfo, int i)
 LIBDOS9 COMMANDFLAG   Dos9_GetCommandProc(char* lpCommandLine, LPCOMMANDLIST lpclCommandList, void** lpcpCommandProcedure)
 {
     int iRet;
-    while ((iRet=strnicmp(lpCommandLine,lpclCommandList->ptrCommandName,lpclCommandList->iLenght)))
-    {
-        if (iRet>0)
-        {
-            if (!(lpclCommandList=lpclCommandList->lpclRightRoot)) return -1;
+    LPCOMMANDLIST lpclCommandReturn=NULL;
+
+    while (lpclCommandList) {
+
+        iRet=strnicmp(lpCommandLine,
+                      lpclCommandList->ptrCommandName,
+                      lpclCommandList->iLenght);
+
+        if (iRet>0) {
+
+           lpclCommandList=lpclCommandList->lpclRightRoot;
+
+        } else if (iRet<0) {
+
+            lpclCommandList=lpclCommandList->lpclLeftRoot;
+
+        } else {
+
+            if (lpclCommandReturn) {
+
+                if ((lpclCommandList->iLenght) > (lpclCommandReturn->iLenght)) {
+
+                    lpclCommandReturn=lpclCommandList;
+
+                }
+
+            } else {
+
+                lpclCommandReturn=lpclCommandList;
+
+            }
+
+            iRet=stricmp(lpCommandLine, lpclCommandList->ptrCommandName);
+
+            if (iRet>0) {
+
+                lpclCommandList=lpclCommandList->lpclRightRoot;
+
+            } else if (iRet<0) {
+
+                lpclCommandList=lpclCommandList->lpclRightRoot;
+
+            } else {
+
+                /* this is obviously realy unlikely to happen, however,
+                   this case must be handled, or it results on a infinite
+                   loop */
+                break;
+
+            }
+
         }
-        else if (iRet<0)
-        {
-            if (!(lpclCommandList=lpclCommandList->lpclLeftRoot)) return -1;
-        }
+
     }
-    *lpcpCommandProcedure=lpclCommandList->lpCommandProc;
-    return lpclCommandList->cfFlag;
+
+    if (lpclCommandReturn==NULL)
+        return -1;
+
+    *lpcpCommandProcedure=lpclCommandReturn->lpCommandProc;
+    return lpclCommandReturn->cfFlag;
 }
 
 LIBDOS9 int Dos9_FreeCommandList(LPCOMMANDLIST lpclList)

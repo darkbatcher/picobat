@@ -110,6 +110,8 @@ void Dos9_LoadErrors(void)
 
     lpErrorMsg[DOS9_UNABLE_CREATE_PIPE]=gettext("Error : Unable to create pipe at function (%s).\n");
 
+    lpErrorMsg[DOS9_UNABLE_SET_ENVIRONMENT]=gettext("Error : Unable to set environment string (%s).\n");
+
     lpQuitMessage=gettext("\nAborting current command, press any key to end Dos9.\n");
 
 }
@@ -128,7 +130,7 @@ void Dos9_ShowErrorMessage(unsigned int iErrorNumber, const char* lpComplement, 
 
     }
 
-    if (iExitCode == TRUE) {
+    if (iExitCode) {
 
         Dos9_SetConsoleColor(DOS9_COLOR_DEFAULT);
 

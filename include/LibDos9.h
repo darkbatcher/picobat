@@ -449,6 +449,7 @@ int _Dos9_Estr_Init(void);
             \param lpclCommandList : A pointer to a COMMANDLIST structure in which the command will be searched
             \param lpcpCommandProcedure : A pointer to a pointer that will recieve the command-associated function.
             \return Return the COMMANDFLAG associated to the command, or returns -1 (0xffffffff) if no command has been found
+			\note Before Dos9 version 2014.0.9, the function used to return the first match found if they were colisions. Since, it returns the largest
             */
         LIBDOS9 COMMANDFLAG     Dos9_GetCommandProc(char* lpCommandLine, LPCOMMANDLIST lpclCommandList,void** lpcpCommandProcedure);
     /** \} */
