@@ -235,20 +235,8 @@ int Dos9_CmdSet(char *lpLine)
 
             /* simple set */
 
-            lpLine=lpLine+3;
-            while (*lpLine==' ' || *lpLine=='\t')
-                lpLine++;
-
-
-            if ((lpNextToken=strrchr(lpLine,' ')))
-                *lpNextToken='\0';
-
-            if (Dos9_PutEnv(lpLine)) {
-
-                Dos9_ShowErrorMessage(DOS9_UNABLE_SET_ENVIRONMENT, lpLine, FALSE);
+            if ((Dos9_CmdSetS(lpLine+3)))
                 goto error;
-
-            }
 
         }
 
@@ -263,6 +251,34 @@ int Dos9_CmdSet(char *lpLine)
 
     error:
         return -1;
+}
+
+/* simple set */
+int Dos9_CmdSetS(char* lpLine)
+{
+    ESTR* lpEsVar=Dos9_EsInit();
+
+    while (*lpLine==' ' || *lpLine=='\t')
+            lpLine++;
+
+    Dos9_GetEndOfLine(lpLine, lpEsVar);
+
+    if (Dos9_PutEnv(Dos9_EsToChar(lpEsVar))) {
+
+        Dos9_ShowErrorMessage(DOS9_UNABLE_SET_ENVIRONMENT,
+                              Dos9_EsToChar(lpEsVar),
+                              FALSE);
+        goto error;
+
+    }
+
+    Dos9_EsFree(lpEsVar);
+    return 0;
+
+    error:
+        Dos9_EsFree(lpEsVar);
+        return -1;
+
 }
 
 int Dos9_CmdSetP(char* lpLine)
@@ -287,6 +303,9 @@ int Dos9_CmdSetP(char* lpLine)
 
         Dos9_EsCat(lpEsVar, "=");
         Dos9_EsCatE(lpEsVar, lpEsInput);
+
+        if ((lpEqual=strchr(Dos9_EsToChar(lpEsVar), '\n')))
+            *lpEqual='\0';
 
         if (Dos9_PutEnv(Dos9_EsToChar(lpEsVar))) {
 

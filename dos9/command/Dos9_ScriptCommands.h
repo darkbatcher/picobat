@@ -7,6 +7,7 @@ int Dos9_CmdEcho(char* lpLine);
 int Dos9_CmdPause(char* lpLine);
 
 int Dos9_CmdSet(char* lpLine);
+int Dos9_CmdSetS(char* lpLine);
 int Dos9_CmdSetP(char* lpLine);
 int Dos9_CmdSetA(char* lpLine, int bFloats);
 int Dos9_CmdSetEvalFloat(ESTR* lpExpression);

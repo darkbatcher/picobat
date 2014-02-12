@@ -308,6 +308,13 @@ SATURDAY 1ST, FEBRUARY
 
 FRIDAY 7TH, FEBRUARY
 
-        - fixed a bug of SET /P subcommand. The bug caused a SEGFAULT to be 
+        - Fixed a bug of SET /P subcommand. The bug caused a SEGFAULT to be 
           raised on execution.
+
+        - Fixed a major bug that prevented command search to be executed 
+          normally, it returned the shortest match available instead of the 
+          largest available one.
+
+        - Added an error message if the SET command is unable to set 
+          environment variable.
 
