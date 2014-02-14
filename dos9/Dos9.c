@@ -58,7 +58,8 @@ int main(int argc, char *argv[])
 
     */
 
-    char* lpFileName=NULL;
+    char *lpFileName=NULL,
+          lpFileAbs[FILENAME_MAX];
     char lpTitle[FILENAME_MAX+10]="Dos9 [" DOS9_VERSION "] - ";
     int i;
     int j;
@@ -141,7 +142,7 @@ int main(int argc, char *argv[])
                     break;
 
                 case '?':
-                    puts("DOS9 [" DOS9_VERSION "] - Build" DOS9_BUILDDATE "\n"
+                    puts("DOS9 [" DOS9_VERSION "] - Build " DOS9_BUILDDATE "\n"
                          "Copyright (c) 2010-" DOS9_BUILDYEAR " " DOS9_AUTHORS "\n\n"
                          "This is free software, you can modify and/or redistribute it under "
                          "the terms of the GNU Genaral Public License.\n");
@@ -184,11 +185,12 @@ int main(int argc, char *argv[])
         strcat(lpTitle, "Command prompt");
         Dos9_PutEnv("DOS9_IS_SCRIPT=false");
 
-    } else if (!Dos9_FileExists(lpFileName)) {
-
-        Dos9_ShowErrorMessage(DOS9_FILE_ERROR, lpFileName, -1); // ou le message d'erreur si le fichier n'existe pas
-
     } else {
+
+        if (Dos9_GetFilePath(lpFileAbs, lpFileName, sizeof(lpFileAbs))==-1)
+            Dos9_ShowErrorMessage(DOS9_FILE_ERROR, lpFileName, -1);
+
+        lpFileName=lpFileAbs;
 
         strncat(lpTitle, lpFileName, sizeof(lpTitle)-sizeof("Dos9 [" DOS9_VERSION "] - "));
         Dos9_PutEnv("DOS9_IS_SCRIPT=true");
@@ -243,12 +245,17 @@ int main(int argc, char *argv[])
     /* running auto batch initialisation */
     Dos9_UpdateCurrentDir();
 
-    strcat(lpTitle+10, "/Dos9_Auto.bat");
+    strcat(lpTitle, "/Dos9_Auto.bat");
     Dos9_SendMessage(DOS9_READ_MODULE, MODULE_READ_SETFILE, lpTitle+10, NULL);
     Dos9_RunBatch(TRUE);
 
     Dos9_LoadErrors();
     Dos9_LoadStrings();
+
+    /* todo : Fix the bug caused by cd in batch scripts :
+       sometimes, the filename given is relative and not absolute
+       so that any use of cd will make the script to have
+       undefined behaviour */
 
     /* then run batch mode */
     Dos9_SendMessage(DOS9_READ_MODULE, MODULE_READ_SETFILE, lpFileName, NULL);

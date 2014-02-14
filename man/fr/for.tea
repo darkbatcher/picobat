@@ -126,7 +126,7 @@ ${FOR /F [options] %%A IN (objet) DO (
 				
 			-- {delims} : spécifie les caractères à utiliser comme délimiteurs pour découper l'entrée
 			obtenue avec {objet} en éléments. Par défaut, le seul délimiteur
-			utilisé par {Dos9} est l'espace (`` ''). Si vous spécifié ce paramètre, l'utilisation de l'espace
+			utilisé par {Dos9} est l'espace (`` ''). Si vous spécifiez ce paramètre, l'utilisation de l'espace
 			comme délimiteur sera remplacé par les caractères saisis. Si {Dos9} rencontre plusieurs délimiteurs
 			se suivant dans une chaîne, {Dos9} ne crée pas d'élément vide ``''.
 				
@@ -135,7 +135,7 @@ ${FOR /F [options] %%A IN (objet) DO (
 			est entouré par des guillemets inversés, alors il sera considéré comme une ligne de commande. Ce paramètre
 			est le seul qui ne nécessite pas de signe égal ni de valeur.
 			
-	{Example 1:} Parsage de chaîne:
+	{Exemple 1:} Parsage de chaîne:
 
 ${:: Le premier parse une chaîne simple
 :: Dans cette exemple, on va parser des en-tête
@@ -196,14 +196,15 @@ Nathaniel B. Nichols,américain,ingénieur,a contribué à la théorie des asser
 	commande.)
 	
 ${FOR /F "tokens=1,2,3" "delims=," %%A IN (my_csv.csv) DO (
-	:: split that file into tokens
-	:: %%A will recieve the name
-	:: %%B will recieve the citizenship
-	:: %%C will recieve the proffession
-	:: %%D will recieve the description
+	:: découpe le fichier en éléments
+	:: %%A recevra le nom
+	:: %%B recevra la nationalité
+	:: %%C recevra la profession
+	:: %%D recevra la description
 	
 	ECHO %%A était un %%C %%B qui %%C
 )}
+
 
 	Le script doit alors produire la sortie suivante:
 	

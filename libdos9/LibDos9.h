@@ -73,10 +73,15 @@
     #define dup2(a,b) _dup2(a,b)
 	#define write(a,b,c) _write(a,b,c)
 	#define read(a,b,c) _read(a,b,c)
+	#define access(a,b) _acess(a,b)
     #define O_WRONLY _O_WRONLY
     #define O_RDONLY _O_RDONLY
     #define O_TRUNC _O_TRUNC
     #define O_TEXT _O_TEXT
+    #define F_OK 0x00
+    #define R_OK 0x02
+    #define W_OK 0x04
+    #define X_OK 0x06
 
     #define S_IREAD _S_IREAD
     #define O_IWRITE _S_IWRITE

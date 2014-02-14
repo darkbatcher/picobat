@@ -96,7 +96,7 @@ int MODULE_MAIN Dos9_ParseModule(int iMsg, void* param1, void* param2)
 
 			lpCh=Dos9_EsToChar(lpesCommandLine);
 
-			while (*lpCh==' ' || *lpCh=='\t' || *lpCh=='@') {
+			while (*lpCh==' ' || *lpCh=='\t' || *lpCh=='@' || *lpCh==';') {
 
                 if (*lpCh=='@')
                     bEchoCommand=FALSE;

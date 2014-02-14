@@ -3,6 +3,9 @@
 
 #include "../../Dos9_Core.h"
 
+// #define DOS9_DBG_MODE
+#include "../../Dos9_Debug.h"
+
 /* fonction principale du module */
 
 int Dos9_ReadModule(int Msg, void* param1, void* param2)
@@ -38,6 +41,7 @@ int Dos9_ReadModule(int Msg, void* param1, void* param2)
             return 0;
 
         case MODULE_READ_ISEOF:
+            DOS9_DBG("[module@read] Returned iEof=%d\n", iEof);
             return iEof;
 
         case MODULE_READ_GETLINE:
@@ -48,9 +52,11 @@ int Dos9_ReadModule(int Msg, void* param1, void* param2)
                 fseek(pFile, iLastPos, SEEK_SET);
                 iPreviousPos=iLastPos;
                 iEof=Dos9_EsGet((ESTR*)param1, pFile);
+                DOS9_DBG("[module@read] Got iEof=%d\n", iEof);
                 iLastPos=ftell(pFile);
                 fclose(pFile);
             } else {
+
                 iEof=1;
             }
             return 0;
@@ -59,6 +65,7 @@ int Dos9_ReadModule(int Msg, void* param1, void* param2)
             if (lpFileName==NULL) return 1;
             strncpy((char*)param1, lpFileName, (size_t)param2);
             return 0;
+
         default:
             return -1;
     }

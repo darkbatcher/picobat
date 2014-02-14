@@ -15,33 +15,25 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
-#ifndef DOS9_CORE_H_INCLUDED
-#define DOS9_CORE_H_INCLUDED
+#ifndef DOS9_FILEPATH_H
+#define DOS9_FILEPATH_H
 
-#include <libDos9.h>
-#include "../errors/Dos9_Errors.h"
+#ifdef _POSIX_C_SOURCE
 
-#include "Dos9_Context.h"
+    #define DOS9_PATH_DELIMITER ':'
 
-#include "Dos9_Var.h"
-#include "Dos9_Expand.h"
-#include "Dos9_Run.h"
-#include "Dos9_Modules.h"
-#include "Dos9_Jump.h"
-#include "Dos9_VersionInfo.h"
-#include "Dos9_ShowIntro.h"
-#include "Dos9_FilePath.h"
-
-#include "Dos9_Globals.h"
-
-#include "Dos9_Exit.h"
-
-#ifndef WIN32
-    #define getch() getchar()
 #else
-    #include <conio.h>
+
+    #define DOS9_PATH_DELIMITER ';'
+
 #endif
 
-#endif // DOS9_CORE_H_INCLUDED
+int     Dos9_GetFilePath(char* lpFullPath, const char* lpPartial, size_t iBufSize);
+char*   Dos9_GetPathNextPart(char* lpPath, ESTR* lpReturn);
+int     Dos9_MakePath(ESTR* lpReturn, int nOps, ...);
+char*   Dos9_GetLastChar(ESTR* lpReturn);
+
+#endif // DOS9_FILEPATH_H

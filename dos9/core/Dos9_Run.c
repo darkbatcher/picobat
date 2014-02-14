@@ -48,12 +48,12 @@ int Dos9_RunBatch(int isScript)
         lppssStreamStart=(PARSED_STREAM_START*)Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_READ_LINE_PARSE, NULL, (void*)isScript);
 
         if (!lppssStreamStart) {
-            DOS9_DBG("!!! Can't parse line : %s\n", strerror(errno));
+            DOS9_DBG("!!! Can't parse line : \"%s\".\n", strerror(errno));
             continue;
         }
 
         Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_PARSED_START_EXEC, lppssStreamStart, NULL);
-        DOS9_DBG("\t[*] Global streams set\n.");
+        DOS9_DBG("\t[*] Global streams set.\n");
 
 
         lppsStream=lppssStreamStart->lppsStream;
@@ -70,6 +70,9 @@ int Dos9_RunBatch(int isScript)
         DOS9_DBG("\t[*] Line run.\n");
 
     }
+
+    DOS9_DBG("*** Input ends here  ***\n");
+
     return 0;
 }
 
@@ -108,6 +111,7 @@ int Dos9_RunCommand(ESTR* lpCommand)
 
     while (*lpCmdLine==' '
            || *lpCmdLine=='\t'
+           || *lpCmdLine==';'
            || *lpCmdLine=='@') lpCmdLine++;
 
     if (*lpCmdLine==':')

@@ -37,7 +37,8 @@ void Tea_HtmlOutputHandler(TEAPAGE* lpTeaPage, FILE* pFile, int i, char** argv)
          *lpHeadTagEnd="</h1>";
 
     int iLastLevel=0,
-        iCompMode=0;
+        iCompMode=0,
+        iBckLevel;
 
     /* execute command line */
 
@@ -249,10 +250,7 @@ void Tea_HtmlOutputHandler(TEAPAGE* lpTeaPage, FILE* pFile, int i, char** argv)
 
             case TEA_BLOCK_PARAGRAPH:
 
-                if ((iLastLevel == lpTeaPage->iBlockLevel)
-                    && !(lpTeaPage->iFlag & TEA_LIST_NO_MARK)
-                    && iLastLevel)
-                    fputs("</li><li>", pFile);
+                iBckLevel=iLastLevel;
 
                 while (iLastLevel > lpTeaPage->iBlockLevel) {
 
@@ -267,6 +265,13 @@ void Tea_HtmlOutputHandler(TEAPAGE* lpTeaPage, FILE* pFile, int i, char** argv)
                     iLastLevel++;
 
                 }
+
+                if (!(iLastLevel>iBckLevel)
+                    && !(lpTeaPage->iFlag & TEA_LIST_NO_MARK)
+                    && iLastLevel)
+                    fputs("</li><li>", pFile);
+
+
 
                 fputs("<p>", pFile);
 

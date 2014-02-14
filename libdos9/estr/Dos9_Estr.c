@@ -44,7 +44,18 @@ int   _Dos9_EstrFreeBuffer_MaxElement=-1;
     inline void _Dos9_EstrFreeBuffer_LockMutex(void)
     {
 
-        WaitForSingleObject(_Dos9_EstrFreeBuffer_Mutex, INFINITE);
+        switch (WaitForSingleObject(_Dos9_EstrFreeBuffer_Mutex, INFINITE)) {
+
+            case WAIT_ABANDONED:
+            case WAIT_TIMEOUT:
+                fprintf(stderr, "Error : Unable to get mutex back\n");
+                exit(-1);
+
+            case WAIT_FAILED:
+                fprintf(stderr, "Error : Try to get mutex failed : %d", GetLastError());
+                exit(-1);
+
+        }
 
     }
 
@@ -52,8 +63,10 @@ int   _Dos9_EstrFreeBuffer_MaxElement=-1;
     {
 
         if (!ReleaseMutex(_Dos9_EstrFreeBuffer_Mutex)) {
+
             fprintf(stderr, "Error : Unable to release Mutex : %d\n", (int)GetLastError());
             exit(-1);
+
         }
 
     }
@@ -105,7 +118,6 @@ ESTR* Dos9_EsInit(void)
             Dos9_EsInit_Error:
 
             puts("Error : Not Enough memory to run Dos9. Exiting...");
-            getchar();
             exit(-1);
 
             _Dos9_EstrFreeBuffer_ReleaseMutex();

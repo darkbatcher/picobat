@@ -11,16 +11,22 @@ static char lpCurrentDir[FILENAME_MAX+3]="CD=";
 int Dos9_GetExePath(char* lpBuf, size_t iBufSize)
 {
     char* lpDelim;
-    if (readlink("/proc/self/exe", lpBuf, iBufSize)==-1) return -1;
+
+    #ifdef __linux
+        if (readlink("/proc/self/exe", lpBuf, iBufSize)==-1) return -1;
+    #endif
+
     if ((lpDelim=strrchr(lpBuf, '/'))) {
         *lpDelim='\0';
     }
+
     return 0;
 }
 
 int Dos9_DirExists(char *ptrName)
 {
     DIR* rep;
+
     if ((rep = opendir(ptrName))==NULL) return 0; /* Ouverture d'un dossier */
     closedir(rep);
     return 1;

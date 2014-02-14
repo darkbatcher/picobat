@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
 
 #include <matheval.h>
 #include <inteval.h>
@@ -34,6 +35,9 @@
 #include "Dos9_ScriptCommands.h"
 
 #include "../lang/Dos9_Lang.h"
+
+// #define DOS9_DBG_MODE
+#include "../core/Dos9_Debug.h"
 
 #include "../errors/Dos9_Errors.h"
 
@@ -918,9 +922,13 @@ int Dos9_CmdCd(char* lpLine)
 
         lpLine=Dos9_EsToChar(lpEsDir);
 
+        DOS9_DBG("Changing directory to : \"%s\"\n", lpLine);
+
         chdir(lpLine);
 
         if (errno ==  0) {
+
+            /* update the current directory buffer */
 
             Dos9_UpdateCurrentDir();
 
@@ -950,6 +958,8 @@ int Dos9_CmdCd(char* lpLine)
     }
 
     Dos9_EsFree(lpEsDir);
+
+    DOS9_DBG("Returning from \"cd\" on success\n");
     return 0;
 
     error:

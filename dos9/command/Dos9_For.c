@@ -79,7 +79,7 @@ int Dos9_CmdFor(char* lpLine)
      FORINFO forInfo={
          " ", /* no tokens delimiters, since only one
                 token is taken account */
-         "", /* no end-of-line delimiters */
+         ";", /* no end-of-line delimiters */
          0, /* no skipped line */
          0, /* this is to be fullfiled later (the
                 name letter of loop special var) */

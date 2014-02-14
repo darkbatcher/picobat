@@ -43,7 +43,9 @@ ${FOR %%A IN (chaine) DO (
 	chaque élément.
 	
 		- {%%A} : Le nom de la {spec/xvar|variable spéciale} qui va recevoir l'élément sur lequel exécuter
-		les commandes. Le logiciel privateur {cmd.exe} forçait les utilisateurs à utiliser deux différentes syntaxes,
+		les commandes. 
+		
+		@- Le logiciel privateur {cmd.exe} forçait les utilisateurs à utiliser deux différentes syntaxes,
 		en fonction du mode d'entrée de la commande (console ou batch). Dans le premier cas, l'utilsateur devait
 		utiliser {%A} à la place de {%%A}, qui devait être utilisée pour le second cas.
 		Cette différence n'a plus d'importance sous {dos9|Dos9} puisque {Dos9} supporte les deux
@@ -64,7 +66,7 @@ ${FOR %%A IN (chaine) DO (
 			
 			-- {,} : La virgule.
 			
-	Chancun des ces délimiteurs (à l'exception des retours à la ligne) peuvent être
+	Chacun des ces délimiteurs (à l'exception des retours à la ligne) peuvent être
 	ignorés en entourant l'élément par des guillemets simples ou doubles. Ces guillemets
 	seront alors conservés en tant que partie des éléments découpés. Pour éviter
 	la présence des guillemets, utilisez seulement {%%~A} à la place de {%%A} (Pour plus
@@ -100,9 +102,12 @@ ${FOR /F [options] %%A IN (objet) DO (
 		
 			-- {'} : L'objet {objet} est considéré comme une ligne de commande. La boucle {FOR} va
 			donc exécuter cette ligne de commande et ensuite exécuter la boucle {FOR} en prenant comme
-			entréee la sortie de la ligne de commande. La ligne de commande est exécutée de manière asynchrone
+			entréee la sortie de la ligne de commande.
+			
+			@-- La ligne de commande est exécutée de manière asynchrone
 			(c-à-d, les commandes de la boucle {FOR} et de {objet} sont exécutées simultanément).
-			Sous {cmd.exe}, si la ligne de commande contenait des caractères de fin de ligne, ils étaient
+			
+			@-- Sous {cmd.exe}, si la ligne de commande contenait des caractères de fin de ligne, ils étaient
 			enlevés de la ligne de commande et la ligne était donc exécutée comme si il s'agissait d'une
 			ligne unique, empéchant l'utilisateur d'utilser des scripts complexes comme {objet}.
 			Cette limitation n'existe plus dans {Dos9}, il est possible d'utilser des lignes de commandes
@@ -116,7 +121,9 @@ ${FOR /F [options] %%A IN (objet) DO (
 			-- Si aucun des délimiteurs précédents n'entoure {objet}, alors {objet} sera considéré
 			comme un nom de fichier. La boucle {FOR} va alors ouvrir le fichier dont le nom est
 			donné par {objet} et lire entièrement son contenu, et finalement exécuter les commandes
-			sur ce contenu. Le fichier peut évidemment être multiligne, mais il est supposé être
+			sur ce contenu. 
+			
+			@-- Le fichier peut évidemment être multiligne, mais il est supposé être
 			un fichier {texte} (ie. le fichier ne doit pas contenir de caractères {NUL}). Si le fichier
 			n'est pas un fichier texte, alors le comportement est indéfini (de manière générale, cela
 			aurat pour effet de découper les lignes contenant des caractères {NUL} en plusieurs lignes).
@@ -125,57 +132,76 @@ ${FOR /F [options] %%A IN (objet) DO (
 		doivent être, soit un seul paramètre contenant toutes les options ou une combinasion de courts
 		paramètres qui contiennent chacun une partie des options totales. Chaque option doit être
 		spécifiée en utilisant le nom de l'option suivi d'un signe ``='' et enfin la valeur que doit prendre
-		l'option. Si un paramètre est spécifié plus d'une fois, alors la boucle {FOR} tient seulement en compte
-		dernière. Les noms d'options sont:
+		l'option.
 			
 			-- {eol} : Spécifie des caractères qui seront utilisés comme des caractères de fin de ligne.
 			Tous les caractères suivant la première ocurrence d'un caractère qui fait partie de ceux qui sont
-			sont spécifiés sont ignorés. La valeur par défaut de ce paramètre est la chaine vide, (ie. {``'')}.
+			sont spécifiés sont ignorés. La valeur par défaut de ce paramètre est le point-virgule, (ie. {``;'')}.
+			
+			@-- Si ce paramètre est spécifié plus d'une fois, alors la commande {FOR} ne prendra en
+			compte que le dernier des paramètres spécifiés, sans s'occuper des paramètres précédents.
 			
 			-- {skip} : Spécifie le nombre de lines qui doivent être enlevées dans l'entrée avant de
-			commencer l'exécution de la boucle. Si la valeur spécifiée est plus grande que le nombre de
+			commencer l'exécution de la boucle.
+			
+			@-- Si la valeur spécifiée est plus grande que le nombre de
 			ligne de l'entrée, alors la boucle {FOR} ne sera tout simplement pas exécutée.
-			Sa valeur pas défaut est bien évidemment {0}.
+			Sa valeur par défaut est bien évidemment {0}.
 			
 			-- {tokens} : Une liste spécifiant les éléments qui seront assignés à une 
-			{spec/xvar|variable spéciale}, comme {%%A}. Chaque élément spécifié sera assigné
-			à une variable locale différente, en commençant par la variable donnée en argument
-			à la boucle {FOR}, puis en incrémentant le code {ASCII} correspondant pour chaque nouvel
-			élément (correspond grossièrement à une évolution alphabétique, en commençant par les
-			capitales et en finissant par les minuscules). Si le code {ASCII} dépasse la plage
-			de codes de caractères {ASCII} ({0x7F}), alors le code {ASCII} qui sera utilisé ensuite
-			sera le point-de-code {0x21} (ie. ``!''). Si la boucle {FOR} doit ré-assigner une variable
-			spéciale déjà utilisée, celle-ci s'arrête et retourne un message d'erreur. Le premier élément
-			est désigné par le nombre {1}. Notez, que contrairement au logiciel propriétaire {cmd.exe},
-			l'ordre des opération n'est pas importante pour {Dos9} (Voir section {Compatibilité}}.
-			La liste doit être conforme au format défini par les règles suivantes, pouvant éventuellement
-			séparés par des virgules:
+			{spec/xvar|variable spéciale}, comme {%%A}. La liste doit être conforme au format 
+			défini par les règles suivantes, pouvant éventuellement être séparés par des virgules:
 			
 				--- {n} : Où {n} est un nombre entier. Sélectionne le {n}-ième élément.
 				
 				--- {n-p} : Où {n} et {p} sont des nombre entiers. Sélectionne la réunion de
 				tous les élément compris entre le {n}-ième et {p}-ième élement inclus.
 				
-				-- {*} : Sélectionne la réunion tous les élémént restants (tous ceux qui se trouvent après
+				--- {*} : Sélectionne la réunion tous les élémént restants (tous ceux qui se trouvent après
 				le dernier élément sélectioné). Ce paramètre peut aussi être utilisé pour le {p} de la
 				syntaxe {n-p}, dans ce cas, la réunion de tous les élément suivant le {n}-ième élément (inclus)
 				est sélectionnée.
 				
+			@-- Chaque élément spécifié sera assigné
+			à une variable locale différente, en commençant par la variable donnée en argument
+			à la boucle {FOR}, puis en incrémentant le code {ASCII} correspondant pour chaque nouvel
+			élément (correspond grossièrement à une évolution alphabétique, en commençant par les
+			capitales et en finissant par les minuscules). Si le code {ASCII} dépasse la plage
+			de codes de caractères {ASCII} ({0x7F}), alors le code {ASCII} qui sera utilisé ensuite
+			sera le point-de-code {0x21} (ie. ``!''). 
+			
+			@-- Si la boucle {FOR} doit ré-assigner une variable
+			spéciale déjà utilisée, celle-ci s'arrête et retourne un message d'erreur. Le premier élément
+			est désigné par le nombre {1}. Notez, que contrairement au logiciel propriétaire {cmd.exe},
+			l'ordre des opération n'est pas importante pour {Dos9} (Voir section {Compatibilité}}.
+				
 			-- {delims} : spécifie les caractères à utiliser comme délimiteurs pour découper l'entrée
-			obtenue avec {objet} en éléments. Vous pouvez spécifier au plus {FILENAME_MAX-1} délimiteurs
-			en utilisant un encodage orienté octet. Si le même délimiteur est spécifié plus d'une fois, alors
-			il occupera deux fois l'espace necessaire dans le programme {dos9|Dos9}. Par défaut, le seul délimiteur
-			utilisé par {Dos9} est l'espace (`` ''). Si vous spécifié ce paramètre, l'utilisation de l'espace
+			obtenue avec {objet} en éléments. Par défaut, le seul délimiteur
+			utilisé par {Dos9} est l'espace (`` '').
+			
+			@-- Si vous spécifiez ce paramètre, l'utilisation de l'espace
 			comme délimiteur sera remplacé par les caractères saisis. Si {Dos9} rencontre plusieurs délimiteurs
 			se suivant dans une chaîne, ces délimiteurs seront considérés comme un seul délimiteur et il ne sera crée
 			qu'un seul élément ({Dos9} ne crée pas d'élément vide ``'').
+			
+			@-- Vous pouvez spécifier au plus {FILENAME_MAX-1} délimiteurs
+			en utilisant un encodage orienté octet. Si le même délimiteur est spécifié plus d'une fois, alors
+			il occupera deux fois l'espace necessaire dans le programme {dos9|Dos9}.
+			
+			@-- Si ce paramètre est spécifié plusieurs fois, la commande {FOR} ne prendra en compte
+			que le dernier de ces paramètres, sans s'occuper des autres.
 				
 			-- {usebackq} : Utilise la nouvelle syntaxe. Cette syntaxe a été introduite avec {Windows NT}. Si {objet}
 			est entouré par des guillemets simples, alors {Dos9} le considérera comme une chaîne. À l'inverse, s'il
 			est entouré par des guillemets inversés, alors il sera considéré comme une ligne de commande. Ce paramètre
-			est le seul qui ne nécessite pas de signe égal ni de valeur.
+			est le seul qui ne nécessite pas de signe égal ni de valeur
 			
-	{Example 1:} Parsage de chaîne:
+			@-- Ce paramètre avait un réel intérêt avec {cmd.exe} qui tronquait souvent les chaînes spécifiées dans
+			les boucles {FOR} si celles-ci contenaient des paramètres, cependant, ce problème n'étant plus présent
+			avec {DOS9}, cette option est fournie pour la compatibilité, même si elle n'est pas dénuée d'un certain
+			esthétisme.
+			
+	{Exemple 1:} Parsage de chaîne:
 
 ${:: Le premier parse une chaîne simple
 :: Dans cette exemple, on va parser des en-tête
@@ -236,11 +262,11 @@ Nathaniel B. Nichols,américain,ingénieur,a contribué à la théorie des asser
 	commande.)
 	
 ${FOR /F "tokens=1,2,3" "delims=," %%A IN (my_csv.csv) DO (
-	:: split that file into tokens
-	:: %%A will recieve the name
-	:: %%B will recieve the citizenship
-	:: %%C will recieve the proffession
-	:: %%D will recieve the description
+	:: découpe le fichier en éléments
+	:: %%A recevra le nom
+	:: %%B recevra la nationalité
+	:: %%C recevra la profession
+	:: %%D recevra la description
 	
 	ECHO %%A était un %%C %%B qui %%C
 )}

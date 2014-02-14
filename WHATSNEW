@@ -318,3 +318,8 @@ FRIDAY 7TH, FEBRUARY
         - Added an error message if the SET command is unable to set 
           environment variable.
 
+WEDNESDAY 12TH, FEBRUARY
+
+        - Fixed a bug of SET /P subcommand, that didn't not removed the 
+          carriage return at the end of the input.
+
