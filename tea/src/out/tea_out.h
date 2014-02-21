@@ -42,6 +42,7 @@
 
 void Tea_TextOutputHandler(TEAPAGE* lpTeaPage, FILE* pFile, int i, char** argv);
 void Tea_TextParseHandler(int iMsg ,void* lpData);
+void Tea_TextPlainParseHandler(int iMsg, void* lpData);
 
 void Tea_TextOutputStaticBlock(size_t iMargin, size_t iNewLineMargin, size_t iLength, char* lpBlock, char* lpNl, FILE* pFile);
 void Tea_TextOutputParagraph(size_t iMargin, size_t iFirstLine, size_t iLength, TEANODE* lpTeaNode, char* lpNl, FILE* pFile);

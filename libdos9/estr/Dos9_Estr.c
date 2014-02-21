@@ -13,77 +13,35 @@ int _Dos9_NewLine=DOS9_NEWLINE_WINDOWS;
 ESTR* _Dos9_EstrFreeBuffer_Array[DOS9_MAX_FREEBUFFER_SIZE];
 int   _Dos9_EstrFreeBuffer_MaxElement=-1;
 
-#ifdef _POSIX_C_SOURCE
+MUTEX _Dos9_EstrFreeBuffer_Mutex;
 
-    /* what to do if we are running under a *NIX system */
+int _Dos9_Estr_Init(void)
+{
 
+    if (Dos9_CreateMutex(&_Dos9_EstrFreeBuffer_Mutex) != 0) {
 
-#elif defined WIN32
-
-    /* what to do if we are running undef windows */
-
-    #include <windows.h>
-
-    HANDLE _Dos9_EstrFreeBuffer_Mutex;
-
-    int _Dos9_Estr_Init(void)
-    {
-
-        if (!(_Dos9_EstrFreeBuffer_Mutex=CreateMutex(NULL, FALSE, NULL))) {
-
-            return -1;
-
-        }
-
-
-        Dos9_EsFree(NULL);
-        return 0;
+        return -1;
 
     }
 
-    inline void _Dos9_EstrFreeBuffer_LockMutex(void)
-    {
 
-        switch (WaitForSingleObject(_Dos9_EstrFreeBuffer_Mutex, INFINITE)) {
+    Dos9_EsFree(NULL);
+    return 0;
 
-            case WAIT_ABANDONED:
-            case WAIT_TIMEOUT:
-                fprintf(stderr, "Error : Unable to get mutex back\n");
-                exit(-1);
+}
 
-            case WAIT_FAILED:
-                fprintf(stderr, "Error : Try to get mutex failed : %d", GetLastError());
-                exit(-1);
 
-        }
+void _Dos9_Estr_Close(void) {
 
-    }
+    Dos9_CloseMutex(&_Dos9_EstrFreeBuffer_Mutex);
 
-    inline void _Dos9_EstrFreeBuffer_ReleaseMutex(void)
-    {
-
-        if (!ReleaseMutex(_Dos9_EstrFreeBuffer_Mutex)) {
-
-            fprintf(stderr, "Error : Unable to release Mutex : %d\n", (int)GetLastError());
-            exit(-1);
-
-        }
-
-    }
-
-    void _Dos9_Estr_Close(void) {
-
-        CloseHandle(_Dos9_EstrFreeBuffer_Mutex);
-
-    }
-
-#endif // _POSIX_C_SOURCE
+}
 
 ESTR* Dos9_EsInit(void)
 {
     ESTR* ptrESTR=NULL;
 
-    _Dos9_EstrFreeBuffer_LockMutex();
+    Dos9_LockMutex(&_Dos9_EstrFreeBuffer_Mutex);
 
     if ((_Dos9_EstrFreeBuffer_MaxElement >= 0) && (_Dos9_EstrFreeBuffer_MaxElement < (DOS9_MAX_FREEBUFFER_SIZE -1))) {
 
@@ -120,7 +78,7 @@ ESTR* Dos9_EsInit(void)
             puts("Error : Not Enough memory to run Dos9. Exiting...");
             exit(-1);
 
-            _Dos9_EstrFreeBuffer_ReleaseMutex();
+            Dos9_ReleaseMutex(&_Dos9_EstrFreeBuffer_Mutex);
             /* Release the lock */
 
             return NULL;
@@ -131,7 +89,8 @@ ESTR* Dos9_EsInit(void)
 
     *(ptrESTR->ptrString)='\0';
 
-    _Dos9_EstrFreeBuffer_ReleaseMutex();
+    Dos9_ReleaseMutex(&_Dos9_EstrFreeBuffer_Mutex);
+
     /* Release the lock */
 
     return ptrESTR;
@@ -141,7 +100,7 @@ LIBDOS9 int Dos9_EsFree(ESTR* ptrESTR)
 {
     int i;
 
-    _Dos9_EstrFreeBuffer_LockMutex();
+    Dos9_LockMutex(&_Dos9_EstrFreeBuffer_Mutex);
 
     if (ptrESTR == NULL) {
 
@@ -175,7 +134,7 @@ LIBDOS9 int Dos9_EsFree(ESTR* ptrESTR)
 
     }
 
-    _Dos9_EstrFreeBuffer_ReleaseMutex();
+    Dos9_ReleaseMutex(&_Dos9_EstrFreeBuffer_Mutex);
         /* Release the lock */
 
     return 0;

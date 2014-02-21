@@ -62,8 +62,8 @@ $(INCLUDE_FILE): $(ORIGIN_FILE)
 
 # build YACC files			
 %.c : %.y
-			$(YACC) -d $< -o $@
+			$(YACC) -d $< -p evaluator_ -o $@
 
 # build LEX files
 %.c : %.l
-			$(LEX) -o $@ $<
+			$(LEX) -o $@ -P evaluator_ $<

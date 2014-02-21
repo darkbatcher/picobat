@@ -9,8 +9,7 @@ QUICK STARTING INFORMATION
      <darkbatcher@dos9.org> with a description of the bug, or even a fix if 
      you want to contribute.
 
-     To get information about the license, see the license file (-> 
-     ``LICENSE'') .
+     To get information about the license, see the _license file_.
 
 LEGAL NOTICE
 
@@ -71,11 +70,28 @@ FIRST STEPS
      .CMD files though, do not associate it with both file types, as DOS9 is 
      still an unstable software.
 
-     Once you launched DOS9, you can type batch commands lines. Remember that 
-     if you need some help, the help program is HLP. Note that if you can not 
-     browse the documentation due to the lack of translation or else, you can 
-     still read the different translations of the documentation in several 
-     languages and formats in the subfolder ``share/doc''.
+     To run DOS9 you must execute the file DOS9.EXE located in the ``bin'' 
+     directory of the folder where you built files or where you extracted the 
+     archive you get from the site.
+
+     Once you launched DOS9, you can type batch commands lines. The command 
+     prompt is very similar to CMD.EXE, so that you should not be dissapointed 
+     (for those who already use CMD.EXE, obviously). Commands are very similar 
+     to CMD.EXE's with a few exceptions, which most important is the 
+     obligation to put blank characters between switches.
+
+     Remember that if you need some help, the help program is HLP. Note that 
+     if you can not browse the documentation due to the lack of translation or 
+     else, you can still read the different translations of the documentation 
+     in several languages and formats in the subfolder ``share/doc''.
+
+     The help might be a little bit lightweight (and sometimes technical, as 
+     i'm sometimes using it as notes during devellopement). If you have 
+     troubles getting used to the help, remember that there's plenty of 
+     interesting tutorials about batch programming all over the world, to such 
+     an extent I haven't been able to make a choice between them. Nonetheless, 
+     learning batch would not be to tough, so why no spend a few minutes in 
+     the internet to find some tutorial ?
 
      If the executable crash, please send a mail to : <darkbatcher@dos9.org>.
 
@@ -95,7 +111,7 @@ CHANGING THE LANGUAGE
      if you use HLP, it might crash. Nevertheless, this should'nt occur as 
      HLP failsback to english.
 
-MAKING TRANSLATION
+MAKING TRANSLATIONS
 
      Translations uses the GNU GETTEXT tool. To make translation, run the 
      ``dos9-build-gettext.bat'' script to produce .PO files (avaliable from 

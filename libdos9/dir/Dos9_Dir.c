@@ -174,10 +174,11 @@ LIBDOS9 int         Dos9_GetMatchFileCallback(char* lpPathMatch, int iFlag, void
 
 
 	/* start the thread that gather answers */
-    hThread=Dos9_BeginThread((void(*)(void*))_Dos9_WaitForFileListCallBack,
-                             0,
-                             (void*)(&fpParam)
-                             );
+    Dos9_BeginThread(&hThread,
+                     (void(*)(void*))_Dos9_WaitForFileListCallBack,
+                     0,
+                     (void*)(&fpParam)
+                     );
 
 	if (!*lpStaticPart && *lpMatchPart) {
 
@@ -223,15 +224,15 @@ LIBDOS9 int         Dos9_GetMatchFileCallback(char* lpPathMatch, int iFlag, void
 
 	Dos9_GetMatchFileList_End:
 
-        if (write(iFileDescriptors[1], "\1", 1)==-1) return 0;
+    if (write(iFileDescriptors[1], "\1", 1)==-1)
+        return 0;
 
-        Dos9_WaitForThread(hThread);
-        Dos9_GetThreadExitCode(hThread, &iReturn);
+    Dos9_WaitForThread(hThread, &iReturn);
 
-        close(iFileDescriptors[0]);
-        close(iFileDescriptors[1]);
+    close(iFileDescriptors[0]);
+    close(iFileDescriptors[1]);
 
-        return iReturn;
+    return iReturn;
 
 }
 
@@ -272,10 +273,11 @@ LIBDOS9 LPFILELIST  Dos9_GetMatchFileList(char* lpPathMatch, int iFlag)
 
 
 	/* start the thread that gather answers */
-    hThread=Dos9_BeginThread((void(*)(void*))_Dos9_WaitForFileList,
-                             0,
-                             (void*)(&fpParam)
-                             );
+    Dos9_BeginThread(&hThread,
+                     (void(*)(void*))_Dos9_WaitForFileList,
+                     0,
+                     (void*)(&fpParam)
+                     );
 
 	if (!*lpStaticPart && *lpMatchPart) {
 
@@ -323,8 +325,7 @@ LIBDOS9 LPFILELIST  Dos9_GetMatchFileList(char* lpPathMatch, int iFlag)
 
         if (write(iFileDescriptors[1], "\1", 1)==-1) return NULL;
 
-        Dos9_WaitForThread(hThread);
-        Dos9_GetThreadExitCode(hThread, &lpReturn);
+        Dos9_WaitForThread(hThread, &lpReturn);
 
         close(iFileDescriptors[0]);
         close(iFileDescriptors[1]);
@@ -660,13 +661,19 @@ char* _Dos9_GetFileName(char* lpPath)
     return lpLastPos;
 }
 
-LIBDOS9 THREAD Dos9_FreeFileList(LPFILELIST lpflFileList)
+LIBDOS9 int Dos9_FreeFileList(LPFILELIST lpflFileList)
 {
 
-	return Dos9_BeginThread((void(*)(void*))_Dos9_FreeFileList,
+    THREAD hThread;
+
+	Dos9_BeginThread(&hThread,
+                            (void(*)(void*))_Dos9_FreeFileList,
                             0,
                             (void*)(lpflFileList)
-                           );
+                            );
+
+
+    return 0;
 
 }
 
@@ -709,7 +716,7 @@ LPFILELIST _Dos9_WaitForFileList(LPFILEPARAMETER lpParam)
         }
     }
 
-    Dos9_EndThreadEx(lpflCurrent);
+    Dos9_EndThread(lpflCurrent);
     return lpflCurrent;
 }
 
@@ -758,7 +765,7 @@ int                 _Dos9_WaitForFileListCallBack(LPFILEPARAMETER lpParam)
 
     }
 
-    Dos9_EndThreadEx(i);
+    Dos9_EndThread(i);
     return i;
 }
 
@@ -772,7 +779,7 @@ int _Dos9_FreeFileList(LPFILELIST lpflFileList)
         free(lpflFileList);
     }
 
-    Dos9_EndThread();
+    Dos9_EndThread(0);
 
     return 0;
 }

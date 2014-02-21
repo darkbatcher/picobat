@@ -323,3 +323,32 @@ WEDNESDAY 12TH, FEBRUARY
         - Fixed a bug of SET /P subcommand, that didn't not removed the 
           carriage return at the end of the input.
 
+THURSDAY 13TH, FEBRUARY
+
+        - Found a bug that occurs when using CD command from inside a batch 
+          script, if the path to the script given is relative, DOS9 tries to 
+          open it in the new current path, and fail, or execute a different 
+          script depending on circumstances. This is to be fixed in next 
+          release (that will include a bunch of improvements, like CALL, I 
+          hope).
+
+FRIDAY 14TH, FEBRUARY
+
+        - Started working in version 2014.0.8, a version that will include 
+          more features, (including use of intelligent help browsing, and 
+          improved command searching (through a own procedure, instead of what 
+          was used previously).
+
+        - Fixed a bug with multiple lists in TEA html mode.
+
+        - Added own function to search files in path. It is not used 
+          everywhere though.
+
+FRIDAY 21TH, FEBRUARY
+
+        - Added support of new threaded function, through a particular header.
+
+        - The issue of uncontrolled sub-threads that continued to be executed 
+          was a major concerns, this is fixed thanks to the new thread 
+          functions.
+

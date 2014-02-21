@@ -62,6 +62,14 @@
 /* Using locations.  */
 #define YYLSP_NEEDED 0
 
+/* Substitute the variable and function names.  */
+#define yyparse         evaluator_parse
+#define yylex           evaluator_lex
+#define yyerror         evaluator_error
+#define yylval          evaluator_lval
+#define yychar          evaluator_char
+#define yydebug         evaluator_debug
+#define yynerrs         evaluator_nerrs
 
 
 /* Copy the first part of user declarations.  */
@@ -113,7 +121,7 @@ extern void input_reset (void);
 
 
 /* Line 189 of yacc.c  */
-#line 117 "lib/parser.c"
+#line 125 "lib/parser.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -164,7 +172,7 @@ typedef union YYSTYPE
 
 
 /* Line 214 of yacc.c  */
-#line 168 "lib/parser.c"
+#line 176 "lib/parser.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -176,7 +184,7 @@ typedef union YYSTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 180 "lib/parser.c"
+#line 188 "lib/parser.c"
 
 #ifdef short
 # undef short
@@ -1475,7 +1483,7 @@ yyreduce:
 
 
 /* Line 1464 of yacc.c  */
-#line 1479 "lib/parser.c"
+#line 1487 "lib/parser.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1692,7 +1700,7 @@ yyreturn:
 
 int yyerror(char* s)
 {
-        /* Indicate parsing error through appropriate flag, reset input
+		/* Indicate parsing error through appropriate flag, reset input
          * string and stop parsing.  */
         ok = 0;
         input_reset();

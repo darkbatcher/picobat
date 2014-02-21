@@ -28,10 +28,16 @@ int MODULE_MAIN Dos9_ParseModule(int iMsg, void* param1, void* param2)
 {
    static ESTR *lpesCommandLine, *lpesLine;
    ESTR* lpTmp;
+
    char* const lpCurrentDir=Dos9_GetCurrentDir();
    char* lpCh;
+
+   THREAD thId;
+
    PARSED_STREAM* lppsParsedStream;
    PARSED_STREAM_START* lppssStreamStart;
+
+
    int iLastParentNb,
        iBlock=-1,
        bEchoCommand=TRUE;
@@ -135,7 +141,7 @@ int MODULE_MAIN Dos9_ParseModule(int iMsg, void* param1, void* param2)
             return (int)lppssStreamStart;
 
         case MODULE_PARSE_FREE_PARSED_LINE:
-            return Dos9_BeginThread((void (*)(void *))Dos9_FreeParsedStreamStart, 0, (void*)((PARSED_STREAM_START*)param1));
+            return Dos9_BeginThread(&thId, (void (*)(void *))Dos9_FreeParsedStreamStart, 0, (void*)((PARSED_STREAM_START*)param1));
 
         case MODULE_PARSE_NEWLINE:
             //lppsStreamStack=Dos9_PushStreamStack(lppsStreamStack);
@@ -182,7 +188,10 @@ int MODULE_MAIN Dos9_ParseModule(int iMsg, void* param1, void* param2)
 
         case MODULE_PARSE_PIPE_OPEN:
             lppsParsedStream=(PARSED_STREAM*)param1;
-            if (lppsParsedStream->cNodeType==PARSED_STREAM_NODE_PIPE && lppsParsedStream->lppsNode!=NULL) Dos9_OpenPipe(lppsStreamStack);
+
+            if (lppsParsedStream->cNodeType==PARSED_STREAM_NODE_PIPE && lppsParsedStream->lppsNode!=NULL)
+                Dos9_OpenPipe(lppsStreamStack);
+
             return 0;
 
         default:

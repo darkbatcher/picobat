@@ -133,7 +133,7 @@ expression
 
 int yyerror(char* s)
 {
-        /* Indicate parsing error through appropriate flag, reset input
+		/* Indicate parsing error through appropriate flag, reset input
          * string and stop parsing.  */
         ok = 0;
         input_reset();

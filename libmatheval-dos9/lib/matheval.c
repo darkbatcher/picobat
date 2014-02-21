@@ -79,7 +79,7 @@ evaluator_create(char *string)
 	ok = 1;
 
 	/* Do parsing. */
-	yyparse();
+	evaluator_parse();
 
 	/* Free copy of string representing function. */
 	XFREE(stringn);

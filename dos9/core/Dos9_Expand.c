@@ -160,6 +160,8 @@ void Dos9_RemoveEscapeChar(char* lpLine)
 
 char* Dos9_StrToken(char* lpString, char cToken)
 {
+    if (lpString == NULL)
+        return NULL;
 
     for (;*lpString!='\0';lpString++) {
 

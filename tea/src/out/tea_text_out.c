@@ -187,12 +187,13 @@ void Tea_TextOutputParagraph(size_t iMargin, size_t iFirstLine, size_t iLength, 
 
 void Tea_TextParseHandler(int iMsg ,void* lpData)
 {
-    ESTR* lpEsStr=Dos9_EsInit();
+    ESTR* lpEsStr;
     TEANODE* lpTeaNode;
 
     if (iMsg==TEA_MSG_READ_FILE)
         return;
 
+    lpEsStr=Dos9_EsInit();
     lpTeaNode=(TEANODE*)lpData;
 
     switch(lpTeaNode->iNodeType) {
@@ -214,6 +215,43 @@ void Tea_TextParseHandler(int iMsg ,void* lpData)
                 perror("TEA :: impossible d'allouer de la mémoire ");
                 exit(-1);
             }
+            break;
+
+    }
+
+    Dos9_EsFree(lpEsStr);
+}
+
+void Tea_TextPlainParseHandler(int iMsg ,void* lpData)
+{
+    ESTR* lpEsStr;
+    TEANODE* lpTeaNode;
+
+    if (iMsg==TEA_MSG_READ_FILE)
+        return;
+
+    lpEsStr=Dos9_EsInit();
+
+    lpTeaNode=(TEANODE*)lpData;
+
+    switch(lpTeaNode->iNodeType) {
+
+        case TEA_NODE_EMPHASIS:
+            strupr(lpTeaNode->lpContent);
+            break;
+
+        case TEA_NODE_LINK:
+            Dos9_EsCpy(lpEsStr, "_");
+            Dos9_EsCat(lpEsStr, lpTeaNode->lpContent);
+            Dos9_EsCat(lpEsStr, "_");
+            free(lpTeaNode->lpContent);
+
+            if (!(lpTeaNode->lpContent=strdup(Dos9_EsToChar(lpEsStr)))) {
+
+                perror("TEA :: impossible d'allouer de la mémoire ");
+                exit(-1);
+            }
+
             break;
 
     }

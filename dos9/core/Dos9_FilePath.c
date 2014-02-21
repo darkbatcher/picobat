@@ -24,7 +24,7 @@
 
 #include <libDos9.h>
 
-// #define DOS9_DBG_MODE
+#define DOS9_DBG_MODE
 #include "Dos9_Debug.h"
 
 #include "Dos9_FilePath.h"

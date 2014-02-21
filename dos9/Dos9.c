@@ -49,6 +49,9 @@
 #include "command/Dos9_For.h"
 #include "command/Dos9_CommandInfo.h"
 
+#define DOS9_DBG_MODE
+#include "core/Dos9_Debug.h"
+
 
 int main(int argc, char *argv[])
 {
@@ -59,12 +62,14 @@ int main(int argc, char *argv[])
     */
 
     char *lpFileName=NULL,
-          lpFileAbs[FILENAME_MAX];
-    char lpTitle[FILENAME_MAX+10]="Dos9 [" DOS9_VERSION "] - ";
-    int i;
-    int j;
-    int c;
-    int bQuiet=FALSE;
+          lpFileAbs[FILENAME_MAX],
+          lpTmp[FILENAME_MAX],
+          lpTitle[FILENAME_MAX+10]="Dos9 [" DOS9_VERSION "] - ";
+
+    int i,
+        j,
+        c,
+        bQuiet=FALSE;
 
     if (Dos9_LibInit() == -1) {
 
@@ -91,6 +96,8 @@ int main(int argc, char *argv[])
     /* Load Messages (including errors) */
     Dos9_LoadStrings();
     Dos9_LoadErrors();
+
+    Dos9_UpdateCurrentDir();
 
     /* **********************************
        *   getting Dos9's parameters    *
@@ -187,13 +194,10 @@ int main(int argc, char *argv[])
 
     } else {
 
-        if (Dos9_GetFilePath(lpFileAbs, lpFileName, sizeof(lpFileAbs))==-1)
-            Dos9_ShowErrorMessage(DOS9_FILE_ERROR, lpFileName, -1);
-
-        lpFileName=lpFileAbs;
-
         strncat(lpTitle, lpFileName, sizeof(lpTitle)-sizeof("Dos9 [" DOS9_VERSION "] - "));
         Dos9_PutEnv("DOS9_IS_SCRIPT=true");
+
+        DOS9_DBG("[dos9] Runing \"%s\"\n", lpFileName);
 
     }
 
@@ -243,19 +247,38 @@ int main(int argc, char *argv[])
 
 
     /* running auto batch initialisation */
-    Dos9_UpdateCurrentDir();
+
+
 
     strcat(lpTitle, "/Dos9_Auto.bat");
     Dos9_SendMessage(DOS9_READ_MODULE, MODULE_READ_SETFILE, lpTitle+10, NULL);
     Dos9_RunBatch(TRUE);
 
-    Dos9_LoadErrors();
-    Dos9_LoadStrings();
 
-    /* todo : Fix the bug caused by cd in batch scripts :
-       sometimes, the filename given is relative and not absolute
-       so that any use of cd will make the script to have
-       undefined behaviour */
+
+
+    if (lpFileName) {
+
+        /* generates real path if the path is uncomplete */
+
+        if (Dos9_GetFilePath(lpFileAbs, lpFileName, sizeof(lpFileAbs))==-1)
+            Dos9_ShowErrorMessage(DOS9_FILE_ERROR, lpFileName, -1);
+
+        if (*lpFileAbs) {
+            if (strncmp(lpFileAbs+1, ":\\", 2)
+                && strncmp(lpFileAbs+1, ":/", 2)
+                && *lpFileAbs!='/'
+                ) {
+                /* if the file path is relative */
+
+                snprintf(lpTmp, sizeof(lpFileAbs), "%s/%s", Dos9_GetCurrentDir(), lpFileAbs);
+                strcpy(lpFileAbs, lpTmp);
+
+            }
+        }
+
+        lpFileName=lpFileAbs;
+    }
 
     /* then run batch mode */
     Dos9_SendMessage(DOS9_READ_MODULE, MODULE_READ_SETFILE, lpFileName, NULL);
@@ -264,6 +287,13 @@ int main(int argc, char *argv[])
     Dos9_RunBatch((int)lpFileName); // if we are actually running a script lpFileName is non-zero
 
     Dos9_Exit();
+
+    Dos9_LibClose();
+    /*
+       this is actually a big issue since it is not secured at all, since
+       we have optionally severals threads still running, able to require use
+       of the libDos9 library
+     */
 
     return 0;
 

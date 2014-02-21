@@ -79,6 +79,11 @@ int main(int argc, char *argv[])
                 pOutputHandler=Tea_HtmlOutputHandler;
                 pParseHandler=Tea_HtmlParseHandler;
 
+            } else if (!stricmp("TEXT-PLAIN", argv[i])) {
+
+                pOutputHandler=Tea_TextOutputHandler;
+                pParseHandler=Tea_TextPlainParseHandler;
+
             } else {
 
                 fprintf(stderr, "TEA :: Error : ``%s'' is not a valid output format.\n",  argv[i]);
@@ -148,5 +153,8 @@ int main(int argc, char *argv[])
     Tea_PageFree(lpTeaPage);
 
     fclose(pOutput);
+
+    Dos9_LibClose();
+
     return 0;
 }

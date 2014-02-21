@@ -69,6 +69,6 @@ typedef union YYSTYPE
 # define YYSTYPE_IS_DECLARED 1
 #endif
 
-extern YYSTYPE yylval;
+extern YYSTYPE evaluator_lval;
 
 

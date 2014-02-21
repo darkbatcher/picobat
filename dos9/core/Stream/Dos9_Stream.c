@@ -35,24 +35,23 @@ LPSTREAMSTACK Dos9_InitStreamStack(void)
 
         lpStream->iPopLock=TRUE;
     }
-    lpssStream=Dos9_PushStack(lpssStream, lpStream, 0);
+    lpssStream=Dos9_PushStack(lpssStream, lpStream);
     return lpssStream;
+}
+
+void Dos9_CloseStackLvl(STREAMLVL* lpLvl)
+{
+
+    Dos9_CloseDescriptors(lpLvl->iFreeDescriptors);
+    free(lpLvl);
+
 }
 
 void Dos9_FreeStreamStack(LPSTREAMSTACK lpssStream)
 {
-    LPSTREAMLVL lpLvl;
-
     if (!lpssStream) return;
 
-    do {
-
-        Dos9_GetStack(lpssStream, (void**)&lpLvl);
-
-        Dos9_CloseDescriptors(lpLvl->iFreeDescriptors);
-        free(lpLvl);
-
-    } while ((lpssStream=Dos9_PopStack(lpssStream)));
+    Dos9_ClearStack(lpssStream, (void(*)(void*))Dos9_CloseStackLvl);
 
 }
 
@@ -232,7 +231,7 @@ LPSTREAMSTACK Dos9_PopStreamStack(LPSTREAMSTACK lppsStack)
 
     }
 
-    lppsStack=Dos9_PopStack(lppsStack);
+    lppsStack=Dos9_PopStack(lppsStack, NULL);
     Dos9_GetStack(lppsStack, (void**)&lpStream);
 
     if (lpStream) {
@@ -264,7 +263,7 @@ LPSTREAMSTACK Dos9_PushStreamStack(LPSTREAMSTACK lppsStack) {
         lpStream->iFreeDescriptors[i]=0;
     }
     lpStream->iPipeIndicator=0;
-    lppsStack=Dos9_PushStack(lppsStack, lpStream, 0);
+    lppsStack=Dos9_PushStack(lppsStack, lpStream);
     return lppsStack;
 }
 

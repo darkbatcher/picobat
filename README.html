@@ -7,8 +7,8 @@
 -->
 <html>
 <head>
-<meta charset="utf-8" />
-<title>The Dos9 Project :: Quick starting information</title>
+<meta charset="UTF-8" />
+<title>Quick starting information</title>
 
 </head>
 <body>
@@ -51,7 +51,13 @@
 
 <p>Once you have binaries, you can run <strong>Dos9</strong> since it has no need to be installed in order to work. If you want to associate it with <strong>.bat</strong> or <strong>.cmd</strong> files though, do not associate it with both file types, as <strong>Dos9</strong> is still an unstable software.</p>
 
-<p>Once you launched <strong>Dos9</strong>, you can type batch commands lines. Remember that if you need some help, the help program is <strong>HLP</strong>. Note that if you can not browse the documentation due to the lack of translation or else, you can still read the different translations of the documentation in several languages and formats in the subfolder ``share/doc''.</p>
+<p>To run <strong>Dos9</strong> you must execute the file <strong>Dos9.exe</strong> located in the ``bin'' directory of the folder where you built files or where you extracted the archive you get from the site.</p>
+
+<p>Once you launched <strong>Dos9</strong>, you can type batch commands lines. The command prompt is very similar to <strong>cmd.exe</strong>, so that you should not be dissapointed (for those who already use <strong>cmd.exe</strong>, obviously). Commands are very similar to <strong>cmd.exe</strong>'s with a few exceptions, which most important is the obligation to put blank characters between switches.</p>
+
+<p>Remember that if you need some help, the help program is <strong>HLP</strong>. Note that if you can not browse the documentation due to the lack of translation or else, you can still read the different translations of the documentation in several languages and formats in the subfolder ``share/doc''.</p>
+
+<p>The help might be a little bit lightweight (and sometimes technical, as i'm sometimes using it as notes during devellopement). If you have troubles getting used to the help, remember that there's plenty of interesting tutorials about batch programming all over the world, to such an extent I haven't been able to make a choice between them. Nonetheless, learning batch would not be to tough, so why no spend a few minutes in the internet to find some tutorial ?</p>
 
 <p>If the executable crash, please send a mail to : &lt;darkbatcher@dos9.org&gt;.</p>
 
@@ -63,7 +69,7 @@
 
 <p>Uncomment the line and replace <strong>en_US</strong> by the name of your locale. It is still possible that the langage does not work though, this means that <strong>Dos9</strong> is not translated yet in your language. Note that dos9 might be translated into your language, and manual page can be not translated, so if you use <strong>HLP</strong>, it might crash. Nevertheless, this should'nt occur as <strong>HLP</strong> failsback to english.</p>
 
-<h2>Making translation</h2>
+<h2>Making translations</h2>
 
 <p>Translations uses the <strong>GNU gettext</strong> tool. To make translation, run the ``dos9-build-gettext.bat'' script to produce <strong>.po</strong> files (avaliable from the sources) for your language, and then, translate it via a po editor like <strong>poedit</strong> or <strong>kbabel</strong>.</p>
 

@@ -54,15 +54,17 @@
 /* Redefine macro to redirect scanner input from string instead of
  * standard input.  */
 #define YY_INPUT( buffer, result, max_size ) \
-{ result = input_from_string (buffer, max_size); }
+{ result = evaluator_input_from_string (buffer, max_size); }
 
 /* Variables used to communicate with code using scanner.  */
 extern SymbolTable *symbol_table; /* Evaluator symbol table.  */
 extern char *input_string; /* String representing function.  */
 
 /* Read next max_size character from string into buffer.  */
-static int input_from_string (char *buffer, int max_size);
+static int evaluator_input_from_string (char *buffer, int max_size);
 %}
+
+%option noyywrap
 
 /* Token definitions.  */
 whitespace [ \t]+
@@ -78,7 +80,7 @@ identifier [_a-zA-Z][[_a-zA-Z0-9]*
 
 {number} {
         /* Create node representing constant with appropriate value.  */
-        yylval.node = node_create ('n', atof (yytext));
+        evaluator_lval.node = node_create ('n', atof (yytext));
         return NUMBER;
 }
 
@@ -87,13 +89,13 @@ identifier [_a-zA-Z][[_a-zA-Z0-9]*
 
         /* Find symbol table record corresponding to constant name.  */
         record = symbol_table_lookup (symbol_table, yytext);
-        yylval.node = node_create ('c', record);
+        evaluator_lval.node = node_create ('c', record);
         return CONSTANT;
 }
 
 {function} {
         /* Find symbol table record corresponding to function name.  */
-        yylval.record = symbol_table_lookup (symbol_table, yytext);
+        evaluator_lval.record = symbol_table_lookup (symbol_table, yytext);
         return FUNCTION;
 }
 
@@ -102,7 +104,7 @@ identifier [_a-zA-Z][[_a-zA-Z0-9]*
 
         /* Insert variable into symbol table.  */
         record = symbol_table_insert (symbol_table, yytext, 'v');
-        yylval.node = node_create ('v', record);
+        evaluator_lval.node = node_create ('v', record);
         return VARIABLE;
 }
 
@@ -140,7 +142,7 @@ identifier [_a-zA-Z][[_a-zA-Z0-9]*
 
 %%
 
-static int input_from_string (char *buffer, int max_size)
+static int evaluator_input_from_string (char *buffer, int max_size)
 {
         int count; /* Count of characters to copy from input string to buffer.  */
 

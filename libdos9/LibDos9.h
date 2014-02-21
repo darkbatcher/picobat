@@ -78,23 +78,11 @@
     #define O_RDONLY _O_RDONLY
     #define O_TRUNC _O_TRUNC
     #define O_TEXT _O_TEXT
-    #define F_OK 0x00
-    #define R_OK 0x02
-    #define W_OK 0x04
-    #define X_OK 0x06
 
     #define S_IREAD _S_IREAD
     #define O_IWRITE _S_IWRITE
     #define Dos9_GetFileAttributes(lpcstr) GetFileAttributes(lpcstr)
 
-
-    #define THREAD int
-
-    #define Dos9_BeginThread _beginthread
-    #define Dos9_EndThread _endthread
-    #define Dos9_EndThreadEx(a) _endthreadex((unsigned int) a)
-    #define Dos9_WaitForThread(a) WaitForSingleObject((HANDLE) a , -1)
-    #define Dos9_GetThreadExitCode(a,b) GetExitCodeThread((HANDLE) a , (PDWORD) b)
     #define _Dos9_Pipe(descriptors, size, mode) _pipe(descriptors, size, mode)
 
 #else
@@ -119,16 +107,20 @@
     #define DOS9_FILE_SYSTEM 0
 
     #define _Dos9_GetFileAttributes(lpName)
-
-        /* definition of thread windows lib compatibility */
-    #define THREAD pthread_t
-
-    pthread_t Dos9_BeginThread(void(*lpFunction)(void*) , int iMemAmount, void* lpArgList);
-    #define Dos9_EndThread() return 0
-    #define Dos9_EndThreadEx(a) return a
-    #define Dos9_WaitForThread(a)
-    #define Dos9_GetThreadExitCode(a,b) pthread_join(a,(void**)b)
     #define _Dos9_Pipe(descriptors, size, mode) pipe(descriptors)
+
+#endif
+
+#ifdef _POSIX_C_SOURCE
+
+typedef pthread_t       THREAD;
+typedef pthread_mutex_t MUTEX;
+
+
+#elif defined WIN32
+
+typedef HANDLE THREAD;
+typedef HANDLE MUTEX;
 
 #endif
 
@@ -140,9 +132,11 @@
 
 
 LIBDOS9 int Dos9_LibInit(void);
-LIBDOS9 void _Dos9_LibClose(void);
+LIBDOS9 void Dos9_LibClose(void);
 void _Dos9_Estr_Close(void);
 int _Dos9_Estr_Init(void);
+int _Dos9_Thread_Init(void);
+void _Dos9_Thread_Close(void);
 
 /** \defgroup THREAD_REF Thread reference
     \{ */
@@ -207,14 +201,14 @@ int _Dos9_Estr_Init(void);
             \return Returns a pointer to the new top-element, NULL if the function failled
             \attention Pushing an element does not make copies of element, it just stores a pointer into the stack
         */
-        LIBDOS9     LPSTACK Dos9_PushStack(LPSTACK lpcsStack, void* ptrContent, int iFlag);
+        LIBDOS9     LPSTACK Dos9_PushStack(LPSTACK lpcsStack, void* ptrContent);
 
         /** Pop an element from the top of a stack
             \param lpcsStack : The stack to be poped
             \return Returns a pointer to the new top-element, NULL if the function failled
             \attention Poping an element does not free it, it just removes it from the stack
         */
-        LIBDOS9     LPSTACK Dos9_PopStack(LPSTACK lpcsStack);
+        LIBDOS9     LPSTACK Dos9_PopStack(LPSTACK lpcsStack, void(*pFunc)(void*));
 
         /** \brief Get the element on top of a stack
             \param lpcsStack : The stack from which the function will return the top element
@@ -228,7 +222,7 @@ int _Dos9_Estr_Init(void);
             \return Returns 0 if the function succeded, 1 else.
             \attention Clearing a stack does not free all it element, it just destroys the stack
             \deprecated This function is deprecated, use Dos9_ClearStack() instead */
-        LIBDOS9     int Dos9_ClearStack(LPSTACK lpcsStack);
+        LIBDOS9     int Dos9_ClearStack(LPSTACK lpcsStack, void(*pFunc)(void*));
 
     /** \} */
 
@@ -820,7 +814,7 @@ int                     _Dos9_Sort(const void* ptrS, const void* ptrD);
         /** \brief Free a FILELIST structure
             \param lpflFileList : A pointer to the file list to be freed
             \return Returns 0 on success or 1 on failure */
-        LIBDOS9 THREAD     Dos9_FreeFileList(LPFILELIST lpflFileList);
+        LIBDOS9 int         Dos9_FreeFileList(LPFILELIST lpflFileList);
 
         LIBDOS9 int         Dos9_FormatFileSize (char* lpBuf, int iLenght, unsigned int iSize);
     /** \} */
@@ -928,6 +922,18 @@ LIBDOS9 int Dos9_UpdateCurrentDir(void);
 LIBDOS9 int Dos9_SetCurrentDir(char* lpPath);
 LIBDOS9 char* Dos9_GetCurrentDir(void);
 LIBDOS9 int Dos9_GetExePath(char* lpBuf, size_t iBufSize);
+
+
+
+LIBDOS9 int      Dos9_BeginThread(THREAD* lpThId, void(*pFunc)(void*), int iMemAmount, void* arg);
+LIBDOS9 void     Dos9_EndThread(void* iReturn);
+LIBDOS9 int      Dos9_WaitForThread(THREAD thId, void* lpRet);
+LIBDOS9 int      Dos9_WaitForAllThreads(void);
+
+LIBDOS9 int      Dos9_CreateMutex(MUTEX* lpMuId);
+LIBDOS9 int      Dos9_CloseMutex(MUTEX* lpMuId);
+LIBDOS9 int      Dos9_LockMutex(MUTEX* lpMuId);
+LIBDOS9 int      Dos9_ReleaseMutex(MUTEX* lpMuId);
 
 /* end of libDos9 declaration */
 #endif
