@@ -469,6 +469,7 @@ LIBDOS9 int      Dos9_WaitForAllThreads(void)
 {
 
     int iWait;
+    HANDLE hThread;
 
     Dos9_LockMutex(&_threadStack_Mutex);
 
@@ -478,7 +479,9 @@ LIBDOS9 int      Dos9_WaitForAllThreads(void)
                       (void**)&iWait
                       );
 
-        WaitForSingleObject((HANDLE)iWait, INFINITE);
+        hThread=OpenThread(SYNCHRONIZE, FALSE, iWait);
+
+        WaitForSingleObject(hThread, INFINITE);
 
         _lpcsThreadStack=
             Dos9_PopStack(_lpcsThreadStack, NULL);

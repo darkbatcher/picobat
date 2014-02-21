@@ -142,10 +142,13 @@ LIBDOS9 int Dos9_EsFree(ESTR* ptrESTR)
 
 int Dos9_EsGet(ESTR* ptrESTR, FILE* ptrFile)
 {
-    int iCurrentL=0, iResult=0;
-    int iTotalBytesRead=0;
-    char* crLf=NULL;
-    char *ptrCursor=NULL;
+    int iCurrentL=0,
+        iResult=0,
+        iTotalBytesRead=0;
+
+    char* crLf=NULL,
+          *ptrCursor=NULL;
+
     ptrCursor=ptrESTR->ptrString;
     iCurrentL=ptrESTR->iLenght-1;
 
@@ -166,12 +169,30 @@ int Dos9_EsGet(ESTR* ptrESTR, FILE* ptrFile)
         }
 
         crLf=strchr(ptrESTR->ptrString, '\n');
-        if (crLf!=NULL) break;
+        if (crLf!=NULL)
+            break;
+
         iCurrentL=ptrESTR->iLenght;
+
         ptrESTR->iLenght=ptrESTR->iLenght*2;
-        ptrESTR->ptrString=realloc(ptrESTR->ptrString, ptrESTR->iLenght);
-        if (ptrESTR->ptrString==NULL) return -1;
+
+        crLf=realloc(ptrESTR->ptrString, ptrESTR->iLenght);
+
+        if (crLf==NULL) {
+                /* make if more fault tolerant, abort the loop,
+                   and just read a part of the real line (not
+                   so bad however). */
+                // fprintf(stderr, "Error ! Unable to relocate string (iCurrentL=%d).\n", iCurrentL);
+
+                ptrESTR->iLenght=iCurrentL;
+
+                return -1;
+        }
+
+        ptrESTR->ptrString=crLf;
+
         ptrCursor=ptrESTR->ptrString+iCurrentL-1;
+
     }
 
     switch (_Dos9_NewLine) {
