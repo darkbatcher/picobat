@@ -126,6 +126,7 @@ int Dos9_CmdIf(char* lpParam)
             Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
             return -1;
         }
+
         iResult=(int)getenv(lpArgument);
         if (iFlag & DOS9_IF_NEGATION) iResult=!iResult;
         lpParam=lpNext;

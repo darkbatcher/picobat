@@ -13,6 +13,16 @@
 /* this file contains code of function used for parsing variables content
    (e.g. %~* and !:*! */
 
+#ifdef WIN32
+
+    #define Dos9_GetFileAttributes(lpcstr) GetFileAttributes(lpcstr)
+
+#elif defined _POSIX_C_SOURCE
+
+    #define Dos9_GetFileAttributes(lpcstr) GetFileAttributes(lpcstr)
+
+#endif // WIN32
+
 #ifndef WIN32
 
 void strupr(char* lpBuf)
@@ -72,7 +82,12 @@ int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
     struct tm* lTime;
     time_t iTime;
 
-    if (!(lpNameCpy=strdup(lpName))) return FALSE;
+        /* empty the line */
+    Dos9_EsCpy(lpRecieve, "");
+
+    if (!(lpNameCpy=strdup(lpName)))
+        return FALSE;
+
     if ((lpToken=strchr(lpNameCpy, ':'))) {
         if ((lpNextToken=strchr(lpToken, '='))) {
 

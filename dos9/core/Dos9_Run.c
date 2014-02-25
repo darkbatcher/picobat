@@ -60,8 +60,10 @@ int Dos9_RunBatch(int isScript)
 
 
         do {
+
             Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_PIPE_OPEN, lppsStream, NULL);
             Dos9_RunCommand(lppsStream->lpCmdLine);
+
         } while ((lppsStream=(PARSED_STREAM*)Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_PARSED_LINE_EXEC, lppsStream, NULL)));
 
         Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_FREE_PARSED_LINE, lppssStreamStart, NULL);
@@ -84,13 +86,19 @@ int Dos9_RunLine(ESTR* lpLine)
         Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_NEWLINE, NULL, NULL);
         lppssStreamStart=(PARSED_STREAM_START*)Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_PARSE_ESTR, lpLine, NULL);
         Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_PARSED_START_EXEC, lppssStreamStart, NULL);
+
         DEBUG("Parsing succeded");
         lppsStream=lppssStreamStart->lppsStream;
+
         DEBUG("Starting command loop !");
+
         do {
+
             Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_PIPE_OPEN, lppsStream, NULL);
             Dos9_RunCommand(lppsStream->lpCmdLine);
+
         } while ((lppsStream=(PARSED_STREAM*)Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_PARSED_LINE_EXEC, lppsStream, NULL)));
+
         Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_FREE_PARSED_LINE, lppssStreamStart, NULL);
         Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_ENDLINE, NULL, NULL);
 
@@ -135,7 +143,7 @@ int Dos9_RunCommand(ESTR* lpCommand)
                 && lpCmdLine[iFlag]!='\0')
                 goto Dos9_BackTrackExternalCommand;
 
-            lpProc(lpCmdLine);
+            iErrorLevel=lpProc(lpCmdLine);
 
     }
 

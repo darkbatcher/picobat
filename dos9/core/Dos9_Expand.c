@@ -5,9 +5,16 @@
 
  */
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+
 #include "Dos9_Core.h"
 
 #include "../errors/Dos9_Errors.h"
+
+// #define DOS9_DBG_MODE
+#include "Dos9_Debug.h"
 
 /* function for replacing variable on commands line  */
 void Dos9_ReplaceVars(ESTR* ptrCommandLine)
@@ -25,6 +32,8 @@ void Dos9_ExpandSpecialVar(ESTR* ptrCommandLine)
          *lpNextToken,
          *lpPreviousToken=lpToken,
          *lpTokenBegin;
+
+    DOS9_DBG("[+]Dos9_ExpandSpecialVar: \"%s\".\n", Dos9_EsToChar(ptrCommandLine));
 
     while ((lpNextToken=Dos9_StrToken(lpToken, '%'))) {
 
@@ -57,6 +66,8 @@ void Dos9_ExpandSpecialVar(ESTR* ptrCommandLine)
     Dos9_EsFree(lpVarContent);
     Dos9_EsFree(lpExpanded);
 
+    DOS9_DBG("[-]Dos9_ExpandSpecialVar: \"%s\".\n", Dos9_EsToChar(ptrCommandLine));
+
 }
 
 void Dos9_ExpandVar(ESTR* ptrCommandLine, char cDelimiter)
@@ -69,7 +80,7 @@ void Dos9_ExpandVar(ESTR* ptrCommandLine, char cDelimiter)
          *ptrNextToken,
          *ptrEndToken;
 
-    char lpDelimiter[2]={cDelimiter, 0};
+    char lpDelimiter[3]={cDelimiter, 0, 0};
 
     /* initialisation du buffer de sortie */
     Dos9_EsCpy(lpExpanded,"");
@@ -80,13 +91,27 @@ void Dos9_ExpandVar(ESTR* ptrCommandLine, char cDelimiter)
         *ptrNextToken='\0';
         ptrNextToken++; // on passe au caractère suivant
 
-        if (*ptrNextToken==cDelimiter) {
+        if ((*ptrNextToken==cDelimiter)) {
 
             // si un % est échappé via %%
+
+            /* on supprime le caractère qui peut éventuellement
+               trainer dans ce buffer */
+            lpDelimiter[1]='\0';
+
             Dos9_EsCat(lpExpanded, ptrToken);
             Dos9_EsCat(lpExpanded, lpDelimiter);
             ptrToken=ptrNextToken+1;
             continue;
+
+        } else if (isdigit(*ptrNextToken)) {
+
+            lpDelimiter[1]=*ptrNextToken;
+            Dos9_EsCat(lpExpanded, ptrToken);
+            Dos9_EsCat(lpExpanded, lpDelimiter);
+            ptrToken=ptrNextToken+1;
+            continue;
+
 
         } else if ((ptrEndToken=Dos9_StrToken(ptrNextToken, cDelimiter))) {
 
@@ -97,13 +122,6 @@ void Dos9_ExpandVar(ESTR* ptrCommandLine, char cDelimiter)
                 Dos9_EsCat(lpExpanded, ptrToken);
                 Dos9_EsCatE(lpExpanded, lpVarContent);
                 ptrToken=ptrEndToken+1;
-
-            } else {
-
-                *ptrEndToken=cDelimiter;
-                Dos9_EsCat(lpExpanded, ptrToken);
-                Dos9_EsCat(lpExpanded, lpDelimiter);
-                ptrToken=ptrNextToken;
 
             }
 

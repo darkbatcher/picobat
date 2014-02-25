@@ -106,7 +106,7 @@
     #define DOS9_FILE_READONLY 0
     #define DOS9_FILE_SYSTEM 0
 
-    #define _Dos9_GetFileAttributes(lpName)
+    #define Dos9_GetFileAttributes(lpName)
     #define _Dos9_Pipe(descriptors, size, mode) pipe(descriptors)
 
 #endif

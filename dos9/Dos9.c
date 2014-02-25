@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
 
     int i,
         j,
-        c,
+        c='0',
         bQuiet=FALSE;
 
     if (Dos9_LibInit() == -1) {
@@ -166,6 +166,7 @@ int main(int argc, char *argv[])
                 for (j=i ,  c='1';argv[j] && c<='9';i++, c++ , j++ ) {
                     Dos9_SetLocalVar(lpvLocalVars, c, argv[j]);
                 }
+
                 break;
             }
             lpFileName=argv[i];
@@ -173,6 +174,10 @@ int main(int argc, char *argv[])
         }
 
     }
+
+        /* empty remaining special vars */
+    for (;c<='9';c++)
+        Dos9_SetLocalVar(lpvLocalVars, c , "");
 
     /* initialisation du système de génération aléatoire */
 
