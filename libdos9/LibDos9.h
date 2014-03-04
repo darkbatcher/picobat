@@ -115,12 +115,14 @@
 
 typedef pthread_t       THREAD;
 typedef pthread_mutex_t MUTEX;
+typedef pid_t           PROCESS;
 
 
 #elif defined WIN32
 
 typedef HANDLE THREAD;
 typedef HANDLE MUTEX;
+typedef int    PROCESS;
 
 #endif
 
@@ -934,6 +936,9 @@ LIBDOS9 int      Dos9_CreateMutex(MUTEX* lpMuId);
 LIBDOS9 int      Dos9_CloseMutex(MUTEX* lpMuId);
 LIBDOS9 int      Dos9_LockMutex(MUTEX* lpMuId);
 LIBDOS9 int      Dos9_ReleaseMutex(MUTEX* lpMuId);
+
+LIBDOS9 int      Dos9_CreateProcess(PROCESS* pId, char* lpName, char** lpArgs);
+LIBDOS9 int      Dos9_WaitForProcess(PROCESS* pId, void* iRes);
 
 /* end of libDos9 declaration */
 #endif

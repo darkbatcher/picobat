@@ -326,7 +326,7 @@ void Tea_HtmlOutputParagraph(TEANODE* lpTeaNode, FILE* pFile)
 
         if (lpTeaNode->iNodeType==TEA_NODE_LINK) {
 
-            fprintf(pFile, "<a href=\"%s\">", lpTeaNode->lpTarget);
+            fprintf(pFile, "<a href=\"%s.html\">", lpTeaNode->lpTarget);
 
         } else if (lpTeaNode->iNodeType==TEA_NODE_EMPHASIS) {
 

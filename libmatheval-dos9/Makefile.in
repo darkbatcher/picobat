@@ -23,34 +23,20 @@
 SRC=./lib/error.c ./lib/matheval.c ./lib/node.c \
 	./lib/parser.c ./lib/scanner.c ./lib/symbol_table.c ./lib/xmalloc.c \
 	./lib/xmath.c
-	
-# flags for LEX/YACC
-YACC=bison
-LEX=flex
-
-# flags for c compiler
-CFLAGS=-Wall -O3 -g
-
-# flags for lib compiler
-AFLAGS=-r -s
-
-# the compilers vars
-CC=gcc
-AR=ar
 
 # setup includes
-INCLUDE_FILE=$(INC_DIR)/matheval.h
+INCLUDE_FILE=@includedir@/matheval.h
 ORIGIN_FILE=./lib/matheval.h
 
 # build filenames
-TARGET=$(LIB_DIR)/libmatheval.a
+TARGET=@libdir@/libmatheval.a
 OBJ=$(SRC:.c=.o)
 
 all : $(TARGET) $(INCLUDE_FILE)
 
 # build the lib
 $(TARGET): $(OBJ)
-			$(AR) $(AFLAGS) $@ $^
+			ar -r -s $@ $^
 
 # installation of header
 $(INCLUDE_FILE): $(ORIGIN_FILE)
@@ -58,12 +44,12 @@ $(INCLUDE_FILE): $(ORIGIN_FILE)
 			
 # build C files
 %.o : %.c
-			$(CC) -o $@ -c $< $(CFLAGS) -D HAVE_CONFIG_H
+			@CC@ @CFLAGS@ -o $@ -c $< -D HAVE_CONFIG_H
 
 # build YACC files			
 %.c : %.y
-			$(YACC) -d $< -p evaluator_ -o $@
+			@YACC@ -d $< -p evaluator_ -o $@
 
 # build LEX files
 %.c : %.l
-			$(LEX) -o $@ -P evaluator_ $<
+			@LEX@ -o $@ -P evaluator_ $<

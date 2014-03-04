@@ -7,10 +7,7 @@
 #
 # Please report bugs, and mistakes at : <darkbatcher at dos9 dot org>
 
-# the compilers vars
-CC=gcc
-
-#the list of the sources
+#list of the sources
 SRC=./Dos9.c ./command/Dos9_Conditions.c ./command/Dos9_FileCommands.c \
 	./command/Dos9_ScriptCommands.c ./command/cmdlib/Dos9_CmdLibArgs.c \
 	./core/Dos9_Expand.c ./core/Dos9_Globals.c ./core/Dos9_Jump.c \
@@ -20,22 +17,9 @@ SRC=./Dos9.c ./command/Dos9_Conditions.c ./command/Dos9_FileCommands.c \
 	./core/Stream/Dos9_Stream.c ./errors/Dos9_Errors.c \
 	./lang/Dos9_Lang.c ./core/Dos9_Debug.c ./core/Dos9_FilePath.c
 
-ifeq ($(BUILD_OS),WINDOWS)
-
-# libs for windows
-LIB=$(LIB_DIR)/libDos9.a $(LIB_DIR)/libinteval.a $(LIB_DIR)/libmatheval.a \
-	 -lfl -lintl 
+LIB=-linteval -lDos9 -lmatheval @LIBS@
 	
-CFLAGS=-Wall -g -I $(INC_DIR)
-
-else
-
-# libs for *nix
-LIB=$(LIB_DIR)/libDos9.a $(LIB_DIR)/libmatheval.a $(LIB_DIR)/libinteval -lfl -lm
-CFLAGS=-Wall -g -pthread -I $(INC_DIR)
-endif
-	
-TARGET=$(BIN_DIR)/Dos9
+TARGET=../bin/Dos9
 
 OBJ=$(SRC:.c=.o)
 
@@ -44,7 +28,7 @@ all: $(TARGET)
 
 # build the main lib
 $(TARGET) : $(OBJ)
-			$(CC) $(CFLAGS) -o $@ $^ $(LIB)
+			@CC@ -o $@ $^ $(LIB)  @CFLAGS@ 
 
 %.o : %.c
-			$(CC) -o $@ -c $< $(CFLAGS)
+			@CC@ -o $@ -c $<  @CFLAGS@ 

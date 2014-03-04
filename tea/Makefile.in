@@ -1,5 +1,4 @@
-# Hlp, The Dos9 Project
-# Copyright © 2010-2014 Darkbatcher
+# Tea, The Dos9 Project - Copyright © 2010-2014 Darkbatcher
 #
 # This is free software: you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software 
@@ -9,26 +8,22 @@
 # Please report bugs, and mistakes at : <darkbatcher at dos9 dot org>
 #
 
-# the compilers vars
-CC=gcc
+SRC= ./src/tea.c ./src/out/tea_html_out.c \
+     ./src/Tea_Load.c ./src/out/tea_text_out.c ./src/Tea_Node.c \
+     ./src/Tea_Output.c ./src/tea_strupr.c
 
-#the list of the sources
-SRC= ./src/hlp.c ./src/hlp_show.c ./src/hlp_load.c ./src/hlp_enc.c 
+LIB=-lDos9
 
-LIB=$(LIB_DIR)/libDos9.a -liconv -lintl
+TARGET=../bin/cmd/tea
 
-
-TARGET=$(CMD_DIR)/hlp
-CFLAGS=-Wall -g -I $(INC_DIR)
 
 OBJ=$(SRC:.c=.o)
 
 # build all
 all: $(TARGET)
 
-# build the main lib
 $(TARGET) : $(OBJ)
-			$(CC) $(CFLAGS) -o $@ $^ $(LIB)
+			@CC@ -o $@ $^ $(LIB)  @CFLAGS@ 
 
 %.o : %.c
-			$(CC) -o $@ -c $< $(CFLAGS)
+			@CC@ -o $@ -c $< @CFLAGS@

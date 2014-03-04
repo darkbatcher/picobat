@@ -133,7 +133,7 @@ int Dos9_RunCommand(ESTR* lpCommand)
        case -1:
             Dos9_BackTrackExternalCommand:
 
-            Dos9_RunExternalCommand(lpCmdLine);
+            iErrorLevel=Dos9_RunExternalCommand(lpCmdLine);
             break;
 
        default:

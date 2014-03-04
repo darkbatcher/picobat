@@ -8,49 +8,34 @@
 # Please report bugs, and mistakes at : <darkbatcher at dos9 dot org>
 
 SRC=./lib/inteval.c ./lib/parser.c ./lib/lexer.c 
-	
-# flags for LEX/YACC
-YACC=bison
-LEX=flex
-
-# flags for c compiler
-CFLAGS=-Wall -O3 -g
-
-# flags for lib compiler
-AFLAGS=-r -s
-
-# the compilers vars
-CC=gcc
-AR=ar
 
 # setup includes
-INCLUDE_FILE=$(INC_DIR)/inteval.h
+INCLUDE_FILE=@includedir@/inteval.h
 ORIGIN_FILE=./lib/inteval.h
 
 # build filenames
-TARGET=$(LIB_DIR)/libinteval.a
+TARGET=@libdir@/libinteval.a
 OBJ=$(SRC:.c=.o)
 
 all : $(TARGET) $(INCLUDE_FILE)
 
 # construction de la librarie
 $(TARGET): $(OBJ)
-			$(AR) $(AFLAGS) $@ $^
+			ar -r -s $@ $^
 
-# copie du fichier matheval.h original vers le dossier ``./include''
 $(INCLUDE_FILE): $(ORIGIN_FILE)
 	cp $(ORIGIN_FILE) $(INCLUDE_FILE)
 			
 #compilation des fichiers C
 %.o : %.c
-			$(CC) -o $@ -c $< $(CFLAGS) -D HAVE_CONFIG_H
+			@CC@ @CFLAGS@ -o $@ -c $< 
 
 # constuction des fichiers YACC			
 %.c : %.y
-			$(YACC) -d $< -p IntEval_ -o $@
+			@YACC@ -d $< -p IntEval_ -o $@
 
 # construction des fichiers LEX
 %.c : %.l
-			$(LEX) -o $@ -P IntEval_ $<
+			@LEX@ -o $@ -P IntEval_ $<
 
 			

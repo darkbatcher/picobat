@@ -156,6 +156,14 @@ extern void input_reset (void);
      END = 263
    };
 #endif
+/* Tokens.  */
+#define NUMBER 258
+#define CONSTANT 259
+#define VARIABLE 260
+#define FUNCTION 261
+#define NEG 262
+#define END 263
+
 
 
 
@@ -172,7 +180,7 @@ typedef union YYSTYPE
 
 
 /* Line 214 of yacc.c  */
-#line 176 "lib/parser.c"
+#line 184 "lib/parser.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -184,7 +192,7 @@ typedef union YYSTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 188 "lib/parser.c"
+#line 196 "lib/parser.c"
 
 #ifdef short
 # undef short
@@ -1398,7 +1406,7 @@ yyreduce:
 #line 90 "lib/parser.y"
     {
   root = (yyvsp[(1) - (2)].node);
-;}
+}
     break;
 
   case 6:
@@ -1408,7 +1416,7 @@ yyreduce:
     {
         /* Create addition binary operation node.  */
         (yyval.node) = node_create ('b', '+', (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node));
-;}
+}
     break;
 
   case 7:
@@ -1418,7 +1426,7 @@ yyreduce:
     {
         /* Create subtraction binary operation node.  */
         (yyval.node) = node_create ('b', '-', (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node));
-;}
+}
     break;
 
   case 8:
@@ -1428,7 +1436,7 @@ yyreduce:
     {
         /* Create multiplication binary operation node.  */
         (yyval.node) = node_create ('b', '*', (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node));
-;}
+}
     break;
 
   case 9:
@@ -1438,7 +1446,7 @@ yyreduce:
     {
         /* Create division binary operation node.  */
         (yyval.node) = node_create ('b', '/', (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node));
-;}
+}
     break;
 
   case 10:
@@ -1448,7 +1456,7 @@ yyreduce:
     {
         /* Create minus unary operation node.  */
         (yyval.node) = node_create ('u', '-', (yyvsp[(2) - (2)].node));
-;}
+}
     break;
 
   case 11:
@@ -1458,7 +1466,7 @@ yyreduce:
     {
         /* Create exponentiation unary operation node.  */
         (yyval.node) = node_create ('b', '^', (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node));
-;}
+}
     break;
 
   case 12:
@@ -1468,7 +1476,7 @@ yyreduce:
     {
         /* Create function node.  */
         (yyval.node) = node_create ('f', (yyvsp[(1) - (4)].record), (yyvsp[(3) - (4)].node));
-;}
+}
     break;
 
   case 13:
@@ -1477,13 +1485,13 @@ yyreduce:
 #line 127 "lib/parser.y"
     {
         (yyval.node) = (yyvsp[(2) - (3)].node);
-;}
+}
     break;
 
 
 
 /* Line 1464 of yacc.c  */
-#line 1487 "lib/parser.c"
+#line 1495 "lib/parser.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);

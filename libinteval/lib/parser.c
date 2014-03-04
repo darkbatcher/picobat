@@ -138,6 +138,28 @@
      NEG = 277
    };
 #endif
+/* Tokens.  */
+#define NOMBRE 258
+#define VARIABLE 259
+#define PLUS 260
+#define MOINS 261
+#define FOIS 262
+#define DIVISE 263
+#define NON_LOG 264
+#define NON_BAB 265
+#define OU_LOG 266
+#define ET_LOG 267
+#define OU_BAB 268
+#define ET_BAB 269
+#define XOR_BAB 270
+#define DEC_DROITE 271
+#define DEC_GAUCHE 272
+#define MODULO 273
+#define PARENTHESE_GAUCHE 274
+#define PARENTHESE_DROITE 275
+#define FIN 276
+#define NEG 277
+
 
 
 
@@ -153,7 +175,7 @@ typedef int YYSTYPE;
 
 
 /* Line 264 of yacc.c  */
-#line 157 "lib/parser.c"
+#line 179 "lib/parser.c"
 
 #ifdef short
 # undef short
@@ -1398,77 +1420,77 @@ yyreduce:
 
 /* Line 1464 of yacc.c  */
 #line 36 "lib/parser.y"
-    { IntEval_Result=(yyval) ;}
+    { IntEval_Result=(yyval); }
     break;
 
   case 6:
 
 /* Line 1464 of yacc.c  */
 #line 40 "lib/parser.y"
-    { (yyval)=(yyvsp[(1) - (1)]); ;}
+    { (yyval)=(yyvsp[(1) - (1)]); }
     break;
 
   case 7:
 
 /* Line 1464 of yacc.c  */
 #line 41 "lib/parser.y"
-    { (yyval)=(yyvsp[(1) - (1)]); ;}
+    { (yyval)=(yyvsp[(1) - (1)]); }
     break;
 
   case 8:
 
 /* Line 1464 of yacc.c  */
 #line 42 "lib/parser.y"
-    { (yyval)=(yyvsp[(1) - (3)])+(yyvsp[(3) - (3)]); ;}
+    { (yyval)=(yyvsp[(1) - (3)])+(yyvsp[(3) - (3)]); }
     break;
 
   case 9:
 
 /* Line 1464 of yacc.c  */
 #line 43 "lib/parser.y"
-    { (yyval)=(yyvsp[(1) - (3)])-(yyvsp[(3) - (3)]); ;}
+    { (yyval)=(yyvsp[(1) - (3)])-(yyvsp[(3) - (3)]); }
     break;
 
   case 10:
 
 /* Line 1464 of yacc.c  */
 #line 44 "lib/parser.y"
-    { (yyval)=(yyvsp[(1) - (3)])*(yyvsp[(3) - (3)]); ;}
+    { (yyval)=(yyvsp[(1) - (3)])*(yyvsp[(3) - (3)]); }
     break;
 
   case 11:
 
 /* Line 1464 of yacc.c  */
 #line 45 "lib/parser.y"
-    { (yyval)=(yyvsp[(1) - (3)])/(yyvsp[(3) - (3)]); ;}
+    { (yyval)=(yyvsp[(1) - (3)])/(yyvsp[(3) - (3)]); }
     break;
 
   case 12:
 
 /* Line 1464 of yacc.c  */
 #line 46 "lib/parser.y"
-    { (yyval)=(yyvsp[(1) - (3)]) % (yyvsp[(3) - (3)]);;}
+    { (yyval)=(yyvsp[(1) - (3)]) % (yyvsp[(3) - (3)]);}
     break;
 
   case 13:
 
 /* Line 1464 of yacc.c  */
 #line 47 "lib/parser.y"
-    { (yyval)=-(yyvsp[(2) - (2)]); ;}
+    { (yyval)=-(yyvsp[(2) - (2)]); }
     break;
 
   case 14:
 
 /* Line 1464 of yacc.c  */
 #line 48 "lib/parser.y"
-    { (yyval)=(yyvsp[(2) - (3)]); ;}
+    { (yyval)=(yyvsp[(2) - (3)]); }
     break;
 
   case 15:
 
 /* Line 1464 of yacc.c  */
 #line 49 "lib/parser.y"
-    {(yyval)=!(yyvsp[(2) - (2)]); ;}
+    {(yyval)=!(yyvsp[(2) - (2)]); }
     break;
 
   case 16:
@@ -1489,48 +1511,48 @@ yyreduce:
 
 /* Line 1464 of yacc.c  */
 #line 52 "lib/parser.y"
-    {(yyval)=~(yyvsp[(2) - (2)]);;}
+    {(yyval)=~(yyvsp[(2) - (2)]);}
     break;
 
   case 19:
 
 /* Line 1464 of yacc.c  */
 #line 53 "lib/parser.y"
-    {(yyval)=(yyvsp[(1) - (3)]) | (yyvsp[(3) - (3)]);;}
+    {(yyval)=(yyvsp[(1) - (3)]) | (yyvsp[(3) - (3)]);}
     break;
 
   case 20:
 
 /* Line 1464 of yacc.c  */
 #line 54 "lib/parser.y"
-    {(yyval)=(yyvsp[(1) - (3)]) & (yyvsp[(3) - (3)]);;}
+    {(yyval)=(yyvsp[(1) - (3)]) & (yyvsp[(3) - (3)]);}
     break;
 
   case 21:
 
 /* Line 1464 of yacc.c  */
 #line 55 "lib/parser.y"
-    {(yyval)=(yyvsp[(1) - (3)]) ^ (yyvsp[(3) - (3)]);;}
+    {(yyval)=(yyvsp[(1) - (3)]) ^ (yyvsp[(3) - (3)]);}
     break;
 
   case 22:
 
 /* Line 1464 of yacc.c  */
 #line 56 "lib/parser.y"
-    {(yyval)= (yyvsp[(1) - (3)]) << (yyvsp[(3) - (3)]);;}
+    {(yyval)= (yyvsp[(1) - (3)]) << (yyvsp[(3) - (3)]);}
     break;
 
   case 23:
 
 /* Line 1464 of yacc.c  */
 #line 57 "lib/parser.y"
-    {(yyval)= (yyvsp[(1) - (3)]) >> (yyvsp[(3) - (3)]);;}
+    {(yyval)= (yyvsp[(1) - (3)]) >> (yyvsp[(3) - (3)]);}
     break;
 
 
 
 /* Line 1464 of yacc.c  */
-#line 1534 "lib/parser.c"
+#line 1556 "lib/parser.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);

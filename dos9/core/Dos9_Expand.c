@@ -106,6 +106,9 @@ void Dos9_ExpandVar(ESTR* ptrCommandLine, char cDelimiter)
 
         } else if (isdigit(*ptrNextToken)) {
 
+            /* if the variable is one of the parameter variables,
+               then skip, for compatibility purpose
+             */
             lpDelimiter[1]=*ptrNextToken;
             Dos9_EsCat(lpExpanded, ptrToken);
             Dos9_EsCat(lpExpanded, lpDelimiter);
@@ -129,8 +132,12 @@ void Dos9_ExpandVar(ESTR* ptrCommandLine, char cDelimiter)
 
         } else {
 
-            Dos9_EsCat(lpExpanded, ptrToken); // si il y'a un seul % qui ne respecte aucune règle
-            Dos9_EsCat(lpExpanded, lpDelimiter);
+            /* there is only a single %, that does not
+               match any following %, then, split it
+               from the input.
+             */
+
+            Dos9_EsCat(lpExpanded, ptrToken);
             ptrToken=ptrNextToken;
 
         }

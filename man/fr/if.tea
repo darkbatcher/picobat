@@ -193,11 +193,11 @@ ${IF %ma_var%==test (
 		- On peut entourer {ma_var} avec des guillemets (doubles ou simples),
 		ce qui empêche les
 		caractères blancs d'être interprétés. Cepandant, les caractères tels
-		que {&} et {|} contenus dans {ma_var} seront toujours interprétés, et 
+		que {&} et {\|} contenus dans {ma_var} seront toujours interprétés, et 
 		{ma_var} ne poura plus contenir de guillemets (doubles ou simples).
 
-		- La seconde, et meilleure des solutions est d'utiliser l'{expansion retardée|spec/exp}
-		plutôt que l'{expansion conventionnelle|spec/exp}. De cette façon, aucun
+		- La seconde, et meilleure des solutions est d'utiliser l'{spec/exp|expansion retardée}
+		plutôt que l'{spec/exp|expansion conventionnelle}. De cette façon, aucun
 		des caractères contenus dans {ma_var} ne peut causer de problème.
 		
 	Ainsi, lors de création de scripts qui doivent nécessairement être robustes

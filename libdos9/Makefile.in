@@ -8,19 +8,9 @@
 # Please report bugs, and mistakes at : <darkbatcher at dos9 dot org>
 #
 
-# flags pour  c compiler
-CFLAGS=-Wall -O3 -g
+TARGET=@libdir@/libDos9.a
 
-# flags for lib compiler
-AFLAGS=-r -s
-
-# the compilers vars
-CC=gcc
-AR=ar
-
-TARGET=$(LIB_DIR)/libDos9.a
-
-INCLUDE_FILE=$(INC_DIR)/libDos9.h
+INCLUDE_FILE=@includedir@/libDos9.h
 ORIGIN_FILE=./libDos9-export.h
 
 #the list of the sources
@@ -38,9 +28,9 @@ $(INCLUDE_FILE): $(ORIGIN_FILE)
 
 # build the main lib
 $(TARGET): $(OBJ)
-			$(AR) $(AFLAGS) $@ $^
+			AR -r -s $@ $^
 
 %.o : %.c
-			$(CC) -o $@ -c $< $(CFLAGS)
+			@CC@ @CFLAGS@ -o $@ -c $<
 
 

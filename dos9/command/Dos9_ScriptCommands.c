@@ -227,7 +227,7 @@ int Dos9_CmdSet(char *lpLine)
             }
 
             /* get the floats */
-            if (!(Dos9_CmdSetA(lpNextToken, bFloats)))
+            if (Dos9_CmdSetA(lpNextToken, bFloats))
                 goto error;
 
         } else if (!stricmp(lpArg, "/p")) {

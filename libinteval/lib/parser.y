@@ -33,7 +33,7 @@ Input:
 
 Ligne:
     FIN
-  | Expression FIN    { IntEval_Result=$$ }
+  | Expression FIN    { IntEval_Result=$$; }
   ;
 
 Expression:
@@ -47,8 +47,8 @@ Expression:
   | MOINS Expression %prec NEG  { $$=-$2; }
   | PARENTHESE_GAUCHE Expression PARENTHESE_DROITE  { $$=$2; }
   | NON_LOG Expression %prec NEG {$$=!$2; }
-  | Expression OU_LOG Expression {$$=$1 || $3}
-  | Expression ET_LOG Expression {$$=$1 && $3}
+  | Expression OU_LOG Expression {$$=$1 || $3;}
+  | Expression ET_LOG Expression {$$=$1 && $3;}
   | NON_BAB Expression %prec NEG {$$=~$2;}
   | Expression OU_BAB Expression {$$=$1 | $3;}
   | Expression ET_BAB Expression {$$=$1 & $3;}

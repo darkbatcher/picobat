@@ -345,8 +345,8 @@ ${IF 1==1 (
 	{Dos9} and {CMD.exe}. The changes resides in the way var and special vars are parsed.
 	
 	@- On the one hand,
-	to make the difference between the two kind of variables, i decided the only way to denote a special var
-	(ie. like {%%A}) is to prefix it with two percent. Except for variables like {%0, %1} and so one, which can
+	to make the difference between the two kind of variables, I decided the only way to denote a special var
+	(ie. like {%%A}) is to prefix it with two percent. Except for variables like {%0, %1} and so on, which can
 	be accessed with a single {%} for compatibility purposes. This new conventions provides more stylished script
 	and prevent ``name crashes'', (ie. unexpected behaviour caused for exemple by the following code) :
 	
@@ -365,3 +365,22 @@ ${ECHO %1 test%
 	
 	- Changed {Dos9} behaviour towards {%0, ..., %9} variables. Those which are not explicitelly specified at startup will
 	be filled with an empty string, and will expand to the empty string.
+	
+{{Thursday 25th, February}}
+
+	- Finalized behaviour change for variables. Singles {%} are now splited from the input at parsing, exception made for
+	the special variables {%0, ..., %9} for which the use of a single percent is still valid (for compatibility purposes)
+	as stated previously. This prevent users from using single '%' to denote a special var other than these specified
+	previously.
+	
+	- Fixed a bug that made {SET /P} subfunction to return inconsistent {%ERRORLEVEL%} codes. In fact, it was
+	the reverse of normal behaviour, that is :
+	
+		-- Returning {-1} on error.
+		
+		-- Returning {0} on success.
+		
+	- Added an example of batch powered by Dos9, a multifunction caculator using both floating point arithmetics and
+	integer arithmetics.
+	
+	

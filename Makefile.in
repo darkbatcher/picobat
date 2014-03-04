@@ -1,0 +1,29 @@
+# Overall Dos9 suite Makefile, The Dos9 Project (c) Darkbatcher
+# 2010-2013
+#
+# This is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software 
+# Foundation, either version 3 of the License, or (at your option) any later
+# version.
+#
+
+DOS9_COMPONENTS=libDos9 libinteval libmatheval-dos9 dos9 tea dump
+
+# define a list of components to be build
+bin: buildall
+
+buildall:
+	for i in $(DOS9_COMPONENTS); do $(MAKE) -e -C $$i ; done;
+	
+install:
+	@bindir@
+
+# make the documentation	
+doc:
+	./make-doc.bat
+	
+.PHONY: clean buildall
+
+
+clean:
+	rm -r *.o

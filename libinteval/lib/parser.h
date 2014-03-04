@@ -60,6 +60,28 @@
      NEG = 277
    };
 #endif
+/* Tokens.  */
+#define NOMBRE 258
+#define VARIABLE 259
+#define PLUS 260
+#define MOINS 261
+#define FOIS 262
+#define DIVISE 263
+#define NON_LOG 264
+#define NON_BAB 265
+#define OU_LOG 266
+#define ET_LOG 267
+#define OU_BAB 268
+#define ET_BAB 269
+#define XOR_BAB 270
+#define DEC_DROITE 271
+#define DEC_GAUCHE 272
+#define MODULO 273
+#define PARENTHESE_GAUCHE 274
+#define PARENTHESE_DROITE 275
+#define FIN 276
+#define NEG 277
+
 
 
 

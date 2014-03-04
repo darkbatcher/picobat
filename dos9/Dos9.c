@@ -294,11 +294,6 @@ int main(int argc, char *argv[])
     Dos9_Exit();
 
     Dos9_LibClose();
-    /*
-       this is actually a big issue since it is not secured at all, since
-       we have optionally severals threads still running, able to require use
-       of the libDos9 library
-     */
 
     return 0;
 

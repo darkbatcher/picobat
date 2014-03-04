@@ -46,6 +46,14 @@
      END = 263
    };
 #endif
+/* Tokens.  */
+#define NUMBER 258
+#define CONSTANT 259
+#define VARIABLE 260
+#define FUNCTION 261
+#define NEG 262
+#define END 263
+
 
 
 
@@ -62,7 +70,7 @@ typedef union YYSTYPE
 
 
 /* Line 1685 of yacc.c  */
-#line 66 "lib/parser.h"
+#line 74 "lib/parser.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
