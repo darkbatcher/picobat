@@ -48,6 +48,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "node.h"
+#include "parser_symbols.h"
 #include "parser.h"
 #include "symbol_table.h"
 

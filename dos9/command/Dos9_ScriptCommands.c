@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
+#include <ctype.h>
 
 #include <matheval.h>
 #include <inteval.h>
@@ -44,48 +45,55 @@
 int Dos9_CmdEcho(char* lpLine)
 {
 
-    ESTR* lpEsParameter=Dos9_EsInit();
+    ESTR* lpEsParameter;
 
     lpLine+=4;
 
-    if (*lpLine=='\0') {
+    if (*lpLine!=' '
+        && !ispunct(*lpLine)) {
+
+        Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR, lpLine-4, FALSE);
+        return -1;
+
+    }
+
+    lpEsParameter=Dos9_EsInit();
+
+    if (ispunct(*lpLine)) {
+
+        Dos9_GetEndOfLine(lpLine+1, lpEsParameter);
+        puts(Dos9_EsToChar(lpEsParameter));
+
+
+    } else if (Dos9_GetNextParameterEs(lpLine, lpEsParameter)) {
+
+        if (!stricmp(Dos9_EsToChar(lpEsParameter), "OFF")) {
+
+            bEchoOn=FALSE;
+
+        } else if (!stricmp(Dos9_EsToChar(lpEsParameter) , "ON")) {
+
+            bEchoOn=TRUE;
+
+        } else if (!strcmp(Dos9_EsToChar(lpEsParameter), "/?")) {
+
+            puts(lpHlpDeprecated);
+
+        } else {
+
+            Dos9_GetEndOfLine(lpLine+1, lpEsParameter);
+            puts(Dos9_EsToChar(lpEsParameter));
+
+        }
+
+     } else {
 
         /* si rien n'est entré on affiche l'état de la commannd echo */
         if (bEchoOn) puts(lpMsgEchoOn);
         else puts(lpMsgEchoOff);
 
-    } else {
+     }
 
-        if (Dos9_GetNextParameterEs(lpLine, lpEsParameter)) {
-
-            if (!stricmp(Dos9_EsToChar(lpEsParameter), "OFF")) {
-
-                bEchoOn=FALSE;
-
-            } else if (!stricmp(Dos9_EsToChar(lpEsParameter) , "ON")) {
-
-                bEchoOn=TRUE;
-
-            } else if (!strcmp(Dos9_EsToChar(lpEsParameter), "/?")) {
-
-                puts(lpHlpDeprecated);
-
-            } else {
-
-                Dos9_GetEndOfLine(lpLine+1, lpEsParameter);
-                puts(Dos9_EsToChar(lpEsParameter));
-
-            }
-
-         } else {
-
-            /* si rien n'est entré on affiche l'état de la commannd echo */
-            if (bEchoOn) puts(lpMsgEchoOn);
-            else puts(lpMsgEchoOff);
-
-         }
-
-    }
 
     Dos9_EsFree(lpEsParameter);
 

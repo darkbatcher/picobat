@@ -12,8 +12,7 @@
    searched */
 
 COMMANDINFO lpCmdInfo[]={
-                            {"ECHO", Dos9_CmdEcho, STRLEN("ECHO")},
-                            {"ECHO.", Dos9_CmdEcho,0},
+                            {"ECHO", Dos9_CmdEcho, 0},
                             {"EXIT", Dos9_CmdExit, STRLEN("EXIT")},
                             {"PAUSE", Dos9_CmdPause, STRLEN("PAUSE")},
                             {"SET", Dos9_CmdSet, STRLEN("SET")},

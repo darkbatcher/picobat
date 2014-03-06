@@ -394,7 +394,7 @@ MONDAY 24TH, FEBRUARY
           are not explicitelly specified at startup will be filled with an 
           empty string, and will expand to the empty string.
 
-THURSDAY 25TH, FEBRUARY
+THESSDAY 25TH, FEBRUARY
 
         - Finalized behaviour change for variables. Singles % are now splited 
           from the input at parsing, exception made for the special variables 
@@ -413,4 +413,59 @@ THURSDAY 25TH, FEBRUARY
 
         - Added an example of batch powered by Dos9, a multifunction caculator 
           using both floating point arithmetics and integer arithmetics.
+
+THURSDAY 6TH, MARCH
+
+        - Changed the behaviour of the function which decide wether the 
+          command is multiline or not. It now correctly handles parenthesis 
+          that are not multiline. For example, the following code used to be 
+          expected to continue on next lines :
+
+             echo(some test&if 1 equ 1 echo some other test
+
+          However, this behaviour is not actually resolved, indeed, some error 
+          might occurs (in some very special case) if the previous is run. 
+          This is still to be fixed.
+
+        - Added more compatible version of ECHO command. The command now 
+          tolerates various non-mainstream syntax (ie. using other characters 
+          than '.' to force print). The following variants are accepted :
+
+             echo!
+             echo"
+             echo#
+             echo$
+             echo%
+             echo&
+             echo'
+             echo(
+             echo)
+             echo*
+             echo+
+             echo,
+             echo-
+             echo.
+             echo/
+             echo[
+             echo\
+             echo]
+             echo^
+             echo_
+             echo`
+
+          Most of these syntax are however not recommended, because they can 
+          cause obvious syntax errors, and are only provided for compatibility 
+          purposes.
+
+        - Switched to AUTOCONF build system. This allows more standard builds, 
+          with GNU build toolchain. I can be compiled through a *NIX-shell 
+          typing:
+
+             ./configure
+             make
+
+          The install target is not supported yet. It also does not use 
+          AUTOMAKE, since it is hard to see the point of of writing awfull 
+          makefile.am in order to produce a makefile that can be written by 
+          hand.
 

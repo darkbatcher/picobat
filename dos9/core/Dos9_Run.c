@@ -182,6 +182,10 @@ int Dos9_RunBlock(BLOCKINFO* lpbkInfo)
 
         lpBeginToken=lpToken;
 
+        /* TODO :
+            Merge this part with functions that are defined
+            in modules/parse
+         */
         for (;*lpToken && ((*lpToken!='\n' && *lpToken!=')') || iParentheseNb);lpToken++) {
             switch (*lpToken) {
                 case '^':

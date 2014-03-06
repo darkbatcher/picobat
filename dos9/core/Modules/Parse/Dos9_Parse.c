@@ -86,8 +86,8 @@ int MODULE_MAIN Dos9_ParseModule(int iMsg, void* param1, void* param2)
                     if (iBlock == -1)
                         iBlock=Dos9_CheckIfBlock(lpesLine);
 
-                } while ((iLastParentNb=Dos9_CountParenthese(Dos9_EsToChar(lpesLine),iLastParentNb))
-						 && !Dos9_SendMessage(DOS9_READ_MODULE, MODULE_READ_ISEOF, NULL, NULL)
+                } while ((iLastParentNb=Dos9_CountParenthese(Dos9_EsToChar(lpesLine),iLastParentNb)) /* test wether the line is complete */
+						 && !Dos9_SendMessage(DOS9_READ_MODULE, MODULE_READ_ISEOF, NULL, NULL) /* test wether the file is ended */
                          && iBlock);
 
 
@@ -571,27 +571,69 @@ void Dos9_RmTrailingNl(char* lpLine)
 int Dos9_CheckIfBlock(ESTR* lpesLine)
 {
     char* lpCh=Dos9_EsToChar(lpesLine);
+    int   bIsBlockCommand,
+          bIsEscaped=FALSE;
 
     /* this is for compatibility purpose */
 
     do {
 
         /* skip all blank symbols */
-        while (*lpCh==' ' || *lpCh=='\t' || *lpCh=='@')
-            lpCh++;
+        while (*lpCh==' '
+               || *lpCh=='\t'
+               || *lpCh=='@'
+               || *lpCh==';') lpCh++;
 
         /* if a command or a top level block is found
            then, return that we must look for a block */
         if (!strnicmp(lpCh, "FOR ", 4)
-            || !strnicmp(lpCh, "IF ", 3)
-            || *lpCh=='(') {
+            || !strnicmp(lpCh, "IF ", 3)) {
 
+            bIsBlockCommand=TRUE;
+
+        } else if (*lpCh=='(') {
+
+            /* this is a top-level block */
             return TRUE;
+
+        } else {
+
+           bIsBlockCommand=FALSE;
 
         }
 
-        while (*lpCh && *lpCh!='|' && *lpCh!='&')
+        bIsEscaped=FALSE;
+
+        while (*lpCh && *lpCh!='|' && *lpCh!='&') {
+
+            if (bIsEscaped) {
+
+                bIsEscaped=FALSE;
+                continue;
+
+            }
+
+            if (*lpCh=='^') {
+
+                bIsEscaped=TRUE;
+                continue;
+
+            }
+
+
+            if (bIsBlockCommand && *lpCh=='(') {
+
+                /* if the command accepts blocks and if it
+                   effectively uses a block, then return
+                   that the input contains blocks */
+
+                return TRUE;
+
+            }
+
             lpCh++;
+
+        }
 
         if (*lpCh)
             lpCh++;

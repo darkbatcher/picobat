@@ -39,7 +39,11 @@ ${	ECHO [OFF|ON]
 	Affiche du texte dans la console
 		
 		- {texte} : texte a afficher dans la console. Si vous utilisez
-		  {ECHO.} le texte {texte} peut etre vide
+		  {ECHO.} le texte {texte} peut être vide. Depuis la version {2014.0.8}, il est
+		  possible d'utiliser d'autre caractères que {.} pour forcer l'affichage. Les
+		  caractères autorisés sont donc {!"#$%&'()*+,-./[\\]^_	\{\|\}~},  l'usage d'une
+		  grande partie de ces caractères est déconseillée a cause de problèmes de
+		  syntaxes évidents.
 
 {{Compatibilite}}
 

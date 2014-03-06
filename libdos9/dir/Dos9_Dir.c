@@ -765,7 +765,7 @@ int                 _Dos9_WaitForFileListCallBack(LPFILEPARAMETER lpParam)
 
     }
 
-    Dos9_EndThread(i);
+    Dos9_EndThread((void*)i);
     return i;
 }
 
@@ -789,19 +789,22 @@ char* _Dos9_SeekCasePatterns(char* lpSearch, char* lpPattern)
     const char* lpPatternBegin=(const char*)lpPattern;
     char* lpLastBegin;
     while (TRUE) {
-        for (;*lpSearch && (toupper(*lpPattern)!=toupper(*lpSearch));lpSearch++) {
-        }
+        for (;*lpSearch && (toupper(*lpPattern)!=toupper(*lpSearch));lpSearch++);
+
         lpLastBegin=lpSearch;
-        for (;*lpSearch && *lpPattern && *lpPattern!='*' && *lpPattern!='?' && (toupper(*lpPattern)==toupper(*lpSearch)); lpSearch++, lpPattern++) {
-        }
+
+        for (;*lpSearch && *lpPattern && *lpPattern!='*' && *lpPattern!='?' && (toupper(*lpPattern)==toupper(*lpSearch)); lpSearch++, lpPattern++);
+
         if (!*lpPattern || *lpPattern=='*' || *lpPattern=='?') {
             //printf("<FOUND> (returns: '%s')\n",lpLastBegin, lpSearch);
             return lpSearch;
         }
+
         if (!*lpSearch){
             //printf("[WRONG] ('%s')\n", lpLastBegin);
             return NULL;
         }
+
         lpSearch=lpLastBegin+1;
         lpPattern=(char*)lpPatternBegin;
     }
