@@ -14,21 +14,19 @@
     #define P_WAIT _P_WAIT
 #endif
 
-#ifndef DOS9_BLOCKINFO_DEFINED
-#define DOS9_BLOCKINFO_DEFINED
+#include <libDos9.h>
+#include "Dos9_Core.h"
 
-/* a structure that contains boundaries of a block */
-typedef struct BLOCKINFO {
-    char* lpBegin;
-    char* lpEnd;
-} BLOCKINFO;
+/* applies redirections */
+int Dos9_ExecOutput(PARSED_STREAM_START* lppssStart);
 
-#endif
+/* applies conditional operators */
+int Dos9_ExecOperators(PARSED_STREAM* lppsStream);
 
 int Dos9_RunCommand(ESTR* lpCommand); // the fucbtions that run every command
 int Dos9_RunLine(ESTR* lpLine);
 int Dos9_RunBlock(BLOCKINFO* lpbkInfo); // the function that run blocks
-int Dos9_RunBatch(int isScript); // the function that runs the batch
+int Dos9_RunBatch(INPUT_FILE* pIn); // the function that runs the batch
 int Dos9_RunExternalCommand(char* lpCommandLine);
 
 #endif

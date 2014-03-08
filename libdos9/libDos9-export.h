@@ -335,5 +335,16 @@ LIBDOS9 int Dos9_SetCurrentDir(char* lpPath);
 LIBDOS9 char* Dos9_GetCurrentDir(void);
 LIBDOS9 int Dos9_GetExePath(char* lpBuf, size_t iBufSize);
 
+LIBDOS9 char* Dos9_SkipBlanks(char* lpCh);
+LIBDOS9 char* Dos9_SkipAllBlanks(char* lpCh);
+LIBDOS9 char* Dos9_SearchChar(char* lpCh, int cChar);
+LIBDOS9 char* Dos9_SearchLastChar(char* lpCh, int cChar);
+LIBDOS9 void  Dos9_UnEscape(char* lpCh);
+LIBDOS9 char* Dos9_GetNextNonEscaped(char* lpCh);
+LIBDOS9 char* Dos9_SearchToken(char* lpCh, char* lpDelims);
+
+LIBDOS9 char* Dos9_GetBlockEnd(char* lpCh);
+LIBDOS9 char* Dos9_GetNextBlockBegin(char* lpCh);
+
 
 #endif // LIBDOS9_INCLUDED_H

@@ -940,5 +940,32 @@ LIBDOS9 int      Dos9_ReleaseMutex(MUTEX* lpMuId);
 LIBDOS9 int      Dos9_CreateProcess(PROCESS* pId, char* lpName, char** lpArgs);
 LIBDOS9 int      Dos9_WaitForProcess(PROCESS* pId, void* iRes);
 
+/* skip blank characters ' ' and '\t' */
+LIBDOS9 char* Dos9_SkipBlanks(char* lpCh);
+
+/* skip blanck characrers ' ' and '\t' and '@' and ';' */
+LIBDOS9 char* Dos9_SkipAllBlanks(char* lpCh);
+
+/* search the first non escaped character */
+LIBDOS9 char* Dos9_SearchChar(char* lpCh, int cChar);
+
+/* search the last non-escaped chararcter */
+LIBDOS9 char* Dos9_SearchLastChar(char* lpCh, int cChar);
+
+/* un-escape the string */
+LIBDOS9 void Dos9_UnEscape(char* lpCh);
+
+LIBDOS9 char* Dos9_SearchToken(char* lpCh, char* lpDelims);
+
+
+/* Gets the end of block
+   either a new line or either the end of a real block
+   returns NULL if unable to find such termination
+ */
+LIBDOS9 char* Dos9_GetNextBlockEnd(char* lpCh);
+
+/* get the begining of the very first next block*/
+LIBDOS9 char* Dos9_GetNextBlockBegin(char* lpCh);
+
 /* end of libDos9 declaration */
 #endif

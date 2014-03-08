@@ -6,7 +6,7 @@
 
 int Dos9_JumpToLabel(char* lpLabelName, char* lpFileName)
 {
-    size_t iSize=strlen(lpLabelName);
+    /* size_t iSize=strlen(lpLabelName);
     char* lpName=lpFileName;
     char lpBuf[FILENAME_MAX];
     FILE* pFile;
@@ -37,5 +37,9 @@ int Dos9_JumpToLabel(char* lpLabelName, char* lpFileName)
     fclose(pFile);
     Dos9_EsFree(lpLine);
     DEBUG("Unable to find label");
-    return -1;
+    return -1; */
+
+    return 0;
+
 }
+

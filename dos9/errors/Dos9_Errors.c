@@ -1,3 +1,23 @@
+/*
+ *
+ *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
+ *   Copyright (C) 2010-2014 DarkBatcher
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -112,6 +132,14 @@ void Dos9_LoadErrors(void)
 
     lpErrorMsg[DOS9_UNABLE_SET_ENVIRONMENT]=gettext("Error : Unable to set environment string (%s).\n");
 
+    lpErrorMsg[DOS9_INVALID_REDIRECTION]=gettext("Error : \"%s\" is an invalid stream redirection.\n");
+
+    lpErrorMsg[DOS9_ALREADY_REDIRECTED]=gettext("Error : Redirection for %s was already specified.\n");
+
+    lpErrorMsg[DOS9_MALFORMED_BLOCKS]=gettext("Error : Encountered malformed blocks (\"%s\").\n");
+
+    lpErrorMsg[DOS9_NONCLOSED_BLOCKS]=gettext("Error : Blocks left unclosed a end-of-file.\n");
+
     lpQuitMessage=gettext("\nAborting current command, press any key to end Dos9.\n");
 
 }
@@ -126,7 +154,7 @@ void Dos9_ShowErrorMessage(unsigned int iErrorNumber, const char* lpComplement, 
 
     if (iErrorNumber & DOS9_PRINT_C_ERROR) {
 
-        perror("");
+        perror("Reason : ");
 
     }
 

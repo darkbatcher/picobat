@@ -44,7 +44,6 @@
 #endif
 
 #include <stdlib.h>
-#include "parser_symbols.h"
 #include "node.h"
 
 /* Variables used to communicate with code using parser.  */

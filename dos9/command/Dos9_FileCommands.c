@@ -21,6 +21,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <time.h>
+
 #include <libDos9.h>
 
 #ifdef _POSIX_C_SOURCE
@@ -33,7 +35,9 @@
 
 #endif /* defined linux */
 
+#include "../lang/Dos9_Lang.h"
 #include "../errors/Dos9_Errors.h"
+#include "../core/Dos9_Core.h"
 #include "Dos9_FileCommands.h"
 
 

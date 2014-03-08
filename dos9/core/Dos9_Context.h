@@ -21,6 +21,16 @@
 #ifndef DOS9_CONTEXT_H
 #define DOS9_CONTEXT_H
 
+#include <libDos9.h>
+#include "Dos9_Core.h"
 
+//typedef struct DOS9_CONTEXT {
+//    INPUT_FILE*  pInputFile;        /* informations about the input file */
+//    STREAMSTACK* lpssStreamStack;   /* informations about stream redirections */
+//    COMMANDLIST* lpclList;          /* informations about the commands enabled */
+//} DOS9_CONTEXT;
+
+//int Dos9_InitContext(DOS9_CONTEXT* lpdcContext);
+//int Dos9_CloseContext(DOS9_CONTEXT* lpdcContext);
 
 #endif // DOS9_CONTEXT_H

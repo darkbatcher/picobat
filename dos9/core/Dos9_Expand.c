@@ -35,7 +35,7 @@ void Dos9_ExpandSpecialVar(ESTR* ptrCommandLine)
 
     DOS9_DBG("[+]Dos9_ExpandSpecialVar: \"%s\".\n", Dos9_EsToChar(ptrCommandLine));
 
-    while ((lpNextToken=Dos9_StrToken(lpToken, '%'))) {
+    while ((lpNextToken=Dos9_SearchChar(lpToken, '%'))) {
 
         lpTokenBegin=lpNextToken+1;
 
@@ -85,7 +85,7 @@ void Dos9_ExpandVar(ESTR* ptrCommandLine, char cDelimiter)
     /* initialisation du buffer de sortie */
     Dos9_EsCpy(lpExpanded,"");
 
-    while ((ptrNextToken=Dos9_StrToken(ptrToken, cDelimiter))) {
+    while ((ptrNextToken=Dos9_SearchChar(ptrToken, cDelimiter))) {
 
         DEBUG(ptrToken);
         *ptrNextToken='\0';

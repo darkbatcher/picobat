@@ -62,6 +62,14 @@
 /* Using locations.  */
 #define YYLSP_NEEDED 0
 
+/* Substitute the variable and function names.  */
+#define yyparse         IntEval_parse
+#define yylex           IntEval_lex
+#define yyerror         IntEval_error
+#define yylval          IntEval_lval
+#define yychar          IntEval_char
+#define yydebug         IntEval_debug
+#define yynerrs         IntEval_nerrs
 
 
 /* Copy the first part of user declarations.  */
@@ -82,7 +90,7 @@
 
 
 /* Line 189 of yacc.c  */
-#line 86 "lib/parser.c"
+#line 94 "lib/parser.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -168,7 +176,7 @@ typedef int YYSTYPE;
 
 
 /* Line 264 of yacc.c  */
-#line 172 "lib/parser.c"
+#line 180 "lib/parser.c"
 
 #ifdef short
 # undef short
@@ -1545,7 +1553,7 @@ yyreduce:
 
 
 /* Line 1464 of yacc.c  */
-#line 1549 "lib/parser.c"
+#line 1557 "lib/parser.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);

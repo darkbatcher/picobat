@@ -22,13 +22,12 @@
 #include <stdlib.h>
 #include <errno.h>
 
-#include "libDos9.h"
-#include "Dos9_For.h"
+#include <libDos9.h>
 
+#include "../lang/Dos9_Lang.h"
 #include "../errors/Dos9_Errors.h"
 #include "../core/Dos9_Core.h"
-
-#include "Dos9_CmdLib.h"
+#include "Dos9_For.h"
 
 /*
     The for command

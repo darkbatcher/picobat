@@ -1,12 +1,6 @@
 #ifndef DOS9_FILECOMMANDS_H_INCLUDED
 #define DOS9_FILECOMMANDS_H_INCLUDED
 
-#include <time.h>
-
-#include "libDos9.h"
-#include "Dos9_CmdLib.h"
-#include "../lang/Dos9_Lang.h"
-
 #define DOS9_ASK_CONFIRMATION 0x01
 #define DOS9_DELETE_READONLY 0x02
 #define DOS9_DONT_ASK_GENERIC 0x04

@@ -62,6 +62,14 @@
 /* Using locations.  */
 #define YYLSP_NEEDED 0
 
+/* Substitute the variable and function names.  */
+#define yyparse         evaluator_parse
+#define yylex           evaluator_lex
+#define yyerror         evaluator_error
+#define yylval          evaluator_lval
+#define yychar          evaluator_char
+#define yydebug         evaluator_debug
+#define yynerrs         evaluator_nerrs
 
 
 /* Copy the first part of user declarations.  */
@@ -93,7 +101,6 @@
 #endif
 
 #include <stdlib.h>
-#include "parser_symbols.h"
 #include "node.h"
 
 /* Variables used to communicate with code using parser.  */
@@ -114,7 +121,7 @@ extern void input_reset (void);
 
 
 /* Line 189 of yacc.c  */
-#line 118 "lib/parser.c"
+#line 125 "lib/parser.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -165,7 +172,7 @@ typedef union YYSTYPE
 {
 
 /* Line 214 of yacc.c  */
-#line 68 "lib/parser.y"
+#line 67 "lib/parser.y"
 
   Node *node;
   Record *record;
@@ -173,7 +180,7 @@ typedef union YYSTYPE
 
 
 /* Line 214 of yacc.c  */
-#line 177 "lib/parser.c"
+#line 184 "lib/parser.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -185,7 +192,7 @@ typedef union YYSTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 189 "lib/parser.c"
+#line 196 "lib/parser.c"
 
 #ifdef short
 # undef short
@@ -472,8 +479,8 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    91,    91,    97,    98,    99,   100,   104,   108,   112,
-     116,   120,   124,   128
+       0,    90,    90,    96,    97,    98,    99,   103,   107,   111,
+     115,   119,   123,   127
 };
 #endif
 
@@ -1396,7 +1403,7 @@ yyreduce:
         case 2:
 
 /* Line 1464 of yacc.c  */
-#line 91 "lib/parser.y"
+#line 90 "lib/parser.y"
     {
   root = (yyvsp[(1) - (2)].node);
 }
@@ -1405,7 +1412,7 @@ yyreduce:
   case 6:
 
 /* Line 1464 of yacc.c  */
-#line 100 "lib/parser.y"
+#line 99 "lib/parser.y"
     {
         /* Create addition binary operation node.  */
         (yyval.node) = node_create ('b', '+', (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node));
@@ -1415,7 +1422,7 @@ yyreduce:
   case 7:
 
 /* Line 1464 of yacc.c  */
-#line 104 "lib/parser.y"
+#line 103 "lib/parser.y"
     {
         /* Create subtraction binary operation node.  */
         (yyval.node) = node_create ('b', '-', (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node));
@@ -1425,7 +1432,7 @@ yyreduce:
   case 8:
 
 /* Line 1464 of yacc.c  */
-#line 108 "lib/parser.y"
+#line 107 "lib/parser.y"
     {
         /* Create multiplication binary operation node.  */
         (yyval.node) = node_create ('b', '*', (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node));
@@ -1435,7 +1442,7 @@ yyreduce:
   case 9:
 
 /* Line 1464 of yacc.c  */
-#line 112 "lib/parser.y"
+#line 111 "lib/parser.y"
     {
         /* Create division binary operation node.  */
         (yyval.node) = node_create ('b', '/', (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node));
@@ -1445,7 +1452,7 @@ yyreduce:
   case 10:
 
 /* Line 1464 of yacc.c  */
-#line 116 "lib/parser.y"
+#line 115 "lib/parser.y"
     {
         /* Create minus unary operation node.  */
         (yyval.node) = node_create ('u', '-', (yyvsp[(2) - (2)].node));
@@ -1455,7 +1462,7 @@ yyreduce:
   case 11:
 
 /* Line 1464 of yacc.c  */
-#line 120 "lib/parser.y"
+#line 119 "lib/parser.y"
     {
         /* Create exponentiation unary operation node.  */
         (yyval.node) = node_create ('b', '^', (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node));
@@ -1465,7 +1472,7 @@ yyreduce:
   case 12:
 
 /* Line 1464 of yacc.c  */
-#line 124 "lib/parser.y"
+#line 123 "lib/parser.y"
     {
         /* Create function node.  */
         (yyval.node) = node_create ('f', (yyvsp[(1) - (4)].record), (yyvsp[(3) - (4)].node));
@@ -1475,7 +1482,7 @@ yyreduce:
   case 13:
 
 /* Line 1464 of yacc.c  */
-#line 128 "lib/parser.y"
+#line 127 "lib/parser.y"
     {
         (yyval.node) = (yyvsp[(2) - (3)].node);
 }
@@ -1484,7 +1491,7 @@ yyreduce:
 
 
 /* Line 1464 of yacc.c  */
-#line 1488 "lib/parser.c"
+#line 1495 "lib/parser.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1696,7 +1703,7 @@ yyreturn:
 
 
 /* Line 1684 of yacc.c  */
-#line 133 "lib/parser.y"
+#line 132 "lib/parser.y"
 
 
 int yyerror(char* s)

@@ -1,8 +1,6 @@
 #ifndef DOS9_SCRIPTCOMMAND_H
 #define DOS9_SCRIPTCOMMAND_H
 
-#include "Dos9_CmdLib.h"
-
 int Dos9_CmdEcho(char* lpLine);
 int Dos9_CmdPause(char* lpLine);
 

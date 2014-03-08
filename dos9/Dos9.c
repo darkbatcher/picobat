@@ -71,6 +71,8 @@ int main(int argc, char *argv[])
         c='0',
         bQuiet=FALSE;
 
+    INPUT_FILE ifIn;
+
     if (Dos9_LibInit() == -1) {
 
         puts("Error : Unable to load LibDos9. Exiting ...");
@@ -228,9 +230,6 @@ int main(int argc, char *argv[])
 
     lpclCommands=Dos9_MapCommandInfo(lpCmdInfo, sizeof(lpCmdInfo)/sizeof(COMMANDINFO));
 
-    Dos9_SendMessage(DOS9_READ_MODULE, MODULE_READ_INIT, NULL, NULL);
-    Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_INIT, NULL, NULL);
-
     lppsStreamStack=Dos9_InitStreamStack();
 
     /* getting input intialised (if they are specified) */
@@ -256,11 +255,12 @@ int main(int argc, char *argv[])
 
 
     strcat(lpTitle, "/Dos9_Auto.bat");
-    Dos9_SendMessage(DOS9_READ_MODULE, MODULE_READ_SETFILE, lpTitle+10, NULL);
-    Dos9_RunBatch(TRUE);
 
+    ifIn.lpFileName=lpTitle+10;
+    ifIn.iPos=0;
+    ifIn.bEof=FALSE;
 
-
+    Dos9_RunBatch(&ifIn);
 
     if (lpFileName) {
 
@@ -285,11 +285,13 @@ int main(int argc, char *argv[])
         lpFileName=lpFileAbs;
     }
 
-    /* then run batch mode */
-    Dos9_SendMessage(DOS9_READ_MODULE, MODULE_READ_SETFILE, lpFileName, NULL);
-    Dos9_SendMessage(DOS9_READ_MODULE, MODULE_READ_SETPOS, NULL, NULL);
 
-    Dos9_RunBatch((int)lpFileName); // if we are actually running a script lpFileName is non-zero
+    /* run the batch */
+    ifIn.lpFileName=lpFileName;
+    ifIn.iPos=0;
+    ifIn.bEof=FALSE;
+
+    Dos9_RunBatch(&ifIn);
 
     Dos9_Exit();
 

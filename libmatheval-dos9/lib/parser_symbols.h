@@ -66,5 +66,36 @@
 #define yycheck  evaluator_yycheck
 #define yyname   evaluator_yyname
 #define yyrule   evaluator_yyrule
+#define yyrestart evalulator_restart
+
+#define yy_switch_to_buffer evaluator_switch_to_buffer
+#define yy_delete_buffer evaluator_delete_buffer
+#define yy_flush_buffer evaluator_flush_buffer
+#define yy_create_buffer evaluator_create_buffer
+#define yyrestart evaluator_yyrestart
+#define yypush_buffer_state evaluator_yypush_buffer_state
+#define yypop_buffer_state evaluator_yypop_buffer_state
+#define yy_scan_buffer evaluator_scan_buffer
+#define yy_scan_bytes evaluator_scan_bytes
+#define yy_scan_string evaluator_scan_string
+#define yyget_lineno evaluator_yyget_lineno
+#define yyget_in evaluator_yyget_in
+#define yyget_out evaluator_yyget_out
+#define yyget_leng evaluator_yyget_leng
+#define yyget_text evaluator_yyget_text
+#define yyset_lineno evaluator_yyset_lineno
+#define yyset_in evaluator_yyset_in
+#define yyset_out evaluator_yyset_out
+#define yyget_debug evaluator_yyget_debug
+#define yyset_debug evaluator_yyset_debug
+#define yylex_destroy evaluator_yylex_destroy
+#define yyalloc evaluator_yyalloc
+#define yyrealloc evaluator_yyrealloc
+#define yyfree evaluator_free
+#define yy_get_previous_state evaluator_get_previous_state
+#define yyin evaluator_yyin
+#define yyout evaluator_yyout
+#define yylineno evaluator_yylineno
+#define yy_flex_debug evaluator_yy_flex_debug
 
 #endif // PARSER_SYMBOLS_H

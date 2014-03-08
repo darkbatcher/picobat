@@ -62,7 +62,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1685 of yacc.c  */
-#line 68 "lib/parser.y"
+#line 67 "lib/parser.y"
 
   Node *node;
   Record *record;
@@ -77,6 +77,6 @@ typedef union YYSTYPE
 # define YYSTYPE_IS_DECLARED 1
 #endif
 
-extern YYSTYPE yylval;
+extern YYSTYPE evaluator_lval;
 
 

@@ -20,9 +20,9 @@
 #include <errno.h>
 
 #include "Dos9_Stream.h"
-#include "../Dos9_Core.h"
+#include "Dos9_Core.h"
 
-#include "../../errors/Dos9_Errors.h"
+#include "../errors/Dos9_Errors.h"
 
 LPSTREAMSTACK Dos9_InitStreamStack(void)
 {

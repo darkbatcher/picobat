@@ -15,39 +15,26 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
-#ifndef DOS9_CORE_H_INCLUDED
-#define DOS9_CORE_H_INCLUDED
+#ifndef DOS9_ARGS_H
+#define DOS9_ARGS_H
 
-#include <libDos9.h>
-#include "../errors/Dos9_Errors.h"
+#include "Dos9_Core.h"
 
-#include "Dos9_Context.h"
+/* a structure that contains boundaries of a block */
 
-#include "Dos9_Var.h"
-#include "Dos9_Expand.h"
+typedef struct BLOCKINFO {
+    char* lpBegin;
+    char* lpEnd;
+} BLOCKINFO;
 
-#include "Dos9_Args.h"
-#include "Dos9_Jump.h"
-#include "Dos9_VersionInfo.h"
-#include "Dos9_ShowIntro.h"
-#include "Dos9_FilePath.h"
-#include "Dos9_Parse.h"
-#include "Dos9_Read.h"
-#include "Dos9_Stream.h"
-#include "Dos9_Run.h"
-#include "Dos9_Expand.h"
+char* Dos9_GetNextParameterEs(char* lpLine, ESTR* lpReturn);
+char* Dos9_GetNextParameter(char* lpLine, char* lpResponseBuffer, int iLength);
+int   Dos9_GetParamArrayEs(char* lpLine, ESTR** lpArray, size_t iLenght);
+char* Dos9_GetNextBlockEs(char* lpLine, ESTR* lpReturn);
+char* Dos9_GetNextBlock(char* lpLine, BLOCKINFO* lpbkInfo);
+char* Dos9_GetEndOfLine(char* lpLine, ESTR* lpReturn);
 
-
-#include "Dos9_Globals.h"
-
-#include "Dos9_Exit.h"
-
-#ifndef WIN32
-    #define getch() getchar()
-#else
-    #include <conio.h>
-#endif
-
-#endif // DOS9_CORE_H_INCLUDED
+#endif // DOS9_ARGS_H

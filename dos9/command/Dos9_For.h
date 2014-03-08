@@ -20,8 +20,6 @@
 #ifndef DOS9_FOR_H
 #define DOS9_FOR_H
 
-#include "Dos9_CmdLib.h"
-
 #define TOKENINFO_NB_MAX 128-32
 #define MAX_UNICODE_CHAR 5
 #define TOKENNB_ALL_REMAINING 0xFFFF

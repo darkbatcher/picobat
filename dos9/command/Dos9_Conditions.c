@@ -22,11 +22,12 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "Dos9_CmdLib.h"
+#include <libDos9.h>
+
 #include "Dos9_Conditions.h"
 #include "../lang/Dos9_Lang.h"
 #include "../errors/Dos9_Errors.h"
-#include "../core/Dos9_Run.h"
+#include "../core/Dos9_Core.h"
 
 int Dos9_CmdIf(char* lpParam)
 {

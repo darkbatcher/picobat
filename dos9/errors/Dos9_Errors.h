@@ -69,8 +69,12 @@ void Dos9_LoadErrors(void);
 #define DOS9_UNABLE_DUPLICATE_FD            27
 #define DOS9_UNABLE_CREATE_PIPE             28
 #define DOS9_UNABLE_SET_ENVIRONMENT         29
+#define DOS9_INVALID_REDIRECTION            30
+#define DOS9_ALREADY_REDIRECTED             31
+#define DOS9_MALFORMED_BLOCKS               32
+#define DOS9_NONCLOSED_BLOCKS               33
 
-#define DOS9_ERROR_MESSAGE_NUMBER 30
+#define DOS9_ERROR_MESSAGE_NUMBER 34
 
 #define DOS9_PRINT_C_ERROR 0x80
 

@@ -51,7 +51,7 @@
 
 #endif
 
-#include "libDos9.h"
+#include <libDos9.h>
 
 /** \defgroup DESCRIPTORS_CONSTANT Descriptors constants
     \{
@@ -138,6 +138,9 @@ typedef STACK STREAMSTACK,*LPSTREAMSTACK;
     \return Returns 0 if the function has succeded, -1 otherwise.
 */
  LPSTREAMSTACK     Dos9_PushStreamStack(LPSTREAMSTACK lppsStack);
+
+
+
 
 
 void  Dos9_SetStreamStackLockState(STREAMSTACK* lppsStack, int iState);

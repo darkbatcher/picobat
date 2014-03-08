@@ -1,8 +1,30 @@
-#include "../Dos9_CmdLib.h"
-#include "../../core/Dos9_Core.h"
+/*
+ *
+ *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
+ *   Copyright (C) 2010-2014 DarkBatcher
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 
-DOS9_CMDLIB char* Dos9_GetNextParameter(char* lpLine, char* lpResponseBuffer, int iLength)
-/* determines wheter a paramater follows the position lpLine.
+#include <string.h>
+#include <libDos9.h>
+
+#include "Dos9_Core.h"
+
+LIBDOS9 char* Dos9_GetNextParameter(char* lpLine, char* lpResponseBuffer, int iLength)
+/* determines wheter a paramater follows the position lpLinLIBDOS9LIBDOS9LIBDOS9LIBDOS9e.
  *
  * lpLine : A pointer to where to seek a parameter
  * lpResponse : A buffer to store the parameter
@@ -23,8 +45,7 @@ DOS9_CMDLIB char* Dos9_GetNextParameter(char* lpLine, char* lpResponseBuffer, in
  }
 
 /* the returning pointer is on the parenthesis */
-
-DOS9_CMDLIB char* Dos9_GetNextBlock(char* lpLine, BLOCKINFO* lpbkInfo)
+LIBDOS9 char* Dos9_GetNextBlock(char* lpLine, BLOCKINFO* lpbkInfo)
 {
     char* lpBlockBegin;
     int iParentheseLvl=0;
@@ -63,7 +84,7 @@ DOS9_CMDLIB char* Dos9_GetNextBlock(char* lpLine, BLOCKINFO* lpbkInfo)
 
 }
 
-DOS9_CMDLIB char* Dos9_GetNextBlockEs(char* lpLine, ESTR* lpReturn)
+LIBDOS9 char* Dos9_GetNextBlockEs(char* lpLine, ESTR* lpReturn)
 {
     char* lpNext;
     BLOCKINFO bkInfo;
@@ -83,7 +104,7 @@ DOS9_CMDLIB char* Dos9_GetNextBlockEs(char* lpLine, ESTR* lpReturn)
 
 }
 
-DOS9_CMDLIB char* Dos9_GetNextParameterEs(char* lpLine, ESTR* lpReturn)
+LIBDOS9 char* Dos9_GetNextParameterEs(char* lpLine, ESTR* lpReturn)
 {
      int iSeekQuote=FALSE;
      int i=0;
@@ -139,7 +160,7 @@ DOS9_CMDLIB char* Dos9_GetNextParameterEs(char* lpLine, ESTR* lpReturn)
      return lpLine;
 }
 
-DOS9_CMDLIB int   Dos9_GetParamArrayEs(char* lpLine, ESTR** lpArray, size_t iLenght)
+LIBDOS9 int   Dos9_GetParamArrayEs(char* lpLine, ESTR** lpArray, size_t iLenght)
 /*
     gets command-line argument in an array of extended string
 */
@@ -195,7 +216,7 @@ DOS9_CMDLIB int   Dos9_GetParamArrayEs(char* lpLine, ESTR** lpArray, size_t iLen
     return 0;
 }
 
-DOS9_CMDLIB char* Dos9_GetEndOfLine(char* lpLine, ESTR* lpReturn)
+LIBDOS9 char* Dos9_GetEndOfLine(char* lpLine, ESTR* lpReturn)
 /* this returns fully expanded line from the lpLine Buffer */
 {
 

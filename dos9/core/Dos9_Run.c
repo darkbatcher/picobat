@@ -27,47 +27,67 @@
 
 #include "Dos9_Core.h"
 
-// #define DOS9_DBG_MODE
+#define DOS9_DBG_MODE
 
 #include "Dos9_Debug.h"
 
-#include "../command/Dos9_CmdLib.h"
 #include "../errors/Dos9_Errors.h"
 
 
-int Dos9_RunBatch(int isScript)
+int Dos9_RunBatch(INPUT_FILE* pIn)
 {
     PARSED_STREAM_START* lppssStreamStart;
+
     PARSED_STREAM* lppsStream;
-    while (!Dos9_SendMessage(DOS9_READ_MODULE, MODULE_READ_ISEOF, NULL, NULL))
+
+    ESTR* lpLine=Dos9_EsInit();
+
+    char* const lpCurrentDir=Dos9_GetCurrentDir();
+
+    char* lpCh;
+
+    while (!(pIn->bEof))
     {
 
         DOS9_DBG("[*] %d : Parsing new line\n", __LINE__);
-        Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_NEWLINE, NULL, NULL);
+        //Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_NEWLINE, NULL, NULL);
 
-        lppssStreamStart=(PARSED_STREAM_START*)Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_READ_LINE_PARSE, NULL, (void*)isScript);
+        if (pIn->lpFileName==NULL) {
 
-        if (!lppssStreamStart) {
-            DOS9_DBG("!!! Can't parse line : \"%s\".\n", strerror(errno));
-            continue;
+            /* this is a direct input */
+
+            Dos9_SetConsoleTextColor(DOS9_FOREGROUND_IGREEN | DOS9_GET_BACKGROUND(colColor));
+            printf("DOS9 ");
+            Dos9_SetConsoleTextColor(colColor);
+
+            printf("%s>", lpCurrentDir);
+
         }
 
-        Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_PARSED_START_EXEC, lppssStreamStart, NULL);
-        DOS9_DBG("\t[*] Global streams set.\n");
+        /* the line we read was a void line */
+        if (Dos9_GetLine(lpLine, pIn) == 1)
+            continue;
 
+        lpCh=Dos9_EsToChar(lpLine);
 
-        lppsStream=lppssStreamStart->lppsStream;
+        while (*lpCh==' '
+               || *lpCh=='\t'
+               || *lpCh==';')
+            lpCh++;
 
+        if ((pIn->lpFileName!=NULL)
+            && bEchoOn
+            && *lpCh!='@') {
 
-        do {
+            Dos9_SetConsoleTextColor(DOS9_FOREGROUND_IGREEN | DOS9_GET_BACKGROUND(colColor));
+            printf("DOS9 ");
+            Dos9_SetConsoleTextColor(colColor);
 
-            Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_PIPE_OPEN, lppsStream, NULL);
-            Dos9_RunCommand(lppsStream->lpCmdLine);
+            printf("%s>%s", lpCurrentDir, Dos9_EsToChar(lpLine));
 
-        } while ((lppsStream=(PARSED_STREAM*)Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_PARSED_LINE_EXEC, lppsStream, NULL)));
+        }
 
-        Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_FREE_PARSED_LINE, lppssStreamStart, NULL);
-        Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_ENDLINE, NULL, NULL);
+        Dos9_RunLine(lpLine);
 
         DOS9_DBG("\t[*] Line run.\n");
 
@@ -76,33 +96,135 @@ int Dos9_RunBatch(int isScript)
     DOS9_DBG("*** Input ends here  ***\n");
 
     return 0;
+
+}
+
+int Dos9_ExecOperators(PARSED_STREAM* lppsStream)
+{
+
+    lppsStreamStack=Dos9_Pipe(lppsStreamStack);
+
+    if (lppsStream->lppsNode != NULL) {
+
+        if (lppsStream->lppsNode->cNodeType
+            == PARSED_STREAM_NODE_PIPE)
+             Dos9_OpenPipe(lppsStreamStack);
+
+    }
+
+    switch (lppsStream->cNodeType) {
+
+        case PARSED_STREAM_NODE_NONE :
+            /* this condition is alwais true */
+            return TRUE;
+
+        case PARSED_STREAM_NODE_NOT :
+            /* this condition is true when the instruction
+               before failed */
+            return iErrorLevel;
+
+        case PARSED_STREAM_NODE_YES:
+            return !iErrorLevel;
+
+        case PARSED_STREAM_NODE_PIPE:
+            return TRUE;
+
+    }
+
+    return FALSE;
+
+}
+
+int Dos9_ExecOutput(PARSED_STREAM_START* lppssStart)
+{
+
+    DOS9_DBG("lppssStart->lpInputFile=%s\n"
+         "          ->lpOutputFile=%s\n"
+         "          ->cOutputMode=%d\n"
+         "lppssStart->cOutputMode & ~PARSED_STREAM_START_MODE_TRUNCATE=%d\n"
+         "lppssStart->cOutputMode & PARSED_STREAM_START_MODE_TRUNCATE=%d\n"
+         "STDOUT_FILENO=%d\n",
+         lppssStart->lpInputFile,
+         lppssStart->lpOutputFile,
+         lppssStart->cOutputMode,
+         lppssStart->cOutputMode & ~PARSED_STREAM_START_MODE_TRUNCATE,
+         lppssStart->cOutputMode & PARSED_STREAM_START_MODE_TRUNCATE,
+         STDOUT_FILENO
+         );
+
+    if (!(lppssStart->lpInputFile)
+        && !(lppssStart->lpOutputFile)) {
+
+        /* nothing to be done, just return, now */
+        return 0;
+
+    }
+
+
+
+    /* open the redirections */
+
+    lppsStreamStack=Dos9_PushStreamStack(lppsStreamStack);
+
+    if (lppssStart->cOutputMode
+        && lppssStart->lpOutputFile )
+        Dos9_OpenOutput(lppsStreamStack,
+                        lppssStart->lpOutputFile,
+                        lppssStart->cOutputMode & ~PARSED_STREAM_START_MODE_TRUNCATE,
+                        lppssStart->cOutputMode & PARSED_STREAM_START_MODE_TRUNCATE
+                        );
+
+
+    if (lppssStart->lpInputFile)
+        Dos9_OpenOutput(lppsStreamStack,
+                        lppssStart->lpInputFile,
+                        DOS9_STDIN,
+                        0
+                        );
+
+    return 0;
 }
 
 int Dos9_RunLine(ESTR* lpLine)
 {
-        PARSED_STREAM_START* lppssStreamStart;
-        PARSED_STREAM* lppsStream;
+    PARSED_STREAM_START* lppssStreamStart;
+    PARSED_STREAM* lppsStream;
 
-        Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_NEWLINE, NULL, NULL);
-        lppssStreamStart=(PARSED_STREAM_START*)Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_PARSE_ESTR, lpLine, NULL);
-        Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_PARSED_START_EXEC, lppssStreamStart, NULL);
+    Dos9_ReplaceVars(lpLine);
 
-        DEBUG("Parsing succeded");
-        lppsStream=lppssStreamStart->lppsStream;
+    lppssStreamStart=Dos9_ParseLine(lpLine);
 
-        DEBUG("Starting command loop !");
+    if (!lppssStreamStart) {
+        DOS9_DBG("!!! Can't parse line : \"%s\".\n", strerror(errno));
+    }
 
-        do {
+    Dos9_ExecOutput(lppssStreamStart);
 
-            Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_PIPE_OPEN, lppsStream, NULL);
-            Dos9_RunCommand(lppsStream->lpCmdLine);
+    //Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_PARSED_START_EXEC, lppssStreamStart, NULL);
+    DOS9_DBG("\t[*] Global streams set.\n");
 
-        } while ((lppsStream=(PARSED_STREAM*)Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_PARSED_LINE_EXEC, lppsStream, NULL)));
 
-        Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_FREE_PARSED_LINE, lppssStreamStart, NULL);
-        Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_ENDLINE, NULL, NULL);
+    lppsStream=lppssStreamStart->lppsStream;
 
-        return 0;
+
+    do {
+
+        if (Dos9_ExecOperators(lppsStream)==FALSE)
+            break;
+
+        Dos9_RunCommand(lppsStream->lpCmdLine);
+
+    } while ((lppsStream=lppsStream->lppsNode));
+
+    lppsStreamStack=Dos9_PopStreamStack(lppsStreamStack);
+
+    Dos9_FreeLine(lppssStreamStart);
+
+    DOS9_DBG("\t[*] Line run.\n");
+
+    DOS9_DBG("*** Input ends here  ***\n");
+
+    return 0;
 }
 
 int Dos9_RunCommand(ESTR* lpCommand)
@@ -117,13 +239,7 @@ int Dos9_RunCommand(ESTR* lpCommand)
     lpCmdLine=Dos9_EsToChar(lpCommand);
     Dos9_RemoveEscapeChar(lpCmdLine);
 
-    while (*lpCmdLine==' '
-           || *lpCmdLine=='\t'
-           || *lpCmdLine==';'
-           || *lpCmdLine=='@') lpCmdLine++;
-
-    if (*lpCmdLine==':')
-        return 0;
+    lpCmdLine=Dos9_SkipAllBlanks(lpCmdLine);
 
     DOS9_DBG("*** Running  line '%s'\n", lpCmdLine);
 

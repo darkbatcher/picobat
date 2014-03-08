@@ -32,10 +32,10 @@ $(INCLUDE_FILE): $(ORIGIN_FILE)
 
 # constuction des fichiers YACC			
 %.c : %.y
-			@YACC@ -d $< -o $@
+			@YACC@ -d $< -p IntEval_ -o $@
 
 # construction des fichiers LEX
 %.c : %.l
-			@LEX@ -o $@ $<
+			@LEX@ -o $@ -P IntEval_ $<
 
 			
