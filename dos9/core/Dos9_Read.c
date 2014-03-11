@@ -1,10 +1,30 @@
+/*
+ *
+ *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
+ *   Copyright (C) 2010-2014 DarkBatcher
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "Dos9_Core.h"
 
 
-#define DOS9_DBG_MODE
+//#define DOS9_DBG_MODE
 
 #include "Dos9_Debug.h"
 
@@ -58,6 +78,14 @@ int Dos9_GetLine(ESTR* lpesLine, INPUT_FILE* pIn)
 
     }
 
+
+    if (!*Dos9_EsToChar(lpesLine)) {
+
+        Dos9_EsFree(lpesTmp);
+        return 1;
+
+    }
+
     if (!bCorrectBlocks) {
 
         Dos9_ShowErrorMessage(DOS9_NONCLOSED_BLOCKS, NULL, FALSE);
@@ -66,10 +94,8 @@ int Dos9_GetLine(ESTR* lpesLine, INPUT_FILE* pIn)
     }
 
     Dos9_EsFree(lpesTmp);
-    Dos9_RmTrailingNl(Dos9_EsToChar(lpesLine));
 
-    return ( *(Dos9_SkipAllBlanks(Dos9_EsToChar(lpesLine))) == '\0' )
-           ? 1 : 0;
+    return 0;
 
     error:
         Dos9_EsFree(lpesTmp);
@@ -82,10 +108,16 @@ int Dos9_CheckBlocks(ESTR* lpesLine)
     char *lpBlock,
          *lpCh=Dos9_EsToChar(lpesLine);
 
+    if (!*lpCh)
+        return TRUE;
 
     if (!(lpBlock=Dos9_GetNextBlockBegin(lpCh))) {
 
         /* There's no block, thus all is fine */
+
+        if (strchr(lpCh, '\n')
+            && !Dos9_SearchChar(lpCh, '\n'))
+            return FALSE;
 
         return TRUE;
 
@@ -100,6 +132,10 @@ int Dos9_CheckBlocks(ESTR* lpesLine)
             return FALSE;
 
     } while ((lpBlock=Dos9_GetNextBlockBegin(lpCh)));
+
+    if (strchr(lpCh, '\n')
+        && !Dos9_SearchChar(lpCh, '\n'))
+            return FALSE;
 
     return TRUE;
 

@@ -421,14 +421,17 @@ echo`}
 	@- Most of these syntax are however not recommended, because they can cause obvious syntax errors, and are only
 	provided for compatibility purposes.
 	
+	@- The characters that were given are those specified by the {ISO-C 90} standard, so that some locale may provide
+	additionnal characters.
+	
 	- Switched to {Autoconf} build system. This allows more standard builds, with {GNU} build toolchain. I can be
 	compiled through a {*NIX}-shell typing:
 	
 ${./configure
 make}
 
-	@- The install target is not supported yet. It also does not use {Automake}, since it is hard to see the point of
-	of writing awfull makefile.am in order to produce a makefile that can be written by hand.
+	@- The install target is not supported yet. It also does not use {Automake}, since it is hard to see the point
+	of writing awfull Makefile.am in order to produce a Makefile that can be written by hand.
 	
 {{Friday 7th, March}}
 
@@ -439,8 +442,35 @@ make}
 	rid of old and ugly pieces of codes i've been writting about two years ago. Some function have also been transfered to
 	libDos9, this is limited however, since Dos9 is not stable enough to get it in a whole library.
 	
+{{Saturday 8th, March}}
 	
+	- Added brand new parser, and also, brand new file reader. The new implementations are much more safe and elegant.
+	Lots of repetitions in the code have be gathered into singles funciton to make it more maintainable.
 	
+	- Silenced `Dos9_Jump.c', but hoping to get it works within a short time.
+	
+	- Added new string search based that take account of escaped-characters (ie. Characters preceded by '^').
 
+	- Lots of bugfixes, particularly with the new parser and reader.
+	
+	- {Dos9} is much more unstable than it was, but it is to be fixed quickly since new version are easier to maintain.
+	
+	- Changed behaviour of function than are used to get command-line arguments. It already did line delayed expansion,
+	but is include now unescaping (ie. removing '^'). Thus some syntax have became valid, such as :
+	
+${echo ^!test^!}
+
+	@- This will output {!test!}, without expanding the variable, even if {test} is defined.
+	
+	@- It is also important to note that, syntax with escaping and with quotes are {strictly} equivalent. As an example, take
+	the following code :
+	
+${if foo^ bar equ "foo bar" echo YES}
+
+    @- Using, {Dos9}, the code will output {YES}. However, {cmd.exe} will not. It as been chosen to promote the first syntax
+	since it is more easy to handle and far less tricky than escaping characters with {cmd.exe}, which require an almost
+	random number of '^' to escape some character. 
+
+	- Optimised {Dos9_RunBlock()} function.
 	
 	

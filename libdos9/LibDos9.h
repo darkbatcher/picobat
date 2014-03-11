@@ -962,7 +962,7 @@ LIBDOS9 char* Dos9_SearchToken(char* lpCh, char* lpDelims);
    either a new line or either the end of a real block
    returns NULL if unable to find such termination
  */
-LIBDOS9 char* Dos9_GetNextBlockEnd(char* lpCh);
+LIBDOS9 char* Dos9_GetBlockEnd(char* lpCh);
 
 /* get the begining of the very first next block*/
 LIBDOS9 char* Dos9_GetNextBlockBegin(char* lpCh);

@@ -978,9 +978,18 @@ int Dos9_CmdBlock(char* lpLine)
 {
     BLOCKINFO bkCode;
     char* lpToken;
+    ESTR* lpNextBlock=Dos9_EsInit();
+
+    Dos9_GetNextBlockEs(lpLine, lpNextBlock);
 
     lpToken=Dos9_GetNextBlock(lpLine, &bkCode);
 
+    if (!lpToken) {
+
+        Dos9_ShowErrorMessage(DOS9_INVALID_TOP_BLOCK, lpLine, FALSE);
+        return -1;
+
+    }
 
     if (*lpToken!=')') {
 
@@ -991,7 +1000,7 @@ int Dos9_CmdBlock(char* lpLine)
 
     lpToken++;
 
-    while (*lpToken==' ' || *lpToken=='\t') lpToken++;
+    lpToken=Dos9_SkipBlanks(lpToken);
 
 
     if (*lpToken) {

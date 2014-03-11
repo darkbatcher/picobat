@@ -23,7 +23,10 @@
 
 #include "Dos9_Core.h"
 
-LIBDOS9 char* Dos9_GetNextParameter(char* lpLine, char* lpResponseBuffer, int iLength)
+//#define DOS9_DBG_MODE
+#include "Dos9_Debug.h"
+
+char* Dos9_GetNextParameter(char* lpLine, char* lpResponseBuffer, int iLength)
 /* determines wheter a paramater follows the position lpLinLIBDOS9LIBDOS9LIBDOS9LIBDOS9e.
  *
  * lpLine : A pointer to where to seek a parameter
@@ -44,47 +47,41 @@ LIBDOS9 char* Dos9_GetNextParameter(char* lpLine, char* lpResponseBuffer, int iL
      return lpLine;
  }
 
-/* the returning pointer is on the parenthesis */
-LIBDOS9 char* Dos9_GetNextBlock(char* lpLine, BLOCKINFO* lpbkInfo)
+/* the returning pointer is on the parenthesis
+   note that the lpbkInfo->lpEnd may be NULL
+   its means that the end of the block is the full
+   line */
+char* Dos9_GetNextBlock(char* lpLine, BLOCKINFO* lpbkInfo)
 {
-    char* lpBlockBegin;
-    int iParentheseLvl=0;
+    char* lpBlockEnd;
 
-    while (*lpLine=='\t' || *lpLine==' ') lpLine++;
+    lpLine=Dos9_SkipBlanks(lpLine);
 
-    if (*lpLine=='(') {
+    lpBlockEnd=Dos9_GetBlockEnd(lpLine);
 
-        /* the block might begin here */
-
+    if (*lpLine=='(')
         lpLine++;
-        lpBlockBegin=lpLine;
 
-        while (*lpLine && (*lpLine!=')' || iParentheseLvl)) {
+    if (lpBlockEnd == NULL) {
 
-            /* parenthesis may contain enclosed parenthesis levels,
-               skip them */
+        lpBlockEnd=lpLine;
 
-            if (*lpLine=='(') iParentheseLvl++;
-            if (*lpLine==')' && iParentheseLvl>0) iParentheseLvl--;
-            lpLine++;
+        /* go to the end of line */
+        while (*lpBlockEnd!='\n'
+               && *lpBlockEnd!='\0' )
+                lpBlockEnd++;
 
-        }
-
-    } else {
-
-        /* The blocks continues until the next carriage return */
-        lpBlockBegin=lpLine;
-        while (*lpLine && *lpLine!='\n') lpLine++;
     }
 
-    lpbkInfo->lpBegin=lpBlockBegin;
-    lpbkInfo->lpEnd=lpLine;
+    lpbkInfo->lpBegin=lpLine;
 
-    return lpLine;
+    lpbkInfo->lpEnd=lpBlockEnd;
+
+    return lpBlockEnd;
 
 }
 
-LIBDOS9 char* Dos9_GetNextBlockEs(char* lpLine, ESTR* lpReturn)
+char* Dos9_GetNextBlockEs(char* lpLine, ESTR* lpReturn)
 {
     char* lpNext;
     BLOCKINFO bkInfo;
@@ -93,74 +90,87 @@ LIBDOS9 char* Dos9_GetNextBlockEs(char* lpLine, ESTR* lpReturn)
 
     lpNext = Dos9_GetNextBlock(lpLine, &bkInfo);
 
-
     iNbBytes = bkInfo.lpEnd - bkInfo.lpBegin;
-
     Dos9_EsCpyN(lpReturn, bkInfo.lpBegin, iNbBytes);
 
+    /* replace delayed expansion */
     Dos9_DelayedExpand(lpReturn, bDelayedExpansion);
+
+    /* remove escape characters */
+    Dos9_UnEscape(Dos9_EsToChar(lpReturn));
 
     return lpNext+1;
 
 }
 
-LIBDOS9 char* Dos9_GetNextParameterEs(char* lpLine, ESTR* lpReturn)
+char* Dos9_GetNextParameterEs(char* lpLine, ESTR* lpReturn)
 {
-     int iSeekQuote=FALSE;
-     int i=0;
-     char* lpStartParameter=NULL;
+     char cChar=' ';
 
-     while (*lpLine==' ' || *lpLine=='\t') lpLine++;
+     size_t iSize;
+
+     char *lpBegin,
+          *lpEnd=NULL;
+
+     lpLine=Dos9_SkipBlanks(lpLine);
 
      if (*lpLine=='"') {
-         iSeekQuote=1;
+
+         cChar='"';
          lpLine++;
+
      } else if (*lpLine=='\'') {
-         iSeekQuote=2;
+
+         cChar='\'';
          lpLine++;
+
      }
 
      if (!*lpLine) return NULL;
 
-     lpStartParameter=lpLine;
+     lpBegin=lpLine;
 
-     for (;*lpLine;lpLine++) {
+     while ((lpEnd=Dos9_SearchChar(lpLine, cChar))) {
 
-         i++;
+        if (cChar==' ') {
 
-         if (((*lpLine=='"') && (iSeekQuote==1)) || (*lpLine=='\'' && iSeekQuote == 2)) {
-             /* if we were seeking a quote */
+            lpLine=lpEnd;
+            break;
 
-             if (*(lpLine+1)!='\t' && *(lpLine+1)!=' ') continue; /* if the following character is neither a
-                                                                    a space nor a tab, then it continues */
-             break;
-         }
+        }
 
-         if ((*lpLine==' ') & (!iSeekQuote)) break; /* if the programs seeks only a space
-                                                       then it breaks */
+        lpLine=lpEnd+1;
 
-     }
-
-     if (!(*lpLine=='\0') || iSeekQuote) {
-
-        if (*lpLine)
-            lpLine++;
-        i--; /* i is obviously strictly greater
-                than 1 */
+        if (*lpLine=='\t'
+            || *lpLine==' ')
+              break;
 
      }
 
-     Dos9_EsCpyN(lpReturn, lpStartParameter, i);
+     if (lpEnd == NULL) {
 
-     Dos9_DelayedExpand(lpReturn, bDelayedExpansion); /* Note : delayed expansion means here all vars expansion
-                                                        peformed after the line first buffering from the file,
-                                                        thus, it includes also expansion of special-local vars,
-                                                        such as %1 */
+        Dos9_EsCpy(lpReturn, lpBegin);
+
+        while (*lpLine) lpLine++;
+
+
+     } else {
+
+        iSize=lpEnd-lpBegin;
+        Dos9_EsCpyN(lpReturn, lpBegin, iSize);
+
+     }
+
+     /* expand delayed expand variable */
+     Dos9_DelayedExpand(lpReturn, bDelayedExpansion);
+
+     /* remove escape characters */
+     Dos9_UnEscape(Dos9_EsToChar(lpReturn));
 
      return lpLine;
 }
 
-LIBDOS9 int   Dos9_GetParamArrayEs(char* lpLine, ESTR** lpArray, size_t iLenght)
+int   Dos9_GetParamArrayEs(char* lpLine, ESTR** lpArray, size_t iLenght)
 /*
     gets command-line argument in an array of extended string
 */
@@ -222,6 +232,8 @@ LIBDOS9 char* Dos9_GetEndOfLine(char* lpLine, ESTR* lpReturn)
 
     Dos9_EsCpy(lpReturn, lpLine); /* Copy the content of the line in the buffer */
     Dos9_DelayedExpand(lpReturn, bDelayedExpansion); /* Expands the content of the specified  line */
+
+    Dos9_UnEscape(Dos9_EsToChar(lpReturn));
 
     return NULL;
 }

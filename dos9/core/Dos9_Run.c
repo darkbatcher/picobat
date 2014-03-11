@@ -27,7 +27,7 @@
 
 #include "Dos9_Core.h"
 
-#define DOS9_DBG_MODE
+//#define DOS9_DBG_MODE
 
 #include "Dos9_Debug.h"
 
@@ -36,10 +36,6 @@
 
 int Dos9_RunBatch(INPUT_FILE* pIn)
 {
-    PARSED_STREAM_START* lppssStreamStart;
-
-    PARSED_STREAM* lppsStream;
-
     ESTR* lpLine=Dos9_EsInit();
 
     char* const lpCurrentDir=Dos9_GetCurrentDir();
@@ -50,14 +46,14 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
     {
 
         DOS9_DBG("[*] %d : Parsing new line\n", __LINE__);
-        //Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_NEWLINE, NULL, NULL);
+
 
         if (pIn->lpFileName==NULL) {
 
             /* this is a direct input */
 
             Dos9_SetConsoleTextColor(DOS9_FOREGROUND_IGREEN | DOS9_GET_BACKGROUND(colColor));
-            printf("DOS9 ");
+            printf("\nDOS9 ");
             Dos9_SetConsoleTextColor(colColor);
 
             printf("%s>", lpCurrentDir);
@@ -80,12 +76,14 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
             && *lpCh!='@') {
 
             Dos9_SetConsoleTextColor(DOS9_FOREGROUND_IGREEN | DOS9_GET_BACKGROUND(colColor));
-            printf("DOS9 ");
+            printf("\nDOS9 ");
             Dos9_SetConsoleTextColor(colColor);
 
             printf("%s>%s", lpCurrentDir, Dos9_EsToChar(lpLine));
 
         }
+
+        Dos9_ReplaceVars(lpLine);
 
         Dos9_RunLine(lpLine);
 
@@ -190,7 +188,7 @@ int Dos9_RunLine(ESTR* lpLine)
     PARSED_STREAM_START* lppssStreamStart;
     PARSED_STREAM* lppsStream;
 
-    Dos9_ReplaceVars(lpLine);
+    Dos9_RmTrailingNl(Dos9_EsToChar(lpLine));
 
     lppssStreamStart=Dos9_ParseLine(lpLine);
 
@@ -200,12 +198,9 @@ int Dos9_RunLine(ESTR* lpLine)
 
     Dos9_ExecOutput(lppssStreamStart);
 
-    //Dos9_SendMessage(DOS9_PARSE_MODULE, MODULE_PARSE_PARSED_START_EXEC, lppssStreamStart, NULL);
     DOS9_DBG("\t[*] Global streams set.\n");
 
-
     lppsStream=lppssStreamStart->lppsStream;
-
 
     do {
 
@@ -237,7 +232,6 @@ int Dos9_RunCommand(ESTR* lpCommand)
     int iFlag;
 
     lpCmdLine=Dos9_EsToChar(lpCommand);
-    Dos9_RemoveEscapeChar(lpCmdLine);
 
     lpCmdLine=Dos9_SkipAllBlanks(lpCmdLine);
 
@@ -276,16 +270,18 @@ int Dos9_RunCommand(ESTR* lpCommand)
 
 int Dos9_RunBlock(BLOCKINFO* lpbkInfo)
 {
-    ESTR*  lpEsLine=Dos9_EsInit();
 
-    char *lpBeginToken;
-    char *lpToken = lpbkInfo->lpBegin;
-    char *lpEnd = lpbkInfo->lpEnd;
+    ESTR *lpEsLine=Dos9_EsInit();
 
-    int iParentheseNb=0;
-    int iOldState;
+    char *lpToken = lpbkInfo->lpBegin,
+         *lpEnd = lpbkInfo->lpEnd,
+         *lpBlockBegin,
+         *lpBlockEnd,
+         *lpNl;
 
     size_t iSize;
+
+    int iOldState;
 
     /* Save old lock state and lock the
        level, definitely */
@@ -294,55 +290,55 @@ int Dos9_RunBlock(BLOCKINFO* lpbkInfo)
 
     while (*lpToken && (lpToken < lpEnd)) {
 
-        while (*lpToken==' ' || *lpToken=='\t') lpToken++;
+        lpBlockEnd=Dos9_SearchChar(lpToken, '\n');
 
-        lpBeginToken=lpToken;
+         if (!lpBlockEnd) {
 
-        /* TODO :
-            Merge this part with functions that are defined
-            in modules/parse
-         */
-        for (;*lpToken && ((*lpToken!='\n' && *lpToken!=')') || iParentheseNb);lpToken++) {
-            switch (*lpToken) {
-                case '^':
-                    lpToken++;
-                case '(':
-                    iParentheseNb++;
-                    break;
-                case  ')':
-                    if (iParentheseNb>0) iParentheseNb--;
-                    break;
+            iSize=lpEnd-lpToken;
+
+            lpBlockEnd=lpEnd;
+
+         } else {
+
+             lpBlockBegin=Dos9_GetNextBlockBegin(lpToken);
+
+             if (lpBlockBegin && (lpBlockBegin < lpBlockEnd)) {
+
+                /* if that line is a block (since block can be
+                   contained in blocks) */
+
+                lpNl=lpBlockEnd;
+
+                /* we can assume the blocks are built the right
+                   way */
+                do {
+
+                    lpBlockEnd=Dos9_GetBlockEnd(lpBlockBegin);
+
+                } while ((lpBlockBegin=Dos9_GetNextBlockBegin(lpBlockEnd)));
+
+                if (lpNl > lpBlockEnd)
+                    lpBlockEnd=lpNl;
+
+                lpBlockEnd++;
+                iSize=lpBlockEnd-lpToken;
+
+            } else {
+
+                lpBlockEnd++;
+                iSize=lpBlockEnd-lpToken;
+
             }
-        }
-
-        if (lpToken==lpBeginToken)  {
-
-            if (*lpToken) lpToken++;
-            continue;
 
         }
 
-        if (*lpToken) {
+        Dos9_EsCpyN(lpEsLine, lpToken, iSize);
 
-            /* Do not modify the value of the string passed
-               as argument, just take the character that interest
-               you */
-            iSize = lpToken - lpBeginToken;
+        lpToken=lpBlockEnd;
+        Dos9_RunLine(lpEsLine);
 
-            Dos9_EsCpyN(lpEsLine, lpBeginToken, iSize);
-            Dos9_RunLine(lpEsLine);
-
-            lpToken++;
-
-        } else {
-
-            Dos9_EsCpy(lpEsLine, lpBeginToken);
-            Dos9_RunLine(lpEsLine);
-
-        }
 
     }
-
 
     /* releases the lock */
     Dos9_SetStreamStackLockState(lppsStreamStack, iOldState);
