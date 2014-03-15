@@ -43,16 +43,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.}
 	
 ${git clone ssh://git.code.sf.net/p/dos9/code dos9-code}
 
+	@- If you get the source from the repos by the given command-line, note that you will
+	not be able to push patches and update without modifying your git configuration, thus
+	if you have already a sourceforge account, it might be easier for you to download it
+	from your account.
+
 	@- When you have downloaded sources, you just need to compile them using any C compiler. 
 	For {windows} system, it is more complicated than getting precompiled binaries because
 	you need to have gcc and gmake installed on your system. On {Windows}, you should also
 	have a {*nix} compatible shell. If not, you can get one from the {MinGW} project.
 	For {*nix} system, doing so is as simple as typing :
 	
-${make *nix}
+${./configure
+make}
 
-	@- {Windows} users just have to specify ``win'' target instead ``*nix''. Windows users also need
-	to move non native dependencies *.dll from the folder ``depend'' to the folder ``bin''.
+	@- {Windows} might have to copy dependencies in the {Dos9} folder if they need to make to
+	make it portable.
+	
+	@- An install target is not provided yet because we think that is not an important task
+	(copying on usr/bin), and because no tests have be performed to check if such installation work.
 	
 	A list of needed programs and tools to be able to build {Dos9} properly can be obtained by
 	typing:

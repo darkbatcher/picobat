@@ -143,7 +143,7 @@ LIBDOS9 int Dos9_EsFree(ESTR* ptrESTR)
 int Dos9_EsGet(ESTR* ptrESTR, FILE* ptrFile)
 {
     int iCurrentL=0,
-        iResult=0,
+        iResult,
         iTotalBytesRead=0;
 
     char* crLf=NULL,
@@ -151,6 +151,10 @@ int Dos9_EsGet(ESTR* ptrESTR, FILE* ptrFile)
 
     ptrCursor=ptrESTR->ptrString;
     iCurrentL=ptrESTR->iLenght-1;
+
+    //printf("Start of function...");
+
+    //printf(" Beginning loop...");
 
     while (1)
     {
@@ -169,6 +173,7 @@ int Dos9_EsGet(ESTR* ptrESTR, FILE* ptrFile)
         }
 
         crLf=strchr(ptrESTR->ptrString, '\n');
+
         if (crLf!=NULL)
             break;
 
@@ -195,6 +200,8 @@ int Dos9_EsGet(ESTR* ptrESTR, FILE* ptrFile)
 
     }
 
+    //printf(" Ending loop...");
+
     switch (_Dos9_NewLine) {
 
         case DOS9_NEWLINE_WINDOWS :
@@ -220,6 +227,8 @@ int Dos9_EsGet(ESTR* ptrESTR, FILE* ptrFile)
 
 
     }
+
+    //printf(" Returning\n");
 
     return !iTotalBytesRead;
 }
@@ -257,8 +266,14 @@ int Dos9_EsCpyN(ESTR* ptrESTR, const char* ptrChaine, size_t iSize)
 
     }
 
+        /* this is some test to prevent user from experiencing
+           crash in windows whenever iSize is 0. Sadly, windows
+           crt's send SIGSEGV to the program, although this
+           is correct for C89 standard (afaik) */
 
-    strncpy(ptrBuf, ptrChaine, iSize);
+    if (iSize)
+       strncpy(ptrBuf, ptrChaine, iSize);
+
     ptrBuf[iSize]='\0';
 
     return 0;

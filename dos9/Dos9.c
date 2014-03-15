@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
 
     */
 
-    char *lpFileName=NULL,
+    char *lpFileName="",
           lpFileAbs[FILENAME_MAX],
           lpTmp[FILENAME_MAX],
           lpTitle[FILENAME_MAX+10]="Dos9 [" DOS9_VERSION "] - ";
@@ -70,8 +70,6 @@ int main(int argc, char *argv[])
         j,
         c='0',
         bQuiet=FALSE;
-
-    INPUT_FILE ifIn;
 
     if (Dos9_LibInit() == -1) {
 
@@ -105,6 +103,13 @@ int main(int argc, char *argv[])
        *   getting Dos9's parameters    *
        ********************************** */
 
+    if (!argv[0])
+        Dos9_ShowErrorMessage(DOS9_BAD_COMMAND_LINE,
+                              "Dos9",
+                              -1
+                              );
+
+    /* get command line arguments */
     for (i=1;argv[i];i++) {
         if (*argv[i]=='/') {
             argv[i]++;
@@ -161,9 +166,11 @@ int main(int argc, char *argv[])
 
                 default:
                     Dos9_ShowErrorMessage(DOS9_BAD_COMMAND_LINE, NULL, -1);
+
             }
+
         } else {
-            if (lpFileName) {
+            if (*lpFileName!='\0') {
                 /* set parameters for the file currently runned */
                 for (j=i ,  c='1';argv[j] && c<='9';i++, c++ , j++ ) {
                     Dos9_SetLocalVar(lpvLocalVars, c, argv[j]);
@@ -191,7 +198,7 @@ int main(int argc, char *argv[])
     Dos9_InitConsole();
 
 
-    if (!lpFileName) {
+    if (*lpFileName=='\0') {
 
         if (!bQuiet)
             Dos9_PrintIntroduction();
@@ -256,13 +263,13 @@ int main(int argc, char *argv[])
 
     strcat(lpTitle, "/Dos9_Auto.bat");
 
-    ifIn.lpFileName=lpTitle+10;
+    strcpy(ifIn.lpFileName, lpTitle+10);
     ifIn.iPos=0;
     ifIn.bEof=FALSE;
 
     Dos9_RunBatch(&ifIn);
 
-    if (lpFileName) {
+    if (*lpFileName!='\0') {
 
         /* generates real path if the path is uncomplete */
 
@@ -287,7 +294,7 @@ int main(int argc, char *argv[])
 
 
     /* run the batch */
-    ifIn.lpFileName=lpFileName;
+    strcpy(ifIn.lpFileName, lpFileName);
     ifIn.iPos=0;
     ifIn.bEof=FALSE;
 

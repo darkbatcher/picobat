@@ -29,17 +29,13 @@
 #define LOCAL_VAR_BLOCK_SIZE 128
 
 #ifndef WIN32
-    #define _MAX_DRIVE FILENAME_MAX
-    #define _MAX_DIR FILENAME_MAX
-    #define _MAX_FNAME FILENAME_MAX
-    #define _MAX_EXT FILENAME_MAX
 
     int Dos9_PutEnv(char* lpEnv);
-    void Dos9_SplitPath(char* lpPath, char* lpDisk, char* lpDir, char* lpName, char* lpExt);
 
 #else
-    #define Dos9_SplitPath _splitpath
+
     #define Dos9_PutEnv(a) putenv(a)
+
 #endif
 
 #define DOS9_ALL_PATH    0

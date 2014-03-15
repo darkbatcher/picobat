@@ -78,7 +78,7 @@ int Dos9_CmdFor(char* lpLine)
      FORINFO forInfo={
          " ", /* no tokens delimiters, since only one
                 token is taken account */
-         ";", /* no end-of-line delimiters */
+         ";", /* the default delimiter is ; */
          0, /* no skipped line */
          0, /* this is to be fullfiled later (the
                 name letter of loop special var) */
@@ -399,6 +399,12 @@ int Dos9_CmdForSimple(ESTR* lpInput, BLOCKINFO* lpbkCommand, char cVarName, char
 
         }
 
+        /* if a goto as been executed while the for-loop
+           was ran */
+
+        if (bAbortCommand==TRUE)
+            break;
+
     }
 
     /* delete the special var */
@@ -463,6 +469,12 @@ int Dos9_CmdForL(ESTR* lpInput, BLOCKINFO* lpbkCommand, char cVarName)
 
         Dos9_RunBlock(lpbkCommand);
 
+
+        /* if a goto as been executed while the for-loop
+           was ran */
+        if (bAbortCommand==TRUE)
+            break;
+
     }
 
     Dos9_SetLocalVar(lpvLocalVars, cVarName, NULL);
@@ -485,6 +497,7 @@ int Dos9_CmdForF(ESTR* lpInput, BLOCKINFO* lpbkInfo, FORINFO* lpfrInfo)
 
     //printf("Starting for LOOP \n");
 
+
     if ((Dos9_ForVarCheckAssignment(lpfrInfo)))
         goto error;
 
@@ -493,7 +506,7 @@ int Dos9_CmdForF(ESTR* lpInput, BLOCKINFO* lpbkInfo, FORINFO* lpfrInfo)
 
     while (Dos9_ForGetInputLine(lpInputToP, &inputInfo)) {
 
-        //printf("Processing :\n \"%s\"\n", Dos9_EsToChar(lpInputToP));
+        /* printf("Processing :\n \"%s\"\n", Dos9_EsToChar(lpInputToP)); */
 
         if (iSkip > 0) {
 
@@ -503,16 +516,23 @@ int Dos9_CmdForF(ESTR* lpInput, BLOCKINFO* lpbkInfo, FORINFO* lpfrInfo)
 
         } else {
 
-            //printf("Splitting Token !\n");
+            /* printf("Splitting Token !\n"); */
 
             Dos9_ForSplitTokens(lpInputToP, lpfrInfo);
             /* split the block on subtokens */
 
-            //printf("Running Block !\n");
+            /* printf("Running Block !\n"); */
             Dos9_RunBlock(lpbkInfo);
             /* split the input into tokens and then run the
                 block */
         }
+
+
+        /* if a goto as been executed while the for-loop
+           was ran */
+
+        if (bAbortCommand==TRUE)
+            break;
 
     }
 
@@ -863,9 +883,9 @@ void Dos9_ForSplitTokens(ESTR* lpContent, FORINFO* lpfrInfo)
     for (i=0; i<lpfrInfo->iTokenNb; i++) {
 
 
-         //printf("Getting token n. %d \n", i);
+         /* printf("Getting token n. %d \n", i); */
          Dos9_ForGetToken(lpContent, lpfrInfo, i, lpVarContent);
-         // printf("Returned : \"%s\"\n", Dos9_EsToChar(lpVarContent));
+         /* printf("Returned : \"%s\"\n", Dos9_EsToChar(lpVarContent */
             /* get the token descibed by the token info number i */
 
          Dos9_SetLocalVar(lpvLocalVars, cVarName, Dos9_EsToChar(lpVarContent));
@@ -907,6 +927,7 @@ void Dos9_ForGetToken(ESTR* lpContent, FORINFO* lpfrInfo, int iPos, ESTR* lpRetu
            "\t* iTokenBegin = %d\n"
            "\t* iTokenEnd   = %d\n"
            "\t* lpDelims    = \"%s\"\n\n", iPos, iTokenBegin, iTokenEnd, lpDelims);
+
     */
 
     while ((lpNextToken = strpbrk(lpToken, lpDelims)))
@@ -919,6 +940,8 @@ void Dos9_ForGetToken(ESTR* lpContent, FORINFO* lpfrInfo, int iPos, ESTR* lpRetu
                just ignore it */
 
                lpToken=lpNextToken+1;
+
+            continue;
 
         }
 
@@ -948,6 +971,11 @@ void Dos9_ForGetToken(ESTR* lpContent, FORINFO* lpfrInfo, int iPos, ESTR* lpRetu
         lpBeginToken=lpToken;
     }
 
+    /* printf("Get data loop Ended\n");
+
+    printf("lpBeginToken=\"%s\"\n", lpBeginToken);
+    if (lpEndToken)
+        printf("lpEndToken=\"%s\"\n", lpEndToken); */
 
     if (lpBeginToken) {
 
@@ -966,6 +994,7 @@ void Dos9_ForGetToken(ESTR* lpContent, FORINFO* lpfrInfo, int iPos, ESTR* lpRetu
 
     }
 
+    /* printf("Returned from token"); */
 
 }
 
@@ -1267,7 +1296,7 @@ int Dos9_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn, int
     }
 
     fputs(Dos9_EsToChar(lpInput), pFile);
-    fputs("& exit\n", pFile);
+    fputs(" & exit\n", pFile);
     fflush(pFile);
         /* write the command given on the for command */
 

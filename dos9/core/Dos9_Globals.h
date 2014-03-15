@@ -20,6 +20,7 @@
 #ifndef DOS9_GLOBALS_H
 #define DOS9_GLOBALS_H
 
+extern int bAbortCommand;
 extern int bDelayedExpansion;
 extern int bUseFloats;
 extern int bDos9Extension;
@@ -29,6 +30,7 @@ extern LPCOMMANDLIST lpclCommands;
 extern LOCAL_VAR_BLOCK* lpvLocalVars;
 extern LPSTREAMSTACK lppsStreamStack;
 extern COLOR colColor;
+extern INPUT_FILE ifIn;
 
 extern char* lpInitVar[];
 

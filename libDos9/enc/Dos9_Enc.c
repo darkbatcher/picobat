@@ -92,7 +92,6 @@ const ENCODINGINFO EncodingInfo[] = {
                                         {1258, "WINDOWS-1258"},
                                         {874, "WINDOWS-874"},
                                         {850, "CP850"},
-                                        {850, "CP850"},
                                         {862, "CP862"},
                                         {866, "CP866"},
                                         {10079, "MACICELAND"},

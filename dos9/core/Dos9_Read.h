@@ -1,8 +1,10 @@
 #ifndef DOS9_MODULE_READ_H
 #define DOS9_MODULE_READ_H
 
+#include <stdio.h>
+
 typedef struct INPUT_FILE {
-    char *lpFileName;
+    char  lpFileName[FILENAME_MAX];
     int   iPos;
     int   bEof;
 } INPUT_FILE;

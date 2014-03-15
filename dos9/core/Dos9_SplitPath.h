@@ -15,45 +15,20 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
-#include "libDos9.h"
-#include "Dos9_Core.h"
+#ifndef DOS9_SPLITPATH_H
 
-int bDelayedExpansion=FALSE;
-int bUseFloats=FALSE;
-int bDos9Extension=FALSE;
-int bEchoOn=TRUE;
-int iErrorLevel=0;
+#ifdef _POSIX_C_SOURCE
 
-int bAbortCommand=FALSE;
-LPCOMMANDLIST lpclCommands;
-LOCAL_VAR_BLOCK* lpvLocalVars;
-LPSTREAMSTACK lppsStreamStack;
-COLOR colColor;
+    #define _MAX_DRIVE FILENAME_MAX
+    #define _MAX_DIR FILENAME_MAX
+    #define _MAX_FNAME FILENAME_MAX
+    #define _MAX_EXT FILENAME_MAX
 
-int iInputD=0,
-    iOutputD=0;
-
-INPUT_FILE ifIn;
-
-void(*pErrorHandler)(void)=NULL;
-
-#ifdef WIN32
-    #define environ _environ
-#else
-    extern char** environ;
 #endif
 
-char* lpInitVar[]={
-    "DOS9_VERSION=" DOS9_VERSION,
-#ifdef WIN32
-    "DOS9_OS=WINDOWS",
-#elif defined _POSIX_C_SOURCE
-    "DOS9_OS=*NIX",
-#else
-    "DOS9_OS=UNKNOWN"
-#endif
-    NULL,
-    NULL
-};
+void Dos9_SplitPath(char* lpPath, char* lpDisk, char* lpDir, char* lpName, char* lpExt);
+
+#endif // DOS9_SPLITPATH_H

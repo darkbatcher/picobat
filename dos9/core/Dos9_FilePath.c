@@ -24,7 +24,7 @@
 
 #include <libDos9.h>
 
-//#define DOS9_DBG_MODE
+// #define DOS9_DBG_MODE
 #include "Dos9_Debug.h"
 
 #include "Dos9_FilePath.h"
@@ -85,7 +85,7 @@ int Dos9_GetFilePath(char* lpFullPath, const char* lpPartial, size_t iBufSize)
 
                 DOS9_DBG("\t\t[*] trying \"%s\"\n", Dos9_EsToChar(lpEsFinalPath));
 
-                if (access(Dos9_EsToChar(lpEsFinalPath), F_OK)==0)
+                if (Dos9_FileExists(Dos9_EsToChar(lpEsFinalPath)))
                     goto file_found;
 
 
@@ -94,7 +94,7 @@ int Dos9_GetFilePath(char* lpFullPath, const char* lpPartial, size_t iBufSize)
 
         #else
 
-            if (access(Dos9_EsToChar(lpEsTmp), F_OK)==0) {
+            if (Dos9_FileExists(Dos9_EsToChar(lpEsTmp))) {
 
                 Dos9_EsCpyE(lpEsFinalPath, lpEsTmp);
                 goto file_found;

@@ -48,7 +48,8 @@ int Dos9_CmdEcho(char* lpLine)
     lpLine+=4;
 
     if (*lpLine!=' '
-        && !ispunct(*lpLine)) {
+        && !ispunct(*lpLine)
+        && *lpLine!='\0') {
 
         Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR, lpLine-4, FALSE);
         return -1;
@@ -351,6 +352,8 @@ int Dos9_CmdSetA(char* lpLine, int bFloats)
 {
 
     ESTR* lpExpression=Dos9_EsInit();
+
+    lpLine=Dos9_SkipBlanks(lpLine);
 
     /* get the expression back */
     Dos9_GetEndOfLine(lpLine, lpExpression);
@@ -834,7 +837,6 @@ int Dos9_CmdGoto(char* lpLine)
 
     if (*(lpLine+1)==':') lpLine++;
     if ((lpLine=Dos9_GetNextParameter(lpLine, lpLabelName, FILENAME_MAX))) {
-        DEBUG("Found label Name");
 
         if (!strcmp(lpLabelName, ":/?")) {
 
@@ -846,31 +848,43 @@ int Dos9_CmdGoto(char* lpLine)
         if ((lpLine=Dos9_GetNextParameter(lpLine ,lpFileName, FILENAME_MAX))) {
 
             if (!stricmp(lpFileName, "/Q")) {
+
                 /* on a choisi de rendre l'erreux muette */
                 bEchoError=FALSE;
 
                 if (!(Dos9_GetNextParameter(lpLine, lpFileName, FILENAME_MAX)))
                     goto next;
+
             }
 
             if (bDos9Extension == FALSE) Dos9_ShowErrorMessage(DOS9_EXTENSION_DISABLED_ERROR, NULL, FALSE);
             else lpFile=lpFileName;
+
         }
 
         next:
 
         /* Now we have a valid label name, thus  we are about to find a label in the specified file */
         /* if we do have a valid file name, the search will be made in specified file */
-        DEBUG("Jump to Label [(name) and (filename) nexts line]");
-        DEBUG(lpLabelName);
-        DEBUG(lpFile);
+        DOS9_DBG("Jump to Label \"%s\" in \"%s\"", lpLabelName, lpFile);
 
-        if (Dos9_JumpToLabel(lpLabelName, lpFile)==-1 && bEchoError) {
-            Dos9_ShowErrorMessage(DOS9_LABEL_ERROR, lpLabelName, FALSE);
+        if (Dos9_JumpToLabel(lpLabelName, lpFile)==-1) {
+
+            if (!bEchoError)
+                Dos9_ShowErrorMessage(DOS9_LABEL_ERROR, lpLabelName, FALSE);
+
+            return -1;
+
+        } else  {
+
+            bAbortCommand=TRUE;
+
         }
 
         DEBUG("Jump made");
+
     }
+
     return 0;
 }
 

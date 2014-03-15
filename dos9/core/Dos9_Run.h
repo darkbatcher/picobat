@@ -28,5 +28,6 @@ int Dos9_RunLine(ESTR* lpLine);
 int Dos9_RunBlock(BLOCKINFO* lpbkInfo); // the function that run blocks
 int Dos9_RunBatch(INPUT_FILE* pIn); // the function that runs the batch
 int Dos9_RunExternalCommand(char* lpCommandLine);
+int Dos9_RunExternalFile(char* lpFileName, char** lpArguments);
 
 #endif

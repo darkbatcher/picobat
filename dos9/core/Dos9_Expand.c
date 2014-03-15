@@ -13,7 +13,7 @@
 
 #include "../errors/Dos9_Errors.h"
 
-// #define DOS9_DBG_MODE
+//#define DOS9_DBG_MODE
 #include "Dos9_Debug.h"
 
 /* function for replacing variable on commands line  */
@@ -32,8 +32,6 @@ void Dos9_ExpandSpecialVar(ESTR* ptrCommandLine)
          *lpNextToken,
          *lpPreviousToken=lpToken,
          *lpTokenBegin;
-
-    DOS9_DBG("[+]Dos9_ExpandSpecialVar: \"%s\".\n", Dos9_EsToChar(ptrCommandLine));
 
     while ((lpNextToken=Dos9_SearchChar(lpToken, '%'))) {
 
@@ -66,7 +64,7 @@ void Dos9_ExpandSpecialVar(ESTR* ptrCommandLine)
     Dos9_EsFree(lpVarContent);
     Dos9_EsFree(lpExpanded);
 
-    DOS9_DBG("[-]Dos9_ExpandSpecialVar: \"%s\".\n", Dos9_EsToChar(ptrCommandLine));
+    DOS9_DBG("[ExpandSpecialVar] : \"%s\".\n", Dos9_EsToChar(ptrCommandLine));
 
 }
 
@@ -104,7 +102,7 @@ void Dos9_ExpandVar(ESTR* ptrCommandLine, char cDelimiter)
             ptrToken=ptrNextToken+1;
             continue;
 
-        } else if (isdigit(*ptrNextToken)) {
+        } else if (isdigit(*ptrNextToken) || *ptrNextToken=='~') {
 
             /* if the variable is one of the parameter variables,
                then skip, for compatibility purpose
@@ -120,13 +118,17 @@ void Dos9_ExpandVar(ESTR* ptrCommandLine, char cDelimiter)
 
             *ptrEndToken='\0';
 
+            Dos9_EsCat(lpExpanded, ptrToken);
+
             if ((Dos9_GetVar(ptrNextToken, lpVarContent))) {
 
-                Dos9_EsCat(lpExpanded, ptrToken);
+                /* add the content of the variable only if
+                   it is really defined */
                 Dos9_EsCatE(lpExpanded, lpVarContent);
-                ptrToken=ptrEndToken+1;
 
             }
+
+             ptrToken=ptrEndToken+1;
 
             continue;
 
@@ -144,9 +146,11 @@ void Dos9_ExpandVar(ESTR* ptrCommandLine, char cDelimiter)
     }
 
     Dos9_EsCat(lpExpanded, ptrToken); // si pas de séquence détectée
-    DEBUG(Dos9_EsToChar(lpExpanded));
     Dos9_EsCpy(ptrCommandLine, Dos9_EsToChar(lpExpanded));
-    DEBUG(Dos9_EsToChar(ptrCommandLine));
+
+    DOS9_DBG("[ExpandVar] : '%s'\n",
+             Dos9_EsToChar(ptrCommandLine)
+             );
 
     Dos9_EsFree(lpExpanded);
     Dos9_EsFree(lpVarContent);

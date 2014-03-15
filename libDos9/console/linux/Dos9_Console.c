@@ -16,21 +16,33 @@ void Dos9_SetConsoleColor(COLOR cColor)
 void Dos9_SetConsoleTextColor(COLOR cColor)
 {
     if (cColor & DOS9_FOREGROUND_INT) {
+
+        /* set foreground intensity */
         printf("\033[1m");
         cColor^=DOS9_FOREGROUND_INT;
-    } else {
-        printf("\033[0m");
-    }
-    if (cColor & DOS9_BACKGROUND_DEFAULT) printf("\033[49m");
-    if (cColor & DOS9_FOREGROUND_DEFAULT) printf("\033[39m");
-    if ((cColor & DOS9_FOREGROUND_DEFAULT) && (cColor & DOS9_BACKGROUND_DEFAULT)) return;
 
-    if (!(cColor & DOS9_BACKGROUND_DEFAULT)) {
+    } else {
+
+        printf("\033[0m");
+
+    }
+
+    if (cColor & DOS9_BACKGROUND_DEFAULT)
+        printf("\033[49m");
+
+    if (cColor & DOS9_FOREGROUND_DEFAULT)
+        printf("\033[39m");
+
+    if ((cColor & DOS9_FOREGROUND_DEFAULT)
+        && (cColor & DOS9_BACKGROUND_DEFAULT))
+            return;
+
+    if (!(cColor & DOS9_BACKGROUND_DEFAULT))
         printf("\033[%dm",DOS9_GET_BACKGROUND_(cColor)+40);
-    }
-    if (!(cColor & DOS9_FOREGROUND_DEFAULT)) {
+
+    if (!(cColor & DOS9_FOREGROUND_DEFAULT))
         printf("\033[%dm", DOS9_GET_FOREGROUND_(cColor)+30);
-    }
+
 }
 
 void Dos9_SetConsoleTitle(char* lpTitle)

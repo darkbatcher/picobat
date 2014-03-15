@@ -501,16 +501,25 @@ int Dos9_PutEnv(char* lpEnv)
     char *lpEnvCpy, *lpToken;
     char lpVoid[]="";
     int iRet;
-    if (!(lpEnvCpy=strdup(lpEnv))) return -1;
+
+    if (!(lpEnvCpy=strdup(lpEnv)))
+        return -1;
+
     if ((lpToken=strchr(lpEnvCpy, '='))) {
+
         *lpToken='\0';
         lpToken++;
+
     } else {
+
         lpToken=lpVoid;
+
     }
+
     strupr(lpEnvCpy);
     iRet=setenv(lpEnvCpy, lpToken, TRUE);
     free(lpEnvCpy);
+
     return iRet;
 }
 

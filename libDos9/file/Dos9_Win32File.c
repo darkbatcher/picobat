@@ -19,15 +19,10 @@ int Dos9_GetExePath(char* lpBuf, size_t iBufSize)
 
 int Dos9_FileExists(char* ptrName)
 {
-    HFILE hFile;
-    OFSTRUCT ofFile;
-    hFile=OpenFile(ptrName, &ofFile, OF_EXIST);
-    if (hFile!=(HFILE)HFILE_ERROR)
-    {
-        CloseHandle((HANDLE)hFile); /* le fichier existe */
-        return 1;
-    }
-    return 0;
+    int iAttrib = GetFileAttributes(ptrName);
+
+    return (iAttrib != INVALID_FILE_ATTRIBUTES &&
+            !(iAttrib & FILE_ATTRIBUTE_DIRECTORY));
 }
 
 int Dos9_DirExists(char *ptrName)

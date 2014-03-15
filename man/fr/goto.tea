@@ -37,9 +37,16 @@ ${GOTO [:]étiquette [fichier] [/Q]}
           {spec/new|Nouvelles fonctions de Dos9}).
 		  
 		- {/Q} : Ignore silencieusement les étiquettes invalides, et continue
-		à la ligne suivant l'instruction [GOTO}. Ce commutateur permet d'effecter
+		à la ligne suivant l'instruction {GOTO} en mettant néamoins {errorlevel|%ERRORLEVEL%} à {0}
+		si le saut a effectivement lieu et à {-1} si l'étiquette n'est pas trouvée.
+		Ce commutateur permet d'effecter
 		des structures conditionnelles comme la structure {switch/case} de nombreux
 		langages de programmation.
+		
+	Si une commande {goto} est appelée depuis l'intérieur d'un bloc de commande, soit
+	de niveau supérieur, soit depuis une commande ({for|FOR} ou {if|IF}), alors l'éxécution
+	du bloc est intérompue et l'exécution reprend après l'étiquette spécifiée. Dans le cas d'une boucle
+	{for|FOR}, l'exécution de la boucle est interrompue.
 		
 {{Construction d'une structure switch/case}}
 

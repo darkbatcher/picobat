@@ -6,40 +6,77 @@
 
 int Dos9_JumpToLabel(char* lpLabelName, char* lpFileName)
 {
-    /* size_t iSize=strlen(lpLabelName);
+    size_t iSize=strlen(lpLabelName);
     char* lpName=lpFileName;
-    char lpBuf[FILENAME_MAX];
     FILE* pFile;
     ESTR* lpLine=Dos9_EsInit();
+
+
     if ((lpFileName==NULL)) {
-        Dos9_SendMessage(DOS9_READ_MODULE, MODULE_READ_GETFILE, lpBuf, (void*)FILENAME_MAX);
-        lpName=lpBuf;
+        lpName=ifIn.lpFileName;
     }
+
+
     if (!(pFile=fopen(lpName, "r"))) {
         Dos9_EsFree(lpLine);
+
         DEBUG("unable to open file : %s");
         DEBUG(strerror(errno));
+
         return -1;
     }
+
     while (!Dos9_EsGet(lpLine, pFile)) {
+
         if (!strnicmp(Dos9_EsToChar(lpLine), lpLabelName, iSize)) {
+
             if (lpFileName) {
-                    Dos9_SendMessage(DOS9_READ_MODULE, MODULE_READ_SETFILE, (void*)lpFileName, NULL);
+
+                /* at that time, we can assume that lpFileName is not
+                   the void string, because the void string is not usually
+                   a valid file name */
+                if (*lpFileName=='/'
+                    || !strncmp(":/", lpFileName+1, 2)
+                    || !strncmp(":\\", lpFileName+1, 2)) {
+
+                    /* the path is absolute */
+                    strncpy(ifIn.lpFileName, lpFileName, sizeof(ifIn.lpFileName));
+                    ifIn.lpFileName[FILENAME_MAX-1]='\0';
+
+                } else {
+
+                    /* the path is relative */
+                    snprintf(ifIn.lpFileName,
+                             sizeof(ifIn.lpFileName),
+                             "%s/%s",
+                             Dos9_GetCurrentDir(),
+                             lpFileName
+                             );
+
+                }
+
             }
-            Dos9_SendMessage(DOS9_READ_MODULE, MODULE_READ_SETPOS, (void*)ftell(pFile), NULL);
+
+            ifIn.iPos=ftell(pFile);
+            ifIn.bEof=feof(pFile);
+
+
             DEBUG("Freeing data");
+
             fclose(pFile);
             Dos9_EsFree(lpLine);
+
             DEBUG("Jump created with success");
+
             return 0;
         }
     }
+
     fclose(pFile);
     Dos9_EsFree(lpLine);
+
     DEBUG("Unable to find label");
-    return -1; */
 
-    return 0;
-
+    return -1;
 }
 

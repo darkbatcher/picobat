@@ -63,8 +63,21 @@ ${TEA fichier_source [fichier_destination] [/E[:]encodage] [/O[:]mode]}
 	- {/O[:]mode} : Spécifie le type de fichier que doit produire {TEA}. Le type de fichier {MODE}
 	peut être l'un des types suivants:
 	
-		-- {TEXT} : Le fichier produit sera un fichier texte, c'est a dire un fichier sans coloration
-		se servant des caractères du texte pour formatter le document.
+		-- {TEXT} : Le fichier produit sera un fichier texte brut, c'est a dire un fichier sans coloration
+		se servant des caractères du texte pour formatter le document. Toutes les informations dans la source
+		sont incluses, les chemins associés aux liens sont donc incorporés dans le texte.
+		Il s'agit de la sortie par défaut.
+		
+		-- {TEXT-PLAIN} : Le fichier produit sera un fichier texte brut, sans coloration. Le texte est formatté
+		de manière légèrement différente de celle de l'option {TEXT}. Les chemins associés aux liens ne seront
+		pas incorporés pour donner un document dont la lecture est plus simple. Les liens seront néanmoins souligné
+		via des tirets bas aux extrémités du lien.
+		
+		-- {TEXT-ANSI} : Génère un fichier texte qui utilise les {code d'échappement ANSI} pour ajouter de la
+		coloration au texte, à la manière des pages de manuels sous les systèmes {*nix}. Si vous utilisez windows,
+		il faudra utiliser la commande {ansicon|ansicon} pour pouvoir l'afficher. Pour les utilisateur d'{*nix}
+		un simple {type|TYPE} suffira surement. Les chemins des liens seront supprimés, mais les liens demeureront
+		d'une couleur différente du texte ordinaire.
 		
 		-- {HTML} : Le fichier produit sera un fichier {html}. Ce format est utilisé pour la création
 		(entre autres) de pages web. Il permet d'obtenir un résultat plus lisible et globalement mieux

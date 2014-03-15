@@ -120,7 +120,7 @@ typedef pid_t           PROCESS;
 
 #elif defined WIN32
 
-typedef HANDLE THREAD;
+typedef DWORD THREAD;
 typedef HANDLE MUTEX;
 typedef int    PROCESS;
 
@@ -929,8 +929,10 @@ LIBDOS9 int Dos9_GetExePath(char* lpBuf, size_t iBufSize);
 
 LIBDOS9 int      Dos9_BeginThread(THREAD* lpThId, void(*pFunc)(void*), int iMemAmount, void* arg);
 LIBDOS9 void     Dos9_EndThread(void* iReturn);
-LIBDOS9 int      Dos9_WaitForThread(THREAD thId, void* lpRet);
-LIBDOS9 int      Dos9_WaitForAllThreads(void);
+LIBDOS9 void     Dos9_AbortThread(THREAD* lpThId);
+LIBDOS9 int      Dos9_WaitForThread(THREAD* thId, void* lpRet);
+LIBDOS9 int      Dos9_WaitForAllThreads(int iDelay);
+LIBDOS9 void     Dos9_AbortAllThreads(void);
 
 LIBDOS9 int      Dos9_CreateMutex(MUTEX* lpMuId);
 LIBDOS9 int      Dos9_CloseMutex(MUTEX* lpMuId);
@@ -957,15 +959,8 @@ LIBDOS9 void Dos9_UnEscape(char* lpCh);
 
 LIBDOS9 char* Dos9_SearchToken(char* lpCh, char* lpDelims);
 
+LIBDOS9 char* Dos9_SearchLastToken(char* lpCh, char* lpDelims);
 
-/* Gets the end of block
-   either a new line or either the end of a real block
-   returns NULL if unable to find such termination
- */
-LIBDOS9 char* Dos9_GetBlockEnd(char* lpCh);
-
-/* get the begining of the very first next block*/
-LIBDOS9 char* Dos9_GetNextBlockBegin(char* lpCh);
 
 /* end of libDos9 declaration */
 #endif

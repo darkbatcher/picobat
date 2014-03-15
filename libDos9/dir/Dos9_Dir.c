@@ -227,7 +227,7 @@ LIBDOS9 int         Dos9_GetMatchFileCallback(char* lpPathMatch, int iFlag, void
     if (write(iFileDescriptors[1], "\1", 1)==-1)
         return 0;
 
-    Dos9_WaitForThread(hThread, &iReturn);
+    Dos9_WaitForThread(&hThread, &iReturn);
 
     close(iFileDescriptors[0]);
     close(iFileDescriptors[1]);
@@ -325,7 +325,7 @@ LIBDOS9 LPFILELIST  Dos9_GetMatchFileList(char* lpPathMatch, int iFlag)
 
         if (write(iFileDescriptors[1], "\1", 1)==-1) return NULL;
 
-        Dos9_WaitForThread(hThread, &lpReturn);
+        Dos9_WaitForThread(&hThread, &lpReturn);
 
         close(iFileDescriptors[0]);
         close(iFileDescriptors[1]);

@@ -57,7 +57,7 @@ char* Dos9_GetNextBlock(char* lpLine, BLOCKINFO* lpbkInfo)
 
     lpLine=Dos9_SkipBlanks(lpLine);
 
-    lpBlockEnd=Dos9_GetBlockEnd(lpLine);
+    lpBlockEnd=Dos9_GetNextBlockEnd(lpLine);
 
     if (*lpLine=='(')
         lpLine++;

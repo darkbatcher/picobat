@@ -17,43 +17,31 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "libDos9.h"
-#include "Dos9_Core.h"
+#ifndef DOS9_BLOCK_H
+#define DOS9_BLOCK_H
 
-int bDelayedExpansion=FALSE;
-int bUseFloats=FALSE;
-int bDos9Extension=FALSE;
-int bEchoOn=TRUE;
-int iErrorLevel=0;
+/* Note that both following functions are inter-dependent.
+   It's basically a binary recursion, ie :
 
-int bAbortCommand=FALSE;
-LPCOMMANDLIST lpclCommands;
-LOCAL_VAR_BLOCK* lpvLocalVars;
-LPSTREAMSTACK lppsStreamStack;
-COLOR colColor;
+    Dos9_GetNextBlockEnd -> Dos9_GetBlockLineEnd
+      -> Dos9_GetNextBlockEnd ...
 
-int iInputD=0,
-    iOutputD=0;
+   and so on and so forth.
+*/
 
-INPUT_FILE ifIn;
 
-void(*pErrorHandler)(void)=NULL;
+ /* Gets the end of block
+    if lpCh does not point to a '(' character, the return value is NULL
+    if not end can be found the return value is NULL
+ */
+char* Dos9_GetNextBlockEnd(char* lpCh);
 
-#ifdef WIN32
-    #define environ _environ
-#else
-    extern char** environ;
-#endif
+/* Get the end of a line, taking account of multiples
+   blocks on a single line */
+char* Dos9_GetBlockLineEnd(char* lpCh);
 
-char* lpInitVar[]={
-    "DOS9_VERSION=" DOS9_VERSION,
-#ifdef WIN32
-    "DOS9_OS=WINDOWS",
-#elif defined _POSIX_C_SOURCE
-    "DOS9_OS=*NIX",
-#else
-    "DOS9_OS=UNKNOWN"
-#endif
-    NULL,
-    NULL
-};
+/* get the begining of the very first next block*/
+char* Dos9_GetNextBlockBegin(char* lpCh);
+char* Dos9_GetNextBlockBeginEx(char* lpCh, int bIsBlockCmd);
+
+ #endif // DOS9_BLOCK_H

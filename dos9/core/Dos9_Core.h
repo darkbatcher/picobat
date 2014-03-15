@@ -38,6 +38,8 @@
 #include "Dos9_Stream.h"
 #include "Dos9_Run.h"
 #include "Dos9_Expand.h"
+#include "Dos9_SplitPath.h"
+#include "Dos9_Block.h"
 
 
 #include "Dos9_Globals.h"

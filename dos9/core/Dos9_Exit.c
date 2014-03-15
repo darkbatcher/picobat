@@ -36,5 +36,12 @@ void Dos9_Exit(void)
     if (iOutputD)
         close(iOutputD);
 
+    if (Dos9_WaitForAllThreads(5000)) {
+        /* some threads did not returned after 5 seconds,
+           so why not abort them anyway ? */
+
+        Dos9_AbortAllThreads();
+
+    }
 
 }

@@ -110,6 +110,69 @@ int Dos9_BeginThread(THREAD* lpThId, void(*lpFunction)(void*) , int iMemAmount, 
     return iRet;
 }
 
+LIBDOS9 int Dos9_AbortThread(THREAD* thSelfId)
+{
+
+    /* aborts the given thread */
+    pthread_t thSelfId,
+             *thId;
+
+    STACK    *lpThreadStack,
+             *lpLastThreadStack=NULL;
+
+    /* lock the mutex to acces to
+       the thread stack */
+
+    Dos9_LockMutex(&_threadStack_Mutex);
+
+    lpThreadStack=_lpcsThreadStack;
+    lpLastThreadStack=NULL;
+
+    /* picks the stack element that matche
+       curent thread pthread_t structure */
+    while (lpThreadStack) {
+
+        /* gets the value from the stack */
+        Dos9_GetStack(_lpcsThreadStack, &thId);
+
+        if (pthread_equal(*thId, thSelfId)) {
+            /* both threads are the same */
+
+            if (lpLastThreadStack) {
+
+                lpLastThreadStack->lpcsPrevious=
+                    lpThreadStack->lpcsPrevious;
+
+                free(lpThreadStack);
+
+            } else {
+
+                _lpcsThreadStack=
+                    Dos9_PopStack(_lpcsThreadStack, free);
+
+            }
+
+            /* free the structure we got from the
+               stack */
+            free(thId);
+
+            break;
+
+        }
+
+        /* if we hav'nt found anything, dig deeper
+           into the stack */
+        lpLastThreadStack=lpThreadStack;
+        lpThreadStack=lpThreadStack->lpcsPrevious;
+
+    }
+
+    Dos9_ReleaseMutex(&_threadStack_Mutex);
+
+    pthread_abort(thSelfId);
+
+}
+
 /*
     Ends a thread
  */
@@ -180,43 +243,11 @@ LIBDOS9 void     Dos9_EndThread(void* iReturn)
 /*
     Waits for a thread and get its return value
  */
-LIBDOS9 int     Dos9_WaitForThread(THREAD thId, void* lpRet)
+LIBDOS9 int     Dos9_WaitForThread(THREAD* thId, void* lpRet)
 {
 
     /* join the thread to get the exit code */
-    return pthread_join(thId,lpReturn);
-}
-
-/*
-   Waits for all remaining threads, ie, threads that have
-   not terminated yet
-
-   if an error occurs, it returns the error code from the
-   POSIX thread library
- */
-LIBDOS9 int     Dos9_WaitForAllThreads(void)
-{
-    int     iRet;
-    THREAD  thId;
-
-    Dos9_LockMutex(&_lpcsThreadStack);
-
-    while (_lpcsThreadStack) {
-
-        thId=(THREAD*)Dos9_GetStack(_lpcsThreadStack,
-                               NULL);
-
-
-        if (!(iRet=pthread_join(thId, NULL)))
-            return iRet;
-
-        _lpcsThreadStack=Dos9_PopStack(_lpcsThreadStack, free);
-
-    }
-
-    Dos9_ReleaseMutex(&_lpcsThreadStack);
-
-    return 0;
+    return pthread_join(*thId,lpReturn);
 }
 
 LIBDOS9 int Dos9_CreateMutex(MUTEX* lpMuId)
@@ -326,6 +357,8 @@ LIBDOS9 int     Dos9_ReleaseMutex(MUTEX lpmuId)
 
 #else
 
+    //#define _WIN32_WINNT _WIN32_WINNT_WINXP
+
     #include <windows.h>
 
     /* use the windows interface */
@@ -345,19 +378,19 @@ void _Dos9_Thread_Close(void)
 LIBDOS9 int  Dos9_BeginThread(THREAD* lpThId, void(*pFunc)(void*), int iMemAmount, void* arg)
 {
 
-    int iId;
+    HANDLE hThread;
 
-    *lpThId=CreateThread(NULL,
+    hThread=CreateThread(NULL,
                          0,
                          (LPTHREAD_START_ROUTINE)pFunc,
                          (PVOID)arg,
                          0,
-                         (PDWORD)&iId
+                         lpThId
                          );
 
     #ifndef LIBDOS9_THREAD_SILENT
 
-    if (*lpThId==INVALID_HANDLE_VALUE) {
+    if (hThread==INVALID_HANDLE_VALUE) {
 
         fprintf(stderr,
                 "[libDos9/Dos9_BeginThread()] Error: Unable to start thread : %d.\n",
@@ -370,20 +403,80 @@ LIBDOS9 int  Dos9_BeginThread(THREAD* lpThId, void(*pFunc)(void*), int iMemAmoun
 
     #endif
 
-    if (*lpThId!=INVALID_HANDLE_VALUE) {
+    if (hThread!=INVALID_HANDLE_VALUE) {
 
         Dos9_LockMutex(&_threadStack_Mutex);
 
         _lpcsThreadStack=
             Dos9_PushStack(_lpcsThreadStack,
-                           (void*)iId
+                           (void*)*lpThId
                            );
+
 
         Dos9_ReleaseMutex(&_threadStack_Mutex);
 
+        CloseHandle(hThread);
+
+        return 0;
+
     }
 
-    return (*lpThId == INVALID_HANDLE_VALUE) ? -1 : 0;
+    return -1;
+}
+
+LIBDOS9 void     Dos9_AbortThread(THREAD* lpThId)
+{
+
+    STACK *lpStackElement,
+          *lpLastStackElement;
+    int   iCurrent=*lpThId,
+          iSearch;
+
+    HANDLE hThread;
+
+    Dos9_LockMutex(&_threadStack_Mutex);
+
+    lpLastStackElement=NULL;
+    lpStackElement=_lpcsThreadStack;
+
+    while (lpStackElement) {
+
+        Dos9_GetStack(lpStackElement, (void**)&iSearch);
+
+        if (iCurrent == iSearch) {
+
+            if (lpLastStackElement) {
+
+                lpLastStackElement->lpcsPrevious=
+                    lpStackElement->lpcsPrevious;
+
+
+                free(lpStackElement);
+
+            } else {
+
+                _lpcsThreadStack=Dos9_PopStack(_lpcsThreadStack, NULL);
+
+            }
+
+            break;
+
+        }
+
+        lpLastStackElement=lpStackElement;
+        lpStackElement=lpStackElement->lpcsPrevious;
+
+    }
+
+    Dos9_ReleaseMutex(&_threadStack_Mutex);
+
+    hThread=OpenThread(THREAD_ALL_ACCESS,
+                       FALSE,
+                       *lpThId);
+
+    TerminateThread(hThread, 0);
+
+    CloseHandle(hThread);
 }
 
 LIBDOS9 void     Dos9_EndThread(void* iReturn)
@@ -403,7 +496,7 @@ LIBDOS9 void     Dos9_EndThread(void* iReturn)
 
     while (lpStackElement) {
 
-        Dos9_GetStack(lpLastStackElement, (void**)&iSearch);
+        Dos9_GetStack(lpStackElement, (void**)&iSearch);
 
         if (iCurrent == iSearch) {
 
@@ -435,11 +528,17 @@ LIBDOS9 void     Dos9_EndThread(void* iReturn)
     ExitThread((DWORD)iReturn);
 }
 
-LIBDOS9 int      Dos9_WaitForThread(THREAD thId, void* lpRet)
+LIBDOS9 int      Dos9_WaitForThread(THREAD* thId, void* lpRet)
 {
     int iRet;
 
-    iRet=WaitForSingleObject((HANDLE)thId, INFINITE);
+    HANDLE hThread;
+
+    hThread=OpenThread(THREAD_ALL_ACCESS,
+                       FALSE,
+                       *thId);
+
+    iRet=WaitForSingleObject(hThread, INFINITE);
 
     #ifndef LIBDOS9_THREAD_SILENT
 
@@ -459,37 +558,10 @@ LIBDOS9 int      Dos9_WaitForThread(THREAD thId, void* lpRet)
     if (iRet)
         return iRet;
 
-    iRet=GetExitCodeThread((HANDLE)thId, (PDWORD)lpRet);
+    iRet=GetExitCodeThread(hThread, (PDWORD)lpRet);
 
     return iRet;
 
-}
-
-LIBDOS9 int      Dos9_WaitForAllThreads(void)
-{
-
-    int iWait;
-    HANDLE hThread;
-
-    Dos9_LockMutex(&_threadStack_Mutex);
-
-    while (_lpcsThreadStack) {
-
-        Dos9_GetStack(_lpcsThreadStack,
-                      (void**)&iWait
-                      );
-
-        hThread=OpenThread(SYNCHRONIZE, FALSE, iWait);
-
-        WaitForSingleObject(hThread, INFINITE);
-
-        _lpcsThreadStack=
-            Dos9_PopStack(_lpcsThreadStack, NULL);
-    }
-
-    Dos9_ReleaseMutex(&_threadStack_Mutex);
-
-    return 0;
 }
 
 LIBDOS9 int      Dos9_CreateMutex(MUTEX* lpMuId)
@@ -566,3 +638,60 @@ LIBDOS9 int      Dos9_ReleaseMutex(MUTEX* lpMuId)
 }
 
 #endif
+
+LIBDOS9 int      Dos9_WaitForAllThreads(int iDelay)
+{
+    int iContinue=TRUE,
+        iAttempt=0;
+
+    STACK* lpStack;
+
+    iDelay/=10;
+
+    do {
+
+        Dos9_LockMutex(&_threadStack_Mutex);
+
+        iContinue=(_lpcsThreadStack!=NULL);
+
+        Dos9_ReleaseMutex(&_threadStack_Mutex);
+
+        /* increment the counter to avoid deadlock if
+           a process never returns, the function will
+           wait for at most iDelay Milliseconds */
+        iAttempt++;
+
+        Sleep(10);
+
+    } while (iContinue && (iAttempt <= iDelay));
+
+    return (iAttempt > iDelay);
+}
+
+LIBDOS9 void     Dos9_AbortAllThreads(void)
+{
+    THREAD thId;
+    int iContinue=TRUE;
+
+    while (iContinue) {
+
+        Dos9_LockMutex(&_threadStack_Mutex);
+
+        if (_lpcsThreadStack == NULL) {
+
+            iContinue=FALSE;
+            break;
+
+        }
+
+        /* retrieve the next thread id */
+        Dos9_GetStack(_lpcsThreadStack, (void*)&thId);
+
+        Dos9_ReleaseMutex(&_threadStack_Mutex);
+
+        Dos9_AbortThread(&thId);
+
+    }
+
+}
+

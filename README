@@ -45,6 +45,12 @@ BUILDING DOS9
 
              git clone ssh://git.code.sf.net/p/dos9/code dos9-code
 
+          If you get the source from the repos by the given command-line, note 
+          that you will not be able to push patches and update without 
+          modifying your git configuration, thus if you have already a 
+          sourceforge account, it might be easier for you to download it from 
+          your account.
+
           When you have downloaded sources, you just need to compile them 
           using any C compiler. For WINDOWS system, it is more complicated 
           than getting precompiled binaries because you need to have gcc and 
@@ -52,11 +58,15 @@ BUILDING DOS9
           *NIX compatible shell. If not, you can get one from the MINGW 
           project. For *NIX system, doing so is as simple as typing :
 
-             make *nix
+             ./configure
+             make
 
-          WINDOWS users just have to specify ``win'' target instead ``*nix''. 
-          Windows users also need to move non native dependencies *.dll from 
-          the folder ``depend'' to the folder ``bin''.
+          WINDOWS might have to copy dependencies in the DOS9 folder if they 
+          need to make to make it portable.
+
+          An install target is not provided yet because we think that is not 
+          an important task (copying on usr/bin), and because no tests have be 
+          performed to check if such installation work.
 
      A list of needed programs and tools to be able to build DOS9 properly can 
      be obtained by typing:
@@ -90,7 +100,7 @@ FIRST STEPS
      troubles getting used to the help, remember that there's plenty of 
      interesting tutorials about batch programming all over the world, to such 
      an extent I haven't been able to make a choice between them. Nonetheless, 
-     learning batch would not be to tough, so why no spend a few minutes in 
+     learning batch would not be too tough, so why no spend a few minutes in 
      the internet to find some tutorial ?
 
      If the executable crash, please send a mail to : <darkbatcher@dos9.org>.
@@ -111,12 +121,15 @@ CHANGING THE LANGUAGE
      if you use HLP, it might crash. Nevertheless, this should'nt occur as 
      HLP failsback to english.
 
-MAKING TRANSLATIONS
+MAKING TRANSLATIONS AND CONTRIBUTING
 
      Translations uses the GNU GETTEXT tool. To make translation, run the 
      ``dos9-build-gettext.bat'' script to produce .PO files (avaliable from 
      the sources) for your language, and then, translate it via a po editor 
      like POEDIT or KBABEL.
+
+     Feel free to submit sugestion and improovements, either by submiting 
+     ideas or by improoving the code.
 
      To submit translation, send it to : <darkbatcher@dos9.org>
 

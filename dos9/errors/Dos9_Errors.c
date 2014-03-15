@@ -51,7 +51,9 @@ void Dos9_LoadErrors(void)
     snprintf(lpSharePath, FILENAME_MAX, "%s/share/locale", lpPath);
 
     bindtextdomain("Dos9-errors", lpSharePath);
-	bind_textdomain_codeset("Dos9-errors", lpEncoding);
+
+    bind_textdomain_codeset("Dos9-errors", lpEncoding);
+
     textdomain("Dos9-errors");
 
     lpErrorMsg[DOS9_FILE_ERROR]=
@@ -197,7 +199,7 @@ void Dos9_ShowErrorMessage(unsigned int iErrorNumber,
 
     if (iErrorNumber & DOS9_PRINT_C_ERROR) {
 
-        perror("Reason : ");
+        perror("");
 
     }
 

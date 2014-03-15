@@ -20,6 +20,7 @@
 #include <sys/types.h>
 #include <string.h>
 #include <errno.h>
+#include <assert.h>
 
 #ifdef _POSIX_C_SOURCE
     #include <sys/wait.h>
@@ -40,7 +41,10 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
 
     char* const lpCurrentDir=Dos9_GetCurrentDir();
 
-    char* lpCh;
+    char *lpCh,
+         *lpTmp;
+
+    int res;
 
     while (!(pIn->bEof))
     {
@@ -48,12 +52,14 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
         DOS9_DBG("[*] %d : Parsing new line\n", __LINE__);
 
 
-        if (pIn->lpFileName==NULL) {
+        if (*(pIn->lpFileName)=='\0'
+            && bEchoOn ) {
 
             /* this is a direct input */
 
             Dos9_SetConsoleTextColor(DOS9_FOREGROUND_IGREEN | DOS9_GET_BACKGROUND(colColor));
             printf("\nDOS9 ");
+
             Dos9_SetConsoleTextColor(colColor);
 
             printf("%s>", lpCurrentDir);
@@ -61,7 +67,7 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
         }
 
         /* the line we read was a void line */
-        if (Dos9_GetLine(lpLine, pIn) == 1)
+        if (Dos9_GetLine(lpLine, pIn))
             continue;
 
         lpCh=Dos9_EsToChar(lpLine);
@@ -71,7 +77,7 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
                || *lpCh==';')
             lpCh++;
 
-        if ((pIn->lpFileName!=NULL)
+        if (*(pIn->lpFileName)!='\0'
             && bEchoOn
             && *lpCh!='@') {
 
@@ -84,6 +90,8 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
         }
 
         Dos9_ReplaceVars(lpLine);
+
+        bAbortCommand=FALSE;
 
         Dos9_RunLine(lpLine);
 
@@ -194,6 +202,7 @@ int Dos9_RunLine(ESTR* lpLine)
 
     if (!lppssStreamStart) {
         DOS9_DBG("!!! Can't parse line : \"%s\".\n", strerror(errno));
+        return -1;
     }
 
     Dos9_ExecOutput(lppssStreamStart);
@@ -204,7 +213,7 @@ int Dos9_RunLine(ESTR* lpLine)
 
     do {
 
-        if (Dos9_ExecOperators(lppsStream)==FALSE)
+        if (Dos9_ExecOperators(lppsStream)==FALSE || bAbortCommand)
             break;
 
         Dos9_RunCommand(lppsStream->lpCmdLine);
@@ -235,7 +244,7 @@ int Dos9_RunCommand(ESTR* lpCommand)
 
     lpCmdLine=Dos9_SkipAllBlanks(lpCmdLine);
 
-    DOS9_DBG("*** Running  line '%s'\n", lpCmdLine);
+    // printf("*** Running  line '%s'\n", lpCmdLine);
 
     switch((iFlag=Dos9_GetCommandProc(lpCmdLine, lpclCommands, (void**)&lpProc)))
     {
@@ -288,54 +297,71 @@ int Dos9_RunBlock(BLOCKINFO* lpbkInfo)
     iOldState=Dos9_GetStreamStackLockState(lppsStreamStack);
     Dos9_SetStreamStackLockState(lppsStreamStack, TRUE);
 
+    DOS9_DBG("Block_b=\"%s\"\n"
+           "Block_e=\"%s\"\n",
+           lpToken,
+           lpEnd
+           );
+
     while (*lpToken && (lpToken < lpEnd)) {
 
-        lpBlockEnd=Dos9_SearchChar(lpToken, '\n');
+        lpBlockBegin=Dos9_GetNextBlockBeginEx(lpToken, TRUE);
 
-         if (!lpBlockEnd) {
+        /* get the block that are contained in the line */
 
-            iSize=lpEnd-lpToken;
+        if (lpBlockBegin) {
 
-            lpBlockEnd=lpEnd;
+            lpBlockEnd=Dos9_GetBlockLineEnd(lpBlockBegin);
 
-         } else {
+            assert(lpBlockEnd != NULL);
 
-             lpBlockBegin=Dos9_GetNextBlockBegin(lpToken);
+            lpBlockBegin=lpBlockEnd;
 
-             if (lpBlockBegin && (lpBlockBegin < lpBlockEnd)) {
+        } else {
 
-                /* if that line is a block (since block can be
-                   contained in blocks) */
-
-                lpNl=lpBlockEnd;
-
-                /* we can assume the blocks are built the right
-                   way */
-                do {
-
-                    lpBlockEnd=Dos9_GetBlockEnd(lpBlockBegin);
-
-                } while ((lpBlockBegin=Dos9_GetNextBlockBegin(lpBlockEnd)));
-
-                if (lpNl > lpBlockEnd)
-                    lpBlockEnd=lpNl;
-
-                lpBlockEnd++;
-                iSize=lpBlockEnd-lpToken;
-
-            } else {
-
-                lpBlockEnd++;
-                iSize=lpBlockEnd-lpToken;
-
-            }
+            lpBlockBegin=lpToken;
 
         }
 
+        /* search the end of the line */
+        if (!(lpBlockEnd=Dos9_SearchChar(lpBlockBegin, '\n'))) {
+
+            lpBlockEnd=lpEnd;
+
+        }
+
+        lpBlockEnd++;
+
+        if (lpBlockEnd > lpEnd)
+            lpBlockEnd=lpEnd;
+
+        iSize=lpBlockEnd-lpToken;
+
         Dos9_EsCpyN(lpEsLine, lpToken, iSize);
 
+        //printf("Running=\"%s\"\n", Dos9_EsToChar(lpEsLine));
+
+        //getch();
+
+        lpToken=Dos9_SkipAllBlanks(lpToken);
+
+        if (*lpToken=='\0'
+            || *lpToken=='\n') {
+
+            /* don't run void lines, it is time wasting */
+            lpToken=lpBlockEnd;
+
+            continue;
+
+        }
+
         lpToken=lpBlockEnd;
+
         Dos9_RunLine(lpEsLine);
+
+        /* if we are asked to abort the command */
+        if (bAbortCommand)
+            break;
 
 
     }
@@ -351,71 +377,175 @@ int Dos9_RunBlock(BLOCKINFO* lpbkInfo)
 int Dos9_RunExternalCommand(char* lpCommandLine)
 {
 
-    char* lpArguments[FILENAME_MAX];
+    char *lpArguments[FILENAME_MAX],
+          lpFileName[FILENAME_MAX],
+          lpExt[_MAX_EXT],
+          lpTmp[FILENAME_MAX],
+          lpExePath[FILENAME_MAX];
+
     ESTR* lpEstr[FILENAME_MAX];
+
     int i=0;
-#ifdef _POSIX_C_SOURCE
-    pid_t iPid;
-#endif
 
 
     Dos9_GetParamArrayEs(lpCommandLine, lpEstr, FILENAME_MAX);
 
-    if (lpEstr[0]) Dos9_EsReplace(lpEstr[0], "\"", "");
+    if (!lpEstr[0])
+        return 0;
 
-    for (;lpEstr[i];i++) {
+    Dos9_EsReplace(lpEstr[0], "\"", "");
+
+    for (;lpEstr[i] && (i < FILENAME_MAX);i++) {
         lpArguments[i]=Dos9_EsToChar(lpEstr[i]);
     }
 
-    lpArguments[i]=0;
+    lpArguments[i]=NULL;
 
-    errno=0;
+    /* check if the program exist */
 
-#ifdef WIN32
+    if (Dos9_GetFilePath(lpFileName, lpArguments[0], sizeof(lpFileName))==-1) {
 
-    /* in windows the result is directly returned */
-    iErrorLevel=spawnvp(_P_WAIT, lpArguments[0], (DOS9_SPAWN_CAST)lpArguments);
-
-    if (errno==ENOENT)
-    {
-
-        Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR, lpArguments[0] , 0);
+        Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR,
+                              lpArguments[0],
+                              FALSE);
+        goto error;
 
     }
 
+    /* check if "command" is a batch file */
+    Dos9_SplitPath(lpFileName, NULL, NULL, NULL, lpExt);
+
+    if (!stricmp(".bat", lpExt)
+        || !stricmp(".cmd", lpExt)) {
+
+        /* these are batch */
+
+        strncpy(lpTmp, lpFileName, sizeof(lpFileName));
+
+        for (i=1;lpArguments[i] && (i < (FILENAME_MAX-1));i++)
+            lpArguments[i+1]=lpArguments[i];
+
+        lpArguments[i+1]=NULL;
+
+        lpArguments[1]=lpTmp;
+
+        Dos9_GetExePath(lpExePath, sizeof(lpExePath));
+
+        #ifdef WIN32
+
+            snprintf(lpFileName, sizeof(lpFileName) ,"%s/Dos9.exe", lpExePath);
+
+        #else
+
+            snprintf(lpFileName, sizeof(lpFileName) ,"%s/Dos9", lpExePath);
+
+        #endif // WIN32
+
+    }
+
+    if (Dos9_RunExternalFile(lpFileName, lpArguments)==-1)
+        goto error;
+
+    for (i=0;lpEstr[i];i++)
+        Dos9_EsFree(lpEstr[i]);
+
+    return 0;
+
+
+    error:
+        for (i=0;lpEstr[i] && (i < FILENAME_MAX);i++)
+            Dos9_EsFree(lpEstr[i]);
+
+        return -1;
+
+}
+
+
+#ifdef WIN32
+
+int Dos9_RunExternalFile(char* lpFileName, char** lpArguments)
+{
+    int res;
+
+    errno=0;
+
+    /* in windows the result is directly returned */
+    res=spawnv(_P_WAIT, lpFileName, (const char* const*)lpArguments);
+
+    if (errno==ENOENT) {
+
+        res=-1;
+
+        Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR,
+                              lpArguments[0],
+                              FALSE
+                              );
+
+    }
+
+
+    return res;
+
+}
+
 #elif defined _POSIX_C_SOURCE
 
+int Dos9_RunExternalFile(char* lpFileName, char** lpArguments)
+{
+    pid_t iPid;
+
+    int iResult;
+
     iPid=fork();
+
     if (iPid == 0 ) {
       /* if we are in the son */
 
-      if ( execvp(lpArguments[0], lpArguments) == -1) {
+          if ( execv(lpArguments[0], lpArguments) == -1) {
 
-        Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR, lpArguments[0], 0);
+                /* if we got here, we can't set ERRORLEVEL
+                   variable anymore, but print an error message anyway.
 
-      }
+                   This is problematic because if fork do not fail (that
+                   is the usual behaviour) command line such as
 
-      exit(0);
+                        batbox || goto error
+
+                   will not work as expected. However, during search in the
+                   path, command found exist, so the risk of such a
+                   dysfunction is limited.
+
+                   For more safety, we return -1, so that the given value will be
+                   reported anyway*/
+
+                Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR,
+                                      lpArguments[0],
+                                      FALSE
+                                      );
+
+                exit(-1);
+
+
+          }
 
     } else {
       /* if we are in the father */
 
-      if (iPid == (pid_t)-1) {
-        /* the execution failed */
-        Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR, lpArguments[0], 0);
-      } else {
-        wait(&iErrorLevel);
-      }
+          if (iPid == (pid_t)-1) {
+                /* the execution failed */
+                return -1;
+
+          } else {
+
+                wait(&iResult);
+
+          }
 
     }
 
-#endif
-
-    for (i=0;lpEstr[i];i++) {
-        Dos9_EsFree(lpEstr[i]);
-    }
-
-    DEBUG("Executable ran");
     return 0;
 
 }
+
+
+#endif // WIN32 || _POSIX_C_SOURCE

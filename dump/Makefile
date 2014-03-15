@@ -20,7 +20,7 @@ all: $(TARGET)
 
 # build the main lib
 $(TARGET) : $(OBJ)
-			gcc -O3 -g -o $@ $^
+			gcc -g -O2 -o $@ $^
 
 %.o : %.c
-			gcc -o $@ -c $< -O3 -g
+			gcc -o $@ -c $< -g -O2
