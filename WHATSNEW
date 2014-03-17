@@ -623,3 +623,53 @@ THURSDAY 13TH, MARCH
         - Made the hlp to work again, without problem, since version 0.7 and 
           the deep changes made into DOS9 core to get something more modern.
 
+SUNDAY 16TH, MARCH
+
+        - Started building a X64 version of Dos9. I experienced troubles 
+          because of the lack of X64 version of MINGW. However, I managed to 
+          get a distribution of mingw-w64, the MINGW compiler adapted for 
+          X64, in the TDM-gcc. The install of LIBINTL (and libiconv, on which 
+          libintl depends) must be done by downloading packages from GNU 
+          ports, and do some tricks to get it compiled in the x64 version. 
+          This is actually difficult to build, and unstable as a did not 
+          perform further tests.
+
+        - Started profiling the DOS9 codebase, looking for making DOS9 more 
+          fast. The use of GPROF has brought several interesting analysis. On 
+          the one hand, I can't get explaination why is CMD.EXE faster for 
+          long files, although if both are run at the same time, DOS9 perform 
+          about twice as much commands by second. The things to be updated are 
+          :
+
+             - DOS9_ESINIT and DOS9_ESFREE function are far too expensive. It 
+               sometimes consumes 10% of the global time-run, thus, we removed 
+               parts of code from the LIBDOS9 library.
+
+             - DOS9_GETCOMMANDPROC is far too expensive. I'm currently looking 
+               for an alternative, such as hash function. I haven't found a 
+               good one yet (however), and i will probably write it by myself.
+
+             - I'm also to optimise the execution times of DOS9_STRING.H. 
+               Those functions are allmost ubiquitus in the code, so that 
+               large parts of code will benefit from better execution rates. 
+               I'm especially targetting DOS9_SEARCHCHAR and 
+               DOS9_SEARCHTOKEN, that account for a large share (about 10% 
+               time execution overall).
+
+          All those test have be made for normal script optimisation, it was 
+          tested from a file that implement GOTO, IF, SET and ECHO COMMAND. I 
+          also performed some tests on FOR command, as expected, functions 
+          that are the most time consuming are not the same. Though, the 
+          functions i listed before were also much more time consuming than 
+          they need to be.
+
+        - Improoved efficiency of DOS9_STRING.H and DOS9_ESTR.C from the 
+          LIBDOS9 library. Also dissabled some piece of code that ran thread 
+          in some functions, that basically made them slow down. DOS9 now 
+          achieve allmost equivalent performances in FOR loops (about 100 
+          lines/s less than CMD.EXE, without further optimisation), it also 
+          reach got execution rates at script level (with about 3250 lines/s 
+          while cmd.exe runs at 2720 lines/s on average). It is suprisingly 
+          good because I did not even finished optimisation yet, so much 
+          better performances can be expected.
+

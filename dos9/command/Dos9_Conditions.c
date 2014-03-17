@@ -168,7 +168,7 @@ int Dos9_CmdIf(char* lpParam)
                 } else if (!stricmp(lpArgument, "LEQ")) {
                     cmpCompType=CMP_LESSER_OR_EQUAL;
                 } else if (!stricmp(lpArgument, "LSS")) {
-                    cmpCompType=CMP_LESSER_OR_EQUAL;
+                    cmpCompType=CMP_LESSER;
                 } else if (!stricmp(lpArgument, "FEQ")) {
                     cmpCompType=CMP_FLOAT_EQUAL;
                 } else {

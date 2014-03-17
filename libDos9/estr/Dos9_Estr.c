@@ -7,7 +7,11 @@
     */
 #endif // DOS9_MAX_FREEBUFFER_SIZE
 
+
+
 int _Dos9_NewLine=DOS9_NEWLINE_WINDOWS;
+
+#ifdef LIBDOS9_WITH_THREAD
 
 
 ESTR* _Dos9_EstrFreeBuffer_Array[DOS9_MAX_FREEBUFFER_SIZE];
@@ -140,14 +144,83 @@ LIBDOS9 int Dos9_EsFree(ESTR* ptrESTR)
     return 0;
 }
 
+#else
+
+int _Dos9_Estr_Init(void)
+{
+    return 0;
+}
+
+
+void _Dos9_Estr_Close(void)
+{
+
+}
+
+ESTR* Dos9_EsInit(void)
+{
+    ESTR* ptrESTR=NULL;
+
+    ptrESTR=malloc(sizeof(ESTR));
+
+    if (ptrESTR)
+    {
+
+        ptrESTR->ptrString=malloc(DEFAULT_ESTR);
+
+        if (ptrESTR->ptrString) {
+
+            ptrESTR->iLenght=DEFAULT_ESTR;
+
+        } else {
+
+            goto Dos9_EsInit_Error;
+
+        }
+
+
+    } else {
+
+        Dos9_EsInit_Error:
+
+        puts("Error : Not Enough memory to run Dos9. Exiting...");
+        exit(-1);
+
+        return NULL;
+        /* if exist fails */
+
+    }
+
+    *(ptrESTR->ptrString)='\0';
+
+    /* Release the lock */
+
+    return ptrESTR;
+}
+
+LIBDOS9 int Dos9_EsFree(ESTR* ptrESTR)
+{
+    /* free the string buffer */
+    free(ptrESTR->ptrString);
+
+    /* free the structure itself */
+    free(ptrESTR);
+
+    return 0;
+}
+
+
+#endif // LIBDOS9_WITH_THREAD
+
 int Dos9_EsGet(ESTR* ptrESTR, FILE* ptrFile)
 {
-    int iCurrentL=0,
-        iResult,
-        iTotalBytesRead=0;
+    int iCurrentL=0;
 
-    char* crLf=NULL,
-          *ptrCursor=NULL;
+    size_t iTotalBytesRead=0;
+
+    char *crLf=NULL,
+         *ptrCursor=NULL,
+         *lpResult;
 
     ptrCursor=ptrESTR->ptrString;
     iCurrentL=ptrESTR->iLenght-1;
@@ -159,16 +232,23 @@ int Dos9_EsGet(ESTR* ptrESTR, FILE* ptrFile)
     while (1)
     {
 
-        iResult=(int)fgets(ptrCursor, iCurrentL+1, ptrFile);
+        lpResult=fgets(ptrCursor, iCurrentL+1, ptrFile);
 
 
-        if(iResult==0 || iResult==EOF) {
+        if(lpResult==NULL) {
+
+            /* this means we will continue because there is no more
+               stuff to get from the file */
 
             break;
 
         } else {
 
-            iTotalBytesRead+=iResult;
+            /* this could appear to be the number of byte read
+               however, it is just used to know wether the
+               function have read some text there */
+
+            iTotalBytesRead+=(size_t)lpResult;
 
         }
 
@@ -361,15 +441,20 @@ LIBDOS9 int Dos9_EsReplace(ESTR* ptrESTR, const char* ptrPattern, const char* pt
     ESTR *lpReturn=Dos9_EsInit();
 
     while ((lpToken=strstr(lpBuffer, ptrPattern))) {
+
         *lpToken='\0';
+
         Dos9_EsCat(lpReturn, lpBuffer);
         Dos9_EsCat(lpReturn, ptrReplace);
+
         lpBuffer=lpToken+iLength;
+
     }
 
     Dos9_EsCat(lpReturn, lpBuffer);
     Dos9_EsCpyE(ptrESTR, lpReturn);
     Dos9_EsFree(lpReturn);
+
     return 0;
 }
 

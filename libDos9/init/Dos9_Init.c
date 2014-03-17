@@ -17,8 +17,11 @@ LIBDOS9 int Dos9_LibInit(void)
 LIBDOS9 void Dos9_LibClose(void)
 {
 
+    #ifdef LIBDOS9_WITH_THREADS
     Dos9_EsFree(NULL);
         /* free all remaining string buffers */
+
+    #endif
 
     _Dos9_Estr_Close();
     _Dos9_Thread_Close();

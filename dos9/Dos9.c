@@ -52,6 +52,29 @@
 //#define DOS9_DBG_MODE
 #include "core/Dos9_Debug.h"
 
+/* void Dos9_ElevatePriority(void)
+{
+    TOKEN_PRIVILEGES tp;
+    LUID luid;
+    HANDLE hToken;
+
+    if (!OpenProcessToken(GetCurrentProcess(),
+                          TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
+                          &hToken)) {
+
+        printf("Error: Can't acces to the process token (%d).\n", GetLastError());
+
+        return;
+
+    }
+
+    if (!LookupPrivilegeValue(NULL,
+                              ))
+
+
+} */
+
+
 
 int main(int argc, char *argv[])
 {
@@ -66,10 +89,25 @@ int main(int argc, char *argv[])
           lpTmp[FILENAME_MAX],
           lpTitle[FILENAME_MAX+10]="Dos9 [" DOS9_VERSION "] - ";
 
+
     int i,
         j,
         c='0',
         bQuiet=FALSE;
+
+    // Dos9_ElevatePriority();
+
+    /* printf("Current process:%d\n", GetPriorityClass(GetCurrentProcess()));
+
+    if (!(SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS))) {
+
+        printf("Error: Can't increase priority state. (%d)\n", GetLastError());
+
+    }
+
+    printf("Current process:%d\n", GetPriorityClass(GetCurrentProcess())); */
+
+    //SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
 
     if (Dos9_LibInit() == -1) {
 

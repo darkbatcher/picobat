@@ -39,6 +39,8 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
 {
     ESTR* lpLine=Dos9_EsInit();
 
+    INPUT_FILE pIndIn;
+
     char* const lpCurrentDir=Dos9_GetCurrentDir();
 
     char *lpCh,

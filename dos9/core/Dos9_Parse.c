@@ -269,9 +269,9 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 
 void                 Dos9_FreeLine(PARSED_STREAM_START* lpssStreamStart)
 {
-    THREAD thId;
 
-    Dos9_BeginThread(&thId, (void(*)(void*))Dos9_FreeParsedStreamStart, 0, lpssStreamStart);
+    Dos9_FreeParsedStreamStart(lpssStreamStart);
+
 }
 
 PARSED_STREAM*       Dos9_ParseOperators(ESTR* lpesLine)
@@ -438,8 +438,6 @@ void Dos9_FreeParsedStreamStart(PARSED_STREAM_START* lppssStart)
         Dos9_FreeParsedStream(lppssStart->lppsStream);
 
         free(lppssStart);
-
-        Dos9_EndThread(0);
 }
 
 void Dos9_FreeParsedStream(PARSED_STREAM* lppsStream)

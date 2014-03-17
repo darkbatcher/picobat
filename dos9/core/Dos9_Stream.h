@@ -30,6 +30,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#include <libDos9.h>
+
 #ifdef WIN32
     /* used for compatibility purpose */
     #include <io.h>
@@ -51,7 +53,7 @@
 
 #endif
 
-#include <libDos9.h>
+
 
 /** \defgroup DESCRIPTORS_CONSTANT Descriptors constants
     \{
