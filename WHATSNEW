@@ -638,8 +638,8 @@ SUNDAY 16TH, MARCH
           fast. The use of GPROF has brought several interesting analysis. On 
           the one hand, I can't get explaination why is CMD.EXE faster for 
           long files, although if both are run at the same time, DOS9 perform 
-          about twice as much commands by second. The things to be updated are 
-          :
+          about twice as much commands by second. The things to be updated 
+          are:
 
              - DOS9_ESINIT and DOS9_ESFREE function are far too expensive. It 
                sometimes consumes 10% of the global time-run, thus, we removed 
@@ -672,4 +672,25 @@ SUNDAY 16TH, MARCH
           while cmd.exe runs at 2720 lines/s on average). It is suprisingly 
           good because I did not even finished optimisation yet, so much 
           better performances can be expected.
+
+        - Fixed a bug of IF command. The LSS comparison operator was 
+          interpreted as LEQ.
+
+THURSDAY 20, MARCH
+
+        - Started comparisions between GCC optimisation levels.
+
+        - Fixed a bug introduced in the function DOS9_SEARCHLASTTOKEN. It 
+          appears that, on windows, the code runs faster using -O2 than using 
+          -O3 optimisation switches, this might be caused by processor 
+          caching, but however, this should not be expected to have the same 
+          effect on variouss platform however. I ended up optimisation 
+          operations there, since the functions used by gprof account for 
+          about 70% of the execution time, so that I'm not sure it is reliable 
+          now. With GPROF version, i've be able to achieve speeds of about 
+          3700 L/S, so the result are expected to be at least double. In fact, 
+          by experimenting, i got only about 4000 L/S, which it the speed of 
+          CMD on my computer when it consumes about 80%-90% of the cpu, in 
+          random occasion, because cmd.exe's has really random performances. 
+          Instead, DOS9 is limited to approximately 25%.
 

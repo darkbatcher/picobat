@@ -41,7 +41,8 @@ char* Dos9_GetNextBlockEnd(char* lpCh);
 char* Dos9_GetBlockLineEnd(char* lpCh);
 
 /* get the begining of the very first next block*/
-char* Dos9_GetNextBlockBegin(char* lpCh);
+#define Dos9_GetNextBlockBegin(lpCh) Dos9_GetNextBlockBeginEx(lpCh, 0)
 char* Dos9_GetNextBlockBeginEx(char* lpCh, int bIsBlockCmd);
+
 
  #endif // DOS9_BLOCK_H

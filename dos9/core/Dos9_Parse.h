@@ -61,12 +61,12 @@ PARSED_STREAM_START* Dos9_ParseLine(ESTR* lpLine);
 PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine);
 PARSED_STREAM*       Dos9_ParseOperators(ESTR* lpesLine);
 
-void                 Dos9_FreeLine(PARSED_STREAM_START* lpssStreamStart);
-
 PARSED_STREAM_START* Dos9_AllocParsedStreamStart(void);
 PARSED_STREAM*       Dos9_AllocParsedStream(PARSED_STREAM* lppsStream);
 
 void                 Dos9_FreeParsedStream(PARSED_STREAM* lppsStream);
 void                 Dos9_FreeParsedStreamStart(PARSED_STREAM_START* lppssStart);
+
+#define Dos9_FreeLine(lpssStreamStart) Dos9_FreeParsedStreamStart(lpssStreamStart)
 
 #endif // DOS9_PARSE_H

@@ -267,13 +267,6 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 
 }
 
-void                 Dos9_FreeLine(PARSED_STREAM_START* lpssStreamStart)
-{
-
-    Dos9_FreeParsedStreamStart(lpssStreamStart);
-
-}
-
 PARSED_STREAM*       Dos9_ParseOperators(ESTR* lpesLine)
 {
     PARSED_STREAM *lppsStream=NULL,

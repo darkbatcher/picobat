@@ -24,12 +24,6 @@
  //#define DOS9_DBG_MODE
  #include "Dos9_Debug.h"
 
-char* Dos9_GetNextBlockBegin(char* lpCh) {
-
-    return Dos9_GetNextBlockBeginEx(lpCh, FALSE);
-
-}
-
 /* this is to detect nearest block openning with
    a parenthesis to lpCh. it assumes it is launched
    a command begin */
