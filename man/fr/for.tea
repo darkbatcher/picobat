@@ -162,7 +162,7 @@ L'entrée du header est : Connection
 La valeur du header est: keep alive
 }
 
-	{Example 2:} Obtention des sous répertoire d'un répertoire:
+	{Exemple 2:} Obtention des sous répertoire d'un répertoire:
 	
 ${FOR /F "tokens=*" %%A IN ('dir /b /a:D') DO (
 
@@ -234,7 +234,7 @@ ${FOR /L %%A IN (début,pas,fin) DO (
 	des nombres flotants, il seront tronqué à la valeur entière directement inférieure. Si ils sont
 	des chaînes, le comportement est indéfini.
 		
-	{Example:} Compter de 1 à 10:
+	{Exemple:} Compter de 1 à 10:
 	
 ${FOR /L %%A IN (1,1,10) DO (
 	ECHO %%A
@@ -277,7 +277,8 @@ ${FOR /R basedir %%A IN (masque) DO (
 {{Compatibilité}}
 
 	Majoritairement compatible avec {cmd.exe}. Cependant, la syntaxe est compatible avec {cmd.exe},
-	si bien que tout code provenant de {cmd.exe} pourra fonctionner sous {Dos9}.
+	si bien que tout code provenant de {cmd.exe} pourra fonctionner sous {Dos9}. Il y a néamoins quelques
+	incompatibilités, dont le détail est donné sur la page {for-tech|For (technique)}.
 	
 	La commande {FOR} est disponible depuis la version {0.7.0.0}. Le {FOR /F} est complètement
 	fonctionnel depuis la version {0.7.0.2}.

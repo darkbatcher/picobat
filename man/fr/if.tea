@@ -240,14 +240,30 @@ IF !ma_var! EQU test (
 	ECHO Le test est bon
 )		
 }
-	
 
+{{Notes}}
+	
+	Quelques comparaisons peuvent causer des résultats inattendus. En particulier,
+	si des caractères d'échappement ({^}) sont utilisés, il se peut que de chaînes qui sont
+	en apparence différentes soient jugées comme étant égales. En effet, les caractères
+	d'échappement ne sont supprimés qu'a la fin de l'exécution, lors de la lecture des paramètres,
+	en même temps que les guillemets sont enlevés. Il y a donc plusieurs manières de spécifier la
+	même chaîne, même si les guillemets sont fortement recommendés.
+	
+	Ansi, le code suivant affichera le texte, même si les deux chaînes sont en apparence distinctes:
+	
+${if foo^ bar equ "foo bar" echo les chaines sont egales}
+
+	Il est possible d'activer un remplacement des caractères d'échappement compatible avec {cmd.exe},
+	c'est-à-dire de désactiver cette fonctionnalité avec l'option {CMDLYCORRECT} de la commande
+	{setlocal|SETLOCAL}.
+	
 {{Compatibilité}}
 
-	   Partiellement compatible avec {cmd.exe}. En effet, le résultat de
+	Partiellement compatible avec {cmd.exe}. En effet, le résultat de
 	l'utilisation de {IF ERRORLEVEL} n'est pas garanti comme compatible
 	avec {cmd.exe} dans la mesure où le comportement de cette comparaison
-	n'est pas très claire avec {cmd.exe}
+	n'est pas très claire avec {cmd.exe}.
 	
 	Disponible depuis la version {0.4}.
 	

@@ -414,6 +414,8 @@ int Dos9_RunExternalCommand(char* lpCommandLine)
 
     }
 
+    printf("lpFileName=%s\n", lpFileName);
+
     /* check if "command" is a batch file */
     Dos9_SplitPath(lpFileName, NULL, NULL, NULL, lpExt);
 
@@ -424,12 +426,21 @@ int Dos9_RunExternalCommand(char* lpCommandLine)
 
         strncpy(lpTmp, lpFileName, sizeof(lpFileName));
 
-        for (i=1;lpArguments[i] && (i < (FILENAME_MAX-1));i++)
-            lpArguments[i+1]=lpArguments[i];
+        if (!(i < FILENAME_MAX-2)) {
 
-        lpArguments[i+1]=NULL;
+          i=FILENAME_MAX-3;
+          lpArguments[i]=NULL;
 
-        lpArguments[1]=lpTmp;
+        }
+
+        for (;(i > 0);i--)
+            lpArguments[i+2]=lpArguments[i];
+
+        lpArguments[i+2]=NULL;
+
+        lpArguments[2]=lpTmp;
+        lpArguments[1]="/p"; /* use this switch to prevent
+                                other switches from being executed */
 
         Dos9_GetExePath(lpExePath, sizeof(lpExePath));
 

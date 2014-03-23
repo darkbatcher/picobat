@@ -18,35 +18,38 @@
 
 {{Commande SETLOCAL}}
 
-	   La commande {SETLOCAL} permet de changer le mode de l'interpréteur
+	La commande {SETLOCAL} permet de changer le mode de l'interpréteur
 	de commande {Dos9}. Elle permet par exemple d'activer
-	{spec/delexp|l'expansion retardée de variable}.
+	{spec/exp|l'expansion retardée de variable}.
 
 {{Synopsis}}
 
-${	SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] [ENABLEFLOATS | DISABLEFLOATS] [ENABLEDOS9MODE | DISABLEDOS9MODE]}
+${	SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] [ENABLEFLOATS | DISABLEFLOATS] [CMDLYCORRECT | CMDLYINCORRECT]}
 	
 	Active/désactive les modes suivants:
 	
-		- {DELAYEDEXPANSION} : Active/désactive 
-		  {spec/delexp|l'expansion retardée de variable}
+		- {ENABLEDELAYEDEXPANSION}, {DISABLEDELAYEDEXPANSION} : Active/désactive 
+		  {spec/exp|l'expansion retardée de variable}.
 		
-		- {FLOATS} : Active/désactive les {spec/floats|nombres flotants}
+		- {ENABLEFLOATS}, {DISABLEFLOATS} : Active/désactive les {spec/floats|nombres flotants}.
 		
-		- {DOS9MODE} : Active/désactive les
-		  {spec/new|nouvelles fonctions de Dos9}
+		- {CMDLYCORRECT}, {CMDLYINCORRECT} : Active/désactive les options de compatibilité
+		avec {cmd.exe}.
 
 {{Compatibilite}}
 
-	   Complètement compatible avec {cmd.exe}. Les modes {ENABLEEXTENSION}
-	et {DISABLEEXTENSION} seront simplements ignorés.
+	Complètement compatible avec {cmd.exe}. Les modes {ENABLEEXTENSION}
+	et {DISABLEEXTENSION} seront simplements ignorés, car ils sont supportés par
+	défauts, et il n'est plus d'aucun intérêt de les désactiver pour créer des
+	scripts portables sur les version anciennes de {windows} comme {MS-WINDOWS 98}.
 	
-	   Les paramètres {ENABLEFLOATS} et {DISABLEFLOATS} sont disponibles
-	depuis la version {0.5}
+	Les paramètres {ENABLEFLOATS} et {DISABLEFLOATS} sont disponibles
+	depuis la version {0.5}.
 	
-	Les paramètres {DISABLEDOS9MODE} et {DISAABLEDOS9MODE} sont disponibles
-	depuis la version {0.7}
+	Les paramètres {CMDLYCORRECT} et {CMDLYINCORRECT} sont disponibles depuis
+	la version {2014.0.9}. Auparavant, ils étaient nommés {DISABLEDOS9MODE} et 
+	{DISABLEDOS9MODE}, depuis la version {0.7}.
 	
 {{A voir aussi}}
 
-	{set|Commande SET},{commands|Liste des commandes}
+	{set|Commande SET}, {commands|Liste des commandes}

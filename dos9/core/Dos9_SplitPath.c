@@ -22,7 +22,13 @@ void Dos9_SplitPath(char* lpPath,
 
             lpToken+=3;
 
+        }  else {
+
+            if (lpDisk)
+               *lpDisk='\0';
+
         }
+
 
     } else {
 
@@ -40,7 +46,7 @@ void Dos9_SplitPath(char* lpPath,
         DOS9_DBG("found path=\"%s\"\n", lpToken);
 
         if (lpDir)
-            snprintf(lpDir, _MAX_DIR, "%s/", lpToken);
+            strncpy(lpDir, lpToken, _MAX_DIR);
 
         *lpNextToken=cSaveChar;
         lpToken=lpNextToken;

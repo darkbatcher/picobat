@@ -205,7 +205,7 @@ void Dos9_ShowErrorMessage(unsigned int iErrorNumber,
 
     if (iExitCode) {
 
-        Dos9_SetConsoleColor(DOS9_COLOR_DEFAULT);
+        Dos9_SetConsoleTextColor(DOS9_COLOR_DEFAULT);
 
         if (pErrorHandler)
             pErrorHandler();

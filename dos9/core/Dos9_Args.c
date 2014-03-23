@@ -142,7 +142,8 @@ char* Dos9_GetNextParameterEs(char* lpLine, ESTR* lpReturn)
         lpLine=lpEnd+1;
 
         if (*lpLine=='\t'
-            || *lpLine==' ')
+            || *lpLine==' '
+            || *lpLine=='\0')
               break;
 
      }

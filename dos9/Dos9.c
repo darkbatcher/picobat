@@ -93,21 +93,8 @@ int main(int argc, char *argv[])
     int i,
         j,
         c='0',
-        bQuiet=FALSE;
-
-    // Dos9_ElevatePriority();
-
-    /* printf("Current process:%d\n", GetPriorityClass(GetCurrentProcess()));
-
-    if (!(SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS))) {
-
-        printf("Error: Can't increase priority state. (%d)\n", GetLastError());
-
-    }
-
-    printf("Current process:%d\n", GetPriorityClass(GetCurrentProcess())); */
-
-    //SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
+        bQuiet=FALSE,
+        bGetSwitch=TRUE;
 
     if (Dos9_LibInit() == -1) {
 
@@ -149,7 +136,7 @@ int main(int argc, char *argv[])
 
     /* get command line arguments */
     for (i=1;argv[i];i++) {
-        if (*argv[i]=='/') {
+        if (*argv[i]=='/' && bGetSwitch) {
             argv[i]++;
             switch(toupper(*argv[i])) {
 
@@ -202,6 +189,11 @@ int main(int argc, char *argv[])
                     puts(lpHlpMain);
                     return 0;
 
+                case 'P' :
+                    /* there is no more switch on the command line */
+                    bGetSwitch=FALSE;
+                    break;
+
                 default:
                     Dos9_ShowErrorMessage(DOS9_BAD_COMMAND_LINE, NULL, -1);
 
@@ -211,7 +203,9 @@ int main(int argc, char *argv[])
             if (*lpFileName!='\0') {
                 /* set parameters for the file currently runned */
                 for (j=i ,  c='1';argv[j] && c<='9';i++, c++ , j++ ) {
+
                     Dos9_SetLocalVar(lpvLocalVars, c, argv[j]);
+
                 }
 
                 break;

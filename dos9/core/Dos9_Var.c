@@ -193,8 +193,10 @@ int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
     Dos9_EsCpy(lpRecieve, lpVarContent);
 
     if (iVarState==1) {
+
         /* FIXME : This should be case insensitive */
         Dos9_EsReplace(lpRecieve, lpToken, lpNextToken);
+
     }
 
     if (iVarState==2) {
@@ -421,7 +423,21 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
         #endif
     }
 
-    if (bSplitPath) Dos9_SplitPath(lpPos, lpDrive, lpDir, lpFileName, lpExt);
+    if (bSplitPath) {
+
+        Dos9_SplitPath(lpPos, lpDrive, lpDir, lpFileName, lpExt);
+
+        /* printf("lpDrive=`%s`\n"
+               "lpDir=`%s`\n"
+               "lpFileName=`%s`\n"
+               "lpExt=`%s`\n",
+               lpDrive,
+               lpDir,
+               lpFileName,
+               lpExt
+               ); */
+
+    }
 
     if (cFlag[0]!=DOS9_ALL_PATH) {
         Dos9_EsCpy(lpRecieve, "");

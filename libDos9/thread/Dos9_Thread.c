@@ -538,6 +538,9 @@ LIBDOS9 int      Dos9_WaitForThread(THREAD* thId, void* lpRet)
                        FALSE,
                        *thId);
 
+    if (hThread==NULL)
+        return 0;
+
     iRet=WaitForSingleObject(hThread, INFINITE);
 
     #ifndef LIBDOS9_THREAD_SILENT

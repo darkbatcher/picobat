@@ -126,7 +126,11 @@ ${FOR /F [options] %%A IN (objet) DO (
 			@-- Le fichier peut évidemment être multiligne, mais il est supposé être
 			un fichier {texte} (ie. le fichier ne doit pas contenir de caractères {NUL}). Si le fichier
 			n'est pas un fichier texte, alors le comportement est indéfini (de manière générale, cela
-			aurat pour effet de découper les lignes contenant des caractères {NUL} en plusieurs lignes).
+			aura pour effet de découper les lignes contenant des caractères {NUL} en plusieurs lignes).
+			
+			@- Contrairement à {cmd.exe}, {Dos9} ne retire pas les lignes vides de l'entrée de la boucle
+			{FOR}. Néanmoins, un comportement compatible peut être obtenu avec l'option {CMDLYCORRECT} de
+			la commande {setlocal|SETLOCAL}.
 
 		- {options} : Les options qui doivent utilisée par la boucle {FOR} en s'exécutant. Ces options
 		doivent être, soit un seul paramètre contenant toutes les options ou une combinasion de courts
@@ -273,9 +277,9 @@ ${FOR /F "tokens=1,2,3" "delims=," %%A IN (my_csv.csv) DO (
 
 	Le script doit alors produire la sortie suivante:
 	
-${Alan Turing était un mathématicien qui a donné naissance à la théorique mathématique de l'informatique
-Harry Nyquist était un ingénieur américan qui a contribué à la théorie de la communication
-Nathaniel B. Nichols était un ingénieur américan qui contribué à la théorie des asservissement}
+${Alan Turing était un mathématicien anglais qui a donné naissance à la théorie mathématique de l'informatique
+Harry Nyquist était un ingénieur américain qui a contribué à la théorie de la communication
+Nathaniel B. Nichols était un ingénieur américain qui contribué à la théorie des asservissement}
 
 {{Synopsis - Troisième syntaxe}}
 
@@ -357,6 +361,9 @@ ${FOR /F "tokens=*" %%A IN ('dir /b /s /a:-D basedir/mask') DO (
 	légèrement différent. Notez que {Dos9} n'a pas de problème avec les intervalles d'éléments qui se
 	recouvrent (par exemple ``4-6,5-7''), alors que de tels intervalles seront en général mal découpés
 	par {cmd.exe}, en fonction de la fonction.
+	
+	Notez également qu'avec l'option {/F} les lignes vides ne sont pas retirées de l'entrée, comme avec
+	{cmd.exe}.
 	
 	La commande {FOR} est disponible depuis la version {0.7.0.0}. Le {FOR /F} est complètement
 	fonctionnel depuis la version {0.7.0.2}.
