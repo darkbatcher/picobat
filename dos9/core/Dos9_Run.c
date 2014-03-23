@@ -414,8 +414,6 @@ int Dos9_RunExternalCommand(char* lpCommandLine)
 
     }
 
-    printf("lpFileName=%s\n", lpFileName);
-
     /* check if "command" is a batch file */
     Dos9_SplitPath(lpFileName, NULL, NULL, NULL, lpExt);
 

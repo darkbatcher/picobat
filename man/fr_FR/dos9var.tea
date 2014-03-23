@@ -37,11 +37,16 @@ ${	%DOS9_VER%}
 	
 ${	%DOS9_OS%}
 
-	Contient le type d'os sous lequel {Dos9} s'éxécute. Cette variable ne permet pas de distinguer la version de l'os mais seulement son type (peut être {LINUX} ou {WINDOWS}), et cela pour des raisons de gestion de compatibilité de scripts entre les différents os (les scripts peuvent ainsi exéctuer du code différent selon les os).
+	Contient le type d'os sous lequel {Dos9} s'éxécute. Cette variable ne permet pas de distinguer la
+	version de l'os mais seulement son type (peut être {*NIX} ou {WINDOWS}), et cela pour des raisons
+	de gestion de compatibilité de scripts entre les différents os (les scripts peuvent ainsi exéctuer
+	du code différent selon les os).
 
 ${	%DOS9_PATH%}
 
-	Contient le chemin de l'exécutable {Dos9.exe}(WINDOWS) ou {Dos9}(LINUX). Ce chemin est généré à chaque lancement de {Dos9} Donc, il peut s'accommoder avec toutes sortes d'installations.
+	Contient le chemin de l'exécutable {Dos9.exe} (WINDOWS) ou {Dos9}(*NIX). Ce chemin est généré à chaque
+	lancement de {Dos9}. Donc, il peut s'accommoder avec toutes sortes d'installations, par exemple, une
+	installation sur support amovible est tout à fait envisageable.
 
 {{Compatibilité}}
 
