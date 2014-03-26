@@ -41,9 +41,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.}
 	
 	- Download precompiled binaries package from
 	{Dos9}'s sourceforge page. Then you just have to unpack the package on your computer.
-	This method is only availiable for {windows}. Indeed, for {*nix} systems, it's
-	about going mad to make distribution-portable binaries, for {*nix} users, the second
-	solution must be used.
+	This method is only availiable for {windows}, and this is the recommended path for these.
+	Indeed, for {*nix} systems, it's about going mad to make distribution-portable binaries,
+	for {*nix} users, the second solution must be used.
 	
 	- Download sources and then build them yourself. To eases this work, just download
 	sources package from {Dos9}'s sourceforge page, or just get them from the git repository
@@ -70,11 +70,15 @@ make}
 	
 	@- An install target is not provided yet because we think that is not an important task
 	(copying on usr/bin), and because no tests have be performed to check if such installation work.
+	Finally, installing the program should just putting a symbolic link on the {/bin} or {/usr/bin}
+	directory.
 	
-	A list of needed programs and tools to be able to build {Dos9} properly can be obtained by
-	typing:
+	@- {Dos9} only depends on {libiconv} and {libintl}, thus, any mingw environment enables to build
+	it.
 	
-${make}
+	@- Note that getting {x64} binaries working on {MS-WINDOWS} is somewhat really annoying since
+	official {MinGW} only provide {x32} compiler, preventing you from compiling {x64}. Having {x64}
+	binaries compiled by {MinGW} needs  a special setup, that makes it so though. 
 	
 {{First steps}}
 	
@@ -90,17 +94,41 @@ ${make}
 	are very similar to {cmd.exe}'s with a few exceptions, which most important is the obligation to put blank characters
 	between switches.
 	
-	Remember that if you need some help, the help program is
-	{HLP}. Note that if you can not browse the documentation due to the lack of translation or else, you can still
-	read the different translations of the documentation in several languages and formats in the subfolder ``share/doc''.
+{{Getting help}}
+
+	{Dos9} provides a manual page manager and a text processor, that allows to make simple manual page. When you first
+	use {Dos9}, a good thing would be to initialize it. This operation is language dependant, so you can't avoid some
+	manual setup. The help program is named {HLP}, the setup needed is on steps :
 	
-	The help might be a little bit lightweight (and sometimes technical, as i'm sometimes using it as notes
-	during devellopement). If you have troubles getting used to the help, remember that there's plenty of
-	interesting tutorials about batch programming all over the world, to such an extent I haven't been able
-	to make a choice between them. Nonetheless, learning batch would not be too tough, so why no spend a few
-	minutes in the internet to find some tutorial ?
+		- {Step 1} : You need to check the languages already installed with your version
+		  of {dos9}, by the following line.
+		  
+${hlp /l local}
+
+		@- If your language is already installed, just jump to step 4
+		
+		- {Step 2} : Check the languages availiables from the repository. This allow you to know all the
+		languages avaliable with {Dos9}.
+		
+${hlp /l remote}
+
+		@- If your language is not displayed, then, there is no language manual tree, you should use another
+		language.
+		
+		- {Step 3} : Get your language from the repository. Replace {lang_COUNTRY} in the following line by
+		your language and your country.
+		
+${hlp /d lang_COUNTRY}
+
+		- {Step 4} : Build the manual pages from the repositories. Replace {lang_COUNTRY} in the following line by
+		your language and your country. You may add an optional encoding {ENC} to specify that you need to have the
+		manual pages in {ENC}, rather than {UTF-8}. Note that it will not apply to {html} documents.
 	
-	If the executable crash, please send a mail to : <darkbatcher@dos9.org>.
+${hlp /b lang_COUNTRY ENC}
+	
+	Once you've done that few things, you can access the help for a command or for syntax at any moment, just by typing:
+	
+${hlp command}
 	
 {{Changing the language}}
 

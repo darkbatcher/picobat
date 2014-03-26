@@ -208,16 +208,6 @@ int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
     return TRUE;
 }
 
-LOCAL_VAR_BLOCK* Dos9_GetLocalBlock(void)
-{
-    return (LOCAL_VAR_BLOCK*)calloc(LOCAL_VAR_BLOCK_SIZE, sizeof(LOCAL_VAR_BLOCK));
-}
-
-void Dos9_FreeLocalBlock(LOCAL_VAR_BLOCK* lpBlock)
-{
-    return free(lpBlock);
-}
-
 char* Dos9_GetLocalVarPointer(LOCAL_VAR_BLOCK* lpvBlock, char cVarName)
 {
     if (Dos9_TestLocalVarName(cVarName))

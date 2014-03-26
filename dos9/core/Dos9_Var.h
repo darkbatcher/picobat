@@ -49,13 +49,16 @@
 
 #define DOS9_VAR_MAX_OPTION 16
 
+#define Dos9_GetLocalBlock() (LOCAL_VAR_BLOCK*)calloc(LOCAL_VAR_BLOCK_SIZE, sizeof(LOCAL_VAR_BLOCK))
+#define Dos9_FreeLocalBlock(lpBlock) free(lpBlock)
+
 
 typedef char* LOCAL_VAR_BLOCK;
 
 int              Dos9_InitVar(char* lpArray[]);
+
 int              Dos9_SetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char cVarName, char* cVarContent);
-LOCAL_VAR_BLOCK* Dos9_GetLocalBlock(void);
-void             Dos9_FreeLocalBlock(LOCAL_VAR_BLOCK* lpBlock);
+
 char*            Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve);
 int              Dos9_GetVar(char* lpName, ESTR* lpRecieve);
 char*            Dos9_GetLocalVarPointer(LOCAL_VAR_BLOCK* lpvBlock, char cVarName);

@@ -6,8 +6,13 @@
 	
 {{Utilisation des variables spéciales}}
 
-	   Les variables d'environement ne sont pas modifiables, elles sont
+	Les variables spéciales ne sont pas modifiables, elles sont
 	uniquement définies par {../dos9|Dos9} ou par {../for|FOR}.
+	
+	Les variables spéciales {%%0} à {%%9} (la syntaxe {%0} à {%9}) est aussi
+	acceptée) sont affectés par les arguments passés au programme, dans l'ordre
+	dans lequels ils ont été passés. Par convention {%0} est le nom du script,
+	néanmoins il se peut que cette convention soit contournée.
 
 {{L'expansion des variables spéciales}}
 
@@ -16,28 +21,31 @@
 	utilisés cepandant pour préserver la lisibilité du code il est
 	préférable de se limiter au lettres, au chiffres et aux symboles.
 	
-	Les variables spéciales doivent être précédés d'un seul {%}
+	Les variables spéciales doivent être précédés de deux {%}, à l'exception
+	des variables {%%0} à {%%9} qui peuvent être dévellopés en utilisant {%0}
+	à {%9}, et ce pour des raisons de compatibilité, même si l'usage de cette
+	notation n'est pas déprécié. 
 
 	   On peut aussi utiliser les options suivantes pour le dévelloppement
 	des variables spéciales, pour cela il faut insérer un tilde {~} après
 	le {%}, et combiner les options suivantes puis mettre le caractère
 	correspondant à la variables a la fin.
 	
-	Les options disponibles sont (en prenant l'exemple de la variable {%I}):
+	Les options disponibles sont (en prenant l'exemple de la variable {%%I}):
 	
-		- {%~dI} : dévellope {%I} en lettre de lecteur
+		- {%%~dI} : dévellope {%%I} en lettre de lecteur
 		
-		- {%~pI} : dévellope {%I} en chemin d'accès
+		- {%%~pI} : dévellope {%I} en chemin d'accès
 		
-		- {%~nI} : dévellope {%I} en nom de ficher 
+		- {%%~nI} : dévellope {%I} en nom de ficher 
 		
-		- {%~xI} : dévellope {%I} en extension de fichier
+		- {%%~xI} : dévellope {%I} en extension de fichier
 		
-		- {%~zI} : dévellope {%I} en taille de fichier
+		- {%%~zI} : dévellope {%I} en taille de fichier
 		
-		- {%~aI} : dévellope {%I} en attribut de fichier
+		- {%%~aI} : dévellope {%I} en attribut de fichier
 		
-		- {%~tI} : dévellope {%I} en date et heure d'accès
+		- {%%~tI} : dévellope {%I} en date et heure d'accès
 		
 	On peut biensûr combiner les options (jusqu'a 16 simultanément).
 	
@@ -45,24 +53,23 @@
 	Si c'est le cas, {Dos9} utilisera la combinaison d'option la plus longue possible
 	donnant une variable valide (une variable définie). Ainsi, dans le code suivant :
 	
-	${ECHO %~aI}
+	${ECHO %%~aI}
 	
 	Il existe plusieurs interprétation possibles :
 	
-		- Si {%I} est définie, alors la variable qui sera dévellopée sera {%~aI}.
+		- Si {%%I} est définie, alors la variable {%%I} sera dévellopée en utilisant le l'option {a}.
 		
-		- Si {%I} n'est pas définie et que {%~a}, alors la variable qui sera dévellopée sera
+		- Si {%%I} n'est pas définie et que {%%a} l'est, alors la variable qui sera dévellopée sera
 		{%~a}.
 		
 		- Si aucune variable n'est définie, la variable est laissée telle qu'elle.
-		
 	
 {{Note}}
 
-	   {Dos9} est sensible à la casse pour les options et les noms de
+	{Dos9} est sensible à la casse pour les options et les noms de
 	{variables spéciales}
 		
-{{A voir aussi}}
+{{À voir aussi}}
 
 	{var|Les variables d'environnement}, {exp|L'expansion des variables},
 	{index|Index des spécification}

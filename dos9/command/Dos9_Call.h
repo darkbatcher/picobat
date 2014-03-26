@@ -15,27 +15,19 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
-#ifndef DOS9_GLOBALS_H
-#define DOS9_GLOBALS_H
+#ifndef DOS9_CALL_H
+#define DOS9_CALL_H
 
-extern int bAbortCommand;
-extern int bDelayedExpansion;
-extern int bUseFloats;
-extern int bCmdlyCorrect;
-extern int bEchoOn;
-extern int iErrorLevel;
-extern LPCOMMANDLIST lpclCommands;
-extern LOCAL_VAR_BLOCK* lpvLocalVars;
-extern LPSTREAMSTACK lppsStreamStack;
-extern COLOR colColor;
-extern INPUT_FILE ifIn;
+int Dos9_CmdCall(char* lpCh);
 
-extern char* lpInitVar[];
+/* this is used to call other batch files */
+int Dos9_CmdCallFile(char* lpFile, char lpLabel, char* lpCmdLine);
 
-extern int iInputD,
-           iOutputD;
-extern void(*pErrorHandler)(void);
+/* this is used to call external programs
+   or even internals  */
+int Dos9_CmdCallExternal(char* lpFile, char* lpCh);
 
-#endif
+#endif // DOS9_CALL_H

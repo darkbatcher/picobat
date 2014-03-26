@@ -6,31 +6,44 @@
 	
 {{Synopsis}}
 
-${CALL [ficher] [:label] [/p] [paramètres ...]}
+${CALL [/e] [ficher] [:label] [paramètres ...]}
 
 	Appelle le fichier {fichier} ou l'étiquette {:label} depuis le contexte courrant
 	de {Dos9}.
 	
 		- {fichier} : Le chemin du fichier de commande a exécuter. Si un nom d'étiquette
-		{:label} a été spécifié, alors {Dos9} recherchera dans l'étiquette {:label} dans
-		{fichier}.
+		{:label} et l'option {/e} ont été spécifiés, alors {Dos9} recherchera dans 
+		l'étiquette {:label} dans {fichier}.
 		
 		- {:label} : Une étiquette spécifie où le fichier de commande doit être démaré. Si
-		aucun {fichier} n'est spécifié, alors la commande cherchera dans le fichier courant.
+		ni {fichier} ni {/E} n'est spécifié, alors la commande cherchera dans le fichier
+		courant.
 		
-		- {/p} : Spécifie que tous les arguments suivants sont des paramètres à passer au
-		script.
+		- {/e} : Spécifie que les deux paramètres {fichiers} et {:label} sont spécifiés.
+		Ce commutateur permet de lever les ambiguitées entre la nature des paramètres, par défaut,
+		{Dos9} tiendra seulement en compte le premier des paramètres. Ce commutateur doit
+		impérativement être spécifié en première ou en seconde position, sinon il sera inopérant et considéré
+		comme un des {paramètres}.
 		
 		- {paramètres ...} : Spécifie les paramètres à passer au script appellé. Ces paramètres
-		seront passés par les paramètres {%1 - %9}. Le nombre de paramètres est donc limité à 9,
+		seront passés par les paramètres {%1} - {%9}. Le nombre de paramètres est donc limité à 9,
 		ce qui est largement suffisant en pratique.
 		
 	Le script spécifié sera alors, exécuté dans le contexte de commande courrant, c'est-à-dire qu'il
-	pourra modifier les {var|variables d'environement} du script appelant, mais ne poura pas modifier les 
+	pourra modifier les {spec/var|variables d'environement} du script appelant, mais ne poura pas modifier les 
 	{xvar|variables spéciales} de celui-ci.
 	
 	La possibilité spécifier simultanément un fichier et une étiquette est une possibilité introduite
 	par {Dos9}. Pour optenir un comportement compatible avec celui de {cmd.exe}, vous pouvez spécifier
 	l'option {CMDLYCORRECT} de la commande {setlocal|SETLOCAL}.
 	
-{{}}
+{{Compatibilité}}
+
+	Compatible avec {cmd.exe}, à l'exception de l'utilisation des commutateur {/e} et {//}, qui ne sont pas
+	disponibles dans {cmd.exe}.
+	
+	Disponible depuis la version {2014.0.9d}.
+	
+{{À voir aussi}}
+
+	{for|Commande FOR}, {if|Commande IF}, {goto|Commande GOTO}

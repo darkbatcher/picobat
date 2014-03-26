@@ -26,6 +26,7 @@
 
 #include "Dos9_Conditions.h"
 #include "../lang/Dos9_Lang.h"
+#include "../lang/Dos9_Help.h"
 #include "../errors/Dos9_Errors.h"
 #include "../core/Dos9_Core.h"
 
@@ -57,41 +58,67 @@ int Dos9_CmdIf(char* lpParam)
     if ((lpNext=Dos9_GetNextParameter(lpParam, lpArgument, 11))) {
 
         if (!strcmp(lpArgument, "/?")) {
-            puts(lpHlpDeprecated);
+
+            Dos9_ShowInternalHelp(DOS9_HELP_IF);
             return 0;
+
         }
+
         if (!stricmp(lpArgument, "/i")){
+
+            /* this is case insensitive */
             iFlag|=DOS9_IF_CASE_UNSENSITIVE;
             lpParam=lpNext;
+
             if (!(lpNext=Dos9_GetNextParameter(lpNext, lpArgument, 11))) {
+
                 Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
                 return 0;
+
             }
+
         }
 
         if (!stricmp(lpArgument, "NOT")) {
+
+            /* this is negative */
             iFlag|=DOS9_IF_NEGATION;
             lpParam=lpNext;
+
             if (!(lpNext=Dos9_GetNextParameter(lpNext, lpArgument, 11))) {
+
                 Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
                 return 0;
+
             }
+
         }
 
         if (!stricmp(lpArgument, "EXIST")) {
+
             iFlag|=DOS9_IF_EXIST;
+
         } else if (!stricmp(lpArgument, "DEFINED")) {
+
             iFlag|=DOS9_IF_DEFINED;
+
         } else if (!stricmp(lpArgument, "ERRORLEVEL")) {
+
             iFlag|=DOS9_IF_ERRORLEVEL;
+
         }
 
-        if ((iFlag & DOS9_IF_CASE_UNSENSITIVE) && (iFlag & (DOS9_IF_ERRORLEVEL | DOS9_IF_EXIST | DOS9_IF_DEFINED))) {
+        if ((iFlag & DOS9_IF_CASE_UNSENSITIVE)
+            && (iFlag & (DOS9_IF_ERRORLEVEL | DOS9_IF_EXIST | DOS9_IF_DEFINED))
+            ) {
+
             Dos9_ShowErrorMessage(DOS9_INCOMPATIBLE_ARGS, "'/i' (DEFINED, EXIST, ERRORLEVEL)", FALSE);
             return 0;
+
         }
-        if (iFlag & (DOS9_IF_EXIST | DOS9_IF_DEFINED | DOS9_IF_ERRORLEVEL)) lpParam=lpNext;
-        //lpParam=lpNext;
+
+        if (iFlag & (DOS9_IF_EXIST | DOS9_IF_DEFINED | DOS9_IF_ERRORLEVEL))
+            lpParam=lpNext;
 
     }
 
@@ -99,11 +126,17 @@ int Dos9_CmdIf(char* lpParam)
 
         /* the script used 'ERRORLEVEL' Keyword */
         if (!(lpNext=Dos9_GetNextParameter(lpParam, lpArgument, FILENAME_MAX))) {
+
             Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
             return -1;
+
         }
+
         iResult=!strcmp(getenv("ERRORLEVEL"), lpArgument);
-        if (iFlag & DOS9_IF_NEGATION) iResult=!iResult;
+
+        if (iFlag & DOS9_IF_NEGATION)
+            iResult=!iResult;
+
         lpParam=lpNext;
 
 
@@ -111,31 +144,46 @@ int Dos9_CmdIf(char* lpParam)
 
         /* the script used 'EXIST' keyWord */
         if (!(lpNext=Dos9_GetNextParameter(lpParam, lpArgument, FILENAME_MAX))) {
+
             Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
             return -1;
+
         }
+
         lpflFileList=Dos9_GetMatchFileList(lpArgument, DOS9_SEARCH_DEFAULT);
+
         iResult=(int)lpflFileList;
-        if (lpflFileList) Dos9_FreeFileList(lpflFileList);
-        if (iFlag & DOS9_IF_NEGATION) iResult=!iResult;
+
+        if (lpflFileList)
+            Dos9_FreeFileList(lpflFileList);
+
+        if (iFlag & DOS9_IF_NEGATION)
+            iResult=!iResult;
+
         lpParam=lpNext;
 
     } else if (iFlag & DOS9_IF_DEFINED) {
 
         /* the script used 'DEFINED' */
         if (!(lpNext=Dos9_GetNextParameter(lpParam, lpArgument, FILENAME_MAX))) {
+
             Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
             return -1;
+
         }
 
         iResult=(int)getenv(lpArgument);
-        if (iFlag & DOS9_IF_NEGATION) iResult=!iResult;
+
+        if (iFlag & DOS9_IF_NEGATION)
+            iResult=!iResult;
+
         lpParam=lpNext;
 
     } else {
 
         /* the script uses normal comparisons */
         lpComparison=Dos9_EsInit();
+
         if ((lpNext=Dos9_GetNextParameterEs(lpParam, lpComparison))) {
 
             if ((lpToken=strstr(Dos9_EsToChar(lpComparison), "=="))) {
@@ -153,45 +201,81 @@ int Dos9_CmdIf(char* lpParam)
                 /* if script uses new basic-like comparison (e.g. EQU, NEQ ...) */
 
                 if (!(lpNext=Dos9_GetNextParameter(lpNext, lpArgument, 11))) {
+
                     Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
                     return -1;
+
                 }
 
                 if (!stricmp(lpArgument, "EQU")) {
+
                     cmpCompType=CMP_EQUAL;
+
                 } else if (!stricmp(lpArgument, "NEQ")) {
+
                     cmpCompType=CMP_DIFFERENT;
+
                 } else if (!stricmp(lpArgument, "GEQ")) {
+
                     cmpCompType=CMP_GREATER_OR_EQUAL;
+
                 } else if (!stricmp(lpArgument, "GTR")) {
+
                     cmpCompType=CMP_GREATER;
+
                 } else if (!stricmp(lpArgument, "LEQ")) {
+
                     cmpCompType=CMP_LESSER_OR_EQUAL;
+
                 } else if (!stricmp(lpArgument, "LSS")) {
+
                     cmpCompType=CMP_LESSER;
+
                 } else if (!stricmp(lpArgument, "FEQ")) {
+
                     cmpCompType=CMP_FLOAT_EQUAL;
+
                 } else {
+
                     Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpArgument, FALSE);
                     return -1;
+
                 }
 
                 lpOtherPart=Dos9_EsInit();
 
                 if (!(lpNext=Dos9_GetNextParameterEs(lpNext, lpOtherPart))) {
+
                     Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", TRUE);
                     return -1;
+
                 }
 
                 switch (cmpCompType) {
                     case CMP_EQUAL:
-                        if (iFlag & DOS9_IF_CASE_UNSENSITIVE) iResult=!stricmp(Dos9_EsToChar(lpOtherPart), Dos9_EsToChar(lpComparison));
-                        else iResult=!strcmp(Dos9_EsToChar(lpOtherPart), Dos9_EsToChar(lpComparison));
+                        if (iFlag & DOS9_IF_CASE_UNSENSITIVE) {
+
+                            iResult=!stricmp(Dos9_EsToChar(lpOtherPart), Dos9_EsToChar(lpComparison));
+
+                        } else {
+
+                            iResult=!strcmp(Dos9_EsToChar(lpOtherPart), Dos9_EsToChar(lpComparison));
+
+                        }
+
                         break;
 
                     case CMP_DIFFERENT:
-                        if (iFlag & DOS9_IF_CASE_UNSENSITIVE) iResult=stricmp(Dos9_EsToChar(lpOtherPart), Dos9_EsToChar(lpComparison));
-                        else iResult=strcmp(Dos9_EsToChar(lpOtherPart), Dos9_EsToChar(lpComparison));
+                        if (iFlag & DOS9_IF_CASE_UNSENSITIVE) {
+
+                            iResult=stricmp(Dos9_EsToChar(lpOtherPart), Dos9_EsToChar(lpComparison));
+
+                        } else {
+
+                            iResult=strcmp(Dos9_EsToChar(lpOtherPart), Dos9_EsToChar(lpComparison));
+
+                        }
+
                         break;
 
                     case CMP_GREATER:
@@ -222,10 +306,13 @@ int Dos9_CmdIf(char* lpParam)
                 Dos9_EsFree(lpOtherPart);
             }
         } else {
+
             Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
             Dos9_EsFree(lpComparison);
             return -1;
+
         }
+
         lpParam=lpNext;
         Dos9_EsFree(lpComparison);
 

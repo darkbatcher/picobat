@@ -26,16 +26,17 @@
 	
 {{Synopsis}}
 
-${	DOS9 [/v] [/n] [/f] [/e] [/q] [/i entrée] [/o sortie] [fichier]}
+${	DOS9 [/v] [/c] [/f] [/e] [/q] [/i entrée] [/o sortie] [fichier]}
 
 	   Exécute un fichier de commande ou attend une entrée de commande de
 	l'utilisateur.
 
 		- {fichier} : Chemin du script de commande a exécuter.
 		
-		- {/v}	  : Active {dos9/spec/exp|l'expansion retardée de variable}.
+		- {/v}	  : Active {spec/exp|l'expansion retardée de variable}.
 		
-		- {/n}	  : Active les {dos9/spec/ext|extensions de dos9}.
+		- {/c}	  : Active l'option {spec/cmdlycorrect|CMDLYCORRECT} qui permet de force le
+		mode de compatibilité entre {Dos9} et {cmd.exe}.
 		
 		- {/f}	  : Active les nombres flotants dans la commande {SET}. Pour
 		plus d'information, consultez la page {setaf|Commande SET (nombres flotants)}.
@@ -52,8 +53,11 @@ ${	DOS9 [/v] [/n] [/f] [/e] [/q] [/i entrée] [/o sortie] [fichier]}
 		
 {{Notes}}
 
-	Les commuttateurs {/o} et {/i} ne sont pas destinés à être utilisés d'eux même,
+	Les commutateurs {/o} et {/i} ne sont pas destinés à être utilisés d'eux même,
 	ils sont conçus pour être utilisé par les boucles {for|FOR}.
+	
+	Si vous voulez spécifier des commutateurs comme arguments pour un script, vous
+	devez placer le commutateur {//} avant le début des options.
 
 {{Compatibilité}}
 

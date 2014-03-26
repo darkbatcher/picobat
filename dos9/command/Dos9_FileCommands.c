@@ -36,6 +36,7 @@
 #endif /* defined linux */
 
 #include "../lang/Dos9_Lang.h"
+#include "../lang/Dos9_Help.h"
 #include "../errors/Dos9_Errors.h"
 #include "../core/Dos9_Core.h"
 #include "Dos9_FileCommands.h"
@@ -52,31 +53,43 @@ int Dos9_CmdDel(char* lpLine)
     FILELIST* lpFileList, *lpSaveList;
 
     if (!(lpLine=strchr(lpLine, ' '))) {
+
         Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "DEL / ERASE", FALSE);
+        Dos9_EsFree(lpEstr);
         return -1;
+
     }
 
     while ((lpNextToken=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
 
         lpToken=Dos9_EsToChar(lpEstr);
 
-        if (!stricmp(lpToken, "/P")) { /* Demande une confirmation avant la suppression */
+        if (!stricmp(lpToken, "/P")) {
+
+            /* Demande une confirmation avant la suppression */
 
             bParam|=DOS9_ASK_CONFIRMATION;
 
-        } else if (!stricmp(lpToken, "/F")) { /* supprime les fichiers en lecture seule */
+        } else if (!stricmp(lpToken, "/F")) {
+
+            /* supprime les fichiers en lecture seule */
 
             bParam|=DOS9_DELETE_READONLY;
 
-        } else if (!stricmp(lpToken, "/S")) { /* procède récursivement */
+        } else if (!stricmp(lpToken, "/S")) {
+
+            /* procède récursivement */
 
             iFlag|=DOS9_SEARCH_RECURSIVE;
 
-        } else if (!stricmp(lpToken, "/Q")) { /* pas de confirmation pour suppression avec caractères génériques */
+        } else if (!stricmp(lpToken, "/Q")) {
+
+            /* pas de confirmation pour suppression avec caractères génériques */
 
             bParam|=DOS9_DONT_ASK_GENERIC;
 
         } else if (!strnicmp(lpToken, "/A", 2)) {
+
             /* gestion des attributs */
             lpToken+=2;
             if (*lpToken==':') lpToken++;
@@ -85,9 +98,18 @@ int Dos9_CmdDel(char* lpLine)
 
             iFlag^=DOS9_SEARCH_NO_STAT;
 
+        } else if (!strcmp("/?", lpToken)) {
+
+            Dos9_ShowInternalHelp(DOS9_HELP_DEL);
+
+            Dos9_EsFree(lpEstr);
+            return -1;
+
         } else {
 
-            if (*lpName != '\0') { /* si un nom a été donné, on affiche, l'erreur */
+            if (*lpName != '\0') {
+
+                /* si un nom a été donné, on affiche, l'erreur */
 
                 Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpToken, FALSE);
                 Dos9_EsFree(lpEstr);
@@ -162,7 +184,9 @@ int Dos9_CmdDel(char* lpLine)
 
         Dos9_FreeFileList(lpSaveList);
     } else {
+
         printf("Aucun fichier `%s' n'a ete trouve\n", lpName);
+
     }
 
     Dos9_EsFree(lpEstr);
@@ -246,7 +270,7 @@ int Dos9_CmdDir(char* lpLine)
 
         if (!strcmp(lpToken, "/?")) {
 
-            puts(lpHlpDeprecated);
+            Dos9_ShowInternalHelp(DOS9_HELP_DIR);
             return 0;
 
         } else if (!stricmp("/b", lpToken)) {
@@ -334,6 +358,7 @@ int Dos9_CmdRen(char* lpLine)
     }
 
     if ((lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
+
         strncpy(lpFileName, Dos9_EsToChar(lpEstr), FILENAME_MAX);
         lpFileName[FILENAME_MAX-1]='\0'; // can't assume that what was buffered is NULL-terminated
                                         // see the C-89,99,11 standards for further informations
@@ -387,7 +412,7 @@ int Dos9_CmdRmdir(char* lpLine)
     if ((lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
         if (!strcmp(Dos9_EsToChar(lpEstr), "/?")) {
 
-            puts(lpHlpDeprecated);
+            Dos9_ShowInternalHelp(DOS9_HELP_RD);
 
         } else if (!stricmp(Dos9_EsToChar(lpEstr),"/Q")) {
             // on affiche ta mère blah
@@ -423,7 +448,7 @@ int Dos9_CmdMkdir(char* lpLine)
     if ((lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
         if (!strcmp(Dos9_EsToChar(lpEstr), "/?")) {
 
-            puts(lpHlpDeprecated);
+            Dos9_ShowInternalHelp(DOS9_HELP_MD);
 
         } else {
 

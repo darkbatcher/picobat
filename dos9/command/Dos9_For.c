@@ -25,6 +25,7 @@
 #include <libDos9.h>
 
 #include "../lang/Dos9_Lang.h"
+#include "../lang/Dos9_Help.h"
 #include "../errors/Dos9_Errors.h"
 #include "../core/Dos9_Core.h"
 #include "Dos9_For.h"
@@ -112,6 +113,11 @@ int Dos9_CmdFor(char* lpLine)
         } else if (!stricmp(Dos9_EsToChar(lpParam), "/D")) {
 
             iForType=FOR_LOOP_D;
+
+        } else if (!strcmp(Dos9_EsToChar(lpParam), "/?")) {
+
+            Dos9_ShowInternalHelp(DOS9_HELP_FOR);
+            goto error;
 
         } else {
 
@@ -1224,8 +1230,8 @@ int Dos9_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn, int
     if (bDelayedExpansion)
         lpArgs[i++]="/V";
 
-    if (bDos9Extension)
-        lpArgs[i++]="/N";
+    if (bCmdlyCorrect)
+        lpArgs[i++]="/C";
 
     lpArgs[i++]="/I";
 
@@ -1354,6 +1360,8 @@ int Dos9_ForGetInputLine(ESTR* lpReturn, INPUTINFO* lpipInfo)
     int iReturn=0;
     char* lpToken;
 
+    loop_begin:
+
     switch (lpipInfo->cType) {
 
         case INPUTINFO_TYPE_COMMAND:
@@ -1363,6 +1371,27 @@ int Dos9_ForGetInputLine(ESTR* lpReturn, INPUTINFO* lpipInfo)
 
         case INPUTINFO_TYPE_STRING:
             iReturn=!Dos9_ForGetStringInput(lpReturn, &(lpipInfo->Info.StringInfo));
+
+    }
+
+    if (bCmdlyCorrect) {
+
+        lpToken=Dos9_EsToChar(lpReturn);
+        lpToken=Dos9_SkipBlanks(lpToken);
+
+        if ((*lpToken=='\0'
+             || *lpToken=='\n')
+            && iReturn) {
+
+            /* this is a blank line, and the CMDLYCORRECT
+               is enabled, that means that we *must* loop
+               back and get another line, since cmd.exe
+               strips blank lines from the input.
+             */
+
+             goto loop_begin;
+
+        }
 
     }
 

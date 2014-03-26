@@ -39,6 +39,7 @@
 #include "errors/Dos9_Errors.h"
 
 #include "lang/Dos9_Lang.h"
+#include "lang/Dos9_Help.h"
 
 #include "core/Dos9_Core.h"
 
@@ -51,30 +52,6 @@
 
 //#define DOS9_DBG_MODE
 #include "core/Dos9_Debug.h"
-
-/* void Dos9_ElevatePriority(void)
-{
-    TOKEN_PRIVILEGES tp;
-    LUID luid;
-    HANDLE hToken;
-
-    if (!OpenProcessToken(GetCurrentProcess(),
-                          TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
-                          &hToken)) {
-
-        printf("Error: Can't acces to the process token (%d).\n", GetLastError());
-
-        return;
-
-    }
-
-    if (!LookupPrivilegeValue(NULL,
-                              ))
-
-
-} */
-
-
 
 int main(int argc, char *argv[])
 {
@@ -121,6 +98,7 @@ int main(int argc, char *argv[])
     /* Load Messages (including errors) */
     Dos9_LoadStrings();
     Dos9_LoadErrors();
+    Dos9_LoadInternalHelp();
 
     Dos9_UpdateCurrentDir();
 
@@ -140,11 +118,13 @@ int main(int argc, char *argv[])
             argv[i]++;
             switch(toupper(*argv[i])) {
 
-                case 'V': // enables expansion
+                case 'V':
+                    /* enables delayed expansion */
                     bDelayedExpansion=TRUE;
                     break;
 
-                case 'F': // enables floats
+                case 'F':
+                    /* enables floats */
                     bUseFloats=TRUE;
                     break;
 
@@ -152,8 +132,9 @@ int main(int argc, char *argv[])
                     bEchoOn=FALSE;
                     break;
 
-                case 'N': // enables new commands
-                    bDos9Extension=TRUE;
+                case 'C':
+                    /* enable cmd-compatible mode */
+                    bCmdlyCorrect=TRUE;
                     break;
 
                 case 'Q':
@@ -189,8 +170,9 @@ int main(int argc, char *argv[])
                     puts(lpHlpMain);
                     return 0;
 
-                case 'P' :
-                    /* there is no more switch on the command line */
+                case '/' :
+                    /* there is no more switch on the command line.
+                       '' */
                     bGetSwitch=FALSE;
                     break;
 

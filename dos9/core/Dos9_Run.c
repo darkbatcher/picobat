@@ -97,6 +97,9 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
 
         Dos9_RunLine(lpLine);
 
+        if (bAbortCommand == -1)
+            break;
+
         DOS9_DBG("\t[*] Line run.\n");
 
     }
@@ -437,7 +440,7 @@ int Dos9_RunExternalCommand(char* lpCommandLine)
         lpArguments[i+2]=NULL;
 
         lpArguments[2]=lpTmp;
-        lpArguments[1]="/p"; /* use this switch to prevent
+        lpArguments[1]="//"; /* use this switch to prevent
                                 other switches from being executed */
 
         Dos9_GetExePath(lpExePath, sizeof(lpExePath));

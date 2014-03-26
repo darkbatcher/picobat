@@ -25,12 +25,14 @@
 
 <code>Dos9 - Command prompt and interpreter for windows batch files<br />Copyright (c) 2010-2014 DarkBatcher (Romain Garbi) <br /><br />This program is free software: you can redistribute it and/or modify<br />it under the terms of the GNU General Public License as published by<br />the Free Software Foundation, either version 3 of the License, or<br />(at your option) any later version.<br /><br />This program is distributed in the hope that it will be useful,<br />but WITHOUT ANY WARRANTY; without even the implied warranty of<br />MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the<br />GNU General Public License for more details.<br /><br />You should have received a copy of the GNU General Public License<br />along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</code>
 
+<p>Note : This project include binaries from other project, especially <strong>GNU</strong> projects. These project are distributed under the terms of the <strong>GNU GPL</strong> license (ie. the preceeding licence). It also includes the ansicon command for windows distributions, the ansicon binaries are licensed under the <strong>New Bsd License</strong>, which can be found in <strong>LICENCE-ansicon.txt</strong>. The sources of ansicon are availiable from <a href="http://adoxa.hostmyway.net/ansicon/.html">http://adoxa.hostmyway.net/ansicon/</a></p>
+
 <h2>Building dos9</h2>
 
 <p>To get <strong>Dos9</strong> binaries, you have two options :</p>
 
 <ul><li>
-<p> Download precompiled binaries package from <strong>Dos9</strong>'s sourceforge page. Then you just have to unpack the package on your computer. This method is only availiable for <strong>windows</strong>. Indeed, for <strong>*nix</strong> systems, it's about going mad to make distribution-portable binaries, for <strong>*nix</strong> users, the second solution must be used.</p>
+<p> Download precompiled binaries package from <strong>Dos9</strong>'s sourceforge page. Then you just have to unpack the package on your computer. This method is only availiable for <strong>windows</strong>, and this is the recommended path for these. Indeed, for <strong>*nix</strong> systems, it's about going mad to make distribution-portable binaries, for <strong>*nix</strong> users, the second solution must be used.</p>
 
 </li><li><p> Download sources and then build them yourself. To eases this work, just download sources package from <strong>Dos9</strong>'s sourceforge page, or just get them from the git repository using :</p>
 
@@ -44,13 +46,13 @@
 
 <p><strong>Windows</strong> might have to copy dependencies in the <strong>Dos9</strong> folder if they need to make to make it portable.</p>
 
-<p>An install target is not provided yet because we think that is not an important task (copying on usr/bin), and because no tests have be performed to check if such installation work.</p>
+<p>An install target is not provided yet because we think that is not an important task (copying on usr/bin), and because no tests have be performed to check if such installation work. Finally, installing the program should just putting a symbolic link on the <strong>/bin</strong> or <strong>/usr/bin</strong> directory.</p>
+
+<p><strong>Dos9</strong> only depends on <strong>libiconv</strong> and <strong>libintl</strong>, thus, any mingw environment enables to build it.</p>
+
+<p>Note that getting <strong>x64</strong> binaries working on <strong>MS-WINDOWS</strong> is somewhat really annoying since official <strong>MinGW</strong> only provide <strong>x32</strong> compiler, preventing you from compiling <strong>x64</strong>. Having <strong>x64</strong> binaries compiled by <strong>MinGW</strong> needs a special setup, that makes it so though. </p>
 
 </li></ul>
-<p>A list of needed programs and tools to be able to build <strong>Dos9</strong> properly can be obtained by typing:</p>
-
-<code>make</code>
-
 <h2>First steps</h2>
 
 <p>Once you have binaries, you can run <strong>Dos9</strong> since it has no need to be installed in order to work. If you want to associate it with <strong>.bat</strong> or <strong>.cmd</strong> files though, do not associate it with both file types, as <strong>Dos9</strong> is still an unstable software.</p>
@@ -59,11 +61,35 @@
 
 <p>Once you launched <strong>Dos9</strong>, you can type batch commands lines. The command prompt is very similar to <strong>cmd.exe</strong>, so that you should not be dissapointed (for those who already use <strong>cmd.exe</strong>, obviously). Commands are very similar to <strong>cmd.exe</strong>'s with a few exceptions, which most important is the obligation to put blank characters between switches.</p>
 
-<p>Remember that if you need some help, the help program is <strong>HLP</strong>. Note that if you can not browse the documentation due to the lack of translation or else, you can still read the different translations of the documentation in several languages and formats in the subfolder ``share/doc''.</p>
+<h2>Getting help</h2>
 
-<p>The help might be a little bit lightweight (and sometimes technical, as i'm sometimes using it as notes during devellopement). If you have troubles getting used to the help, remember that there's plenty of interesting tutorials about batch programming all over the world, to such an extent I haven't been able to make a choice between them. Nonetheless, learning batch would not be too tough, so why no spend a few minutes in the internet to find some tutorial ?</p>
+<p><strong>Dos9</strong> provides a manual page manager and a text processor, that allows to make simple manual page. When you first use <strong>Dos9</strong>, a good thing would be to initialize it. This operation is language dependant, so you can't avoid some manual setup. The help program is named <strong>HLP</strong>, the setup needed is on steps :</p>
 
-<p>If the executable crash, please send a mail to : &lt;darkbatcher@dos9.org&gt;.</p>
+<ul><li>
+<p> <strong>Step 1</strong> : You need to check the languages already installed with your version of <strong>dos9</strong>, by the following line.</p>
+
+<code>hlp /l local</code>
+
+<p>If your language is already installed, just jump to step 4</p>
+
+</li><li><p> <strong>Step 2</strong> : Check the languages availiables from the repository. This allow you to know all the languages avaliable with <strong>Dos9</strong>.</p>
+
+<code>hlp /l remote</code>
+
+<p>If your language is not displayed, then, there is no language manual tree, you should use another language.</p>
+
+</li><li><p> <strong>Step 3</strong> : Get your language from the repository. Replace <strong>lang_COUNTRY</strong> in the following line by your language and your country.</p>
+
+<code>hlp /d lang_COUNTRY</code>
+
+</li><li><p> <strong>Step 4</strong> : Build the manual pages from the repositories. Replace <strong>lang_COUNTRY</strong> in the following line by your language and your country. You may add an optional encoding <strong>ENC</strong> to specify that you need to have the manual pages in <strong>ENC</strong>, rather than <strong>UTF-8</strong>. Note that it will not apply to <strong>html</strong> documents.</p>
+
+<code>hlp /b lang_COUNTRY ENC</code>
+
+</li></ul>
+<p>Once you've done that few things, you can access the help for a command or for syntax at any moment, just by typing:</p>
+
+<code>hlp command</code>
 
 <h2>Changing the language</h2>
 

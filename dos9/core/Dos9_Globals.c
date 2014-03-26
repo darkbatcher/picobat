@@ -22,7 +22,7 @@
 
 int bDelayedExpansion=FALSE;
 int bUseFloats=FALSE;
-int bDos9Extension=FALSE;
+int bCmdlyCorrect=FALSE;
 int bEchoOn=TRUE;
 int iErrorLevel=0;
 

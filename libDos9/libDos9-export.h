@@ -125,8 +125,6 @@ typedef struct STACK {
     struct STACK* lpcsPrevious;
 } STACK,*LPSTACK;
 
-typedef STACK CALLSTACK,*LPCALLSTACK;
-
 LIBDOS9     LPSTACK Dos9_PushStack(LPSTACK lpcsStack, void* ptrContent);
 LIBDOS9     LPSTACK Dos9_PopStack(LPSTACK lpcsStack, void(*pFunc)(void));
 LIBDOS9     int Dos9_GetStack(LPSTACK lpcsStack, void** ptrContent);

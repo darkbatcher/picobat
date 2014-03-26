@@ -81,7 +81,7 @@ void Dos9_LoadErrors(void)
     // TRANSLATORS : Don't remove the %s because the program needs it
 
     lpErrorMsg[DOS9_EXTENSION_DISABLED_ERROR]=
-        gettext("Warning : This requires Dos9's extensions to be enabled.\n");
+        gettext("Warning : Using a Dos9 extension but the CMDLYCORRECT option is set.\n");
 
     lpErrorMsg[DOS9_EXPECTED_MORE]=
         gettext("Error : \"%s\" expected more arguments.\n");

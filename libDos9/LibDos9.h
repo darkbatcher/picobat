@@ -191,7 +191,6 @@ void _Dos9_Thread_Close(void);
                 struct STACK* lpcsPrevious; /**< A pointer to the previous element */
             } STACK,*LPSTACK;
 
-            typedef STACK CALLSTACK,*LPCALLSTACK;
     /** \} */
     /** \defgroup STACK_FUNCTIONS Stack functions
         \{ */

@@ -34,6 +34,7 @@
 #include "Dos9_ScriptCommands.h"
 
 #include "../lang/Dos9_Lang.h"
+#include "../lang/Dos9_Help.h"
 
 // #define DOS9_DBG_MODE
 #include "../core/Dos9_Debug.h"
@@ -76,7 +77,7 @@ int Dos9_CmdEcho(char* lpLine)
 
         } else if (!strcmp(Dos9_EsToChar(lpEsParameter), "/?")) {
 
-            puts(lpHlpDeprecated);
+            Dos9_ShowInternalHelp(DOS9_HELP_ECHO);
 
         } else {
 
@@ -108,7 +109,7 @@ int Dos9_CmdExit(char* lpLine)
 
         if (!stricmp(lpArg, "/?")) {
 
-            puts(lpHlpDeprecated);
+            Dos9_ShowInternalHelp(DOS9_HELP_EXIT);
             return 0;
 
         } else if (!stricmp(lpArg, "/b")) {
@@ -139,7 +140,7 @@ int Dos9_CmdPause(char* lpLine)
 {
     if (!strcmp(lpLine+6, "/? ")) {
 
-        puts(lpHlpDeprecated);
+        Dos9_ShowInternalHelp(DOS9_HELP_PAUSE);
         return 0;
     }
 
@@ -210,8 +211,7 @@ int Dos9_CmdSet(char *lpLine)
 
         if (!stricmp(lpArg, "/?")) {
 
-            /* help is deprecated */
-            puts(lpHlpDeprecated);
+            Dos9_ShowInternalHelp(DOS9_HELP_SET);
             goto error;
 
         } else if (!strnicmp(lpArg,"/a", 2)) {
@@ -666,7 +666,7 @@ int Dos9_CmdSetLocal(char* lpLine)
 
         if (!strcmp(lpName, "/?")) {
 
-            puts(lpHlpDeprecated);
+            Dos9_ShowInternalHelp(DOS9_HELP_SETLOCAL);
             return 0;
 
         } else if (!stricmp(lpName, "ENABLEDELAYEDEXPANSION")) {
@@ -677,13 +677,13 @@ int Dos9_CmdSetLocal(char* lpLine)
 
             bUseFloats=TRUE;
 
-        } else if (!stricmp(lpName, "ENABLEDOS9MODE")) {
+        } else if (!stricmp(lpName, "CMDLYCORRECT")) {
 
-            bDos9Extension=TRUE;
+            bCmdlyCorrect=TRUE;
 
-        } else if (!stricmp(lpName, "DISABLEDOS9MODE")) {
+        } else if (!stricmp(lpName, "CMDLYINCORRECT")) {
 
-            bDos9Extension=FALSE;
+            bCmdlyCorrect=FALSE;
 
         } else if (!stricmp(lpName, "DISABLEFLOATS")) {
 
@@ -695,7 +695,12 @@ int Dos9_CmdSetLocal(char* lpLine)
 
         } else if (!stricmp(lpName, "ENABLEEXTENSIONS") || !stricmp(lpName, "DISABLEEXTENSION")) {
 
-            // provided for backward compatibility
+            /* provided for backward compatibility. The ENABLEEXTENSIONS
+               options used to block some NT features to make scripts portables
+               to MS-DOS based prompt. This is not interesting anymore (at most
+               interest it too few people), so it is just ignored, since many NT
+               designed script use ENABLEEXTENSIONS to enable cmd.exe features
+             */
 
         } else {
 
@@ -719,6 +724,13 @@ int Dos9_CmdHelp(char* lpLine)
 
 int Dos9_CmdRem(char* lpLine)
 {
+    /* well a help message for this function is included,
+       however, is it really usefull, because, logically,
+
+            REM /?
+
+       should not be interpreted because /? is indeed a
+       comment */
 
     return 0;
 
@@ -733,7 +745,7 @@ int Dos9_CmdCls(char* lpLine)
 
         if (!strcmp(lpArg, "/?")) {
 
-            puts(lpHlpDeprecated);
+            Dos9_ShowInternalHelp(DOS9_HELP_CLS);
             return 0;
 
         } else {
@@ -758,7 +770,7 @@ int Dos9_CmdColor(char* lpLine)
 
         if (!strcmp(lpArg, "/?")) {
 
-            puts(lpHlpDeprecated);
+            Dos9_ShowInternalHelp(DOS9_HELP_COLOR);
 
         } else {
 
@@ -787,7 +799,7 @@ int Dos9_CmdTitle(char* lpLine)
 
         if (!strcmp(lpArg, "/?")) {
 
-            puts(lpHlpDeprecated);
+            Dos9_ShowInternalHelp(DOS9_HELP_TITLE);
 
         } else {
 
@@ -812,13 +824,18 @@ int Dos9_CmdType(char* lpLine)
     FILE* pFile;
     if (Dos9_GetNextParameter(lpLine+4, lpFileName, FILENAME_MAX)) {
         if (!strcmp(lpFileName, "/?")) {
-            puts(lpHlpDeprecated);
+
+            Dos9_ShowInternalHelp(DOS9_HELP_TYPE);
             return 0;
+
         } else if ((pFile=fopen(lpFileName, "r"))) {
+
             while (fgets(lpFileName, FILENAME_MAX, pFile)) printf("%s", lpFileName);
             fclose(pFile);
             return 0;
+
         }
+
     }
 
     Dos9_ShowErrorMessage(DOS9_FILE_ERROR, lpFileName, FALSE);
@@ -835,12 +852,14 @@ int Dos9_CmdGoto(char* lpLine)
     lpLine+=4;
     *lpLine=':';
 
-    if (*(lpLine+1)==':') lpLine++;
+    if (*(lpLine+1)==':')
+        lpLine++;
+
     if ((lpLine=Dos9_GetNextParameter(lpLine, lpLabelName, FILENAME_MAX))) {
 
         if (!strcmp(lpLabelName, ":/?")) {
 
-            puts(lpHlpDeprecated);
+            Dos9_ShowInternalHelp(DOS9_HELP_GOTO);
             return 0;
 
         }
@@ -857,8 +876,20 @@ int Dos9_CmdGoto(char* lpLine)
 
             }
 
-            if (bDos9Extension == FALSE) Dos9_ShowErrorMessage(DOS9_EXTENSION_DISABLED_ERROR, NULL, FALSE);
-            else lpFile=lpFileName;
+            if (bCmdlyCorrect) {
+
+                /* if the user has set the CMDLYCORRECT flag, the capabilities of
+                   calling another file's label is prohibited */
+
+                Dos9_ShowErrorMessage(DOS9_EXTENSION_DISABLED_ERROR, NULL, FALSE);
+
+                return -1;
+
+            } else {
+
+                lpFile=lpFileName;
+
+            }
 
         }
 
@@ -868,22 +899,31 @@ int Dos9_CmdGoto(char* lpLine)
         /* if we do have a valid file name, the search will be made in specified file */
         DOS9_DBG("Jump to Label \"%s\" in \"%s\"", lpLabelName, lpFile);
 
-        if (Dos9_JumpToLabel(lpLabelName, lpFile)==-1) {
+        if (!stricmp(lpLabelName,  ":EOF")) {
+
+            /* do not even look for ``:EOF'', just
+               abort the command */
+
+            bAbortCommand=-1;
+
+            return;
+
+        } else if (Dos9_JumpToLabel(lpLabelName, lpFile)==-1) {
 
             if (!bEchoError)
                 Dos9_ShowErrorMessage(DOS9_LABEL_ERROR, lpLabelName, FALSE);
 
             return -1;
 
-        } else  {
-
-            bAbortCommand=TRUE;
-
         }
 
-        DEBUG("Jump made");
-
     }
+
+
+    /* let's set a this global variable to let the other functions
+       know that they should reload an entire line */
+    bAbortCommand=TRUE;
+
 
     return 0;
 }
@@ -902,7 +942,7 @@ int Dos9_CmdCd(char* lpLine)
 
         if (!strcmp(Dos9_EsToChar(lpEsDir), "/?")) {
 
-            puts(lpHlpDeprecated);
+            Dos9_ShowInternalHelp(DOS9_HELP_CD);
             goto error;
 
         } else if (!stricmp(Dos9_EsToChar(lpEsDir), "/d")) {
