@@ -16,12 +16,6 @@
 //#define DOS9_DBG_MODE
 #include "Dos9_Debug.h"
 
-/* function for replacing variable on commands line  */
-void Dos9_ReplaceVars(ESTR* ptrCommandLine)
-{
-    Dos9_ExpandVar(ptrCommandLine, '%');
-}
-
 void Dos9_ExpandSpecialVar(ESTR* ptrCommandLine)
 {
 

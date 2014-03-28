@@ -24,7 +24,7 @@
 int Dos9_CmdCall(char* lpCh);
 
 /* this is used to call other batch files */
-int Dos9_CmdCallFile(char* lpFile, char lpLabel, char* lpCmdLine);
+int Dos9_CmdCallFile(char* lpFile, char* lpLabel, char* lpCmdLine);
 
 /* this is used to call external programs
    or even internals  */

@@ -130,15 +130,17 @@ void Tea_TextOutputStaticBlock(size_t iMargin, size_t iNewLineMargin, size_t iLe
 
 void Tea_TextOutputParagraph(size_t iMargin, size_t iFirstLine, size_t iLength, TEANODE* lpTeaNode, char* lpNl, FILE* pFile)
 {
-    size_t iLeft;
+    size_t iLeft,
+           iLeftNl;
     int    bFirstLine=TRUE;
     int    iNoMargin=FALSE;
-    char   *lpBlock;
+    char   *lpBlock,
+           *lpNext;
 
     if ((iMargin >= iLength)
         || (iFirstLine >= iLength)) {
 
-        fprintf(stderr, "Error : Incoherent margin parameters.\n");
+        fprintf(stderr, "TEA : Error : Incoherent margin parameters.\n");
         exit(-1);
 
     }
@@ -172,9 +174,38 @@ void Tea_TextOutputParagraph(size_t iMargin, size_t iFirstLine, size_t iLength, 
 
                 }
 
+                iLeftNl=iLeft;
+
             }
 
             lpBlock=Tea_OutputLineT(lpBlock, pFile, lpTeaNode, &iLeft);
+
+            if (iLeftNl==iLeft) {
+
+                /* if nothing has been written since we wrote the
+                   last line, it should be that the world is to
+                   long too fit in a single line, thus, we should try
+                   to split it in various lines */
+
+                while (iLeft) {
+
+                    lpNext=Dos9_GetNextChar(lpBlock);
+
+                    while (lpBlock < lpNext) {
+
+                        fputc(*lpBlock, pFile);
+                        lpBlock++;
+
+                    }
+
+                    iLeft--;
+
+                }
+
+                while (*lpBlock==' ')
+                    lpBlock++;
+
+            }
 
         }
 

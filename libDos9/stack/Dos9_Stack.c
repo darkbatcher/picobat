@@ -3,9 +3,9 @@
 
 LIBDOS9     LPSTACK Dos9_PushStack(LPSTACK lpcsStack, void* ptrContent)
 {
-    LPCALLSTACK lpcsTmp;
+    LPSTACK lpcsTmp;
 
-    if (!(lpcsTmp=malloc(sizeof(CALLSTACK))))
+    if (!(lpcsTmp=malloc(sizeof(STACK))))
         return lpcsStack;
 
     lpcsTmp->lpcsPrevious=lpcsStack;
@@ -16,7 +16,7 @@ LIBDOS9     LPSTACK Dos9_PushStack(LPSTACK lpcsStack, void* ptrContent)
 
 LIBDOS9     LPSTACK Dos9_PopStack(LPSTACK lpcsStack, void(*pFunc)(void*))
 {
-    LPCALLSTACK lpcsTmp;
+    LPSTACK lpcsTmp;
 
     if (!lpcsStack) return NULL;
 
@@ -43,7 +43,7 @@ LIBDOS9     int Dos9_GetStack(LPSTACK lpcsStack, void** ptrContent)
 
 LIBDOS9     int Dos9_ClearStack(LPSTACK lpcsStack, void(*pFunc)(void*))
 {
-    LPCALLSTACK lpcsTmp;
+    LPSTACK lpcsTmp;
 
 
 

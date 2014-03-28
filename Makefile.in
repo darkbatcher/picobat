@@ -14,9 +14,6 @@ bin: buildall
 
 buildall:
 	for i in $(DOS9_COMPONENTS); do $(MAKE) -e -C $$i ; done;
-	
-install:
-	@bindir@
 
 # make the documentation	
 doc:

@@ -12,7 +12,7 @@
 #the list of the sources
 SRC=./dump.c
 
-TARGET=../bin_${arch}/cmd/dump
+TARGET=../bin${arch}/cmd/dump
 OBJ=$(SRC:.c=.o)
 
 # build all

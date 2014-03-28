@@ -26,6 +26,8 @@
 
 #include "../core/Dos9_Core.h"
 
+#include "../lang/Dos9_Help.h"
+
 #include "Dos9_Call.h"
 
 int Dos9_CmdCall(char* lpLine)
@@ -44,7 +46,7 @@ int Dos9_CmdCall(char* lpLine)
          iNbParam=0;
 
 
-
+    lpLine+=4;
 
     while (lpNxt=Dos9_GetNextParameterEs(lpLine, lpEsParameter)) {
 
@@ -96,14 +98,13 @@ int Dos9_CmdCall(char* lpLine)
 
             }
 
-
             switch(*lpCh) {
 
                 case ':' :
                     /* this is a label, obviously, so that we must
                        parameter ``label'' */
 
-                    if (!*(Dos9_EsToChar(lpEsLabel))) {
+                    if (*(Dos9_EsToChar(lpEsLabel))) {
 
                         /* that parameter is already set, so that it migth
                            be the next first argument  */
@@ -119,7 +120,7 @@ int Dos9_CmdCall(char* lpLine)
                 default:
                     /* this is the ``file'', obviously */
 
-                    if (!*(Dos9_EsToChar(lpEsFile))) {
+                    if (*(Dos9_EsToChar(lpEsFile))) {
 
                         /* that parameter is already set, so that it migth
                            be the next first argument  */
@@ -129,8 +130,6 @@ int Dos9_CmdCall(char* lpLine)
                     }
 
                     Dos9_EsCpy(lpEsFile, lpCh);
-
-                    break;
 
 
 
@@ -191,7 +190,8 @@ int Dos9_CmdCall(char* lpLine)
         } else {
 
             /* this is an executable */
-            Dos9_CmdCallExternal(lpFile, lpLine);
+            Dos9_GetEndOfLine(lpLine, lpEsParameter);
+            Dos9_CmdCallExternal(lpFile, Dos9_EsToChar(lpEsParameter));
 
         }
 
@@ -213,10 +213,10 @@ int Dos9_CmdCall(char* lpLine)
 
 }
 
-int Dos9_CmdCallFile(char* lpFile, char lpLabel, char* lpCmdLine)
+int Dos9_CmdCallFile(char* lpFile, char* lpLabel, char* lpCmdLine)
 {
     INPUT_FILE ifOldFile;
-    LOCAL_VAR_BLOCK[LOCAL_VAR_BLOCK_SIZE] lpvOldBlock;
+    LOCAL_VAR_BLOCK lpvOldBlock[LOCAL_VAR_BLOCK_SIZE];
 
     ESTR *lpEsParam=Dos9_EsInit();
     int   c='1',
@@ -226,22 +226,26 @@ int Dos9_CmdCallFile(char* lpFile, char lpLabel, char* lpCmdLine)
 
     memcpy(&ifOldFile, &ifIn, sizeof(INPUT_FILE));
     memcpy(lpvOldBlock,
-           lpvLocalVars
+           lpvLocalVars,
            LOCAL_VAR_BLOCK_SIZE *sizeof(LOCAL_VAR_BLOCK));
 
     /* Now we reset local var buffer */
 
     memset(lpvLocalVars,
-           NULL,
+           0,
            LOCAL_VAR_BLOCK_SIZE*sizeof(LOCAL_VAR_BLOCK));
 
     /* Set the INPUT_INFO data */
 
     if (!lpLabel) {
 
-        ifIn.bEof=FALSE;        /* the file is not at EOF */
-        ifIn.iPos=0;            /* places the cursor at the origin */
-        ifIn.lpFileName=lpFile; /* sets input to given file */
+        ifIn.bEof=FALSE;          /* the file is not at EOF */
+        ifIn.iPos=0;              /* places the cursor at the origin */
+        snprintf(ifIn.lpFileName,
+                 sizeof(ifIn.lpFileName),
+                 "%s",
+                 lpFile
+                 );               /* sets input to given file */
 
         Dos9_SetLocalVar(lpvLocalVars, '0', lpLabel);
 
@@ -327,5 +331,34 @@ int Dos9_CmdCallFile(char* lpFile, char lpLabel, char* lpCmdLine)
         Dos9_EsFree(lpEsParam);
 
         return -1;
+
+}
+
+int Dos9_CmdCallExternal(char* lpFile, char* lpCh)
+{
+
+    BLOCKINFO bkInfo;
+
+    ESTR *lpEsLine=Dos9_EsInit();
+
+    char *lpStr;
+
+    Dos9_EsCpy(lpEsLine, lpFile);
+    Dos9_EsCat(lpEsLine, " ");
+    Dos9_EsCat(lpEsLine, lpCh);
+
+    Dos9_ReplaceVars(lpEsLine);
+
+    bkInfo.lpBegin=Dos9_EsToChar(lpEsLine);
+
+    for (lpStr=Dos9_EsToChar(lpEsLine);*lpStr;lpStr++);
+
+    bkInfo.lpEnd=lpStr;
+
+    Dos9_RunBlock(&bkInfo);
+
+    Dos9_EsFree(lpEsLine);
+
+    return 0;
 
 }

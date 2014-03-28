@@ -97,14 +97,26 @@ void        Tea_MakeMargin(size_t iLength, size_t* iLeft, FILE* pFile)
 
 char*       Tea_OutputWord(char* lpBegin, FILE* pFile, size_t* iLeft)
 {
+    char* lpNext;
+
     while (*lpBegin
            && *lpBegin!=' '
            && *lpBegin!='\n'
            && *iLeft) {
 
 
-        fputc(*lpBegin,pFile);
-        lpBegin++;
+        lpNext=Dos9_GetNextChar(lpBegin);
+
+        while (lpBegin < lpNext) {
+
+            /* This is somewhat important since it takes
+               account of possibly mutiple byte sequences */
+
+            fputc(*lpBegin,pFile);
+            lpBegin++;
+
+        }
+
         (*iLeft)--;
 
     }

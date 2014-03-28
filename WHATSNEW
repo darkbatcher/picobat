@@ -676,7 +676,7 @@ SUNDAY 16TH, MARCH
         - Fixed a bug of IF command. The LSS comparison operator was 
           interpreted as LEQ.
 
-THURSDAY 20, MARCH
+THURSDAY 20TH, MARCH
 
         - Started comparisions between GCC optimisation levels.
 
@@ -689,8 +689,70 @@ THURSDAY 20, MARCH
           about 70% of the execution time, so that I'm not sure it is reliable 
           now. With GPROF version, i've be able to achieve speeds of about 
           3700 L/S, so the result are expected to be at least double. In fact, 
-          by experimenting, i got only about 4000 L/S, which it the speed of 
+          by experimenting, I got only about 4000 L/S, which it the speed of 
           CMD on my computer when it consumes about 80%-90% of the cpu, in 
           random occasion, because cmd.exe's has really random performances. 
           Instead, DOS9 is limited to approximately 25%.
+
+SATURDAY 23TH, MARCH
+
+        - Fixed a bug in DOS9_SEARCHLASTCHAR function.
+
+        - Fixed a bug with redirection that was not right delt with. DOS9 did 
+          not check wether several block are in a row on the same line.
+
+        - Added some functionnalities to the CMD/HLP.BAT script, which is 
+          meant to replace old-fashioned HLP manual page viewer. It is 
+          bassically designed to act as a manual page manager rather than just 
+          a viewer, by providing interfaces to build manual trees, and to get 
+          manual tress from the repositories at DOS9.ORG (this is to be 
+          implented later).
+
+        - Changed names of the manual-pages subdirectories, they now match up 
+          with traditional *NIX-like local names that are widely used. Note 
+          that only usefull locales should be implemented (at most one for 
+          every language).
+
+TUESDAY 25TH, MARCH
+
+        - Implemented replacement for old ENABLE/DISABLEDOS9MODE. Instead of 
+          the variable, DOS9 provides the CMDLYCORRECT options that can be set 
+          through SETLOCAL, and that enables more compatibility features for 
+          CMD.EXE.
+
+        - Option CMDLYCORRECT now affects FOR loops: If the option is set, 
+          then all blank lines are to be stripped for the output.
+
+        - Changed switch to specify part of lines that are not consituted of 
+          switches but by text. It is now //, a bit like *NIX's --.
+
+WEDNESDAY 26TH, MARCH
+
+        - Added a short internal documentation to get help for internal 
+          functions. These are however much tinier that the full documentation 
+          given in HLP. This is voluntary, to fit in the executable.
+
+        - First implementation of the CALL command is now working. This is 
+          somewhat blured because i've not written the full man page now, but 
+          it seems functionnal.
+
+        - Fixed bug in Makefiles.
+
+        - Fixed a file from libDos9 that still used old name CALLSTACK instead 
+          of stack.
+
+        - Found out that in some cases, TEA breaks unicode sequences by 
+          intruding some line feed in the file, This remains to be fixed. This 
+          was actually fixed quickly.
+
+        - Fixed a bug that cause TEA to loop infinitely if a word turned out 
+          to be to wide to fit on a single line. This is now fixed and long 
+          words are now splitted in multiple lines.
+
+        - Fixed numerous bugs introduced by use of various encoding in the 
+          documentation, that is, some file were not builded by HLP because 
+          iconv was not able to convert file from erroneous encoding. This has 
+          been fixed and all pages builds up well with HLP.
+
+        - Added a couple of manual pages.
 

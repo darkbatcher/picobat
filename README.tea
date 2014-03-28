@@ -63,7 +63,10 @@ ${git clone ssh://git.code.sf.net/p/dos9/code dos9-code}
 	For {*nix} system, doing so is as simple as typing :
 	
 ${./configure
-make}
+make arch='_x64'}
+
+	@- The {arch} variables only appends {_x64} to the traditionnal {bin} directory. This
+	variable is usefull if you have to maintain different architectures for {Dos9}.
 
 	@- {Windows} might have to copy dependencies in the {Dos9} folder if they need to make to
 	make it portable.

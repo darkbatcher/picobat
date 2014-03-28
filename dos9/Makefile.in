@@ -20,7 +20,7 @@ SRC=./Dos9.c ./command/Dos9_Conditions.c ./command/Dos9_FileCommands.c \
 
 LIB=-linteval -lDos9 -lmatheval @LIBS@ -lintl
 	
-TARGET=../bin_${arch}/Dos9
+TARGET=../bin${arch}/Dos9
 
 OBJ=$(SRC:.c=.o)
 

@@ -68,7 +68,11 @@ BUILDING DOS9
           project. For *NIX system, doing so is as simple as typing :
 
              ./configure
-             make
+             make arch='_x64'
+
+          The ARCH variables only appends _X64 to the traditionnal BIN 
+          directory. This variable is usefull if you have to maintain 
+          different architectures for DOS9.
 
           WINDOWS might have to copy dependencies in the DOS9 folder if they 
           need to make to make it portable.

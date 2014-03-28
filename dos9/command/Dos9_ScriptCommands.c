@@ -906,7 +906,7 @@ int Dos9_CmdGoto(char* lpLine)
 
             bAbortCommand=-1;
 
-            return;
+            return 0;
 
         } else if (Dos9_JumpToLabel(lpLabelName, lpFile)==-1) {
 

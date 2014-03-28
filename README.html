@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<title>Quick starting information</title>
+<title>The Dos9 Project :: Quick starting information</title>
 
 </head>
 <body>
@@ -42,7 +42,9 @@
 
 <p>When you have downloaded sources, you just need to compile them using any C compiler. For <strong>windows</strong> system, it is more complicated than getting precompiled binaries because you need to have gcc and gmake installed on your system. On <strong>Windows</strong>, you should also have a <strong>*nix</strong> compatible shell. If not, you can get one from the <strong>MinGW</strong> project. For <strong>*nix</strong> system, doing so is as simple as typing :</p>
 
-<code>./configure<br />make</code>
+<code>./configure<br />make arch='_x64'</code>
+
+<p>The <strong>arch</strong> variables only appends <strong>_x64</strong> to the traditionnal <strong>bin</strong> directory. This variable is usefull if you have to maintain different architectures for <strong>Dos9</strong>.</p>
 
 <p><strong>Windows</strong> might have to copy dependencies in the <strong>Dos9</strong> folder if they need to make to make it portable.</p>
 

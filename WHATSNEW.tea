@@ -614,7 +614,23 @@ ${if foo^ bar equ "foo bar" echo YES}
 
 	- Added a short internal documentation to get help for internal functions. These are however much tinier that the full documentation
 	given in {HLP}. This is voluntary, to fit in the executable.
+	
+	- First implementation of the {CALL} command is now working. This is somewhat blured because i've not written the full man page now,
+	but it seems functionnal.
+	
+	- Fixed bug in Makefiles.
+	
+	- Fixed a file from libDos9 that still used old name {CALLSTACK} instead of stack.
+	
+	- Found out that in some cases, {tea} breaks unicode sequences by intruding some line feed in the file, This remains to be fixed.
+	This was actually fixed quickly.
+	
+	- Fixed a bug that cause {tea} to loop infinitely if a word turned out to be to wide to fit on a single line. This is now fixed and
+	long words are now splitted in multiple lines.
 
-		
+	- Fixed numerous bugs introduced by use of various encoding in the documentation, that is, some file were not builded by {hlp} because
+	iconv was not able to convert file from erroneous encoding. This has been fixed and all pages builds up well with {hlp}.
+	
+	- Added a couple of manual pages.
 	
 	
