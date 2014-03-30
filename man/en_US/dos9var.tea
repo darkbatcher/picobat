@@ -1,3 +1,21 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
 {{%DOS9_VER%, %DOS9_OS%, %DOS9_PATH% variables}}
 
 	   {%DOS9_VER%} contains the version number of {dos9|Dos9}.
@@ -12,19 +30,21 @@
 
 ${	%DOS9_VER%}
 
-	Contains {dos9|Dos9} version number.
+	Contain {dos9|Dos9} version number.
 	
 ${	%DOS9_OS%}
 
-	Contains the os type on which {dos9|Dos9} is runing. This varibable does not make different between different oses, but
+	Contain the os type on which {dos9|Dos9} is runing. This varibable does not make different between different oses, but
 	it contains its kind (either {WINDOWS} or {LINUX}).
 
 ${	%DOS9_PATH%}
 
-	{%DOS9_PATH%} contains the path to the {dos9|Dos9} executable. This path is dinamically generated, so that the path will be 
-	correct even from non conventionnal paths.
+	{%DOS9_PATH%} contain the path to the {dos9|Dos9} executable. This path is 
+	dinamically generated, so that the path will be correct even from non 
+	conventionnal paths, this enables making portable version on removable
+	media.
 
-{{Compatibilité}}
+{{Compatibility}}
 
 	Uncompatible with {cmd.exe}, these variable are not defined.
 	

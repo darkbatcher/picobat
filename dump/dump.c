@@ -81,7 +81,11 @@ void Dump_ReverseBytes(union InputData* lpData, size_t iSize)
     int i;
     size_t iMid;
 
-    /* simply don't do it if there are no need to do that */
+    /* simply don't do it if there are no need to do that
+       that is the length is even, except for char which
+       length is 1, and thus don't even need to be reversed
+    */
+
     if ((iSize % 2) != 0) return;
 
     iMid=iSize/2-1;
@@ -135,7 +139,7 @@ void Dump_DumpChar(FILE* pData, char* lpBuf, size_t bufSize)
 
 void Dump_PrintHeader(FILE* pData, size_t iNumberSize, int iLineTokenNb, size_t iDatasize, int iAddr)
 {
-    char lpLine[80]=" Adresse    ";
+    char lpLine[80]=" Adress     ";
     char* lpToken=lpLine;
     union InputData uData;
 
@@ -144,7 +148,7 @@ void Dump_PrintHeader(FILE* pData, size_t iNumberSize, int iLineTokenNb, size_t 
     uData.iCoord=0;
 
     for (;i<iLineTokenNb;i++) {
-        if ( ((unsigned int)lpToken-(unsigned int)lpLine+(unsigned int)iNumberSize) >= 80) {
+        if ( (unsigned)(lpToken-lpLine+iNumberSize) >= 80) {
             break;
         }
 
@@ -154,7 +158,7 @@ void Dump_PrintHeader(FILE* pData, size_t iNumberSize, int iLineTokenNb, size_t 
 
     }
 
-    if (((unsigned int)lpToken-(unsigned int)lpLine+(unsigned int)iNumberSize) <= 80) {
+    if ((unsigned)(lpToken-lpLine+iNumberSize) <= 80) {
         strcpy(lpToken, "Char dump");
         lpToken+=sizeof("Char dump");
     }
@@ -182,9 +186,13 @@ void Dump_DumpFile(FILE* pFile, FILE* pData, size_t iDataSize, size_t iNumberSiz
     char* lpCharToken=lpCharDump;
 
     if (iFlag & ADDRESSES_ON) {
+
+            /* print addreesses */
+
             Dump_PrintHeader(pData,iNumberSize , iLineTokenNb, iDataSize ,iFlag & ADDRESSES_ON);
-            sprintf(lpLine, "%p   ", iAddress);
+            sprintf(lpLine, "%010X   ", iAddress);
             lpToken+=11;
+
     }
 
 
@@ -192,27 +200,28 @@ void Dump_DumpFile(FILE* pFile, FILE* pData, size_t iDataSize, size_t iNumberSiz
 
         iAddress+=fread(&uData, 1, iDataSize, pFile);
 
-        if (iEndianess != ENDIANESS) {
-
+        if (iEndianess != ENDIANESS)
             Dump_ReverseBytes(&uData, iDataSize);
 
-        }
-
-        if (feof(pFile)) {
+        if (feof(pFile))
             break;
-        }
 
         if (iFlag & CHARS_ON) {
+
+
             memcpy(lpCharToken, &uData, iDataSize);
             lpCharToken+=iDataSize;
+
         }
 
-        if ( ((unsigned int)lpToken-(unsigned int)lpLine+(unsigned int)iNumberSize)-1 >= 80) {
-            fprintf(stderr, "Erreur ! Ligne trop longue, depassement de buffer! (%d,%d)\n", lpToken, lpLine);
+        if ( (unsigned)((lpToken-lpLine+iNumberSize)-1) >= 80) {
+
+            fprintf(stderr, "Erreur ! Line is too long ! (%d,%d)\n", lpToken, lpLine);
             j=0;
             i++;
             lpToken=lpLine;
             continue;
+
         }
 
         Dump_ProduceNumber(lpToken, iNumberSize+1, lpFormat, &uData);
@@ -222,15 +231,20 @@ void Dump_DumpFile(FILE* pFile, FILE* pData, size_t iDataSize, size_t iNumberSiz
         if (i==21) { /* screen pause */
 
                 if (iFlag & PAGE_MODE_ON) {
+
                         printf("\nPress ``ENTER'' to continue dumping");
+
                         while (getchar()!='\n');
-                        Dump_PrintHeader(pData,iNumberSize , iLineTokenNb, iDataSize ,iFlag & ADDRESSES_ON);
+
+                        Dump_PrintHeader(pData, iNumberSize , iLineTokenNb, iDataSize ,iFlag & ADDRESSES_ON);
+
                 }
                 i=0;
 
         }
 
         if (j==iLineTokenNb) {
+
             i++;
             j=0;
             *lpToken='\0';
@@ -239,16 +253,21 @@ void Dump_DumpFile(FILE* pFile, FILE* pData, size_t iDataSize, size_t iNumberSiz
             if (iFlag & CHARS_ON) {
                 Dump_DumpChar(pData, lpCharDump, sizeof(lpCharDump));
             }
+
             fputc('\n', pData); /* on ajoute un retour à la ligne */
 
             lpToken=lpLine;
             lpCharToken=lpCharDump;
 
             if (iFlag & ADDRESSES_ON) {
-                sprintf(lpLine, "%p   ", iAddress);
+
+                sprintf(lpLine, "%010X   ", iAddress);
                 lpToken+=11;
+
             }
+
         }
+
     }
 
     /* on finit la dernière ligne si elle a déjà été entammée */
@@ -256,16 +275,18 @@ void Dump_DumpFile(FILE* pFile, FILE* pData, size_t iDataSize, size_t iNumberSiz
     if (j>0) {
         /* on complète la dernière ligne */
         while (j < iLineTokenNb) {
-            if ( ((unsigned int)lpToken-(unsigned int)lpLine+(unsigned int)iNumberSize) >= 80) {
+            if ( (unsigned)(lpToken-lpLine+iNumberSize) >= 80) {
                 break;
             }
+
             Dump_ProduceNumber(lpToken, iNumberSize, "", &uData);
             lpToken+=iNumberSize;
             j++;
+
         }
 
         /* on complète le char dump */
-        while ((unsigned int)lpCharToken - (unsigned int)lpCharDump < sizeof(lpCharDump)) {
+        while ((unsigned)(lpCharToken - lpCharDump) < sizeof(lpCharDump)) {
             *lpCharToken=' ';
             lpCharToken++;
         }
@@ -273,9 +294,10 @@ void Dump_DumpFile(FILE* pFile, FILE* pData, size_t iDataSize, size_t iNumberSiz
         /* on affiche la ligne */
         *lpToken='\0';
         fputs(lpLine, pData); /* on affiche la ligne */
-        if (iFlag & CHARS_ON) {
-                    Dump_DumpChar(pData, lpCharDump, sizeof(lpCharDump));
-        }
+
+        if (iFlag & CHARS_ON)
+                Dump_DumpChar(pData, lpCharDump, sizeof(lpCharDump));
+
         fputc('\n', pData); /* on ajoute un retour à la ligne */
 
     }
@@ -308,9 +330,11 @@ int main(int argc, char* argv[])
     for (i=1;argv[i];i++) {
 
         if (*argv[i]=='/') {
+
             switch(toupper(*(argv[i]+1))) {
 
                 case 'T':
+
                     argv[i]+=2;
                     if (*argv[i]==':') argv[i]++;
                     switch (toupper(*(argv[i]))) {

@@ -18,7 +18,7 @@
 
 {{Commande Dos9}}
 
-	   {Dos9} est un interpréteur de commande utilisé pour les scripts
+	{Dos9} est un interpréteur de commande utilisé pour les scripts
 	batch et les entrées de commandes.
 	
 	{Dos9} est un logiciel libre conçu pour être le plus compatible possible
@@ -28,15 +28,15 @@
 
 ${	DOS9 [/v] [/c] [/f] [/e] [/q] [/i entrée] [/o sortie] [fichier]}
 
-	   Exécute un fichier de commande ou attend une entrée de commande de
+	Exécute un fichier de commande ou attend une entrée de commande de
 	l'utilisateur.
 
 		- {fichier} : Chemin du script de commande a exécuter.
 		
 		- {/v}	  : Active {spec/exp|l'expansion retardée de variable}.
 		
-		- {/c}	  : Active l'option {spec/cmdlycorrect|CMDLYCORRECT} qui permet de force le
-		mode de compatibilité entre {Dos9} et {cmd.exe}.
+		- {/c}	  : Active l'option {CMDLYCORRECT} de la commande {setlocal|SETLOCAL}.
+		ce qui permet de forcer le mode de compatibilité entre {Dos9} et {cmd.exe}.
 		
 		- {/f}	  : Active les nombres flotants dans la commande {SET}. Pour
 		plus d'information, consultez la page {setaf|Commande SET (nombres flotants)}.

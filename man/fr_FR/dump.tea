@@ -26,7 +26,7 @@
 
 {{Synopsis}}
 
-${	DUMP fichier [sortie] [/P] [/H] [/T[:]type] [/B] [/E:endianess] [/L]}
+${DUMP fichier [sortie] [/P] [/H] [/T[:]type] [/B] [/E[:]endianess] [/L]}
 
 	Affiche le contenu d'un fichier sous forme binaire.
 
@@ -39,7 +39,7 @@ ${	DUMP fichier [sortie] [/P] [/H] [/T[:]type] [/B] [/E:endianess] [/L]}
 	     l'utilisateur avant d'afficher la page suivante.
 
 	   - {/H} : Active le mode héxadecimal. Ne marche que pour les types
-	     entiers (``int'', ``short'', ``char'').
+	     entiers ({I}, {S}, {C}).
 
 	   - {/T[:]type} : Choisit le type de données a afficher, parmi les
 	      suivants :
@@ -58,7 +58,7 @@ ${	DUMP fichier [sortie] [/P] [/H] [/T[:]type] [/B] [/E:endianess] [/L]}
 	     le char dump. Utile pour créer des fichier pour en générer des
 	     copies portables via un script.
 
-	   - {/E:endianess} : Corrige les problèmes d'endianess, marche pour les
+	   - {/E[:]endianess} : Corrige les problèmes d'endianess, marche pour les
 	     types d'endianness suivants :
 
 	     -- {B} : grand-boutien (Big-Endian)
@@ -70,7 +70,7 @@ ${	DUMP fichier [sortie] [/P] [/H] [/T[:]type] [/B] [/E:endianess] [/L]}
 
 	Par defaut, la presentation activee est equivalente à :
 
-${	DUMP fichier /T:C /H}
+${DUMP fichier /T:C /H}
 
 {{Licence}}
 

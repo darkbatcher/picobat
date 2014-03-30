@@ -26,7 +26,7 @@
 	 
 {{Synopsis}}
 
-${	DOS9 [/v] [/n] [/f] [/e] [file]}
+${	DOS9 [/v] [/n] [/f] [/e] [/i input] [/o output] [file]}
 
 	Run a command file or wait for an user input.
 
@@ -34,7 +34,8 @@ ${	DOS9 [/v] [/n] [/f] [/e] [file]}
 		
 		- {/v}	  : Enables {spec/var|delayed expansion}.
 		
-		- {/n}	  : Enables {spec/ext|dos9's extension}.
+		- {/c}	  : Enables {CMDLYCORRECT} option from the {setlocal|SETLOCAL}
+		command. This forces {cmd.exe} compatible mode. 
 		
 		- {/f}	  : Enables {spec/exp|floating numbers}.
 		
