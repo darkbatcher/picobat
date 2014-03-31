@@ -148,9 +148,9 @@ void Dump_PrintHeader(FILE* pData, size_t iNumberSize, int iLineTokenNb, size_t 
     uData.iCoord=0;
 
     for (;i<iLineTokenNb;i++) {
-        if ( (unsigned)(lpToken-lpLine+iNumberSize) >= 80) {
+
+        if ( (unsigned)(lpToken-lpLine+iNumberSize) >= 80)
             break;
-        }
 
         Dump_ProduceNumber(lpToken, iNumberSize, "%X", &uData);
         lpToken+=iNumberSize;;
@@ -313,7 +313,7 @@ int main(int argc, char* argv[])
     size_t iNumberSize=3;
 
     int i,j,
-        iHex=0;
+        iHex=1;
 
     int iFlag=ADDRESSES_ON | CHARS_ON | TITLE_ON;
     int iLineTokenNb=16;

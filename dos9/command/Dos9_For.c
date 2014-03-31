@@ -1251,7 +1251,7 @@ int Dos9_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn, int
 
     #ifdef WIN32
 
-        spawnvp(_P_NOWAIT, lpArgs[0], (DOS9_SPAWN_CAST)lpArgs);
+        spawnvp(_P_NOWAIT, lpArgs[0], (char * const*)lpArgs);
 
         if (errno == ENOENT)
         {

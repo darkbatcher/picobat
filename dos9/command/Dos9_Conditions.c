@@ -152,7 +152,7 @@ int Dos9_CmdIf(char* lpParam)
 
         lpflFileList=Dos9_GetMatchFileList(lpArgument, DOS9_SEARCH_DEFAULT);
 
-        iResult=(int)lpflFileList;
+        iResult=(lpflFileList == NULL) ? FALSE : TRUE;
 
         if (lpflFileList)
             Dos9_FreeFileList(lpflFileList);
@@ -172,7 +172,9 @@ int Dos9_CmdIf(char* lpParam)
 
         }
 
-        iResult=(int)getenv(lpArgument);
+        /* avoid errors from conversion from 64 bits to
+           32 bits */
+        iResult=(getenv(lpArgument) == NULL) ? FALSE : TRUE;
 
         if (iFlag & DOS9_IF_NEGATION)
             iResult=!iResult;

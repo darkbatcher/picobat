@@ -484,7 +484,7 @@ int Dos9_RunExternalFile(char* lpFileName, char** lpArguments)
     errno=0;
 
     /* in windows the result is directly returned */
-    res=spawnv(_P_WAIT, lpFileName, (const char* const*)lpArguments);
+    res=spawnv(_P_WAIT, lpFileName, (char * const*)lpArguments);
 
     if (errno==ENOENT) {
 

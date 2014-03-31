@@ -34,7 +34,7 @@
 
 {{Synopsis - First Syntax}}
 
-	The first syntax, allows processing strings.
+	The first syntax, allows performing commands against strings.
 
 ${FOR %%A IN (string) DO (
 	:: some commands
@@ -49,10 +49,10 @@ ${FOR %%A IN (string) DO (
 		user was typing the command from the command prompt or if the command
 		was processed from a script. In the first case, ``%A'' should be used
 		instead of ``%%A'' (ie. removing the first ``%''). In the second case,
-		``%%A'' should be used. This difference is no more relevant using {dos9|Dos9},
-		since both syntax are supported. Note that, using Dos9, ``%%A'' and
-		``%A'' both expand to the same text, as the interpreter will consider
-		it as the same variables.
+		``%%A'' should be used. This difference is no more relevant using 
+		{dos9|Dos9}, only the second syntax is suported, since {Dos9} only
+		supports {%%} for {spec/xvar|special variables}, except for variables
+		from {%0} to {%9}, which are still valid for compatibility purposes.
 		
 		- {string} : The string to be splitted in tokens. The delimiters used
 		split the string in tokens are :
@@ -69,7 +69,7 @@ ${FOR %%A IN (string) DO (
 			
 			-- {,} : Coma.
 			
-	Note that you can discard any of the previous delimiters (expects line feeds or
+	@- Note that you can discard any of the previous delimiters (expects line feeds or
 	new lines) just by enclosing the token between single or double quotes. Note
 	also that the double or single quote will remain in the tokens processed, to avoid
 	this, just use {%%~A} instead of {%%A} (for more details see {spec/xvar|special
@@ -105,8 +105,11 @@ ${FOR /F [options] %%A IN (object) DO (
 		
 			-- {'} : The object {object} is considered as a command line. The {FOR} loop
 			will run the given command line and then process the output of the command line.
-			The command line are ran asynchroniously, (ie. both commands in the for loop
-			and the command line are ran at the same time). Using {cmd.exe},
+			
+			@-- Commands are ran asynchroniously, (ie. both commands in the for loop
+			and the command line are ran at the same time). 
+			
+			@-- Using {cmd.exe},
 			if the command line include line feeds or new lines, then they were splitted
 			from the command line and the command line was considered as a single-line
 			command line, preventing user from using complex script as command line. This
@@ -121,11 +124,17 @@ ${FOR /F [options] %%A IN (object) DO (
 			
 			-- If neither of the previous delimiters encloses {object}, then object will
 			be considered as a filename. The {FOR} loop will open the file named by {object}
-			and read all its content, and finally process what have been read. The file
+			and read all its content, and finally process what have been read. 
+			
+			@-- The file
 			can obviously be multiline, but it is expected to be a {text-mode} file. (ie.
 			the file should not contain any {NUL} characters). If the file is not a
 			{text-mode} file, then the result is undefined (basically, it will result on
 			splitting line that contains {NUL} characters in numerous different lines).
+			
+			@-- {Dos9} does not remove empty lines (e.g. "") from the output, Although
+			{cmd.exe} does. Nevertheless, you can force a compatible behaviour by
+			setting the option {CMDLYCORRECT} of the {setlocal|SETLOCAL} command
 			
 		- {options} : The options that must be used by {FOR} to process {object}. This must
 		be, either a single parameter that gathers all options or a combinations of short
@@ -135,24 +144,25 @@ ${FOR /F [options] %%A IN (object) DO (
 		
 			-- {eol} : Specify characters that will be used as end-of line delimiters. The
 			use of this option does not discard the use of line feeds and new lines as eol 
-			delimiters. You can specify {FILENAME_MAX-1} (exactly {259} in windows.
+			delimiters. The default  value of this option is 
+			the semi-colon (ie. ";").
+			
+			@-- You can specify {FILENAME_MAX-1} (exactly {259} in windows)
 			distinct {ASCII} or byte oriented characters (Note that it might be possible in the future to
-			support different characters set, particularly, {UTF-8}). The default  value of this option is the empty 
-			string, (ie. "").
+			support different characters set, particularly, {UTF-8})
+			
+			@-- If this option is given more than once, then the {FOR} command only
+			considers the last occurence, without taking care of others.
 			
 			-- {skip} : Specify the number of lines to be skipped at the beginning of the processed
 			text. The default value is 0, obviously.
 			
+			@-- If the entered value is greater than {object} input line number,
+			then the {FOR} command will not be executed. The default value is {0},
+			obviously.
+			
 			-- {tokens} : A list describing which tokens will be assigned to special (local) 
-			variables, such as {%%A}. Each token will be assigned to a different special var,
-			starting from the specified variable (in the previous code {%%A}) and incrementing
-			the ASCII code of the starting variable (roughly corresponding to alphabetical order
-			first for capitalized characters and then for normal characters) and repeating that
-			algorithm for each new token. If the the ascii code fall out the bounds of ASCII
-			characters codes (ie. 0x7F) then, the algorithm restart at the 0x21 codepoint (ie. ``!'').
-			If the algorithm try to assign a value already assigned before, then this value
-			will be overwritten. The first token, is designed by the number {1}. Note that no
-			specifical order is needed in token specification.
+			variables, such as {%%A}. 
 			The token description must conform to the following rules,
 			separated by a comma:
 			
@@ -164,19 +174,40 @@ ${FOR /F [options] %%A IN (object) DO (
 				--- {*} : Select all the remaining tokens. This could be used for the {p}
 				parameter of the syntax {n-p}.
 				
-			-- {delims} : Specify characters that will be used as delimiters to split the string to
-			process in tokens. You can specify at most {FILENAME_MAX-1} delimiters on a byte oriented
-			encoding. If the same delimiter character is specified more than once, the delimiter will 
-			take more than only one delimiter size in {dos9|Dos9} data. By default, the only delimiter
-			used by dos9 is the space (`` ''). Specifying this parameter discard the default use of space 
-			(`` '') as a delimiter. If {dos9|Dos9} encounters severals delimiters in a raw in the string
-			to process, then these delimiters will be considered as a single delimiter, ie. no void-string
-			(``'') tokens are created.
+			@-- Each token will be assigned to a different special var,
+			starting from the specified variable (in the previous code {%%A}) and incrementing
+			the ASCII code of the starting variable (roughly corresponding to alphabetical order
+			first for capitalized characters and then for normal characters) and repeating that
+			algorithm for each new token. If the the ascii code fall out the bounds of ASCII
+			characters codes (ie. 0x7F) then, the algorithm restart at the 0x21 codepoint (ie. ``!'').
 			
-			-- {usebackq} : Uses a new syntax. If {object} is enclosed in single quotes, then it will be
-			considered as a string. If {object} is enclosed in backward quotes, then it will be considered
-			as a command to run. This options is not worth since it just changes syntax of the {FOR} loop.
-			Just provided for compatibility purpose.
+			@-- If the algorithm try to assign a value already assigned before, then the
+			{FOR} loop will abort and print an error message.
+			
+			@-- The first token, is designed by the number {1}. Note that no
+			specifical order is needed in token specification.
+				
+			-- {delims} : Specify characters that will be used as delimiters to split the
+			string to process in tokens. By default, the only delimiter
+			used by dos9 is the space (`` '').
+			
+			@-- Specifying this parameter discard the default use of space 
+			(`` '') as a delimiter. If {dos9|Dos9} encounters severals delimiters in a raw
+			in the string to process, then these delimiters will be considered as a single delimiter, ie. 
+			no empty string (``'') tokens are created.
+			
+			@-- You can specify at most {FILENAME_MAX-1} delimiters on a byte oriented
+			encoding. If the same delimiter character is specified more than once, the delimiter will 
+			take more than only one delimiter size in {dos9|Dos9} data.
+			
+			@-- If this parameter is specified more than once, the {FOR} command 
+			will only take the last occurence into account. 
+			
+			-- {usebackq} : Uses a new syntax. If {object} is enclosed in single 
+			quotes, then it will be considered as a string. 
+			If {object} is enclosed in backward quotes, then it will be considered
+			as a command to run. This options is not worth since it just changes
+			syntax of the {FOR} loop. Just provided for compatibility purpose.
 			
 	{Example 1:} Parsing a string :
 

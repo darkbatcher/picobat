@@ -18,18 +18,20 @@
 
 {{Commande FOR (Technique)}}
 
-	{Attention : cette page de manuel est la version techinque de la description de la commande FOR}
-	Cette page fournit les spécifications complètes de la commande. Cependant, la plupart des gens
-	n'ont pas besoin de savoir tout ce qui est décrit dans cette page puisque elle traite de nombreux cas
-	particuliers. Si vous ne recherchez pas une information précise, consultez la version résumée
+	{Attention : cette page de manuel est la version techinque de la description
+	de la commande FOR.} Cette page fournit les spécifications complètes de la 
+	commande. Cependant, la plupart des gens n'ont pas besoin de savoir tout ce qui
+	est décrit dans cette page puisque elle traite de nombreux cas particuliers. Si
+	vous ne recherchez pas une information précise, consultez la version résumée
 	{for|FOR} à la place.
 	
-	La boucle {FOR} est certainement l'outil le plus puissant que fournisse le langage batch. Elle permet de 
-	traiter de nombreux types d'objets, entiers, fichiers, sorties de commandes. Ainsi, la boucle {FOR}
+	La boucle {FOR} est certainement l'outil le plus puissant que fournisse le
+	langage batch. Elle permet de traiter de nombreux types d'objets, entiers,
+	fichiers, sorties de commandes. Ainsi, la boucle {FOR}
 	est un outil important pour élaborer des scripts avancés.
 	
-	Les boucles {FOR} peuvent sembler difficiles à apréhender, néanmoins il s'agit d'un outil très utile
-	pour les programmeurs batch.
+	Les boucles {FOR} peuvent sembler difficiles à apréhender, néanmoins il
+	s'agit d'un outil très utile par les programmeurs batch.
 
 {{Synopsis - Première syntaxe}}
 
@@ -42,15 +44,17 @@ ${FOR %%A IN (chaine) DO (
 	Découpe {chaine} en éléments et exécute les commandes spécifiées sur
 	chaque élément.
 	
-		- {%%A} : Le nom de la {spec/xvar|variable spéciale} qui va recevoir l'élément sur lequel exécuter
-		les commandes. 
+		- {%%A} : Le nom de la {spec/xvar|variable spéciale} qui va recevoir
+		l'élément sur lequel exécuter les commandes. 
 		
-		@- Le logiciel privateur {cmd.exe} forçait les utilisateurs à utiliser deux différentes syntaxes,
-		en fonction du mode d'entrée de la commande (console ou batch). Dans le premier cas, l'utilsateur devait
-		utiliser {%A} à la place de {%%A}, qui devait être utilisée pour le second cas.
-		Cette différence n'a plus d'importance sous {dos9|Dos9} puisque {Dos9} supporte les deux
-		syntaxes. Notez que {%%A} et {%A} seront tout de même considérés comme des noms différents
-		fesant référence à la même variable.
+		@- Le logiciel privateur {cmd.exe} forçait les utilisateurs à utiliser deux
+		différentes syntaxes, en fonction du mode d'entrée de la commande
+		(console ou batch). Dans le premier cas, l'utilsateur devait
+		utiliser {%A} à la place de {%%A}, qui devait être utilisée
+		pour le second cas. Cette différence n'a plus d'importance, car {dos9|Dos9}
+		ne supporte que l'utilisation de {%%} pour les {spec/xvar|variables
+		spéciales} (exception faite pour les variables {%0} à {%9}, pour lesquelles
+		les deux sont supportées).
 		
 		- {chaine} : La chaîne à découper en éléments. Les délimiteurs utilisés sont:
 		
@@ -66,11 +70,11 @@ ${FOR %%A IN (chaine) DO (
 			
 			-- {,} : La virgule.
 			
-	Chacun des ces délimiteurs (à l'exception des retours à la ligne) peuvent être
-	ignorés en entourant l'élément par des guillemets simples ou doubles. Ces guillemets
-	seront alors conservés en tant que partie des éléments découpés. Pour éviter
-	la présence des guillemets, utilisez seulement {%%~A} à la place de {%%A} (Pour plus
-	d'information, voir {spec/xvar|variables spéciales}).
+	@- Chacun des ces délimiteurs (à l'exception des retours à la ligne) peuvent être
+	ignorés en entourant l'élément par des guillemets simples ou doubles. 
+	Ces guillemets seront alors conservés en tant que partie des éléments découpés.
+	Pour éviter la présence des guillemets, utilisez seulement {%%~A} à la place
+	de {%%A} (Pour plus d'information, voir {spec/xvar|variables spéciales}).
 	
 	Example :
 ${FOR %%A IN (des trucs "des trucs") DO (
@@ -100,9 +104,10 @@ ${FOR /F [options] %%A IN (objet) DO (
 		doît être constitué d'une chaîne qui peut être (ou non) encadré par un seul type des délimteurs
 		suivants :
 		
-			-- {'} : L'objet {objet} est considéré comme une ligne de commande. La boucle {FOR} va
-			donc exécuter cette ligne de commande et ensuite exécuter la boucle {FOR} en prenant comme
-			entréee la sortie de la ligne de commande.
+			-- {'} : L'objet {objet} est considéré comme une ligne de commande. 
+			La boucle {FOR} va donc exécuter cette ligne de commande et ensuite
+			exécuter la boucle {FOR} en prenant comme entréee la sortie de la ligne 
+			de commande.
 			
 			@-- La ligne de commande est exécutée de manière asynchrone
 			(c-à-d, les commandes de la boucle {FOR} et de {objet} sont exécutées simultanément).
@@ -142,6 +147,11 @@ ${FOR /F [options] %%A IN (objet) DO (
 			Tous les caractères suivant la première ocurrence d'un caractère qui fait partie de ceux qui sont
 			sont spécifiés sont ignorés. La valeur par défaut de ce paramètre est le point-virgule, (ie. {``;'')}.
 			
+			@-- Il est possible de spécifier au plus {FILENAME_MAX-1} (259 sous
+			windows) caractères différents de la table {ASCII}, ou d'un encodage
+			contenu sur un octet (Mais il n'est pour l'instant pas possible d'utiliser
+			des caractères {UTF-8}).
+			
 			@-- Si ce paramètre est spécifié plus d'une fois, alors la commande {FOR} ne prendra en
 			compte que le dernier des paramètres spécifiés, sans s'occuper des paramètres précédents.
 			
@@ -175,9 +185,11 @@ ${FOR /F [options] %%A IN (objet) DO (
 			sera le point-de-code {0x21} (ie. ``!''). 
 			
 			@-- Si la boucle {FOR} doit ré-assigner une variable
-			spéciale déjà utilisée, celle-ci s'arrête et retourne un message d'erreur. Le premier élément
-			est désigné par le nombre {1}. Notez, que contrairement au logiciel propriétaire {cmd.exe},
-			l'ordre des opération n'est pas importante pour {Dos9} (Voir section {Compatibilité}}.
+			spéciale déjà utilisée, celle-ci s'arrête et retourne un message d'erreur. 
+			
+			@-- Le premier élément est désigné par le nombre {1}. Notez,
+			que contrairement au logiciel propriétaire {cmd.exe}, l'ordre des 
+			opération n'est pas importante pour {Dos9} (Voir section {Compatibilité}}.
 				
 			-- {delims} : spécifie les caractères à utiliser comme délimiteurs pour découper l'entrée
 			obtenue avec {objet} en éléments. Par défaut, le seul délimiteur
@@ -287,7 +299,7 @@ Nathaniel B. Nichols était un ingénieur américain qui contribué à la théor
 	qui incrémente une variable à chaque boucle, comme pour le langage de programmation {C}).  
 
 ${FOR /L %%A IN (début,pas,fin) DO (
-	:: some commands
+	:: des commandes
 )}
 
 		- {début} : La première valeur qui sera assignée à {%%A}.
@@ -343,8 +355,8 @@ ${FOR /R basedir %%A IN (masque) DO (
 	Cette syntaxe est déprecié parce que l'on peut optenir le même résultat avec un script plus
 	flexible, en utilisant la syntaxe suivante.
 
-${FOR /F "tokens=*" %%A IN ('dir /b /s /a:-D basedir/mask') DO (
-	:: some stuff
+${FOR /F "tokens=*" %%A IN ('dir /b /s /a:-D basedir/masque') DO (
+	:: des trucs
 )}
 
 	La seconde syntaxe permet d'effectuer le même type de recherche, mais sur les répertoires. La

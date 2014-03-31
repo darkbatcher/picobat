@@ -53,7 +53,7 @@ ${FOR %%A IN (chaine) DO (
 			
 			-- {,} : La virgule.
 			
-	Chancun des ces délimiteurs (à l'exception des retours à la ligne) peuvent être
+	@- Chancun des ces délimiteurs (à l'exception des retours à la ligne) peuvent être
 	ignorés en entourant l'élément par des guillemets simples ou doubles. Ces guillemets
 	seront alors conservés en tant que partie des éléments découpés. Pour éviter
 	la présence des guillemets, utilisez seulement {%%~A} à la place de {%%A} (Pour plus
@@ -108,10 +108,7 @@ ${FOR /F [options] %%A IN (objet) DO (
 			commencer l'exécution de la boucle.
 			
 			-- {tokens} : Une liste spécifiant les éléments qui seront assignés à une 
-			{spec/xvar|variable spéciale}, comme {%%A}. Chaque élément spécifié sera assigné
-			à une variable locale différente, en commençant par la variable donnée en argument
-			à la boucle {FOR}, puis la variable suivante sera obtenue en passant au caractère suivant (de ``A'' à ``Z''
-			puis de ``a''  à ``z'', pour plus d'informations sur le procédé voir {for-tech|FOR (technique)}).
+			{spec/xvar|variable spéciale}, comme {%%A}. 
 			La liste doit respecter la syntaxe suivant, séparés par des virgules:
 			
 				--- {n} : Où {n} est un nombre entier. Sélectionne le {n}-ième élément.
@@ -119,11 +116,17 @@ ${FOR /F [options] %%A IN (objet) DO (
 				--- {n-p} : Où {n} et {p} sont des nombre entiers. Sélectionne la réunion de
 				tous les élément compris entre le {n}-ième et {p}-ième élement inclus.
 				
-				-- {*} : Sélectionne la réunion tous les élémént restants (tous ceux qui se trouvent après
+				
+				--- {*} : Sélectionne la réunion tous les élémént restants (tous ceux qui se trouvent après
 				le dernier élément sélectioné). Ce paramètre peut aussi être utilisé pour le {p} de la
 				syntaxe {n-p}, dans ce cas, la réunion de tous les élément suivant le {n}-ième élément (inclus)
 				est sélectionnée.
 				
+			@-- Chaque élément spécifié sera assigné
+			à une variable locale différente, en commençant par la variable donnée en argument
+			à la boucle {FOR}, puis la variable suivante sera obtenue en passant au caractère suivant (de ``A'' à ``Z''
+			puis de ``a''  à ``z'', pour plus d'informations sur le procédé voir {for-tech|FOR (technique)}).
+			
 			-- {delims} : spécifie les caractères à utiliser comme délimiteurs pour découper l'entrée
 			obtenue avec {objet} en éléments. Par défaut, le seul délimiteur
 			utilisé par {Dos9} est l'espace (`` ''). Si vous spécifiez ce paramètre, l'utilisation de l'espace
@@ -216,11 +219,11 @@ Nathaniel B. Nichols était un ingénieur américan qui contribué à la théori
 
 
 ${FOR /L %%A IN (début,pas,fin) DO (
-	:: some commands
+	:: des commandes
 )}
 
 	Effectue des boucles {FOR} en incrémentant une variable (comme
-	langage {C}).
+	en langage {C}).
 	
 		- {début} : La première valeur qui sera assignée à {%%A}.
 		

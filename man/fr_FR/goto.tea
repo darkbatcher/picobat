@@ -30,6 +30,8 @@
 	
 ${GOTO [:]étiquette [fichier] [/Q]}
 
+	Effectue un saut.
+
         - {étiquette} : étiquette à laquelle l'exécution se poursuivra.
 		
         - {fichier} : fichier de commande dans lequel on doit trouver
@@ -43,15 +45,15 @@ ${GOTO [:]étiquette [fichier] [/Q]}
 		des structures conditionnelles comme la structure {switch/case} de nombreux
 		langages de programmation.
 		
-	Si une commande {goto} est appelée depuis l'intérieur d'un bloc de commande, soit
+	Si une commande {GOTO} est appelée depuis l'intérieur d'un bloc de commande, soit
 	de niveau supérieur, soit depuis une commande ({for|FOR} ou {if|IF}), alors l'éxécution
 	du bloc est intérompue et l'exécution reprend après l'étiquette spécifiée. Dans le cas d'une boucle
 	{for|FOR}, l'exécution de la boucle est interrompue.
 		
 {{Construction d'une structure switch/case}}
 
-	La commande goto permet de construire des structures conditionnelles semblables
-	aux structures {switch/case} de nombreux  système d'exploitation. Cette possibilité
+	La commande {GOTO} permet de construire des structures conditionnelles semblables
+	aux structures {switch/case} de nombreux langages. Cette possibilité
 	repose sur le fait que l'argument {étiquette} est sensible à l'{spec/exp|l'expansion},
 	comme tous les élements du langage batch. On peut donc, en utilisant le commutateur
 	{/Q} construire un batch effectuant un {switch/case}, comme montré dans l'exemple
@@ -97,8 +99,7 @@ ECHO Vous avez choisi le choix 3
 {{Notes}}
 
 	Pour des raisons de compatibilité, la commande {GOTO} supporte la syntaxe
-	consistant à accoler l'étiquette au nom de la commande. Cependant, ce n'est
-	pas une généralité : la commande {call|CALL} ne le supporte pas.
+	consistant à accoler l'étiquette au nom de la commande.
 
 {{Compatibilité}}
 

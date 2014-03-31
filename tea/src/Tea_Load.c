@@ -243,10 +243,15 @@ char* Tea_SeekNextDelimiter(const char* lpBeginPos, const char** lpToken, int* i
 
     while (*lpToken) {
         lpTokenPos=strstr(lpBeginPos, *lpToken);
-        if ((((unsigned int) lpTokenPos < (unsigned int)lpDelimPos)  || lpDelimPos==NULL) && lpTokenPos) {
+
+        if ((((size_t)lpTokenPos < (size_t)lpDelimPos)
+             || lpDelimPos==NULL) && lpTokenPos) {
+
             lpDelimPos=lpTokenPos;
             *iDelimPos=iTokenPos;
+
         }
+
         lpToken++;
         iTokenPos++;
     }
@@ -273,9 +278,13 @@ char*       Tea_SeekNextClosingBrace(const char* lpBeginPos)
 
             case '}':
                 if (!iBraceLvl) {
-                    return lpBeginPos;
+
+                    return (char*)lpBeginPos;
+
                 } else {
+
                     iBraceLvl--;
+
                 }
 
                 break;
