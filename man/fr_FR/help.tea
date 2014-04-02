@@ -19,22 +19,27 @@
 {{Commande HELP}}	
 
 	   Affiche une {liste} de commandes externes et internes ainsi qu'une
-	description sommaire de chaque commande. Cette aide est generalement
-	plus sommaire que celle obtenue à partir de la commande {dman|DMAN}
- 
-{{Synopsys}}
-
-${	HELP}
-
-	Affiche une liste de commande externes et internes
-
-{{Compatibilite}}
-
-	   Cette commande n'est {pas compatible avec cmd.exe}. L'aide des
-	commandes fournies par commande {HELP} a été remplacée par la
-	commande {dman|DMAN} inspirée d'{UNIX}.
-
-{{A voir Aussi}}
+	description sommaire de chaque commande. Il est aussi possible
+	d'afficher des pages de manuels.
 	
-	{dman|Commande DMAN}, {echo|Commande ECHO}, {set|Commande SET},
+	Il s'agit en réalité d'un alias donnant sur la commande {hlp|HLP}.
+ 
+{{Synopsis}}
+
+${HELP [commande]}
+
+	Affiche une liste de commande externes et internes, ou une page de
+	manual:
+	
+		- {commande} : le nom de la commande dont l'aide est à obtenir.
+		
+{{Compatibilité}}
+
+	Compatible avec {cmd.exe}. On peut néanmoins lui fournir bien plus
+	d'arguments que pour la commande {help} de {cmd.exe}, car il sagit
+	d'un alias de {hlp|HLP}
+
+{{À voir Aussi}}
+	
+	{hlp|Commande HLP}, {echo|Commande ECHO}, {set|Commande SET},
 	{scripts|Les scripts de commande}

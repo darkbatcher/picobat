@@ -696,7 +696,7 @@ int Dos9_CmdSetLocal(char* lpLine)
         } else if (!stricmp(lpName, "ENABLEEXTENSIONS") || !stricmp(lpName, "DISABLEEXTENSION")) {
 
             /* provided for backward compatibility. The ENABLEEXTENSIONS
-               options used to block some NT features to make scripts portables
+               option was used to block some NT features to make scripts portables
                to MS-DOS based prompt. This is not interesting anymore (at most
                interest it too few people), so it is just ignored, since many NT
                designed script use ENABLEEXTENSIONS to enable cmd.exe features

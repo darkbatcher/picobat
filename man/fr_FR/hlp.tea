@@ -16,87 +16,54 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-{{Afficheur de page de manuel HLP}}
+{{Commande HLP}}
 
-	{HLP} est un afficheur de page de manuels disponibles pour les systèmes {MS-WINDOWS} et {GNU/Linux} (aussi disponible sur les systèmes
-	compatibles {POSIX}). Il est l'afficheur de pages de manuels de {dos9|Dos9}.
-	
-	{HLP} forme avec {tea|Tea}, les commandes {hlp_make|hlp_make} et {hlp_db|hlp_db} un système de gestion de pages de manuels complet
-	permettant de produire, stocker et afficher des pages de manuels en toute simplicité.
-	
+	La commande {HLP} est une commande permettant de visioner l'aide des
+	commandes. Il s'agit d'un script de commande agissant comme front-end
+	de la commande {tea|TEA}.
+
 {{Synopsis}}
 
-${	HLP [/l langue] [/f] nom}
+${HLP [nom | /b langue [encodage] | /l | /d]}
 
-	Affiche une page manuel formatté.
+	Affiche une page manuel formattée.
 	
-	- {nom} : Le nom de la page de manuel à afficher. Ce nom de page doit être dans le
-	dossier voué à la documentation, c'est-à-dire share/doc/[lang_id] se trouvant dans le dossier
-	de l'exécutable ou dans le dossier de {dos9|Dos9} si vous l'utilisez avec {dos9}.
+	- {nom} : Le nom de la page de manuel à afficher. 
 	
-	- {/f} : Affiche la page de manuel à partir d'un {fichier}. Ce fichier doît 
-	avoir été généré par le préprocesseur de texte {tea|Tea} et porté le nom spécifié par le paramètre {nom}.
-	Avec cette option les liens dans les pages de manuels peuvent ne pas marcher.
+	- {/b} : Construit la documentation pour le langage et un encodage 
+	spécifié. Ce commutateur est utilisé pour produire les fichiers à partir
+	des documents {tea|TEA} qui sont fournis avec {Dos9}. Les paramètres
+	sont: 
 	
-	- {/l langue} : Spécifie la langue du manuel à afficher. Ces langues peuvent être des codes constituées de
-	deux lettres comme {fr} ou {en}, mais peuvent aussi être spécifié dans la notation {UNIX}, soit {langue_PAYS}.
-	Dans ce cas, sachez que seules les lettres de la langue sont prises en compte. Si ce paramètre n'est pas spécifié,
-	alors {HLP} cherche la langue dans la variable {LANGUAGE}, si cette langue n'est toujours pas spécifiée, alors
-	il affichera la documentation anglaise. Ce commutateur n'a aucun effet si vous avez spécifié le commutateur {/f}.
+		-- {langue} : Le langage dans lequel la documentation doit être 
+		générée. Les langages disponibles peuvent être obtenus par 
+		l'intermédiaire du commutateur {/l}.
+		
+		-- {encodage} : Spécifie un encodage dans lequel il faut convertir les
+		fichiers générés. Ce paramètre requiert la commande {iconv|GNU iconv}.
+		L'encodage utilisé par défaut est l'encodage {utf-8}. Ce paramètre est
+		utile si votre console (ou votre émulateur de terminal) ne supporte
+		pas l'encodage {utf-8}. En particulier pour une console {windows}
+		française, l'encodage supporté par défaut est {CP850}.
+		
+	- {/l} : Liste tous les langages disponibles sur la machine courrante. Les
+	langues disponibles sont exprimées sous la forme de locales {POSIX},
+	c'est-à-dire des codes sous la forme {langue_PAYS} où {langue} et {pays}
+	sont des abréviations des noms de la langue et du pays.
 	
-{{Commandes de l'afficheur}}
-
-	L'afficheur de manuel {HLP} fournit une interface en ligne de commande. 
-	Ces commandes permettent d'interagir avec l'afficheur {HLP}, comme
-	naviguer à travers les liens ou naviguer dans la page.
 	
-${	UP}
-
-	Déplace la partie de la page affichée d'une ligne vers le haut. Si vous vous trouvez déjà en haut de la page, alors il ne se passe rien.
+	- {/d} : Télécharge la documentation à partir du dépot
+	{http://www.dos9.org}. Ce commutateur requiert que la commande {wget} soit
+	disponible sur le système courrant.
 	
-${	DOWN}
-
-	Déplace la partie affichée de la page d'une ligne vers le bas. Si vous vous trouvez déjà en bas de la page, il ne se passe rien.
-	
-${	PGUP}
-
-	Affiche la page suppérieure.
-
-${	PGDOWN}
-
-	Affiche la page inférieure.
-	
-${	LNK numéro}
-
-	Affiche la page correspondante au lien portant le numéro {numéro}.
-	
-${	HELP}
-
-	Affiche l'aide de l'afficheur de page de manuel {HLP}.
-	
-${	GOTO numéro}
-
-	Va à la ligne ligne désignée par le numéro de ligne {numéro}.
-	
-${	EXIT}
-
-	Quitte l'afficheur de manuel {HLP}.
 
 {{Compatibilité}}
 
-	{HLP} est multiplateforme. Il est possible de le compiler sur toutes
-	les plateformes qui possèdent une console supportant l'{utf-8}, les terminaux {ANSI} et
-	un compilateur C supportant {C 89}.
+	{HLP} n'est pas compatible avec {cmd.exe}
 	
-{{License}}
-
-	{HLP} est un logiciel libre distribué sous la
-	{http://www.gnu.org/licenses/gpl.html|Licence Publique Générale GNU}. Pour plus
-	d'information à propos de la philosophie du logiciel libre, visitez le site de
-	{http://www.fsf.org|la Free Software Fundation}.
+	Disponible depuis la version {2014.0.9d}.
 	
-{{Auteur}}
+{{À voir aussi}}
 
-	{HLP} a été écrit par {Romain Garbi (DarkBatcher)} en 2013
-
+	{help|Commande HELP}, {tea|Commande TEA}
 

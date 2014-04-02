@@ -641,4 +641,13 @@ ${if foo^ bar equ "foo bar" echo YES}
 	
 	- Improved robustness of {Dos9_AddCommandDynamic}.
 	
+	- Fixed some bugs with {CALL} function that was not really functional. It works much better now, but the features have not been all tested
+	yet.
+	
+	- Fixed a bug that caused {%0} not to be set to the correct value by the {CALL} command. Now, the behaviour is the following:
+	
+		-- if a {label} was given, {%0} contains this label.
+		
+		-- if no {label} was given, {%0} contains the file name.
+	
 	

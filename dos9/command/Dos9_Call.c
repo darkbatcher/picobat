@@ -217,6 +217,7 @@ int Dos9_CmdCallFile(char* lpFile, char* lpLabel, char* lpCmdLine)
 {
     INPUT_FILE ifOldFile;
     LOCAL_VAR_BLOCK lpvOldBlock[LOCAL_VAR_BLOCK_SIZE];
+    char lpAbsPath[FILENAME_MAX];
 
     ESTR *lpEsParam=Dos9_EsInit();
     int   c='1',
@@ -239,15 +240,23 @@ int Dos9_CmdCallFile(char* lpFile, char* lpLabel, char* lpCmdLine)
 
     if (!lpLabel) {
 
+        if (Dos9_GetFilePath(lpAbsPath, lpFile, sizeof(lpAbsPath))==-1) {
+
+            Dos9_ShowErrorMessage(DOS9_FILE_ERROR, lpFile, FALSE);
+
+            goto error;
+
+        }
+
         ifIn.bEof=FALSE;          /* the file is not at EOF */
         ifIn.iPos=0;              /* places the cursor at the origin */
         snprintf(ifIn.lpFileName,
                  sizeof(ifIn.lpFileName),
                  "%s",
-                 lpFile
+                 lpAbsPath
                  );               /* sets input to given file */
 
-        Dos9_SetLocalVar(lpvLocalVars, '0', lpLabel);
+        Dos9_SetLocalVar(lpvLocalVars, '0', lpFile);
 
     } else if (Dos9_JumpToLabel(lpLabel, lpFile)== -1) {
 
@@ -256,7 +265,7 @@ int Dos9_CmdCallFile(char* lpFile, char* lpLabel, char* lpCmdLine)
 
     } else {
 
-        Dos9_SetLocalVar(lpvLocalVars, '0', lpFile);
+        Dos9_SetLocalVar(lpvLocalVars, '0', lpLabel);
 
     }
 
@@ -297,6 +306,8 @@ int Dos9_CmdCallFile(char* lpFile, char* lpLabel, char* lpCmdLine)
     /* run the  command */
 
     Dos9_RunBatch(&ifIn);
+
+    bAbortCommand=FALSE;
 
     /* restore the stream stack */
 

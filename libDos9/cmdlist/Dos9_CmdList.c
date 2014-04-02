@@ -188,11 +188,14 @@ LIBDOS9 COMMANDFLAG   Dos9_GetCommandProc(char* lpCommandLine, LPCOMMANDLIST lpc
     int iRet;
     LPCOMMANDLIST lpclCommandReturn=NULL;
 
+
     while (lpclCommandList) {
 
         iRet=strnicmp(lpCommandLine,
                       lpclCommandList->ptrCommandName,
                       lpclCommandList->iLenght);
+
+        loop_again:
 
         if (iRet>0) {
 
@@ -204,36 +207,41 @@ LIBDOS9 COMMANDFLAG   Dos9_GetCommandProc(char* lpCommandLine, LPCOMMANDLIST lpc
 
         } else {
 
-            if (lpclCommandReturn) {
+            if ((lpclCommandList->cfFlag & ~DOS9_ALIAS_FLAG)) {
 
-                if ((lpclCommandList->iLenght) > (lpclCommandReturn->iLenght)) {
+                /* if there is a limit, just check if next
+                   character is a delimiter.
 
-                    lpclCommandReturn=lpclCommandList;
+                   Note that if we have been here, it's because
+                   the string is at least as large as the
+                   comparing string */
+
+                switch(lpCommandLine
+                       [lpclCommandList->cfFlag & ~DOS9_ALIAS_FLAG]) {
+
+                    case ' ':
+                    case '\n':
+                    case '\t':
+                    case '\0':
+                        *lpcpCommandProcedure=lpclCommandList->lpCommandProc;
+                        return lpclCommandList->cfFlag;
 
                 }
 
-            } else {
+                /* it did not matched, just try again */
 
-                lpclCommandReturn=lpclCommandList;
+                iRet=stricmp(lpCommandLine, lpclCommandList->ptrCommandName);
 
-            }
-
-            iRet=stricmp(lpCommandLine, lpclCommandList->ptrCommandName);
-
-            if (iRet>0) {
-
-                lpclCommandList=lpclCommandList->lpclRightRoot;
-
-            } else if (iRet<0) {
-
-                lpclCommandList=lpclCommandList->lpclRightRoot;
+                goto loop_again;
 
             } else {
 
-                /* this is obviously realy unlikely to happen, however,
-                   this case must be handled, or it results on a infinite
-                   loop */
-                break;
+                /* if there is no delimiter to check, return
+                   that, because it's obviously the right
+                   command (match the shortest match found) */
+
+                *lpcpCommandProcedure=lpclCommandList->lpCommandProc;
+                return lpclCommandList->cfFlag;
 
             }
 
@@ -241,11 +249,7 @@ LIBDOS9 COMMANDFLAG   Dos9_GetCommandProc(char* lpCommandLine, LPCOMMANDLIST lpc
 
     }
 
-    if (lpclCommandReturn==NULL)
-        return -1;
-
-    *lpcpCommandProcedure=lpclCommandReturn->lpCommandProc;
-    return lpclCommandReturn->cfFlag;
+    return -1;
 }
 
 LIBDOS9 int Dos9_FreeCommandList(LPCOMMANDLIST lpclList)
