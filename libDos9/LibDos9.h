@@ -430,6 +430,8 @@ void _Dos9_Thread_Close(void);
             \note The parameter array passed throug lpciCommandInfo might no be remain unchanged. And if it didn't the function would modify nothing but the order of the elements in the array */
         LIBDOS9 LPCOMMANDLIST   Dos9_MapCommandInfo(LPCOMMANDINFO lpciCommandInfo, int i);
 
+        LIBDOS9 LPCOMMANDLIST   Dos9_ReMapCommandInfo(LPCOMMANDLIST lpclCommandList);
+
         /** \brief Adds dynamicly a command to a COMMANDLIST structure
             Add dynamicly a command to a COMMANDLIST structure. Note that the function does not re-arrrange COMMANDLIST structure to increase searching.Thus this function is not designed for intensive use. For intensive use, use Dos9_MapCommandInfo() instead
             \param lpciCommandInfo : A pointer to a COMMANDINFO structure that stores information about command to be added
@@ -455,9 +457,14 @@ void _Dos9_Thread_Close(void);
     /** \} */
 /** \} */
 
+#define DOS9_ALIAS_FLAG 0x80000000
+
 int                     _Dos9_FillCommandList(LPCOMMANDLIST lpclList, LPCOMMANDINFO lpciCommandInfo);
 int                     _Dos9_PutSeed(LPCOMMANDINFO lpciCommandInfo, int iSegBottom, int iSegTop, LPCOMMANDLIST* lpclList);
 int                     _Dos9_Sort(const void* ptrS, const void* ptrD);
+size_t                  _Dos9_CountListItems(LPCOMMANDLIST lpclList);
+LPCOMMANDINFO           _Dos9_FillInfoFromList(LPCOMMANDINFO lpCommandInfo, LPCOMMANDLIST lpCommandList);
+
 
 /* *******************************************************************************
    *                            Console Functions                                *

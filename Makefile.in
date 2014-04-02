@@ -13,7 +13,6 @@ DOS9_COMPONENTS=libDos9 libinteval libmatheval-dos9 dos9 tea dump
 bin: buildall
 
 buildall:
-    md bin${arch}
 	for i in $(DOS9_COMPONENTS); do $(MAKE) -e -C $$i ; done;
 
 # make the documentation	

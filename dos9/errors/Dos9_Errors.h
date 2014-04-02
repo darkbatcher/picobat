@@ -73,8 +73,10 @@ void Dos9_LoadErrors(void);
 #define DOS9_ALREADY_REDIRECTED             31
 #define DOS9_MALFORMED_BLOCKS               32
 #define DOS9_NONCLOSED_BLOCKS               33
+#define DOS9_UNABLE_ADD_COMMAND             34
+#define DOS9_UNABLE_REMAP_COMMANDS          35
 
-#define DOS9_ERROR_MESSAGE_NUMBER 34
+#define DOS9_ERROR_MESSAGE_NUMBER 35
 
 #define DOS9_PRINT_C_ERROR 0x80
 

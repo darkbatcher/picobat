@@ -176,7 +176,10 @@ typedef struct COMMANDINFO {
     COMMANDFLAG cfFlag;
 } COMMANDINFO,*LPCOMMANDINFO;
 
+#define DOS9_ALIAS_FLAG 0x80000000
+
 LIBDOS9 LPCOMMANDLIST   Dos9_MapCommandInfo(LPCOMMANDINFO lpciCommandInfo, int i);
+LIBDOS9 LPCOMMANDLIST   Dos9_ReMapCommandInfo(LPCOMMANDLIST lpclCommandList);
 LIBDOS9 int             Dos9_AddCommandDynamic(LPCOMMANDINFO lpciCommandInfo, LPCOMMANDLIST* lpclListEntry);
 LIBDOS9 int             Dos9_FreeCommandList(LPCOMMANDLIST lpclList);
 LIBDOS9 COMMANDFLAG     Dos9_GetCommandProc(char* lpCommandLine, LPCOMMANDLIST lpclCommandList,void** lpcpCommandProcedure);

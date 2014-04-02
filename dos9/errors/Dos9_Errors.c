@@ -179,6 +179,12 @@ void Dos9_LoadErrors(void)
     lpErrorMsg[DOS9_NONCLOSED_BLOCKS]=
         gettext("Error : Blocks left unclosed a end-of-file.\n");
 
+    lpErrorMsg[DOS9_UNABLE_ADD_COMMAND]=
+        gettext("Error : Unable to add command \"%s\".\n");
+
+    lpErrorMsg[DOS9_UNABLE_REMAP_COMMANDS]=
+        gettext("Error : Unable to remap commands (in function %s)");
+
     lpQuitMessage=
         gettext("\nAborting current command, press any key to end Dos9.\n");
 

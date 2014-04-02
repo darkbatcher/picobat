@@ -17,6 +17,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 #include <sys/types.h>
 #include <string.h>
 #include <errno.h>
@@ -245,6 +246,8 @@ int Dos9_RunCommand(ESTR* lpCommand)
     char *lpCmdLine;
     int iFlag;
 
+    RestartSearch:
+
     lpCmdLine=Dos9_EsToChar(lpCommand);
 
     lpCmdLine=Dos9_SkipAllBlanks(lpCmdLine);
@@ -255,17 +258,29 @@ int Dos9_RunCommand(ESTR* lpCommand)
     {
 
        case -1:
-            Dos9_BackTrackExternalCommand:
+            BackTrackExternalCommand:
 
             iErrorLevel=Dos9_RunExternalCommand(lpCmdLine);
             break;
 
        default:
             if (iFlag
-                && lpCmdLine[iFlag]!=' '
-                && lpCmdLine[iFlag]!='\t'
-                && lpCmdLine[iFlag]!='\0')
-                goto Dos9_BackTrackExternalCommand;
+                && lpCmdLine[iFlag & ~DOS9_ALIAS_FLAG]!=' '
+                && lpCmdLine[iFlag & ~DOS9_ALIAS_FLAG]!='\t'
+                && lpCmdLine[iFlag & ~DOS9_ALIAS_FLAG]!='\0')
+                goto BackTrackExternalCommand;
+
+            if (iFlag & DOS9_ALIAS_FLAG) {
+                /* this is an alias */
+
+                Dos9_ExpandAlias(lpCommand,
+                                 lpCmdLine + (iFlag & ~DOS9_ALIAS_FLAG),
+                                 (char*)lpProc
+                                 );
+
+                goto RestartSearch;
+
+            }
 
             iErrorLevel=lpProc(lpCmdLine);
 

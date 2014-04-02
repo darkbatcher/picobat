@@ -26,8 +26,12 @@
 #include "Dos9_Conditions.h"
 #include "Dos9_For.h"
 #include "Dos9_Call.h"
+#include "Dos9_Alias.h"
+
+#include "../core/Dos9_Core.h"
 
 #define STRLEN(str) (sizeof(str)-1)
+
 
 /* the flag paramater detemines wether a space should be
    searched */
@@ -38,7 +42,7 @@ COMMANDINFO lpCmdInfo[]={
                             {"PAUSE", Dos9_CmdPause, STRLEN("PAUSE")},
                             {"SET", Dos9_CmdSet, STRLEN("SET")},
                             {"SETLOCAL", Dos9_CmdSetLocal, STRLEN("SETLOCAL")},
-                            {"HELP", Dos9_CmdHelp, STRLEN("HELP")},
+                            {"HELP", "HLP", STRLEN("HELP") | DOS9_ALIAS_FLAG},
                             {"REM", Dos9_CmdRem, STRLEN("REM")},
                             {"CLS", Dos9_CmdCls, STRLEN("CLS")},
                             {"COLOR", Dos9_CmdColor, STRLEN("COLOR")},
@@ -63,7 +67,9 @@ COMMANDINFO lpCmdInfo[]={
                             {"COPY", Dos9_CmdCopy, STRLEN("COPY")},
                             {"FOR", Dos9_CmdFor, STRLEN("FOR")},
                             {"(", Dos9_CmdBlock, 0},
-                            {"CALL", Dos9_CmdCall, STRLEN("CALL")}
+                            {"CALL", Dos9_CmdCall, STRLEN("CALL")},
+                            {"CALL:", Dos9_CmdCall, 0},
+                            {"ALIAS", Dos9_CmdAlias, STRLEN("ALIAS")}
                         };
 
 #endif

@@ -16,7 +16,7 @@ SRC=./Dos9.c ./command/Dos9_Conditions.c ./command/Dos9_FileCommands.c \
 	./core/Dos9_Parse.c ./core/Dos9_Read.c \
 	./core/Dos9_Stream.c ./errors/Dos9_Errors.c \
 	./lang/Dos9_Lang.c ./core/Dos9_Debug.c ./core/Dos9_FilePath.c ./core/Dos9_Block.c \
-	./command/Dos9_Call.c ./lang/Dos9_Help.c
+	./command/Dos9_Call.c ./lang/Dos9_Help.c ./core/Dos9_Alias.c ./command/Dos9_Alias.c
 
 LIB=-linteval -lDos9 -lmatheval @LIBS@ -lintl
 	

@@ -15,42 +15,12 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
-#ifndef DOS9_CORE_H_INCLUDED
-#define DOS9_CORE_H_INCLUDED
+#ifndef DOS9_CMD_ALIAS_H
+#define DOS9_CMD_ALIAS_H
 
-#include <libDos9.h>
-#include "../errors/Dos9_Errors.h"
+int Dos9_CmdAlias(char* lpLine);
 
-#include "Dos9_Context.h"
-
-#include "Dos9_Var.h"
-#include "Dos9_Expand.h"
-
-#include "Dos9_Args.h"
-#include "Dos9_Jump.h"
-#include "Dos9_VersionInfo.h"
-#include "Dos9_ShowIntro.h"
-#include "Dos9_FilePath.h"
-#include "Dos9_Parse.h"
-#include "Dos9_Read.h"
-#include "Dos9_Stream.h"
-#include "Dos9_Run.h"
-#include "Dos9_Expand.h"
-#include "Dos9_SplitPath.h"
-#include "Dos9_Block.h"
-#include "Dos9_Alias.h"
-
-
-#include "Dos9_Globals.h"
-
-#include "Dos9_Exit.h"
-
-#ifndef WIN32
-    #define getch() getchar()
-#else
-    #include <conio.h>
-#endif
-
-#endif // DOS9_CORE_H_INCLUDED
+#endif // DOS9_CMD_ALIAS_H
