@@ -7,19 +7,30 @@
 # version.
 #
 
-DOS9_COMPONENTS=libDos9 libinteval libmatheval-dos9 dos9 tea dump po
+DOS9_COMPONENTS=libDos9 libinteval libmatheval-dos9 dos9 tea dump po scripts
+
+BUILD_TREE=bin${arch} bin${arch}/cmd bin${arch}/share bin${arch}/share \
+
+all:
+	$(MAKE) -e build-tree
+	$(MAKE) -e bin
+	$(MAKE) -e doc
 
 # define a list of components to be build
-bin: buildall
 
-buildall:
+bin:
 	for i in $(DOS9_COMPONENTS); do $(MAKE) -e -C $$i ; done;
 
-# make the documentation	
 doc:
-	./make-doc.bat
+	cp -r man bin${arch}/share/man
+	cd bin_${arch} && dos9 // hlp /b ${lang} ${enc}
 	
-.PHONY: clean buildall
+build-tree:
+	for i in $(BUILD_TREE); do mkdir -p $$i ; done;
+
+	
+	
+.PHONY: clean bin
 
 
 clean:

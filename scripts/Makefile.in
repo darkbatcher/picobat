@@ -1,0 +1,16 @@
+# Overall Dos9 suite Makefile, The Dos9 Project (c) Darkbatcher
+# 2010-2013
+#
+# This is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software 
+# Foundation, either version 3 of the License, or (at your option) any later
+# version.
+#
+
+# copy the scripts at the right place, nothing more to be done :
+
+cp-scripts: Dos9_Auto.bat cmd/hlp.bat
+	cp -r *.bat ../bin${arch}
+
+	
+	

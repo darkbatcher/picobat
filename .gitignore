@@ -1,9 +1,9 @@
 # gitignore file :
 # ignore objects
-*.[o]
 # ignore documentation
 doc/*
 # ignore test
 test/*
 config.status
 config.log
+Makefile
