@@ -7,7 +7,7 @@
 # version.
 #
 
-DOS9_COMPONENTS=libDos9 libinteval libmatheval-dos9 dos9 tea dump
+DOS9_COMPONENTS=libDos9 libinteval libmatheval-dos9 dos9 tea dump po
 
 # define a list of components to be build
 bin: buildall

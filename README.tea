@@ -72,7 +72,7 @@ make arch='_x64'}
 	make it portable.
 	
 	@- An install target is not provided yet because we think that is not an important task
-	(copying on usr/bin), and because no tests have be performed to check if such installation work.
+	(copying on usr/bin), and because no tests have been performed to check if such installation work.
 	Finally, installing the program should just putting a symbolic link on the {/bin} or {/usr/bin}
 	directory.
 	
@@ -81,7 +81,7 @@ make arch='_x64'}
 	
 	@- Note that getting {x64} binaries working on {MS-WINDOWS} is somewhat really annoying since
 	official {MinGW} only provide {x32} compiler, preventing you from compiling {x64}. Having {x64}
-	binaries compiled by {MinGW} needs  a special setup, that makes it so though. 
+	binaries compiled by {MinGW} needs  a special setup, that makes it so tough. 
 	
 {{First steps}}
 	
@@ -113,10 +113,11 @@ ${hlp /l local}
 		- {Step 2} : Check the languages availiables from the repository. This allow you to know all the
 		languages avaliable with {Dos9}.
 		
-${hlp /l remote}
+${hlp /l}
 
 		@- If your language is not displayed, then, there is no language manual tree, you should use another
-		language.
+		language, or produce a translation as explained in the next part. Alternatively, you can use {cmd.exe}
+		documentation, however, we do not recommand it.
 		
 		- {Step 3} : Get your language from the repository. Replace {lang_COUNTRY} in the following line by
 		your language and your country.
@@ -139,7 +140,7 @@ ${hlp command}
 	you should configure the ``Dos9_Auto.bat'' script that {Dos9} launches at startup. Normally this is not
 	necessary as {GNU gettext} automatically chose your langage. Modify the following line :
 	
-${	:: SET LANGUAGE=en_US}
+${:: SET LANGUAGE=en_US}
 
 	Uncomment the line and replace {en_US} by the name of your locale. It is still possible that the langage does not work though, this means that
 	{Dos9} is not translated yet in your language. Note that dos9 might be translated into your language, and manual page
@@ -149,6 +150,10 @@ ${	:: SET LANGUAGE=en_US}
 
 	Translations uses the {GNU gettext} tool. To make translation, run the ``dos9-build-gettext.bat'' script to produce
 	{.po} files (avaliable from the sources) for your language, and then, translate it via a po editor like {poedit} or {kbabel}.
+	
+	Making translations of the external documentation is much more simple, just go in the {share/man} directory, copy one
+	of the existing directories (possible one you can understand) rename it to your locale and start translating pages. Of
+	course, don't forget to submit your translation !
 	
 	Feel free to submit sugestion and improovements, either by submiting ideas or by improoving the code.
 	

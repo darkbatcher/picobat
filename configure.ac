@@ -20,5 +20,5 @@ AC_CHECK_HEADER([iconv.h],
 				[], 
 				[AC_MSG_ERROR("Dos9 requires iconv.h")])
 
-AC_CONFIG_FILES([Makefile libDos9/Makefile libinteval/Makefile libmatheval-dos9/Makefile dos9/Makefile tea/Makefile dump/Makefile])
+AC_CONFIG_FILES([Makefile libDos9/Makefile libinteval/Makefile libmatheval-dos9/Makefile dos9/Makefile tea/Makefile dump/Makefile po/Makefile])
 AC_OUTPUT
