@@ -14,9 +14,9 @@ SHARE_DIR=../bin${arch}/share/locale
 
 m-po: po-merge po-tree
 	for i in $(PO_BUILD); do \
-		msgfmt -c -v -o $(SHARE_DIR)/$$i/LC_MESSAGES/Dos9-errors.mo po/$$i/Dos9-errors.po ;\
-		msgfmt -c -v -o $(SHARE_DIR)/$$i/LC_MESSAGES/Dos9-msg.mo po/$$i/Dos9-msg.po ;\
-		msgfmt -c -v -o $(SHARE_DIR)/$$i/LC_MESSAGES/Dos9-hlp.mo po/$$i/Dos9-hlp.po ;\
+		msgfmt -c -v -o "$(SHARE_DIR)/$$i/LC_MESSAGES/Dos9-errors.mo" po/$$i/Dos9-errors.po ;\
+		msgfmt -c -v -o "$(SHARE_DIR)/$$i/LC_MESSAGES/Dos9-msg.mo" po/$$i/Dos9-msg.po ;\
+		msgfmt -c -v -o "$(SHARE_DIR)/$$i/LC_MESSAGES/Dos9-hlp.mo" po/$$i/Dos9-hlp.po ;\
 	done;
 
 po-tree:
