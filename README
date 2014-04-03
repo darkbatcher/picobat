@@ -68,20 +68,20 @@ BUILDING DOS9
           project. For *NIX system, doing so is as simple as typing :
 
              ./configure
-             make arch='_x64'
+             make arch='postfix'
 
-          The ARCH variables only appends _X64 to the traditionnal BIN 
+          The ARCH variables only appends POSTFIX to the traditionnal BIN 
           directory. This variable is usefull if you have to maintain 
-          different architectures for DOS9.
+          different architectures for DOS9. 
 
           WINDOWS might have to copy dependencies in the DOS9 folder if they 
           need to make to make it portable.
 
           An install target is not provided yet because we think that is not 
-          an important task (copying on usr/bin), and because no tests have be 
-          performed to check if such installation work. Finally, installing 
-          the program should just putting a symbolic link on the /BIN or 
-          /USR/BIN directory.
+          an important task (copying on usr/bin), and because no tests have 
+          been performed to check if such installation work. Finally, 
+          installing the program should just putting a symbolic link on the 
+          /BIN or /USR/BIN directory.
 
           DOS9 only depends on LIBICONV and LIBINTL, thus, any mingw 
           environment enables to build it.
@@ -89,7 +89,7 @@ BUILDING DOS9
           Note that getting X64 binaries working on MS-WINDOWS is somewhat 
           really annoying since official MINGW only provide X32 compiler, 
           preventing you from compiling X64. Having X64 binaries compiled by 
-          MINGW needs a special setup, that makes it so though. 
+          MINGW needs a special setup, that makes it so tough. 
 
 FIRST STEPS
 
@@ -126,10 +126,12 @@ GETTING HELP
         - STEP 2 : Check the languages availiables from the repository. This 
           allow you to know all the languages avaliable with DOS9.
 
-             hlp /l remote
+             hlp /l
 
           If your language is not displayed, then, there is no language manual 
-          tree, you should use another language.
+          tree, you should use another language, or produce a translation as 
+          explained in the next part. Alternatively, you can use CMD.EXE 
+          documentation, however, we do not recommand it.
 
         - STEP 3 : Get your language from the repository. Replace 
           LANG_COUNTRY in the following line by your language and your 
@@ -157,7 +159,7 @@ CHANGING THE LANGUAGE
      script that DOS9 launches at startup. Normally this is not necessary as 
      GNU GETTEXT automatically chose your langage. Modify the following line :
 
-         :: SET LANGUAGE=en_US
+        :: SET LANGUAGE=en_US
 
      Uncomment the line and replace EN_US by the name of your locale. It is 
      still possible that the langage does not work though, this means that 
@@ -172,6 +174,11 @@ MAKING TRANSLATIONS AND CONTRIBUTING
      ``dos9-build-gettext.bat'' script to produce .PO files (avaliable from 
      the sources) for your language, and then, translate it via a po editor 
      like POEDIT or KBABEL.
+
+     Making translations of the external documentation is much more simple, 
+     just go in the SHARE/MAN directory, copy one of the existing directories 
+     (possible one you can understand) rename it to your locale and start 
+     translating pages. Of course, don't forget to submit your translation !
 
      Feel free to submit sugestion and improovements, either by submiting 
      ideas or by improoving the code.

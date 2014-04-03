@@ -114,6 +114,7 @@ int main(int argc, char *argv[])
 
     /* get command line arguments */
     for (i=1;argv[i];i++) {
+
         if (*argv[i]=='/' && bGetSwitch) {
             argv[i]++;
             switch(toupper(*argv[i])) {
@@ -182,7 +183,9 @@ int main(int argc, char *argv[])
             }
 
         } else {
+
             if (*lpFileName!='\0') {
+
                 /* set parameters for the file currently runned */
                 for (j=i ,  c='1';argv[j] && c<='9';i++, c++ , j++ ) {
 
@@ -192,6 +195,7 @@ int main(int argc, char *argv[])
 
                 break;
             }
+
             lpFileName=argv[i];
             Dos9_SetLocalVar(lpvLocalVars, '0', lpFileName);
         }

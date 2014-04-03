@@ -754,5 +754,36 @@ WEDNESDAY 26TH, MARCH
           iconv was not able to convert file from erroneous encoding. This has 
           been fixed and all pages builds up well with HLP.
 
-        - Added a couple of manual pages.
+        - Added a couple of manual pages. It is also combined with new pages 
+          and translations.
+
+WEDNESDAY 2ND, APRIL
+
+        - Implemented aliases within Dos9
+
+        - Added ALIAS command.
+
+        - Improved robustness of DOS9_ADDCOMMANDDYNAMIC.
+
+        - Fixed some bugs with CALL function that was not really functional. 
+          It works much better now, but the features have not been all tested 
+          yet.
+
+        - Fixed a bug that caused %0 not to be set to the correct value by the 
+          CALL command. Now, the behaviour is the following:
+
+             - if a LABEL was given, %0 contains this label.
+
+             - if no LABEL was given, %0 contains the file name.
+
+TUESDAY 3RD, APRIL
+
+        - Updated build system, so that building DOS9 can allmost be done 
+          without user intervention. It's as simple as typing the following 
+          line:
+
+             make
+
+        - Switched to version 2014.0.9, because DOS9 is becoming pretty 
+          develloped now. 
 

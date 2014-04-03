@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<title>The Dos9 Project :: Quick starting information</title>
+<title>Quick starting information</title>
 
 </head>
 <body>
@@ -42,17 +42,17 @@
 
 <p>When you have downloaded sources, you just need to compile them using any C compiler. For <strong>windows</strong> system, it is more complicated than getting precompiled binaries because you need to have gcc and gmake installed on your system. On <strong>Windows</strong>, you should also have a <strong>*nix</strong> compatible shell. If not, you can get one from the <strong>MinGW</strong> project. For <strong>*nix</strong> system, doing so is as simple as typing :</p>
 
-<code>./configure<br />make arch='_x64'</code>
+<code>./configure<br />make arch='postfix'</code>
 
-<p>The <strong>arch</strong> variables only appends <strong>_x64</strong> to the traditionnal <strong>bin</strong> directory. This variable is usefull if you have to maintain different architectures for <strong>Dos9</strong>.</p>
+<p>The <strong>arch</strong> variables only appends <strong>postfix</strong> to the traditionnal <strong>bin</strong> directory. This variable is usefull if you have to maintain different architectures for <strong>Dos9</strong>. </p>
 
 <p><strong>Windows</strong> might have to copy dependencies in the <strong>Dos9</strong> folder if they need to make to make it portable.</p>
 
-<p>An install target is not provided yet because we think that is not an important task (copying on usr/bin), and because no tests have be performed to check if such installation work. Finally, installing the program should just putting a symbolic link on the <strong>/bin</strong> or <strong>/usr/bin</strong> directory.</p>
+<p>An install target is not provided yet because we think that is not an important task (copying on usr/bin), and because no tests have been performed to check if such installation work. Finally, installing the program should just putting a symbolic link on the <strong>/bin</strong> or <strong>/usr/bin</strong> directory.</p>
 
 <p><strong>Dos9</strong> only depends on <strong>libiconv</strong> and <strong>libintl</strong>, thus, any mingw environment enables to build it.</p>
 
-<p>Note that getting <strong>x64</strong> binaries working on <strong>MS-WINDOWS</strong> is somewhat really annoying since official <strong>MinGW</strong> only provide <strong>x32</strong> compiler, preventing you from compiling <strong>x64</strong>. Having <strong>x64</strong> binaries compiled by <strong>MinGW</strong> needs a special setup, that makes it so though. </p>
+<p>Note that getting <strong>x64</strong> binaries working on <strong>MS-WINDOWS</strong> is somewhat really annoying since official <strong>MinGW</strong> only provide <strong>x32</strong> compiler, preventing you from compiling <strong>x64</strong>. Having <strong>x64</strong> binaries compiled by <strong>MinGW</strong> needs a special setup, that makes it so tough. </p>
 
 </li></ul>
 <h2>First steps</h2>
@@ -76,9 +76,9 @@
 
 </li><li><p> <strong>Step 2</strong> : Check the languages availiables from the repository. This allow you to know all the languages avaliable with <strong>Dos9</strong>.</p>
 
-<code>hlp /l remote</code>
+<code>hlp /l</code>
 
-<p>If your language is not displayed, then, there is no language manual tree, you should use another language.</p>
+<p>If your language is not displayed, then, there is no language manual tree, you should use another language, or produce a translation as explained in the next part. Alternatively, you can use <strong>cmd.exe</strong> documentation, however, we do not recommand it.</p>
 
 </li><li><p> <strong>Step 3</strong> : Get your language from the repository. Replace <strong>lang_COUNTRY</strong> in the following line by your language and your country.</p>
 
@@ -97,13 +97,15 @@
 
 <p>If the language of the interpretor or of the documentation is in your langage under <strong>MS-WINDOWS</strong>, then you should configure the ``Dos9_Auto.bat'' script that <strong>Dos9</strong> launches at startup. Normally this is not necessary as <strong>GNU gettext</strong> automatically chose your langage. Modify the following line :</p>
 
-<code> :: SET LANGUAGE=en_US</code>
+<code>:: SET LANGUAGE=en_US</code>
 
 <p>Uncomment the line and replace <strong>en_US</strong> by the name of your locale. It is still possible that the langage does not work though, this means that <strong>Dos9</strong> is not translated yet in your language. Note that dos9 might be translated into your language, and manual page can be not translated, so if you use <strong>HLP</strong>, it might crash. Nevertheless, this should'nt occur as <strong>HLP</strong> failsback to english.</p>
 
 <h2>Making translations and contributing</h2>
 
 <p>Translations uses the <strong>GNU gettext</strong> tool. To make translation, run the ``dos9-build-gettext.bat'' script to produce <strong>.po</strong> files (avaliable from the sources) for your language, and then, translate it via a po editor like <strong>poedit</strong> or <strong>kbabel</strong>.</p>
+
+<p>Making translations of the external documentation is much more simple, just go in the <strong>share/man</strong> directory, copy one of the existing directories (possible one you can understand) rename it to your locale and start translating pages. Of course, don't forget to submit your translation !</p>
 
 <p>Feel free to submit sugestion and improovements, either by submiting ideas or by improoving the code.</p>
 

@@ -10,7 +10,8 @@
 # copy the scripts at the right place, nothing more to be done :
 
 cp-scripts: Dos9_Auto.bat cmd/hlp.bat
-	cp -r *.bat ../bin${arch}
+	cp  Dos9_Auto.bat ../bin${arch}
+	cp  cmd/hlp.bat ../bin${arch}/cmd
 
 	
 	

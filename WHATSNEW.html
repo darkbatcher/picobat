@@ -580,7 +580,37 @@
 
 </li><li><p> Fixed numerous bugs introduced by use of various encoding in the documentation, that is, some file were not builded by <strong>hlp</strong> because iconv was not able to convert file from erroneous encoding. This has been fixed and all pages builds up well with <strong>hlp</strong>.</p>
 
-</li><li><p> Added a couple of manual pages.</p>
+</li><li><p> Added a couple of manual pages. It is also combined with new pages and translations.</p>
+
+</li></ul>
+<h2>Wednesday 2nd, April</h2>
+
+<ul><li>
+<p> Implemented aliases within Dos9</p>
+
+</li><li><p> Added <strong>ALIAS</strong> command.</p>
+
+</li><li><p> Improved robustness of <strong>Dos9_AddCommandDynamic</strong>.</p>
+
+</li><li><p> Fixed some bugs with <strong>CALL</strong> function that was not really functional. It works much better now, but the features have not been all tested yet.</p>
+
+</li><li><p> Fixed a bug that caused <strong>%0</strong> not to be set to the correct value by the <strong>CALL</strong> command. Now, the behaviour is the following:</p>
+
+<ul><li>
+<p> if a <strong>label</strong> was given, <strong>%0</strong> contains this label.</p>
+
+</li><li><p> if no <strong>label</strong> was given, <strong>%0</strong> contains the file name.</p>
+
+</li></ul>
+</li></ul>
+<h2>Tuesday 3rd, April</h2>
+
+<ul><li>
+<p> Updated build system, so that building <strong>Dos9</strong> can allmost be done without user intervention. It's as simple as typing the following line:</p>
+
+<code>make</code>
+
+</li><li><p> Switched to version <strong>2014.0.9</strong>, because <strong>dos9</strong> is becoming pretty develloped now. </p>
 
 </li></ul>
 
