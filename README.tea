@@ -63,10 +63,11 @@ ${git clone ssh://git.code.sf.net/p/dos9/code dos9-code}
 	For {*nix} system, doing so is as simple as typing :
 	
 ${./configure
-make arch='_x64'}
+make arch='postfix' lang='language' enc='encoding'}
 
-	@- The {arch} variables only appends {_x64} to the traditionnal {bin} directory. This
-	variable is usefull if you have to maintain different architectures for {Dos9}.
+	@- The {arch} variables only appends {postfix} to the traditionnal {bin} directory. This
+	variable is usefull if you have to maintain different architectures for {Dos9}. {lang}
+	and {enc} are used to generate documentation for the package.
 
 	@- {Windows} might have to copy dependencies in the {Dos9} folder if they need to make to
 	make it portable.

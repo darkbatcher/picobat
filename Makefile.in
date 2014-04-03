@@ -23,14 +23,15 @@ bin:
 
 doc:
 	cp -r man bin${arch}/share/man
-	cd bin_${arch} && dos9 // hlp /b ${lang} ${enc}
+	cd bin${arch} && dos9 // hlp /b ${lang} ${enc}
 	
 build-tree:
 	for i in $(BUILD_TREE); do mkdir -p $$i ; done;
 
+po-merge:
+	$(MAKE) -e -C po po-merge
 	
-	
-.PHONY: clean bin
+.PHONY: clean bin doc
 
 
 clean:
