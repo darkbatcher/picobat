@@ -113,7 +113,7 @@ int Dos9_CheckFileAttributes(short wAttr, const FILELIST* lpflList)
 
     if (wAttr & DOS9_CMD_ATTR_READONLY) {
 
-        iResult=(Dos9_GetFileAttributes(lpflList) & (DOS9_FILE_READ | DOS9_FILE_WRITE))==DOS9_FILE_READ;
+        iResult=(Dos9_GetFileMode(lpflList) & (DOS9_FILE_READ | DOS9_FILE_WRITE)) == DOS9_FILE_READ;
         if (wAttr & DOS9_CMD_ATTR_READONLY_N) iResult=!iResult;
         iReturn=iReturn &&iResult;
 

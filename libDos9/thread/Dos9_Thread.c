@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include <errno.h>
 
-#include "../libDos9.h"
+#include "../LibDos9.h"
 
 
 STACK* _lpcsThreadStack=NULL;
@@ -53,7 +53,7 @@ void _Dos9_Thread_Close(void) {
 
     Dos9_ClearStack(_lpcsThreadStack, free);
 
-    return Dos9_CloseMutex(&_threadStack_Mutex);
+    Dos9_CloseMutex(&_threadStack_Mutex);
 }
 
 
@@ -110,12 +110,11 @@ int Dos9_BeginThread(THREAD* lpThId, void(*lpFunction)(void*) , int iMemAmount, 
     return iRet;
 }
 
-LIBDOS9 int Dos9_AbortThread(THREAD* thSelfId)
+LIBDOS9 void Dos9_AbortThread(THREAD* thSelfId)
 {
 
     /* aborts the given thread */
-    pthread_t thSelfId,
-             *thId;
+    pthread_t *thId;
 
     STACK    *lpThreadStack,
              *lpLastThreadStack=NULL;
@@ -133,9 +132,9 @@ LIBDOS9 int Dos9_AbortThread(THREAD* thSelfId)
     while (lpThreadStack) {
 
         /* gets the value from the stack */
-        Dos9_GetStack(_lpcsThreadStack, &thId);
+        Dos9_GetStack(_lpcsThreadStack, (void**)&thId);
 
-        if (pthread_equal(*thId, thSelfId)) {
+        if (pthread_equal(*thId, *thSelfId)) {
             /* both threads are the same */
 
             if (lpLastThreadStack) {
@@ -201,7 +200,7 @@ LIBDOS9 void     Dos9_EndThread(void* iReturn)
     while (lpThreadStack) {
 
         /* gets the value from the stack */
-        Dos9_GetStack(_lpcsThreadStack, &thId);
+        Dos9_GetStack(_lpcsThreadStack, (void**)&thId);
 
         if (pthread_equal(*thId, thSelfId)) {
             /* both threads are the same */
@@ -237,7 +236,7 @@ LIBDOS9 void     Dos9_EndThread(void* iReturn)
 
     Dos9_ReleaseMutex(&_threadStack_Mutex);
 
-    pthread_exit(lpReturn);
+    pthread_exit(iReturn);
 }
 
 /*
@@ -247,7 +246,7 @@ LIBDOS9 int     Dos9_WaitForThread(THREAD* thId, void* lpRet)
 {
 
     /* join the thread to get the exit code */
-    return pthread_join(*thId,lpReturn);
+    return pthread_join(*thId,lpRet);
 }
 
 LIBDOS9 int Dos9_CreateMutex(MUTEX* lpMuId)
@@ -282,11 +281,11 @@ LIBDOS9 int Dos9_CreateMutex(MUTEX* lpMuId)
 
 }
 
-LIBDOS9 int     Dos9_CloseMutex(MUTEX* lpmuId)
+LIBDOS9 int     Dos9_CloseMutex(MUTEX* lpMuId)
 {
     int iRet;
 
-    iRet=pthread_mutex_destroy(lpMuId)
+    iRet=pthread_mutex_destroy(lpMuId);
 
     #ifndef LIBDOS9_THREAD_SILENT
 
@@ -306,7 +305,7 @@ LIBDOS9 int     Dos9_CloseMutex(MUTEX* lpmuId)
     return iRet;
 }
 
-LIBDOS9 int     Dos9_LockMutex(MUTEX* lpmuId)
+LIBDOS9 int     Dos9_LockMutex(MUTEX* lpMuId)
 {
     int iRet;
 
@@ -330,11 +329,11 @@ LIBDOS9 int     Dos9_LockMutex(MUTEX* lpmuId)
 
 }
 
-LIBDOS9 int     Dos9_ReleaseMutex(MUTEX lpmuId)
+LIBDOS9 int     Dos9_ReleaseMutex(MUTEX* lpMuId)
 {
     int iRet;
 
-    iRet=pthread_mutex_unlock(lpMuId)
+    iRet=pthread_mutex_unlock(lpMuId);
 
     #ifndef LIBDOS9_THREAD_SILENT
 

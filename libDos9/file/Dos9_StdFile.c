@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <dirent.h>
+#include <string.h>
 
 #include "Dos9_File.h"
 
@@ -12,13 +13,24 @@ int Dos9_GetExePath(char* lpBuf, size_t iBufSize)
 {
     char* lpDelim;
 
-    #ifdef __linux
-        if (readlink("/proc/self/exe", lpBuf, iBufSize)==-1) return -1;
-    #endif
+    #ifdef DOS9_FILE_SYM_LINK
 
-    if ((lpDelim=strrchr(lpBuf, '/'))) {
-        *lpDelim='\0';
-    }
+        if (readlink("/proc/self/exe", lpBuf, iBufSize)==-1) return -1;
+
+        if ((lpDelim=strrchr(lpBuf, '/'))) {
+
+            *lpDelim='\0';
+
+        }
+
+    #else
+
+        /* we shoud add custom codes for various operating systems,
+           the system not currently supported by default are FreeBSD,
+           MacOS X, and solaris */
+
+
+    #endif
 
     return 0;
 }

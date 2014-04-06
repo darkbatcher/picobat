@@ -21,7 +21,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../libDos9.h"
+#include "../LibDos9.h"
 
 LIBDOS9 char* Dos9_SkipBlanks(char* lpCh)
 {
