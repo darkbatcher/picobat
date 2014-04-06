@@ -28,8 +28,6 @@ void Dos9_ExpandAlias(ESTR* lpRet, char* lpCh, char* lpExp)
 {
     ESTR* lpEsRet=Dos9_EsInit();
 
-    Dos9_ReMapCommandInfo(lpclCommands);
-
     Dos9_EsCpy(lpEsRet, lpExp);
     Dos9_EsCat(lpEsRet, " ");
     Dos9_EsCat(lpEsRet, lpCh);

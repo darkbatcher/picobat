@@ -17,6 +17,9 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include <errno.h>
 
 #include "Dos9_Stream.h"
@@ -199,7 +202,9 @@ LPSTREAMSTACK Dos9_Pipe(LPSTREAMSTACK lppsStreamStack)
     LPSTREAMLVL lpLvl;
 
 
-    Dos9_GetStack(lppsStreamStack, (void**)&lpLvl); // on récupère le contenu du niveau courrant;
+    Dos9_GetStack(lppsStreamStack, (void**)&lpLvl);
+        /* get current level content */
+
 
     DEBUG("In Pipe callback function");
     DEBUG_(lpLvl->iPipeIndicator);

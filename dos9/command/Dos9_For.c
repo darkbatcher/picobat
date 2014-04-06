@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <string.h>
 
 #include <libDos9.h>
 
@@ -1223,6 +1224,14 @@ int Dos9_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn, int
 
     int i=0;
 
+    #ifdef _POSIX_C_SOURCE
+	
+	/* on POSIX systems, we need to know the child process ID in order
+ 	   to process to fork */
+	int iPid;
+
+    #endif
+
     lpArgs[i++]="Dos9";
     lpArgs[i++]="/Q";
     lpArgs[i++]="/E";
@@ -1253,10 +1262,11 @@ int Dos9_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn, int
 
         spawnvp(_P_NOWAIT, lpArgs[0], (char * const*)lpArgs);
 
-        if (errno == ENOENT)
-        {
+        if (errno == ENOENT) {
 
-            Dos9_ShowErrorMessage(DOS9_FOR_LAUNCH_ERROR | DOS9_PRINT_C_ERROR, Dos9_EsToChar(lpInput), FALSE);
+            Dos9_ShowErrorMessage(DOS9_FOR_LAUNCH_ERROR | DOS9_PRINT_C_ERROR, 
+				  Dos9_EsToChar(lpInput), 
+				  FALSE);
 
             return -1;
 
@@ -1269,9 +1279,11 @@ int Dos9_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn, int
         if (iPid == 0 ) {
           /* if we are in the son */
 
-          if ( execvp(lpArguments[0], lpArguments) == -1) {
+          if ( execvp(lpArgs[0], lpArgs) == -1) {
 
-            Dos9_ShowErrorMessage(DOS9_FOR_LAUNCH_ERROR | DOS9_PRINT_C_ERROR, Dos9_EsToChar(lpInput), FALSE);
+            Dos9_ShowErrorMessage(DOS9_FOR_LAUNCH_ERROR | DOS9_PRINT_C_ERROR,
+				  Dos9_EsToChar(lpInput),
+				  FALSE);
             return -1;
 
           }
@@ -1284,7 +1296,9 @@ int Dos9_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn, int
           if (iPid == (pid_t)-1) {
 
             /* the execution failed */
-            Dos9_ShowErrorMessage(DOS9_FOR_LAUNCH_ERROR | DOS9_PRINT_C_ERROR, Dos9_EsToChar(lpInput), FALSE);
+            Dos9_ShowErrorMessage(DOS9_FOR_LAUNCH_ERROR | DOS9_PRINT_C_ERROR,
+                                  Dos9_EsToChar(lpInput),
+                                  FALSE);
             return -1;
 
           }
@@ -1293,8 +1307,7 @@ int Dos9_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn, int
 
     #endif // WIN32
 
-    if (!(pFile=fdopen(iPipeFdIn[1], "w")))
-    {
+    if (!(pFile=fdopen(iPipeFdIn[1], "w"))) {
 
         close(iPipeFdIn[1]);
         goto error;
@@ -1308,8 +1321,7 @@ int Dos9_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn, int
 
     fclose(pFile);
 
-    if (!(pFile=fdopen(iPipeFdOut[0], "r")))
-    {
+    if (!(pFile=fdopen(iPipeFdOut[0], "r"))) {
 
         goto error;
 

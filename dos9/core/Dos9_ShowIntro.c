@@ -17,7 +17,13 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "libDos9.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include <libDos9.h>
+
 #include "Dos9_Core.h"
 #include "Dos9_ShowIntro.h"
 #include "../lang/Dos9_Lang.h"

@@ -9,6 +9,8 @@
 #ifdef WIN32
 #include <windows.h>
 
+/* define usefull symlinks on process information */
+
 #elif defined __linux
 
     #define DOS9_FILE_SYM_LINK "/proc/self/exe"

@@ -23,6 +23,8 @@
 #include <time.h>
 #include <math.h>
 #include <ctype.h>
+#include <string.h>
+#include <errno.h>
 
 #include <matheval.h>
 #include <inteval.h>
@@ -40,6 +42,17 @@
 #include "../core/Dos9_Debug.h"
 
 #include "../errors/Dos9_Errors.h"
+
+#ifdef _POSIX_C_SOURCE
+
+	/* if we actually use a POSIX-operating system, the environ variable
+           should be marked as external */
+
+	extern char** environ;
+
+#endif
+
+
 
 int Dos9_CmdEcho(char* lpLine)
 {

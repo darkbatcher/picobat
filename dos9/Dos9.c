@@ -29,9 +29,6 @@
 
 #if defined WIN32
     #include <conio.h>
-#else
-    /* definitions for GNU/Linux compatibility */
-    #define getch(a)
 #endif
 
 #include <libDos9.h>

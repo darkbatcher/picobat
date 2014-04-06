@@ -88,6 +88,18 @@
 
 #endif
 
+/* define TRUE and FALSE CONSTANTS if they are not
+   defined yet */
+
+#ifndef TRUE
+#define TRUE 1
+#endif // TRUE
+
+#ifndef FALSE
+#define FALSE 0
+#endif // TRUE
+
+
 #ifdef _POSIX_C_SOURCE
 
 typedef pthread_t       THREAD;

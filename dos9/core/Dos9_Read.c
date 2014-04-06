@@ -20,6 +20,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
+#include <libDos9.h>
 
 #include "Dos9_Core.h"
 
