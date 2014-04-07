@@ -54,7 +54,8 @@ msgstr "Erreur : Impossible de trouver l'étiquette \"%s\".\n"
 
 #: ../dos9/errors/Dos9_Errors.c:84
 msgid "Warning : Using a Dos9 extension but the CMDLYCORRECT option is set.\n"
-msgstr ""
+msgstr "Attention : il faut désactiver l'option CMDLYCORRECT pour utiliser"
+" les extensions de Dos9.\n"
 
 #: ../dos9/errors/Dos9_Errors.c:87
 #, c-format
@@ -187,38 +188,39 @@ msgid "Error : Unable to create pipe at function (%s).\n"
 msgstr "Erreur : Impossible de créer un pipe (dans %s).\n"
 
 #: ../dos9/errors/Dos9_Errors.c:168
-#, fuzzy, c-format
+#, c-format
 msgid "Error : Unable to set environment string (%s).\n"
-msgstr "Erreur : Impossible de créer un pipe (dans %s).\n"
+msgstr "Erreur : Impossible de modifier la variable d'environement (dans %s)."
+"\n"
 
 #: ../dos9/errors/Dos9_Errors.c:171
-#, fuzzy, c-format
+#, c-format
 msgid "Error : \"%s\" is an invalid stream redirection.\n"
-msgstr "Erreur :   \"%s\" n'est pas une expreession mathématique valide.\n"
+msgstr "Erreur :   \"%s\" n'est pas une redirection valide.\n"
 
 #: ../dos9/errors/Dos9_Errors.c:174
 #, c-format
 msgid "Error : Redirection for %s was already specified.\n"
-msgstr ""
+msgstr "Erreur : Une redirection pour \"%s\" était déjà spécifiée.\n"
 
 #: ../dos9/errors/Dos9_Errors.c:177
-#, fuzzy, c-format
+#, c-format
 msgid "Error : Encountered malformed blocks (\"%s\").\n"
-msgstr "Erreur : Module de flux : \"%s\".\n"
+msgstr "Erreur : Mauvais bloc (\"%s\").\n"
 
 #: ../dos9/errors/Dos9_Errors.c:180
-msgid "Error : Blocks left unclosed a end-of-file.\n"
-msgstr ""
+msgid "Error : Blocks left unclosed at end-of-file.\n"
+msgstr "Erreur : Bloc non fermé à la fin du fichier.\n"
 
 #: ../dos9/errors/Dos9_Errors.c:183
-#, fuzzy, c-format
+#, c-format
 msgid "Error : Unable to add command \"%s\".\n"
 msgstr "Erreur : Impossible de renommer \"%s\".\n"
 
 #: ../dos9/errors/Dos9_Errors.c:186
-#, fuzzy, c-format
-msgid "Error : Unable to remap commands (in function %s)"
-msgstr "Erreur : Impossible de créer un pipe (dans %s).\n"
+#, c-format
+msgid "Error : Unable to remap commands (in function %s).\n"
+msgstr "Erreur : Impossible de remaper les commandes (dans %s).\n"
 
 #: ../dos9/errors/Dos9_Errors.c:189
 msgid ""

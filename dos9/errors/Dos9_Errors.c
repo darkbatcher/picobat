@@ -171,13 +171,13 @@ void Dos9_LoadErrors(void)
         gettext("Error : \"%s\" is an invalid stream redirection.\n");
 
     lpErrorMsg[DOS9_ALREADY_REDIRECTED]=
-        gettext("Error : Redirection for %s was already specified.\n");
+        gettext("Error : Redirection for \"%s\" was already specified.\n");
 
     lpErrorMsg[DOS9_MALFORMED_BLOCKS]=
         gettext("Error : Encountered malformed blocks (\"%s\").\n");
 
     lpErrorMsg[DOS9_NONCLOSED_BLOCKS]=
-        gettext("Error : Blocks left unclosed a end-of-file.\n");
+        gettext("Error : Blocks left unclosed at end-of-file.\n");
 
     lpErrorMsg[DOS9_UNABLE_ADD_COMMAND]=
         gettext("Error : Unable to add command \"%s\".\n");

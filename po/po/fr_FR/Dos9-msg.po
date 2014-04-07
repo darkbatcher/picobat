@@ -19,207 +19,35 @@ msgstr ""
 "X-Generator: Poedit 1.5.7\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-#: ../dos9/lang/Dos9_Help.c:34
-msgid ""
-"Create an alias on a command.\n"
-"Usage: ALIAS alias=command\n"
-msgstr ""
+msgid "Echo command enabled"
+msgstr "Commande echo activée"
 
-#: ../dos9/lang/Dos9_Help.c:38
-msgid ""
-"Change current working directory.\n"
-"Usage: CD  [[/d] path]\n"
-"       CHDIR [[/d] path]\n"
-msgstr ""
+msgid "Echo command disabled"
+msgstr "Commande echo désactivée"
 
-#: ../dos9/lang/Dos9_Help.c:43
-msgid ""
-"Clear console's screen\n"
-"Usage: CLS\n"
-msgstr ""
+msgid "Press any key to continue..."
+msgstr "Appuyez sur une touche pour continuer..."
 
-#: ../dos9/lang/Dos9_Help.c:47
-msgid ""
-"Change console's color to the given code.\n"
-"Usage: COLOR [code]\n"
-msgstr ""
+msgid "\tNo files found\n"
+msgstr "\tAucun fichier trouvé\n"
 
-#: ../dos9/lang/Dos9_Help.c:51
 msgid ""
-"Copy file(s) to another location.\n"
-"Usage: COPY [/-Y | /Y] [/A[:]attributes] source destination\n"
-msgstr ""
-
-#: ../dos9/lang/Dos9_Help.c:55
-msgid ""
-"Call a script of a label from the current context.\n"
-"Usage: CALL [/e] [file] [:label] [parameters ...]\n"
-msgstr ""
-
-#: ../dos9/lang/Dos9_Help.c:60
-msgid ""
-"Delete file(s).\n"
-"Usage: DEL [/P] [/F] [/S] [/Q] [/A[:]attributes] name\n"
-"       ERASE [/P] [/F] [/S] [/Q] [/A[:]attributes] name\n"
-msgstr ""
-
-#: ../dos9/lang/Dos9_Help.c:65
-msgid ""
-"List files in a directory and in subdirectories.\n"
-"Usage: DIR [/A[:]attributes] [/S] [/B] [path]\n"
-msgstr ""
-
-#: ../dos9/lang/Dos9_Help.c:69
-msgid ""
-"Print a message, or enable/disable commande echoing.\n"
-"Usage: ECHO [OFF|ON]\n"
-"       ECHO text\n"
-"       ECHO.text\n"
-msgstr ""
-
-#: ../dos9/lang/Dos9_Help.c:75
-#, c-format
-msgid ""
-"Perform commands against items (files, strings, command output).\n"
-"Usage: FOR %%A IN (string) DO (\n"
-"          :: some commands\n"
-"       )\n"
 "\n"
-"       FOR /F [options] %%A IN (object) DO (\n"
-"          :: some commands\n"
-"       )\n"
+"Last change\t\tSize\tAttr.\tName\n"
+msgstr ""
 "\n"
-"       FOR /L %%A IN (start,increment,end) DO (\n"
-"          :: some commands\n"
-"       )\n"
-msgstr ""
+"Dernière modif.\t\t Taille\t Attr.\tNom\n"
 
-#: ../dos9/lang/Dos9_Help.c:87
 msgid ""
-"Go to a label in a command script.\n"
-"Usage: GOTO [:]label [file]\n"
+"\t\t\t\t\t\t%d Files\n"
+"\t\t\t\t\t\t%d Folders\n"
 msgstr ""
+"\t\t\t\t\t\t%d Fichiers\n"
+"\t\t\t\t\t\t%d Dossiers\n"
 
-#: ../dos9/lang/Dos9_Help.c:91
 msgid ""
-"Perform commands on some conditions.\n"
-"Usage: IF [/i] [NOT] string1==string2 (\n"
-"          :: code to be ran\n"
-"       )\n"
-"\n"
-"       IF [/i] string1 cmp string2\n"
-"          :: code to be ran\n"
-"       )\n"
-"\n"
-"       IF [NOT] [DEFINED | EXIST | ERRORLEVEL] object          :: code to be "
-"ran\n"
-"       )\n"
+"Dos9 does not support ``/?'' switch for help anymore, use ``HLP command'' "
+"instead."
 msgstr ""
-
-#: ../dos9/lang/Dos9_Help.c:103
-msgid ""
-"Create the given directory.\n"
-"Usage: MD directory\n"
-"       MKDIR directory\n"
-msgstr ""
-
-#: ../dos9/lang/Dos9_Help.c:109
-msgid ""
-"Wait for a keystroke from the user.\n"
-"Usage: PAUSE\n"
-msgstr ""
-
-#: ../dos9/lang/Dos9_Help.c:114
-msgid ""
-"Removes a directory.\n"
-"Usage: RMDIR [/S] [/Q] directory\n"
-"       RD [/S] [/Q] directory\n"
-msgstr ""
-
-#: ../dos9/lang/Dos9_Help.c:119
-msgid ""
-"Renames a file.\n"
-"Usage: REN file name.ext\n"
-"       RENAME file name.ext\n"
-msgstr ""
-
-#: ../dos9/lang/Dos9_Help.c:124
-msgid ""
-"Introduce a comment.\n"
-"Usage: REM comment\n"
-msgstr ""
-
-#: ../dos9/lang/Dos9_Help.c:129
-msgid ""
-"Set an environment variable.\n"
-"Usage: SET variable=content\n"
-"       SET /a[[:][i|f]] variable=expression\n"
-"       SET /p variable=question\n"
-msgstr ""
-
-#: ../dos9/lang/Dos9_Help.c:135
-msgid ""
-"Set options of the Dos9 command prompt.\n"
-"Usage: SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] "
-"[ENABLEFLOATS | DISABLEFLOATS] [CMDLYCORRECT | CMDLYINCORRECT]\n"
-msgstr ""
-
-#: ../dos9/lang/Dos9_Help.c:139
-msgid ""
-"Set console's title.\n"
-"Usage: TITLE title\n"
-msgstr ""
-
-#: ../dos9/lang/Dos9_Help.c:143
-msgid ""
-"Print a file.\n"
-"Usage: TYPE [file]\n"
-"       MORE [file]\n"
-msgstr ""
-
-#: ../dos9/lang/Dos9_Help.c:148
-msgid ""
-"Exit from the command prompt.\n"
-"Usage: EXIT [/b code]\n"
-msgstr ""
-
-#: ../dos9/lang/Dos9_Help.c:151
-msgid ""
-"This help is voluntary limited help to fit in the binary. If you need to\n"
-"see the full documentation, please type:\n"
-"\n"
-"\tHLP command"
-msgstr ""
-
-#~ msgid "Echo command enabled"
-#~ msgstr "Commande echo activée"
-
-#~ msgid "Echo command disabled"
-#~ msgstr "Commande echo désactivée"
-
-#~ msgid "Press any key to continue..."
-#~ msgstr "Appuyez sur une touche pour continuer..."
-
-#~ msgid "\tNo files found\n"
-#~ msgstr "\tAucun fichier trouvé\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Last change\t\tSize\tAttr.\tName\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Dernière modif.\t\t Taille\t Attr.\tNom\n"
-
-#~ msgid ""
-#~ "\t\t\t\t\t\t%d Files\n"
-#~ "\t\t\t\t\t\t%d Folders\n"
-#~ msgstr ""
-#~ "\t\t\t\t\t\t%d Fichiers\n"
-#~ "\t\t\t\t\t\t%d Dossiers\n"
-
-#~ msgid ""
-#~ "Dos9 does not support ``/?'' switch for help anymore, use ``HLP command'' "
-#~ "instead."
-#~ msgstr ""
-#~ "Dos9 ne supporte plus le commutateur ``/?''. Pour de l'aide, utilisez la "
-#~ "commande ``HLP commande'' à la place."
+"Dos9 ne supporte plus le commutateur ``/?''. Pour de l'aide, utilisez la "
+"commande ``HLP commande'' à la place."

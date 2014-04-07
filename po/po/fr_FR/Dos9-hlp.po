@@ -68,6 +68,8 @@ msgid ""
 "List files in a directory and in subdirectories.\n"
 "Usage: DIR [/A[:]attributes] [/S] [/B] [path]\n"
 msgstr ""
+"Liste les fichiers d'un répertoire et de ses sous-répertoires.\n"
+"Usage: DIR [/A[:]attributs] [/S] [/B] [chemin]\n"
 
 #: dos9/lang/Dos9_Help.c:69
 msgid ""
@@ -76,6 +78,10 @@ msgid ""
 "       ECHO text\n"
 "       ECHO.text\n"
 msgstr ""
+"Affiche un message, ou active/désactive l'affichage des commandes.\n"
+"Usage: ECHO [OFF|ON]\n"
+"       ECHO texte\n"
+"       ECHO.texte\n"
 
 #: dos9/lang/Dos9_Help.c:75
 #, c-format
