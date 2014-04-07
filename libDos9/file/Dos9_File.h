@@ -6,12 +6,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#ifdef WIN32
-#include <windows.h>
+/* Define the values of symlinks on process information (especially, the path
+   of the current executable) via procfs. This is a big concern however,
+   because there's no standards used on the procfs system, so that
+   every OS have differebt syntax 
+ */
 
-/* define usefull symlinks on process information */
-
-#elif defined __linux
+#if defined __linux__
 
     #define DOS9_FILE_SYM_LINK "/proc/self/exe"
 

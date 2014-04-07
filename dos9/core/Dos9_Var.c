@@ -135,7 +135,7 @@ int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
 
     }
 
-    #ifndef _POSIX_C_SOURCE
+    #ifndef WIN32
 
         /* Non windows systems are case sensitive, and thus,
            capitalization of charcter is needed */

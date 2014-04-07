@@ -40,16 +40,10 @@ ESTR* Dos9_EsInit(void)
 
         ptrESTR->ptrString=malloc(DEFAULT_ESTR);
 
-        if (ptrESTR->ptrString) {
-
-            ptrESTR->iLenght=DEFAULT_ESTR;
-
-        } else {
-
+        if (!(ptrESTR->ptrString))
             goto Dos9_EsInit_Error;
 
-        }
-
+        ptrESTR->iLenght=DEFAULT_ESTR;
 
     } else {
 
@@ -73,6 +67,7 @@ ESTR* Dos9_EsInit(void)
 LIBDOS9 int Dos9_EsFree(ESTR* ptrESTR)
 {
     /* free the string buffer */
+
     free(ptrESTR->ptrString);
 
     /* free the structure itself */

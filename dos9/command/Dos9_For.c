@@ -1225,14 +1225,14 @@ int Dos9_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn, int
     int i=0;
 
     #ifdef _POSIX_C_SOURCE
-	
+
 	/* on POSIX systems, we need to know the child process ID in order
  	   to process to fork */
 	int iPid;
 
     #endif
 
-    lpArgs[i++]="Dos9";
+    lpArgs[i++]="dos9";
     lpArgs[i++]="/Q";
     lpArgs[i++]="/E";
 
@@ -1264,8 +1264,8 @@ int Dos9_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn, int
 
         if (errno == ENOENT) {
 
-            Dos9_ShowErrorMessage(DOS9_FOR_LAUNCH_ERROR | DOS9_PRINT_C_ERROR, 
-				  Dos9_EsToChar(lpInput), 
+            Dos9_ShowErrorMessage(DOS9_FOR_LAUNCH_ERROR | DOS9_PRINT_C_ERROR,
+				  Dos9_EsToChar(lpInput),
 				  FALSE);
 
             return -1;

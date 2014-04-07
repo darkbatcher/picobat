@@ -3,9 +3,13 @@
 #include <dirent.h>
 #include <string.h>
 
+#include "../LibDos9.h"
+
 #include "Dos9_File.h"
 
 #ifndef WIN32
+
+#include <sys/stat.h>
 
 static char lpCurrentDir[FILENAME_MAX+3]="CD=";
 
@@ -25,8 +29,8 @@ int Dos9_GetExePath(char* lpBuf, size_t iBufSize)
 
     #else
 
-        /* we shoud add custom codes for various operating systems,
-           the system not currently supported by default are FreeBSD,
+        /* we shoud add custom codes for various operating systems.
+           Operating systems not currently supported by are FreeBSD,
            MacOS X, and solaris */
 
 
@@ -41,6 +45,7 @@ int Dos9_DirExists(char *ptrName)
 
     if ((rep = opendir(ptrName))==NULL) return 0; /* Ouverture d'un dossier */
     closedir(rep);
+
     return 1;
 }
 
@@ -62,12 +67,13 @@ char* Dos9_GetCurrentDir(void)
 
 int Dos9_FileExists(char* ptrName)
 {
-    FILE* pFile;
-    if ((pFile=fopen(ptrName, "r"))) {
-        free(pFile);
-        return 1;
-    }
-    return 0;
+    struct stat sStat;
+
+    if (stat(ptrName, &sStat)==-1)
+        return FALSE;
+
+    return S_ISREG(sStat.st_mode);
+
 }
 
 #endif

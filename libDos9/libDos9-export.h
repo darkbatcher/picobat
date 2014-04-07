@@ -48,6 +48,10 @@
 
     #define _Dos9_Pipe(descriptors, size, mode) pipe(descriptors)
 
+    #define stricmp strcasecmp
+    #define strnicmp strncasecmp
+
+
 #elif defined WIN32
 
     #include <windows.h>
@@ -77,9 +81,9 @@
     #define flushall() _flushall()
     #define dup(a) _dup(a)
     #define dup2(a,b) _dup2(a,b)
-	#define write(a,b,c) _write(a,b,c)
-	#define read(a,b,c) _read(a,b,c)
-	#define access(a,b) _access(a,b)
+    #define write(a,b,c) _write(a,b,c)
+    #define read(a,b,c) _read(a,b,c)
+    #define access(a,b) _access(a,b)
     #define _Dos9_Pipe(descriptors, size, mode) _pipe(descriptors, size, mode)
 
 #else

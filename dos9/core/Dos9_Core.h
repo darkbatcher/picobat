@@ -47,10 +47,16 @@
 
 #include "Dos9_Exit.h"
 
-#ifndef WIN32
-    #define getch() getchar()
-#else
+#ifdef WIN32
+
     #include <conio.h>
+
+#elif defined  _POSIX_C_SOURCE
+    
+    #define getch getchar
+    #define stricmp strcasecmp
+    #define strnicmp strncasecmp
+
 #endif
 
 #endif // DOS9_CORE_H_INCLUDED

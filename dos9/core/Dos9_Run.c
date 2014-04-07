@@ -462,11 +462,11 @@ int Dos9_RunExternalCommand(char* lpCommandLine)
 
         #ifdef WIN32
 
-            snprintf(lpFileName, sizeof(lpFileName) ,"%s/Dos9.exe", lpExePath);
+            snprintf(lpFileName, sizeof(lpFileName) ,"%s/dos9.exe", lpExePath);
 
         #else
 
-            snprintf(lpFileName, sizeof(lpFileName) ,"%s/Dos9", lpExePath);
+            snprintf(lpFileName, sizeof(lpFileName) ,"%s/dos9", lpExePath);
 
         #endif // WIN32
 
@@ -530,7 +530,7 @@ int Dos9_RunExternalFile(char* lpFileName, char** lpArguments)
     if (iPid == 0 ) {
       /* if we are in the son */
 
-          if ( execv(lpArguments[0], lpArguments) == -1) {
+          if ( execv(lpFileName, lpArguments) == -1) {
 
                 /* if we got here, we can't set ERRORLEVEL
                    variable anymore, but print an error message anyway.

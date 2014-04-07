@@ -60,7 +60,7 @@ void _Dos9_Thread_Close(void) {
 /*
     begins a thread
  */
-int Dos9_BeginThread(THREAD* lpThId, void(*lpFunction)(void*) , int iMemAmount, void* lpArgList)
+int Dos9_BeginThread(THREAD* lpThId, void(*lpFunction)(void*) , int iMemAmount,                      void* lpArgList)
 {
     int            iRet;
     pthread_t     *lpTh2;
@@ -151,9 +151,8 @@ LIBDOS9 void Dos9_AbortThread(THREAD* thSelfId)
 
             }
 
-            /* free the structure we got from the
-               stack */
-            free(thId);
+            /* don't free anything because things are freed by
+               the if */
 
             break;
 
@@ -168,7 +167,7 @@ LIBDOS9 void Dos9_AbortThread(THREAD* thSelfId)
 
     Dos9_ReleaseMutex(&_threadStack_Mutex);
 
-    pthread_abort(thSelfId);
+    pthread_cancel(*thSelfId);
 
 }
 
@@ -219,9 +218,8 @@ LIBDOS9 void     Dos9_EndThread(void* iReturn)
 
             }
 
-            /* free the structure we got from the
-               stack */
-            free(thId);
+            /* don't free anything because things are freed by
+               the if */
 
             break;
 
@@ -609,8 +607,14 @@ LIBDOS9 int      Dos9_LockMutex(MUTEX* lpMuId)
             exit(-1);
 
         case WAIT_FAILED:
-            fprintf(stderr, "[libDos9/Dos9_LockMutex()] Error : Try to get mutex failed : %d", (int)GetLastError());
+            fprintf(stderr,
+                    "[libDos9/Dos9_LockMutex()] Error : Try to get mutex "
+                    "failed : %d",
+                    (int)GetLastError()
+                   );
+
             exit(-1);
+
     }
 
     #endif
@@ -648,7 +652,14 @@ LIBDOS9 int      Dos9_WaitForAllThreads(int iDelay)
 
     STACK* lpStack;
 
-    iDelay/=10;
+    #ifdef _POSIX_C_SOURCE
+        struct timespec tDelay={0,iDelay*10};
+
+    #else
+        iDelay/=10;
+    #endif
+
+
 
     do {
 
@@ -663,7 +674,15 @@ LIBDOS9 int      Dos9_WaitForAllThreads(int iDelay)
            wait for at most iDelay Milliseconds */
         iAttempt++;
 
-        Sleep(10);
+        #ifdef _POSIX_C_SOURCE
+
+            nanosleep(&tDelay, NULL);
+
+        #elif defined WIN32
+
+           Sleep(10);
+
+        #endif
 
     } while (iContinue && (iAttempt <= iDelay));
 

@@ -18,13 +18,17 @@
  *
  */
 
+#ifndef WIN32
+
+/* this is a wrapper on the Win32 strupr */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
 
-#include "libDos9.h"
+#include <libDos9.h>
 
-char* tea_Strupr(char* lpChar)
+char* strupr(char* lpChar)
 {
     char* const lpCharBegin=lpChar;
 
@@ -38,3 +42,5 @@ char* tea_Strupr(char* lpChar)
 
     return lpCharBegin;
 }
+
+#endif

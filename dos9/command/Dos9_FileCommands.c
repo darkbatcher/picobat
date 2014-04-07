@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <time.h>
+#include <string.h>
 
 #include <libDos9.h>
 
