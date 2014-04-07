@@ -19,7 +19,7 @@ SRC=./Dos9.c ./command/Dos9_Conditions.c ./command/Dos9_FileCommands.c \
     ./core/Dos9_Block.c ./command/Dos9_Call.c ./lang/Dos9_Help.c \
     ./core/Dos9_Alias.c ./command/Dos9_Alias.c
 
-LIB=-linteval -lDos9 -lmatheval @LIBS@
+LIB=-L../lib -linteval -lDos9 -lmatheval @LIBS@
 
 TARGET=../bin${arch}/dos9
 
@@ -33,4 +33,4 @@ $(TARGET) : $(OBJ)
 			@CC@ -o $@ $^ $(LIB)  @CFLAGS@ 
 
 %.o : %.c
-			@CC@ -o $@ -c $<  @CFLAGS@ 
+			@CC@ -I../include -o $@ -c $<  @CFLAGS@ 

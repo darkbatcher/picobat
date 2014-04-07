@@ -11,20 +11,20 @@ SETLOCAL EnableDelayedExpansion
 
 IF %DOS9_OS%==WINDOWS (
 
-    :: set special dos9 directories for commands
+	:: set special dos9 directories for commands
 	SET PATH=!DOS9_PATH!/cmd;!DOS9_PATH!;!PATH!
 
-    :: set home path for support of the gnu nano editor
+	:: set home path for support of the gnu nano editor
 	:: broken since nano is no more includedd and it can
 	:: causes incompatibility with other *nix packages for
 	:: windows
 	:: SET HOME=%DOS9_PATH%/nano
 	
-    :: Set default language in windows
+    	:: Set default language in windows
 	:: Usually, this line is not needed and language
 	:: is automatically detected.
 	
-    :: SET LANGUAGE=fr_FR
+    	:: SET LANGUAGE=fr_FR
 
 ) else (
 
@@ -32,7 +32,7 @@ IF %DOS9_OS%==WINDOWS (
 	:: to expand the path and provide a little compatibility 
 	:: over windows.
 
-	SET PATH=!DOS9_PATH!/cmd:!PATH!
+	SET PATH=!PATH!:!DOS9_PATH!/cmd:!PATH!
 	
 	:: set windows compatible variable
 	SET SYSTEMROOT=/bin
@@ -40,4 +40,12 @@ IF %DOS9_OS%==WINDOWS (
 	SET SYSTEMDRIVE=/
 	SET USERPROFILE=~
 
-))
+)
+
+:: At this state, dos9 will reset neither options or variables that have
+:: been set, so that, it might be something good to reset them by yourself.
+:: The following line is used to disable delayed expansion. Uncomment if
+:: you want to disable delayed expansion by default.
+:: 
+:: SETLOCAL DisableDelayedExpansion
+)

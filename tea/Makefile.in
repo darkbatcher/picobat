@@ -12,7 +12,7 @@ SRC= ./src/tea.c ./src/out/tea_html_out.c \
      ./src/Tea_Load.c ./src/out/tea_text_out.c ./src/Tea_Node.c \
      ./src/Tea_Output.c ./src/tea_strupr.c ./src/out/tea_ansi_out.c
 
-LIB=-lDos9 @LIBS@
+LIB=-L../lib -lDos9 @LIBS@
 
 TARGET=../bin${arch}/cmd/tea
 
@@ -23,7 +23,7 @@ OBJ=$(SRC:.c=.o)
 all: $(TARGET)
 
 $(TARGET) : $(OBJ)
-			@CC@ -o $@ $^ $(LIB)  @CFLAGS@ 
+			@CC@ -o $@ $^ $(LIB) @CFLAGS@ 
 
 %.o : %.c
-			@CC@ -o $@ -c $< @CFLAGS@
+			@CC@ -I../include -o $@ -c $< @CFLAGS@

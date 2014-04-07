@@ -658,4 +658,102 @@ ${if foo^ bar equ "foo bar" echo YES}
 ${make}
 	
 	- Switched to version {2014.0.9}, because {dos9} is becoming pretty develloped now.
+
+{{Monday 7th, April}}
+
+	- Fixed numerous bugs on the {GNU/Linux} version. Before that update, it
+	would have been fairly difficult to make it work. I posted only fixes
+	for GNU/Linux, but very few incompatibilities can be expected for
+	BSD based operating systems (and anyway, the only BSD based os i've
+	got is NetBSD, so that compatibility may not be achievied for other
+	versions. The major fixes included are :
+
+		-- A fix for the {autotools} build system, indeed, the old
+		{configure.ac} did not appended needed libraries (for
+		examples, there was confusions for {libintl}, that is included
+		in {GLibc} on {GNU/linux}). I think i'll consider choosing a
+		better buid systems, because in facts, {autotools} adds endless
+		complications even for building quite simple code. The most
+		Anoying drawback is that in fact, you can't use {autoconf}
+		without using {automake}, otherwise, some bugs are introduced
+		that you'll never hear of reading the documentation.
+		Nevertheless, we don't need using {automake} to generate
+		Makefile that we could write, especially when the output
+		Makefile is about hundreds of KiB, and is constituted of
+		almost hacks to make it work with {make}. Thus, it's a bit
+		like using a program to produce garbage. {autoconf}
+		provides lots of interesting features, but these advantages are
+		superseeded by its drawbacks. In particular, the fact that it
+		does not meet the UNIX conception standards (e.g. each program
+		should do only do one thing, and do it the best), so that the
+		dependencies between apparently distinct {autotools} programs
+		make the developper to use all the {autotools} programs.
+
+		-- A fix for the {Dos9} code itself. The last revisions of
+		{Dos9} included a lot of features that had not been tested
+		on *NIX operating systems. So that numerous incompatibilities
+		were introduced along source code modification. Mainly, the
+		{thread} part of {libDos9} had been left totally untested on
+		real system for versions. I apologize for that, I should not
+		have been waiting for such a long time to upgrade. So, fixes
+		in the code that have been made are:
+
+			--- Make wrapper arround undefined symbols comming
+			from windows like {stricmp} ({strcasecmp} is used
+			instead). 
+
+			--- Fixed bugs from {libDos9/threads}, It caused double
+			free exception for some errors.
+
+			--- Fixed used of {strupr} in {tea}. In fact, the
+			symbol for {strupr} that was intended to be used on 
+			{GNU/Linux} was used on {Windows} platforms instead.
+
+			--- Fixed incompatibilities in {libDos9/file}. In fact,
+			default routines for *NIX used the functions {fopen}
+			to check whether a file existed or not. The bug
+			was introduced because in many *NIX systems, 
+			directories are indeed files that can be opened.
+			{libDos9} now checks for regular files using the
+			{lstat} function instead.
+
+			--- Fixed incompatibilities with environment variables.
+			This issue was caused by the fact that environment
+			variables are case-sentitive for *NIX operating
+			systems while they are not for Windows systems. In
+			fact, {Dos9} already capitilized variable names when 
+			variables were set, however, similar feature was not
+			provided for expansion. This is now fixed.
 	
+		-- Fixes on other files, (I mean, on files that are not
+		required in order to make {Dos9} runing). Those fixes include:
+
+			--- Changed the name of the {Dos9} executable from
+			{Dos9} to {dos9}. This change will have no effect on
+			windows, but it is usual, however, to have command
+			executable names in lower characters. I may implement
+			a feature for {GNU/linux} that ignore case for the
+			command line. However, I now recommand using
+			uncapitalized characters for command name, if you
+			need compatibility, of course.
+
+			--- Fixed a bug with the translation system. It used
+			to scan file {dos9/lang/Dos9_Help.c} instead of file
+			{dos9/lang/Dos9_Lang.c}.
+
+			--- Fixed a bug from {Dos9_Auto.bat}, the current
+			version dit not included the path {%DOS9_PATH%} in
+			the {%PATH%} variable, that was problematic for *NIX
+			systems, however, the {Dos9} executable filename
+			should be looked up by the program itself, rather
+			than being included in {%PATH%}.
+
+	- Changed the way libraries are built. They are now build from within
+	the current direction, and they are located in {./lib} and headers for
+	libraries are located in {./include}.
+
+	- Fixed a bug in Makefiles that caused the manual pages to be copied
+	in a wrong directory (ie. {./bin/share/man} instead of
+	{./bin/share/man/man} that was wrong.
+
+

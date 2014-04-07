@@ -10,6 +10,7 @@
 DOS9_COMPONENTS=libDos9 libinteval libmatheval-dos9 dos9 tea dump po scripts
 
 BUILD_TREE=bin${arch} bin${arch}/cmd bin${arch}/share bin${arch}/share \
+	   bin${arch}/share/man include lib 
 
 all:
 	$(MAKE) -e build-tree
@@ -22,10 +23,10 @@ bin:
 	for i in $(DOS9_COMPONENTS); do $(MAKE) -e -C $$i ; done;
 
 doc:
-	cp -r man bin${arch}/share/man
+	cp -r ./man ./bin${arch}/share/
 	
 build-tree:
-	for i in $(BUILD_TREE); do mkdir -p $$i ; done;
+	for i in $(BUILD_TREE); do mkdir -p $$i ; chmod 777 $$i; done;
 
 po-merge:
 	$(MAKE) -e -C po po-merge

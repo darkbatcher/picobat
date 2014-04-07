@@ -25,11 +25,11 @@ SRC=./lib/error.c ./lib/matheval.c ./lib/node.c \
 	./lib/xmath.c
 
 # setup includes
-INCLUDE_FILE=@includedir@/matheval.h
+INCLUDE_FILE=../include/matheval.h
 ORIGIN_FILE=./lib/matheval.h
 
 # build filenames
-TARGET=@libdir@/libmatheval.a
+TARGET=../lib/libmatheval.a
 OBJ=$(SRC:.c=.o)
 
 all : $(TARGET) $(INCLUDE_FILE)

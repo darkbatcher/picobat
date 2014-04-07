@@ -10,11 +10,11 @@
 SRC=./lib/inteval.c ./lib/parser.c ./lib/lexer.c 
 
 # setup includes
-INCLUDE_FILE=@includedir@/inteval.h
+INCLUDE_FILE=../include/inteval.h
 ORIGIN_FILE=./lib/inteval.h
 
 # build filenames
-TARGET=@libdir@/libinteval.a
+TARGET=../lib/libinteval.a
 OBJ=$(SRC:.c=.o)
 
 all : $(TARGET) $(INCLUDE_FILE)
