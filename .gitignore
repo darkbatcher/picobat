@@ -1,0 +1,8 @@
+*~
+*.[oa]
+Makefile
+include
+lib
+bin
+config.*
+autom4te.cache
