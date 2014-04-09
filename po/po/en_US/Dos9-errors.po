@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dos9 0.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-03 18:46+0200\n"
+"POT-Creation-Date: 2014-04-08 18:08+0200\n"
 "PO-Revision-Date: 2014-02-01 23:37+0100\n"
 "Last-Translator: DarkBatcher <darkbatcher@gmail.com>\n"
 "Language-Team: English <darkbatcher@dos9.org>\n"
-"Language: English\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: English\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.5.7\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -195,9 +195,9 @@ msgid "Error : \"%s\" is an invalid stream redirection.\n"
 msgstr "Error : \"%s\" is not valid mathematical expression.\n"
 
 #: ../dos9/errors/Dos9_Errors.c:174
-#, c-format
-msgid "Error : Redirection for %s was already specified.\n"
-msgstr ""
+#, fuzzy, c-format
+msgid "Error : Redirection for \"%s\" was already specified.\n"
+msgstr "Error : \"%s\" was unexpected.\n"
 
 #: ../dos9/errors/Dos9_Errors.c:177
 #, fuzzy, c-format
@@ -205,7 +205,7 @@ msgid "Error : Encountered malformed blocks (\"%s\").\n"
 msgstr "Error : Stream module : \"%s\".\n"
 
 #: ../dos9/errors/Dos9_Errors.c:180
-msgid "Error : Blocks left unclosed a end-of-file.\n"
+msgid "Error : Blocks left unclosed at end-of-file.\n"
 msgstr ""
 
 #: ../dos9/errors/Dos9_Errors.c:183

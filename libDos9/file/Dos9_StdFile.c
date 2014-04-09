@@ -9,6 +9,14 @@
 
 #ifndef WIN32
 
+#ifdef _NETBSD_SOURCE
+#undef _NETBSD_SOURCE
+#endif // _NETBSD_SOURCE
+
+#ifdef _XOPEN_SOURCE
+#undef _XOPEN_SOURCE
+#endif // _XOPEN_SOURCE
+
 #include <sys/stat.h>
 
 static char lpCurrentDir[FILENAME_MAX+3]="CD=";

@@ -20,9 +20,9 @@
 # <http://www.gnu.org/licenses/>.
 #
 
-SRC=./lib/error.c ./lib/matheval.c ./lib/node.c \
-	./lib/parser.c ./lib/scanner.c ./lib/symbol_table.c ./lib/xmalloc.c \
-	./lib/xmath.c
+OBJ=	./lib/error.o ./lib/matheval.o ./lib/node.o \
+	./lib/scanner.o ./lib/parser.o ./lib/symbol_table.o ./lib/xmalloc.o \
+	./lib/xmath.o
 
 # setup includes
 INCLUDE_FILE=../include/matheval.h
@@ -30,26 +30,47 @@ ORIGIN_FILE=./lib/matheval.h
 
 # build filenames
 TARGET=../lib/libmatheval.a
-OBJ=$(SRC:.c=.o)
+
+CC=@CC@
+CFLAGS=-Ilib @CFLAGS@ -DHAVE_CONFIG_H
+
+YACC=@YACC@
+YFLAGS=-p evaluator_ -d
+
+LEX=@LEX@
+LFLAGS=-P evaluator_
 
 all : $(TARGET) $(INCLUDE_FILE)
 
 # build the lib
 $(TARGET): $(OBJ)
-			ar -r -s $@ $^
+	ar -r -s $@ $(OBJ)
 
 # installation of header
 $(INCLUDE_FILE): $(ORIGIN_FILE)
 	cp $(ORIGIN_FILE) $(INCLUDE_FILE)
+
+clean:
+	for i in $(OBJ); do rm -f $$i ; done;
+
+.PHONY: clean
+
+.SUFFIXES: .o
 			
 # build C files
-%.o : %.c
-			@CC@ @CFLAGS@ -o $@ -c $< -D HAVE_CONFIG_H
+.c.o:
+	$(CC) $(CFLAGS) -o $@ -c $< 
 
 # build YACC files			
-%.c : %.y
-			@YACC@ -p evaluator_ -d $< -o $@
-
+./lib/parser.o: ./lib/parser.y
+	$(YACC) $(YFLAGS) -o ./lib/parser.y.c ./lib/parser.y 
+	$(CC) $(CFLAGS) -o ./lib/parser.o -c ./lib/parser.y.c 
+	rm -f ./lib/parser.y.c
+ 
 # build LEX files
-%.c : %.l
-			@LEX@ -o $@ -P evaluator_ $<
+./lib/scanner.o: ./lib/parser.o ./lib/scanner.l
+	$(LEX) -o ./lib/scanner.l.c $(LFLAGS) ./lib/scanner.l 
+	$(CC) $(CFLAGS) -o ./lib/scanner.o -c ./lib/scanner.l.c
+	rm -f ./lib/scanner.l.c
+
+

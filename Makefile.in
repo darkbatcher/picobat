@@ -8,14 +8,14 @@
 #
 
 DOS9_COMPONENTS=libDos9 libinteval libmatheval-dos9 dos9 tea dump po scripts
-
+DOS9_CLEAN=libDos9 libinteval libmatheval-dos9 dos9 tea dump
 BUILD_TREE=bin${arch} bin${arch}/cmd bin${arch}/share bin${arch}/share \
 	   bin${arch}/share/man include lib 
 
 all:
-	$(MAKE) -e build-tree
-	$(MAKE) -e bin
-	$(MAKE) -e doc
+	$(MAKE) build-tree
+	$(MAKE) bin
+	$(MAKE) doc
 
 # define a list of components to be build
 
@@ -35,4 +35,5 @@ po-merge:
 
 
 clean:
-	rm -r *.o
+	for i in $(DOS9_CLEAN); do $(MAKE) -e -C $$i clean ; done;
+	for i in bin lib include; do rm -f -r $$i ; done;

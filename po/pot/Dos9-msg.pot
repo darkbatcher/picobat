@@ -8,183 +8,114 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-03 20:41+0200\n"
+"POT-Creation-Date: 2014-04-08 18:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../dos9/lang/Dos9_Help.c:34
-msgid ""
-"Create an alias on a command.\n"
-"Usage: ALIAS alias=command\n"
+#: ../dos9/lang/Dos9_Lang.c:60
+msgid "Echo command enabled"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Help.c:38
-msgid ""
-"Change current working directory.\n"
-"Usage: CD  [[/d] path]\n"
-"       CHDIR [[/d] path]\n"
+#: ../dos9/lang/Dos9_Lang.c:61
+msgid "Echo command disabled"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Help.c:43
-msgid ""
-"Clear console's screen\n"
-"Usage: CLS\n"
+#: ../dos9/lang/Dos9_Lang.c:62
+msgid "Press any key to continue..."
 msgstr ""
 
-#: ../dos9/lang/Dos9_Help.c:47
-msgid ""
-"Change console's color to the given code.\n"
-"Usage: COLOR [code]\n"
+#: ../dos9/lang/Dos9_Lang.c:65
+msgid "\tNo files found\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Help.c:51
+#: ../dos9/lang/Dos9_Lang.c:66
 msgid ""
-"Copy file(s) to another location.\n"
-"Usage: COPY [/-Y | /Y] [/A[:]attributes] source destination\n"
+"\n"
+"Last change\t\tSize\tAttr.\tName\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Help.c:55
-msgid ""
-"Call a script of a label from the current context.\n"
-"Usage: CALL [/e] [file] [:label] [parameters ...]\n"
-msgstr ""
-
-#: ../dos9/lang/Dos9_Help.c:60
-msgid ""
-"Delete file(s).\n"
-"Usage: DEL [/P] [/F] [/S] [/Q] [/A[:]attributes] name\n"
-"       ERASE [/P] [/F] [/S] [/Q] [/A[:]attributes] name\n"
-msgstr ""
-
-#: ../dos9/lang/Dos9_Help.c:65
-msgid ""
-"List files in a directory and in subdirectories.\n"
-"Usage: DIR [/A[:]attributes] [/S] [/B] [path]\n"
-msgstr ""
-
-#: ../dos9/lang/Dos9_Help.c:69
-msgid ""
-"Print a message, or enable/disable commande echoing.\n"
-"Usage: ECHO [OFF|ON]\n"
-"       ECHO text\n"
-"       ECHO.text\n"
-msgstr ""
-
-#: ../dos9/lang/Dos9_Help.c:75
+#: ../dos9/lang/Dos9_Lang.c:67
 #, c-format
 msgid ""
-"Perform commands against items (files, strings, command output).\n"
-"Usage: FOR %%A IN (string) DO (\n"
-"          :: some commands\n"
-"       )\n"
+"\t\t\t\t\t\t%d Files\n"
+"\t\t\t\t\t\t%d Folders\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_Lang.c:70
+msgid ""
+"Dos9 does not support ``/?'' switch for help anymore, use ``HLP command'' "
+"instead."
+msgstr ""
+
+#: ../dos9/lang/Dos9_Lang.c:74
+msgid ""
+"DOS9 COMMAND\n"
 "\n"
-"       FOR /F [options] %%A IN (object) DO (\n"
-"          :: some commands\n"
-"       )\n"
+"        DOS9 is a free, cross-platform command prompt used for batch "
+"scripts \n"
+"     and command processing.\n"
 "\n"
-"       FOR /L %%A IN (start,increment,end) DO (\n"
-"          :: some commands\n"
-"       )\n"
-msgstr ""
-
-#: ../dos9/lang/Dos9_Help.c:87
-msgid ""
-"Go to a label in a command script.\n"
-"Usage: GOTO [:]label [file]\n"
-msgstr ""
-
-#: ../dos9/lang/Dos9_Help.c:91
-msgid ""
-"Perform commands on some conditions.\n"
-"Usage: IF [/i] [NOT] string1==string2 (\n"
-"          :: code to be ran\n"
-"       )\n"
+"        DOS9 is a free software, designed to be as compatible as possible "
+"with\n"
+"     CMD.EXE proprietary software from MICROSOFT.\n"
 "\n"
-"       IF [/i] string1 cmp string2\n"
-"          :: code to be ran\n"
-"       )\n"
+"SYNOPSIS\n"
 "\n"
-"       IF [NOT] [DEFINED | EXIST | ERRORLEVEL] object          :: code to be "
-"ran\n"
-"       )\n"
-msgstr ""
-
-#: ../dos9/lang/Dos9_Help.c:103
-msgid ""
-"Create the given directory.\n"
-"Usage: MD directory\n"
-"       MKDIR directory\n"
-msgstr ""
-
-#: ../dos9/lang/Dos9_Help.c:109
-msgid ""
-"Wait for a keystroke from the user.\n"
-"Usage: PAUSE\n"
-msgstr ""
-
-#: ../dos9/lang/Dos9_Help.c:114
-msgid ""
-"Removes a directory.\n"
-"Usage: RMDIR [/S] [/Q] directory\n"
-"       RD [/S] [/Q] directory\n"
-msgstr ""
-
-#: ../dos9/lang/Dos9_Help.c:119
-msgid ""
-"Renames a file.\n"
-"Usage: REN file name.ext\n"
-"       RENAME file name.ext\n"
-msgstr ""
-
-#: ../dos9/lang/Dos9_Help.c:124
-msgid ""
-"Introduce a comment.\n"
-"Usage: REM comment\n"
-msgstr ""
-
-#: ../dos9/lang/Dos9_Help.c:129
-msgid ""
-"Set an environment variable.\n"
-"Usage: SET variable=content\n"
-"       SET /a[[:][i|f]] variable=expression\n"
-"       SET /p variable=question\n"
-msgstr ""
-
-#: ../dos9/lang/Dos9_Help.c:135
-msgid ""
-"Set options of the Dos9 command prompt.\n"
-"Usage: SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] "
-"[ENABLEFLOATS | DISABLEFLOATS] [CMDLYCORRECT | CMDLYINCORRECT]\n"
-msgstr ""
-
-#: ../dos9/lang/Dos9_Help.c:139
-msgid ""
-"Set console's title.\n"
-"Usage: TITLE title\n"
-msgstr ""
-
-#: ../dos9/lang/Dos9_Help.c:143
-msgid ""
-"Print a file.\n"
-"Usage: TYPE [file]\n"
-"       MORE [file]\n"
-msgstr ""
-
-#: ../dos9/lang/Dos9_Help.c:148
-msgid ""
-"Exit from the command prompt.\n"
-"Usage: EXIT [/b code]\n"
-msgstr ""
-
-#: ../dos9/lang/Dos9_Help.c:151
-msgid ""
-"This help is voluntary limited help to fit in the binary. If you need to\n"
-"see the full documentation, please type:\n"
+"   DOS9 [/v] [/n] [/f] [/e] [file]\n"
 "\n"
-"\tHLP command"
+"        Run a command file or wait for an user input.\n"
+"\n"
+"        - FILE : Path of the batch script to be run.\n"
+"\n"
+"        - /V : Enables delayed expansion (see `spec/xvar').\n"
+"\n"
+"        - /N : Enables dos9's extension (see `spec/ext').\n"
+"\n"
+"        - /F : Enables floating numbers (see `spec/exp').\n"
+"\n"
+"        - /E : Disable current directory echoing.\n"
+"\n"
+"COMPATIBILITY\n"
+"\n"
+"        Compatible with any version of DOS9. Incompatible with CMD.EXE.\n"
+"\n"
+"        Dos9 is cross-platform so that it can be run either on MS-WINDOWS "
+"or \n"
+"     GNU/LINUX. Theorically, a port of Dos9 should be possible in any \n"
+"     POSIX-compatible system just by recompiling sources using a C89 "
+"compiler.\n"
+"\n"
+"LICENSE\n"
+"\n"
+"        DOS9 is a free software distributed under GNU General Public "
+"License \n"
+"     (see `http://www.gnu.org/licenses/gpl.html') terms. For more \n"
+"     informations about free software's philosophy, see Free Software \n"
+"     Fundation's (see `http://www.fsf.org') website.\n"
+"\n"
+"AUTHOR\n"
+"\n"
+"        DOS9 have been written since 2010 by DARKBATCHER (ROMAIN GARBI). "
+"It \n"
+"     uses severals helpful free libraries from the GNU operating system "
+"(see \n"
+"     `http://www.gnu.org/'), mostly libmatheval (see \n"
+"     `http://www.gnu.org/software/libmatheval/'), gettext (see \n"
+"     `https://www.gnu.org/software/gettext/').\n"
+"\n"
+"        Dos9's windows packages also distribute some binaries from the "
+"GnuWin \n"
+"     project (see `http://gnuwin32.sourceforge.net/'). These binaries are "
+"GNU \n"
+"     iconv (see `iconv') and GNU nano (see `nano').\n"
+"\n"
+"SEE ALSO\n"
+"\n"
+"        ECHO Command (see `echo'), Command scripts (see `script'), "
+"Commands \n"
+"     list (see `commands') Commands list (see `commands')\n"
 msgstr ""

@@ -137,8 +137,8 @@ LIBDOS9 int         Dos9_GetMatchFileCallback(char* lpPathMatch, int iFlag, void
     char lpStaticPart[FILENAME_MAX],
          lpMatchPart[FILENAME_MAX];
 
-    int iFileDescriptors[2],
-        iReturn;
+    int iFileDescriptors[2];
+    size_t iReturn;
 
     THREAD hThread;
 
@@ -171,7 +171,6 @@ LIBDOS9 int         Dos9_GetMatchFileCallback(char* lpPathMatch, int iFlag, void
     /* Set pipe arguments */
     if (_Dos9_Pipe(iFileDescriptors, 1024, O_BINARY)==-1) return 0;
     fpParam.iInput=iFileDescriptors[0];
-
 
 	/* start the thread that gather answers */
     Dos9_BeginThread(&hThread,
@@ -214,6 +213,7 @@ LIBDOS9 int         Dos9_GetMatchFileCallback(char* lpPathMatch, int iFlag, void
 
 	}
 
+
     /* Start regexp-based file research */
     _Dos9_SeekFiles(lpStaticPart,
                     lpMatchPart,
@@ -223,6 +223,7 @@ LIBDOS9 int         Dos9_GetMatchFileCallback(char* lpPathMatch, int iFlag, void
                     iFlag);
 
 	Dos9_GetMatchFileList_End:
+
 
     if (write(iFileDescriptors[1], "\1", 1)==-1)
         return 0;
@@ -724,8 +725,8 @@ int                 _Dos9_WaitForFileListCallBack(LPFILEPARAMETER lpParam)
 {
     char lpFileName[FILENAME_MAX];
     char cUseStat=lpParam->bStat;
-    int iInDescriptor=lpParam->iInput,
-        i=0;
+    int iInDescriptor=lpParam->iInput;
+    size_t i=0;
     void(*pCallback)(FILELIST*)=lpParam->pCallBack;
 
     FILELIST flElement;
@@ -760,11 +761,10 @@ int                 _Dos9_WaitForFileListCallBack(LPFILEPARAMETER lpParam)
             pCallback(&flElement);
 
             i++;
-
         }
 
     }
-
+ 
     Dos9_EndThread((void*)i);
     return i;
 }

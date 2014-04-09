@@ -61,7 +61,7 @@ typedef union YYSTYPE
 {
 
 /* Line 2068 of yacc.c  */
-#line 67 "lib/parser.y"
+#line 67 "parser.y"
 
   Node *node;
   Record *record;
@@ -69,7 +69,7 @@ typedef union YYSTYPE
 
 
 /* Line 2068 of yacc.c  */
-#line 73 "lib/parser.h"
+#line 73 "parser.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

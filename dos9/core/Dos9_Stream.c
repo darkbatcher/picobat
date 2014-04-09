@@ -337,7 +337,7 @@ void Dos9_FlushDescriptor(int iDescriptor, unsigned int iStd)
 
 void Dos9_FlushStd(void)
 {
-    //fflush(stdin);
+    fflush(stdin);
     fflush(stdout);
     fflush(stderr);
 }

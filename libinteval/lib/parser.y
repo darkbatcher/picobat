@@ -6,8 +6,7 @@
 #include <math.h>
 
 #include "global.h"
-#include "parser_sym.h"
-#include "parser.h"
+#include "parser.y.h"
 
 %}
 

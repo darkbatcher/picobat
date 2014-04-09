@@ -289,6 +289,18 @@ typedef int COLOR;
 
 #endif
 
+#if defined( LIBDOS9_NO_CONSOLE )
+
+#define Dos9_ClearConsoleScreen()
+#define Dos9_SetConsoleColor(color)
+#define Dos9_SetConsoleTextColor(color)
+#define Dos9_SetConsoleCursorPosition(coord)
+#define Dos9_GetConsoleCursorPosition(void)   
+#define Dos9_SetConsoleCursorState(bVisible, iSize)
+#define Dos9_SetConsoleTitle(lpTitle) 
+
+#else
+
 LIBDOS9 void            Dos9_ClearConsoleScreen(void);
 LIBDOS9 void            Dos9_SetConsoleColor(COLOR cColor);
 LIBDOS9 void            Dos9_SetConsoleTextColor(COLOR cColor);
@@ -296,6 +308,8 @@ LIBDOS9 void            Dos9_SetConsoleCursorPosition(CONSOLECOORD iCoord);
 LIBDOS9 CONSOLECOORD    Dos9_GetConsoleCursorPosition(void);
 LIBDOS9 void            Dos9_SetConsoleCursorState(int bVisible, int iSize);
 LIBDOS9 void            Dos9_SetConsoleTitle(char* lpTitle);
+
+#endif
 
 #define Dos9_GetAccessTime(lpList) lpList->stFileStats.st_atime
 #define Dos9_GetCreateTime(lpList) lpList->stFileStats.st_ctime

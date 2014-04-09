@@ -23,6 +23,9 @@ LIB=-L../lib -linteval -lDos9 -lmatheval @LIBS@
 
 TARGET=../bin${arch}/dos9
 
+CC=@CC@
+CFLAGS=-I../include @CFLAGS@ 
+
 OBJ=$(SRC:.c=.o)
 
 # build all
@@ -30,7 +33,14 @@ all: $(TARGET)
 
 # build the main lib
 $(TARGET) : $(OBJ)
-			@CC@ -o $@ $^ $(LIB)  @CFLAGS@ 
+	$(CC) -o $(TARGET) $(OBJ) $(LIB) $(CFLAGS) 
 
-%.o : %.c
-			@CC@ -I../include -o $@ -c $<  @CFLAGS@ 
+clean:
+	for i in $(SRC:.c=.o); do rm -f $$i ; done;
+
+.PHONY: clean
+
+.SUFFIXES: .o
+
+.c.o:
+	$(CC) $(CFLAGS) -o $@ -c $<

@@ -132,7 +132,7 @@ LIBDOS9 void Dos9_AbortThread(THREAD* thSelfId)
     while (lpThreadStack) {
 
         /* gets the value from the stack */
-        Dos9_GetStack(_lpcsThreadStack, (void**)&thId);
+        Dos9_GetStack(lpThreadStack, (void**)&thId);
 
         if (pthread_equal(*thId, *thSelfId)) {
             /* both threads are the same */
@@ -199,7 +199,9 @@ LIBDOS9 void     Dos9_EndThread(void* iReturn)
     while (lpThreadStack) {
 
         /* gets the value from the stack */
-        Dos9_GetStack(_lpcsThreadStack, (void**)&thId);
+        Dos9_GetStack(lpThreadStack, (void**)&thId);
+	
+	
 
         if (pthread_equal(*thId, thSelfId)) {
             /* both threads are the same */

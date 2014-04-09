@@ -2,7 +2,7 @@
 
 #include "global.h"
 #include "parser_sym.h"
-#include "parser.h"
+#include "parser.y.h"
 
 #include <stdlib.h>
 

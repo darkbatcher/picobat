@@ -13,17 +13,24 @@ SRC= ./src/tea.c ./src/out/tea_html_out.c \
      ./src/Tea_Output.c ./src/tea_strupr.c ./src/out/tea_ansi_out.c
 
 LIB=-L../lib -lDos9 @LIBS@
-
 TARGET=../bin${arch}/cmd/tea
-
-
 OBJ=$(SRC:.c=.o)
+
+CC=@CC@
+CFLAGS=-I../include @CFLAGS@
 
 # build all
 all: $(TARGET)
 
 $(TARGET) : $(OBJ)
-			@CC@ -o $@ $^ $(LIB) @CFLAGS@ 
+	$(CC) -o $(TARGET) $(OBJ) $(LIB) $(CFLAGS)
 
-%.o : %.c
-			@CC@ -I../include -o $@ -c $< @CFLAGS@
+clean:
+	for i in $(SRC:.c=.o); do rm -f $$i ; done;
+
+.PHONY: clean
+
+.SUFFIXES: .o
+
+.c.o:
+	$(CC) -o $@ -c $< $(CFLAGS)

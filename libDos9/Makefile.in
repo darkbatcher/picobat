@@ -20,7 +20,9 @@ SRC=./cmdlist/Dos9_CmdList.c ./console/linux/Dos9_Console.c \
     ./enc/Dos9_Enc.c ./estr/Dos9_Estr.c stack/Dos9_Stack.c \
     ./thread/Dos9_Thread.c ./file/Dos9_StdFile.c \
     ./file/Dos9_Win32File.c ./init/Dos9_Init.c ./cmdlib/Dos9_String.c 
-		
+	
+CFLAGS=@CFLAGS@
+CC=@CC@	
 OBJ=$(SRC:.c=.o)
 
 all: $(TARGET) $(INCLUDE_FILE)
@@ -30,9 +32,16 @@ $(INCLUDE_FILE): $(ORIGIN_FILE)
 
 # build the main lib
 $(TARGET): $(OBJ)
-			ar -r -s $@ $^
+	ar -r -s $(TARGET) $(OBJ) 
 
-%.o : %.c
-			@CC@ @CFLAGS@ -o $@ -c $<
+clean:
+	for i in $(SRC:.c=.o); do rm -f $$i ; done;
+
+.PHONY: clean
+
+.SUFFIXES: .o
+
+.c.o:
+	$(CC) $(CFLAGS) -o $@ -c $<
 
 

@@ -24,7 +24,7 @@
 #include <ctype.h>
 #include <time.h>
 #include <locale.h>
-
+#include <signal.h>
 
 
 #if defined WIN32
@@ -47,8 +47,14 @@
 #include "command/Dos9_For.h"
 #include "command/Dos9_CommandInfo.h"
 
-//#define DOS9_DBG_MODE
+#define DOS9_DBG_MODE
 #include "core/Dos9_Debug.h"
+
+void Dos9_SigHandler(int c)
+{
+	exit (-1);
+}
+
 
 int main(int argc, char *argv[])
 {
@@ -70,17 +76,32 @@ int main(int argc, char *argv[])
         bQuiet=FALSE,
         bGetSwitch=TRUE;
 
+    DOS9_DBG("Initializing signal handler...\n");
+
+    signal(SIGINT, Dos9_SigHandler);
+
+    DOS9_DBG("Initializing libDos9 ...\n");
+
     if (Dos9_LibInit() == -1) {
 
         puts("Error : Unable to load LibDos9. Exiting ...");
         exit(-1);
     }
 
+    DOS9_DBG("Setting UNIX newlines ...\n");
+
     /* Set new line Mode to UNIX */
     Dos9_SetNewLineMode(DOS9_NEWLINE_UNIX);
 
+    DOS9_DBG("Allocating local variable block ... \n");
+
     lpvLocalVars=Dos9_GetLocalBlock();
+    
+    DOS9_DBG("Initializing console ...\n");  
+
     Dos9_InitConsole();
+
+    DOS9_DBG("Setting locale ...\n");
 
     #ifdef WIN32
 
@@ -92,10 +113,14 @@ int main(int argc, char *argv[])
 
     #endif // WINDOWS
 
+    DOS9_DBG("Loading GETTEXT messages... \n");
+
     /* Load Messages (including errors) */
     Dos9_LoadStrings();
     Dos9_LoadErrors();
     Dos9_LoadInternalHelp();
+
+    DOS9_DBG("Loading current directory...\n");
 
     Dos9_UpdateCurrentDir();
 
@@ -109,8 +134,12 @@ int main(int argc, char *argv[])
                               -1
                               );
 
+    DOS9_DBG("Getting command line arguments ... \n");
+
     /* get command line arguments */
     for (i=1;argv[i];i++) {
+
+	DOS9_DBG("* Got \"%s\" as argument...\n", argv[i]); 
 
         if (*argv[i]=='/' && bGetSwitch) {
             argv[i]++;
@@ -210,8 +239,8 @@ int main(int argc, char *argv[])
     colColor=DOS9_COLOR_DEFAULT;
     /* messages affichés */
 
-    Dos9_InitConsole();
 
+    DOS9_DBG("Setting introduction and DOS9_IS_SCRIPT ...\n");
 
     if (*lpFileName=='\0') {
 
@@ -237,22 +266,38 @@ int main(int argc, char *argv[])
 
     }
 
+    DOS9_DBG("Getting current executable name ...\n");
+
     strcpy(lpTitle, "DOS9_PATH=");
 
     Dos9_GetExePath(lpTitle+10, FILENAME_MAX);
 
-    lpInitVar[2]=lpTitle;
-    Dos9_InitVar(lpInitVar);
+    DOS9_DBG("\tGot \"%s\" as name ...\n", lpTitle+10);
 
-      /**********************************************
-       *         Initialization of Modules          *
-       **********************************************/
+    lpInitVar[2]=lpTitle;
+
+    DOS9_DBG("Initializing variables ...\n");
+
+    Dos9_InitVar(lpInitVar);
 
     putenv("ERRORLEVEL=0");
 
+    DOS9_DBG("Mapping commands ... \n");
+
     lpclCommands=Dos9_MapCommandInfo(lpCmdInfo, sizeof(lpCmdInfo)/sizeof(COMMANDINFO));
 
+    DOS9_DBG("Initializing streams ... \n");   
+
     lppsStreamStack=Dos9_InitStreamStack();
+
+    DOS9_DBG("Check wether stdout is still the screen ...\n");
+    printf("\tTest !\n");  
+
+    DOS9_DBG("\t If you cannot read anything, the test is failed\n");
+
+    DOS9_DBG("Check whether stdin is still the keyboard ...\n");
+    getchar();
+    DOS9_DBG("\t If you didn't hit anything, the test failed\n");
 
     /* getting input intialised (if they are specified) */
 
@@ -282,7 +327,11 @@ int main(int argc, char *argv[])
     ifIn.iPos=0;
     ifIn.bEof=FALSE;
 
+    DOS9_DBG("Running file \"%s\"\n", ifIn.lpFileName);  
+
     Dos9_RunBatch(&ifIn);
+
+    DOS9_DBG("\tRan\n");
 
     if (*lpFileName!='\0') {
 
@@ -313,7 +362,12 @@ int main(int argc, char *argv[])
     ifIn.iPos=0;
     ifIn.bEof=FALSE;
 
+    DOS9_DBG("Running file \"%s\" ...\n", ifIn.lpFileName);
+
     Dos9_RunBatch(&ifIn);
+
+    DOS9_DBG("\t Ran\nExiting...\n");
+
 
     Dos9_Exit();
 

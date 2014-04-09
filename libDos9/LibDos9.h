@@ -21,6 +21,19 @@
 #ifndef LIBDOS9_INCLUDED
 #define LIBDOS9_INCLUDED
 
+/* We don't define _POSIX_C_SOURCE value here, just set it by the -D compiler
+   flag, to the value you want. I don't actually now for wich revision of
+   POSIX i'm conforming, althoug AFAIK I only use POSIX functions for *nix
+   oses. If you try to build it in non POSIX conforming systems, (by default)
+   you should probably append the given argurments to the CFLAGS variables
+   when configuring: 
+
+	-D_POSIX_C_SOURCE=200809L
+
+   I have not tried with previous revisions, but this it seems to work on
+   NetBSD 6.1
+ */ 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -51,6 +64,7 @@
     #define DOS9_FILE_COMPRESSED FILE_ATTRIBUTE_COMPRESSED
 
     /** The file is hidden */
+B
     #define DOS9_FILE_HIDDEN FILE_ATTRIBUTE_HIDDEN
 
     /** The file has offline attribute */
@@ -88,8 +102,9 @@
 #else
 
     #include <unistd.h>
-	#include <pthread.h>
-	#include <stdarg.h>
+    #include <pthread.h>
+    #include <stdarg.h>
+    #include <sys/stat.h>
 
     #define stricmp(a,b) strcasecmp(a,b)
     #define strnicmp(a,b,c) strncasecmp(a,b,c)
@@ -120,9 +135,13 @@ typedef pid_t           PROCESS;
 
 #elif defined WIN32
 
-typedef DWORD THREAD;
+typedef DWORD  THREAD;
 typedef HANDLE MUTEX;
 typedef int    PROCESS;
+
+#else
+
+  #error bitch* does not define _POSIX_C_SOURCE
 
 #endif
 
@@ -933,9 +952,9 @@ LIBDOS9 int Dos9_GetExePath(char* lpBuf, size_t iBufSize);
 
 
 
-LIBDOS9 int      Dos9_BeginThread(THREAD* lpThId, void(*pFunc)(void*), int iMemAmount, void* arg);
+// LIBDOS9 int      Dos9_BeginThread(THREAD* lpThId, void(*pFunc)(void*), int iMemAmount, void* arg);
 LIBDOS9 void     Dos9_EndThread(void* iReturn);
-LIBDOS9 void     Dos9_AbortThread(THREAD* lpThId);
+LIBDOS9 void     Dos9_AbortThread(THREAD * lpThId);
 LIBDOS9 int      Dos9_WaitForThread(THREAD* thId, void* lpRet);
 LIBDOS9 int      Dos9_WaitForAllThreads(int iDelay);
 LIBDOS9 void     Dos9_AbortAllThreads(void);

@@ -15,12 +15,22 @@ SRC=./dump.c
 TARGET=../bin${arch}/cmd/dump
 OBJ=$(SRC:.c=.o)
 
+CC=@CC@
+CFLAGS=@CFLAGS@
+
 # build all
 all: $(TARGET)
 
 # build the main lib
 $(TARGET) : $(OBJ)
-			@CC@ @CFLAGS@ -o $@ $^
+	$(CC) $(CFLAGS) -o $(TARGET) $(OBJ) 
 
-%.o : %.c
-			@CC@ -o $@ -c $< @CFLAGS@
+clean:
+	for i in $(SRC:.c=.o); do rm -f $$i; done;
+
+.PHONY: clean
+
+.SUFFIXES: .o
+
+.c.o:
+	$(CC) -o $@ -c $< $(CFLAGS)

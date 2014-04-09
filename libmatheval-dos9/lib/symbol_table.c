@@ -67,17 +67,24 @@ symbol_table_create(int length)
 	};			/* Symbol table predefined functions
 				 * names. */
 	static double   (*functions[]) (double) = {
-	exp, log, log10, sqrt, sin, cos, tan, math_cot, math_sec, math_csc, asin, acos, atan, math_acot, math_asec, math_acsc, sinh, cosh, tanh, math_coth, math_sech, math_csch, math_asinh, math_acosh, math_atanh, math_acoth, math_asech, math_acsch, fabs, math_step, math_delta, math_nandelta, erf};	/* Symbol
-																																				 * table
-																																				 * predefined
-																																				 * functions
-																																				 * pointers
-																																				 * to
-																																				 * functions
-																																				 * to
-																																				 * calculate
-																																				 * them.
-																																				 */
+	exp, log, log10, sqrt, sin, cos, tan, math_cot, math_sec, math_csc,
+	asin, acos, atan, math_acot, math_asec, math_acsc, sinh, cosh, tanh, 
+	math_coth, math_sech, math_csch, math_asinh, math_acosh, math_atanh, 
+	math_acoth, math_asech, math_acsch, fabs, math_step, math_delta,
+	math_nandelta, erf};	
+	
+		/* Symbol
+		 * table
+		 * predefined
+		 * functions
+	 	 * pointers
+		 * to
+		 * functions
+		 * to
+		 * calculate
+		 * them.
+		 */
+	
 	int             i;	/* Loop counter.  */
 
 	/* Allocate memory for symbol table data structure as well as for

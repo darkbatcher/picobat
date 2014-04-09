@@ -48,7 +48,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "node.h"
-#include "parser.h"
+#include "parser.y.h"
 #include "symbol_table.h"
 
 /* Redefine macro to redirect scanner input from string instead of

@@ -7,7 +7,7 @@
 #
 # Please report bugs, and mistakes at : <darkbatcher at dos9 dot org>
 
-SRC=./lib/inteval.c ./lib/parser.c ./lib/lexer.c 
+OBJ=./lib/inteval.o ./lib/parser.o ./lib/lexer.o 
 
 # setup includes
 INCLUDE_FILE=../include/inteval.h
@@ -15,27 +15,45 @@ ORIGIN_FILE=./lib/inteval.h
 
 # build filenames
 TARGET=../lib/libinteval.a
-OBJ=$(SRC:.c=.o)
+
+CC=@CC@
+CFLAGS=@CFLAGS@
+
+YACC=@YACC@
+YFLAGS=-p IntEval_ -d
+
+LEX=@LEX@
+LFLAGS=-P IntEval_
 
 all : $(TARGET) $(INCLUDE_FILE)
 
 # construction de la librarie
 $(TARGET): $(OBJ)
-			ar -r -s $@ $^
+	ar -r -s $(TARGET) $(OBJ) 
 
 $(INCLUDE_FILE): $(ORIGIN_FILE)
 	cp $(ORIGIN_FILE) $(INCLUDE_FILE)
-			
-#compilation des fichiers C
-%.o : %.c
-			@CC@ @CFLAGS@ -o $@ -c $< 
 
-# constuction des fichiers YACC			
-%.c : %.y
-			@YACC@ -d $< -p IntEval_ -o $@
+clean:
+	for i in $(OBJ); do rm -f $$i ; done;
 
-# construction des fichiers LEX
-%.c : %.l
-			@LEX@ -o $@ -P IntEval_ $<
+.PHONY: clean
 
-			
+.SUFFIXES: .o
+
+# construct C files. Some people would argue that this old-fashioned syntax
+# has been marked obsolete for a long time now by gmake, however, this is
+# the most widely supported syntax. For example on NetBSD, only this syntax
+# is avialiable.
+.c.o:
+	$(CC) $(CFLAGS) -o $@ -c $< 
+
+./lib/parser.o : ./lib/parser.y
+	$(YACC) $(YFLAGS) -o ./lib/parser.y.c ./lib/parser.y 
+	$(CC) $(CFLAGS) -o ./lib/parser.o -c ./lib/parser.y.c  
+	rm -f ./lib/parser.y.c
+
+./lib/lexer.o: ./lib/parser.o ./lib/lexer.l
+	$(LEX) -o ./lib/lexer.l.c $(LFLAGS) ./lib/lexer.l 
+	$(CC) $(CFLAGS) -o ./lib/lexer.o -c ./lib/lexer.l.c
+	rm -f ./lib/lexer.l.c 
