@@ -47,12 +47,13 @@
 #include "command/Dos9_For.h"
 #include "command/Dos9_CommandInfo.h"
 
-#define DOS9_DBG_MODE
+//#define DOS9_DBG_MODE
 #include "core/Dos9_Debug.h"
 
 void Dos9_SigHandler(int c)
 {
-	exit (-1);
+    printf("Trigered break\n");	
+    exit (-1);
 }
 
 
@@ -290,14 +291,6 @@ int main(int argc, char *argv[])
 
     lppsStreamStack=Dos9_InitStreamStack();
 
-    DOS9_DBG("Check wether stdout is still the screen ...\n");
-    printf("\tTest !\n");  
-
-    DOS9_DBG("\t If you cannot read anything, the test is failed\n");
-
-    DOS9_DBG("Check whether stdin is still the keyboard ...\n");
-    getchar();
-    DOS9_DBG("\t If you didn't hit anything, the test failed\n");
 
     /* getting input intialised (if they are specified) */
 
@@ -315,11 +308,7 @@ int main(int argc, char *argv[])
 
     pErrorHandler=Dos9_Exit;
 
-
-
     /* running auto batch initialisation */
-
-
 
     strcat(lpTitle, "/Dos9_Auto.bat");
 

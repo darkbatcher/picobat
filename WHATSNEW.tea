@@ -756,4 +756,21 @@ ${make}
 	in a wrong directory (ie. {./bin/share/man} instead of
 	{./bin/share/man/man} that was wrong.
 
+{{Thursday 10th, april}}
 
+	- Discovered a strange bug with pipes. This bug appears when input
+	have several lines, when the pipe is closed, the input is not
+	restored (or, at least, the input is not splitted from {stdin}). In
+	fact, this should not occur since when the pipe is no more redirected,
+	there is no more input left. This is strange though, as this problem
+	does not happen with single-lines input that appears to work fairly
+	good. It appears that this is caused by buffers that are stored
+	internally in the kernel of the operating systems. A solution that I
+        might consider is using regular files (instead of pipes) to produce
+	somewhat of a pipe effect, because I haven't actually found a way to
+	override the problem.
+
+	- Fixed a bug with the {Dos9_ParseOutput} function. It wasn't possible
+	to specify {2>&1} and {> foo} simultaneously, so, you it was not
+	possible to specify a redirection for {stdin} and {stdout} with
+	{truncate} attribute.

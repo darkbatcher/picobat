@@ -116,16 +116,26 @@ int Dos9_ExecOperators(PARSED_STREAM* lppsStream)
 
     lppsStreamStack=Dos9_Pipe(lppsStreamStack);
 
+    if (lppsStream==NULL)
+	return 0;
+
+	//fprintf(stderr, "Stream Status: cNodeType=%d\n", lppsStream->cNodeType);
+	//Dos9_DumpStreamStack(lppsStreamStack);
+
     if (lppsStream->lppsNode != NULL) {
 
         if (lppsStream->lppsNode->cNodeType
             == PARSED_STREAM_NODE_PIPE)
              Dos9_OpenPipe(lppsStreamStack);
-
     }
+
+    //Dos9_DumpStreamStack(lppsStreamStack);
+
+    //while (getchar()!='\n');
 
     switch (lppsStream->cNodeType) {
 
+        case PARSED_STREAM_NODE_PIPE:
         case PARSED_STREAM_NODE_NONE :
             /* this condition is alwais true */
             return TRUE;
@@ -137,9 +147,6 @@ int Dos9_ExecOperators(PARSED_STREAM* lppsStream)
 
         case PARSED_STREAM_NODE_YES:
             return !iErrorLevel;
-
-        case PARSED_STREAM_NODE_PIPE:
-            return TRUE;
 
     }
 
@@ -202,6 +209,10 @@ int Dos9_RunLine(ESTR* lpLine)
     PARSED_STREAM_START* lppssStreamStart;
     PARSED_STREAM* lppsStream;
 
+    #ifdef DOS9_DBG_MODE
+        STREAMSTACK* lpStack;
+    #endif
+
     Dos9_RmTrailingNl(Dos9_EsToChar(lpLine));
 
     lppssStreamStart=Dos9_ParseLine(lpLine);
@@ -225,6 +236,9 @@ int Dos9_RunLine(ESTR* lpLine)
         Dos9_RunCommand(lppsStream->lpCmdLine);
 
     } while ((lppsStream=lppsStream->lppsNode));
+
+	/* deal with the remaining pipe operator */
+    Dos9_ExecOperators(NULL);
 
     lppsStreamStack=Dos9_PopStreamStack(lppsStreamStack);
 

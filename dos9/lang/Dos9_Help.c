@@ -52,7 +52,7 @@ void Dos9_LoadInternalHelp(void)
                  "Usage: COPY [/-Y | /Y] [/A[:]attributes] source destination\n");
 
     lpInternalHelp[DOS9_HELP_CALL]
-        =gettext("Call a script of a label from the current context.\n"
+        =gettext("Call a script or a label from the current context.\n"
                  "Usage: CALL [/e] [file] [:label] [parameters ...]\n");
 
 
@@ -95,7 +95,7 @@ void Dos9_LoadInternalHelp(void)
                  "       IF [/i] string1 cmp string2\n"
                  "          :: code to be ran\n"
                  "       )\n\n"
-                 "       IF [NOT] [DEFINED | EXIST | ERRORLEVEL] object"
+                 "       IF [NOT] [DEFINED | EXIST | ERRORLEVEL] object (\n"
                  "          :: code to be ran\n"
                  "       )\n");
 

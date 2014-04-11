@@ -118,7 +118,7 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
                    token
                 */
 
-                if (!strcmp(lpNextToken, ">&1")) {
+                if (!strncmp(lpNextToken, ">&1", 3)) {
 
                     /* redirect both input and output */
                     lppssStart->cOutputMode|=(PARSED_STREAM_START_MODE_ERROR
@@ -162,7 +162,7 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 
                 if (*lpNextToken!='>') {
 
-                    lppssStart->cOutputMode=PARSED_STREAM_START_MODE_TRUNCATE;
+                    lppssStart->cOutputMode|=PARSED_STREAM_START_MODE_TRUNCATE;
 
                 } else {
 
@@ -183,7 +183,7 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
                 /* determine redirection type */
                 if (cChar=='2') {
 
-                    lppssStart->cOutputMode=
+                    lppssStart->cOutputMode|=
                         (lppssStart->cOutputMode | PARSED_STREAM_START_MODE_ERROR)
                         & ~PARSED_STREAM_START_MODE_OUT;
 

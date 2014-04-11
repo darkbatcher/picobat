@@ -24,7 +24,7 @@ LIB=-L../lib -linteval -lDos9 -lmatheval @LIBS@
 TARGET=../bin${arch}/dos9
 
 CC=@CC@
-CFLAGS=-I../include @CFLAGS@ 
+CFLAGS=-I../include @CFLAGS@ @CONSOLE@ 
 
 OBJ=$(SRC:.c=.o)
 

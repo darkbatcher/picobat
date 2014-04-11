@@ -10,6 +10,17 @@ AC_PROG_CC
 AC_PROG_YACC
 AC_PROG_LEX
 
+AC_ARG_ENABLE([console],
+	    [AC_HELP_STRING([--enable-console],
+			    [Use extended console features such as color (default is yes)])],
+	    [],
+	    [enable_console=yes])
+
+AS_IF([test "x$enable_console" = xno], 
+      [AC_SUBST([CONSOLE], [-DLIBDOS9_NO_CONSOLE])],
+      [test "x$enable_console" != xno],
+      [AC_SUBST([CONSOLE], [])])
+
 AC_CHECK_LIB([pthread],
              [pthread_create],
 	     [],

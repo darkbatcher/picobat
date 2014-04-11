@@ -87,7 +87,7 @@ typedef struct STREAMLVL {
     int iFreeDescriptors[3];/**< stores the descriptors to be feed during poping from stack */
     int iPipeIndicator;
     int iPopLock;
-    int iResetStdBuff;
+    //int iResetStdBuff;
  } STREAMLVL,*LPSTREAMLVL;
 
 /** \typedef STACK STREAMSTACK,*LPSTREAMSTACK
@@ -141,7 +141,7 @@ typedef STACK STREAMSTACK,*LPSTREAMSTACK;
 */
  LPSTREAMSTACK     Dos9_PushStreamStack(LPSTREAMSTACK lppsStack);
 
-
+ void              Dos9_DumpStreamStack(LPSTREAMSTACK lppsStack);
 
 
 

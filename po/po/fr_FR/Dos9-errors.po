@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Dos9 0.7\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: darkbatcher@dos9.org\n"
 "POT-Creation-Date: 2014-04-08 18:08+0200\n"
 "PO-Revision-Date: 2014-03-12 16:18+0100\n"
 "Last-Translator: DarkBatcher <darkbatcher@gmail.com>\n"
@@ -200,7 +200,7 @@ msgid "Error : \"%s\" is an invalid stream redirection.\n"
 msgstr "Erreur :   \"%s\" n'est pas une redirection valide.\n"
 
 #: ../dos9/errors/Dos9_Errors.c:174
-#, fuzzy, c-format
+#, c-format
 msgid "Error : Redirection for \"%s\" was already specified.\n"
 msgstr "Erreur : Une redirection pour \"%s\" était déjà spécifiée.\n"
 
@@ -219,8 +219,8 @@ msgid "Error : Unable to add command \"%s\".\n"
 msgstr "Erreur : Impossible de renommer \"%s\".\n"
 
 #: ../dos9/errors/Dos9_Errors.c:186
-#, fuzzy, c-format
-msgid "Error : Unable to remap commands (in function %s)"
+#, c-format
+msgid "Error : Unable to remap commands (in function %s).\n"
 msgstr "Erreur : Impossible de remaper les commandes (dans %s).\n"
 
 #: ../dos9/errors/Dos9_Errors.c:189
@@ -231,5 +231,3 @@ msgstr ""
 "\n"
 "Abandon de l'opération courrante, appuyez sur un touche pour terminer Dos9.\n"
 
-#~ msgid "Warning : This requires Dos9's extensions to be enabled.\n"
-#~ msgstr "Attention : Ceci requiert les extensions de Dos9.\n"

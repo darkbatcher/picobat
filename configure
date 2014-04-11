@@ -586,6 +586,7 @@ PACKAGE_URL='http://www.dos9.org/'
 
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
+CONSOLE
 LEXLIB
 LEX_OUTPUT_ROOT
 LEX
@@ -639,6 +640,7 @@ SHELL'
 ac_subst_files=''
 ac_user_opts='
 enable_option_checking
+enable_console
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1254,6 +1256,13 @@ if test -n "$ac_init_help"; then
      short | recursive ) echo "Configuration of Dos9 2014.0.8:";;
    esac
   cat <<\_ACEOF
+
+Optional Features:
+  --disable-option-checking  ignore unrecognized --enable/--with options
+  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
+  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --enable-console        Use extended console features such as color (default
+                          is yes)
 
 Some influential environment variables:
   CC          C compiler command
@@ -2779,6 +2788,21 @@ $as_echo "#define YYTEXT_POINTER 1" >>confdefs.h
 
 fi
 rm -f conftest.l $LEX_OUTPUT_ROOT.c
+
+fi
+
+# Check whether --enable-console was given.
+if test "${enable_console+set}" = set; then :
+  enableval=$enable_console;
+else
+  enable_console=yes
+fi
+
+
+if test "x$enable_console" = xno; then :
+  CONSOLE=-DLIBDOS9_NO_CONSOLE
+
+elif test "x$enable_console" != xno; then :
 
 fi
 
