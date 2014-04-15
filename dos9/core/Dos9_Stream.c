@@ -243,37 +243,29 @@ int Dos9_OpenPipe(LPSTREAMSTACK lpssStreamStack)
 LPSTREAMSTACK Dos9_Pipe(LPSTREAMSTACK lppsStreamStack)
 {
     LPSTREAMLVL lpLvl;
-    char lpBuf[FILENAME_MAX];
-    int test;
-
-    STREAMSTACK* lpRet;
 
     Dos9_GetStack(lppsStreamStack, (void**)&lpLvl);
         /* get current level content */
-
 
     DEBUG("In Pipe callback function");
     DEBUG_(lpLvl->iPipeIndicator);
     if (lpLvl->iPipeIndicator) {
 
-        fprintf(stderr, "lpLvl->iFreeDescriptor[DOS9_STDIN]=%d\n", lpLvl->iFreeDescriptors[DOS9_STDIN]);
+        if (lpLvl->iFreeDescriptors[DOS9_STDIN]) {
 
-        test=lpLvl->iFreeDescriptors[DOS9_STDIN];
-
-        if (test) {
-
-            fprintf(stderr, "Try to empty DOS9_STDIN\n");
+            /* we need to disable buffering because stdin is not to be
+               buffered since it causes unexpected behavior, because pipes
+               lines which have been buffered remain buffered in the file */
 
             setvbuf(stdin, NULL, _IONBF, 0);
 
         }
 
+        #ifdef DOS9_DBG_MODE
+            Dos9_DumpStreamStack(lppsStreamStack);
+        #endif
 
-        Dos9_DumpStreamStack(lppsStreamStack);
-
-        lpRet=Dos9_PopStreamStack(lppsStreamStack);
-
-        return lpRet;
+        return Dos9_PopStreamStack(lppsStreamStack);
 
     } else {
 
@@ -296,7 +288,11 @@ LPSTREAMSTACK Dos9_PopStreamStack(LPSTREAMSTACK lppsStack)
                 return lppsStack;
         }
 
-        //Dos9_FlushStd();
+        #ifdef WIN32
+
+            Dos9_FlushStd();
+
+        #endif // WIN32
         Dos9_CloseDescriptors(lpStream->iFreeDescriptors);
         free(lpStream);
 
@@ -316,7 +312,11 @@ LPSTREAMSTACK Dos9_PopStreamStack(LPSTREAMSTACK lppsStack)
 
     }
 
-    //Dos9_SetStdBuffering();
+    #ifdef WIN32
+
+        Dos9_SetStdBuffering();
+
+    #endif
 
     return lppsStack;
 }
@@ -424,6 +424,7 @@ void Dos9_FlushStd(void)
 void Dos9_SetStdBuffering(void)
 {
     setvbuf( stdout, NULL, _IONBF, 0 );
+    setvbuf( stderr, NULL, _IONBF, 0 );
 }
 
 LPSTREAMLVL Dos9_AllocStreamLvl(void)

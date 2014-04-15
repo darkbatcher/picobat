@@ -35,6 +35,30 @@ extern const char* lpDirFileDirNb;
 extern const char* lpHlpMain;
 extern const char* lpHlpDeprecated;
 
+extern const char* lpDelConfirm;
+extern const char* lpDelChoices;
+
+extern const char* lpAskYn;
+extern const char* lpAskyN;
+extern const char* lpAskyn;
+
+extern const char* lpAskYna;
+extern const char* lpAskyNa;
+extern const char* lpAskynA;
+extern const char* lpAskyna;
+
+extern const char* lpAskYes;
+extern const char* lpAskYesA;
+
+extern const char* lpAskNo;
+extern const char* lpAskNoA;
+
+extern const char* lpAskAll;
+extern const char* lpAskAllA;
+
+extern const char* lpAskInvalid;
+
+
 void Dos9_LoadStrings(void); /* a function that loads differents
                                languages traductions */
 

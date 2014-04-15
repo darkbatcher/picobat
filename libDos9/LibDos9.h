@@ -23,16 +23,16 @@
 
 /* We don't define _POSIX_C_SOURCE value here, just set it by the -D compiler
    flag, to the value you want. I don't actually now for wich revision of
-   POSIX i'm conforming, althoug AFAIK I only use POSIX functions for *nix
+   POSIX i'm conforming, although AFAIK I only use POSIX functions for *nix
    oses. If you try to build it in non POSIX conforming systems, (by default)
    you should probably append the given argurments to the CFLAGS variables
-   when configuring: 
+   when configuring:
 
 	-D_POSIX_C_SOURCE=200809L
 
    I have not tried with previous revisions, but this it seems to work on
    NetBSD 6.1
- */ 
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -49,26 +49,38 @@
 #include <sys/stat.h>
 
 
+
+
 #ifdef WIN32
+
+
 
     #include <windows.h>
     #include <process.h>
+    #include <io.h>
+
     #define stat _stat
+
 
    /** \defgroup FILE_ATTRIBUTES File attributes constants
         \{ */
+
+
     /** The file is an archive */
     #define DOS9_FILE_ARCHIVE FILE_ATTRIBUTE_ARCHIVE
+
+
 
     /** The file compressed */
     #define DOS9_FILE_COMPRESSED FILE_ATTRIBUTE_COMPRESSED
 
     /** The file is hidden */
-B
     #define DOS9_FILE_HIDDEN FILE_ATTRIBUTE_HIDDEN
 
     /** The file has offline attribute */
     #define DOS9_FILE_OFFLINE FILE_ATTRIBUTE_OFFLINE
+
+
 
     /** The file is read-only */
     #define DOS9_FILE_READONLY FILE_ATTRIBUTE_READONLY
@@ -80,7 +92,6 @@ B
     #define DOS9_FILE_DIR FILE_ATTRIBUTE_DIRECTORY
 
     /** \} */
-    #include <io.h>
 
     #define flushall() _flushall()
     #define dup(a) _dup(a)
@@ -92,6 +103,8 @@ B
     #define O_RDONLY _O_RDONLY
     #define O_TRUNC _O_TRUNC
     #define O_TEXT _O_TEXT
+
+
 
     #define S_IREAD _S_IREAD
     #define O_IWRITE _S_IWRITE
@@ -138,10 +151,6 @@ typedef pid_t           PROCESS;
 typedef DWORD  THREAD;
 typedef HANDLE MUTEX;
 typedef int    PROCESS;
-
-#else
-
-  #error bitch* does not define _POSIX_C_SOURCE
 
 #endif
 

@@ -6,36 +6,36 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Dos9 0.7\n"
-"Report-Msgid-Bugs-To: darkbatcher@dos9.org\n"
-"POT-Creation-Date: 2014-04-08 18:08+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-04-15 18:04+0200\n"
 "PO-Revision-Date: 2013-12-14 20:24+0100\n"
 "Last-Translator: DarkBatcher <darkbatcher@gmail.com>\n"
 "Language-Team: French <darkbatcher@gmail.com>\n"
+"Language: Français\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: Français\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 1.5.7\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-#: ../dos9/lang/Dos9_Lang.c:60
+#: ../dos9/lang/Dos9_Lang.c:84
 msgid "Echo command enabled"
 msgstr "Commande echo activée"
 
-#: ../dos9/lang/Dos9_Lang.c:61
+#: ../dos9/lang/Dos9_Lang.c:85
 msgid "Echo command disabled"
 msgstr "Commande echo désactivée"
 
-#: ../dos9/lang/Dos9_Lang.c:62
+#: ../dos9/lang/Dos9_Lang.c:86
 msgid "Press any key to continue..."
 msgstr "Appuyez sur une touche pour continuer..."
 
-#: ../dos9/lang/Dos9_Lang.c:65
+#: ../dos9/lang/Dos9_Lang.c:89
 msgid "\tNo files found\n"
 msgstr "\tAucun fichier trouvé\n"
 
-#: ../dos9/lang/Dos9_Lang.c:66
+#: ../dos9/lang/Dos9_Lang.c:90
 msgid ""
 "\n"
 "Last change\t\tSize\tAttr.\tName\n"
@@ -43,7 +43,7 @@ msgstr ""
 "\n"
 "Dernière modif.\t\t Taille\t Attr.\tNom\n"
 
-#: ../dos9/lang/Dos9_Lang.c:67
+#: ../dos9/lang/Dos9_Lang.c:91
 #, c-format
 msgid ""
 "\t\t\t\t\t\t%d Files\n"
@@ -52,15 +52,68 @@ msgstr ""
 "\t\t\t\t\t\t%d Fichiers\n"
 "\t\t\t\t\t\t%d Dossiers\n"
 
-#: ../dos9/lang/Dos9_Lang.c:70
-msgid ""
-"Dos9 does not support ``/?'' switch for help anymore, use ``HLP command'' "
-"instead."
-msgstr ""
-"Dos9 ne supporte plus le commutateur ``/?''. Pour de l'aide, utilisez la "
-"commande ``HLP commande'' à la place."
+#: ../dos9/lang/Dos9_Lang.c:94
+#, c-format
+msgid "Are you sure you want to delete \"%s\" ?"
+msgstr "Êtes-vous sûr  de vouloir supprimer \"%s\" ?"
 
-#: ../dos9/lang/Dos9_Lang.c:74
+#: ../dos9/lang/Dos9_Lang.c:96
+msgid " (Yes/no) "
+msgstr " (Oui/non) "
+
+#: ../dos9/lang/Dos9_Lang.c:97
+msgid " (yes/No) "
+msgstr " (oui/Non)"
+
+#: ../dos9/lang/Dos9_Lang.c:98
+msgid " (yes/no) "
+msgstr " (oui/non) "
+
+#: ../dos9/lang/Dos9_Lang.c:100
+msgid " (Yes/no/all) "
+msgstr " (Oui/non/tous) "
+
+#: ../dos9/lang/Dos9_Lang.c:101
+msgid " (yes/No/all) "
+msgstr " (oui/Non/tous) "
+
+#: ../dos9/lang/Dos9_Lang.c:102
+msgid " (yes/no/All) "
+msgstr " (oui/non/Tous) "
+
+#: ../dos9/lang/Dos9_Lang.c:103
+msgid " (yes/no/all) "
+msgstr " (oui/non/tous) "
+
+#: ../dos9/lang/Dos9_Lang.c:105
+msgid "YES"
+msgstr "OUI"
+
+#: ../dos9/lang/Dos9_Lang.c:106
+msgid "Y"
+msgstr "O"
+
+#: ../dos9/lang/Dos9_Lang.c:108
+msgid "NO"
+msgstr "NON"
+
+#: ../dos9/lang/Dos9_Lang.c:109
+msgid "N"
+msgstr "N"
+
+#: ../dos9/lang/Dos9_Lang.c:111
+msgid "ALL"
+msgstr "TOUS"
+
+#: ../dos9/lang/Dos9_Lang.c:112
+msgid "A"
+msgstr "T"
+
+#: ../dos9/lang/Dos9_Lang.c:114
+msgid "Please enter a correct choice (or type enter to choose default) !\n"
+msgstr "Merci d'entrer un choix correct (ou appuyez sur entrée pour le choix par défaut) ! \n"
+
+#: ../dos9/lang/Dos9_Lang.c:116
 msgid ""
 "DOS9 COMMAND\n"
 "\n"
@@ -128,3 +181,10 @@ msgid ""
 "Commands \n"
 "     list (see `commands') Commands list (see `commands')\n"
 msgstr ""
+
+#~ msgid ""
+#~ "Dos9 does not support ``/?'' switch for help anymore, use ``HLP command'' "
+#~ "instead."
+#~ msgstr ""
+#~ "Dos9 ne supporte plus le commutateur ``/?''. Pour de l'aide, utilisez la "
+#~ "commande ``HLP commande'' à la place."

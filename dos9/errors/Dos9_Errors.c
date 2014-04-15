@@ -183,7 +183,7 @@ void Dos9_LoadErrors(void)
         gettext("Error : Unable to add command \"%s\".\n");
 
     lpErrorMsg[DOS9_UNABLE_REMAP_COMMANDS]=
-        gettext("Error : Unable to remap commands (in function %s)");
+        gettext("Error : Unable to remap commands (in function %s).\n");
 
     lpQuitMessage=
         gettext("\nAborting current command, press any key to end Dos9.\n");

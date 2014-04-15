@@ -40,6 +40,30 @@ const char* lpDirFileDirNb;
 
 const char* lpHlpDeprecated;
 
+const char* lpDelConfirm;
+const char* lpDelChoices;
+
+
+const char* lpAskYn;
+const char* lpAskyN;
+const char* lpAskyn;
+
+const char* lpAskYna;
+const char* lpAskyNa;
+const char* lpAskynA;
+const char* lpAskyna;
+
+const char* lpAskYes;
+const char* lpAskYesA;
+
+const char* lpAskNo;
+const char* lpAskNoA;
+
+const char* lpAskAll;
+const char* lpAskAllA;
+
+const char* lpAskInvalid;
+
 void Dos9_LoadStrings(void)
 {
     /* this loads strings */
@@ -67,9 +91,27 @@ void Dos9_LoadStrings(void)
     lpDirFileDirNb=gettext("\t\t\t\t\t\t%d Files\n\t\t\t\t\t\t%d Folders\n");
     // TRANSLATORS : Don't remove the %s because the program needs it
 
-    lpHlpDeprecated=gettext("Dos9 does not support ``/?'' switch for help anymore, use ``HLP command'' instead.");
+    lpDelConfirm=gettext("Are you sure you want to delete \"%s\" ?");
 
+    lpAskYn=gettext(" (Yes/no) ");
+    lpAskyN=gettext(" (yes/No) ");
+    lpAskyn=gettext(" (yes/no) ");
 
+    lpAskYna=gettext(" (Yes/no/all) ");
+    lpAskyNa=gettext(" (yes/No/all) ");
+    lpAskynA=gettext(" (yes/no/All) ");
+    lpAskyna=gettext(" (yes/no/all) ");
+
+    lpAskYes=gettext("YES");
+    lpAskYesA=gettext("Y");
+
+    lpAskNo=gettext("NO");
+    lpAskNoA=gettext("N");
+
+    lpAskAll=gettext("ALL");
+    lpAskAllA=gettext("A");
+
+    lpAskInvalid=gettext("Please enter a correct choice (or type enter to choose default) !\n");
 
     lpHlpMain=gettext("DOS9 COMMAND\n\
 \n\

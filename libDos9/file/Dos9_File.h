@@ -9,7 +9,7 @@
 /* Define the values of symlinks on process information (especially, the path
    of the current executable) via procfs. This is a big concern however,
    because there's no standards used on the procfs system, so that
-   every OS have differebt syntax 
+   every OS have differebt syntax
  */
 
 #if defined __linux__
@@ -24,6 +24,12 @@
 
     #define DOS9_FILE_SYM_LINK "/proc/curproc/file"
 
+#elif ( defined WIN32 )
+
+    #include <windows.h>
+
 #endif
+
+#include "../LibDos9.h"
 
 #endif

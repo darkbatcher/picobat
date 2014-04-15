@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dos9 0.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-08 18:08+0200\n"
+"POT-Creation-Date: 2014-04-15 18:24+0200\n"
 "PO-Revision-Date: 2014-02-01 23:37+0100\n"
 "Last-Translator: DarkBatcher <darkbatcher@gmail.com>\n"
 "Language-Team: English <darkbatcher@dos9.org>\n"
+"Language: English\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: English\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.5.7\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -54,7 +54,7 @@ msgstr "Error : Unable to find label \"%s\".\n"
 
 #: ../dos9/errors/Dos9_Errors.c:84
 msgid "Warning : Using a Dos9 extension but the CMDLYCORRECT option is set.\n"
-msgstr ""
+msgstr "Warning : Using a Dos9 extension but the CMDLYCORRECT option is set.\n"
 
 #: ../dos9/errors/Dos9_Errors.c:87
 #, c-format
@@ -185,38 +185,38 @@ msgid "Error : Unable to create pipe at function (%s).\n"
 msgstr "Error : Unable to create pipe at function (%s).\n"
 
 #: ../dos9/errors/Dos9_Errors.c:168
-#, fuzzy, c-format
+#, c-format
 msgid "Error : Unable to set environment string (%s).\n"
-msgstr "Error : Unable to create pipe at function (%s).\n"
+msgstr "Error : Unable to set environment string (%s).\n"
 
 #: ../dos9/errors/Dos9_Errors.c:171
-#, fuzzy, c-format
+#, c-format
 msgid "Error : \"%s\" is an invalid stream redirection.\n"
-msgstr "Error : \"%s\" is not valid mathematical expression.\n"
+msgstr "Error : \"%s\" is an invalid stream redirection.\n"
 
 #: ../dos9/errors/Dos9_Errors.c:174
-#, fuzzy, c-format
+#, c-format
 msgid "Error : Redirection for \"%s\" was already specified.\n"
-msgstr "Error : \"%s\" was unexpected.\n"
+msgstr "Error : Redirection for \"%s\" was already specified.\n"
 
 #: ../dos9/errors/Dos9_Errors.c:177
-#, fuzzy, c-format
+#, c-format
 msgid "Error : Encountered malformed blocks (\"%s\").\n"
-msgstr "Error : Stream module : \"%s\".\n"
+msgstr "Error : Encountered malformed blocks (\"%s\").\n"
 
 #: ../dos9/errors/Dos9_Errors.c:180
 msgid "Error : Blocks left unclosed at end-of-file.\n"
-msgstr ""
+msgstr "Error : Blocks left unclosed at end-of-file.\n"
 
 #: ../dos9/errors/Dos9_Errors.c:183
-#, fuzzy, c-format
+#, c-format
 msgid "Error : Unable to add command \"%s\".\n"
-msgstr "Error : Unable to rename \"%s\".\n"
+msgstr "Error : Unable to add command \"%s\".\n"
 
 #: ../dos9/errors/Dos9_Errors.c:186
-#, fuzzy, c-format
-msgid "Error : Unable to remap commands (in function %s)"
-msgstr "Error : Unable to create pipe at function (%s).\n"
+#, c-format
+msgid "Error : Unable to remap commands (in function %s).\n"
+msgstr "Error : Unable to remap commands (in function %s).\n"
 
 #: ../dos9/errors/Dos9_Errors.c:189
 msgid ""

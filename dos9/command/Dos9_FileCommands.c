@@ -42,15 +42,24 @@
 #include "../core/Dos9_Core.h"
 #include "Dos9_FileCommands.h"
 
+#include "Dos9_Ask.h"
 
 int Dos9_CmdDel(char* lpLine)
 {
-    char *lpNextToken, *lpToken;
+    char *lpNextToken,
+         *lpToken;
     ESTR* lpEstr=Dos9_EsInit();
-    char  bParam=0, cChar, bDel=TRUE;
+
+    char  bParam=0,
+          bDel=TRUE;
+
     short wAttr=0;
+
     char  lpName[FILENAME_MAX]="\0";
-    int iFlag=DOS9_SEARCH_DEFAULT;
+
+    int iFlag=DOS9_SEARCH_DEFAULT,
+        iChoice;
+
     FILELIST* lpFileList, *lpSaveList;
 
     if (!(lpLine=strchr(lpLine, ' '))) {
@@ -140,10 +149,15 @@ int Dos9_CmdDel(char* lpLine)
 
     }
 
-    wAttr|=DOS9_CMD_ATTR_DIR | DOS9_CMD_ATTR_DIR_N; /* ne sélectionne que le fichiers */
+        /* ne sélectionne que le fichiers */
+    wAttr|=DOS9_CMD_ATTR_DIR | DOS9_CMD_ATTR_DIR_N;
 
-    if ((Dos9_StrToken(lpName, '*') || Dos9_StrToken(lpName, '?')) && !(bParam & DOS9_DONT_ASK_GENERIC)) { // si la recherche est générique on met la demande
-        bParam|=DOS9_ASK_CONFIRMATION;                                      // de confirmation sauf si `/Q` a été spécifié
+    if ((Dos9_StrToken(lpName, '*') || Dos9_StrToken(lpName, '?'))
+        && !(bParam & DOS9_DONT_ASK_GENERIC)) {
+
+            /* si la recherche est générique on met la demande de
+              confirmation sauf si `/Q` a été spécifié */
+        bParam|=DOS9_ASK_CONFIRMATION;
     }
 
     printf("Looking for `%s'\n", lpName);
@@ -152,31 +166,39 @@ int Dos9_CmdDel(char* lpLine)
         lpSaveList=lpFileList;
         while (lpFileList) {
 
-            /* on demande confirmation si la demande de confirmation est active */
+            /* on demande confirmation si la demande de confirmation est
+               active */
             if (bParam & DOS9_ASK_CONFIRMATION) {
-                cChar=0;
-                while (toupper(cChar)!='Y' && toupper(cChar)!='N' && toupper(cChar)!='A')
-                {
-                    printf("<DEL> Voulez vous suprimmer `%s' ? (y/n/a) ", lpFileList->lpFileName);
-                    cChar=getchar();
-                    while (getchar()!='\n') {};
-                }
 
-                if (toupper(cChar)=='N') {
+                iChoice=Dos9_AskConfirmation(DOS9_ASK_YNA
+                                             | DOS9_ASK_INVALID_REASK
+                                             | DOS9_ASK_DEFAULT_Y,
+                                             lpDelConfirm,
+                                             lpFileList->lpFileName
+                                             );
+
+                if (iChoice==DOS9_ASK_NO) {
                     /* si l'utilisateur refuse la suppression du fichier */
+                    printf("Pas suppression !\n");
                     lpFileList=lpFileList->lpflNext;
                     continue;
-                } else if (toupper(cChar)=='A') {
+
+                } else if (iChoice==DOS9_ASK_ALL) {
                     /* si l'utilisateur autorise tous les fichiers */
                     bParam&=~DOS9_ASK_CONFIRMATION;
+
                 }
             }
 
             /* on vérifie que le fichier possède les bons attributs pour la suppression */
             if ((Dos9_CheckFileAttributes(wAttr, lpFileList))) {
+
                 printf("<DEBUG> supression de `%s'\n", lpFileList->lpFileName);
+
             } else {
+
                 printf("<DEBUG> Fichier `%s' non suprimmé (attributs incorrects)\n", lpFileList->lpFileName);
+
             }
 
             /* on passe au fichier suivant */
@@ -186,7 +208,10 @@ int Dos9_CmdDel(char* lpLine)
         Dos9_FreeFileList(lpSaveList);
     } else {
 
-        printf("Aucun fichier `%s' n'a ete trouve\n", lpName);
+        Dos9_ShowErrorMessage(DOS9_FILE_ERROR, lpName, FALSE);
+        Dos9_EsFree(lpEstr);
+
+        return -1;
 
     }
 
@@ -361,8 +386,10 @@ int Dos9_CmdRen(char* lpLine)
     if ((lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
 
         strncpy(lpFileName, Dos9_EsToChar(lpEstr), FILENAME_MAX);
-        lpFileName[FILENAME_MAX-1]='\0'; // can't assume that what was buffered is NULL-terminated
-                                        // see the C-89,99,11 standards for further informations
+        lpFileName[FILENAME_MAX-1]='\0';
+        /* can't assume that what was buffered is NULL-terminated
+           see the C-89,99,11 standards for further informations */
+
         strcpy(lpFileDest, lpFileName);
 
         if ((lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
@@ -382,11 +409,12 @@ int Dos9_CmdRen(char* lpLine)
 
             /* cat with new name */
             strncat(lpFileDest, Dos9_EsToChar(lpEstr), FILENAME_MAX-strlen(lpFileDest));
-            lpFileDest[FILENAME_MAX-1]='\0';// can't assume that what was buffered is NULL-terminated
-                                            // see the C-89,99,11 standards for further informations
+            lpFileDest[FILENAME_MAX-1]='\0';
+            /* can't assume that what was buffered is NULL-terminated
+               see the C-89,99,11 standards for further informations */
             if (!printf("<DEBUG> renaming `%s` to `%s`\n", lpFileName, lpFileDest))
             {
-                Dos9_ShowErrorMessage(DOS9_UNABLE_RENAME, lpFileName, FALSE); // if renaming fails
+                Dos9_ShowErrorMessage(DOS9_UNABLE_RENAME, lpFileName, FALSE);
                 Dos9_EsFree(lpEstr);
                 return -1;
             }
@@ -405,7 +433,7 @@ int Dos9_CmdRmdir(char* lpLine)
 
     if (!(lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
 
-        Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "MD/MKDIR", FALSE);
+        Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "RD/RMDIR", FALSE);
         goto error;
 
     }

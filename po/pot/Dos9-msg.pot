@@ -8,50 +8,106 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-08 18:08+0200\n"
+"POT-Creation-Date: 2014-04-15 18:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../dos9/lang/Dos9_Lang.c:60
+#: ../dos9/lang/Dos9_Lang.c:84
 msgid "Echo command enabled"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:61
+#: ../dos9/lang/Dos9_Lang.c:85
 msgid "Echo command disabled"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:62
+#: ../dos9/lang/Dos9_Lang.c:86
 msgid "Press any key to continue..."
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:65
+#: ../dos9/lang/Dos9_Lang.c:89
 msgid "\tNo files found\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:66
+#: ../dos9/lang/Dos9_Lang.c:90
 msgid ""
 "\n"
 "Last change\t\tSize\tAttr.\tName\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:67
+#: ../dos9/lang/Dos9_Lang.c:91
 #, c-format
 msgid ""
 "\t\t\t\t\t\t%d Files\n"
 "\t\t\t\t\t\t%d Folders\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:70
-msgid ""
-"Dos9 does not support ``/?'' switch for help anymore, use ``HLP command'' "
-"instead."
+#: ../dos9/lang/Dos9_Lang.c:94
+#, c-format
+msgid "Are you sure you want to delete \"%s\" ?"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:74
+#: ../dos9/lang/Dos9_Lang.c:96
+msgid " (Yes/no) "
+msgstr ""
+
+#: ../dos9/lang/Dos9_Lang.c:97
+msgid " (yes/No) "
+msgstr ""
+
+#: ../dos9/lang/Dos9_Lang.c:98
+msgid " (yes/no) "
+msgstr ""
+
+#: ../dos9/lang/Dos9_Lang.c:100
+msgid " (Yes/no/all) "
+msgstr ""
+
+#: ../dos9/lang/Dos9_Lang.c:101
+msgid " (yes/No/all) "
+msgstr ""
+
+#: ../dos9/lang/Dos9_Lang.c:102
+msgid " (yes/no/All) "
+msgstr ""
+
+#: ../dos9/lang/Dos9_Lang.c:103
+msgid " (yes/no/all) "
+msgstr ""
+
+#: ../dos9/lang/Dos9_Lang.c:105
+msgid "YES"
+msgstr ""
+
+#: ../dos9/lang/Dos9_Lang.c:106
+msgid "Y"
+msgstr ""
+
+#: ../dos9/lang/Dos9_Lang.c:108
+msgid "NO"
+msgstr ""
+
+#: ../dos9/lang/Dos9_Lang.c:109
+msgid "N"
+msgstr ""
+
+#: ../dos9/lang/Dos9_Lang.c:111
+msgid "ALL"
+msgstr ""
+
+#: ../dos9/lang/Dos9_Lang.c:112
+msgid "A"
+msgstr ""
+
+#: ../dos9/lang/Dos9_Lang.c:114
+msgid "Please enter a correct choice (or type enter to choose default) !\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_Lang.c:116
 msgid ""
 "DOS9 COMMAND\n"
 "\n"

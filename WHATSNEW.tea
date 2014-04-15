@@ -774,3 +774,24 @@ ${make}
 	to specify {2>&1} and {> foo} simultaneously, so, you it was not
 	possible to specify a redirection for {stdin} and {stdout} with
 	{truncate} attribute.
+
+{{Monday 14th, april}}
+
+	- Added some corections that make the pipe function quite well on both
+	{GNU/Linux} and {Windows} architectures (I also tested on {NetBSD} and
+	it worked pretty well, without further tests however). 
+
+	- Added a few fixes on languages, and I'm starting adding new messages
+	for the {file} commands.
+
+	- Checked build on NetBSD. I've found out that {Dos9} conforms with
+	{POSIX.1-2001}. Thus, On some platform, if you want to build if, you
+	may specoify a configuration that defines the {_POSIX_C_SOURCE} macro,
+	that is, type the configure line :
+
+	${./configure CFLAGS='-D_POSIX_C_SOURCE=200112'}
+
+	@- However, The NetBSD headers does not conform to {POSIX.1} and
+	perform wrong function exposures, so that if you use, it, you might
+	need to specify {_NETBSD_SOURCE} macro.
+ 
