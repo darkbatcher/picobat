@@ -148,6 +148,10 @@ void Dos9_LoadInternalHelp(void)
         =gettext("Exit from the command prompt.\n"
                  "Usage: EXIT [/b code]\n");
 
+    lpInternalHelp[DOS9_HELP_SHIFT]
+        =gettext("Change positions of command-line parameters.\n"
+                 "Usage: SHIFT [/start_number | /s[:]start_number] [/d[:]displacement\n]");
+
     lpExternalMsg=gettext("This help is voluntary limited help to fit in the binary. If you need to\n"
                           "see the full documentation, please type:\n"
                           "\n"

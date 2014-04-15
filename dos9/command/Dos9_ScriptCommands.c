@@ -1081,3 +1081,160 @@ int Dos9_CmdBlock(char* lpLine)
 
     return iErrorLevel;
 }
+
+int Dos9_CmdShift(char* lpLine)
+{
+    ESTR* lpEsArg=Dos9_EsInit();
+    char *lpToken;
+    int iBegin=0,        /* the first parameter to be displaced */
+        iDisplacement=1; /* the displacement of parameters on the left */
+
+    lpLine+=5;
+
+    while (lpLine=Dos9_GetNextParameterEs(lpLine, lpEsArg)) {
+
+        lpToken=Dos9_EsToChar(lpEsArg);
+
+        if ((*lpToken)=='/') {
+
+            lpToken++;
+
+            switch (*lpToken) {
+                case '0':
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '8':
+                case '9':
+                    iBegin=*lpToken-'0'; /* well, we assume that all numbers
+                                            are folowing 0 */
+
+                    break;
+
+                /* following switchs are Dos9-specific */
+                case 's':
+                    lpToken++;
+
+                    if (*lpToken==':')
+                        lpToken++;
+
+                    if (!(*lpToken>='0' && *lpToken<='9')) {
+
+                        Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT,
+                                              lpToken,
+                                              FALSE);
+
+                        goto error;
+
+                    }
+
+                    iBegin=*lpToken-'0';
+                    lpToken++;
+
+                    if (*lpToken) {
+
+                        Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT,
+                                              lpToken,
+                                              FALSE);
+
+                        goto error;
+
+
+                    }
+
+                    break;
+
+                case 'd':
+                    lpToken++;
+
+                    if (*lpToken==':')
+                        lpToken++;
+
+                    if (!(*lpToken>='0' && *lpToken<='9')) {
+
+                        Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT,
+                                              lpToken,
+                                              FALSE);
+
+                        goto error;
+
+                    }
+
+                    iDisplacement=*lpToken-'0';
+                    lpToken++;
+
+                    if (*lpToken) {
+
+                        Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT,
+                                              lpToken,
+                                              FALSE);
+
+                        goto error;
+
+
+                    }
+
+                    break;
+
+                case '?':
+                    Dos9_ShowInternalHelp(DOS9_HELP_SHIFT);
+                    goto error;
+
+                default:
+                    Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT,
+                                          lpToken,
+                                          FALSE
+                                          );
+
+                    goto error;
+
+
+            }
+
+        } else {
+
+            Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT,
+                                  lpToken,
+                                  FALSE);
+
+            goto error;
+
+        }
+
+    }
+
+    /* Displace command-line arguments */
+    while ((iBegin+iDisplacement) < 10) {
+
+        Dos9_SetLocalVar(lpvLocalVars,
+                         '0'+iBegin,
+                         Dos9_GetLocalVarPointer(lpvLocalVars,
+                                                 '0'+iBegin+iDisplacement
+                                                 )
+                         );
+
+        iBegin++;
+
+    }
+
+    /* empty the remaining arguments */
+    while (iBegin < 10) {
+
+        Dos9_SetLocalVar(lpvLocalVars, '0'+iBegin, "");
+
+        iBegin++;
+
+    }
+
+    Dos9_EsFree(lpEsArg);
+    return 0;
+
+    error:
+
+        Dos9_EsFree(lpEsArg);
+        return -1;
+
+}

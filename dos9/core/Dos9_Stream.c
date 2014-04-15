@@ -30,7 +30,7 @@
 
 #include "../errors/Dos9_Errors.h"
 
-#define DOS9_DBG_MODE
+//#define DOS9_DBG_MODE
 #include "Dos9_Debug.h"
 
 void Dos9_DumpStreamStack(LPSTREAMSTACK lppsStack)

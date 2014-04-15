@@ -52,7 +52,7 @@
 
 void Dos9_SigHandler(int c)
 {
-    printf("Trigered break\n");	
+    printf("Trigered break\n");
     exit (-1);
 }
 
@@ -97,8 +97,8 @@ int main(int argc, char *argv[])
     DOS9_DBG("Allocating local variable block ... \n");
 
     lpvLocalVars=Dos9_GetLocalBlock();
-    
-    DOS9_DBG("Initializing console ...\n");  
+
+    DOS9_DBG("Initializing console ...\n");
 
     Dos9_InitConsole();
 
@@ -140,7 +140,7 @@ int main(int argc, char *argv[])
     /* get command line arguments */
     for (i=1;argv[i];i++) {
 
-	DOS9_DBG("* Got \"%s\" as argument...\n", argv[i]); 
+	DOS9_DBG("* Got \"%s\" as argument...\n", argv[i]);
 
         if (*argv[i]=='/' && bGetSwitch) {
             argv[i]++;
@@ -225,6 +225,7 @@ int main(int argc, char *argv[])
 
             lpFileName=argv[i];
             Dos9_SetLocalVar(lpvLocalVars, '0', lpFileName);
+            c='1';
         }
 
     }
@@ -287,7 +288,7 @@ int main(int argc, char *argv[])
 
     lpclCommands=Dos9_MapCommandInfo(lpCmdInfo, sizeof(lpCmdInfo)/sizeof(COMMANDINFO));
 
-    DOS9_DBG("Initializing streams ... \n");   
+    DOS9_DBG("Initializing streams ... \n");
 
     lppsStreamStack=Dos9_InitStreamStack();
 
@@ -316,7 +317,7 @@ int main(int argc, char *argv[])
     ifIn.iPos=0;
     ifIn.bEof=FALSE;
 
-    DOS9_DBG("Running file \"%s\"\n", ifIn.lpFileName);  
+    DOS9_DBG("Running file \"%s\"\n", ifIn.lpFileName);
 
     Dos9_RunBatch(&ifIn);
 

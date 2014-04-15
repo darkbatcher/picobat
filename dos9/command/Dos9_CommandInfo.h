@@ -69,7 +69,8 @@ COMMANDINFO lpCmdInfo[]={
                             {"(", Dos9_CmdBlock, 0},
                             {"CALL", Dos9_CmdCall, STRLEN("CALL")},
                             {"CALL:", Dos9_CmdCall, 0},
-                            {"ALIAS", Dos9_CmdAlias, STRLEN("ALIAS")}
+                            {"ALIAS", Dos9_CmdAlias, STRLEN("ALIAS")},
+                            {"SHIFT", Dos9_CmdShift, STRLEN("SHIFT")}
                         };
 
 #endif

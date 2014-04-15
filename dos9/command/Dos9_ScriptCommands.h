@@ -30,4 +30,6 @@ int Dos9_CmdCd(char* lpLine);
 
 int Dos9_CmdDir(char* lpLine);
 
+int Dos9_CmdShift(char* lpLine);
+
 #endif
