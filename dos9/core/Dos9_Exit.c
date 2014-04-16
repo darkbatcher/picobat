@@ -17,31 +17,31 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
- #include <stdio.h>
- #include <stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 
- #include "Dos9_Core.h"
+#include "Dos9_Core.h"
 
 
 void Dos9_Exit(void)
 {
 
-    Dos9_FreeCommandList(lpclCommands);
-    Dos9_FreeStreamStack(lppsStreamStack);
-    Dos9_FreeLocalBlock(lpvLocalVars);
+	Dos9_FreeCommandList(lpclCommands);
+	Dos9_FreeStreamStack(lppsStreamStack);
+	Dos9_FreeLocalBlock(lpvLocalVars);
 
-    if (iInputD)
-        close(iInputD);
+	if (iInputD)
+		close(iInputD);
 
-    if (iOutputD)
-        close(iOutputD);
+	if (iOutputD)
+		close(iOutputD);
 
-    if (Dos9_WaitForAllThreads(5000)) {
-        /* some threads did not returned after 5 seconds,
-           so why not abort them anyway ? */
+	if (Dos9_WaitForAllThreads(5000)) {
+		/* some threads did not returned after 5 seconds,
+		   so why not abort them anyway ? */
 
-        Dos9_AbortAllThreads();
+		Dos9_AbortAllThreads();
 
-    }
+	}
 
 }

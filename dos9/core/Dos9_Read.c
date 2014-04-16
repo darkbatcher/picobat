@@ -33,132 +33,132 @@
 
 int Dos9_GetLine(ESTR* lpesLine, INPUT_FILE* pIn)
 {
-    FILE* pFile;
-    ESTR* lpesTmp=Dos9_EsInit();
+	FILE* pFile;
+	ESTR* lpesTmp=Dos9_EsInit();
 
-    char bCorrectBlocks=FALSE;
-    char* lpCh;
-    int   res;
+	char bCorrectBlocks=FALSE;
+	char* lpCh;
+	int   res;
 
-    if (*(pIn->lpFileName) == '\0') {
+	if (*(pIn->lpFileName) == '\0') {
 
-        pFile=stdin;
+		pFile=stdin;
 
-    } else if (!(pFile=fopen(pIn->lpFileName, "r"))) {
+	} else if (!(pFile=fopen(pIn->lpFileName, "r"))) {
 
-        Dos9_ShowErrorMessage(DOS9_FILE_ERROR | DOS9_PRINT_C_ERROR,
-                              pIn->lpFileName,
-                              FALSE);
-        goto error;
+		Dos9_ShowErrorMessage(DOS9_FILE_ERROR | DOS9_PRINT_C_ERROR,
+		                      pIn->lpFileName,
+		                      FALSE);
+		goto error;
 
-    } else {
+	} else {
 
-        fseek(pFile, pIn->iPos, SEEK_SET);
+		fseek(pFile, pIn->iPos, SEEK_SET);
 
-    }
+	}
 
-    *(Dos9_EsToChar(lpesLine))='\0';
+	*(Dos9_EsToChar(lpesLine))='\0';
 
-    while (!(res=Dos9_EsGet(lpesTmp, pFile))) {
+	while (!(res=Dos9_EsGet(lpesTmp, pFile))) {
 
-        lpCh=Dos9_SkipAllBlanks(Dos9_EsToChar(lpesTmp));
+		lpCh=Dos9_SkipAllBlanks(Dos9_EsToChar(lpesTmp));
 
-        /* split comments label and void lines from input */
-        if (*lpCh!=':' && *lpCh!='\n')
-            Dos9_EsCatE(lpesLine, lpesTmp);
+		/* split comments label and void lines from input */
+		if (*lpCh!=':' && *lpCh!='\n')
+			Dos9_EsCatE(lpesLine, lpesTmp);
 
-        if (Dos9_CheckBlocks(lpesLine) == TRUE) {
+		if (Dos9_CheckBlocks(lpesLine) == TRUE) {
 
-            bCorrectBlocks=TRUE;
-            break;
+			bCorrectBlocks=TRUE;
+			break;
 
-        }
-    }
+		}
+	}
 
-    DOS9_DBG("-------------------[READ]--------------------------\n"
-             "%s\n"
-             "---------------------------------------------------\n",
-             Dos9_EsToChar(lpesLine)
-             );
+	DOS9_DBG("-------------------[READ]--------------------------\n"
+	         "%s\n"
+	         "---------------------------------------------------\n",
+	         Dos9_EsToChar(lpesLine)
+	        );
 
-    //getch();
+	//getch();
 
-    if (*(pIn->lpFileName)!='\0') {
+	if (*(pIn->lpFileName)!='\0') {
 
-        pIn->bEof=res;
+		pIn->bEof=res;
 
-        if (!res)
-            pIn->iPos=ftell(pFile);
+		if (!res)
+			pIn->iPos=ftell(pFile);
 
-        fclose(pFile);
+		fclose(pFile);
 
-    }
+	}
 
 
 
-    if (!*Dos9_EsToChar(lpesLine)) {
+	if (!*Dos9_EsToChar(lpesLine)) {
 
-        Dos9_EsFree(lpesTmp);
-        return 1;
+		Dos9_EsFree(lpesTmp);
+		return 1;
 
-    }
+	}
 
-    if (!bCorrectBlocks) {
+	if (!bCorrectBlocks) {
 
-        Dos9_ShowErrorMessage(DOS9_NONCLOSED_BLOCKS, NULL, FALSE);
-        goto error;
+		Dos9_ShowErrorMessage(DOS9_NONCLOSED_BLOCKS, NULL, FALSE);
+		goto error;
 
-    }
+	}
 
-    Dos9_EsFree(lpesTmp);
+	Dos9_EsFree(lpesTmp);
 
-    return 0;
+	return 0;
 
-    error:
-        pIn->bEof=TRUE;
-        Dos9_EsFree(lpesTmp);
-        return -1;
+error:
+	pIn->bEof=TRUE;
+	Dos9_EsFree(lpesTmp);
+	return -1;
 
 }
 
 int Dos9_CheckBlocks(ESTR* lpesLine)
 {
-    char *lpBlock,
-         *lpCh=Dos9_EsToChar(lpesLine);
+	char *lpBlock,
+	     *lpCh=Dos9_EsToChar(lpesLine);
 
-    if (!*lpCh)
-        return TRUE;
+	if (!*lpCh)
+		return TRUE;
 
-    DOS9_DBG("--------------------------------------------------------------\n");
+	DOS9_DBG("--------------------------------------------------------------\n");
 
-    if (!(lpBlock=Dos9_GetNextBlockBegin(lpCh))) {
+	if (!(lpBlock=Dos9_GetNextBlockBegin(lpCh))) {
 
-        /* There's no block, thus all is fine */
+		/* There's no block, thus all is fine */
 
-        if (strchr(lpCh, '\n')
-            && !Dos9_SearchChar(lpCh, '\n'))
-            return FALSE;
+		if (strchr(lpCh, '\n')
+		    && !Dos9_SearchChar(lpCh, '\n'))
+			return FALSE;
 
-        return TRUE;
+		return TRUE;
 
-    }
+	}
 
-    /* lpBlockBegin we have is the highest level block
-       that is avaliable, just perform some check for it */
+	/* lpBlockBegin we have is the highest level block
+	   that is avaliable, just perform some check for it */
 
-    if (!(lpCh=Dos9_GetBlockLineEnd(lpBlock))) {
+	if (!(lpCh=Dos9_GetBlockLineEnd(lpBlock))) {
 
-        /* the syntax is broken */
+		/* the syntax is broken */
 
-        return FALSE;
+		return FALSE;
 
-    }
+	}
 
-    if (strchr(lpCh, '\n')
-        && !Dos9_SearchChar(lpCh, '\n'))
-            return FALSE;
+	if (strchr(lpCh, '\n')
+	    && !Dos9_SearchChar(lpCh, '\n'))
+		return FALSE;
 
-    return TRUE;
+	return TRUE;
 
 }
 

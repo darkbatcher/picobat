@@ -26,187 +26,187 @@
 
 size_t         Tea_GetWordLengthT(char* lpBegin, TEANODE* lpTeaNode)
 {
-    size_t iLength=0;
+	size_t iLength=0;
 
-    while (*lpBegin!=' '
-           && *lpBegin!='\n') {
-
-
-        if (*lpBegin=='\0') {
-
-            /* on passe au noeud suivant */
-
-            do {
-
-                lpTeaNode=lpTeaNode->lpTeaNodeNext;
-
-                if (lpTeaNode)
-                    lpBegin=lpTeaNode->lpContent;
-
-            } while (lpTeaNode && *lpBegin=='\0');
-
-            if (*lpBegin=='\0')
-                goto Tea_GetWordLength_End;
+	while (*lpBegin!=' '
+	       && *lpBegin!='\n') {
 
 
-        } else {
+		if (*lpBegin=='\0') {
 
-            lpBegin=Dos9_GetNextChar(lpBegin);
+			/* on passe au noeud suivant */
 
-        }
+			do {
 
-        iLength++;
+				lpTeaNode=lpTeaNode->lpTeaNodeNext;
+
+				if (lpTeaNode)
+					lpBegin=lpTeaNode->lpContent;
+
+			} while (lpTeaNode && *lpBegin=='\0');
+
+			if (*lpBegin=='\0')
+				goto Tea_GetWordLength_End;
 
 
-    }
+		} else {
 
-    Tea_GetWordLength_End:
+			lpBegin=Dos9_GetNextChar(lpBegin);
 
-    return iLength;
+		}
+
+		iLength++;
+
+
+	}
+
+Tea_GetWordLength_End:
+
+	return iLength;
 
 }
 
 size_t      Tea_GetWordLength(char* lpBegin)
 {
-    size_t iLength=0;
+	size_t iLength=0;
 
-    while (*lpBegin
-           && *lpBegin!=' '
-           && *lpBegin!='\n') {
+	while (*lpBegin
+	       && *lpBegin!=' '
+	       && *lpBegin!='\n') {
 
-        lpBegin=Dos9_GetNextChar(lpBegin);
-        iLength++;
+		lpBegin=Dos9_GetNextChar(lpBegin);
+		iLength++;
 
-    }
+	}
 
-    return iLength;
+	return iLength;
 }
 
 void        Tea_MakeMargin(size_t iLength, size_t* iLeft, FILE* pFile)
 {
-    while (iLength) {
+	while (iLength) {
 
-        putc(' ', pFile);
+		putc(' ', pFile);
 
-        iLength--;
-        (*iLeft)--;
+		iLength--;
+		(*iLeft)--;
 
-    }
+	}
 
 }
 
 char*       Tea_OutputWord(char* lpBegin, FILE* pFile, size_t* iLeft)
 {
-    char* lpNext;
+	char* lpNext;
 
-    while (*lpBegin
-           && *lpBegin!=' '
-           && *lpBegin!='\n'
-           && *iLeft) {
+	while (*lpBegin
+	       && *lpBegin!=' '
+	       && *lpBegin!='\n'
+	       && *iLeft) {
 
 
-        lpNext=Dos9_GetNextChar(lpBegin);
+		lpNext=Dos9_GetNextChar(lpBegin);
 
-        while (lpBegin < lpNext) {
+		while (lpBegin < lpNext) {
 
-            /* This is somewhat important since it takes
-               account of possibly mutiple byte sequences */
+			/* This is somewhat important since it takes
+			   account of possibly mutiple byte sequences */
 
-            fputc(*lpBegin,pFile);
-            lpBegin++;
+			fputc(*lpBegin,pFile);
+			lpBegin++;
 
-        }
+		}
 
-        (*iLeft)--;
+		(*iLeft)--;
 
-    }
+	}
 
-    /* return that there's no more pending characters */
-    if (!*lpBegin)
-        return NULL;
+	/* return that there's no more pending characters */
+	if (!*lpBegin)
+		return NULL;
 
-    return lpBegin;
+	return lpBegin;
 }
 
 char*       Tea_OutputLineT(char* lpBegin, FILE* pFile, TEANODE* lpTeaNode, size_t* iLeft)
 {
-    size_t iNextWordLen;
+	size_t iNextWordLen;
 
-    while (*lpBegin) {
+	while (*lpBegin) {
 
-        iNextWordLen=Tea_GetWordLengthT(lpBegin, lpTeaNode);
+		iNextWordLen=Tea_GetWordLengthT(lpBegin, lpTeaNode);
 
-        /* the line is obviously far too big
-           let the user do what he want with new lines
-        */
+		/* the line is obviously far too big
+		   let the user do what he want with new lines
+		*/
 
-        if (iNextWordLen >= *iLeft) return lpBegin;
+		if (iNextWordLen >= *iLeft) return lpBegin;
 
-        lpBegin=Tea_OutputWord(lpBegin, pFile, iLeft);
+		lpBegin=Tea_OutputWord(lpBegin, pFile, iLeft);
 
-        /* if there is no pending character */
-        if (!lpBegin)
-            return NULL;
+		/* if there is no pending character */
+		if (!lpBegin)
+			return NULL;
 
-        /* if the line is finished, return */
-        if (*lpBegin=='\n')
-            return lpBegin;
+		/* if the line is finished, return */
+		if (*lpBegin=='\n')
+			return lpBegin;
 
 
-        if (1 <= *iLeft) {
+		if (1 <= *iLeft) {
 
-            fputc(' ', pFile);
-            (*iLeft)--;
+			fputc(' ', pFile);
+			(*iLeft)--;
 
-        }
+		}
 
-        /* any way, the words are separated by spaces */
-        lpBegin++;
+		/* any way, the words are separated by spaces */
+		lpBegin++;
 
-    }
+	}
 
-    return NULL;
+	return NULL;
 
 }
 
 char*       Tea_OutputLine(char* lpBegin, FILE* pFile, size_t* iLeft)
 {
-    size_t iNextWordLen;
+	size_t iNextWordLen;
 
-    while (*lpBegin) {
+	while (*lpBegin) {
 
-        iNextWordLen=Tea_GetWordLength(lpBegin);
+		iNextWordLen=Tea_GetWordLength(lpBegin);
 
-        /* the line is obviously far too big
-           le the user do what he want with new lines
-        */
+		/* the line is obviously far too big
+		   le the user do what he want with new lines
+		*/
 
-        if (iNextWordLen >= *iLeft) return lpBegin;
+		if (iNextWordLen >= *iLeft) return lpBegin;
 
-        lpBegin=Tea_OutputWord(lpBegin, pFile, iLeft);
+		lpBegin=Tea_OutputWord(lpBegin, pFile, iLeft);
 
-        /* if there is no pending character */
-        if (!lpBegin)
-            return NULL;
+		/* if there is no pending character */
+		if (!lpBegin)
+			return NULL;
 
-        /* if the line is finished, return */
-        if (*lpBegin=='\n')
-            return lpBegin;
+		/* if the line is finished, return */
+		if (*lpBegin=='\n')
+			return lpBegin;
 
 
-        if (1 <= *iLeft) {
+		if (1 <= *iLeft) {
 
-            fputc(' ', pFile);
-            (*iLeft)--;
+			fputc(' ', pFile);
+			(*iLeft)--;
 
-        }
+		}
 
-        /* any way, the words are separated by spaces */
-        lpBegin++;
+		/* any way, the words are separated by spaces */
+		lpBegin++;
 
-    }
+	}
 
-    return NULL;
+	return NULL;
 
 }
 

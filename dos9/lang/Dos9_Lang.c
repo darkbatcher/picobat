@@ -66,54 +66,54 @@ const char* lpAskInvalid;
 
 void Dos9_LoadStrings(void)
 {
-    /* this loads strings */
-    char lpPath[FILENAME_MAX];
+	/* this loads strings */
+	char lpPath[FILENAME_MAX];
 	char lpEncoding[15];
-    char lpSharePath[FILENAME_MAX];
+	char lpSharePath[FILENAME_MAX];
 
-    Dos9_GetExePath(lpPath, FILENAME_MAX);
+	Dos9_GetExePath(lpPath, FILENAME_MAX);
 	Dos9_GetConsoleEncoding(lpEncoding, sizeof(lpEncoding));
 
-    snprintf(lpSharePath, FILENAME_MAX, "%s/share/locale", lpPath);
+	snprintf(lpSharePath, FILENAME_MAX, "%s/share/locale", lpPath);
 
-    bindtextdomain("Dos9-msg", lpSharePath);
+	bindtextdomain("Dos9-msg", lpSharePath);
 	bind_textdomain_codeset("Dos9-msg", lpEncoding);
-    textdomain("Dos9-msg");
+	textdomain("Dos9-msg");
 
-    /* texte des commandes ECHO et PAUSE */
-    lpMsgEchoOn=gettext("Echo command enabled");
-    lpMsgEchoOff=gettext("Echo command disabled");
-    lpMsgPause=gettext("Press any key to continue...");
+	/* texte des commandes ECHO et PAUSE */
+	lpMsgEchoOn=gettext("Echo command enabled");
+	lpMsgEchoOff=gettext("Echo command disabled");
+	lpMsgPause=gettext("Press any key to continue...");
 
-    /* texte de la commande DIR */
-    lpDirNoFileFound=gettext("\tNo files found\n");
-    lpDirListTitle=gettext("\nLast change\t\tSize\tAttr.\tName\n");
-    lpDirFileDirNb=gettext("\t\t\t\t\t\t%d Files\n\t\t\t\t\t\t%d Folders\n");
-    // TRANSLATORS : Don't remove the %s because the program needs it
+	/* texte de la commande DIR */
+	lpDirNoFileFound=gettext("\tNo files found\n");
+	lpDirListTitle=gettext("\nLast change\t\tSize\tAttr.\tName\n");
+	lpDirFileDirNb=gettext("\t\t\t\t\t\t%d Files\n\t\t\t\t\t\t%d Folders\n");
+	// TRANSLATORS : Don't remove the %s because the program needs it
 
-    lpDelConfirm=gettext("Are you sure you want to delete \"%s\" ?");
+	lpDelConfirm=gettext("Are you sure you want to delete \"%s\" ?");
 
-    lpAskYn=gettext(" (Yes/no) ");
-    lpAskyN=gettext(" (yes/No) ");
-    lpAskyn=gettext(" (yes/no) ");
+	lpAskYn=gettext(" (Yes/no) ");
+	lpAskyN=gettext(" (yes/No) ");
+	lpAskyn=gettext(" (yes/no) ");
 
-    lpAskYna=gettext(" (Yes/no/all) ");
-    lpAskyNa=gettext(" (yes/No/all) ");
-    lpAskynA=gettext(" (yes/no/All) ");
-    lpAskyna=gettext(" (yes/no/all) ");
+	lpAskYna=gettext(" (Yes/no/all) ");
+	lpAskyNa=gettext(" (yes/No/all) ");
+	lpAskynA=gettext(" (yes/no/All) ");
+	lpAskyna=gettext(" (yes/no/all) ");
 
-    lpAskYes=gettext("YES");
-    lpAskYesA=gettext("Y");
+	lpAskYes=gettext("YES");
+	lpAskYesA=gettext("Y");
 
-    lpAskNo=gettext("NO");
-    lpAskNoA=gettext("N");
+	lpAskNo=gettext("NO");
+	lpAskNoA=gettext("N");
 
-    lpAskAll=gettext("ALL");
-    lpAskAllA=gettext("A");
+	lpAskAll=gettext("ALL");
+	lpAskAllA=gettext("A");
 
-    lpAskInvalid=gettext("Please enter a correct choice (or type enter to choose default) !\n");
+	lpAskInvalid=gettext("Please enter a correct choice (or type enter to choose default) !\n");
 
-    lpHlpMain=gettext("DOS9 COMMAND\n\
+	lpHlpMain=gettext("DOS9 COMMAND\n\
 \n\
         DOS9 is a free, cross-platform command prompt used for batch scripts \n\
      and command processing.\n\
@@ -168,6 +168,6 @@ SEE ALSO\n\
 \n\
         ECHO Command (see `echo'), Command scripts (see `script'), Commands \n\
      list (see `commands') Commands list (see `commands')\n");
-     // TRANSLATORS : Don't translate this, just pick it up from the documentation
-     // or, obviously, if the translation does not exist, translate it.
+	// TRANSLATORS : Don't translate this, just pick it up from the documentation
+	// or, obviously, if the translation does not exist, translate it.
 }

@@ -23,11 +23,11 @@
 
 #ifdef _POSIX_C_SOURCE
 
-    #define DOS9_PATH_DELIMITER ':'
+#define DOS9_PATH_DELIMITER ':'
 
 #else
 
-    #define DOS9_PATH_DELIMITER ';'
+#define DOS9_PATH_DELIMITER ';'
 
 #endif
 

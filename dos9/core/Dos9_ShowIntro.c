@@ -33,10 +33,10 @@
 
 void Dos9_InitConsole(void)
 {
-    CONSOLE_CURSOR_INFO cciCursorInfo;
-    cciCursorInfo.dwSize=100;
-    cciCursorInfo.bVisible=TRUE;
-    SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cciCursorInfo);
+	CONSOLE_CURSOR_INFO cciCursorInfo;
+	cciCursorInfo.dwSize=100;
+	cciCursorInfo.bVisible=TRUE;
+	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cciCursorInfo);
 }
 
 #else
@@ -48,36 +48,36 @@ void Dos9_InitConsole(void) {}
 
 void Dos9_PrintIntroduction(void)
 {
-    char lpDesc[]="                                         ";
-    char lpAuth[]="                                      ";
+	char lpDesc[]="                                         ";
+	char lpAuth[]="                                      ";
 
-    size_t iSize=sizeof(lpDesc);
+	size_t iSize=sizeof(lpDesc);
 
-     #ifdef DOS9_BUILDCOMMENTS
+#ifdef DOS9_BUILDCOMMENTS
 
-        #define DOS9_DESC_TOKEN "Dos9 [" DOS9_VERSION "] - " DOS9_BUILDCOMMENTS
+#define DOS9_DESC_TOKEN "Dos9 [" DOS9_VERSION "] - " DOS9_BUILDCOMMENTS
 
-     #else
+#else
 
-        #define DOS9_DESC_TOKEN "Dos9 [" DOS9_VERSION "]"
+#define DOS9_DESC_TOKEN "Dos9 [" DOS9_VERSION "]"
 
-     #endif
+#endif
 
-    if (sizeof(DOS9_DESC_TOKEN)-1 < iSize)
-        iSize=sizeof(DOS9_DESC_TOKEN)-1;
+	if (sizeof(DOS9_DESC_TOKEN)-1 < iSize)
+		iSize=sizeof(DOS9_DESC_TOKEN)-1;
 
-    strncpy(lpDesc, DOS9_DESC_TOKEN , iSize);
+	strncpy(lpDesc, DOS9_DESC_TOKEN , iSize);
 
 
-    iSize=sizeof(lpAuth);
-    if (sizeof(DOS9_AUTHORS)-1 < iSize)
-        iSize=sizeof(DOS9_AUTHORS)-1;
+	iSize=sizeof(lpAuth);
+	if (sizeof(DOS9_AUTHORS)-1 < iSize)
+		iSize=sizeof(DOS9_AUTHORS)-1;
 
-    strncpy(lpAuth, DOS9_AUTHORS, iSize);
+	strncpy(lpAuth, DOS9_AUTHORS, iSize);
 
-    Dos9_SetConsoleTextColor(DOS9_BACKGROUND_IBLUE | DOS9_FOREGROUND_IYELLOW);
+	Dos9_SetConsoleTextColor(DOS9_BACKGROUND_IBLUE | DOS9_FOREGROUND_IYELLOW);
 
-    printf("  ______   _______  _______   _____                                            \n\
+	printf("  ______   _______  _______   _____                                            \n\
  (  __  \\ (  ___  )(  ____ \\ / ___ \\  %s\n\
  | (  \\  )| (   ) || (    \\/( (   ) ) Copyright (c) 2010-" DOS9_BUILDYEAR "                  \n\
  | |   ) || |   | || (_____ ( (___) |    %s\n\
@@ -86,9 +86,9 @@ void Dos9_PrintIntroduction(void)
  | (__/  )| (___) |/\\____) |/\\____) ) and/or redistribute it under the terms   \n\
  (______/ (_______)\\_______)\\______/  of the GNU Genaral Public License V3     \n\
                                                                                \n",
-           lpDesc,
-           lpAuth
-           );
-    Dos9_SetConsoleTextColor(DOS9_COLOR_DEFAULT);
-    printf("\n");
+	       lpDesc,
+	       lpAuth
+	      );
+	Dos9_SetConsoleTextColor(DOS9_COLOR_DEFAULT);
+	printf("\n");
 }

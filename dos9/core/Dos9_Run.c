@@ -24,7 +24,7 @@
 #include <assert.h>
 
 #ifdef _POSIX_C_SOURCE
-    #include <sys/wait.h>
+#include <sys/wait.h>
 #endif
 
 #include "Dos9_Core.h"
@@ -38,468 +38,466 @@
 
 int Dos9_RunBatch(INPUT_FILE* pIn)
 {
-    ESTR* lpLine=Dos9_EsInit();
+	ESTR* lpLine=Dos9_EsInit();
 
-    INPUT_FILE pIndIn;
+	INPUT_FILE pIndIn;
 
-    char* const lpCurrentDir=Dos9_GetCurrentDir();
+	char* const lpCurrentDir=Dos9_GetCurrentDir();
 
-    char *lpCh,
-         *lpTmp;
+	char *lpCh,
+	     *lpTmp;
 
-    int res;
+	int res;
 
-    while (!(pIn->bEof))
-    {
+	while (!(pIn->bEof)) {
 
-        DOS9_DBG("[*] %d : Parsing new line\n", __LINE__);
+		DOS9_DBG("[*] %d : Parsing new line\n", __LINE__);
 
 
-        if (*(pIn->lpFileName)=='\0'
-            && bEchoOn ) {
+		if (*(pIn->lpFileName)=='\0'
+		    && bEchoOn ) {
 
-            /* this is a direct input */
+			/* this is a direct input */
 
-            Dos9_SetConsoleTextColor(DOS9_FOREGROUND_IGREEN | DOS9_GET_BACKGROUND(colColor));
-            printf("\nDOS9 ");
+			Dos9_SetConsoleTextColor(DOS9_FOREGROUND_IGREEN | DOS9_GET_BACKGROUND(colColor));
+			printf("\nDOS9 ");
 
-            Dos9_SetConsoleTextColor(colColor);
+			Dos9_SetConsoleTextColor(colColor);
 
-            printf("%s>", lpCurrentDir);
+			printf("%s>", lpCurrentDir);
 
-        }
+		}
 
-        /* the line we read was a void line */
-        if (Dos9_GetLine(lpLine, pIn))
-            continue;
+		/* the line we read was a void line */
+		if (Dos9_GetLine(lpLine, pIn))
+			continue;
 
-        lpCh=Dos9_EsToChar(lpLine);
+		lpCh=Dos9_EsToChar(lpLine);
 
-        while (*lpCh==' '
-               || *lpCh=='\t'
-               || *lpCh==';')
-            lpCh++;
+		while (*lpCh==' '
+		       || *lpCh=='\t'
+		       || *lpCh==';')
+			lpCh++;
 
-        if (*(pIn->lpFileName)!='\0'
-            && bEchoOn
-            && *lpCh!='@') {
+		if (*(pIn->lpFileName)!='\0'
+		    && bEchoOn
+		    && *lpCh!='@') {
 
-            Dos9_SetConsoleTextColor(DOS9_FOREGROUND_IGREEN | DOS9_GET_BACKGROUND(colColor));
-            printf("\nDOS9 ");
-            Dos9_SetConsoleTextColor(colColor);
+			Dos9_SetConsoleTextColor(DOS9_FOREGROUND_IGREEN | DOS9_GET_BACKGROUND(colColor));
+			printf("\nDOS9 ");
+			Dos9_SetConsoleTextColor(colColor);
 
-            printf("%s>%s", lpCurrentDir, Dos9_EsToChar(lpLine));
+			printf("%s>%s", lpCurrentDir, Dos9_EsToChar(lpLine));
 
-        }
+		}
 
-        Dos9_ReplaceVars(lpLine);
+		Dos9_ReplaceVars(lpLine);
 
-        bAbortCommand=FALSE;
+		bAbortCommand=FALSE;
 
-        Dos9_RunLine(lpLine);
+		Dos9_RunLine(lpLine);
 
-        if (bAbortCommand == -1)
-            break;
+		if (bAbortCommand == -1)
+			break;
 
-        DOS9_DBG("\t[*] Line run.\n");
+		DOS9_DBG("\t[*] Line run.\n");
 
-    }
+	}
 
-    DOS9_DBG("*** Input ends here  ***\n");
+	DOS9_DBG("*** Input ends here  ***\n");
 
-    return 0;
+	return 0;
 
 }
 
 int Dos9_ExecOperators(PARSED_STREAM* lppsStream)
 {
 
-    lppsStreamStack=Dos9_Pipe(lppsStreamStack);
+	lppsStreamStack=Dos9_Pipe(lppsStreamStack);
 
-    if (lppsStream==NULL)
-	return 0;
+	if (lppsStream==NULL)
+		return 0;
 
 	//fprintf(stderr, "Stream Status: cNodeType=%d\n", lppsStream->cNodeType);
 	//Dos9_DumpStreamStack(lppsStreamStack);
 
-    if (lppsStream->lppsNode != NULL) {
+	if (lppsStream->lppsNode != NULL) {
 
-        if (lppsStream->lppsNode->cNodeType
-            == PARSED_STREAM_NODE_PIPE)
-             Dos9_OpenPipe(lppsStreamStack);
-    }
+		if (lppsStream->lppsNode->cNodeType
+		    == PARSED_STREAM_NODE_PIPE)
+			Dos9_OpenPipe(lppsStreamStack);
+	}
 
-    //Dos9_DumpStreamStack(lppsStreamStack);
+	//Dos9_DumpStreamStack(lppsStreamStack);
 
-    //while (getchar()!='\n');
+	//while (getchar()!='\n');
 
-    switch (lppsStream->cNodeType) {
+	switch (lppsStream->cNodeType) {
 
-        case PARSED_STREAM_NODE_PIPE:
-        case PARSED_STREAM_NODE_NONE :
-            /* this condition is alwais true */
-            return TRUE;
+	case PARSED_STREAM_NODE_PIPE:
+	case PARSED_STREAM_NODE_NONE :
+		/* this condition is alwais true */
+		return TRUE;
 
-        case PARSED_STREAM_NODE_NOT :
-            /* this condition is true when the instruction
-               before failed */
-            return iErrorLevel;
+	case PARSED_STREAM_NODE_NOT :
+		/* this condition is true when the instruction
+		   before failed */
+		return iErrorLevel;
 
-        case PARSED_STREAM_NODE_YES:
-            return !iErrorLevel;
+	case PARSED_STREAM_NODE_YES:
+		return !iErrorLevel;
 
-    }
+	}
 
-    return FALSE;
+	return FALSE;
 
 }
 
 int Dos9_ExecOutput(PARSED_STREAM_START* lppssStart)
 {
 
-    DOS9_DBG("lppssStart->lpInputFile=%s\n"
-         "          ->lpOutputFile=%s\n"
-         "          ->cOutputMode=%d\n"
-         "lppssStart->cOutputMode & ~PARSED_STREAM_START_MODE_TRUNCATE=%d\n"
-         "lppssStart->cOutputMode & PARSED_STREAM_START_MODE_TRUNCATE=%d\n"
-         "STDOUT_FILENO=%d\n",
-         lppssStart->lpInputFile,
-         lppssStart->lpOutputFile,
-         lppssStart->cOutputMode,
-         lppssStart->cOutputMode & ~PARSED_STREAM_START_MODE_TRUNCATE,
-         lppssStart->cOutputMode & PARSED_STREAM_START_MODE_TRUNCATE,
-         STDOUT_FILENO
-         );
+	DOS9_DBG("lppssStart->lpInputFile=%s\n"
+	         "          ->lpOutputFile=%s\n"
+	         "          ->cOutputMode=%d\n"
+	         "lppssStart->cOutputMode & ~PARSED_STREAM_START_MODE_TRUNCATE=%d\n"
+	         "lppssStart->cOutputMode & PARSED_STREAM_START_MODE_TRUNCATE=%d\n"
+	         "STDOUT_FILENO=%d\n",
+	         lppssStart->lpInputFile,
+	         lppssStart->lpOutputFile,
+	         lppssStart->cOutputMode,
+	         lppssStart->cOutputMode & ~PARSED_STREAM_START_MODE_TRUNCATE,
+	         lppssStart->cOutputMode & PARSED_STREAM_START_MODE_TRUNCATE,
+	         STDOUT_FILENO
+	        );
 
-    if (!(lppssStart->lpInputFile)
-        && !(lppssStart->lpOutputFile)) {
+	if (!(lppssStart->lpInputFile)
+	    && !(lppssStart->lpOutputFile)) {
 
-        /* nothing to be done, just return, now */
-        return 0;
+		/* nothing to be done, just return, now */
+		return 0;
 
-    }
-
-
-
-    /* open the redirections */
-
-    lppsStreamStack=Dos9_PushStreamStack(lppsStreamStack);
-
-    if (lppssStart->cOutputMode
-        && lppssStart->lpOutputFile )
-        Dos9_OpenOutput(lppsStreamStack,
-                        lppssStart->lpOutputFile,
-                        lppssStart->cOutputMode & ~PARSED_STREAM_START_MODE_TRUNCATE,
-                        lppssStart->cOutputMode & PARSED_STREAM_START_MODE_TRUNCATE
-                        );
+	}
 
 
-    if (lppssStart->lpInputFile)
-        Dos9_OpenOutput(lppsStreamStack,
-                        lppssStart->lpInputFile,
-                        DOS9_STDIN,
-                        0
-                        );
 
-    return 0;
+	/* open the redirections */
+
+	lppsStreamStack=Dos9_PushStreamStack(lppsStreamStack);
+
+	if (lppssStart->cOutputMode
+	    && lppssStart->lpOutputFile )
+		Dos9_OpenOutput(lppsStreamStack,
+		                lppssStart->lpOutputFile,
+		                lppssStart->cOutputMode & ~PARSED_STREAM_START_MODE_TRUNCATE,
+		                lppssStart->cOutputMode & PARSED_STREAM_START_MODE_TRUNCATE
+		               );
+
+
+	if (lppssStart->lpInputFile)
+		Dos9_OpenOutput(lppsStreamStack,
+		                lppssStart->lpInputFile,
+		                DOS9_STDIN,
+		                0
+		               );
+
+	return 0;
 }
 
 int Dos9_RunLine(ESTR* lpLine)
 {
-    PARSED_STREAM_START* lppssStreamStart;
-    PARSED_STREAM* lppsStream;
+	PARSED_STREAM_START* lppssStreamStart;
+	PARSED_STREAM* lppsStream;
 
-    #ifdef DOS9_DBG_MODE
-        STREAMSTACK* lpStack;
-    #endif
+#ifdef DOS9_DBG_MODE
+	STREAMSTACK* lpStack;
+#endif
 
-    Dos9_RmTrailingNl(Dos9_EsToChar(lpLine));
+	Dos9_RmTrailingNl(Dos9_EsToChar(lpLine));
 
-    lppssStreamStart=Dos9_ParseLine(lpLine);
+	lppssStreamStart=Dos9_ParseLine(lpLine);
 
-    if (!lppssStreamStart) {
-        DOS9_DBG("!!! Can't parse line : \"%s\".\n", strerror(errno));
-        return -1;
-    }
+	if (!lppssStreamStart) {
+		DOS9_DBG("!!! Can't parse line : \"%s\".\n", strerror(errno));
+		return -1;
+	}
 
-    Dos9_ExecOutput(lppssStreamStart);
+	Dos9_ExecOutput(lppssStreamStart);
 
-    DOS9_DBG("\t[*] Global streams set.\n");
+	DOS9_DBG("\t[*] Global streams set.\n");
 
-    lppsStream=lppssStreamStart->lppsStream;
+	lppsStream=lppssStreamStart->lppsStream;
 
-    do {
+	do {
 
-        if (Dos9_ExecOperators(lppsStream)==FALSE || bAbortCommand)
-            break;
+		if (Dos9_ExecOperators(lppsStream)==FALSE || bAbortCommand)
+			break;
 
-        Dos9_RunCommand(lppsStream->lpCmdLine);
+		Dos9_RunCommand(lppsStream->lpCmdLine);
 
-    } while ((lppsStream=lppsStream->lppsNode));
+	} while ((lppsStream=lppsStream->lppsNode));
 
 	/* deal with the remaining pipe operator */
-    Dos9_ExecOperators(NULL);
+	Dos9_ExecOperators(NULL);
 
-    lppsStreamStack=Dos9_PopStreamStack(lppsStreamStack);
+	lppsStreamStack=Dos9_PopStreamStack(lppsStreamStack);
 
-    Dos9_FreeLine(lppssStreamStart);
+	Dos9_FreeLine(lppssStreamStart);
 
-    DOS9_DBG("\t[*] Line run.\n");
+	DOS9_DBG("\t[*] Line run.\n");
 
-    DOS9_DBG("*** Input ends here  ***\n");
+	DOS9_DBG("*** Input ends here  ***\n");
 
-    return 0;
+	return 0;
 }
 
 int Dos9_RunCommand(ESTR* lpCommand)
 {
 
-    int (*lpProc)(char*);
-    char lpErrorlevel[]="ERRORLEVEL=-3000000000";
-    static int lastErrorLevel=0;
-    char *lpCmdLine;
-    int iFlag;
+	int (*lpProc)(char*);
+	char lpErrorlevel[]="ERRORLEVEL=-3000000000";
+	static int lastErrorLevel=0;
+	char *lpCmdLine;
+	int iFlag;
 
-    RestartSearch:
+RestartSearch:
 
-    lpCmdLine=Dos9_EsToChar(lpCommand);
+	lpCmdLine=Dos9_EsToChar(lpCommand);
 
-    lpCmdLine=Dos9_SkipAllBlanks(lpCmdLine);
+	lpCmdLine=Dos9_SkipAllBlanks(lpCmdLine);
 
-    // printf("*** Running  line '%s'\n", lpCmdLine);
+	// printf("*** Running  line '%s'\n", lpCmdLine);
 
-    switch((iFlag=Dos9_GetCommandProc(lpCmdLine, lpclCommands, (void**)&lpProc)))
-    {
+	switch((iFlag=Dos9_GetCommandProc(lpCmdLine, lpclCommands, (void**)&lpProc))) {
 
-       case -1:
-            BackTrackExternalCommand:
+	case -1:
+BackTrackExternalCommand:
 
-            iErrorLevel=Dos9_RunExternalCommand(lpCmdLine);
-            break;
+		iErrorLevel=Dos9_RunExternalCommand(lpCmdLine);
+		break;
 
-       default:
-            if (iFlag
-                && lpCmdLine[iFlag & ~DOS9_ALIAS_FLAG]!=' '
-                && lpCmdLine[iFlag & ~DOS9_ALIAS_FLAG]!='\t'
-                && lpCmdLine[iFlag & ~DOS9_ALIAS_FLAG]!='\0')
-                goto BackTrackExternalCommand;
+	default:
+		if (iFlag
+		    && lpCmdLine[iFlag & ~DOS9_ALIAS_FLAG]!=' '
+		    && lpCmdLine[iFlag & ~DOS9_ALIAS_FLAG]!='\t'
+		    && lpCmdLine[iFlag & ~DOS9_ALIAS_FLAG]!='\0')
+			goto BackTrackExternalCommand;
 
-            if (iFlag & DOS9_ALIAS_FLAG) {
-                /* this is an alias */
+		if (iFlag & DOS9_ALIAS_FLAG) {
+			/* this is an alias */
 
-                Dos9_ExpandAlias(lpCommand,
-                                 lpCmdLine + (iFlag & ~DOS9_ALIAS_FLAG),
-                                 (char*)lpProc
-                                 );
+			Dos9_ExpandAlias(lpCommand,
+			                 lpCmdLine + (iFlag & ~DOS9_ALIAS_FLAG),
+			                 (char*)lpProc
+			                );
 
-                goto RestartSearch;
+			goto RestartSearch;
 
-            }
+		}
 
-            iErrorLevel=lpProc(lpCmdLine);
+		iErrorLevel=lpProc(lpCmdLine);
 
-    }
+	}
 
-    if (iErrorLevel!=lastErrorLevel) {
+	if (iErrorLevel!=lastErrorLevel) {
 
-        snprintf(lpErrorlevel+11, sizeof(lpErrorlevel)-11, "%d", iErrorLevel);
-        Dos9_PutEnv(lpErrorlevel);
-        lastErrorLevel=iErrorLevel;
-    }
+		snprintf(lpErrorlevel+11, sizeof(lpErrorlevel)-11, "%d", iErrorLevel);
+		Dos9_PutEnv(lpErrorlevel);
+		lastErrorLevel=iErrorLevel;
+	}
 
-    return 0;
+	return 0;
 }
 
 
 int Dos9_RunBlock(BLOCKINFO* lpbkInfo)
 {
 
-    ESTR *lpEsLine=Dos9_EsInit();
+	ESTR *lpEsLine=Dos9_EsInit();
 
-    char *lpToken = lpbkInfo->lpBegin,
-         *lpEnd = lpbkInfo->lpEnd,
-         *lpBlockBegin,
-         *lpBlockEnd,
-         *lpNl;
+	char *lpToken = lpbkInfo->lpBegin,
+	      *lpEnd = lpbkInfo->lpEnd,
+	       *lpBlockBegin,
+	       *lpBlockEnd,
+	       *lpNl;
 
-    size_t iSize;
+	size_t iSize;
 
-    int iOldState;
+	int iOldState;
 
-    /* Save old lock state and lock the
-       level, definitely */
-    iOldState=Dos9_GetStreamStackLockState(lppsStreamStack);
-    Dos9_SetStreamStackLockState(lppsStreamStack, TRUE);
+	/* Save old lock state and lock the
+	   level, definitely */
+	iOldState=Dos9_GetStreamStackLockState(lppsStreamStack);
+	Dos9_SetStreamStackLockState(lppsStreamStack, TRUE);
 
-    DOS9_DBG("Block_b=\"%s\"\n"
-           "Block_e=\"%s\"\n",
-           lpToken,
-           lpEnd
-           );
+	DOS9_DBG("Block_b=\"%s\"\n"
+	         "Block_e=\"%s\"\n",
+	         lpToken,
+	         lpEnd
+	        );
 
-    while (*lpToken && (lpToken < lpEnd)) {
+	while (*lpToken && (lpToken < lpEnd)) {
 
-        lpBlockBegin=Dos9_GetNextBlockBeginEx(lpToken, TRUE);
+		lpBlockBegin=Dos9_GetNextBlockBeginEx(lpToken, TRUE);
 
-        /* get the block that are contained in the line */
+		/* get the block that are contained in the line */
 
-        if (lpBlockBegin) {
+		if (lpBlockBegin) {
 
-            lpBlockEnd=Dos9_GetBlockLineEnd(lpBlockBegin);
+			lpBlockEnd=Dos9_GetBlockLineEnd(lpBlockBegin);
 
-            assert(lpBlockEnd != NULL);
+			assert(lpBlockEnd != NULL);
 
-            lpBlockBegin=lpBlockEnd;
+			lpBlockBegin=lpBlockEnd;
 
-        } else {
+		} else {
 
-            lpBlockBegin=lpToken;
+			lpBlockBegin=lpToken;
 
-        }
+		}
 
-        /* search the end of the line */
-        if (!(lpBlockEnd=Dos9_SearchChar(lpBlockBegin, '\n'))) {
+		/* search the end of the line */
+		if (!(lpBlockEnd=Dos9_SearchChar(lpBlockBegin, '\n'))) {
 
-            lpBlockEnd=lpEnd;
+			lpBlockEnd=lpEnd;
 
-        }
+		}
 
-        lpBlockEnd++;
+		lpBlockEnd++;
 
-        if (lpBlockEnd > lpEnd)
-            lpBlockEnd=lpEnd;
+		if (lpBlockEnd > lpEnd)
+			lpBlockEnd=lpEnd;
 
-        iSize=lpBlockEnd-lpToken;
+		iSize=lpBlockEnd-lpToken;
 
-        Dos9_EsCpyN(lpEsLine, lpToken, iSize);
+		Dos9_EsCpyN(lpEsLine, lpToken, iSize);
 
-        //printf("Running=\"%s\"\n", Dos9_EsToChar(lpEsLine));
+		//printf("Running=\"%s\"\n", Dos9_EsToChar(lpEsLine));
 
-        //getch();
+		//getch();
 
-        lpToken=Dos9_SkipAllBlanks(lpToken);
+		lpToken=Dos9_SkipAllBlanks(lpToken);
 
-        if (*lpToken=='\0'
-            || *lpToken=='\n') {
+		if (*lpToken=='\0'
+		    || *lpToken=='\n') {
 
-            /* don't run void lines, it is time wasting */
-            lpToken=lpBlockEnd;
+			/* don't run void lines, it is time wasting */
+			lpToken=lpBlockEnd;
 
-            continue;
+			continue;
 
-        }
+		}
 
-        lpToken=lpBlockEnd;
+		lpToken=lpBlockEnd;
 
-        Dos9_RunLine(lpEsLine);
+		Dos9_RunLine(lpEsLine);
 
-        /* if we are asked to abort the command */
-        if (bAbortCommand)
-            break;
+		/* if we are asked to abort the command */
+		if (bAbortCommand)
+			break;
 
 
-    }
+	}
 
-    /* releases the lock */
-    Dos9_SetStreamStackLockState(lppsStreamStack, iOldState);
+	/* releases the lock */
+	Dos9_SetStreamStackLockState(lppsStreamStack, iOldState);
 
-    Dos9_EsFree(lpEsLine);
+	Dos9_EsFree(lpEsLine);
 
-    return 0;
+	return 0;
 }
 
 int Dos9_RunExternalCommand(char* lpCommandLine)
 {
 
-    char *lpArguments[FILENAME_MAX],
-          lpFileName[FILENAME_MAX],
-          lpExt[_MAX_EXT],
-          lpTmp[FILENAME_MAX],
-          lpExePath[FILENAME_MAX];
+	char *lpArguments[FILENAME_MAX],
+	     lpFileName[FILENAME_MAX],
+	     lpExt[_MAX_EXT],
+	     lpTmp[FILENAME_MAX],
+	     lpExePath[FILENAME_MAX];
 
-    ESTR* lpEstr[FILENAME_MAX];
+	ESTR* lpEstr[FILENAME_MAX];
 
-    int i=0;
+	int i=0;
 
 
-    Dos9_GetParamArrayEs(lpCommandLine, lpEstr, FILENAME_MAX);
+	Dos9_GetParamArrayEs(lpCommandLine, lpEstr, FILENAME_MAX);
 
-    if (!lpEstr[0])
-        return 0;
+	if (!lpEstr[0])
+		return 0;
 
-    Dos9_EsReplace(lpEstr[0], "\"", "");
+	Dos9_EsReplace(lpEstr[0], "\"", "");
 
-    for (;lpEstr[i] && (i < FILENAME_MAX);i++) {
-        lpArguments[i]=Dos9_EsToChar(lpEstr[i]);
-    }
+	for (; lpEstr[i] && (i < FILENAME_MAX); i++) {
+		lpArguments[i]=Dos9_EsToChar(lpEstr[i]);
+	}
 
-    lpArguments[i]=NULL;
+	lpArguments[i]=NULL;
 
-    /* check if the program exist */
+	/* check if the program exist */
 
-    if (Dos9_GetFilePath(lpFileName, lpArguments[0], sizeof(lpFileName))==-1) {
+	if (Dos9_GetFilePath(lpFileName, lpArguments[0], sizeof(lpFileName))==-1) {
 
-        Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR,
-                              lpArguments[0],
-                              FALSE);
-        goto error;
+		Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR,
+		                      lpArguments[0],
+		                      FALSE);
+		goto error;
 
-    }
+	}
 
-    /* check if "command" is a batch file */
-    Dos9_SplitPath(lpFileName, NULL, NULL, NULL, lpExt);
+	/* check if "command" is a batch file */
+	Dos9_SplitPath(lpFileName, NULL, NULL, NULL, lpExt);
 
-    if (!stricmp(".bat", lpExt)
-        || !stricmp(".cmd", lpExt)) {
+	if (!stricmp(".bat", lpExt)
+	    || !stricmp(".cmd", lpExt)) {
 
-        /* these are batch */
+		/* these are batch */
 
-        strncpy(lpTmp, lpFileName, sizeof(lpFileName));
+		strncpy(lpTmp, lpFileName, sizeof(lpFileName));
 
-        if (!(i < FILENAME_MAX-2)) {
+		if (!(i < FILENAME_MAX-2)) {
 
-          i=FILENAME_MAX-3;
-          lpArguments[i]=NULL;
+			i=FILENAME_MAX-3;
+			lpArguments[i]=NULL;
 
-        }
+		}
 
-        for (;(i > 0);i--)
-            lpArguments[i+2]=lpArguments[i];
+		for (; (i > 0); i--)
+			lpArguments[i+2]=lpArguments[i];
 
-        lpArguments[i+2]=NULL;
+		lpArguments[i+2]=NULL;
 
-        lpArguments[2]=lpTmp;
-        lpArguments[1]="//"; /* use this switch to prevent
+		lpArguments[2]=lpTmp;
+		lpArguments[1]="//"; /* use this switch to prevent
                                 other switches from being executed */
 
-        Dos9_GetExePath(lpExePath, sizeof(lpExePath));
+		Dos9_GetExePath(lpExePath, sizeof(lpExePath));
 
-        #ifdef WIN32
+#ifdef WIN32
 
-            snprintf(lpFileName, sizeof(lpFileName) ,"%s/dos9.exe", lpExePath);
+		snprintf(lpFileName, sizeof(lpFileName) ,"%s/dos9.exe", lpExePath);
 
-        #else
+#else
 
-            snprintf(lpFileName, sizeof(lpFileName) ,"%s/dos9", lpExePath);
+		snprintf(lpFileName, sizeof(lpFileName) ,"%s/dos9", lpExePath);
 
-        #endif // WIN32
+#endif // WIN32
 
-    }
+	}
 
-    if (Dos9_RunExternalFile(lpFileName, lpArguments)==-1)
-        goto error;
+	if (Dos9_RunExternalFile(lpFileName, lpArguments)==-1)
+		goto error;
 
-    for (i=0;lpEstr[i];i++)
-        Dos9_EsFree(lpEstr[i]);
+	for (i=0; lpEstr[i]; i++)
+		Dos9_EsFree(lpEstr[i]);
 
-    return 0;
+	return 0;
 
 
-    error:
-        for (i=0;lpEstr[i] && (i < FILENAME_MAX);i++)
-            Dos9_EsFree(lpEstr[i]);
+error:
+	for (i=0; lpEstr[i] && (i < FILENAME_MAX); i++)
+		Dos9_EsFree(lpEstr[i]);
 
-        return -1;
+	return -1;
 
 }
 
@@ -508,26 +506,26 @@ int Dos9_RunExternalCommand(char* lpCommandLine)
 
 int Dos9_RunExternalFile(char* lpFileName, char** lpArguments)
 {
-    int res;
+	int res;
 
-    errno=0;
+	errno=0;
 
-    /* in windows the result is directly returned */
-    res=spawnv(_P_WAIT, lpFileName, (char * const*)lpArguments);
+	/* in windows the result is directly returned */
+	res=spawnv(_P_WAIT, lpFileName, (char * const*)lpArguments);
 
-    if (errno==ENOENT) {
+	if (errno==ENOENT) {
 
-        res=-1;
+		res=-1;
 
-        Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR,
-                              lpArguments[0],
-                              FALSE
-                              );
+		Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR,
+		                      lpArguments[0],
+		                      FALSE
+		                     );
 
-    }
+	}
 
 
-    return res;
+	return res;
 
 }
 
@@ -535,58 +533,58 @@ int Dos9_RunExternalFile(char* lpFileName, char** lpArguments)
 
 int Dos9_RunExternalFile(char* lpFileName, char** lpArguments)
 {
-    pid_t iPid;
+	pid_t iPid;
 
-    int iResult;
+	int iResult;
 
-    iPid=fork();
+	iPid=fork();
 
-    if (iPid == 0 ) {
-      /* if we are in the son */
+	if (iPid == 0 ) {
+		/* if we are in the son */
 
-          if ( execv(lpFileName, lpArguments) == -1) {
+		if ( execv(lpFileName, lpArguments) == -1) {
 
-                /* if we got here, we can't set ERRORLEVEL
-                   variable anymore, but print an error message anyway.
+			/* if we got here, we can't set ERRORLEVEL
+			   variable anymore, but print an error message anyway.
 
-                   This is problematic because if fork do not fail (that
-                   is the usual behaviour) command line such as
+			   This is problematic because if fork do not fail (that
+			   is the usual behaviour) command line such as
 
-                        batbox || goto error
+			        batbox || goto error
 
-                   will not work as expected. However, during search in the
-                   path, command found exist, so the risk of such a
-                   dysfunction is limited.
+			   will not work as expected. However, during search in the
+			   path, command found exist, so the risk of such a
+			   dysfunction is limited.
 
-                   For more safety, we return -1, so that the given value will be
-                   reported anyway*/
+			   For more safety, we return -1, so that the given value will be
+			   reported anyway*/
 
-                Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR,
-                                      lpArguments[0],
-                                      FALSE
-                                      );
+			Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR,
+			                      lpArguments[0],
+			                      FALSE
+			                     );
 
-                exit(-1);
+			exit(-1);
 
 
-          }
+		}
 
-    } else {
-      /* if we are in the father */
+	} else {
+		/* if we are in the father */
 
-          if (iPid == (pid_t)-1) {
-                /* the execution failed */
-                return -1;
+		if (iPid == (pid_t)-1) {
+			/* the execution failed */
+			return -1;
 
-          } else {
+		} else {
 
-                wait(&iResult);
+			wait(&iResult);
 
-          }
+		}
 
-    }
+	}
 
-    return 0;
+	return 0;
 
 }
 

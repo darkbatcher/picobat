@@ -33,23 +33,23 @@
 #include <libDos9.h>
 
 #ifdef WIN32
-    /* used for compatibility purpose */
-    #include <io.h>
-    #define pipe(a,b,c) _pipe(a,b,c)
-    #define flushall() _flushall()
-    #define dup(a) _dup(a)
-    #define dup2(a,b) _dup2(a,b)
+/* used for compatibility purpose */
+#include <io.h>
+#define pipe(a,b,c) _pipe(a,b,c)
+#define flushall() _flushall()
+#define dup(a) _dup(a)
+#define dup2(a,b) _dup2(a,b)
 
-    #define O_WRONLY _O_WRONLY
-    #define O_RDONLY _O_RDONLY
-    #define O_TRUNC _O_TRUNC
+#define O_WRONLY _O_WRONLY
+#define O_RDONLY _O_RDONLY
+#define O_TRUNC _O_TRUNC
 
-    #define S_IREAD _S_IREAD
-    #define O_IWRITE _S_IWRITE
+#define S_IREAD _S_IREAD
+#define O_IWRITE _S_IWRITE
 #else
 
-    #include <unistd.h>
-    #define flushall()
+#include <unistd.h>
+#define flushall()
 
 #endif
 
@@ -83,12 +83,12 @@
     \brief  A structure used to store the information about the current stream environment
 */
 typedef struct STREAMLVL {
-    int iStandardDescriptors[3]; /**< stores the standard outputs an output descriptors */
-    int iFreeDescriptors[3];/**< stores the descriptors to be feed during poping from stack */
-    int iPipeIndicator;
-    int iPopLock;
-    //int iResetStdBuff;
- } STREAMLVL,*LPSTREAMLVL;
+	int iStandardDescriptors[3]; /**< stores the standard outputs an output descriptors */
+	int iFreeDescriptors[3];/**< stores the descriptors to be feed during poping from stack */
+	int iPipeIndicator;
+	int iPopLock;
+	//int iResetStdBuff;
+} STREAMLVL,*LPSTREAMLVL;
 
 /** \typedef STACK STREAMSTACK,*LPSTREAMSTACK
     \brief used to make an stack of stream environment
@@ -99,9 +99,9 @@ typedef STACK STREAMSTACK,*LPSTREAMSTACK;
 /** \brief Initializes and returns a LPSTREAMSTACK structure
     \return Returns a pointer to the allocated STREAMSTACK. If the function fails, it returns NULL
 */
- LPSTREAMSTACK     Dos9_InitStreamStack(void);
+LPSTREAMSTACK     Dos9_InitStreamStack(void);
 
- void              Dos9_FreeStreamStack(LPSTREAMSTACK lpssStream);
+void              Dos9_FreeStreamStack(LPSTREAMSTACK lpssStream);
 
 /** \brief Open a redirection of a sstandard input or output
     \param lpssStreamStack : The STREAMSTACK structures used to store redirections environment. (Can be allocated by Dos9_InitStreamStack())
@@ -111,15 +111,15 @@ typedef STACK STREAMSTACK,*LPSTREAMSTACK;
     \param iMode : The redirection mode (used only for output redirection). Can be either STREAM_MODE_ADD or STREAM_MODE_TRUNCATE
     \return Returns 0 if the function has succeded, -1 otherwise.
 */
- int               Dos9_OpenOutput(LPSTREAMSTACK lpssStreamStack, char* lpName, int iDescriptor, int iMode);
+int               Dos9_OpenOutput(LPSTREAMSTACK lpssStreamStack, char* lpName, int iDescriptor, int iMode);
 
- int Dos9_OpenOutputD(LPSTREAMSTACK lpssStreamStack, int iNewDescriptor, int iDescriptor);
+int Dos9_OpenOutputD(LPSTREAMSTACK lpssStreamStack, int iNewDescriptor, int iDescriptor);
 
 /** \brief Open a pipe redirection
     \param lpssStreamStack : The STREAMSTACK structures used to store redirections environment. (Can be allocated by Dos9_InitStreamStack())
     \return Returns 0 if the function has succeded, -1 otherwise.
 */
- int               Dos9_OpenPipe(LPSTREAMSTACK lpssStreamStack);
+int               Dos9_OpenPipe(LPSTREAMSTACK lpssStreamStack);
 
 /** \brief Flushes the pipe
             A pipe need to be flushed, in order to put output of a program into input of another program. Then when the pipe is no longer needed,
@@ -127,21 +127,21 @@ typedef STACK STREAMSTACK,*LPSTREAMSTACK;
     \param lpssStreamStack : The STREAMSTACK structures used to store redirections environment. (Can be allocated by Dos9_InitStreamStack())
     \return Returns 0 if the function has succeded, -1 otherwise.
 */
- LPSTREAMSTACK     Dos9_Pipe(LPSTREAMSTACK lppsStreamStack);
+LPSTREAMSTACK     Dos9_Pipe(LPSTREAMSTACK lppsStreamStack);
 
 /** \brief Pop the content of the STREAMSTACK stack
     \param lpssStreamStack : The STREAMSTACK structures used to store redirections environment. (Can be allocated by Dos9_InitStreamStack())
     \return Returns 0 if the function has succeded, -1 otherwise.
 */
- LPSTREAMSTACK     Dos9_PopStreamStack(LPSTREAMSTACK lppsStack);
+LPSTREAMSTACK     Dos9_PopStreamStack(LPSTREAMSTACK lppsStack);
 
 /** \brief Pop the content of the STREAMSTACK stack
     \param lpssStreamStack : The STREAMSTACK structures used to store redirections environment. (Can be allocated by Dos9_InitStreamStack())
     \return Returns 0 if the function has succeded, -1 otherwise.
 */
- LPSTREAMSTACK     Dos9_PushStreamStack(LPSTREAMSTACK lppsStack);
+LPSTREAMSTACK     Dos9_PushStreamStack(LPSTREAMSTACK lppsStack);
 
- void              Dos9_DumpStreamStack(LPSTREAMSTACK lppsStack);
+void              Dos9_DumpStreamStack(LPSTREAMSTACK lppsStack);
 
 
 

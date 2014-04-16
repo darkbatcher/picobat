@@ -30,262 +30,262 @@
 void Tea_TextOutputHandler(TEAPAGE* lpTeaPage, FILE* pFile, int i, char** argv)
 {
 
-    while (lpTeaPage) {
+	while (lpTeaPage) {
 
-        switch (lpTeaPage->iBlockType) {
+		switch (lpTeaPage->iBlockType) {
 
-            case TEA_BLOCK_CODE:
+		case TEA_BLOCK_CODE:
 
-                Tea_TextOutputStaticBlock(TEA_TEXT_CODE_INDENT+TEA_TEXT_PAR_INDENT*(lpTeaPage->iBlockLevel),
-                                          TEA_TEXT_CODE_NINDENT+TEA_TEXT_PAR_INDENT*(lpTeaPage->iBlockLevel),
-                                          TEA_TEXT_WIDTH,
-                                          lpTeaPage->lpBlockContent,
-                                          "\n",
-                                          pFile);
+			Tea_TextOutputStaticBlock(TEA_TEXT_CODE_INDENT+TEA_TEXT_PAR_INDENT*(lpTeaPage->iBlockLevel),
+			                          TEA_TEXT_CODE_NINDENT+TEA_TEXT_PAR_INDENT*(lpTeaPage->iBlockLevel),
+			                          TEA_TEXT_WIDTH,
+			                          lpTeaPage->lpBlockContent,
+			                          "\n",
+			                          pFile);
 
-                break;
+			break;
 
-            case TEA_BLOCK_HEADING:
-                strupr(lpTeaPage->lpBlockContent);
+		case TEA_BLOCK_HEADING:
+			strupr(lpTeaPage->lpBlockContent);
 
-                Tea_TextOutputStaticBlock(TEA_TEXT_HEAD_INDENT,
-                                          0,
-                                          TEA_TEXT_WIDTH,
-                                          lpTeaPage->lpBlockContent,
-                                          "\n",
-                                          pFile);
-
-
-                break;
-
-            case TEA_BLOCK_PARAGRAPH:
-                Tea_TextOutputParagraph(TEA_TEXT_PAR_INDENT*(lpTeaPage->iBlockLevel+1),
-                                        TEA_TEXT_PAR_INDENT*(lpTeaPage->iBlockLevel+1)
-                                        - (((lpTeaPage->iBlockLevel!=0) && !(lpTeaPage->iFlag & TEA_LIST_NO_MARK)) ? 2 : 0),
-                                        TEA_TEXT_WIDTH,
-                                        lpTeaPage->lpTeaNode,
-                                        "\n",
-                                        pFile);
+			Tea_TextOutputStaticBlock(TEA_TEXT_HEAD_INDENT,
+			                          0,
+			                          TEA_TEXT_WIDTH,
+			                          lpTeaPage->lpBlockContent,
+			                          "\n",
+			                          pFile);
 
 
-        }
+			break;
 
-        fputs("\n\n", pFile);
+		case TEA_BLOCK_PARAGRAPH:
+			Tea_TextOutputParagraph(TEA_TEXT_PAR_INDENT*(lpTeaPage->iBlockLevel+1),
+			                        TEA_TEXT_PAR_INDENT*(lpTeaPage->iBlockLevel+1)
+			                        - (((lpTeaPage->iBlockLevel!=0) && !(lpTeaPage->iFlag & TEA_LIST_NO_MARK)) ? 2 : 0),
+			                        TEA_TEXT_WIDTH,
+			                        lpTeaPage->lpTeaNode,
+			                        "\n",
+			                        pFile);
 
-        lpTeaPage=lpTeaPage->lpTeaNext;
 
-    }
+		}
+
+		fputs("\n\n", pFile);
+
+		lpTeaPage=lpTeaPage->lpTeaNext;
+
+	}
 }
 
 void Tea_TextOutputStaticBlock(size_t iMargin, size_t iNewLineMargin, size_t iLength, char* lpBlock, char* lpNl, FILE* pFile)
 {
-    size_t iLeft;
-    int    bFirstLine=TRUE;
+	size_t iLeft;
+	int    bFirstLine=TRUE;
 
-    if ((iMargin >= iLength)
-        || (iNewLineMargin >= iLength)) {
+	if ((iMargin >= iLength)
+	    || (iNewLineMargin >= iLength)) {
 
-        fprintf(stderr, "Error : Incoherent margin parameters.\n");
-        exit(-1);
+		fprintf(stderr, "Error : Incoherent margin parameters.\n");
+		exit(-1);
 
-    }
+	}
 
-    while (lpBlock) {
+	while (lpBlock) {
 
-        iLeft=iLength;
+		iLeft=iLength;
 
-        /* we produce the margin */
-        if (bFirstLine) {
+		/* we produce the margin */
+		if (bFirstLine) {
 
-            bFirstLine=FALSE;
+			bFirstLine=FALSE;
 
-            if (*lpBlock=='\n')
-                lpBlock++;
+			if (*lpBlock=='\n')
+				lpBlock++;
 
-            Tea_MakeMargin(iMargin, &iLeft, pFile);
+			Tea_MakeMargin(iMargin, &iLeft, pFile);
 
-        } else {
+		} else {
 
-            fputs(lpNl, pFile);
+			fputs(lpNl, pFile);
 
-            if (*lpBlock=='\n') {
+			if (*lpBlock=='\n') {
 
-                lpBlock++;
-                Tea_MakeMargin(iMargin, &iLeft, pFile);
+				lpBlock++;
+				Tea_MakeMargin(iMargin, &iLeft, pFile);
 
-            } else {
+			} else {
 
-                Tea_MakeMargin(iNewLineMargin, &iLeft, pFile);
+				Tea_MakeMargin(iNewLineMargin, &iLeft, pFile);
 
-            }
+			}
 
 
-        }
+		}
 
-        lpBlock=Tea_OutputLine(lpBlock, pFile, &iLeft);
+		lpBlock=Tea_OutputLine(lpBlock, pFile, &iLeft);
 
-    }
+	}
 
 }
 
 void Tea_TextOutputParagraph(size_t iMargin, size_t iFirstLine, size_t iLength, TEANODE* lpTeaNode, char* lpNl, FILE* pFile)
 {
-    size_t iLeft,
-           iLeftNl;
-    int    bFirstLine=TRUE;
-    int    iNoMargin=FALSE;
-    char   *lpBlock,
-           *lpNext;
+	size_t iLeft,
+	       iLeftNl;
+	int    bFirstLine=TRUE;
+	int    iNoMargin=FALSE;
+	char   *lpBlock,
+	       *lpNext;
 
-    if ((iMargin >= iLength)
-        || (iFirstLine >= iLength)) {
+	if ((iMargin >= iLength)
+	    || (iFirstLine >= iLength)) {
 
-        fprintf(stderr, "TEA : Error : Incoherent margin parameters.\n");
-        exit(-1);
+		fprintf(stderr, "TEA : Error : Incoherent margin parameters.\n");
+		exit(-1);
 
-    }
+	}
 
-    while (lpTeaNode) {
+	while (lpTeaNode) {
 
-        lpBlock=lpTeaNode->lpContent;
+		lpBlock=lpTeaNode->lpContent;
 
-        while (lpBlock) {
+		while (lpBlock) {
 
-            if (iNoMargin) {
+			if (iNoMargin) {
 
-                iNoMargin=FALSE;
+				iNoMargin=FALSE;
 
-            } else {
+			} else {
 
-                iLeft=iLength;
+				iLeft=iLength;
 
-                if (*lpBlock=='\n')
-                    lpBlock++;
+				if (*lpBlock=='\n')
+					lpBlock++;
 
-                if (bFirstLine) {
+				if (bFirstLine) {
 
-                    bFirstLine=FALSE;
-                    Tea_MakeMargin(iFirstLine, &iLeft, pFile);
+					bFirstLine=FALSE;
+					Tea_MakeMargin(iFirstLine, &iLeft, pFile);
 
-                } else {
+				} else {
 
-                    fputs(lpNl, pFile);
-                    Tea_MakeMargin(iMargin, &iLeft, pFile);
+					fputs(lpNl, pFile);
+					Tea_MakeMargin(iMargin, &iLeft, pFile);
 
-                }
+				}
 
-                iLeftNl=iLeft;
+				iLeftNl=iLeft;
 
-            }
+			}
 
-            lpBlock=Tea_OutputLineT(lpBlock, pFile, lpTeaNode, &iLeft);
+			lpBlock=Tea_OutputLineT(lpBlock, pFile, lpTeaNode, &iLeft);
 
-            if (iLeftNl==iLeft) {
+			if (iLeftNl==iLeft) {
 
-                /* if nothing has been written since we wrote the
-                   last line, it should be that the world is to
-                   long too fit in a single line, thus, we should try
-                   to split it in various lines */
+				/* if nothing has been written since we wrote the
+				   last line, it should be that the world is to
+				   long too fit in a single line, thus, we should try
+				   to split it in various lines */
 
-                while (iLeft) {
+				while (iLeft) {
 
-                    lpNext=Dos9_GetNextChar(lpBlock);
+					lpNext=Dos9_GetNextChar(lpBlock);
 
-                    while (lpBlock < lpNext) {
+					while (lpBlock < lpNext) {
 
-                        fputc(*lpBlock, pFile);
-                        lpBlock++;
+						fputc(*lpBlock, pFile);
+						lpBlock++;
 
-                    }
+					}
 
-                    iLeft--;
+					iLeft--;
 
-                }
+				}
 
-                while (*lpBlock==' ')
-                    lpBlock++;
+				while (*lpBlock==' ')
+					lpBlock++;
 
-            }
+			}
 
-        }
+		}
 
-        iNoMargin=TRUE;
-        lpTeaNode=lpTeaNode->lpTeaNodeNext;
+		iNoMargin=TRUE;
+		lpTeaNode=lpTeaNode->lpTeaNodeNext;
 
-    }
+	}
 
 }
 
 void Tea_TextParseHandler(int iMsg ,void* lpData)
 {
-    ESTR* lpEsStr;
-    TEANODE* lpTeaNode;
+	ESTR* lpEsStr;
+	TEANODE* lpTeaNode;
 
-    if (iMsg==TEA_MSG_READ_FILE)
-        return;
+	if (iMsg==TEA_MSG_READ_FILE)
+		return;
 
-    lpEsStr=Dos9_EsInit();
-    lpTeaNode=(TEANODE*)lpData;
+	lpEsStr=Dos9_EsInit();
+	lpTeaNode=(TEANODE*)lpData;
 
-    switch(lpTeaNode->iNodeType) {
+	switch(lpTeaNode->iNodeType) {
 
-        case TEA_NODE_EMPHASIS:
-            strupr(lpTeaNode->lpContent);
-            break;
+	case TEA_NODE_EMPHASIS:
+		strupr(lpTeaNode->lpContent);
+		break;
 
-        case TEA_NODE_LINK:
-            Dos9_EsCpy(lpEsStr, lpTeaNode->lpContent);
-            Dos9_EsCat(lpEsStr, " (-> ``");
-            Dos9_EsCat(lpEsStr, lpTeaNode->lpTarget);
-            Dos9_EsCat(lpEsStr, "'') ");
+	case TEA_NODE_LINK:
+		Dos9_EsCpy(lpEsStr, lpTeaNode->lpContent);
+		Dos9_EsCat(lpEsStr, " (-> ``");
+		Dos9_EsCat(lpEsStr, lpTeaNode->lpTarget);
+		Dos9_EsCat(lpEsStr, "'') ");
 
-            free(lpTeaNode->lpContent);
+		free(lpTeaNode->lpContent);
 
-            if (!(lpTeaNode->lpContent=strdup(Dos9_EsToChar(lpEsStr)))) {
+		if (!(lpTeaNode->lpContent=strdup(Dos9_EsToChar(lpEsStr)))) {
 
-                perror("TEA :: impossible d'allouer de la mémoire ");
-                exit(-1);
-            }
-            break;
+			perror("TEA :: impossible d'allouer de la mémoire ");
+			exit(-1);
+		}
+		break;
 
-    }
+	}
 
-    Dos9_EsFree(lpEsStr);
+	Dos9_EsFree(lpEsStr);
 }
 
 void Tea_TextPlainParseHandler(int iMsg ,void* lpData)
 {
-    ESTR* lpEsStr;
-    TEANODE* lpTeaNode;
+	ESTR* lpEsStr;
+	TEANODE* lpTeaNode;
 
-    if (iMsg==TEA_MSG_READ_FILE)
-        return;
+	if (iMsg==TEA_MSG_READ_FILE)
+		return;
 
-    lpEsStr=Dos9_EsInit();
+	lpEsStr=Dos9_EsInit();
 
-    lpTeaNode=(TEANODE*)lpData;
+	lpTeaNode=(TEANODE*)lpData;
 
-    switch(lpTeaNode->iNodeType) {
+	switch(lpTeaNode->iNodeType) {
 
-        case TEA_NODE_EMPHASIS:
-            strupr(lpTeaNode->lpContent);
-            break;
+	case TEA_NODE_EMPHASIS:
+		strupr(lpTeaNode->lpContent);
+		break;
 
-        case TEA_NODE_LINK:
-            Dos9_EsCpy(lpEsStr, "_");
-            Dos9_EsCat(lpEsStr, lpTeaNode->lpContent);
-            Dos9_EsCat(lpEsStr, "_");
-            free(lpTeaNode->lpContent);
+	case TEA_NODE_LINK:
+		Dos9_EsCpy(lpEsStr, "_");
+		Dos9_EsCat(lpEsStr, lpTeaNode->lpContent);
+		Dos9_EsCat(lpEsStr, "_");
+		free(lpTeaNode->lpContent);
 
-            if (!(lpTeaNode->lpContent=strdup(Dos9_EsToChar(lpEsStr)))) {
+		if (!(lpTeaNode->lpContent=strdup(Dos9_EsToChar(lpEsStr)))) {
 
-                perror("TEA :: impossible d'allouer de la mémoire ");
-                exit(-1);
-            }
+			perror("TEA :: impossible d'allouer de la mémoire ");
+			exit(-1);
+		}
 
-            break;
+		break;
 
-    }
+	}
 
-    Dos9_EsFree(lpEsStr);
+	Dos9_EsFree(lpEsStr);
 }

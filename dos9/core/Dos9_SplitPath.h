@@ -22,10 +22,10 @@
 
 #ifdef _POSIX_C_SOURCE
 
-    #define _MAX_DRIVE FILENAME_MAX
-    #define _MAX_DIR FILENAME_MAX
-    #define _MAX_FNAME FILENAME_MAX
-    #define _MAX_EXT FILENAME_MAX
+#define _MAX_DRIVE FILENAME_MAX
+#define _MAX_DIR FILENAME_MAX
+#define _MAX_FNAME FILENAME_MAX
+#define _MAX_EXT FILENAME_MAX
 
 #endif
 

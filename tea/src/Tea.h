@@ -36,19 +36,19 @@
 #define TEA_MSG_MAKE_NODE   (2)
 
 typedef struct TEANODE {
-    int iNodeType;
-    char *lpContent;
-    char *lpTarget;
-    struct TEANODE* lpTeaNodeNext;
+	int iNodeType;
+	char *lpContent;
+	char *lpTarget;
+	struct TEANODE* lpTeaNodeNext;
 } TEANODE,*LPTEANODE;
 
 typedef struct TEAPAGE {
-    int iBlockType;
-    int iBlockLevel;
-    int iFlag;
-    char* lpBlockContent;
-    struct TEANODE* lpTeaNode; //
-    struct TEAPAGE* lpTeaNext;
+	int iBlockType;
+	int iBlockLevel;
+	int iFlag;
+	char* lpBlockContent;
+	struct TEANODE* lpTeaNode; //
+	struct TEAPAGE* lpTeaNext;
 } TEAPAGE,*LPTEAPAGE;
 
 /*

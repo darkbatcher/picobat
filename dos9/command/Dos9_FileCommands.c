@@ -28,11 +28,11 @@
 
 #ifdef _POSIX_C_SOURCE
 
-    #define Dos9_Mkdir(name, mode) mkdir(name, mode)
+#define Dos9_Mkdir(name, mode) mkdir(name, mode)
 
 #elif defined WIN32
 
-    #define Dos9_Mkdir(name, mode) mkdir(name)
+#define Dos9_Mkdir(name, mode) mkdir(name)
 
 #endif /* defined linux */
 
@@ -46,177 +46,177 @@
 
 int Dos9_CmdDel(char* lpLine)
 {
-    char *lpNextToken,
-         *lpToken;
-    ESTR* lpEstr=Dos9_EsInit();
+	char *lpNextToken,
+	     *lpToken;
+	ESTR* lpEstr=Dos9_EsInit();
 
-    char  bParam=0,
-          bDel=TRUE;
+	char  bParam=0,
+	      bDel=TRUE;
 
-    short wAttr=0;
+	short wAttr=0;
 
-    char  lpName[FILENAME_MAX]="\0";
+	char  lpName[FILENAME_MAX]="\0";
 
-    int iFlag=DOS9_SEARCH_DEFAULT,
-        iChoice;
+	int iFlag=DOS9_SEARCH_DEFAULT,
+	    iChoice;
 
-    FILELIST* lpFileList, *lpSaveList;
+	FILELIST* lpFileList, *lpSaveList;
 
-    if (!(lpLine=strchr(lpLine, ' '))) {
+	if (!(lpLine=strchr(lpLine, ' '))) {
 
-        Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "DEL / ERASE", FALSE);
-        Dos9_EsFree(lpEstr);
-        return -1;
+		Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "DEL / ERASE", FALSE);
+		Dos9_EsFree(lpEstr);
+		return -1;
 
-    }
+	}
 
-    while ((lpNextToken=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
+	while ((lpNextToken=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
 
-        lpToken=Dos9_EsToChar(lpEstr);
+		lpToken=Dos9_EsToChar(lpEstr);
 
-        if (!stricmp(lpToken, "/P")) {
+		if (!stricmp(lpToken, "/P")) {
 
-            /* Demande une confirmation avant la suppression */
+			/* Demande une confirmation avant la suppression */
 
-            bParam|=DOS9_ASK_CONFIRMATION;
+			bParam|=DOS9_ASK_CONFIRMATION;
 
-        } else if (!stricmp(lpToken, "/F")) {
+		} else if (!stricmp(lpToken, "/F")) {
 
-            /* supprime les fichiers en lecture seule */
+			/* supprime les fichiers en lecture seule */
 
-            bParam|=DOS9_DELETE_READONLY;
+			bParam|=DOS9_DELETE_READONLY;
 
-        } else if (!stricmp(lpToken, "/S")) {
+		} else if (!stricmp(lpToken, "/S")) {
 
-            /* procède récursivement */
+			/* procède récursivement */
 
-            iFlag|=DOS9_SEARCH_RECURSIVE;
+			iFlag|=DOS9_SEARCH_RECURSIVE;
 
-        } else if (!stricmp(lpToken, "/Q")) {
+		} else if (!stricmp(lpToken, "/Q")) {
 
-            /* pas de confirmation pour suppression avec caractères génériques */
+			/* pas de confirmation pour suppression avec caractères génériques */
 
-            bParam|=DOS9_DONT_ASK_GENERIC;
+			bParam|=DOS9_DONT_ASK_GENERIC;
 
-        } else if (!strnicmp(lpToken, "/A", 2)) {
+		} else if (!strnicmp(lpToken, "/A", 2)) {
 
-            /* gestion des attributs */
-            lpToken+=2;
-            if (*lpToken==':') lpToken++;
+			/* gestion des attributs */
+			lpToken+=2;
+			if (*lpToken==':') lpToken++;
 
-            wAttr=Dos9_MakeFileAttributes(lpToken);
+			wAttr=Dos9_MakeFileAttributes(lpToken);
 
-            iFlag^=DOS9_SEARCH_NO_STAT;
+			iFlag^=DOS9_SEARCH_NO_STAT;
 
-        } else if (!strcmp("/?", lpToken)) {
+		} else if (!strcmp("/?", lpToken)) {
 
-            Dos9_ShowInternalHelp(DOS9_HELP_DEL);
+			Dos9_ShowInternalHelp(DOS9_HELP_DEL);
 
-            Dos9_EsFree(lpEstr);
-            return -1;
+			Dos9_EsFree(lpEstr);
+			return -1;
 
-        } else {
+		} else {
 
-            if (*lpName != '\0') {
+			if (*lpName != '\0') {
 
-                /* si un nom a été donné, on affiche, l'erreur */
+				/* si un nom a été donné, on affiche, l'erreur */
 
-                Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpToken, FALSE);
-                Dos9_EsFree(lpEstr);
-                return -1;
+				Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpToken, FALSE);
+				Dos9_EsFree(lpEstr);
+				return -1;
 
-            }
+			}
 
-            strncpy(lpName, lpToken, FILENAME_MAX);
-        }
+			strncpy(lpName, lpToken, FILENAME_MAX);
+		}
 
-        lpLine=lpNextToken;
+		lpLine=lpNextToken;
 
-    }
+	}
 
-    if (*lpName== '\0') { /* si aucun nom n'a été donné */
+	if (*lpName== '\0') { /* si aucun nom n'a été donné */
 
-        Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "DEL / ERASE", FALSE);
-        Dos9_EsFree(lpEstr);
-        return -1;
+		Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "DEL / ERASE", FALSE);
+		Dos9_EsFree(lpEstr);
+		return -1;
 
-    }
+	}
 
-    if (!(bParam & DOS9_DELETE_READONLY)) {
+	if (!(bParam & DOS9_DELETE_READONLY)) {
 
-        /* par défaut, la recherche ne prend pas en compte la recherche des fichiers en lecture seule */
-        wAttr|=DOS9_CMD_ATTR_READONLY_N | DOS9_CMD_ATTR_READONLY;
+		/* par défaut, la recherche ne prend pas en compte la recherche des fichiers en lecture seule */
+		wAttr|=DOS9_CMD_ATTR_READONLY_N | DOS9_CMD_ATTR_READONLY;
 
-    }
+	}
 
-        /* ne sélectionne que le fichiers */
-    wAttr|=DOS9_CMD_ATTR_DIR | DOS9_CMD_ATTR_DIR_N;
+	/* ne sélectionne que le fichiers */
+	wAttr|=DOS9_CMD_ATTR_DIR | DOS9_CMD_ATTR_DIR_N;
 
-    if ((Dos9_StrToken(lpName, '*') || Dos9_StrToken(lpName, '?'))
-        && !(bParam & DOS9_DONT_ASK_GENERIC)) {
+	if ((Dos9_StrToken(lpName, '*') || Dos9_StrToken(lpName, '?'))
+	    && !(bParam & DOS9_DONT_ASK_GENERIC)) {
 
-            /* si la recherche est générique on met la demande de
-              confirmation sauf si `/Q` a été spécifié */
-        bParam|=DOS9_ASK_CONFIRMATION;
-    }
+		/* si la recherche est générique on met la demande de
+		  confirmation sauf si `/Q` a été spécifié */
+		bParam|=DOS9_ASK_CONFIRMATION;
+	}
 
-    printf("Looking for `%s'\n", lpName);
+	printf("Looking for `%s'\n", lpName);
 
-    if ((lpFileList=Dos9_GetMatchFileList(lpName, iFlag))) {
-        lpSaveList=lpFileList;
-        while (lpFileList) {
+	if ((lpFileList=Dos9_GetMatchFileList(lpName, iFlag))) {
+		lpSaveList=lpFileList;
+		while (lpFileList) {
 
-            /* on demande confirmation si la demande de confirmation est
-               active */
-            if (bParam & DOS9_ASK_CONFIRMATION) {
+			/* on demande confirmation si la demande de confirmation est
+			   active */
+			if (bParam & DOS9_ASK_CONFIRMATION) {
 
-                iChoice=Dos9_AskConfirmation(DOS9_ASK_YNA
-                                             | DOS9_ASK_INVALID_REASK
-                                             | DOS9_ASK_DEFAULT_Y,
-                                             lpDelConfirm,
-                                             lpFileList->lpFileName
-                                             );
+				iChoice=Dos9_AskConfirmation(DOS9_ASK_YNA
+				                             | DOS9_ASK_INVALID_REASK
+				                             | DOS9_ASK_DEFAULT_Y,
+				                             lpDelConfirm,
+				                             lpFileList->lpFileName
+				                            );
 
-                if (iChoice==DOS9_ASK_NO) {
-                    /* si l'utilisateur refuse la suppression du fichier */
-                    printf("Pas suppression !\n");
-                    lpFileList=lpFileList->lpflNext;
-                    continue;
+				if (iChoice==DOS9_ASK_NO) {
+					/* si l'utilisateur refuse la suppression du fichier */
+					printf("Pas suppression !\n");
+					lpFileList=lpFileList->lpflNext;
+					continue;
 
-                } else if (iChoice==DOS9_ASK_ALL) {
-                    /* si l'utilisateur autorise tous les fichiers */
-                    bParam&=~DOS9_ASK_CONFIRMATION;
+				} else if (iChoice==DOS9_ASK_ALL) {
+					/* si l'utilisateur autorise tous les fichiers */
+					bParam&=~DOS9_ASK_CONFIRMATION;
 
-                }
-            }
+				}
+			}
 
-            /* on vérifie que le fichier possède les bons attributs pour la suppression */
-            if ((Dos9_CheckFileAttributes(wAttr, lpFileList))) {
+			/* on vérifie que le fichier possède les bons attributs pour la suppression */
+			if ((Dos9_CheckFileAttributes(wAttr, lpFileList))) {
 
-                printf("<DEBUG> supression de `%s'\n", lpFileList->lpFileName);
+				printf("<DEBUG> supression de `%s'\n", lpFileList->lpFileName);
 
-            } else {
+			} else {
 
-                printf("<DEBUG> Fichier `%s' non suprimmé (attributs incorrects)\n", lpFileList->lpFileName);
+				printf("<DEBUG> Fichier `%s' non suprimmé (attributs incorrects)\n", lpFileList->lpFileName);
 
-            }
+			}
 
-            /* on passe au fichier suivant */
-            lpFileList=lpFileList->lpflNext;
-        }
+			/* on passe au fichier suivant */
+			lpFileList=lpFileList->lpflNext;
+		}
 
-        Dos9_FreeFileList(lpSaveList);
-    } else {
+		Dos9_FreeFileList(lpSaveList);
+	} else {
 
-        Dos9_ShowErrorMessage(DOS9_FILE_ERROR, lpName, FALSE);
-        Dos9_EsFree(lpEstr);
+		Dos9_ShowErrorMessage(DOS9_FILE_ERROR, lpName, FALSE);
+		Dos9_EsFree(lpEstr);
 
-        return -1;
+		return -1;
 
-    }
+	}
 
-    Dos9_EsFree(lpEstr);
-    return 0;
+	Dos9_EsFree(lpEstr);
+	return 0;
 }
 
 int iDirNb,
@@ -226,275 +226,274 @@ char bSimple;
 
 void Dos9_CmdDirShow(FILELIST* lpElement)
 {
-    char lpType[]="D RHSA ",
-         lpSize[16];
+	char lpType[]="D RHSA ",
+	              lpSize[16];
 
-    struct tm* lTime;
+	struct tm* lTime;
 
-    /* This structures get only one argument at a time,
-       thus ``lpElement->lpNext'' is inconsistent */
+	/* This structures get only one argument at a time,
+	   thus ``lpElement->lpNext'' is inconsistent */
 
-    if (Dos9_CheckFileAttributes(wAttr, lpElement)) {
+	if (Dos9_CheckFileAttributes(wAttr, lpElement)) {
 
-        /* if the file has right attributes */
+		/* if the file has right attributes */
 
-        if (!bSimple) {
+		if (!bSimple) {
 
-            strcpy(lpType, "       ");
-            if (Dos9_GetFileMode(lpElement) & DOS9_FILE_DIR) {
-                lpType[0]='D';
-                iDirNb++;
+			strcpy(lpType, "       ");
+			if (Dos9_GetFileMode(lpElement) & DOS9_FILE_DIR) {
+				lpType[0]='D';
+				iDirNb++;
 
-            } else {
+			} else {
 
-                iFileNb++;
+				iFileNb++;
 
-            }
+			}
 
-            if (Dos9_GetFileMode(lpElement) & DOS9_FILE_READONLY) lpType[2]='R';
+			if (Dos9_GetFileMode(lpElement) & DOS9_FILE_READONLY) lpType[2]='R';
 
-            if (Dos9_GetFileMode(lpElement) & DOS9_FILE_HIDDEN) lpType[3]='H';
+			if (Dos9_GetFileMode(lpElement) & DOS9_FILE_HIDDEN) lpType[3]='H';
 
-            if (Dos9_GetFileMode(lpElement) & DOS9_FILE_SYSTEM) lpType[4]='S';
+			if (Dos9_GetFileMode(lpElement) & DOS9_FILE_SYSTEM) lpType[4]='S';
 
-            if (Dos9_GetFileMode(lpElement) & DOS9_FILE_ARCHIVE) lpType[5]='A';
+			if (Dos9_GetFileMode(lpElement) & DOS9_FILE_ARCHIVE) lpType[5]='A';
 
-            /* !! Recyclage de la variable lpFilename pour afficher la taille du fichier */
-            Dos9_FormatFileSize(lpSize, 16, Dos9_GetFileSize(lpElement));
+			/* !! Recyclage de la variable lpFilename pour afficher la taille du fichier */
+			Dos9_FormatFileSize(lpSize, 16, Dos9_GetFileSize(lpElement));
 
-            lTime=localtime(&Dos9_GetModifTime(lpElement));
+			lTime=localtime(&Dos9_GetModifTime(lpElement));
 
-            printf("%02d/%02d/%02d %02d:%02d\t%s\t%s\t%s\n",lTime->tm_mday , lTime->tm_mon+1, 1900+lTime->tm_year, lTime->tm_hour, lTime->tm_min, lpSize, lpType, lpElement->lpFileName);
+			printf("%02d/%02d/%02d %02d:%02d\t%s\t%s\t%s\n",lTime->tm_mday , lTime->tm_mon+1, 1900+lTime->tm_year, lTime->tm_hour, lTime->tm_min, lpSize, lpType, lpElement->lpFileName);
 
-        } else {
+		} else {
 
-            printf("%s\n", lpElement->lpFileName);
+			printf("%s\n", lpElement->lpFileName);
 
-        }
-    }
+		}
+	}
 }
 
 int Dos9_CmdDir(char* lpLine)
 {
-    char *lpNext,
-         *lpToken,
-         lpFileName[FILENAME_MAX]={0};
+	char *lpNext,
+	     *lpToken,
+	     lpFileName[FILENAME_MAX]= {0};
 
-    int iFlag=DOS9_SEARCH_DEFAULT | DOS9_SEARCH_DIR_MODE;
+	int iFlag=DOS9_SEARCH_DEFAULT | DOS9_SEARCH_DIR_MODE;
 
-    ESTR* lpParam=Dos9_EsInit();
+	ESTR* lpParam=Dos9_EsInit();
 
-     //if (lpNext=strchr(lpLine, ' ')) *lpNext='\0';
-    lpNext=lpLine+3;
+	//if (lpNext=strchr(lpLine, ' ')) *lpNext='\0';
+	lpNext=lpLine+3;
 
-    wAttr=DOS9_CMD_ATTR_ALL;
-    bSimple=FALSE;
+	wAttr=DOS9_CMD_ATTR_ALL;
+	bSimple=FALSE;
 
-    while ((lpNext=Dos9_GetNextParameterEs(lpNext, lpParam))) {
+	while ((lpNext=Dos9_GetNextParameterEs(lpNext, lpParam))) {
 
-        lpToken=Dos9_EsToChar(lpParam);
+		lpToken=Dos9_EsToChar(lpParam);
 
-        if (!strcmp(lpToken, "/?")) {
+		if (!strcmp(lpToken, "/?")) {
 
-            Dos9_ShowInternalHelp(DOS9_HELP_DIR);
-            return 0;
+			Dos9_ShowInternalHelp(DOS9_HELP_DIR);
+			return 0;
 
-        } else if (!stricmp("/b", lpToken)) {
+		} else if (!stricmp("/b", lpToken)) {
 
-            /* use the simple dir output */
-            bSimple=TRUE;
-            if (!wAttr) iFlag|=DOS9_SEARCH_NO_STAT;
-            iFlag|=DOS9_SEARCH_NO_PSEUDO_DIR;
+			/* use the simple dir output */
+			bSimple=TRUE;
+			if (!wAttr) iFlag|=DOS9_SEARCH_NO_STAT;
+			iFlag|=DOS9_SEARCH_NO_PSEUDO_DIR;
 
-        } else if (!stricmp("/s", lpToken)) {
+		} else if (!stricmp("/s", lpToken)) {
 
-            /* set the command to recusive */
-            iFlag|=DOS9_SEARCH_RECURSIVE;
+			/* set the command to recusive */
+			iFlag|=DOS9_SEARCH_RECURSIVE;
 
-        } else if (!strnicmp("/a", lpToken,2)) {
+		} else if (!strnicmp("/a", lpToken,2)) {
 
-            /* uses the attributes command */
-            lpToken+=2;
-            if (*lpToken==':') lpToken++;
-            wAttr=Dos9_MakeFileAttributes(lpToken);
-            iFlag&=~DOS9_SEARCH_NO_STAT;
+			/* uses the attributes command */
+			lpToken+=2;
+			if (*lpToken==':') lpToken++;
+			wAttr=Dos9_MakeFileAttributes(lpToken);
+			iFlag&=~DOS9_SEARCH_NO_STAT;
 
-        } else {
+		} else {
 
-            if (*lpFileName) {
-                   Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpToken, FALSE);
-                   Dos9_EsFree(lpParam);
-                   return -1;
-            }
-            strncpy(lpFileName, lpToken, FILENAME_MAX);
+			if (*lpFileName) {
+				Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpToken, FALSE);
+				Dos9_EsFree(lpParam);
+				return -1;
+			}
+			strncpy(lpFileName, lpToken, FILENAME_MAX);
 
-        }
-    }
+		}
+	}
 
-    if (!*lpFileName) {
-        /* if no file or directory name have been specified
-           the put a correct value on it */
+	if (!*lpFileName) {
+		/* if no file or directory name have been specified
+		   the put a correct value on it */
 
-        *lpFileName='*';
-        lpFileName[1]='\0';
+		*lpFileName='*';
+		lpFileName[1]='\0';
 
-    }
+	}
 
-    /* do a little global variable setup before
-       starting file research */
-    iDirNb=0;
-    iFileNb=0;
+	/* do a little global variable setup before
+	   starting file research */
+	iDirNb=0;
+	iFileNb=0;
 
-    if (!bSimple) puts(lpDirListTitle);
+	if (!bSimple) puts(lpDirListTitle);
 
-    /* Get a list of file and directories matching to the
-       current filename and options set */
-    if (!(Dos9_GetMatchFileCallback(lpFileName, iFlag, Dos9_CmdDirShow))
-        && !bSimple)
-            puts(lpDirNoFileFound);
+	/* Get a list of file and directories matching to the
+	   current filename and options set */
+	if (!(Dos9_GetMatchFileCallback(lpFileName, iFlag, Dos9_CmdDirShow))
+	    && !bSimple)
+		puts(lpDirNoFileFound);
 
-    if (!bSimple) printf(lpDirFileDirNb, iFileNb, iDirNb);
+	if (!bSimple) printf(lpDirFileDirNb, iFileNb, iDirNb);
 
-    Dos9_EsFree(lpParam);
+	Dos9_EsFree(lpParam);
 
-    return 0;
+	return 0;
 }
 
 
 int Dos9_CmdMove(char* lpLine)
 {
-    return 0;
+	return 0;
 }
 
 int Dos9_CmdCopy(char* lpLine)
 {
-    return 0;
+	return 0;
 }
 
 int Dos9_CmdRen(char* lpLine)
 {
-    ESTR* lpEstr=Dos9_EsInit();
-    char lpFileName[FILENAME_MAX]={0}, lpFileDest[FILENAME_MAX]={0};
-    char* lpToken;
+	ESTR* lpEstr=Dos9_EsInit();
+	char lpFileName[FILENAME_MAX]= {0}, lpFileDest[FILENAME_MAX]= {0};
+	char* lpToken;
 
-    if (!(lpLine=strchr(lpLine, ' '))) {
-        Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "DEL / ERASE", FALSE);
-        Dos9_EsFree(lpEstr);
-        return -1;
-    }
+	if (!(lpLine=strchr(lpLine, ' '))) {
+		Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "DEL / ERASE", FALSE);
+		Dos9_EsFree(lpEstr);
+		return -1;
+	}
 
-    if ((lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
+	if ((lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
 
-        strncpy(lpFileName, Dos9_EsToChar(lpEstr), FILENAME_MAX);
-        lpFileName[FILENAME_MAX-1]='\0';
-        /* can't assume that what was buffered is NULL-terminated
-           see the C-89,99,11 standards for further informations */
+		strncpy(lpFileName, Dos9_EsToChar(lpEstr), FILENAME_MAX);
+		lpFileName[FILENAME_MAX-1]='\0';
+		/* can't assume that what was buffered is NULL-terminated
+		   see the C-89,99,11 standards for further informations */
 
-        strcpy(lpFileDest, lpFileName);
+		strcpy(lpFileDest, lpFileName);
 
-        if ((lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
+		if ((lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
 
-            /* removing old filename */
-            lpLine=strrchr(lpFileDest, '\\');
-            lpToken=strrchr(lpFileDest, '/');
+			/* removing old filename */
+			lpLine=strrchr(lpFileDest, '\\');
+			lpToken=strrchr(lpFileDest, '/');
 
-            if (lpToken>lpLine) {
-                lpLine=lpToken;
-            }
+			if (lpToken>lpLine) {
+				lpLine=lpToken;
+			}
 
-            if (lpLine) {
-                lpLine++;
-                *lpLine='\0';
-            }
+			if (lpLine) {
+				lpLine++;
+				*lpLine='\0';
+			}
 
-            /* cat with new name */
-            strncat(lpFileDest, Dos9_EsToChar(lpEstr), FILENAME_MAX-strlen(lpFileDest));
-            lpFileDest[FILENAME_MAX-1]='\0';
-            /* can't assume that what was buffered is NULL-terminated
-               see the C-89,99,11 standards for further informations */
-            if (!printf("<DEBUG> renaming `%s` to `%s`\n", lpFileName, lpFileDest))
-            {
-                Dos9_ShowErrorMessage(DOS9_UNABLE_RENAME, lpFileName, FALSE);
-                Dos9_EsFree(lpEstr);
-                return -1;
-            }
-            return 0;
-        }
-    }
+			/* cat with new name */
+			strncat(lpFileDest, Dos9_EsToChar(lpEstr), FILENAME_MAX-strlen(lpFileDest));
+			lpFileDest[FILENAME_MAX-1]='\0';
+			/* can't assume that what was buffered is NULL-terminated
+			   see the C-89,99,11 standards for further informations */
+			if (!printf("<DEBUG> renaming `%s` to `%s`\n", lpFileName, lpFileDest)) {
+				Dos9_ShowErrorMessage(DOS9_UNABLE_RENAME, lpFileName, FALSE);
+				Dos9_EsFree(lpEstr);
+				return -1;
+			}
+			return 0;
+		}
+	}
 
-    Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "REN / RENAME", FALSE);
-    Dos9_EsFree(lpEstr);
-    return -1;
+	Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "REN / RENAME", FALSE);
+	Dos9_EsFree(lpEstr);
+	return -1;
 }
 
 int Dos9_CmdRmdir(char* lpLine)
 {
-    ESTR* lpEstr=Dos9_EsInit();
+	ESTR* lpEstr=Dos9_EsInit();
 
-    if (!(lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
+	if (!(lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
 
-        Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "RD/RMDIR", FALSE);
-        goto error;
+		Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "RD/RMDIR", FALSE);
+		goto error;
 
-    }
+	}
 
-    if ((lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
-        if (!strcmp(Dos9_EsToChar(lpEstr), "/?")) {
+	if ((lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
+		if (!strcmp(Dos9_EsToChar(lpEstr), "/?")) {
 
-            Dos9_ShowInternalHelp(DOS9_HELP_RD);
+			Dos9_ShowInternalHelp(DOS9_HELP_RD);
 
-        } else if (!stricmp(Dos9_EsToChar(lpEstr),"/Q")) {
-            // on affiche ta mère blah
-        } else {
+		} else if (!stricmp(Dos9_EsToChar(lpEstr),"/Q")) {
+			// on affiche ta mère blah
+		} else {
 
-            if (rmdir(Dos9_EsToChar(lpEstr))) {
-                Dos9_ShowErrorMessage(DOS9_MKDIR_ERROR, Dos9_EsToChar(lpEstr), FALSE);
-                goto error;
-            }
+			if (rmdir(Dos9_EsToChar(lpEstr))) {
+				Dos9_ShowErrorMessage(DOS9_MKDIR_ERROR, Dos9_EsToChar(lpEstr), FALSE);
+				goto error;
+			}
 
-        }
-    }
+		}
+	}
 
-    Dos9_EsFree(lpEstr);
-    return 0;
+	Dos9_EsFree(lpEstr);
+	return 0;
 
-    error:
-        Dos9_EsFree(lpEstr);
-        return -1;
+error:
+	Dos9_EsFree(lpEstr);
+	return -1;
 }
 
 int Dos9_CmdMkdir(char* lpLine)
 {
-    ESTR* lpEstr=Dos9_EsInit();
+	ESTR* lpEstr=Dos9_EsInit();
 
-    if (!(lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
+	if (!(lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
 
-        Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "MD/MKDIR", FALSE);
-        goto error;
+		Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "MD/MKDIR", FALSE);
+		goto error;
 
-    }
+	}
 
-    if ((lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
-        if (!strcmp(Dos9_EsToChar(lpEstr), "/?")) {
+	if ((lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
+		if (!strcmp(Dos9_EsToChar(lpEstr), "/?")) {
 
-            Dos9_ShowInternalHelp(DOS9_HELP_MD);
+			Dos9_ShowInternalHelp(DOS9_HELP_MD);
 
-        } else {
+		} else {
 
-            if (Dos9_Mkdir(Dos9_EsToChar(lpEstr), 0777)) {
+			if (Dos9_Mkdir(Dos9_EsToChar(lpEstr), 0777)) {
 
-                Dos9_ShowErrorMessage(DOS9_MKDIR_ERROR, Dos9_EsToChar(lpEstr), FALSE);
-                goto error;
+				Dos9_ShowErrorMessage(DOS9_MKDIR_ERROR, Dos9_EsToChar(lpEstr), FALSE);
+				goto error;
 
-            }
-        }
-    }
+			}
+		}
+	}
 
-    Dos9_EsFree(lpEstr);
-    return 0;
+	Dos9_EsFree(lpEstr);
+	return 0;
 
-    error:
-        Dos9_EsFree(lpEstr);
-        return -1;
+error:
+	Dos9_EsFree(lpEstr);
+	return -1;
 
 }

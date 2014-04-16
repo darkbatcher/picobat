@@ -36,16 +36,16 @@ char* Dos9_GetNextParameter(char* lpLine, char* lpResponseBuffer, int iLength)
  * return : the part after the parameter or null if no parameter has been found
  *
  */
- {
-     ESTR* lpParameter=Dos9_EsInit();
+{
+	ESTR* lpParameter=Dos9_EsInit();
 
-     lpLine=Dos9_GetNextParameterEs(lpLine, lpParameter);
-     strncpy(lpResponseBuffer, Dos9_EsToChar(lpParameter), iLength);
-     lpResponseBuffer[iLength-1]='\0';
+	lpLine=Dos9_GetNextParameterEs(lpLine, lpParameter);
+	strncpy(lpResponseBuffer, Dos9_EsToChar(lpParameter), iLength);
+	lpResponseBuffer[iLength-1]='\0';
 
-     Dos9_EsFree(lpParameter);
-     return lpLine;
- }
+	Dos9_EsFree(lpParameter);
+	return lpLine;
+}
 
 /* the returning pointer is on the parenthesis
    note that the lpbkInfo->lpEnd may be NULL
@@ -53,122 +53,122 @@ char* Dos9_GetNextParameter(char* lpLine, char* lpResponseBuffer, int iLength)
    line */
 char* Dos9_GetNextBlock(char* lpLine, BLOCKINFO* lpbkInfo)
 {
-    char* lpBlockEnd;
+	char* lpBlockEnd;
 
-    lpLine=Dos9_SkipBlanks(lpLine);
+	lpLine=Dos9_SkipBlanks(lpLine);
 
-    lpBlockEnd=Dos9_GetNextBlockEnd(lpLine);
+	lpBlockEnd=Dos9_GetNextBlockEnd(lpLine);
 
-    if (*lpLine=='(')
-        lpLine++;
+	if (*lpLine=='(')
+		lpLine++;
 
-    if (lpBlockEnd == NULL) {
+	if (lpBlockEnd == NULL) {
 
-        lpBlockEnd=lpLine;
+		lpBlockEnd=lpLine;
 
-        /* go to the end of line */
-        while (*lpBlockEnd!='\n'
-               && *lpBlockEnd!='\0' )
-                lpBlockEnd++;
+		/* go to the end of line */
+		while (*lpBlockEnd!='\n'
+		       && *lpBlockEnd!='\0' )
+			lpBlockEnd++;
 
-    }
+	}
 
-    lpbkInfo->lpBegin=lpLine;
+	lpbkInfo->lpBegin=lpLine;
 
-    lpbkInfo->lpEnd=lpBlockEnd;
+	lpbkInfo->lpEnd=lpBlockEnd;
 
-    return lpBlockEnd;
+	return lpBlockEnd;
 
 }
 
 char* Dos9_GetNextBlockEs(char* lpLine, ESTR* lpReturn)
 {
-    char* lpNext;
-    BLOCKINFO bkInfo;
+	char* lpNext;
+	BLOCKINFO bkInfo;
 
-    size_t iNbBytes;
+	size_t iNbBytes;
 
-    lpNext = Dos9_GetNextBlock(lpLine, &bkInfo);
+	lpNext = Dos9_GetNextBlock(lpLine, &bkInfo);
 
-    iNbBytes = bkInfo.lpEnd - bkInfo.lpBegin;
-    Dos9_EsCpyN(lpReturn, bkInfo.lpBegin, iNbBytes);
+	iNbBytes = bkInfo.lpEnd - bkInfo.lpBegin;
+	Dos9_EsCpyN(lpReturn, bkInfo.lpBegin, iNbBytes);
 
-    /* replace delayed expansion */
-    Dos9_DelayedExpand(lpReturn, bDelayedExpansion);
+	/* replace delayed expansion */
+	Dos9_DelayedExpand(lpReturn, bDelayedExpansion);
 
-    /* remove escape characters */
-    Dos9_UnEscape(Dos9_EsToChar(lpReturn));
+	/* remove escape characters */
+	Dos9_UnEscape(Dos9_EsToChar(lpReturn));
 
-    return lpNext+1;
+	return lpNext+1;
 
 }
 
 char* Dos9_GetNextParameterEs(char* lpLine, ESTR* lpReturn)
 {
-     char cChar=' ';
+	char cChar=' ';
 
-     size_t iSize;
+	size_t iSize;
 
-     char *lpBegin,
-          *lpEnd=NULL;
+	char *lpBegin,
+	     *lpEnd=NULL;
 
-     lpLine=Dos9_SkipBlanks(lpLine);
+	lpLine=Dos9_SkipBlanks(lpLine);
 
-     if (*lpLine=='"') {
+	if (*lpLine=='"') {
 
-         cChar='"';
-         lpLine++;
+		cChar='"';
+		lpLine++;
 
-     } else if (*lpLine=='\'') {
+	} else if (*lpLine=='\'') {
 
-         cChar='\'';
-         lpLine++;
+		cChar='\'';
+		lpLine++;
 
-     }
+	}
 
-     if (!*lpLine) return NULL;
+	if (!*lpLine) return NULL;
 
-     lpBegin=lpLine;
+	lpBegin=lpLine;
 
-     while ((lpEnd=Dos9_SearchChar(lpLine, cChar))) {
+	while ((lpEnd=Dos9_SearchChar(lpLine, cChar))) {
 
-        if (cChar==' ') {
+		if (cChar==' ') {
 
-            lpLine=lpEnd;
-            break;
+			lpLine=lpEnd;
+			break;
 
-        }
+		}
 
-        lpLine=lpEnd+1;
+		lpLine=lpEnd+1;
 
-        if (*lpLine=='\t'
-            || *lpLine==' '
-            || *lpLine=='\0')
-              break;
+		if (*lpLine=='\t'
+		    || *lpLine==' '
+		    || *lpLine=='\0')
+			break;
 
-     }
+	}
 
-     if (lpEnd == NULL) {
+	if (lpEnd == NULL) {
 
-        Dos9_EsCpy(lpReturn, lpBegin);
+		Dos9_EsCpy(lpReturn, lpBegin);
 
-        while (*lpLine) lpLine++;
+		while (*lpLine) lpLine++;
 
 
-     } else {
+	} else {
 
-        iSize=lpEnd-lpBegin;
-        Dos9_EsCpyN(lpReturn, lpBegin, iSize);
+		iSize=lpEnd-lpBegin;
+		Dos9_EsCpyN(lpReturn, lpBegin, iSize);
 
-     }
+	}
 
-     /* expand delayed expand variable */
-     Dos9_DelayedExpand(lpReturn, bDelayedExpansion);
+	/* expand delayed expand variable */
+	Dos9_DelayedExpand(lpReturn, bDelayedExpansion);
 
-     /* remove escape characters */
-     Dos9_UnEscape(Dos9_EsToChar(lpReturn));
+	/* remove escape characters */
+	Dos9_UnEscape(Dos9_EsToChar(lpReturn));
 
-     return lpLine;
+	return lpLine;
 }
 
 int   Dos9_GetParamArrayEs(char* lpLine, ESTR** lpArray, size_t iLenght)
@@ -176,65 +176,65 @@ int   Dos9_GetParamArrayEs(char* lpLine, ESTR** lpArray, size_t iLenght)
     gets command-line argument in an array of extended string
 */
 {
-    size_t iIndex=0;
-    ESTR* lpParam=Dos9_EsInit();
-    ESTR* lpTemp=Dos9_EsInit();
-    char* lpNext;
+	size_t iIndex=0;
+	ESTR* lpParam=Dos9_EsInit();
+	ESTR* lpTemp=Dos9_EsInit();
+	char* lpNext;
 
-    while ((iIndex < iLenght) && (lpNext = Dos9_GetNextParameterEs(lpLine, lpParam))) {
+	while ((iIndex < iLenght) && (lpNext = Dos9_GetNextParameterEs(lpLine, lpParam))) {
 
-        while (*lpLine=='\t' || *lpLine==' ') lpLine++;
+		while (*lpLine=='\t' || *lpLine==' ') lpLine++;
 
-        if (*lpLine == '"') {
+		if (*lpLine == '"') {
 
-            /* if the first character are '"', then
-               report it back in the command arguments,
-               since some microsoft commands would not
-               work without these */
+			/* if the first character are '"', then
+			   report it back in the command arguments,
+			   since some microsoft commands would not
+			   work without these */
 
-            Dos9_EsCpy(lpTemp, "\"");
-            Dos9_EsCatE(lpTemp, lpParam);
-            Dos9_EsCat(lpTemp, "\"");
+			Dos9_EsCpy(lpTemp, "\"");
+			Dos9_EsCatE(lpTemp, lpParam);
+			Dos9_EsCat(lpTemp, "\"");
 
-            Dos9_EsCpyE(lpParam, lpTemp);
+			Dos9_EsCpyE(lpParam, lpTemp);
 
-        }
-
-
-        lpArray[iIndex]=lpParam;
-
-        Dos9_DelayedExpand(lpParam, bDelayedExpansion);
-
-        lpParam=Dos9_EsInit();
-
-        lpLine=lpNext;
-
-        iIndex++;
-    }
-
-    Dos9_EsFree(lpParam);
-    Dos9_EsFree(lpTemp);
+		}
 
 
-    while (iIndex < iLenght) {
+		lpArray[iIndex]=lpParam;
 
-        lpArray[iIndex] = NULL;
+		Dos9_DelayedExpand(lpParam, bDelayedExpansion);
 
-        iIndex++;
+		lpParam=Dos9_EsInit();
 
-    }
+		lpLine=lpNext;
 
-    return 0;
+		iIndex++;
+	}
+
+	Dos9_EsFree(lpParam);
+	Dos9_EsFree(lpTemp);
+
+
+	while (iIndex < iLenght) {
+
+		lpArray[iIndex] = NULL;
+
+		iIndex++;
+
+	}
+
+	return 0;
 }
 
 LIBDOS9 char* Dos9_GetEndOfLine(char* lpLine, ESTR* lpReturn)
 /* this returns fully expanded line from the lpLine Buffer */
 {
 
-    Dos9_EsCpy(lpReturn, lpLine); /* Copy the content of the line in the buffer */
-    Dos9_DelayedExpand(lpReturn, bDelayedExpansion); /* Expands the content of the specified  line */
+	Dos9_EsCpy(lpReturn, lpLine); /* Copy the content of the line in the buffer */
+	Dos9_DelayedExpand(lpReturn, bDelayedExpansion); /* Expands the content of the specified  line */
 
-    Dos9_UnEscape(Dos9_EsToChar(lpReturn));
+	Dos9_UnEscape(Dos9_EsToChar(lpReturn));
 
-    return NULL;
+	return NULL;
 }

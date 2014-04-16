@@ -6,10 +6,10 @@
 
 void Dos9_ShowDebug(const char* format,...)
 {
-    va_list vaArgs;
+	va_list vaArgs;
 
-    va_start(vaArgs, format);
-    vfprintf(stderr, format, vaArgs);
+	va_start(vaArgs, format);
+	vfprintf(stderr, format, vaArgs);
 
-    va_end(vaArgs);
+	va_end(vaArgs);
 }

@@ -33,78 +33,78 @@
 int Dos9_CmdAlias(char* lpLine)
 {
 
-    ESTR* lpEsParam=Dos9_EsInit();
-    COMMANDLIST* lpclNewCommands;
-    COMMANDINFO  ciCommand;
+	ESTR* lpEsParam=Dos9_EsInit();
+	COMMANDLIST* lpclNewCommands;
+	COMMANDINFO  ciCommand;
 
-    char* lpCh;
+	char* lpCh;
 
-    lpLine+=5;
+	lpLine+=5;
 
-    lpLine=Dos9_SkipBlanks(lpLine);
+	lpLine=Dos9_SkipBlanks(lpLine);
 
-    Dos9_GetEndOfLine(lpLine, lpEsParam);
+	Dos9_GetEndOfLine(lpLine, lpEsParam);
 
-    lpLine=Dos9_EsToChar(lpEsParam);
+	lpLine=Dos9_EsToChar(lpEsParam);
 
-    if (!strcmp("/?", lpLine)) {
+	if (!strcmp("/?", lpLine)) {
 
-        Dos9_ShowInternalHelp(DOS9_HELP_ALIAS);
+		Dos9_ShowInternalHelp(DOS9_HELP_ALIAS);
 
-        goto error;
+		goto error;
 
-    }
+	}
 
-    if (!(lpCh=Dos9_SearchChar(lpLine, '='))) {
+	if (!(lpCh=Dos9_SearchChar(lpLine, '='))) {
 
-        Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT,
-                              lpLine,
-                              FALSE);
+		Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT,
+		                      lpLine,
+		                      FALSE);
 
-        goto error;
+		goto error;
 
-    }
+	}
 
-    *lpCh='\0';
-    lpCh++;
+	*lpCh='\0';
+	lpCh++;
 
-    ciCommand.cfFlag=strlen(lpLine) | DOS9_ALIAS_FLAG;
-    ciCommand.ptrCommandName=lpLine;
+	ciCommand.cfFlag=strlen(lpLine) | DOS9_ALIAS_FLAG;
+	ciCommand.ptrCommandName=lpLine;
 
-    ciCommand.lpCommandProc=lpCh;
+	ciCommand.lpCommandProc=lpCh;
 
-    if ((Dos9_AddCommandDynamic(&ciCommand, &lpclCommands))) {
+	if ((Dos9_AddCommandDynamic(&ciCommand, &lpclCommands))) {
 
-        Dos9_ShowErrorMessage(DOS9_UNABLE_ADD_COMMAND,
-                              lpLine,
-                              FALSE
-                              );
+		Dos9_ShowErrorMessage(DOS9_UNABLE_ADD_COMMAND,
+		                      lpLine,
+		                      FALSE
+		                     );
 
-        goto error;
+		goto error;
 
-    }
+	}
 
-    if (!(lpclNewCommands=Dos9_ReMapCommandInfo(lpclCommands))) {
+	if (!(lpclNewCommands=Dos9_ReMapCommandInfo(lpclCommands))) {
 
-        Dos9_ShowErrorMessage(DOS9_UNABLE_REMAP_COMMANDS,
-                              __FILE__ "/Dos9_CmdAlias()",
-                              FALSE
-                              );
+		Dos9_ShowErrorMessage(DOS9_UNABLE_REMAP_COMMANDS,
+		                      __FILE__ "/Dos9_CmdAlias()",
+		                      FALSE
+		                     );
 
-        goto error;
+		goto error;
 
-    }
+	}
 
-    Dos9_FreeCommandList(lpclCommands);
+	Dos9_FreeCommandList(lpclCommands);
 
-    lpclCommands=lpclNewCommands;
+	lpclCommands=lpclNewCommands;
 
-    Dos9_EsFree(lpEsParam);
+	Dos9_EsFree(lpEsParam);
 
-    return 0;
+	return 0;
 
-    error:
-        Dos9_EsFree(lpEsParam);
-        return 0;
+error:
+	Dos9_EsFree(lpEsParam);
+	return 0;
 
 }

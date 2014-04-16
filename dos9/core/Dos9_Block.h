@@ -30,10 +30,10 @@
 */
 
 
- /* Gets the end of block
-    if lpCh does not point to a '(' character, the return value is NULL
-    if not end can be found the return value is NULL
- */
+/* Gets the end of block
+   if lpCh does not point to a '(' character, the return value is NULL
+   if not end can be found the return value is NULL
+*/
 char* Dos9_GetNextBlockEnd(char* lpCh);
 
 /* Get the end of a line, taking account of multiples
@@ -45,4 +45,4 @@ char* Dos9_GetBlockLineEnd(char* lpCh);
 char* Dos9_GetNextBlockBeginEx(char* lpCh, int bIsBlockCmd);
 
 
- #endif // DOS9_BLOCK_H
+#endif // DOS9_BLOCK_H

@@ -22,25 +22,25 @@
 #define DOS9_ASK_H
 
 #define DOS9_ASK_YN             (0x00)
-    /* The use can choose either YES or NO */
+/* The use can choose either YES or NO */
 
 #define DOS9_ASK_YNA            (0x08)
-    /* the user can choose either YES, NO or ALL */
+/* the user can choose either YES, NO or ALL */
 
 #define DOS9_ASK_DEFAULT_Y      (0x01)
-    /* if the user input invalid value, the function will
-       return DOS9_ASK_YES */
+/* if the user input invalid value, the function will
+   return DOS9_ASK_YES */
 
 #define DOS9_ASK_DEFAULT_N      (0x02)
-    /* if the user input invalid value, the function will
-    return DOS9_ASK_NO */
+/* if the user input invalid value, the function will
+return DOS9_ASK_NO */
 
 #define DOS9_ASK_DEFAULT_A      (0x04)
-    /* if the user input invalid value, the function will
-    return DOS9_ASK_ALL */
+/* if the user input invalid value, the function will
+return DOS9_ASK_ALL */
 
 #define DOS9_ASK_INVALID_REASK  (0x10)
-    /* re-ask if the input turn out to be invalid */
+/* re-ask if the input turn out to be invalid */
 
 #define DOS9_ASK_YES            (1)
 #define DOS9_ASK_NO             (2)

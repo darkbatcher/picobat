@@ -10,125 +10,125 @@
 
 int Dos9_AskConfirmation(int iFlags, const char* lpMsg, ...)
 {
-    va_list vaArgs;
-    const char *lpChoices=NULL;
-    char *lpLf;
+	va_list vaArgs;
+	const char *lpChoices=NULL;
+	char *lpLf;
 
-    int iRet;
+	int iRet;
 
-    ESTR* lpInput=Dos9_EsInit();
+	ESTR* lpInput=Dos9_EsInit();
 
-    if (iFlags & DOS9_ASK_YNA) {
+	if (iFlags & DOS9_ASK_YNA) {
 
-        /* if the user choosed to display YES NO ALL
-           options */
+		/* if the user choosed to display YES NO ALL
+		   options */
 
-        switch(iFlags & (DOS9_ASK_DEFAULT_Y | DOS9_ASK_DEFAULT_N |
-                         DOS9_ASK_DEFAULT_A)) {
-
-
-            case DOS9_ASK_DEFAULT_Y:
-                lpChoices=lpAskYna;
-                break;
-
-            case DOS9_ASK_DEFAULT_N:
-                lpChoices=lpAskyNa;
-                break;
-
-            case DOS9_ASK_DEFAULT_A:
-                lpChoices=lpAskynA;
-                break;
-
-            default:
-                lpChoices=lpAskyna;
-                break;
+		switch(iFlags & (DOS9_ASK_DEFAULT_Y | DOS9_ASK_DEFAULT_N |
+		                 DOS9_ASK_DEFAULT_A)) {
 
 
-        }
+			case DOS9_ASK_DEFAULT_Y:
+				lpChoices=lpAskYna;
+				break;
 
-    } else {
+			case DOS9_ASK_DEFAULT_N:
+				lpChoices=lpAskyNa;
+				break;
 
-        /* if the user choosed to display only YES and NO */
+			case DOS9_ASK_DEFAULT_A:
+				lpChoices=lpAskynA;
+				break;
 
-        if (iFlags & DOS9_ASK_DEFAULT_A){
-
-            Dos9_EsFree(lpInput);
-            return DOS9_ASK_INVALID;
-
-        }
-
-        switch (iFlags & (DOS9_ASK_DEFAULT_Y || DOS9_ASK_DEFAULT_N)) {
-
-            case DOS9_ASK_DEFAULT_Y:
-                lpChoices=lpAskYn;
-                break;
-
-            case DOS9_ASK_DEFAULT_N:
-                lpChoices=lpAskyN;
-                break;
-
-            default:
-                lpChoices=lpAskyn;
-
-        }
-
-    }
-
-    va_start(vaArgs, lpMsg);
-
-    do {
-
-        vfprintf(stderr, lpMsg, vaArgs);
-
-        fputs(lpChoices, stderr);
-
-        Dos9_EsGet(lpInput, stdin);
-
-        if ((lpLf=strchr(Dos9_EsToChar(lpInput), '\n')))
-            *lpLf='\0';
-
-        if (!stricmp(Dos9_EsToChar(lpInput), lpAskYes)
-            || !stricmp(Dos9_EsToChar(lpInput), lpAskYesA)) {
-
-            iRet=DOS9_ASK_YES;
-
-        } else if (!stricmp(Dos9_EsToChar(lpInput), lpAskNo)
-                   || !stricmp(Dos9_EsToChar(lpInput), lpAskNoA)) {
-
-            iRet=DOS9_ASK_NO;
-
-        } else {
-
-            if ((iFlags & DOS9_ASK_YNA) && (
-                !stricmp(Dos9_EsToChar(lpInput), lpAskAll)
-                || !stricmp(Dos9_EsToChar(lpInput), lpAskAllA))) {
+			default:
+				lpChoices=lpAskyna;
+				break;
 
 
-                iRet=DOS9_ASK_ALL;
+		}
 
-            } else if ((iFlags & (DOS9_ASK_DEFAULT_Y | DOS9_ASK_DEFAULT_N
-                                | DOS9_ASK_DEFAULT_A))
-                       && *Dos9_EsToChar(lpInput)=='\0') {
+	} else {
 
-                iRet=iFlags & (DOS9_ASK_DEFAULT_Y | DOS9_ASK_DEFAULT_N
-                                | DOS9_ASK_DEFAULT_A);
+		/* if the user choosed to display only YES and NO */
 
-            } else if (!(iFlags & DOS9_ASK_INVALID_REASK)) {
+		if (iFlags & DOS9_ASK_DEFAULT_A) {
 
-                iRet=DOS9_ASK_INVALID;
+			Dos9_EsFree(lpInput);
+			return DOS9_ASK_INVALID;
 
-            } else {
+		}
 
-                fputs(lpAskInvalid, stderr);
+		switch (iFlags & (DOS9_ASK_DEFAULT_Y || DOS9_ASK_DEFAULT_N)) {
 
-            }
+			case DOS9_ASK_DEFAULT_Y:
+				lpChoices=lpAskYn;
+				break;
 
-        }
+			case DOS9_ASK_DEFAULT_N:
+				lpChoices=lpAskyN;
+				break;
 
-    } while (iRet==0);
+			default:
+				lpChoices=lpAskyn;
 
-    va_end(vaArgs);
+		}
 
-    Dos9_EsFree(lpInput);
-    return iRet;
+	}
+
+	va_start(vaArgs, lpMsg);
+
+	do {
+
+		vfprintf(stderr, lpMsg, vaArgs);
+
+		fputs(lpChoices, stderr);
+
+		Dos9_EsGet(lpInput, stdin);
+
+		if ((lpLf=strchr(Dos9_EsToChar(lpInput), '\n')))
+			*lpLf='\0';
+
+		if (!stricmp(Dos9_EsToChar(lpInput), lpAskYes)
+		    || !stricmp(Dos9_EsToChar(lpInput), lpAskYesA)) {
+
+			iRet=DOS9_ASK_YES;
+
+		} else if (!stricmp(Dos9_EsToChar(lpInput), lpAskNo)
+		           || !stricmp(Dos9_EsToChar(lpInput), lpAskNoA)) {
+
+			iRet=DOS9_ASK_NO;
+
+		} else {
+
+			if ((iFlags & DOS9_ASK_YNA) && (
+			        !stricmp(Dos9_EsToChar(lpInput), lpAskAll)
+			        || !stricmp(Dos9_EsToChar(lpInput), lpAskAllA))) {
+
+
+				iRet=DOS9_ASK_ALL;
+
+			} else if ((iFlags & (DOS9_ASK_DEFAULT_Y | DOS9_ASK_DEFAULT_N
+			                      | DOS9_ASK_DEFAULT_A))
+			           && *Dos9_EsToChar(lpInput)=='\0') {
+
+				iRet=iFlags & (DOS9_ASK_DEFAULT_Y | DOS9_ASK_DEFAULT_N
+				               | DOS9_ASK_DEFAULT_A);
+
+			} else if (!(iFlags & DOS9_ASK_INVALID_REASK)) {
+
+				iRet=DOS9_ASK_INVALID;
+
+			} else {
+
+				fputs(lpAskInvalid, stderr);
+
+			}
+
+		}
+
+	} while (iRet==0);
+
+	va_end(vaArgs);
+
+	Dos9_EsFree(lpInput);
+	return iRet;
 }

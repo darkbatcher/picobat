@@ -40,20 +40,20 @@ INPUT_FILE ifIn;
 void(*pErrorHandler)(void)=NULL;
 
 #ifdef WIN32
-    #define environ _environ
+#define environ _environ
 #else
-    extern char** environ;
+extern char** environ;
 #endif
 
-char* lpInitVar[]={
-    "DOS9_VERSION=" DOS9_VERSION,
+char* lpInitVar[]= {
+	"DOS9_VERSION=" DOS9_VERSION,
 #ifdef WIN32
-    "DOS9_OS=WINDOWS",
+	"DOS9_OS=WINDOWS",
 #elif defined _POSIX_C_SOURCE
-    "DOS9_OS=*NIX",
+	"DOS9_OS=*NIX",
 #else
-    "DOS9_OS=UNKNOWN"
+	"DOS9_OS=UNKNOWN"
 #endif
-    NULL,
-    NULL
+	NULL,
+	NULL
 };

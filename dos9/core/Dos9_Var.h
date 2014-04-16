@@ -30,11 +30,11 @@
 
 #ifndef WIN32
 
-    int Dos9_PutEnv(char* lpEnv);
+int Dos9_PutEnv(char* lpEnv);
 
 #else
 
-    #define Dos9_PutEnv(a) putenv(a)
+#define Dos9_PutEnv(a) putenv(a)
 
 #endif
 

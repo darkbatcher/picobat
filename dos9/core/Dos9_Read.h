@@ -4,9 +4,9 @@
 #include <stdio.h>
 
 typedef struct INPUT_FILE {
-    char  lpFileName[FILENAME_MAX];
-    int   iPos;
-    int   bEof;
+	char  lpFileName[FILENAME_MAX];
+	int   iPos;
+	int   bEof;
 } INPUT_FILE;
 
 int Dos9_GetLine(ESTR* lpesLine, INPUT_FILE* pIn);

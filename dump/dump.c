@@ -15,7 +15,8 @@
 #define ENDIANESS LITTLE_ENDIAN
 /* the default endianness mode */
 
-/* Ce progrmamme est un essais pour lire une capteur ccD */
+/* Ce progrmamme est un essais pour lire une un fichier binaire issu d'un
+   d'un capteur CCD */
 
 char lpLicense[]="\n\n    Dos9 DUMP, a free file bynary dumper, The Dos9 Project                 \n\
     Copyright (C) 2013 Darkbatcher (Romain Garbi)\n\
@@ -68,438 +69,438 @@ projet Dos9, a <http://www.dos9.org/>\n\
 Page d'aide de DUMP : <http://www.dos9.org/man/dump>\n\n";
 
 union InputData {
-        float fCoord;
-        double dCoord;
-        int iCoord;
-        short sCoord;
-        char cCoord;
+	float fCoord;
+	double dCoord;
+	int iCoord;
+	short sCoord;
+	char cCoord;
 };
 
 void Dump_ReverseBytes(union InputData* lpData, size_t iSize)
 {
-    char* lpBuffer=(char*)lpData;
-    int i;
-    size_t iMid;
+	char* lpBuffer=(char*)lpData;
+	int i;
+	size_t iMid;
 
-    /* simply don't do it if there are no need to do that
-       that is the length is even, except for char which
-       length is 1, and thus don't even need to be reversed
-    */
+	/* simply don't do it if there are no need to do that
+	   that is the length is even, except for char which
+	   length is 1, and thus don't even need to be reversed
+	*/
 
-    if ((iSize % 2) != 0) return;
+	if ((iSize % 2) != 0) return;
 
-    iMid=iSize/2-1;
-    iSize--;
+	iMid=iSize/2-1;
+	iSize--;
 
-    for (i=0;i<=iMid;i++) {
+	for (i=0; i<=iMid; i++) {
 
-        /* swap byte (i) and (iSize-i) */
-        lpBuffer[i]^=lpBuffer[iSize-i];
-        lpBuffer[iSize-i]^=lpBuffer[i];
-        lpBuffer[i]^=lpBuffer[iSize-i];
+		/* swap byte (i) and (iSize-i) */
+		lpBuffer[i]^=lpBuffer[iSize-i];
+		lpBuffer[iSize-i]^=lpBuffer[i];
+		lpBuffer[i]^=lpBuffer[iSize-i];
 
-    }
+	}
 
 }
 
 void Dump_ShowHelp(void)
 {
-    puts(lpHlpFr);
+	puts(lpHlpFr);
 }
 
 void Dump_ShowLicence(void)
 {
-    puts(lpLicense);
+	puts(lpLicense);
 }
 
 void Dump_ProduceNumber(char* lpBuffer, size_t tSize, char* lpFormat, union InputData* lpData)
 {
-    int i=0;
-    snprintf(lpBuffer, tSize, lpFormat, *(lpData));
-    while (i<tSize && lpBuffer[i]!='\0') {
-        i++;
-    }
+	int i=0;
+	snprintf(lpBuffer, tSize, lpFormat, *(lpData));
+	while (i<tSize && lpBuffer[i]!='\0') {
+		i++;
+	}
 
-    if (i>=tSize) return;
+	if (i>=tSize) return;
 
-    while (i<tSize) {
-        lpBuffer[i]=' ';
-        i++;
-    }
+	while (i<tSize) {
+		lpBuffer[i]=' ';
+		i++;
+	}
 }
 
 void Dump_DumpChar(FILE* pData, char* lpBuf, size_t bufSize)
 {
-    int i=0;
-    for (i=0;i<bufSize;i++) {
-        if (iscntrl(lpBuf[i])) fputc('.',pData);
-        else fputc(lpBuf[i],pData);
-    }
+	int i=0;
+	for (i=0; i<bufSize; i++) {
+		if (iscntrl(lpBuf[i])) fputc('.',pData);
+		else fputc(lpBuf[i],pData);
+	}
 }
 
 void Dump_PrintHeader(FILE* pData, size_t iNumberSize, int iLineTokenNb, size_t iDatasize, int iAddr)
 {
-    char lpLine[80]=" Adress     ";
-    char* lpToken=lpLine;
-    union InputData uData;
+	char lpLine[80]=" Adress     ";
+	char* lpToken=lpLine;
+	union InputData uData;
 
-    int i=0;
-    if (iAddr) lpToken+=11;
-    uData.iCoord=0;
+	int i=0;
+	if (iAddr) lpToken+=11;
+	uData.iCoord=0;
 
-    for (;i<iLineTokenNb;i++) {
+	for (; i<iLineTokenNb; i++) {
 
-        if ( (unsigned)(lpToken-lpLine+iNumberSize) >= 80)
-            break;
+		if ( (unsigned)(lpToken-lpLine+iNumberSize) >= 80)
+			break;
 
-        Dump_ProduceNumber(lpToken, iNumberSize, "%X", &uData);
-        lpToken+=iNumberSize;;
-        uData.iCoord+=iDatasize;
+		Dump_ProduceNumber(lpToken, iNumberSize, "%X", &uData);
+		lpToken+=iNumberSize;;
+		uData.iCoord+=iDatasize;
 
-    }
+	}
 
-    if ((unsigned)(lpToken-lpLine+iNumberSize) <= 80) {
-        strcpy(lpToken, "Char dump");
-        lpToken+=sizeof("Char dump");
-    }
+	if ((unsigned)(lpToken-lpLine+iNumberSize) <= 80) {
+		strcpy(lpToken, "Char dump");
+		lpToken+=sizeof("Char dump");
+	}
 
-    *lpToken='\0';
-    fputs(lpLine, pData); /* on affiche la ligne */
-    fputs("\n\n", pData); /* on ajoute un retour à la ligne */
+	*lpToken='\0';
+	fputs(lpLine, pData); /* on affiche la ligne */
+	fputs("\n\n", pData); /* on ajoute un retour à la ligne */
 }
 
 void Dump_DumpFile(FILE* pFile, FILE* pData, size_t iDataSize, size_t iNumberSize, int iLineTokenNb,
-                                int iLineNb, char* lpFormat, char iEndianess, int iFlag)
+                   int iLineNb, char* lpFormat, char iEndianess, int iFlag)
 {
-    int i=0;
-    int j=0;
+	int i=0;
+	int j=0;
 
-    int iAddress=0;
+	int iAddress=0;
 
-    union InputData uData;
+	union InputData uData;
 
-    uData.dCoord=0.0;
-    uData.iCoord=0;
-    char  lpLine[80];
-    char* lpToken=lpLine;
-    char  lpCharDump[16];
-    char* lpCharToken=lpCharDump;
+	uData.dCoord=0.0;
+	uData.iCoord=0;
+	char  lpLine[80];
+	char* lpToken=lpLine;
+	char  lpCharDump[16];
+	char* lpCharToken=lpCharDump;
 
-    if (iFlag & ADDRESSES_ON) {
+	if (iFlag & ADDRESSES_ON) {
 
-            /* print addreesses */
+		/* print addreesses */
 
-            Dump_PrintHeader(pData,iNumberSize , iLineTokenNb, iDataSize ,iFlag & ADDRESSES_ON);
-            sprintf(lpLine, "%010X   ", iAddress);
-            lpToken+=11;
+		Dump_PrintHeader(pData,iNumberSize , iLineTokenNb, iDataSize ,iFlag & ADDRESSES_ON);
+		sprintf(lpLine, "%010X   ", iAddress);
+		lpToken+=11;
 
-    }
-
-
-    while (1) {
-
-        iAddress+=fread(&uData, 1, iDataSize, pFile);
-
-        if (iEndianess != ENDIANESS)
-            Dump_ReverseBytes(&uData, iDataSize);
-
-        if (feof(pFile))
-            break;
-
-        if (iFlag & CHARS_ON) {
+	}
 
 
-            memcpy(lpCharToken, &uData, iDataSize);
-            lpCharToken+=iDataSize;
+	while (1) {
 
-        }
+		iAddress+=fread(&uData, 1, iDataSize, pFile);
 
-        if ( (unsigned)((lpToken-lpLine+iNumberSize)-1) >= 80) {
+		if (iEndianess != ENDIANESS)
+			Dump_ReverseBytes(&uData, iDataSize);
 
-            fprintf(stderr, "Erreur ! Line is too long ! (%d,%d)\n", lpToken, lpLine);
-            j=0;
-            i++;
-            lpToken=lpLine;
-            continue;
+		if (feof(pFile))
+			break;
 
-        }
+		if (iFlag & CHARS_ON) {
 
-        Dump_ProduceNumber(lpToken, iNumberSize+1, lpFormat, &uData);
-        lpToken+=iNumberSize;
-        j++;
 
-        if (i==21) { /* screen pause */
+			memcpy(lpCharToken, &uData, iDataSize);
+			lpCharToken+=iDataSize;
 
-                if (iFlag & PAGE_MODE_ON) {
+		}
 
-                        printf("\nPress ``ENTER'' to continue dumping");
+		if ( (unsigned)((lpToken-lpLine+iNumberSize)-1) >= 80) {
 
-                        while (getchar()!='\n');
+			fprintf(stderr, "Erreur ! Line is too long ! (%d,%d)\n", lpToken, lpLine);
+			j=0;
+			i++;
+			lpToken=lpLine;
+			continue;
 
-                        Dump_PrintHeader(pData, iNumberSize , iLineTokenNb, iDataSize ,iFlag & ADDRESSES_ON);
+		}
 
-                }
-                i=0;
+		Dump_ProduceNumber(lpToken, iNumberSize+1, lpFormat, &uData);
+		lpToken+=iNumberSize;
+		j++;
 
-        }
+		if (i==21) { /* screen pause */
 
-        if (j==iLineTokenNb) {
+			if (iFlag & PAGE_MODE_ON) {
 
-            i++;
-            j=0;
-            *lpToken='\0';
+				printf("\nPress ``ENTER'' to continue dumping");
 
-            fputs(lpLine, pData); /* on affiche la ligne */
-            if (iFlag & CHARS_ON) {
-                Dump_DumpChar(pData, lpCharDump, sizeof(lpCharDump));
-            }
+				while (getchar()!='\n');
 
-            fputc('\n', pData); /* on ajoute un retour à la ligne */
+				Dump_PrintHeader(pData, iNumberSize , iLineTokenNb, iDataSize ,iFlag & ADDRESSES_ON);
 
-            lpToken=lpLine;
-            lpCharToken=lpCharDump;
+			}
+			i=0;
 
-            if (iFlag & ADDRESSES_ON) {
+		}
 
-                sprintf(lpLine, "%010X   ", iAddress);
-                lpToken+=11;
+		if (j==iLineTokenNb) {
 
-            }
+			i++;
+			j=0;
+			*lpToken='\0';
 
-        }
+			fputs(lpLine, pData); /* on affiche la ligne */
+			if (iFlag & CHARS_ON) {
+				Dump_DumpChar(pData, lpCharDump, sizeof(lpCharDump));
+			}
 
-    }
+			fputc('\n', pData); /* on ajoute un retour à la ligne */
 
-    /* on finit la dernière ligne si elle a déjà été entammée */
+			lpToken=lpLine;
+			lpCharToken=lpCharDump;
 
-    if (j>0) {
-        /* on complète la dernière ligne */
-        while (j < iLineTokenNb) {
-            if ( (unsigned)(lpToken-lpLine+iNumberSize) >= 80) {
-                break;
-            }
+			if (iFlag & ADDRESSES_ON) {
 
-            Dump_ProduceNumber(lpToken, iNumberSize, "", &uData);
-            lpToken+=iNumberSize;
-            j++;
+				sprintf(lpLine, "%010X   ", iAddress);
+				lpToken+=11;
 
-        }
+			}
 
-        /* on complète le char dump */
-        while ((unsigned)(lpCharToken - lpCharDump) < sizeof(lpCharDump)) {
-            *lpCharToken=' ';
-            lpCharToken++;
-        }
+		}
 
-        /* on affiche la ligne */
-        *lpToken='\0';
-        fputs(lpLine, pData); /* on affiche la ligne */
+	}
 
-        if (iFlag & CHARS_ON)
-                Dump_DumpChar(pData, lpCharDump, sizeof(lpCharDump));
+	/* on finit la dernière ligne si elle a déjà été entammée */
 
-        fputc('\n', pData); /* on ajoute un retour à la ligne */
+	if (j>0) {
+		/* on complète la dernière ligne */
+		while (j < iLineTokenNb) {
+			if ( (unsigned)(lpToken-lpLine+iNumberSize) >= 80) {
+				break;
+			}
 
-    }
+			Dump_ProduceNumber(lpToken, iNumberSize, "", &uData);
+			lpToken+=iNumberSize;
+			j++;
+
+		}
+
+		/* on complète le char dump */
+		while ((unsigned)(lpCharToken - lpCharDump) < sizeof(lpCharDump)) {
+			*lpCharToken=' ';
+			lpCharToken++;
+		}
+
+		/* on affiche la ligne */
+		*lpToken='\0';
+		fputs(lpLine, pData); /* on affiche la ligne */
+
+		if (iFlag & CHARS_ON)
+			Dump_DumpChar(pData, lpCharDump, sizeof(lpCharDump));
+
+		fputc('\n', pData); /* on ajoute un retour à la ligne */
+
+	}
 }
 
 
 int main(int argc, char* argv[])
 {
-    FILE *pFile, *pData;
+	FILE *pFile, *pData;
 
-    size_t iDataSize=sizeof(char);
+	size_t iDataSize=sizeof(char);
 
-    size_t iNumberSize=3;
+	size_t iNumberSize=3;
 
-    int i,j,
-        iHex=1;
+	int i,j,
+	    iHex=1;
 
-    int iFlag=ADDRESSES_ON | CHARS_ON | TITLE_ON;
-    int iLineTokenNb=16;
+	int iFlag=ADDRESSES_ON | CHARS_ON | TITLE_ON;
+	int iLineTokenNb=16;
 
-    char iEndianness=ENDIANESS;
+	char iEndianness=ENDIANESS;
 
-    char lpFormat[]="%02X";
-    char *lpOutput=NULL, *lpInput=NULL;
-    char *lpToken;
-    char lpLine[80]=""; /* a buffer that contains text to be printed to screen */
+	char lpFormat[]="%02X";
+	char *lpOutput=NULL, *lpInput=NULL;
+	char *lpToken;
+	char lpLine[80]=""; /* a buffer that contains text to be printed to screen */
 
-    char* lpDataTypes[]={"","char","short","","int/float", "", "", "", "double"};
+	char* lpDataTypes[]= {"","char","short","","int/float", "", "", "", "double"};
 
-    for (i=1;argv[i];i++) {
+	for (i=1; argv[i]; i++) {
 
-        if (*argv[i]=='/') {
+		if (*argv[i]=='/') {
 
-            switch(toupper(*(argv[i]+1))) {
+			switch(toupper(*(argv[i]+1))) {
 
-                case 'T':
+			case 'T':
 
-                    argv[i]+=2;
-                    if (*argv[i]==':') argv[i]++;
-                    switch (toupper(*(argv[i]))) {
-                        case 'F':
-                            /* lire des floats */
-                            strcpy(lpFormat, "%E");
-                            iDataSize=sizeof(float);
-                            iNumberSize=13;
-                            iLineTokenNb=4;
-                            break;
+				argv[i]+=2;
+				if (*argv[i]==':') argv[i]++;
+				switch (toupper(*(argv[i]))) {
+				case 'F':
+					/* lire des floats */
+					strcpy(lpFormat, "%E");
+					iDataSize=sizeof(float);
+					iNumberSize=13;
+					iLineTokenNb=4;
+					break;
 
-                        case 'D':
-                            iDataSize=sizeof(double);
-                            strcpy(lpFormat, "%E");
-                            iNumberSize=25;
-                            iLineTokenNb=2;
-                            break;
+				case 'D':
+					iDataSize=sizeof(double);
+					strcpy(lpFormat, "%E");
+					iNumberSize=25;
+					iLineTokenNb=2;
+					break;
 
-                        case 'I':
-                            strcpy(lpFormat, "%d");
-                            iDataSize=sizeof(int);
-                            iNumberSize=13;
-                            iLineTokenNb=4;
-                            break;
+				case 'I':
+					strcpy(lpFormat, "%d");
+					iDataSize=sizeof(int);
+					iNumberSize=13;
+					iLineTokenNb=4;
+					break;
 
-                        case 'S':
-                            strcpy(lpFormat, "%d");
-                            iDataSize=sizeof(short);
-                            iNumberSize=6;
-                            iLineTokenNb=8;
-                            break;
+				case 'S':
+					strcpy(lpFormat, "%d");
+					iDataSize=sizeof(short);
+					iNumberSize=6;
+					iLineTokenNb=8;
+					break;
 
-                        case 'C':
-                            strcpy(lpFormat, "%d");
-                            iDataSize=sizeof(char);
-                            iNumberSize=4;
-                            iLineTokenNb=16;
-                            break;
+				case 'C':
+					strcpy(lpFormat, "%d");
+					iDataSize=sizeof(char);
+					iNumberSize=4;
+					iLineTokenNb=16;
+					break;
 
-                        default:
-                            printf("Error ! ``%c'' is not a valid data type\n", argv[i]);
-                    }
-                    break;
+				default:
+					printf("Error ! ``%c'' is not a valid data type\n", argv[i]);
+				}
+				break;
 
-                case 'P': // attend confirmation avant d'afficher une nouvelle page
-                    iFlag|=PAGE_MODE_ON;
-                    break;
+			case 'P': // attend confirmation avant d'afficher une nouvelle page
+				iFlag|=PAGE_MODE_ON;
+				break;
 
-                case 'B':
-                    iFlag = 0;
-                    if (!iHex) break;
+			case 'B':
+				iFlag = 0;
+				if (!iHex) break;
 
-                case 'H': // utilise le mode héxadécimal
-                    iHex=1;
-                    switch(iDataSize) {
-                        case 1:
+			case 'H': // utilise le mode héxadécimal
+				iHex=1;
+				switch(iDataSize) {
+				case 1:
 
-                            if (iFlag) {
-                                iNumberSize=3;
-                                iLineTokenNb=16;
-                            } else {
-                                iNumberSize=2;
-                                iLineTokenNb=32;
-                            }
-                            strcpy(lpFormat, "%02X");
-                            break;
+					if (iFlag) {
+						iNumberSize=3;
+						iLineTokenNb=16;
+					} else {
+						iNumberSize=2;
+						iLineTokenNb=32;
+					}
+					strcpy(lpFormat, "%02X");
+					break;
 
-                        case 2:
-                            if (iFlag) {
-                                iNumberSize=6;
-                                iLineTokenNb=8;
-                            } else {
-                                iNumberSize=4;
-                                iLineTokenNb=16;
-                            }
-                            strcpy(lpFormat, "%04X");
-                            break;
+				case 2:
+					if (iFlag) {
+						iNumberSize=6;
+						iLineTokenNb=8;
+					} else {
+						iNumberSize=4;
+						iLineTokenNb=16;
+					}
+					strcpy(lpFormat, "%04X");
+					break;
 
-                        case 4:
-                            if (iFlag) {
-                                iNumberSize=13;
-                                iLineTokenNb=4;
-                            } else {
-                                iLineTokenNb=8;
-                                iNumberSize=8;
-                            }
-                            strcpy(lpFormat, "%08X");
-                            break;
+				case 4:
+					if (iFlag) {
+						iNumberSize=13;
+						iLineTokenNb=4;
+					} else {
+						iLineTokenNb=8;
+						iNumberSize=8;
+					}
+					strcpy(lpFormat, "%08X");
+					break;
 
-                        default:
-                            strcpy(lpFormat, "%f");
-                    }
-                    break;
+				default:
+					strcpy(lpFormat, "%f");
+				}
+				break;
 
-                case '?':
-                    Dump_ShowHelp();
-                    return EXIT_SUCCESS;
+			case '?':
+				Dump_ShowHelp();
+				return EXIT_SUCCESS;
 
-                case 'L':
-                    Dump_ShowLicence();
-                    return EXIT_SUCCESS;
+			case 'L':
+				Dump_ShowLicence();
+				return EXIT_SUCCESS;
 
-                case 'E':
-                    argv[i]+=2;
-                    if (*argv[i]==':') argv[i]++;
+			case 'E':
+				argv[i]+=2;
+				if (*argv[i]==':') argv[i]++;
 
-                    switch (toupper(*argv[i])) {
+				switch (toupper(*argv[i])) {
 
-                        case 'L':
-                            iEndianness=LITTLE_ENDIAN;
-                            break;
+				case 'L':
+					iEndianness=LITTLE_ENDIAN;
+					break;
 
-                        case 'B':
-                            iEndianness=BIG_ENDIAN;
-                            break;
+				case 'B':
+					iEndianness=BIG_ENDIAN;
+					break;
 
-                        default:
-                            printf("Error : ``%c'' is not a valid endianness flavour.",
-                                   *argv[i]);
-                    }
-                    break;
+				default:
+					printf("Error : ``%c'' is not a valid endianness flavour.",
+					       *argv[i]);
+				}
+				break;
 
-                default:
-                    printf("Error : Invalid switch (``%s'')\n", argv[i]);
-                    return EXIT_FAILURE;
-            }
-        } else {
+			default:
+				printf("Error : Invalid switch (``%s'')\n", argv[i]);
+				return EXIT_FAILURE;
+			}
+		} else {
 
-            if (!lpInput) {
-                lpInput=argv[i];
-            } else if (!lpOutput) {
-                lpOutput=argv[i];
-            } else {
-                printf("Error, invalid argument ``%s''\n", argv[i]);
-                return EXIT_FAILURE;
-            }
+			if (!lpInput) {
+				lpInput=argv[i];
+			} else if (!lpOutput) {
+				lpOutput=argv[i];
+			} else {
+				printf("Error, invalid argument ``%s''\n", argv[i]);
+				return EXIT_FAILURE;
+			}
 
-        }
-    }
+		}
+	}
 
 
 
-    if (!lpOutput) {
-        pData=stdout;
-    } else {
-        if (!(pData=fopen(lpOutput, "w+"))) {
-            printf("Error : Can't find file ``%s''\n", lpOutput);
-            return EXIT_FAILURE;
-        }
-    }
+	if (!lpOutput) {
+		pData=stdout;
+	} else {
+		if (!(pData=fopen(lpOutput, "w+"))) {
+			printf("Error : Can't find file ``%s''\n", lpOutput);
+			return EXIT_FAILURE;
+		}
+	}
 
-    if (!(pFile=fopen(lpInput, "rb"))) {
-        printf("Error : Can't find file ``%s''", lpInput);
-        return EXIT_FAILURE;
-    }
+	if (!(pFile=fopen(lpInput, "rb"))) {
+		printf("Error : Can't find file ``%s''", lpInput);
+		return EXIT_FAILURE;
+	}
 
-    if (iFlag & TITLE_ON) {
-            fprintf(pData, "Dumping content of ``%s'' using data type ``%s'' and format ``%s''\nGenerated by Dos9 Dump.exe - copyleft (c) darkbatcher\n\n", lpInput, lpDataTypes[iDataSize], lpFormat);
-    }
+	if (iFlag & TITLE_ON) {
+		fprintf(pData, "Dumping content of ``%s'' using data type ``%s'' and format ``%s''\nGenerated by Dos9 Dump.exe - copyleft (c) darkbatcher\n\n", lpInput, lpDataTypes[iDataSize], lpFormat);
+	}
 
-    Dump_DumpFile(pFile, pData, iDataSize, iNumberSize, iLineTokenNb, 22, lpFormat, iEndianness, iFlag);
+	Dump_DumpFile(pFile, pData, iDataSize, iNumberSize, iLineTokenNb, 22, lpFormat, iEndianness, iFlag);
 
-    fclose(pFile);
-    fclose(pData);
+	fclose(pFile);
+	fclose(pData);
 
-    return EXIT_SUCCESS;
+	return EXIT_SUCCESS;
 
 }

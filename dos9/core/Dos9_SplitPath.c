@@ -8,84 +8,84 @@ void Dos9_SplitPath(char* lpPath,
                     char* lpDisk, char* lpDir, char* lpName, char* lpExt)
 {
 
-    char* lpNextToken, *lpToken=lpPath;
-    char cSaveChar;
+	char* lpNextToken, *lpToken=lpPath;
+	char cSaveChar;
 
-    if (*lpToken) {
+	if (*lpToken) {
 
-        if (!strncmp(lpToken+1, ":\\", 2)) {
+		if (!strncmp(lpToken+1, ":\\", 2)) {
 
-            DOS9_DBG("Found disk_name=\"%c\"\n", *lpToken);
+			DOS9_DBG("Found disk_name=\"%c\"\n", *lpToken);
 
-            if (lpDisk)
-                snprintf(lpDisk, _MAX_DRIVE, "%c:\\", *lpToken);
+			if (lpDisk)
+				snprintf(lpDisk, _MAX_DRIVE, "%c:\\", *lpToken);
 
-            lpToken+=3;
+			lpToken+=3;
 
-        }  else {
+		} else {
 
-            if (lpDisk)
-               *lpDisk='\0';
+			if (lpDisk)
+				*lpDisk='\0';
 
-        }
-
-
-    } else {
-
-        if (lpDisk)
-            *lpDisk='\0';
-
-    }
-
-    if ((lpNextToken = Dos9_SearchLastToken(lpToken, "\\/"))) {
-
-        lpNextToken++;
-        cSaveChar=*lpNextToken;
-        *lpNextToken='\0';
-
-        DOS9_DBG("found path=\"%s\"\n", lpToken);
-
-        if (lpDir)
-            strncpy(lpDir, lpToken, _MAX_DIR);
-
-        *lpNextToken=cSaveChar;
-        lpToken=lpNextToken;
-
-    } else {
-
-        if (lpDir)
-            *lpDir=='\0';
-
-    }
-
-    if ((lpNextToken = Dos9_SearchLastChar(lpToken, '.'))) {
-
-        cSaveChar=*lpNextToken;
-        *lpNextToken='\0';
-
-        DOS9_DBG("found name=\"%s\"\n", lpToken);
+		}
 
 
-        if (lpName)
-            strncpy(lpName, lpToken, _MAX_FNAME);
+	} else {
 
-        *lpNextToken=cSaveChar;
-        lpToken=lpNextToken+1;
+		if (lpDisk)
+			*lpDisk='\0';
 
-        DOS9_DBG("found ext=\"%s\"\n", lpToken);
+	}
 
-        if (lpExt)
-            snprintf(lpExt, _MAX_EXT, ".%s", lpToken);
+	if ((lpNextToken = Dos9_SearchLastToken(lpToken, "\\/"))) {
 
-    } else {
+		lpNextToken++;
+		cSaveChar=*lpNextToken;
+		*lpNextToken='\0';
 
-        if (lpName)
-            strncpy(lpName, lpToken, _MAX_FNAME);
+		DOS9_DBG("found path=\"%s\"\n", lpToken);
 
-        if (lpExt)
-            *lpExt='\0';
+		if (lpDir)
+			strncpy(lpDir, lpToken, _MAX_DIR);
 
-    }
+		*lpNextToken=cSaveChar;
+		lpToken=lpNextToken;
+
+	} else {
+
+		if (lpDir)
+			*lpDir=='\0';
+
+	}
+
+	if ((lpNextToken = Dos9_SearchLastChar(lpToken, '.'))) {
+
+		cSaveChar=*lpNextToken;
+		*lpNextToken='\0';
+
+		DOS9_DBG("found name=\"%s\"\n", lpToken);
+
+
+		if (lpName)
+			strncpy(lpName, lpToken, _MAX_FNAME);
+
+		*lpNextToken=cSaveChar;
+		lpToken=lpNextToken+1;
+
+		DOS9_DBG("found ext=\"%s\"\n", lpToken);
+
+		if (lpExt)
+			snprintf(lpExt, _MAX_EXT, ".%s", lpToken);
+
+	} else {
+
+		if (lpName)
+			strncpy(lpName, lpToken, _MAX_FNAME);
+
+		if (lpExt)
+			*lpExt='\0';
+
+	}
 
 
 }

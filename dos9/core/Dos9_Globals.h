@@ -35,7 +35,7 @@ extern INPUT_FILE ifIn;
 extern char* lpInitVar[];
 
 extern int iInputD,
-           iOutputD;
+       iOutputD;
 extern void(*pErrorHandler)(void);
 
 #endif

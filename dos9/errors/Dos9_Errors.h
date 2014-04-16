@@ -24,15 +24,15 @@
 
 #ifdef DOS9_DEBUG_MODE
 
-    #define DEBUG(Msg,...) fprintf(stderr, __FILE__ "\t" __func__ ":%d\n\t" Msg "\n", __LINE__, ##__VA_ARGS__)
+#define DEBUG(Msg,...) fprintf(stderr, __FILE__ "\t" __func__ ":%d\n\t" Msg "\n", __LINE__, ##__VA_ARGS__)
+#define DEBUG_(a) fprintf( stderr, "$ %s (line %d) * %d\n", __func__, __LINE__, a)
+#define DOS9_DEBUG(a) fprintf( stderr, "$ %s (line %d) * %s\n", __func__, __LINE__, a)
 
-    #define DEBUG_(a) fprintf( stderr, "$ %s (line %d) * %d\n", __func__, __LINE__, a)
-    #define DOS9_DEBUG(a) fprintf( stderr, "$ %s (line %d) * %s\n", __func__, __LINE__, a)
 #else
 
-    #define DEBUG(Msg, ...)
-    #define DEBUG_(a)
-    #define DOS9_DEBUG(a)
+#define DEBUG(Msg, ...)
+#define DEBUG_(a)
+#define DOS9_DEBUG(a)
 
 #endif
 

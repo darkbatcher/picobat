@@ -22,16 +22,16 @@
 #define DOS9_CORE_RUN_H
 
 #ifdef WIN32
-    #include <process.h>
-    #define DOS9_SPAWN_CAST const char* const*
+#include <process.h>
+#define DOS9_SPAWN_CAST const char* const*
 #else
-    #include <spawn.h>
-    #define DOS9_SPAWN_CAST char* const*
-    #define spawnvp(a,b,c) posix_spawnp(NULL, b, NULL, NULL, c, environ)
+#include <spawn.h>
+#define DOS9_SPAWN_CAST char* const*
+#define spawnvp(a,b,c) posix_spawnp(NULL, b, NULL, NULL, c, environ)
 #endif
 
 #ifndef P_WAIT
-    #define P_WAIT _P_WAIT
+#define P_WAIT _P_WAIT
 #endif
 
 #include <libDos9.h>

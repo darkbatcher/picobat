@@ -33,141 +33,141 @@ ESTR* lpEsEncoding;
 
 int main(int argc, char *argv[])
 {
-    TEAPAGE* lpTeaPage;
-    LP_OUTPUT_HANDLER pOutputHandler=Tea_TextOutputHandler;
-    LP_PARSE_HANDLER pParseHandler=Tea_TextParseHandler;
+	TEAPAGE* lpTeaPage;
+	LP_OUTPUT_HANDLER pOutputHandler=Tea_TextOutputHandler;
+	LP_PARSE_HANDLER pParseHandler=Tea_TextParseHandler;
 
-    if (Dos9_LibInit() == -1) {
+	if (Dos9_LibInit() == -1) {
 
-        puts("Error : Unable to load LibDos9. Exiting ...");
-        exit(-1);
+		puts("Error : Unable to load LibDos9. Exiting ...");
+		exit(-1);
 
-    }
+	}
 
-    FILE* pOutput;
+	FILE* pOutput;
 
-    char* lpPagePath=NULL;
-    char* lpOutputPath=NULL;
+	char* lpPagePath=NULL;
+	char* lpOutputPath=NULL;
 
-    int i=1,
-        iContinue=TRUE;
+	int i=1,
+	    iContinue=TRUE;
 
-    lpEsEncoding=Dos9_EsInit();
-    Dos9_EsCpy(lpEsEncoding, "US-ASCII");
+	lpEsEncoding=Dos9_EsInit();
+	Dos9_EsCpy(lpEsEncoding, "US-ASCII");
 
-    if (argc < 1) {
-        fputs("TEA :: Error : Invalid command line\n", stderr);
-        return -1;
-    }
+	if (argc < 1) {
+		fputs("TEA :: Error : Invalid command line\n", stderr);
+		return -1;
+	}
 
-    Dos9_SetNewLineMode(DOS9_NEWLINE_LINUX);
+	Dos9_SetNewLineMode(DOS9_NEWLINE_LINUX);
 
-    while (argv[i] && iContinue) {
+	while (argv[i] && iContinue) {
 
-        if (!strnicmp("/O", argv[i], 2)) {
+		if (!strnicmp("/O", argv[i], 2)) {
 
-            argv[i]+=2;
-            if (*(argv[i])==':') argv[i]++;
+			argv[i]+=2;
+			if (*(argv[i])==':') argv[i]++;
 
-            if (!stricmp("TEXT", argv[i])) {
+			if (!stricmp("TEXT", argv[i])) {
 
-                pOutputHandler=Tea_TextOutputHandler;
-                pParseHandler=Tea_TextParseHandler;
+				pOutputHandler=Tea_TextOutputHandler;
+				pParseHandler=Tea_TextParseHandler;
 
-            } else if (!stricmp("HTML", argv[i])) {
+			} else if (!stricmp("HTML", argv[i])) {
 
-                pOutputHandler=Tea_HtmlOutputHandler;
-                pParseHandler=Tea_HtmlParseHandler;
+				pOutputHandler=Tea_HtmlOutputHandler;
+				pParseHandler=Tea_HtmlParseHandler;
 
-            } else if (!stricmp("TEXT-PLAIN", argv[i])) {
+			} else if (!stricmp("TEXT-PLAIN", argv[i])) {
 
-                pOutputHandler=Tea_TextOutputHandler;
-                pParseHandler=Tea_TextPlainParseHandler;
+				pOutputHandler=Tea_TextOutputHandler;
+				pParseHandler=Tea_TextPlainParseHandler;
 
-            } else if (!stricmp("TEXT-ANSI", argv[i])) {
+			} else if (!stricmp("TEXT-ANSI", argv[i])) {
 
-                pOutputHandler=Tea_TextAnsiOutputHandler;
-                pParseHandler=Tea_TextAnsiParseHandler;
+				pOutputHandler=Tea_TextAnsiOutputHandler;
+				pParseHandler=Tea_TextAnsiParseHandler;
 
-            } else {
+			} else {
 
-                fprintf(stderr, "TEA :: Error : ``%s'' is not a valid output format.\n",  argv[i]);
-                exit(-1);
-            }
+				fprintf(stderr, "TEA :: Error : ``%s'' is not a valid output format.\n",  argv[i]);
+				exit(-1);
+			}
 
-        } else if (!strnicmp("/E", argv[i], 2)) {
+		} else if (!strnicmp("/E", argv[i], 2)) {
 
-            argv[i]+=2;
-            if (*(argv[i])==':') argv[i]++;
+			argv[i]+=2;
+			if (*(argv[i])==':') argv[i]++;
 
-            if (!stricmp("UTF-8" ,argv[i])) {
+			if (!stricmp("UTF-8" ,argv[i])) {
 
-                Dos9_SetEncoding(DOS9_UTF8_ENCODING);
+				Dos9_SetEncoding(DOS9_UTF8_ENCODING);
 
-            } else {
+			} else {
 
-                Dos9_SetEncoding(DOS9_BYTE_ENCODING);
+				Dos9_SetEncoding(DOS9_BYTE_ENCODING);
 
-            }
+			}
 
-            Dos9_EsCpy(lpEsEncoding, argv[i]);
+			Dos9_EsCpy(lpEsEncoding, argv[i]);
 
-        } else if (!strcmp("/?", argv[i])) {
+		} else if (!strcmp("/?", argv[i])) {
 
-            puts("See file tea.txt\n");
-            return 0;
+			puts("See file tea.txt\n");
+			return 0;
 
-        } else {
+		} else {
 
-            if (!lpPagePath) {
+			if (!lpPagePath) {
 
-                lpPagePath=argv[i];
+				lpPagePath=argv[i];
 
-            } else if (!lpOutputPath) {
+			} else if (!lpOutputPath) {
 
-                lpOutputPath=argv[i];
+				lpOutputPath=argv[i];
 
-            } else {
+			} else {
 
-                iContinue=FALSE;
-                continue;
+				iContinue=FALSE;
+				continue;
 
-            }
+			}
 
-        }
+		}
 
-        i++;
-    }
+		i++;
+	}
 
-    if (!(lpTeaPage=Tea_PageLoad(lpPagePath, pParseHandler))) {
+	if (!(lpTeaPage=Tea_PageLoad(lpPagePath, pParseHandler))) {
 
-        printf("TEA :: Error : Unable to open TEA script ``%s'' : %s", lpPagePath, strerror(errno));
-        return errno;
+		printf("TEA :: Error : Unable to open TEA script ``%s'' : %s", lpPagePath, strerror(errno));
+		return errno;
 
-    }
+	}
 
-    if (lpOutputPath) {
+	if (lpOutputPath) {
 
-        if (!(pOutput=fopen(lpOutputPath, "w+"))) {
+		if (!(pOutput=fopen(lpOutputPath, "w+"))) {
 
-            printf("TEA :: Error : Unable to open ``%s'' as output : %s", lpOutputPath, strerror(errno));
-            return errno;
+			printf("TEA :: Error : Unable to open ``%s'' as output : %s", lpOutputPath, strerror(errno));
+			return errno;
 
-        }
+		}
 
-    } else {
+	} else {
 
-        pOutput=stdout;
+		pOutput=stdout;
 
-    }
+	}
 
-    pOutputHandler(lpTeaPage, pOutput, i, argv);
+	pOutputHandler(lpTeaPage, pOutput, i, argv);
 
-    Tea_PageFree(lpTeaPage);
+	Tea_PageFree(lpTeaPage);
 
-    fclose(pOutput);
+	fclose(pOutput);
 
-    Dos9_LibClose();
+	Dos9_LibClose();
 
-    return 0;
+	return 0;
 }

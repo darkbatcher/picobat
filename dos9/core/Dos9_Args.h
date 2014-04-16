@@ -26,8 +26,8 @@
 /* a structure that contains boundaries of a block */
 
 typedef struct BLOCKINFO {
-    char* lpBegin;
-    char* lpEnd;
+	char* lpBegin;
+	char* lpEnd;
 } BLOCKINFO;
 
 char* Dos9_GetNextParameterEs(char* lpLine, ESTR* lpReturn);

@@ -31,16 +31,16 @@
  */
 
 struct PARSED_STREAM {
-    ESTR* lpCmdLine;
-    char cNodeType;
-    struct PARSED_STREAM* lppsNode;
+	ESTR* lpCmdLine;
+	char cNodeType;
+	struct PARSED_STREAM* lppsNode;
 };
 
 struct PARSED_STREAM_START {
-    struct PARSED_STREAM* lppsStream;
-    char cOutputMode;
-    char* lpOutputFile;
-    char* lpInputFile;
+	struct PARSED_STREAM* lppsStream;
+	char cOutputMode;
+	char* lpOutputFile;
+	char* lpInputFile;
 };
 
 typedef struct PARSED_STREAM PARSED_STREAM,*LPPARSED_STREAM;

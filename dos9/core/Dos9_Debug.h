@@ -2,11 +2,11 @@
 
 #ifdef DOS9_DBG_MODE
 
-    #define DOS9_DBG(format, ...) Dos9_ShowDebug(format, ##__VA_ARGS__ )
+#define DOS9_DBG(format, ...) Dos9_ShowDebug(format, ##__VA_ARGS__ )
 
 #else
 
-    #define DOS9_DBG(format, ...)
+#define DOS9_DBG(format, ...)
 
 #endif
 

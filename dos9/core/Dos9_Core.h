@@ -49,13 +49,13 @@
 
 #ifdef WIN32
 
-    #include <conio.h>
+#include <conio.h>
 
 #elif defined  _POSIX_C_SOURCE
-    
-    #define getch getchar
-    #define stricmp strcasecmp
-    #define strnicmp strncasecmp
+
+#define getch getchar
+#define stricmp strcasecmp
+#define strnicmp strncasecmp
 
 #endif
 

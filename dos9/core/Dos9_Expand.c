@@ -19,179 +19,178 @@
 void Dos9_ExpandSpecialVar(ESTR* ptrCommandLine)
 {
 
-    ESTR* lpVarContent=Dos9_EsInit();
-    ESTR* lpExpanded=Dos9_EsInit();
+	ESTR* lpVarContent=Dos9_EsInit();
+	ESTR* lpExpanded=Dos9_EsInit();
 
-    char *lpToken=Dos9_EsToChar(ptrCommandLine),
-         *lpNextToken,
-         *lpPreviousToken=lpToken,
-         *lpTokenBegin;
+	char *lpToken=Dos9_EsToChar(ptrCommandLine),
+	      *lpNextToken,
+	      *lpPreviousToken=lpToken,
+	       *lpTokenBegin;
 
-    while ((lpNextToken=Dos9_SearchChar(lpToken, '%'))) {
+	while ((lpNextToken=Dos9_SearchChar(lpToken, '%'))) {
 
-        lpTokenBegin=lpNextToken+1;
+		lpTokenBegin=lpNextToken+1;
 
-        if ((lpTokenBegin=Dos9_GetLocalVar(lpvLocalVars, lpTokenBegin, lpVarContent))) {
+		if ((lpTokenBegin=Dos9_GetLocalVar(lpvLocalVars, lpTokenBegin, lpVarContent))) {
 
-            /* si la variable est bien définie */
-            *lpNextToken='\0';
+			/* si la variable est bien définie */
+			*lpNextToken='\0';
 
-            Dos9_EsCat(lpExpanded, lpPreviousToken);
-            Dos9_EsCatE(lpExpanded, lpVarContent);
+			Dos9_EsCat(lpExpanded, lpPreviousToken);
+			Dos9_EsCatE(lpExpanded, lpVarContent);
 
-            lpToken=lpTokenBegin;
-            lpPreviousToken=lpTokenBegin;
+			lpToken=lpTokenBegin;
+			lpPreviousToken=lpTokenBegin;
 
-        } else {
+		} else {
 
-            /* si la variable n'est pas définie */
-            lpToken=lpNextToken+1;
+			/* si la variable n'est pas définie */
+			lpToken=lpNextToken+1;
 
-        }
+		}
 
 
-    }
+	}
 
-    Dos9_EsCat(lpExpanded, lpPreviousToken);
-    Dos9_EsCpyE(ptrCommandLine, lpExpanded);
+	Dos9_EsCat(lpExpanded, lpPreviousToken);
+	Dos9_EsCpyE(ptrCommandLine, lpExpanded);
 
-    Dos9_EsFree(lpVarContent);
-    Dos9_EsFree(lpExpanded);
+	Dos9_EsFree(lpVarContent);
+	Dos9_EsFree(lpExpanded);
 
-    DOS9_DBG("[ExpandSpecialVar] : \"%s\".\n", Dos9_EsToChar(ptrCommandLine));
+	DOS9_DBG("[ExpandSpecialVar] : \"%s\".\n", Dos9_EsToChar(ptrCommandLine));
 
 }
 
 void Dos9_ExpandVar(ESTR* ptrCommandLine, char cDelimiter)
 {
 
-    ESTR* lpExpanded=Dos9_EsInit();
-    ESTR* lpVarContent=Dos9_EsInit();
+	ESTR* lpExpanded=Dos9_EsInit();
+	ESTR* lpVarContent=Dos9_EsInit();
 
-    char *ptrToken=Dos9_EsToChar(ptrCommandLine),
-         *ptrNextToken,
-         *ptrEndToken;
+	char *ptrToken=Dos9_EsToChar(ptrCommandLine),
+	      *ptrNextToken,
+	      *ptrEndToken;
 
-    char lpDelimiter[3]={cDelimiter, 0, 0};
+	char lpDelimiter[3]= {cDelimiter, 0, 0};
 
-    /* initialisation du buffer de sortie */
-    Dos9_EsCpy(lpExpanded,"");
+	/* initialisation du buffer de sortie */
+	Dos9_EsCpy(lpExpanded,"");
 
-    while ((ptrNextToken=Dos9_SearchChar(ptrToken, cDelimiter))) {
+	while ((ptrNextToken=Dos9_SearchChar(ptrToken, cDelimiter))) {
 
-        DEBUG(ptrToken);
-        *ptrNextToken='\0';
-        ptrNextToken++; // on passe au caractère suivant
+		DEBUG(ptrToken);
+		*ptrNextToken='\0';
+		ptrNextToken++; // on passe au caractère suivant
 
-        if ((*ptrNextToken==cDelimiter)) {
+		if ((*ptrNextToken==cDelimiter)) {
 
-            // si un % est échappé via %%
+			// si un % est échappé via %%
 
-            /* on supprime le caractère qui peut éventuellement
-               trainer dans ce buffer */
-            lpDelimiter[1]='\0';
+			/* on supprime le caractère qui peut éventuellement
+			   trainer dans ce buffer */
+			lpDelimiter[1]='\0';
 
-            Dos9_EsCat(lpExpanded, ptrToken);
-            Dos9_EsCat(lpExpanded, lpDelimiter);
-            ptrToken=ptrNextToken+1;
-            continue;
+			Dos9_EsCat(lpExpanded, ptrToken);
+			Dos9_EsCat(lpExpanded, lpDelimiter);
+			ptrToken=ptrNextToken+1;
+			continue;
 
-        } else if (isdigit(*ptrNextToken) || *ptrNextToken=='~') {
+		} else if (isdigit(*ptrNextToken) || *ptrNextToken=='~') {
 
-            /* if the variable is one of the parameter variables,
-               then skip, for compatibility purpose
-             */
-            lpDelimiter[1]=*ptrNextToken;
-            Dos9_EsCat(lpExpanded, ptrToken);
-            Dos9_EsCat(lpExpanded, lpDelimiter);
-            ptrToken=ptrNextToken+1;
-            continue;
+			/* if the variable is one of the parameter variables,
+			   then skip, for compatibility purpose
+			 */
+			lpDelimiter[1]=*ptrNextToken;
+			Dos9_EsCat(lpExpanded, ptrToken);
+			Dos9_EsCat(lpExpanded, lpDelimiter);
+			ptrToken=ptrNextToken+1;
+			continue;
 
 
-        } else if ((ptrEndToken=Dos9_StrToken(ptrNextToken, cDelimiter))) {
+		} else if ((ptrEndToken=Dos9_StrToken(ptrNextToken, cDelimiter))) {
 
-            *ptrEndToken='\0';
+			*ptrEndToken='\0';
 
-            Dos9_EsCat(lpExpanded, ptrToken);
+			Dos9_EsCat(lpExpanded, ptrToken);
 
-            if ((Dos9_GetVar(ptrNextToken, lpVarContent))) {
+			if ((Dos9_GetVar(ptrNextToken, lpVarContent))) {
 
-                /* add the content of the variable only if
-                   it is really defined */
-                Dos9_EsCatE(lpExpanded, lpVarContent);
+				/* add the content of the variable only if
+				   it is really defined */
+				Dos9_EsCatE(lpExpanded, lpVarContent);
 
-            }
+			}
 
-             ptrToken=ptrEndToken+1;
+			ptrToken=ptrEndToken+1;
 
-            continue;
+			continue;
 
-        } else {
+		} else {
 
-            /* there is only a single %, that does not
-               match any following %, then, split it
-               from the input.
-             */
+			/* there is only a single %, that does not
+			   match any following %, then, split it
+			   from the input.
+			 */
 
-            Dos9_EsCat(lpExpanded, ptrToken);
-            ptrToken=ptrNextToken;
+			Dos9_EsCat(lpExpanded, ptrToken);
+			ptrToken=ptrNextToken;
 
-        }
-    }
+		}
+	}
 
-    Dos9_EsCat(lpExpanded, ptrToken); // si pas de séquence détectée
-    Dos9_EsCpy(ptrCommandLine, Dos9_EsToChar(lpExpanded));
+	Dos9_EsCat(lpExpanded, ptrToken); // si pas de séquence détectée
+	Dos9_EsCpy(ptrCommandLine, Dos9_EsToChar(lpExpanded));
 
-    DOS9_DBG("[ExpandVar] : '%s'\n",
-             Dos9_EsToChar(ptrCommandLine)
-             );
+	DOS9_DBG("[ExpandVar] : '%s'\n",
+	         Dos9_EsToChar(ptrCommandLine)
+	        );
 
-    Dos9_EsFree(lpExpanded);
-    Dos9_EsFree(lpVarContent);
+	Dos9_EsFree(lpExpanded);
+	Dos9_EsFree(lpVarContent);
 
 }
 
 void Dos9_DelayedExpand(ESTR* ptrCommandLine, char cEnableDelayedExpansion)
 {
-    Dos9_ExpandSpecialVar(ptrCommandLine);
+	Dos9_ExpandSpecialVar(ptrCommandLine);
 
-    if (cEnableDelayedExpansion) {
+	if (cEnableDelayedExpansion) {
 
-        Dos9_ExpandVar(ptrCommandLine, '!');
+		Dos9_ExpandVar(ptrCommandLine, '!');
 
-    }
+	}
 }
 
 void Dos9_RemoveEscapeChar(char* lpLine)
 {
-    /* this function is designed to remove the escape characters
-       (e.g. char '^') from the command line */
-    char  lastEsc=FALSE;
-    char* lpPosition=lpLine;
-    for (;*lpLine;lpLine++,lpPosition++)
-    {
-        if (*lpLine=='^' && lastEsc!=TRUE) {
-            lpPosition--;
-            lastEsc=TRUE;
-            continue;
-        }
-        lastEsc=FALSE;
-        if (lpPosition != lpLine) *lpPosition=*lpLine;
-    }
-    *lpPosition='\0';
+	/* this function is designed to remove the escape characters
+	   (e.g. char '^') from the command line */
+	char  lastEsc=FALSE;
+	char* lpPosition=lpLine;
+	for (; *lpLine; lpLine++,lpPosition++) {
+		if (*lpLine=='^' && lastEsc!=TRUE) {
+			lpPosition--;
+			lastEsc=TRUE;
+			continue;
+		}
+		lastEsc=FALSE;
+		if (lpPosition != lpLine) *lpPosition=*lpLine;
+	}
+	*lpPosition='\0';
 }
 
 char* Dos9_StrToken(char* lpString, char cToken)
 {
-    if (lpString == NULL)
-        return NULL;
+	if (lpString == NULL)
+		return NULL;
 
-    for (;*lpString!='\0';lpString++) {
+	for (; *lpString!='\0'; lpString++) {
 
-            if (*lpString==cToken) return lpString;
+		if (*lpString==cToken) return lpString;
 
-    }
+	}
 
-    return NULL;
+	return NULL;
 
 }

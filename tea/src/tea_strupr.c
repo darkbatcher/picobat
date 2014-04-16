@@ -30,17 +30,17 @@
 
 char* strupr(char* lpChar)
 {
-    char* const lpCharBegin=lpChar;
+	char* const lpCharBegin=lpChar;
 
-    while (*lpChar) {
+	while (*lpChar) {
 
-        if (isalpha(*lpChar)) *lpChar=toupper(*lpChar);
+		if (isalpha(*lpChar)) *lpChar=toupper(*lpChar);
 
-        lpChar=Dos9_GetNextChar(lpChar);
+		lpChar=Dos9_GetNextChar(lpChar);
 
-    }
+	}
 
-    return lpCharBegin;
+	return lpCharBegin;
 }
 
 #endif

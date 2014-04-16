@@ -7,137 +7,137 @@
 
 void Tea_TextAnsiOutputHandler(TEAPAGE* lpTeaPage, FILE* pFile, int i, char** argv)
 {
-    while (lpTeaPage) {
+	while (lpTeaPage) {
 
-        switch (lpTeaPage->iBlockType) {
+		switch (lpTeaPage->iBlockType) {
 
-            case TEA_BLOCK_CODE:
+		case TEA_BLOCK_CODE:
 
-                /* set color to green and set intensity */
-                fprintf(pFile, "\033[32m\033[1m");
+			/* set color to green and set intensity */
+			fprintf(pFile, "\033[32m\033[1m");
 
-                Tea_TextOutputStaticBlock(TEA_TEXT_CODE_INDENT+TEA_TEXT_PAR_INDENT*(lpTeaPage->iBlockLevel),
-                                          TEA_TEXT_CODE_NINDENT+TEA_TEXT_PAR_INDENT*(lpTeaPage->iBlockLevel),
-                                          TEA_TEXT_WIDTH,
-                                          lpTeaPage->lpBlockContent,
-                                          "\n",
-                                          pFile);
+			Tea_TextOutputStaticBlock(TEA_TEXT_CODE_INDENT+TEA_TEXT_PAR_INDENT*(lpTeaPage->iBlockLevel),
+			                          TEA_TEXT_CODE_NINDENT+TEA_TEXT_PAR_INDENT*(lpTeaPage->iBlockLevel),
+			                          TEA_TEXT_WIDTH,
+			                          lpTeaPage->lpBlockContent,
+			                          "\n",
+			                          pFile);
 
-                fprintf(pFile, "\033[39m\033[0m");
+			fprintf(pFile, "\033[39m\033[0m");
 
-                break;
+			break;
 
-            case TEA_BLOCK_HEADING:
+		case TEA_BLOCK_HEADING:
 
-                /* set color to purple and set intensity */
-                fprintf(pFile, "\033[35m\033[1m");
+			/* set color to purple and set intensity */
+			fprintf(pFile, "\033[35m\033[1m");
 
-                Tea_TextOutputStaticBlock(TEA_TEXT_HEAD_INDENT,
-                                          0,
-                                          TEA_TEXT_WIDTH,
-                                          lpTeaPage->lpBlockContent,
-                                          "\n",
-                                          pFile);
+			Tea_TextOutputStaticBlock(TEA_TEXT_HEAD_INDENT,
+			                          0,
+			                          TEA_TEXT_WIDTH,
+			                          lpTeaPage->lpBlockContent,
+			                          "\n",
+			                          pFile);
 
 
-                fprintf(pFile, "\033[39m\033[0m");
+			fprintf(pFile, "\033[39m\033[0m");
 
-                break;
+			break;
 
-            case TEA_BLOCK_PARAGRAPH:
-                Tea_TextAnsiOutputParagraph(TEA_TEXT_PAR_INDENT*(lpTeaPage->iBlockLevel+1),
-                                            TEA_TEXT_PAR_INDENT*(lpTeaPage->iBlockLevel+1)
-                                            - (((lpTeaPage->iBlockLevel!=0) && !(lpTeaPage->iFlag & TEA_LIST_NO_MARK)) ? 2 : 0),
-                                            TEA_TEXT_WIDTH,
-                                            lpTeaPage->lpTeaNode,
-                                            "\n",
-                                            pFile);
+		case TEA_BLOCK_PARAGRAPH:
+			Tea_TextAnsiOutputParagraph(TEA_TEXT_PAR_INDENT*(lpTeaPage->iBlockLevel+1),
+			                            TEA_TEXT_PAR_INDENT*(lpTeaPage->iBlockLevel+1)
+			                            - (((lpTeaPage->iBlockLevel!=0) && !(lpTeaPage->iFlag & TEA_LIST_NO_MARK)) ? 2 : 0),
+			                            TEA_TEXT_WIDTH,
+			                            lpTeaPage->lpTeaNode,
+			                            "\n",
+			                            pFile);
 
-                break;
-        }
+			break;
+		}
 
-        fputs("\n\n", pFile);
+		fputs("\n\n", pFile);
 
-        lpTeaPage=lpTeaPage->lpTeaNext;
+		lpTeaPage=lpTeaPage->lpTeaNext;
 
-    }
+	}
 }
 
 void Tea_TextAnsiOutputParagraph(size_t iMargin, size_t iFirstLine, size_t iLength, TEANODE* lpTeaNode, char* lpNl, FILE* pFile)
 {
-    size_t iLeft;
-    int    bFirstLine=TRUE;
-    int    iNoMargin=FALSE;
-    char   *lpBlock;
+	size_t iLeft;
+	int    bFirstLine=TRUE;
+	int    iNoMargin=FALSE;
+	char   *lpBlock;
 
-    if ((iMargin >= iLength)
-        || (iFirstLine >= iLength)) {
+	if ((iMargin >= iLength)
+	    || (iFirstLine >= iLength)) {
 
-        fprintf(stderr, "Error : Incoherent margin parameters.\n");
-        exit(-1);
+		fprintf(stderr, "Error : Incoherent margin parameters.\n");
+		exit(-1);
 
-    }
+	}
 
-    while (lpTeaNode) {
+	while (lpTeaNode) {
 
-        lpBlock=lpTeaNode->lpContent;
+		lpBlock=lpTeaNode->lpContent;
 
-        switch(lpTeaNode->iNodeType) {
+		switch(lpTeaNode->iNodeType) {
 
-            case TEA_NODE_EMPHASIS:
-                fprintf(pFile, "\033[36m\033[1m");
-                break;
+		case TEA_NODE_EMPHASIS:
+			fprintf(pFile, "\033[36m\033[1m");
+			break;
 
-            case TEA_NODE_LINK:
-                fprintf(pFile, "\033[34m\033[1m");
-                break;
+		case TEA_NODE_LINK:
+			fprintf(pFile, "\033[34m\033[1m");
+			break;
 
-        }
+		}
 
-        while (lpBlock) {
+		while (lpBlock) {
 
-            if (iNoMargin) {
+			if (iNoMargin) {
 
-                iNoMargin=FALSE;
+				iNoMargin=FALSE;
 
-            } else {
+			} else {
 
-                iLeft=iLength;
+				iLeft=iLength;
 
-                if (*lpBlock=='\n')
-                    lpBlock++;
+				if (*lpBlock=='\n')
+					lpBlock++;
 
-                if (bFirstLine) {
+				if (bFirstLine) {
 
-                    bFirstLine=FALSE;
-                    Tea_MakeMargin(iFirstLine, &iLeft, pFile);
+					bFirstLine=FALSE;
+					Tea_MakeMargin(iFirstLine, &iLeft, pFile);
 
-                } else {
+				} else {
 
-                    fputs(lpNl, pFile);
-                    Tea_MakeMargin(iMargin, &iLeft, pFile);
+					fputs(lpNl, pFile);
+					Tea_MakeMargin(iMargin, &iLeft, pFile);
 
-                }
+				}
 
-            }
+			}
 
-            lpBlock=Tea_OutputLineT(lpBlock, pFile, lpTeaNode, &iLeft);
+			lpBlock=Tea_OutputLineT(lpBlock, pFile, lpTeaNode, &iLeft);
 
-        }
+		}
 
-        if (lpTeaNode->iNodeType
-            !=TEA_NODE_PLAIN_TEXT)
-            fprintf(pFile, "\033[39m\033[0m");
+		if (lpTeaNode->iNodeType
+		    !=TEA_NODE_PLAIN_TEXT)
+			fprintf(pFile, "\033[39m\033[0m");
 
-        iNoMargin=TRUE;
-        lpTeaNode=lpTeaNode->lpTeaNodeNext;
+		iNoMargin=TRUE;
+		lpTeaNode=lpTeaNode->lpTeaNodeNext;
 
-    }
+	}
 
 }
 
 
 void Tea_TextAnsiParseHandler(int iMsg, void* lpData)
 {
-    return;
+	return;
 }
