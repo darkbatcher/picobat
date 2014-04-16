@@ -37,21 +37,40 @@ int Dos9_CmdAlias(char* lpLine)
 	COMMANDLIST* lpclNewCommands;
 	COMMANDINFO  ciCommand;
 
+	int iReplace=FALSE;
+
+	COMMANDFLAG iRet;
+
+	void* pVoid;
+
 	char* lpCh;
 
 	lpLine+=5;
 
-	lpLine=Dos9_SkipBlanks(lpLine);
+	while ((lpCh=Dos9_GetNextParameterEs(lpLine, lpEsParam))) {
 
-	Dos9_GetEndOfLine(lpLine, lpEsParam);
+		if (!strcmp("/?", Dos9_EsToChar(lpEsParam))) {
 
-	lpLine=Dos9_EsToChar(lpEsParam);
+			Dos9_ShowInternalHelp(DOS9_HELP_ALIAS);
 
-	if (!strcmp("/?", lpLine)) {
+			goto error;
 
-		Dos9_ShowInternalHelp(DOS9_HELP_ALIAS);
+		} else if (!stricmp("/f", Dos9_EsToChar(lpEsParam))) {
 
-		goto error;
+			iReplace=TRUE;
+
+		} else {
+
+			Dos9_GetEndOfLine(lpLine, lpEsParam);
+			lpLine=Dos9_EsToChar(lpEsParam);
+
+			lpLine=Dos9_SkipAllBlanks(lpLine);
+
+			break;
+
+		}
+
+		lpLine=lpCh;
 
 	}
 
@@ -59,7 +78,8 @@ int Dos9_CmdAlias(char* lpLine)
 
 		Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT,
 		                      lpLine,
-		                      FALSE);
+		                      FALSE
+							 );
 
 		goto error;
 
@@ -72,6 +92,48 @@ int Dos9_CmdAlias(char* lpLine)
 	ciCommand.ptrCommandName=lpLine;
 
 	ciCommand.lpCommandProc=lpCh;
+
+	iRet=Dos9_GetCommandProc(lpLine, lpclCommands, &pVoid);
+
+	if (iReplace && (iRet!=-1)) {
+
+		/* it is possible to reassign Dos9 internal commands. I decided
+		   to allow this because it may be a funny trick to hack arround for
+		   example, if some batch requires some uncompatible features it
+		   allows to redifine those commands in order to get compatibility */
+
+		if ((Dos9_ReplaceCommand(&ciCommand, lpclCommands))) {
+
+			/* if we fail to reasign command, print an error message */
+
+			Dos9_ShowErrorMessage(DOS9_UNABLE_REPLACE_COMMAND,
+								  lpLine,
+								  FALSE
+								 );
+
+			goto error;
+
+
+		}
+
+		Dos9_EsFree(lpEsParam);
+
+		return 0;
+
+	}
+
+	if (iRet!=-1) {
+
+		/* the command name is not allowed since it is already used */
+
+		Dos9_ShowErrorMessage(DOS9_TRY_REDEFINE_COMMAND,
+							  lpLine,
+							  FALSE
+							 );
+
+		goto error;
+
+	}
 
 	if ((Dos9_AddCommandDynamic(&ciCommand, &lpclCommands))) {
 

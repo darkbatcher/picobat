@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dos9 0.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-15 18:24+0200\n"
+"POT-Creation-Date: 2014-04-17 00:12+0200\n"
 "PO-Revision-Date: 2014-03-12 16:18+0100\n"
 "Last-Translator: DarkBatcher <darkbatcher@gmail.com>\n"
 "Language-Team: French <darkbatcher@dos9.org>\n"
@@ -224,6 +224,17 @@ msgid "Error : Unable to remap commands (in function %s).\n"
 msgstr "Erreur : Impossible de remaper les commandes (dans %s).\n"
 
 #: ../dos9/errors/Dos9_Errors.c:189
+#, c-format
+msgid "Error : Trying to redefine already used \"%s\" command.\n"
+msgstr ""
+"Erreur : Tentative de réassignement de la commande déjà utilisée \"%s\".\n"
+
+#: ../dos9/errors/Dos9_Errors.c:192
+#, c-format
+msgid "Error : Unable to redefine \"%s\" command.\n"
+msgstr "Erreur : Impossible de redéfinir la commande \"%s\".\n"
+
+#: ../dos9/errors/Dos9_Errors.c:195
 msgid ""
 "\n"
 "Aborting current command, press any key to end Dos9.\n"

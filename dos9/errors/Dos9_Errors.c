@@ -185,6 +185,12 @@ void Dos9_LoadErrors(void)
 	lpErrorMsg[DOS9_UNABLE_REMAP_COMMANDS]=
 	    gettext("Error : Unable to remap commands (in function %s).\n");
 
+	lpErrorMsg[DOS9_TRY_REDEFINE_COMMAND]=
+		gettext("Error : Trying to redefine already used \"%s\" command.\n");
+
+	lpErrorMsg[DOS9_UNABLE_REPLACE_COMMAND]=
+		gettext("Error : Unable to redefine \"%s\" command.\n");
+
 	lpQuitMessage=
 	    gettext("\nAborting current command, press any key to end Dos9.\n");
 

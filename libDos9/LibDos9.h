@@ -481,6 +481,8 @@ LIBDOS9 int             Dos9_FreeCommandList(LPCOMMANDLIST lpclList);
 	\note Before Dos9 version 2014.0.9, the function used to return the first match found if they were colisions. Since, it returns the largest
     */
 LIBDOS9 COMMANDFLAG     Dos9_GetCommandProc(char* lpCommandLine, LPCOMMANDLIST lpclCommandList,void** lpcpCommandProcedure);
+
+LIBDOS9 int				Dos9_ReplaceCommand(LPCOMMANDINFO lpciCommand, LPCOMMANDLIST lpclCommandList);
 /** \} */
 /** \} */
 

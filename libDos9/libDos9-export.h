@@ -197,6 +197,7 @@ typedef struct COMMANDINFO {
 LIBDOS9 LPCOMMANDLIST   Dos9_MapCommandInfo(LPCOMMANDINFO lpciCommandInfo, int i);
 LIBDOS9 LPCOMMANDLIST   Dos9_ReMapCommandInfo(LPCOMMANDLIST lpclCommandList);
 LIBDOS9 int             Dos9_AddCommandDynamic(LPCOMMANDINFO lpciCommandInfo, LPCOMMANDLIST* lpclListEntry);
+LIBDOS9 int				Dos9_ReplaceCommand(LPCOMMANDINFO lpciCommand, LPCOMMANDLIST lpclCommandList);
 LIBDOS9 int             Dos9_FreeCommandList(LPCOMMANDLIST lpclList);
 LIBDOS9 COMMANDFLAG     Dos9_GetCommandProc(char* lpCommandLine, LPCOMMANDLIST lpclCommandList,void** lpcpCommandProcedure);
 
@@ -295,9 +296,9 @@ typedef int COLOR;
 #define Dos9_SetConsoleColor(color)
 #define Dos9_SetConsoleTextColor(color)
 #define Dos9_SetConsoleCursorPosition(coord)
-#define Dos9_GetConsoleCursorPosition(void)   
+#define Dos9_GetConsoleCursorPosition(void)
 #define Dos9_SetConsoleCursorState(bVisible, iSize)
-#define Dos9_SetConsoleTitle(lpTitle) 
+#define Dos9_SetConsoleTitle(lpTitle)
 
 #else
 

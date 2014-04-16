@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-15 18:24+0200\n"
+"POT-Creation-Date: 2014-04-17 00:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 #: ../dos9/lang/Dos9_Help.c:34
 msgid ""
 "Create an alias on a command.\n"
-"Usage: ALIAS alias=command\n"
+"Usage: ALIAS [/f] alias=command\n"
 msgstr ""
 
 #: ../dos9/lang/Dos9_Help.c:38
@@ -181,7 +181,13 @@ msgid ""
 "Usage: EXIT [/b code]\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Help.c:151
+#: ../dos9/lang/Dos9_Help.c:152
+msgid ""
+"Change positions of command-line parameters.\n"
+"Usage: SHIFT [/start_number | /s[:]start_number] [/d[:]displacement]\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_Help.c:156
 msgid ""
 "This help is voluntary limited help to fit in the binary. If you need to\n"
 "see the full documentation, please type:\n"

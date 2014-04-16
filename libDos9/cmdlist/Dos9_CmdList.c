@@ -186,7 +186,6 @@ LIBDOS9 LPCOMMANDLIST Dos9_MapCommandInfo(LPCOMMANDINFO lpciCommandInfo, int i)
 LIBDOS9 COMMANDFLAG   Dos9_GetCommandProc(char* lpCommandLine, LPCOMMANDLIST lpclCommandList, void** lpcpCommandProcedure)
 {
     int iRet;
-    LPCOMMANDLIST lpclCommandReturn=NULL;
 
 
     while (lpclCommandList) {
@@ -244,6 +243,57 @@ LIBDOS9 COMMANDFLAG   Dos9_GetCommandProc(char* lpCommandLine, LPCOMMANDLIST lpc
                 return lpclCommandList->cfFlag;
 
             }
+
+        }
+
+    }
+
+    return -1;
+}
+
+LIBDOS9 int				Dos9_ReplaceCommand(LPCOMMANDINFO lpciCommand, LPCOMMANDLIST lpclCommandList)
+{
+	int iRet;
+
+	char  *lpCommandLine=lpciCommand->ptrCommandName,
+		  *lpBuf;
+
+    while (lpclCommandList) {
+
+        iRet=strnicmp(lpCommandLine,
+                      lpclCommandList->ptrCommandName,
+                      lpclCommandList->iLenght);
+
+        if (iRet>0) {
+
+           lpclCommandList=lpclCommandList->lpclRightRoot;
+
+        } else if (iRet<0) {
+
+            lpclCommandList=lpclCommandList->lpclLeftRoot;
+
+        } else {
+
+			/* substitute the given COMMANDINFO structure */
+
+			if (lpciCommand->cfFlag & DOS9_ALIAS_FLAG) {
+
+				lpBuf=malloc(strlen(lpciCommand->lpCommandProc)+1);
+
+				if (!lpBuf)
+					return -1;
+
+				if (lpclCommandList->cfFlag & DOS9_ALIAS_FLAG)
+					free(lpclCommandList->lpCommandProc);
+
+				strcpy(lpBuf, lpciCommand->lpCommandProc);
+				lpclCommandList->lpCommandProc=lpBuf;
+
+			}
+
+			lpclCommandList->cfFlag=lpciCommand->cfFlag;
+
+			return 0;
 
         }
 
