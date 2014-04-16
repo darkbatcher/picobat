@@ -52,8 +52,8 @@
 
 void Dos9_SigHandler(int c)
 {
-	printf("Trigered break\n");
-	exit (-1);
+	/* this is to prevent ctrl-C or SIGINT to close the
+	   the command prompt. */
 }
 
 

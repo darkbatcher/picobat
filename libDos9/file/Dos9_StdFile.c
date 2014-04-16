@@ -49,12 +49,13 @@ int Dos9_GetExePath(char* lpBuf, size_t iBufSize)
 
 int Dos9_DirExists(char *ptrName)
 {
-    DIR* rep;
+    struct stat sStat;
 
-    if ((rep = opendir(ptrName))==NULL) return 0; /* Ouverture d'un dossier */
-    closedir(rep);
+    if (stat(ptrName, &sStat)==-1)
+        return FALSE;
 
-    return 1;
+    return S_ISDIR(sStat.st_mode);
+
 }
 
 int Dos9_UpdateCurrentDir(void)
@@ -68,6 +69,7 @@ int Dos9_SetCurrentDir(char* lpPath)
     chdir(lpPath);
     return (int)getcwd(lpCurrentDir+3, FILENAME_MAX);
 }
+
 char* Dos9_GetCurrentDir(void)
 {
     return lpCurrentDir+3;

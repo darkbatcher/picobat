@@ -63,10 +63,4 @@ void Tea_HtmlEscapeChar(ESTR* lpEsStr);
 void Tea_HtmlGetTitle(TEAPAGE* lpTeaPage, ESTR* lpEsStr);
 void Tea_HtmlLoadFile(ESTR* lpEsReturn, char* lpFileName);
 
-/* hlp output functions */
-void Tea_HlpOutputHandler(TEAPAGE* lpTeaPage, FILE* pFile, int i, char** argv);
-void Tea_HlpParseHandler(int iMsg ,void* lpData);
-
-void Tea_HlpMakeHeader(TEAPAGE* lpTeaPage, FILE* pFile);
-
 #endif // TEA_MODIFIERS_H
