@@ -610,7 +610,83 @@
 
 <code>make</code>
 
-</li><li><p> Switched to version <strong>2014.0.9</strong>, because <strong>dos9</strong> is becoming pretty develloped now. </p>
+</li><li><p> Switched to version <strong>2014.0.9</strong>, because <strong>dos9</strong> is becoming pretty develloped now.</p>
+
+</li></ul>
+<h2>Monday 7th, April</h2>
+
+<ul><li>
+<p> Fixed numerous bugs on the <strong>GNU/Linux</strong> version. Before that update, it would have been fairly difficult to make it work. I posted only fixes for GNU/Linux, but very few incompatibilities can be expected for BSD based operating systems (and anyway, the only BSD based os i've got is NetBSD, so that compatibility may not be achievied for other versions. The major fixes included are :</p>
+
+<ul><li>
+<p> A fix for the <strong>autotools</strong> build system, indeed, the old <strong>configure.ac</strong> did not appended needed libraries (for examples, there was confusions for <strong>libintl</strong>, that is included in <strong>GLibc</strong> on <strong>GNU/linux</strong>). I think i'll consider choosing a better buid systems, because in facts, <strong>autotools</strong> adds endless complications even for building quite simple code. The most Anoying drawback is that in fact, you can't use <strong>autoconf</strong> without using <strong>automake</strong>, otherwise, some bugs are introduced that you'll never hear of reading the documentation. Nevertheless, we don't need using <strong>automake</strong> to generate Makefile that we could write, especially when the output Makefile is about hundreds of KiB, and is constituted of almost hacks to make it work with <strong>make</strong>. Thus, it's a bit like using a program to produce garbage. <strong>autoconf</strong> provides lots of interesting features, but these advantages are superseeded by its drawbacks. In particular, the fact that it does not meet the UNIX conception standards (e.g. each program should do only do one thing, and do it the best), so that the dependencies between apparently distinct <strong>autotools</strong> programs make the developper to use all the <strong>autotools</strong> programs.</p>
+
+</li><li><p> A fix for the <strong>Dos9</strong> code itself. The last revisions of <strong>Dos9</strong> included a lot of features that had not been tested on *NIX operating systems. So that numerous incompatibilities were introduced along source code modification. Mainly, the <strong>thread</strong> part of <strong>libDos9</strong> had been left totally untested on real system for versions. I apologize for that, I should not have been waiting for such a long time to upgrade. So, fixes in the code that have been made are:</p>
+
+<ul><li>
+<p> Make wrapper arround undefined symbols comming from windows like <strong>stricmp</strong> (<strong>strcasecmp</strong> is used instead). </p>
+
+</li><li><p> Fixed bugs from <strong>libDos9/threads</strong>, It caused double free exception for some errors.</p>
+
+</li><li><p> Fixed used of <strong>strupr</strong> in <strong>tea</strong>. In fact, the symbol for <strong>strupr</strong> that was intended to be used on <strong>GNU/Linux</strong> was used on <strong>Windows</strong> platforms instead.</p>
+
+</li><li><p> Fixed incompatibilities in <strong>libDos9/file</strong>. In fact, default routines for *NIX used the functions <strong>fopen</strong> to check whether a file existed or not. The bug was introduced because in many *NIX systems, directories are indeed files that can be opened. <strong>libDos9</strong> now checks for regular files using the <strong>lstat</strong> function instead.</p>
+
+</li><li><p> Fixed incompatibilities with environment variables. This issue was caused by the fact that environment variables are case-sentitive for *NIX operating systems while they are not for Windows systems. In fact, <strong>Dos9</strong> already capitilized variable names when variables were set, however, similar feature was not provided for expansion. This is now fixed.</p>
+
+</li></ul>
+</li><li><p> Fixes on other files, (I mean, on files that are not required in order to make <strong>Dos9</strong> runing). Those fixes include:</p>
+
+<ul><li>
+<p> Changed the name of the <strong>Dos9</strong> executable from <strong>Dos9</strong> to <strong>dos9</strong>. This change will have no effect on windows, but it is usual, however, to have command executable names in lower characters. I may implement a feature for <strong>GNU/linux</strong> that ignore case for the command line. However, I now recommand using uncapitalized characters for command name, if you need compatibility, of course.</p>
+
+</li><li><p> Fixed a bug with the translation system. It used to scan file <strong>dos9/lang/Dos9_Help.c</strong> instead of file <strong>dos9/lang/Dos9_Lang.c</strong>.</p>
+
+</li><li><p> Fixed a bug from <strong>Dos9_Auto.bat</strong>, the current version dit not included the path <strong>%DOS9_PATH%</strong> in the <strong>%PATH%</strong> variable, that was problematic for *NIX systems, however, the <strong>Dos9</strong> executable filename should be looked up by the program itself, rather than being included in <strong>%PATH%</strong>.</p>
+
+</li></ul>
+</li></ul>
+</li><li><p> Changed the way libraries are built. They are now build from within the current direction, and they are located in <strong>./lib</strong> and headers for libraries are located in <strong>./include</strong>.</p>
+
+</li><li><p> Fixed a bug in Makefiles that caused the manual pages to be copied in a wrong directory (ie. <strong>./bin/share/man</strong> instead of <strong>./bin/share/man/man</strong> that was wrong.</p>
+
+</li></ul>
+<h2>Thursday 10th, april</h2>
+
+<ul><li>
+<p> Discovered a strange bug with pipes. This bug appears when input have several lines, when the pipe is closed, the input is not restored (or, at least, the input is not splitted from <strong>stdin</strong>). In fact, this should not occur since when the pipe is no more redirected, there is no more input left. This is strange though, as this problem does not happen with single-lines input that appears to work fairly good. It appears that this is caused by buffers that are stored internally in the kernel of the operating systems. A solution that I might consider is using regular files (instead of pipes) to produce somewhat of a pipe effect, because I haven't actually found a way to override the problem.</p>
+
+</li><li><p> Fixed a bug with the <strong>Dos9_ParseOutput</strong> function. It wasn't possible to specify <strong>2&gt;&1</strong> and <strong>&gt; foo</strong> simultaneously, so, you it was not possible to specify a redirection for <strong>stdin</strong> and <strong>stdout</strong> with <strong>truncate</strong> attribute.</p>
+
+</li></ul>
+<h2>Monday 14th, april</h2>
+
+<ul><li>
+<p> Added some corections that make the pipe function quite well on both <strong>GNU/Linux</strong> and <strong>Windows</strong> architectures (I also tested on <strong>NetBSD</strong> and it worked pretty well, without further tests however). </p>
+
+</li><li><p> Added a few fixes on languages, and I'm starting adding new messages for the <strong>file</strong> commands.</p>
+
+</li><li><p> Checked build on NetBSD. I've found out that <strong>Dos9</strong> conforms with <strong>POSIX.1-2001</strong>. Thus, On some platform, if you want to build if, you may specoify a configuration that defines the <strong>_POSIX_C_SOURCE</strong> macro, that is, type the configure line :</p>
+
+<code>./configure CFLAGS='-D_POSIX_C_SOURCE=200112'</code>
+
+<p>However, The NetBSD headers does not conform to <strong>POSIX.1</strong> and perform wrong function exposures, so that if you use, it, you might need to specify <strong>_NETBSD_SOURCE</strong> macro.</p>
+
+</li></ul>
+<h2>Thursday 17th, april</h2>
+
+<ul><li>
+<p> Added some translation message in the locale.</p>
+
+</li><li><p> Added new manual pages and lots of fixes in the manual pages.</p>
+
+</li><li><p> Added <strong>SHIFT</strong> command. It can be really easy to manage argument, now, however, I did not preform deep test on the command so that it might still be not reliable.</p>
+
+</li><li><p> Added <strong>/f</strong> switch to <strong>ALIAS</strong> command. This allows user to redefine internal commands and symbols, what was not possible previously. I decided to let user override internal commands because I found it to be an interesting thing to hack arround, allowing to set up replacement commands for some batch that needs enhanced compatibility features (although they should not need such compatibility features).</p>
+
+</li><li><p> Fixed a bug in <strong>Dos9_Thread.c</strong>, threads functions were making casts from different pointer sizes, ommiting the pointed object were different. Thus, writing 8 bytes to a location which was supposed to be 4 bytes long, depending on the locations of those data in the executable (and hence depending on compilation), it could cause really dangerous errors, such as stack corruption for example, in some rare cases. This is now fixed, preventing a rare crash to actually occur.</p>
+
+</li><li><p> This is the final build for at least a few months. I'll be very busy in the next few month, but I hope i'll be able to submit new fix starting in the summer holidays. </p>
 
 </li></ul>
 

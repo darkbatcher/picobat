@@ -200,8 +200,8 @@ LIBDOS9 void     Dos9_EndThread(void* iReturn)
 
         /* gets the value from the stack */
         Dos9_GetStack(lpThreadStack, (void**)&thId);
-	
-	
+
+
 
         if (pthread_equal(*thId, thSelfId)) {
             /* both threads are the same */
@@ -428,8 +428,8 @@ LIBDOS9 void     Dos9_AbortThread(THREAD* lpThId)
 
     STACK *lpStackElement,
           *lpLastStackElement;
-    int   iCurrent=*lpThId,
-          iSearch;
+    size_t iCurrent=*lpThId,
+		   iSearch;
 
     HANDLE hThread;
 
@@ -481,12 +481,14 @@ LIBDOS9 void     Dos9_AbortThread(THREAD* lpThId)
 LIBDOS9 void     Dos9_EndThread(void* iReturn)
 {
 
+	//fprintf(stderr, "Ending thread !\n");
+
     STACK *lpStackElement,
           *lpLastStackElement;
-    int   iCurrent,
-          iSearch;
+    size_t   iCurrent,
+          	 iSearch;
 
-    iCurrent=(int)GetCurrentThreadId();
+    iCurrent=(size_t)GetCurrentThreadId();
 
     Dos9_LockMutex(&_threadStack_Mutex);
 
@@ -525,6 +527,8 @@ LIBDOS9 void     Dos9_EndThread(void* iReturn)
     Dos9_ReleaseMutex(&_threadStack_Mutex);
 
     ExitThread((DWORD)iReturn);
+
+    //fprintf(stderr, "Thread ended\n");
 }
 
 LIBDOS9 int      Dos9_WaitForThread(THREAD* thId, void* lpRet)

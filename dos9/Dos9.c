@@ -1,4 +1,5 @@
 /*
+/*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
  *   Copyright (C) 2010-2014 DarkBatcher
@@ -62,7 +63,6 @@ int main(int argc, char *argv[])
 	/*  a function which initializes Dos9's engine,
 	    parses the command line argumments,
 	    And display starting message
-
 	*/
 
 	char *lpFileName="",

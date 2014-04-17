@@ -662,14 +662,7 @@ char* _Dos9_GetFileName(char* lpPath)
 LIBDOS9 int Dos9_FreeFileList(LPFILELIST lpflFileList)
 {
 
-	THREAD hThread;
-
-	Dos9_BeginThread(&hThread,
-	                 (void(*)(void*))_Dos9_FreeFileList,
-	                 0,
-	                 (void*)(lpflFileList)
-	                );
-
+	_Dos9_FreeFileList(lpflFileList);
 
 	return 0;
 
@@ -775,8 +768,6 @@ int _Dos9_FreeFileList(LPFILELIST lpflFileList)
 		lpflNext=lpflFileList->lpflNext;
 		free(lpflFileList);
 	}
-
-	Dos9_EndThread(0);
 
 	return 0;
 }

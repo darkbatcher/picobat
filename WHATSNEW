@@ -785,5 +785,167 @@ TUESDAY 3RD, APRIL
              make
 
         - Switched to version 2014.0.9, because DOS9 is becoming pretty 
-          develloped now. 
+          develloped now.
+
+MONDAY 7TH, APRIL
+
+        - Fixed numerous bugs on the GNU/LINUX version. Before that update, it 
+          would have been fairly difficult to make it work. I posted only 
+          fixes for GNU/Linux, but very few incompatibilities can be expected 
+          for BSD based operating systems (and anyway, the only BSD based os 
+          i've got is NetBSD, so that compatibility may not be achievied for 
+          other versions. The major fixes included are :
+
+             - A fix for the AUTOTOOLS build system, indeed, the old 
+               CONFIGURE.AC did not appended needed libraries (for examples, 
+               there was confusions for LIBINTL, that is included in GLIBC on 
+               GNU/LINUX). I think i'll consider choosing a better buid 
+               systems, because in facts, AUTOTOOLS adds endless complications 
+               even for building quite simple code. The most Anoying drawback 
+               is that in fact, you can't use AUTOCONF without using 
+               AUTOMAKE, otherwise, some bugs are introduced that you'll never 
+               hear of reading the documentation. Nevertheless, we don't need 
+               using AUTOMAKE to generate Makefile that we could write, 
+               especially when the output Makefile is about hundreds of KiB, 
+               and is constituted of almost hacks to make it work with MAKE. 
+               Thus, it's a bit like using a program to produce garbage. 
+               AUTOCONF provides lots of interesting features, but these 
+               advantages are superseeded by its drawbacks. In particular, the 
+               fact that it does not meet the UNIX conception standards (e.g. 
+               each program should do only do one thing, and do it the best), 
+               so that the dependencies between apparently distinct AUTOTOOLS 
+               programs make the developper to use all the AUTOTOOLS programs.
+
+             - A fix for the DOS9 code itself. The last revisions of DOS9 
+               included a lot of features that had not been tested on *NIX 
+               operating systems. So that numerous incompatibilities were 
+               introduced along source code modification. Mainly, the THREAD 
+               part of LIBDOS9 had been left totally untested on real system 
+               for versions. I apologize for that, I should not have been 
+               waiting for such a long time to upgrade. So, fixes in the code 
+               that have been made are:
+
+                  - Make wrapper arround undefined symbols comming from 
+                    windows like STRICMP (STRCASECMP is used instead). 
+
+                  - Fixed bugs from LIBDOS9/THREADS, It caused double free 
+                    exception for some errors.
+
+                  - Fixed used of STRUPR in TEA. In fact, the symbol for 
+                    STRUPR that was intended to be used on GNU/LINUX was used 
+                    on WINDOWS platforms instead.
+
+                  - Fixed incompatibilities in LIBDOS9/FILE. In fact, default 
+                    routines for *NIX used the functions FOPEN to check 
+                    whether a file existed or not. The bug was introduced 
+                    because in many *NIX systems, directories are indeed files 
+                    that can be opened. LIBDOS9 now checks for regular files 
+                    using the LSTAT function instead.
+
+                  - Fixed incompatibilities with environment variables. This 
+                    issue was caused by the fact that environment variables 
+                    are case-sentitive for *NIX operating systems while they 
+                    are not for Windows systems. In fact, DOS9 already 
+                    capitilized variable names when variables were set, 
+                    however, similar feature was not provided for expansion. 
+                    This is now fixed.
+
+             - Fixes on other files, (I mean, on files that are not required 
+               in order to make DOS9 runing). Those fixes include:
+
+                  - Changed the name of the DOS9 executable from DOS9 to 
+                    DOS9. This change will have no effect on windows, but it 
+                    is usual, however, to have command executable names in 
+                    lower characters. I may implement a feature for GNU/LINUX 
+                    that ignore case for the command line. However, I now 
+                    recommand using uncapitalized characters for command name, 
+                    if you need compatibility, of course.
+
+                  - Fixed a bug with the translation system. It used to scan 
+                    file DOS9/LANG/DOS9_HELP.C instead of file 
+                    DOS9/LANG/DOS9_LANG.C.
+
+                  - Fixed a bug from DOS9_AUTO.BAT, the current version dit 
+                    not included the path %DOS9_PATH% in the %PATH% variable, 
+                    that was problematic for *NIX systems, however, the DOS9 
+                    executable filename should be looked up by the program 
+                    itself, rather than being included in %PATH%.
+
+        - Changed the way libraries are built. They are now build from within 
+          the current direction, and they are located in ./LIB and headers for 
+          libraries are located in ./INCLUDE.
+
+        - Fixed a bug in Makefiles that caused the manual pages to be copied 
+          in a wrong directory (ie. ./BIN/SHARE/MAN instead of 
+          ./BIN/SHARE/MAN/MAN that was wrong.
+
+THURSDAY 10TH, APRIL
+
+        - Discovered a strange bug with pipes. This bug appears when input 
+          have several lines, when the pipe is closed, the input is not 
+          restored (or, at least, the input is not splitted from STDIN). In 
+          fact, this should not occur since when the pipe is no more 
+          redirected, there is no more input left. This is strange though, as 
+          this problem does not happen with single-lines input that appears to 
+          work fairly good. It appears that this is caused by buffers that are 
+          stored internally in the kernel of the operating systems. A solution 
+          that I might consider is using regular files (instead of pipes) to 
+          produce somewhat of a pipe effect, because I haven't actually found 
+          a way to override the problem.
+
+        - Fixed a bug with the DOS9_PARSEOUTPUT function. It wasn't possible 
+          to specify 2>&1 and > FOO simultaneously, so, you it was not 
+          possible to specify a redirection for STDIN and STDOUT with 
+          TRUNCATE attribute.
+
+MONDAY 14TH, APRIL
+
+        - Added some corections that make the pipe function quite well on both 
+          GNU/LINUX and WINDOWS architectures (I also tested on NETBSD and it 
+          worked pretty well, without further tests however). 
+
+        - Added a few fixes on languages, and I'm starting adding new messages 
+          for the FILE commands.
+
+        - Checked build on NetBSD. I've found out that DOS9 conforms with 
+          POSIX.1-2001. Thus, On some platform, if you want to build if, you 
+          may specoify a configuration that defines the _POSIX_C_SOURCE macro, 
+          that is, type the configure line :
+
+             ./configure CFLAGS='-D_POSIX_C_SOURCE=200112'
+
+          However, The NetBSD headers does not conform to POSIX.1 and perform 
+          wrong function exposures, so that if you use, it, you might need to 
+          specify _NETBSD_SOURCE macro.
+
+THURSDAY 17TH, APRIL
+
+        - Added some translation message in the locale.
+
+        - Added new manual pages and lots of fixes in the manual pages.
+
+        - Added SHIFT command. It can be really easy to manage argument, now, 
+          however, I did not preform deep test on the command so that it might 
+          still be not reliable.
+
+        - Added /F switch to ALIAS command. This allows user to redefine 
+          internal commands and symbols, what was not possible previously. I 
+          decided to let user override internal commands because I found it to 
+          be an interesting thing to hack arround, allowing to set up 
+          replacement commands for some batch that needs enhanced 
+          compatibility features (although they should not need such 
+          compatibility features).
+
+        - Fixed a bug in DOS9_THREAD.C, threads functions were making casts 
+          from different pointer sizes, ommiting the pointed object were 
+          different. Thus, writing 8 bytes to a location which was supposed to 
+          be 4 bytes long, depending on the locations of those data in the 
+          executable (and hence depending on compilation), it could cause 
+          really dangerous errors, such as stack corruption for example, in 
+          some rare cases. This is now fixed, preventing a rare crash to 
+          actually occur.
+
+        - This is the final build for at least a few months. I'll be very busy 
+          in the next few month, but I hope i'll be able to submit new fix 
+          starting in the summer holidays. 
 

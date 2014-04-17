@@ -809,3 +809,11 @@ ${make}
 	interesting thing to hack arround, allowing to set up replacement commands for some batch that needs enhanced
 	compatibility features (although they should not need such compatibility features).
 	
+	- Fixed a bug in {Dos9_Thread.c}, threads functions were making casts from different pointer sizes, ommiting
+	the pointed object were different. Thus, writing 8 bytes to a location which was supposed to be 4 bytes long,
+	depending on the locations of those data in the executable (and hence depending on compilation), it could
+	cause really dangerous errors, such as stack corruption for example, in some rare cases. This is now fixed,
+	preventing a rare crash to actually occur.
+	
+	- This is the final build for at least a few months. I'll be very busy in the next few month, but I hope i'll
+	be able to submit new fix starting in the summer holidays.
