@@ -794,4 +794,18 @@ ${make}
 	@- However, The NetBSD headers does not conform to {POSIX.1} and
 	perform wrong function exposures, so that if you use, it, you might
 	need to specify {_NETBSD_SOURCE} macro.
- 
+	
+{{Thursday 17th, april}}
+
+	- Added some translation message in the locale.
+	
+	- Added new manual pages and lots of fixes in the manual pages.
+	
+	- Added {SHIFT} command. It can be really easy to manage argument, now,
+	however, I did not preform deep test on the command so that it might still be not reliable.
+	
+	- Added {/f} switch to {ALIAS} command. This allows user to redefine internal commands and symbols, what was
+	not possible previously. I decided to let user override internal commands because I found it to be an
+	interesting thing to hack arround, allowing to set up replacement commands for some batch that needs enhanced
+	compatibility features (although they should not need such compatibility features).
+	

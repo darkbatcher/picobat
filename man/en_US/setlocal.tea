@@ -1,29 +1,55 @@
-{{SETLOCAL command}}
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 
-	{SETLOCAL} command changes {dos9|Dos9} interpretor's mode. For example
-	It allow enabling the {spec/exp|delayed expansion}.
+{{Commande SETLOCAL}}
+
+	La commande {SETLOCAL} permet de changer le mode de l'interpréteur
+	de commande {Dos9}. Elle permet par exemple d'activer
+	{spec/exp|l'expansion retardée de variable}.
 
 {{Synopsis}}
 
-${	SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] [ENABLEFLOATS | DISABLEFLOATS] [ENABLEDOS9MODE | DISABLEDOS9MODE]}
+${	SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] [ENABLEFLOATS | DISABLEFLOATS] [CMDLYCORRECT | CMDLYINCORRECT]}
 	
-	Enables/Disables the following modes:
+	Active/désactive les modes suivants:
 	
-		- {DELAYEDEXPANSION} : Enables/Disables {spec/exp|delayed expansion}.
+		- {ENABLEDELAYEDEXPANSION}, {DISABLEDELAYEDEXPANSION} : Active/désactive 
+		  {spec/exp|l'expansion retardée de variable}.
 		
-		- {FLOATS} : Enables/Disables {spec/floats|floating numbers}.
+		- {ENABLEFLOATS}, {DISABLEFLOATS} : Active/désactive les {spec/floats|nombres flotants}.
 		
-		- {DOS9MODE} : Enable/Disables {spec/new|Dos9's new features}.
+		- {CMDLYCORRECT}, {CMDLYINCORRECT} : Active/désactive les options de compatibilité
+		avec {cmd.exe}.
 
-{{Compatibility}}
+{{Compatibilite}}
 
-	Fully compatible with {cmd.exe}. Both {ENABLEEXTENSION} and {DISABLEEXTENSIONS}
-	are simply ignored.
-
-	{ENABLEFLOATS} and {DISABLEFLOATS} parameters are avaliable since version {0.5}.
-
-    {DISABLEDOS9MODE} and {DISAABLEDOS9MODE} are avaliable since version {0.7}.
+	Complètement compatible avec {cmd.exe}. Les modes {ENABLEEXTENSION}
+	et {DISABLEEXTENSION} seront simplements ignorés, car ils sont supportés par
+	défauts, et il n'est plus d'aucun intérêt de les désactiver pour créer des
+	scripts portables sur les version anciennes de {windows} comme {MS-WINDOWS 98}.
 	
-{{See also}}
+	Les paramètres {ENABLEFLOATS} et {DISABLEFLOATS} sont disponibles
+	depuis la version {0.5}.
+	
+	Les paramètres {CMDLYCORRECT} et {CMDLYINCORRECT} sont disponibles depuis
+	la version {2014.0.9}. Auparavant, ils étaient nommés {DISABLEDOS9MODE} et 
+	{DISABLEDOS9MODE}, depuis la version {0.7}.
+	
+{{A voir aussi}}
 
-	{set|SET Command}, {commands|Command list}
+	{set|Commande SET}, {commands|Liste des commandes}

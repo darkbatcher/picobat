@@ -30,167 +30,167 @@
 	
 {{Synopsis}}
 
-${	SET [/a | /a[:]f] variable=expression}
+	${SET [/a | /a[:]f] variable=expression}
 
-	   Affecte la valeur d'une {expression mathématique} à la variable
-	   {variable}. Cette command à un comportement dépendent du mode fixé par
-	   la commande {setlocal|SETLOCAL} avec le paramètre {ENABLEFLOATS}.
-	   
-	   L'opérateur {=} peut être remplacé dans cet exemple par les opérateurs suivants:
-	   
-			- {+=} : Addition du résultat à {variable}.
-			
-			- {-=} : Soustraction du résultat à {variable}.
-			
-			- {*=} : Multiplication de {variable} par le résultat.
-			
-			- {/=} : Division de {variable} par le résultat.
+   Affecte la valeur d'une {expression mathématique} à la variable
+   {variable}. Cette commande à un comportement dépendent du mode fixé par
+   la commande {setlocal|SETLOCAL} avec le paramètre {ENABLEFLOATS}.
+   
+   L'opérateur {=} peut être remplacé dans cet exemple par les opérateurs suivants:
+   
+		- {+=} : Addition du résultat à {variable}.
+		
+		- {-=} : Soustraction du résultat à {variable}.
+		
+		- {*=} : Multiplication de {variable} par le résultat.
+		
+		- {/=} : Division de {variable} par le résultat.
 			
 	  
 {{Les Opérateurs}}
 	   
-	   L'expression mathématique doit être constitué d'une suite d'opérateurs et d'opérandes. Chaque opérande
-	   doît être séparé de l'opérande suivant par un opérateur.
-	   
-	   Les opérateurs utilisables avec les nombres {flotants} sont:
-	   
-			- {+} : Addition.
-	   
-			- {-} : Soustraction.
-	   
-			- {*} : Mutiplication.
-	   
-			- {/} : Division.
-			
-			- {^} : Elevation à une puissance.
-			
-			- {%} : Modulo (Reste de la division Euclidienne étendue aux nombres flotants).
+   L'expression mathématique doit être constituée d'une suite d'opérateurs et d'opérandes. Chaque opérande
+   doît être séparé de l'opérande suivant par un opérateur.
+   
+   Les opérateurs utilisables avec les nombres {flotants} sont:
+   
+		- {+} : Addition.
+   
+		- {-} : Soustraction.
+   
+		- {*} : Mutiplication.
+   
+		- {/} : Division.
 		
-		La multiplication, la division et le modulo sont tous prioritaires sur l'addition et la soustraction.
-		Il est néamoins possible de modifier la priorité des opérations en utilisant les parenthèse {(} et {)}.
-			
-		Il est également possible d'utiliser des opérateurs unaires, c'est-à-dire des opérateur affectant
-		uniquement l'opérande qui le suit à droite. Ces opérateurs sont :
+		- {^} : Elevation à une puissance.
 		
-			- {-} : Signe négatif.
-			
-		Les opérateurs unaires ont la priorité la plus haute.
+		- {%} : Modulo (Reste de la division Euclidienne étendue aux nombres flotants).
+	
+	La multiplication, la division et le modulo sont tous prioritaires sur l'addition et la soustraction.
+	Il est néamoins possible de modifier la priorité des opérations en utilisant les parenthèse {(} et {)}.
+		
+	Il est également possible d'utiliser des opérateurs unaires, c'est-à-dire des opérateur affectant
+	uniquement l'opérande qui le suit à droite. Ces opérateurs sont :
+	
+		- {-} : Signe négatif.
+		
+	Les opérateurs unaires ont la priorité la plus haute.
 			
 {{Les fonctions mathématiques}}
 			
 			
-		En plus de contenir des opérateurs, l'{expression mathématique} peut contenir des 
-		fonctions mathématiques. Pour spécifier une fonction mathématique, 
-		il faut entourer son argument par des parenthèses. Par exemple :
+	En plus de contenir des opérateurs, l'{expression mathématique} peut contenir des 
+	fonctions mathématiques. Pour spécifier une fonction mathématique, 
+	il faut entourer son argument par des parenthèses. Par exemple :
 		
 ${fonction(expression)}
 
-		Les fonction fouenies sont :
+	Les fonction fournies sont :
+	
+		- {exp} : Fonction exponnentielle.
 		
-			- {exp} : Fonction exponnentielle.
-			
-			- {log} : Fonction logarithme népérien.
-			
-			- {log10} : Fonction logarithme décimal.
-			
-			- {sqrt} : Fonction racine carrée.
-			
-			- Fonctions trigonométiques :
-			
-			-- {sin} : Fonction sinus.
-			
-			-- {cos} : Fonction cosinus.
-			
-			-- {tan} : Fonction tangente.
-			
-			-- {cot} : Fonction cotangente.
-			
-			-- {sec} : Fonction sécante.
-			
-			-- {csc} : Fonction cosécante.
-			
-			- Fonction trigonométiques inverses :
-			
-			-- {asin} : Fonction arc sinus.
-			
-			-- {acos} : Fonction arc cosinus.
-			
-			-- {atan} : Fonction arc tangente.
-			
-			-- {acot} : Fonction arc cotangente.
-			
-			-- {acec} : Fonction arc sécante.
-			
-			-- {acsc} : Fonction arc cosécante.
-			
-			- Fonctions trigonométiques hyperboliques :
-			
-			-- {sinh} : Fonction sinus hyperbolique.
-			
-			-- {cosh} : Fonction cosinus hyperbolique.
-			
-			-- {tanh} : Fonction tangente hyperbolique.
-			
-			-- {coth} : Fonction cotangente hyperbolique.
-			
-			-- {sech} : Fonction sécante hyperbolique.
-			
-			-- {csch} : Fonction cosécante hyperbolique.
-			
-			- Fonction trigonométiques hyperboliques inverses :
-			
-			-- {asinh} : Fonction argument sinus hyperbolique.
-			
-			-- {acosh} : Fonction argument cosinus hyperbolique.
-			
-			-- {atanh} : Fonction argument tangente hyperbolique.
-			
-			-- {acoth} : Fonction argument cotangente hyperbolique.
-			
-			-- {acech} : Fonction argument sécante hyperbolique.
-			
-			-- {acsch} : Fonction argument cosécante hyperbolique.
-			
-			- {abs} : Fonction valeur absolue.
-			
-			- {step} : Fonction échelon unitaire (fonction de Heaviside). La fonction
-			vaut {0} si {x < 0} et {1} sinon.
-			
-			- {delta} : Fonction de Dirac. Cette fonction vaut l'infini si {x = 0} et
-			{0} sinon.
-			
-			- {nandelta} : Fonction de Dirac avec {NAN}. Cette fonction vaut {NAN} (Not A Number)
-			si {x=0} et {0} sinon.
+		- {log} : Fonction logarithme népérien.
+		
+		- {log10} : Fonction logarithme décimal.
+		
+		- {sqrt} : Fonction racine carrée.
+		
+		- Fonctions trigonométiques :
+		
+		-- {sin} : Fonction sinus.
+		
+		-- {cos} : Fonction cosinus.
+		
+		-- {tan} : Fonction tangente.
+		
+		-- {cot} : Fonction cotangente.
+		
+		-- {sec} : Fonction sécante.
+		
+		-- {csc} : Fonction cosécante.
+		
+		- Fonction trigonométiques inverses :
+		
+		-- {asin} : Fonction arc sinus.
+		
+		-- {acos} : Fonction arc cosinus.
+		
+		-- {atan} : Fonction arc tangente.
+		
+		-- {acot} : Fonction arc cotangente.
+		
+		-- {acec} : Fonction arc sécante.
+		
+		-- {acsc} : Fonction arc cosécante.
+		
+		- Fonctions trigonométiques hyperboliques :
+		
+		-- {sinh} : Fonction sinus hyperbolique.
+		
+		-- {cosh} : Fonction cosinus hyperbolique.
+		
+		-- {tanh} : Fonction tangente hyperbolique.
+		
+		-- {coth} : Fonction cotangente hyperbolique.
+		
+		-- {sech} : Fonction sécante hyperbolique.
+		
+		-- {csch} : Fonction cosécante hyperbolique.
+		
+		- Fonction trigonométiques hyperboliques inverses :
+		
+		-- {asinh} : Fonction argument sinus hyperbolique.
+		
+		-- {acosh} : Fonction argument cosinus hyperbolique.
+		
+		-- {atanh} : Fonction argument tangente hyperbolique.
+		
+		-- {acoth} : Fonction argument cotangente hyperbolique.
+		
+		-- {acech} : Fonction argument sécante hyperbolique.
+		
+		-- {acsch} : Fonction argument cosécante hyperbolique.
+		
+		- {abs} : Fonction valeur absolue.
+		
+		- {step} : Fonction échelon unitaire (fonction de Heaviside). La fonction
+		vaut {0} si {x < 0} et {1} sinon.
+		
+		- {delta} : Fonction de Dirac. Cette fonction vaut l'infini si {x = 0} et
+		{0} sinon.
+		
+		- {nandelta} : Fonction de Dirac avec {NAN}. Cette fonction vaut {NAN} (Not A Number)
+		si {x=0} et {0} sinon.
 			
 {{Les Constantes}}
 
-			Enfin, des constantes mathématiques sont aussi définies. Ces constantes sont :
-			
-			- {e}
-			
-			- {log2e} : log2(e)
-			
-			- {log10e} : log10(e)
+	Enfin, des constantes mathématiques sont aussi définies. Ces constantes sont :
+		
+		- {e}
+		
+		- {log2e} : log2(e)
+		
+		- {log10e} : log10(e)
 
-			- {ln2} : ln(2)
-			
-			- {ln10} : ln(10)
-			
-			- {pi}
-			
-			- {pi_2} : pi/2
-			
-			- {pi_4} : pi/4
-			
-			- {1_pi} : 1/pi
-			
-			- {2_pi} : 2/pi
-			
-			- {2_sqrtpi} : 2/sqrt(pi}
-			
-			- {sqrt2} : sqrt(2)
-			
-			- {sqrt1_2} : sqrt(1/2), ou bien 1/sqrt(2) ou sqrt(2)/2.
+		- {ln2} : ln(2)
+		
+		- {ln10} : ln(10)
+		
+		- {pi}
+		
+		- {pi_2} : pi/2
+		
+		- {pi_4} : pi/4
+		
+		- {1_pi} : 1/pi
+		
+		- {2_pi} : 2/pi
+		
+		- {2_sqrtpi} : 2/sqrt(pi}
+		
+		- {sqrt2} : sqrt(2)
+		
+		- {sqrt1_2} : sqrt(1/2), ou bien 1/sqrt(2) ou sqrt(2)/2.
 
 {{Les nombres spéciaux}}
 
@@ -207,7 +207,7 @@ ${fonction(expression)}
 
 {{Précision}}
 
-	Contrairement au entier, traditionnelement bornés entre {-2 147 483 648} et {+2 147 483 647}, les 
+	Contrairement aux entiers, traditionnelement bornés entre {-2 147 483 648} et {+2 147 483 647}, les 
 	nombres flotants ont un rayon d'utilisation de {2,2250738585072014e-308} à {1,7976931348623157e+308} (en
 	valeur absolue). Les nombres flotants ont néamoins une précision restreinte (environ 16 chiffres significatifs),
 	les calculs qui sont exécutés sont donc de manière approchée, et les valeurs sont arrondies à la valeur la plus
@@ -242,12 +242,12 @@ ${2*10^60-2*10^60+1}
 {{Compatibilité}}
 
 	Disponible depuis la version {0.7.1.0}. Auparavant, le support des expression n'était
-	pas complet. La version {0.7.0.0} ne supportait pas l'opérateur {%} ni la fonction {ln}.
+	pas complet. La version {0.7.0.0} ne supportait pas l'opérateur {%} ni la fonction {log}.
 	Les versions précédentes ne supportaient quant à elles qu'une version simplifiée des expressions.		
 	
-	Non compatible avec {cmd.exe}. En effet, {cmd.exe} ne supporte pas les expression expressions
+	Non compatible avec {cmd.exe}. En effet, {cmd.exe} ne supporte pas les expression
 	avec des nombres flotants.
 	
-{{A voir aussi}}
+{{À voir aussi}}
 
 	{set|Commande SET}, {setai|Commande SET(/a)(entiers)}
