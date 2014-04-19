@@ -947,5 +947,13 @@ THURSDAY 17TH, APRIL
 
         - This is the final build for at least a few months. I'll be very busy 
           in the next few month, but I hope i'll be able to submit new fix 
-          starting in the summer holidays. 
+          starting in the summer holidays.
+
+SATURDAY 20, APRIL
+
+        - Fixed a bug that caused DOS9 to crash if either %PATH% or %PATHEXT% 
+          (only for windows) were not in the command environment.
+
+        - Fixed omition of ANSICON on the DOS9_AUTO.BAT, which is launched at 
+          startup. 
 

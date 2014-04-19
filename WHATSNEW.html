@@ -686,7 +686,15 @@
 
 </li><li><p> Fixed a bug in <strong>Dos9_Thread.c</strong>, threads functions were making casts from different pointer sizes, ommiting the pointed object were different. Thus, writing 8 bytes to a location which was supposed to be 4 bytes long, depending on the locations of those data in the executable (and hence depending on compilation), it could cause really dangerous errors, such as stack corruption for example, in some rare cases. This is now fixed, preventing a rare crash to actually occur.</p>
 
-</li><li><p> This is the final build for at least a few months. I'll be very busy in the next few month, but I hope i'll be able to submit new fix starting in the summer holidays. </p>
+</li><li><p> This is the final build for at least a few months. I'll be very busy in the next few month, but I hope i'll be able to submit new fix starting in the summer holidays.</p>
+
+</li></ul>
+<h2>Saturday 20, april</h2>
+
+<ul><li>
+<p> Fixed a bug that caused <strong>Dos9</strong> to crash if either <strong>%PATH%</strong> or <strong>%PATHEXT%</strong> (only for windows) were not in the command environment.</p>
+
+</li><li><p> Fixed omition of <strong>ansicon</strong> on the <strong>Dos9_Auto.bat</strong>, which is launched at startup. </p>
 
 </li></ul>
 

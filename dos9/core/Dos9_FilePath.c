@@ -48,6 +48,7 @@ int Dos9_GetFilePath(char* lpFullPath, const char* lpPartial, size_t iBufSize)
 
 #endif // WIN32
 
+
 	DOS9_DBG("[Dos9_GetFilePath()]*** Start research of file : \"%s\"\n", lpPartial);
 
 	do {
@@ -89,6 +90,9 @@ int Dos9_GetFilePath(char* lpFullPath, const char* lpPartial, size_t iBufSize)
 			if (Dos9_FileExists(Dos9_EsToChar(lpEsFinalPath)))
 				goto file_found;
 
+			if (lpPathExtToken == NULL)
+				break;
+
 
 
 		} while ((lpPathExtToken=Dos9_GetPathNextPart(lpPathExtToken, lpEsPart)));
@@ -103,6 +107,9 @@ int Dos9_GetFilePath(char* lpFullPath, const char* lpPartial, size_t iBufSize)
 		}
 
 #endif
+
+		if (lpPathToken == NULL)
+			break;
 
 
 	} while ((lpPathToken=Dos9_GetPathNextPart(lpPathToken, lpEsPart)));
