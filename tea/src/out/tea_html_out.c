@@ -381,7 +381,7 @@ void Tea_HtmlParseHandler(int iMsg ,void* lpData)
 
 void Tea_HtmlEscapeChar(ESTR* lpEsStr)
 {
-
+	Dos9_EsReplace(lpEsStr, "&", "&amp;");
 	Dos9_EsReplace(lpEsStr, "<", "&lt;");
 	Dos9_EsReplace(lpEsStr, ">", "&gt;");
 

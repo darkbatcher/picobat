@@ -954,6 +954,12 @@ SATURDAY 20, APRIL
         - Fixed a bug that caused DOS9 to crash if either %PATH% or %PATHEXT% 
           (only for windows) were not in the command environment.
 
+        - Corrected a bug with TEA in HTML mode. The parser did used to escape 
+          the reserved characters > and < but did not care of &. This bug is 
+          corrected, enabling HTML codes to work perfectly well. I hadn't 
+          noticed it until yet because most recents browsers do not care about 
+          such errors, preventing error to be easilly trigered.
+
         - Fixed omition of ANSICON on the DOS9_AUTO.BAT, which is launched at 
           startup. 
 

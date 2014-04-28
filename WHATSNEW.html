@@ -238,7 +238,7 @@
 <h2>Friday 17th, Junuary</h2>
 
 <ul><li>
-<p> Fixed a bug that caused some particular redirections to be misinterpreted, particularly, in blocks ``(echo test&gt;NUL)'' trigered an error, because the output was interpreted to be a redirection to file ``NUL)''. This has been solved, and both '(' , '|' and '&' operators are no prioritary.</p>
+<p> Fixed a bug that caused some particular redirections to be misinterpreted, particularly, in blocks ``(echo test&gt;NUL)'' trigered an error, because the output was interpreted to be a redirection to file ``NUL)''. This has been solved, and both '(' , '|' and '&amp;' operators are no prioritary.</p>
 
 </li><li><p> Modified version information management. Now version are numbered in the folowing way: <strong>YYYY.major.minor[tag]</strong>. Where :</p>
 
@@ -266,7 +266,7 @@
 <h2>Monday 20th, Junuary</h2>
 
 <ul><li>
-<p> Corrected a but that cause line like ``:: comment & command'' to execute the command <strong>command</strong>, unlike <strong>cmd.exe</strong>'s behaviour.</p>
+<p> Corrected a but that cause line like ``:: comment &amp; command'' to execute the command <strong>command</strong>, unlike <strong>cmd.exe</strong>'s behaviour.</p>
 
 </li><li><p> Added <strong>REM</strong> command and comments manual page.</p>
 
@@ -398,13 +398,13 @@
 <ul><li>
 <p> Changed the behaviour of the function which decide wether the command is multiline or not. It now correctly handles parenthesis that are not multiline. For example, the following code used to be expected to continue on next lines :</p>
 
-<code>echo(some test&if 1 equ 1 echo some other test</code>
+<code>echo(some test&amp;if 1 equ 1 echo some other test</code>
 
 <p>However, this behaviour is not actually resolved, indeed, some error might occurs (in some very special case) if the previous is run. This is still to be fixed.</p>
 
 </li><li><p> Added more compatible version of <strong>ECHO</strong> command. The command now tolerates various non-mainstream syntax (ie. using other characters than '.' to force print). The following variants are accepted :</p>
 
-<code>echo!<br />echo"<br />echo#<br />echo$<br />echo%<br />echo&<br />echo'<br />echo(<br />echo)<br />echo*<br />echo+<br />echo,<br />echo-<br />echo.<br />echo/<br />echo[<br />echo\<br />echo]<br />echo^<br />echo_<br />echo`</code>
+<code>echo!<br />echo"<br />echo#<br />echo$<br />echo%<br />echo&amp;<br />echo'<br />echo(<br />echo)<br />echo*<br />echo+<br />echo,<br />echo-<br />echo.<br />echo/<br />echo[<br />echo\<br />echo]<br />echo^<br />echo_<br />echo`</code>
 
 <p>Most of these syntax are however not recommended, because they can cause obvious syntax errors, and are only provided for compatibility purposes.</p>
 
@@ -656,7 +656,7 @@
 <ul><li>
 <p> Discovered a strange bug with pipes. This bug appears when input have several lines, when the pipe is closed, the input is not restored (or, at least, the input is not splitted from <strong>stdin</strong>). In fact, this should not occur since when the pipe is no more redirected, there is no more input left. This is strange though, as this problem does not happen with single-lines input that appears to work fairly good. It appears that this is caused by buffers that are stored internally in the kernel of the operating systems. A solution that I might consider is using regular files (instead of pipes) to produce somewhat of a pipe effect, because I haven't actually found a way to override the problem.</p>
 
-</li><li><p> Fixed a bug with the <strong>Dos9_ParseOutput</strong> function. It wasn't possible to specify <strong>2&gt;&1</strong> and <strong>&gt; foo</strong> simultaneously, so, you it was not possible to specify a redirection for <strong>stdin</strong> and <strong>stdout</strong> with <strong>truncate</strong> attribute.</p>
+</li><li><p> Fixed a bug with the <strong>Dos9_ParseOutput</strong> function. It wasn't possible to specify <strong>2&gt;&amp;1</strong> and <strong>&gt; foo</strong> simultaneously, so, you it was not possible to specify a redirection for <strong>stdin</strong> and <strong>stdout</strong> with <strong>truncate</strong> attribute.</p>
 
 </li></ul>
 <h2>Monday 14th, april</h2>
@@ -693,6 +693,8 @@
 
 <ul><li>
 <p> Fixed a bug that caused <strong>Dos9</strong> to crash if either <strong>%PATH%</strong> or <strong>%PATHEXT%</strong> (only for windows) were not in the command environment.</p>
+
+</li><li><p> Corrected a bug with <strong>tea</strong> in <strong>html</strong> mode. The parser did used to escape the reserved characters <strong>&gt;</strong> and <strong>&lt;</strong> but did not care of <strong>&amp;</strong>. This bug is corrected, enabling <strong>html</strong> codes to work perfectly well. I hadn't noticed it until yet because most recents browsers do not care about such errors, preventing error to be easilly trigered.</p>
 
 </li><li><p> Fixed omition of <strong>ansicon</strong> on the <strong>Dos9_Auto.bat</strong>, which is launched at startup. </p>
 

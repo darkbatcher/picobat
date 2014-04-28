@@ -25,7 +25,7 @@
 
 #include <libDos9.h>
 
-// #define DOS9_DBG_MODE
+#define DOS9_DBG_MODE
 #include "Dos9_Debug.h"
 
 #include "Dos9_FilePath.h"
@@ -48,8 +48,9 @@ int Dos9_GetFilePath(char* lpFullPath, const char* lpPartial, size_t iBufSize)
 
 #endif // WIN32
 
-
-	DOS9_DBG("[Dos9_GetFilePath()]*** Start research of file : \"%s\"\n", lpPartial);
+	DOS9_DBG("[Dos9_GetFilePath()]*** Start research of file : \"%s\"\n\n", lpPartial);
+	DOS9_DBG("[Dos9_GetFilePath()] PATH variable content=[\n%s\n]\n\n", getenv("PATH"));
+	DOS9_DBG("[Dos9_GetFilePath()] PATHEXT variable content=[\n%s\n]\n\n", getenv("PATHEXT"));
 
 	do {
 

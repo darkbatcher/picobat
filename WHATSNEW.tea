@@ -823,4 +823,9 @@ ${make}
 	- Fixed a bug that caused {Dos9} to crash if either {%PATH%} or {%PATHEXT%} (only for windows) were not in the
 	command environment.
 	
+	- Corrected a bug with {tea} in {html} mode. The parser did used to escape the reserved characters {>} and {<}
+	but did not care of {&}. This bug is corrected, enabling {html} codes to work perfectly well. I hadn't noticed
+	it until yet because most recents browsers do not care about such errors, preventing error to be easilly
+	trigered.
+	
 	- Fixed omition of {ansicon} on the {Dos9_Auto.bat}, which is launched at startup.

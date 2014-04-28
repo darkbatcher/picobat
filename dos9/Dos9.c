@@ -48,8 +48,9 @@
 #include "command/Dos9_For.h"
 #include "command/Dos9_CommandInfo.h"
 
-//#define DOS9_DBG_MODE
+#define DOS9_DBG_MODE
 #include "core/Dos9_Debug.h"
+
 
 void Dos9_SigHandler(int c)
 {

@@ -265,7 +265,7 @@ RestartSearch:
 
 	lpCmdLine=Dos9_SkipAllBlanks(lpCmdLine);
 
-	// printf("*** Running  line '%s'\n", lpCmdLine);
+	fprintf(stderr, "*** Running  line '%s'\n", lpCmdLine);
 
 	switch((iFlag=Dos9_GetCommandProc(lpCmdLine, lpclCommands, (void**)&lpProc))) {
 
