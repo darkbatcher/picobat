@@ -104,6 +104,12 @@ char* Dos9_GetNextBlockEs(char* lpLine, ESTR* lpReturn)
 }
 
 char* Dos9_GetNextParameterEs(char* lpLine, ESTR* lpReturn)
+/* This function returns the next parameter available on the
+   command-line.
+
+   It returns a pointer to the next parameter on the command
+   line. If NULL is returned, then, there's no more parameters
+   availiable */
 {
 	char cChar=' ';
 
@@ -114,50 +120,101 @@ char* Dos9_GetNextParameterEs(char* lpLine, ESTR* lpReturn)
 
 	lpLine=Dos9_SkipBlanks(lpLine);
 
-	if (*lpLine=='"') {
-
-		cChar='"';
-		lpLine++;
-
-	} else if (*lpLine=='\'') {
-
-		cChar='\'';
-		lpLine++;
-
-	}
-
 	if (!*lpLine) return NULL;
+
+	/* Here, we are on the first non-blank character
+	   just search among the next characters the first
+	   delimiter (or quote)*/
 
 	lpBegin=lpLine;
 
-	while ((lpEnd=Dos9_SearchChar(lpLine, cChar))) {
+	while ((lpEnd=Dos9_SearchToken(lpLine, " \t,;\""))) {
 
-		if (cChar==' ') {
+		if (*lpEnd=='"') {
 
-			lpLine=lpEnd;
+			/* look for the next quote */
+			lpEnd++;
+
+			if (lpLine=Dos9_SearchChar(lpEnd, '"')) {
+
+				lpLine++;
+				continue;
+
+			}
+
+			/* If we have unpaired quotes, just get all remaining
+			   contents */
+
+			lpEnd=NULL;
+			break;
+
+		} else {
+
+			/* if we have encountered a valid delimiter, just continue
+			   and copy the argument */
 			break;
 
 		}
-
-		lpLine=lpEnd+1;
-
-		if (*lpLine=='\t'
-		    || *lpLine==' '
-		    || *lpLine=='\0')
-			break;
 
 	}
 
 	if (lpEnd == NULL) {
 
-		Dos9_EsCpy(lpReturn, lpBegin);
+		if (*lpBegin=='"') {
 
-		while (*lpLine) lpLine++;
+			lpBegin++;
 
+			if ((lpLine=Dos9_SearchLastChar(lpBegin, '"'))) {
+
+				if (*(lpLine+1)=='\0') {
+
+					iSize=lpLine-lpBegin;
+					Dos9_EsCpyN(lpReturn, lpBegin, iSize);
+
+				} else {
+
+					Dos9_EsCpy(lpReturn, lpBegin);
+
+				}
+
+
+			} else {
+
+				Dos9_EsCpy(lpReturn, lpBegin);
+
+			}
+
+		} else {
+
+			Dos9_EsCpy(lpReturn, lpBegin);
+
+		}
+
+		lpEnd=lpBegin;
+		while (*lpEnd)
+			lpEnd++;
 
 	} else {
 
 		iSize=lpEnd-lpBegin;
+
+		if (*lpBegin=='"') {
+
+			lpBegin++;
+			iSize--;
+
+			/* basically, if the end is '"', the previous
+			   algorithm ensure us that lpEnd-lpBegin >= 1*/
+
+			if (*(lpEnd-1)=='"') {
+
+				iSize--;
+
+			}
+
+		}
+
+
 		Dos9_EsCpyN(lpReturn, lpBegin, iSize);
 
 	}
@@ -168,7 +225,7 @@ char* Dos9_GetNextParameterEs(char* lpLine, ESTR* lpReturn)
 	/* remove escape characters */
 	Dos9_UnEscape(Dos9_EsToChar(lpReturn));
 
-	return lpLine;
+	return lpEnd;
 }
 
 int   Dos9_GetParamArrayEs(char* lpLine, ESTR** lpArray, size_t iLenght)

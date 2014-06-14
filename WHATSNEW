@@ -949,7 +949,7 @@ THURSDAY 17TH, APRIL
           in the next few month, but I hope i'll be able to submit new fix 
           starting in the summer holidays.
 
-SATURDAY 20, APRIL
+SATURDAY 20TH, APRIL
 
         - Fixed a bug that caused DOS9 to crash if either %PATH% or %PATHEXT% 
           (only for windows) were not in the command environment.
@@ -961,5 +961,33 @@ SATURDAY 20, APRIL
           such errors, preventing error to be easilly trigered.
 
         - Fixed omition of ANSICON on the DOS9_AUTO.BAT, which is launched at 
-          startup. 
+          startup.
+
+SATURDAY 14TH, JUNE
+
+        - Following advices of guys for dostips.org, changed the delimiters 
+          and the way quotes are handled:
+
+             - The available delimiters are the following (SPACE),;(TAB). This 
+               is now fully compatible with CMD.EXE. I also introduced 
+               functions in order no to take care of some of them (,;) since 
+               they may be used by some programs for switches. (The first 
+               example I have is GCC, and options like:)
+
+                  gcc -Wl,import
+
+             - Changed the way quotes are handled. Quotes have now precedence 
+               over conditionnal operators (|&) and command blocks (()).
+
+        - Cancelled the conversion of DOS9 code to wide char. This was indeed 
+          far too hard (it implied modifying allmost any piece of code), and 
+          had little advantages (huge incompatibilities between various 
+          platform, particularly for non-c99 function that are obviously 
+          required in order to make thing working). Thus, I decided to make a 
+          wrapper over libC functions in order to be able to use utf-8 
+          internally. This way, I keep the code like it is, and preserve 
+          compatibility with other platforms (Windows, Linux, NetBSD, 
+          DragonFly BSD, OpenBSD) and with POSIX. Moreover, this support for 
+          unicode may easily be remooved for platforms that do not handle 
+          utf-8.
 

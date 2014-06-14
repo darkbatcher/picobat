@@ -25,7 +25,11 @@
 
 LIBDOS9 char* Dos9_SkipBlanks(char* lpCh)
 {
-    while (*lpCh==' ' || *lpCh=='\t')
+	/* Most batch scripts uses only '\t' or ' ' as delimiters. However,
+	   ',' and ';' are also valid. (even if the use of those is strongly
+	   discouraged */
+
+    while (*lpCh==' ' || *lpCh==',' || *lpCh==';' || *lpCh=='\t')
         lpCh++;
 
     if (*lpCh=='^')
@@ -40,6 +44,7 @@ LIBDOS9 char* Dos9_SkipAllBlanks(char* lpCh)
            || *lpCh=='\t'
            || *lpCh=='@' /* this is the silent character */
            || *lpCh==';' /* and this the default eol-char */
+           || *lpCh==','
            )
         lpCh++;
 
