@@ -18,24 +18,9 @@
  *
  */
 
-#ifndef DOS9_ARGS_H
-#define DOS9_ARGS_H
+#ifndef DOS9_CMD_EXIT_H
+#define DOS9_CMD_EXIT_H
 
-#include "Dos9_Core.h"
+int Dos9_CmdExit(char* lpLine);
 
-/* a structure that contains boundaries of a block */
-
-typedef struct BLOCKINFO {
-	char* lpBegin;
-	char* lpEnd;
-} BLOCKINFO;
-
-int   Dos9_GetParameterPointers(char** lpPBegin, char** lpPEnd, const char* lpDelims, const char* lpLine);
-char* Dos9_GetNextParameterEs(char* lpLine, ESTR* lpReturn);
-char* Dos9_GetNextParameter(char* lpLine, char* lpResponseBuffer, int iLength);
-int   Dos9_GetParamArrayEs(char* lpLine, ESTR** lpArray, size_t iLenght);
-char* Dos9_GetNextBlockEs(char* lpLine, ESTR* lpReturn);
-char* Dos9_GetNextBlock(char* lpLine, BLOCKINFO* lpbkInfo);
-char* Dos9_GetEndOfLine(char* lpLine, ESTR* lpReturn);
-
-#endif // DOS9_ARGS_H
+#endif // DOS9_CMD_ECHO_H

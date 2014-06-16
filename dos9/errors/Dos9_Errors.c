@@ -211,7 +211,10 @@ void Dos9_ShowErrorMessage(unsigned int iErrorNumber,
 
 	if (iErrorNumber & DOS9_PRINT_C_ERROR) {
 
-		perror("");
+		fprintf(stderr,
+				"Returned error : \"%s\"\n",
+				strerror(errno)
+				);
 
 	}
 

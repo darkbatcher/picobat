@@ -41,8 +41,7 @@ const char* lpDirFileDirNb;
 const char* lpHlpDeprecated;
 
 const char* lpDelConfirm;
-const char* lpDelChoices;
-
+const char* lpRmdirConfirm;
 
 const char* lpAskYn;
 const char* lpAskyN;
@@ -91,7 +90,8 @@ void Dos9_LoadStrings(void)
 	lpDirFileDirNb=gettext("\t\t\t\t\t\t%d Files\n\t\t\t\t\t\t%d Folders\n");
 	// TRANSLATORS : Don't remove the %s because the program needs it
 
-	lpDelConfirm=gettext("Are you sure you want to delete \"%s\" ?");
+	lpDelConfirm=gettext("Are you sure you want to delete file \"%s\" ?");
+	lpRmdirConfirm=gettext("Are you sure you want to remove \"%s\" directory ?");
 
 	lpAskYn=gettext(" (Yes/no) ");
 	lpAskyN=gettext(" (yes/No) ");

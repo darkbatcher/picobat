@@ -424,7 +424,7 @@ echo`}
 	@- The characters that were given are those specified by the {ISO-C 90} standard, so that some locale may provide
 	additionnal characters.
 	
-	- Switched to {Autoconf} build system. This allows more standard builds, with {GNU} build toolchain. I can be
+	- Switched to {Autoconf} build system. This allows more standard builds, with {GNU} build toolchain. It can be
 	compiled through a {*NIX}-shell typing:
 	
 ${./configure
@@ -437,7 +437,7 @@ make}
 
 	- Started to work on a safer block determination. This should not be to difficult to obtain.
 	
-	- Started to refresh a large part of the core, which i includes rewritting what were called modules, and are now
+	- Started to refresh a large part of the core, which includes rewritting what were called modules, and are now
 	just outdated piece of code. I hope those changes to be functionnal within a short delay. It is mainly about getting
 	rid of old and ugly pieces of codes i've been writting about two years ago. Some function have also been transfered to
 	libDos9, this is limited however, since Dos9 is not stable enough to get it in a whole library.
@@ -841,11 +841,51 @@ ${make}
 		${gcc -Wl,import}
 		
 		-- Changed the way quotes are handled. Quotes have now precedence over conditionnal operators ({\|&}) and command
-		blocks ({()}).
+		blocks ({()}). This enables to make statements more secure using quotes. The new behaviour also conforms to cmd.exe
+		behavior. Typically, the following code :
+		
+		${IF foo==foo echo  ") else ("}
+		
+		@-- was understood differently by {Dos9} and {cmd.exe}. Now, the {") else ("} is considered to be escaped, and is no
+		more interpreted as a subcommand of {if}, as it did before.
+		
+		-- Choosed a standard way to handle quotation marks, an to cut parameter. In fact, any delimiter that is between
+		two quotation marks is ignored. So that parameters are cut on unquoted delimiters, some example of now valid
+		parameters are :
+		
+${"simple quotation"
+foo="foo bar"}
+		
+		@-- and so on and so forth...
+		
+		@-- If the interpreter finds an unpaired quotation mark, then, the remaining characters are considered to be
+		between quotation marks. So that, the following examples are equivalent:
+		
+${type "some file
+type "some file"}
+		
+		-- behaviour of function to remove quotation marks in parameters have also changed in order to achieve more
+		compatibility with {cmd.exe}. Basically, the algorithm that {Dos9} follows when removing parameters quotation
+		marks is:
+		
+			--- If the parameter begin with a quotation mark, then remove it, otherwise, stop the algorithm at this
+			step.
+			
+			--- If the parameter end by a quotation mark, then remove it either. But, do not remove it if the
+			parameter does not begin with a quotation mark.
 		
 	- Cancelled the conversion of {Dos9} code to wide char. This was indeed far too hard (it implied modifying allmost any
 	piece of code), and had little advantages (huge incompatibilities between various platform, particularly for non-c99
 	function that are obviously required in order to make thing working). Thus, I decided to make a wrapper over libC functions
 	in order to be able to use utf-8 internally. This way, I keep the code like it is, and preserve compatibility with other
 	platforms (Windows, Linux, NetBSD, DragonFly BSD, OpenBSD) and with POSIX. Moreover, this support for unicode may easily be
-	remooved for platforms that do not handle utf-8.
+	remooved for platforms that do not handle utf-8, or those that do it natively.
+	
+{{Monday 16th, June}}
+
+	- Reorganized the source tree for internal commands. Before that, every file of the {command} subdirectory contained several
+	different commands. I found that is was not really practical for maintaining code, the code is now splitted in files that contains
+	each a different internal command.
+	
+	- Added a functionnal {/Q} switch to the {RMDIR} command. However, it is supposed to deal with the {/S} switch, which is not
+	functional yet.

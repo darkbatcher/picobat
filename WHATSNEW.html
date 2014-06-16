@@ -7,7 +7,7 @@
 -->
 <html>
 <head>
-<meta charset="utf-8" />
+<meta charset="US-ASCII" />
 <title>What's New ?</title>
 
 </head>
@@ -410,7 +410,7 @@
 
 <p>The characters that were given are those specified by the <strong>ISO-C 90</strong> standard, so that some locale may provide additionnal characters.</p>
 
-</li><li><p> Switched to <strong>Autoconf</strong> build system. This allows more standard builds, with <strong>GNU</strong> build toolchain. I can be compiled through a <strong>*NIX</strong>-shell typing:</p>
+</li><li><p> Switched to <strong>Autoconf</strong> build system. This allows more standard builds, with <strong>GNU</strong> build toolchain. It can be compiled through a <strong>*NIX</strong>-shell typing:</p>
 
 <code>./configure<br />make</code>
 
@@ -422,7 +422,7 @@
 <ul><li>
 <p> Started to work on a safer block determination. This should not be to difficult to obtain.</p>
 
-</li><li><p> Started to refresh a large part of the core, which i includes rewritting what were called modules, and are now just outdated piece of code. I hope those changes to be functionnal within a short delay. It is mainly about getting rid of old and ugly pieces of codes i've been writting about two years ago. Some function have also been transfered to libDos9, this is limited however, since Dos9 is not stable enough to get it in a whole library.</p>
+</li><li><p> Started to refresh a large part of the core, which includes rewritting what were called modules, and are now just outdated piece of code. I hope those changes to be functionnal within a short delay. It is mainly about getting rid of old and ugly pieces of codes i've been writting about two years ago. Some function have also been transfered to libDos9, this is limited however, since Dos9 is not stable enough to get it in a whole library.</p>
 
 </li></ul>
 <h2>Saturday 8th, March</h2>
@@ -689,14 +689,60 @@
 </li><li><p> This is the final build for at least a few months. I'll be very busy in the next few month, but I hope i'll be able to submit new fix starting in the summer holidays.</p>
 
 </li></ul>
-<h2>Saturday 20, april</h2>
+<h2>Saturday 20th, april</h2>
 
 <ul><li>
 <p> Fixed a bug that caused <strong>Dos9</strong> to crash if either <strong>%PATH%</strong> or <strong>%PATHEXT%</strong> (only for windows) were not in the command environment.</p>
 
 </li><li><p> Corrected a bug with <strong>tea</strong> in <strong>html</strong> mode. The parser did used to escape the reserved characters <strong>&gt;</strong> and <strong>&lt;</strong> but did not care of <strong>&amp;</strong>. This bug is corrected, enabling <strong>html</strong> codes to work perfectly well. I hadn't noticed it until yet because most recents browsers do not care about such errors, preventing error to be easilly trigered.</p>
 
-</li><li><p> Fixed omition of <strong>ansicon</strong> on the <strong>Dos9_Auto.bat</strong>, which is launched at startup. </p>
+</li><li><p> Fixed omition of <strong>ansicon</strong> on the <strong>Dos9_Auto.bat</strong>, which is launched at startup.</p>
+
+</li></ul>
+<h2>Saturday 14th, June</h2>
+
+<ul><li>
+<p> Following advices of guys for dostips.org, changed the delimiters and the way quotes are handled:</p>
+
+<ul><li>
+<p> The available delimiters are the following <strong>(space),;(tab)</strong>. This is now fully compatible with <strong>cmd.exe</strong>. I also introduced functions in order no to take care of some of them (<strong>,;</strong>) since they may be used by some programs for switches. (The first example I have is <strong>gcc</strong>, and options like:)</p>
+
+<code>gcc -Wl,import</code>
+
+</li><li><p> Changed the way quotes are handled. Quotes have now precedence over conditionnal operators (<strong>|&amp;</strong>) and command blocks (<strong>()</strong>). This enables to make statements more secure using quotes. The new behaviour also conforms to cmd.exe behavior. Typically, the following code :</p>
+
+<code>IF foo==foo echo  ") else ("</code>
+
+<p>was understood differently by <strong>Dos9</strong> and <strong>cmd.exe</strong>. Now, the <strong>") else ("</strong> is considered to be escaped, and is no more interpreted as a subcommand of <strong>if</strong>, as it did before.</p>
+
+</li><li><p> Choosed a standard way to handle quotation marks, an to cut parameter. In fact, any delimiter that is between two quotation marks is ignored. So that parameters are cut on unquoted delimiters, some example of now valid parameters are :</p>
+
+<code>"simple quotation"<br />foo="foo bar"</code>
+
+<p>and so on and so forth...</p>
+
+<p>If the interpreter finds an unpaired quotation mark, then, the remaining characters are considered to be between quotation marks. So that, the following examples are equivalent:</p>
+
+<code>type "some file<br />type "some file"</code>
+
+</li><li><p> behaviour of function to remove quotation marks in parameters have also changed in order to achieve more compatibility with <strong>cmd.exe</strong>. Basically, the algorithm that <strong>Dos9</strong> follows when removing parameters quotation marks is:</p>
+
+<ul><li>
+<p> If the parameter begin with a quotation mark, then remove it, otherwise, stop the algorithm at this step.</p>
+
+</li><li><p> If the parameter end by a quotation mark, then remove it either. But, do not remove it if the parameter does not begin with a quotation mark.</p>
+
+</li></ul>
+</li></ul>
+</li><li><p> Cancelled the conversion of <strong>Dos9</strong> code to wide char. This was indeed far too hard (it implied modifying allmost any piece of code), and had little advantages (huge incompatibilities between various platform, particularly for non-c99 function that are obviously required in order to make thing working). Thus, I decided to make a wrapper over libC functions in order to be able to use utf-8 internally. This way, I keep the code like it is, and preserve compatibility with other platforms (Windows, Linux, NetBSD, DragonFly BSD, OpenBSD) and with POSIX. Moreover, this support for unicode may easily be remooved for platforms that do not handle utf-8, or those that do it natively.</p>
+
+</li></ul>
+<h2>Monday 16th, June</h2>
+
+<ul><li>
+<p> Reorganized the source tree for internal commands. Before that, every file of the <strong>command</strong> subdirectory contained several different commands. I found that is was not really practical for maintaining code, the code is now splitted in files that contains each a different internal command.</p>
+
+</li><li><p> Added a functionnal <strong>/Q</strong> switch to the <strong>RMDIR</strong> command. However, it is supposed to deal with the <strong>/S</strong> switch, which is not functional yet.</p>
 
 </li></ul>
 

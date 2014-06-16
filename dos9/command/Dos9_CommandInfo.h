@@ -21,12 +21,8 @@
 #ifndef DOS9_COMMANDINFO_H
 #define DOS9_COMMANDINFO_H
 
-#include "Dos9_ScriptCommands.h"
-#include "Dos9_FileCommands.h"
-#include "Dos9_Conditions.h"
-#include "Dos9_For.h"
-#include "Dos9_Call.h"
-#include "Dos9_Alias.h"
+/* include the header that defines all function name */
+#include "Dos9_Commands.h"
 
 #include "../core/Dos9_Core.h"
 

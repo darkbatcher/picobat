@@ -18,24 +18,53 @@
  *
  */
 
-#ifndef DOS9_ARGS_H
-#define DOS9_ARGS_H
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <math.h>
+#include <ctype.h>
+#include <string.h>
+#include <errno.h>
 
-#include "Dos9_Core.h"
+#include <matheval.h>
+#include <inteval.h>
 
-/* a structure that contains boundaries of a block */
+#include <libDos9.h>
 
-typedef struct BLOCKINFO {
-	char* lpBegin;
-	char* lpEnd;
-} BLOCKINFO;
+#include "../core/Dos9_Core.h"
 
-int   Dos9_GetParameterPointers(char** lpPBegin, char** lpPEnd, const char* lpDelims, const char* lpLine);
-char* Dos9_GetNextParameterEs(char* lpLine, ESTR* lpReturn);
-char* Dos9_GetNextParameter(char* lpLine, char* lpResponseBuffer, int iLength);
-int   Dos9_GetParamArrayEs(char* lpLine, ESTR** lpArray, size_t iLenght);
-char* Dos9_GetNextBlockEs(char* lpLine, ESTR* lpReturn);
-char* Dos9_GetNextBlock(char* lpLine, BLOCKINFO* lpbkInfo);
-char* Dos9_GetEndOfLine(char* lpLine, ESTR* lpReturn);
+#include "Dos9_Color.h"
 
-#endif // DOS9_ARGS_H
+#include "../lang/Dos9_Lang.h"
+#include "../lang/Dos9_Help.h"
+
+// #define DOS9_DBG_MODE
+#include "../core/Dos9_Debug.h"
+#include "../errors/Dos9_Errors.h"
+
+int Dos9_CmdColor(char* lpLine)
+{
+	char lpArg[4];
+
+	if (Dos9_GetNextParameter(lpLine+5, lpArg, 4)) {
+
+		if (!strcmp(lpArg, "/?")) {
+
+			Dos9_ShowInternalHelp(DOS9_HELP_COLOR);
+
+		} else {
+
+			colColor=strtol(lpArg, NULL, 16);
+			Dos9_SetConsoleColor(colColor);
+
+		}
+		return 0;
+
+	}
+
+	colColor=DOS9_COLOR_DEFAULT;
+	Dos9_SetConsoleColor(DOS9_COLOR_DEFAULT);
+
+	return 0;
+}
+

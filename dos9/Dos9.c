@@ -43,9 +43,7 @@
 
 /* those are codes of internal commands */
 
-#include "command/Dos9_ScriptCommands.h"
-#include "command/Dos9_Conditions.h"
-#include "command/Dos9_For.h"
+#include "command/Dos9_Commands.h"
 #include "command/Dos9_CommandInfo.h"
 
 //#define DOS9_DBG_MODE

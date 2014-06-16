@@ -17,7 +17,7 @@ int Dos9_GetExePath(char* lpBuf, size_t iBufSize)
 }
 
 
-int Dos9_FileExists(char* ptrName)
+int Dos9_FileExists(const char* ptrName)
 {
     int iAttrib = GetFileAttributes(ptrName);
 
@@ -25,7 +25,7 @@ int Dos9_FileExists(char* ptrName)
             !(iAttrib & FILE_ATTRIBUTE_DIRECTORY));
 }
 
-int Dos9_DirExists(char *ptrName)
+int Dos9_DirExists(const char *ptrName)
 {
     DIR* rep = NULL;
     if ((rep = opendir(ptrName))==NULL) return 0; /* Ouverture d'un dossier */
@@ -39,7 +39,7 @@ int Dos9_UpdateCurrentDir(void)
     return _putenv(lpCurrentDir);
 }
 
-int Dos9_SetCurrentDir(char* lpPath)
+int Dos9_SetCurrentDir(const char* lpPath)
 {
     chdir(lpPath);
     _getcwd(lpCurrentDir+3, MAX_PATH);

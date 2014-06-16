@@ -25,7 +25,7 @@
 
 #include <libDos9.h>
 
-#include "Dos9_Conditions.h"
+#include "Dos9_If.h"
 #include "../lang/Dos9_Lang.h"
 #include "../lang/Dos9_Help.h"
 #include "../errors/Dos9_Errors.h"

@@ -461,7 +461,7 @@ THURSDAY 6TH, MARCH
           standard, so that some locale may provide additionnal characters.
 
         - Switched to AUTOCONF build system. This allows more standard builds, 
-          with GNU build toolchain. I can be compiled through a *NIX-shell 
+          with GNU build toolchain. It can be compiled through a *NIX-shell 
           typing:
 
              ./configure
@@ -477,7 +477,7 @@ FRIDAY 7TH, MARCH
         - Started to work on a safer block determination. This should not be 
           to difficult to obtain.
 
-        - Started to refresh a large part of the core, which i includes 
+        - Started to refresh a large part of the core, which includes 
           rewritting what were called modules, and are now just outdated piece 
           of code. I hope those changes to be functionnal within a short 
           delay. It is mainly about getting rid of old and ugly pieces of 
@@ -977,7 +977,45 @@ SATURDAY 14TH, JUNE
                   gcc -Wl,import
 
              - Changed the way quotes are handled. Quotes have now precedence 
-               over conditionnal operators (|&) and command blocks (()).
+               over conditionnal operators (|&) and command blocks (()). This 
+               enables to make statements more secure using quotes. The new 
+               behaviour also conforms to cmd.exe behavior. Typically, the 
+               following code :
+
+                  IF foo==foo echo  ") else ("
+
+               was understood differently by DOS9 and CMD.EXE. Now, the ") 
+               ELSE (" is considered to be escaped, and is no more interpreted 
+               as a subcommand of IF, as it did before.
+
+             - Choosed a standard way to handle quotation marks, an to cut 
+               parameter. In fact, any delimiter that is between two quotation 
+               marks is ignored. So that parameters are cut on unquoted 
+               delimiters, some example of now valid parameters are :
+
+                  "simple quotation"
+                  foo="foo bar"
+
+               and so on and so forth...
+
+               If the interpreter finds an unpaired quotation mark, then, the 
+               remaining characters are considered to be between quotation 
+               marks. So that, the following examples are equivalent:
+
+                  type "some file
+                  type "some file"
+
+             - behaviour of function to remove quotation marks in parameters 
+               have also changed in order to achieve more compatibility with 
+               CMD.EXE. Basically, the algorithm that DOS9 follows when 
+               removing parameters quotation marks is:
+
+                  - If the parameter begin with a quotation mark, then remove 
+                    it, otherwise, stop the algorithm at this step.
+
+                  - If the parameter end by a quotation mark, then remove it 
+                    either. But, do not remove it if the parameter does not 
+                    begin with a quotation mark.
 
         - Cancelled the conversion of DOS9 code to wide char. This was indeed 
           far too hard (it implied modifying allmost any piece of code), and 
@@ -989,5 +1027,16 @@ SATURDAY 14TH, JUNE
           compatibility with other platforms (Windows, Linux, NetBSD, 
           DragonFly BSD, OpenBSD) and with POSIX. Moreover, this support for 
           unicode may easily be remooved for platforms that do not handle 
-          utf-8.
+          utf-8, or those that do it natively.
+
+MONDAY 16TH, JUNE
+
+        - Reorganized the source tree for internal commands. Before that, 
+          every file of the COMMAND subdirectory contained several different 
+          commands. I found that is was not really practical for maintaining 
+          code, the code is now splitted in files that contains each a 
+          different internal command.
+
+        - Added a functionnal /Q switch to the RMDIR command. However, it is 
+          supposed to deal with the /S switch, which is not functional yet.
 

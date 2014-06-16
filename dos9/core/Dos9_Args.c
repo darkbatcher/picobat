@@ -26,6 +26,58 @@
 //#define DOS9_DBG_MODE
 #include "Dos9_Debug.h"
 
+int Dos9_GetParameterPointers(char** lpPBegin, char** lpPEnd, const char* lpDelims, const char* lpLine)
+{
+	const char  *lpBegin,
+				*lpEnd;
+
+	lpLine=Dos9_SkipBlanks(lpLine);
+
+	if (!*lpLine) return FALSE;
+
+	/* Here, we are on the first non-blank character
+	   just search among the next characters the first
+	   delimiter (or quote)*/
+
+	lpBegin=lpLine;
+
+	while ((lpEnd=Dos9_SearchToken(lpLine, lpDelims))) {
+
+		if (*lpEnd=='"') {
+
+			/* look for the next quote */
+			lpEnd++;
+
+			if (lpLine=Dos9_SearchChar(lpEnd, '"')) {
+
+				lpLine++;
+				continue;
+
+			}
+
+			/* If we have unpaired quotes, just get all remaining
+			   contents */
+
+			lpEnd=NULL;
+			break;
+
+		} else {
+
+			/* if we have encountered a valid delimiter, just continue
+			   and copy the argument */
+			break;
+
+		}
+
+	}
+
+	*lpPEnd = (char*)lpEnd;
+	*lpPBegin = (char*)lpBegin;
+
+	return TRUE;
+
+}
+
 char* Dos9_GetNextParameter(char* lpLine, char* lpResponseBuffer, int iLength)
 /* determines wheter a paramater follows the position lpLinLIBDOS9LIBDOS9LIBDOS9LIBDOS9e.
  *
@@ -111,53 +163,17 @@ char* Dos9_GetNextParameterEs(char* lpLine, ESTR* lpReturn)
    line. If NULL is returned, then, there's no more parameters
    availiable */
 {
-	char cChar=' ';
 
 	size_t iSize;
 
 	char *lpBegin,
 	     *lpEnd=NULL;
 
-	lpLine=Dos9_SkipBlanks(lpLine);
+	if (Dos9_GetParameterPointers(&lpBegin, &lpEnd, " ;,\t\"", lpLine)==FALSE)
+		return NULL;
 
-	if (!*lpLine) return NULL;
-
-	/* Here, we are on the first non-blank character
-	   just search among the next characters the first
-	   delimiter (or quote)*/
-
-	lpBegin=lpLine;
-
-	while ((lpEnd=Dos9_SearchToken(lpLine, " \t,;\""))) {
-
-		if (*lpEnd=='"') {
-
-			/* look for the next quote */
-			lpEnd++;
-
-			if (lpLine=Dos9_SearchChar(lpEnd, '"')) {
-
-				lpLine++;
-				continue;
-
-			}
-
-			/* If we have unpaired quotes, just get all remaining
-			   contents */
-
-			lpEnd=NULL;
-			break;
-
-		} else {
-
-			/* if we have encountered a valid delimiter, just continue
-			   and copy the argument */
-			break;
-
-		}
-
-	}
-
+	/* the following are gymnastics in order to remove to
+	   which quotes should be remooved from the parmaters */
 	if (lpEnd == NULL) {
 
 		if (*lpBegin=='"') {
@@ -213,7 +229,6 @@ char* Dos9_GetNextParameterEs(char* lpLine, ESTR* lpReturn)
 			}
 
 		}
-
 
 		Dos9_EsCpyN(lpReturn, lpBegin, iSize);
 

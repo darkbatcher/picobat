@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2014 DarkBatcher
+ *   Copyright (C) 2010-2014 Romain GARBI (DarkBatcher)
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -78,7 +78,7 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 	lpSearchBegin=lpCh;
 	lpNextBlock=Dos9_GetNextBlockBegin(lpCh);
 
-	while ((lpNextToken=Dos9_SearchToken(lpSearchBegin, "12<>"))) {
+	while ((lpNextToken=Dos9_SearchToken_OutQuotes(lpSearchBegin, "12<>"))) {
 
 		if ((lpNextToken >= lpNextBlock)
 		    && (lpNextBlock!=NULL)) {
@@ -113,14 +113,13 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 		switch(cChar) {
 
 		case '2':
-			/* test wether this is the beginning of the
-			        2>&1
-			   token
+			/* test wether this is the beginning of the token
+			   '2>&1'
 			*/
 
 			if (!strncmp(lpNextToken, ">&1", 3)) {
 
-				/* redirect both input and output */
+				/* redirect stderr in stdout */
 				lppssStart->cOutputMode|=(PARSED_STREAM_START_MODE_ERROR
 				                          | PARSED_STREAM_START_MODE_OUT );
 
@@ -270,7 +269,7 @@ error:
 PARSED_STREAM*       Dos9_ParseOperators(ESTR* lpesLine)
 {
 	PARSED_STREAM *lppsStream=NULL,
-	               *lppsStreamBegin=NULL;
+					*lppsStreamBegin=NULL;
 
 	char *lpCh=Dos9_EsToChar(lpesLine),
 	      *lpNextToken,
@@ -279,7 +278,6 @@ PARSED_STREAM*       Dos9_ParseOperators(ESTR* lpesLine)
 
 	char cChar,
 	     cNodeType=PARSED_STREAM_NODE_NONE;
-
 
 	if (!(lppsStreamBegin=Dos9_AllocParsedStream(NULL))) {
 
@@ -297,7 +295,7 @@ PARSED_STREAM*       Dos9_ParseOperators(ESTR* lpesLine)
 	lpNextBlock=Dos9_GetNextBlockBegin(lpCh);
 	lpSearchBegin=lpCh;
 
-	while ((lpNextToken=Dos9_SearchToken(lpSearchBegin, "|&"))) {
+	while ((lpNextToken=Dos9_SearchToken_OutQuotes(lpSearchBegin, "|&"))) {
 
 		if ((lpNextToken >= lpNextBlock)
 		    && (lpNextBlock != NULL)) {

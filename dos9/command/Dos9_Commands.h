@@ -18,24 +18,36 @@
  *
  */
 
-#ifndef DOS9_ARGS_H
-#define DOS9_ARGS_H
+#ifndef DOS9_COMMAND_H
+#define DOS9_COMMAND_H
 
-#include "Dos9_Core.h"
+/* include all internal commands headers */
+#include "Dos9_Alias.h"
+#include "Dos9_Ask.h"
+#include "Dos9_Block.h"
+#include "Dos9_Call.h"
+#include "Dos9_Cd.h"
+#include "Dos9_Cls.h"
+#include "Dos9_Color.h"
+#include "Dos9_Echo.h"
+#include "Dos9_Exit.h"
+#include "Dos9_For.h"
+#include "Dos9_Goto.h"
+#include "Dos9_Help.h"
+#include "Dos9_Pause.h"
+#include "Dos9_Rem.h"
+#include "Dos9_Set.h"
+#include "Dos9_Setlocal.h"
+#include "Dos9_Shift.h"
+#include "Dos9_Title.h"
+#include "Dos9_Type.h"
+#include "Dos9_If.h"
+#include "Dos9_Del.h"
+#include "Dos9_Dir.h"
+#include "Dos9_Copy.h"
+#include "Dos9_Move.h"
+#include "Dos9_Ren.h"
+#include "Dos9_Mkdir.h"
+#include "Dos9_Rmdir.h"
 
-/* a structure that contains boundaries of a block */
-
-typedef struct BLOCKINFO {
-	char* lpBegin;
-	char* lpEnd;
-} BLOCKINFO;
-
-int   Dos9_GetParameterPointers(char** lpPBegin, char** lpPEnd, const char* lpDelims, const char* lpLine);
-char* Dos9_GetNextParameterEs(char* lpLine, ESTR* lpReturn);
-char* Dos9_GetNextParameter(char* lpLine, char* lpResponseBuffer, int iLength);
-int   Dos9_GetParamArrayEs(char* lpLine, ESTR** lpArray, size_t iLenght);
-char* Dos9_GetNextBlockEs(char* lpLine, ESTR* lpReturn);
-char* Dos9_GetNextBlock(char* lpLine, BLOCKINFO* lpbkInfo);
-char* Dos9_GetEndOfLine(char* lpLine, ESTR* lpReturn);
-
-#endif // DOS9_ARGS_H
+#endif // DOS9_CMD_ECHO_H

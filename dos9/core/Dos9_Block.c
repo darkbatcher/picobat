@@ -32,7 +32,7 @@ char* Dos9_GetNextBlockBeginEx(char* lpCh, int bIsBlockCmd)
 	char *lpNextParent,
 	     *lpNext;
 
-	if (!(lpNextParent=Dos9_SearchChar(lpCh, '('))) {
+	if (!(lpNextParent=Dos9_SearchChar_OutQuotes(lpCh, '('))) {
 
 		/* there's no parent at all, so skip now */
 		return NULL;
@@ -43,7 +43,7 @@ char* Dos9_GetNextBlockBeginEx(char* lpCh, int bIsBlockCmd)
 
 		/* check if there is a new openning right there */
 
-		if ((lpNextParent=Dos9_SearchToken(lpCh, "(\n"))) {
+		if ((lpNextParent=Dos9_SearchToken_OutQuotes(lpCh, "(\n"))) {
 
 			if (*lpNextParent=='(')
 				return lpNextParent;
@@ -59,16 +59,10 @@ char* Dos9_GetNextBlockBeginEx(char* lpCh, int bIsBlockCmd)
 
 		/* skip all characters before the command */
 
-		//printf("[New token]=\"%s\"\n", lpCh);
-
 		lpCh=Dos9_SkipAllBlanks(lpCh);
-
-		//printf("\t=\"%s\"\n", lpCh);
 
 		/* we are now next to the command name, try if it
 		   is a FOR or a IF or a top level block. */
-
-		//printf("Examining : \"%s\"\n", lpCh);
 
 		bIsBlockCmd=FALSE;
 
@@ -98,10 +92,8 @@ char* Dos9_GetNextBlockBeginEx(char* lpCh, int bIsBlockCmd)
 
 		if (bIsBlockCmd) {
 
-			//printf("This is a block command\n");
-
 			/* look for a parenthesis that is not escaped */
-			lpNextParent=Dos9_SearchChar(lpCh, '(');
+			lpNextParent=Dos9_SearchChar_OutQuotes(lpCh, '(');
 
 			/* no more parenthesis */
 			if (!lpNextParent) {
@@ -112,7 +104,7 @@ char* Dos9_GetNextBlockBeginEx(char* lpCh, int bIsBlockCmd)
 
 		}
 
-		lpNext=Dos9_SearchToken(lpCh, "&|\n");
+		lpNext=Dos9_SearchToken_OutQuotes(lpCh, "&|\n");
 
 		if (!lpNext) {
 
@@ -155,7 +147,7 @@ char* Dos9_GetNextBlockBeginEx(char* lpCh, int bIsBlockCmd)
 
 /* Gets the end of block
    if lpCh does not point to a '(' character, the return value is NULL
-   if not end can be found the return value is NULL
+   if no end can be found the return value is NULL
 */
 char* Dos9_GetNextBlockEnd(char* lpCh)
 {
@@ -175,7 +167,7 @@ char* Dos9_GetNextBlockEnd(char* lpCh)
 
 	lpCh++;
 
-	if (!(lpNextEnd=Dos9_SearchChar(lpCh, ')'))) {
+	if (!(lpNextEnd=Dos9_SearchChar_OutQuotes(lpCh, ')'))) {
 
 		/* there is no closing parenthesis no more
 		   so that the block is malformed, return NULL */
@@ -202,7 +194,7 @@ char* Dos9_GetNextBlockEnd(char* lpCh)
 		   the one we guessed to be the closing parenthesis
 		   We have to make little of recusion */
 
-		/* The function Dos9_GetBlockLine end takes account of
+		/* The function Dos9_GetBlockLineEnd end takes account of
 		   the fact that serveral block in a line are valid.
 		   ie :
 
@@ -242,7 +234,7 @@ char* Dos9_GetNextBlockEnd(char* lpCh)
 
 			/* loop until the block is up */
 
-			if (!(lpCh=Dos9_SearchChar(lpNextEnd, ')'))) {
+			if (!(lpCh=Dos9_SearchChar_OutQuotes(lpNextEnd, ')'))) {
 
 				/* the block is misformed */
 
@@ -270,7 +262,7 @@ char* Dos9_GetNextBlockEnd(char* lpCh)
 	} else {
 
 		/* its all-right since the block stands outside the next
-		   block openning, return the parenthesis we guessed */
+		   block openning parenthesis, return the parenthesis we guessed */
 
 		DOS9_DBG("Found lowest-level block"
 		         "lpBlockBegin=\"%s\"\n"

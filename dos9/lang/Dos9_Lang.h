@@ -36,7 +36,7 @@ extern const char* lpHlpMain;
 extern const char* lpHlpDeprecated;
 
 extern const char* lpDelConfirm;
-extern const char* lpDelChoices;
+extern const char* lpRmdirConfirm;
 
 extern const char* lpAskYn;
 extern const char* lpAskyN;

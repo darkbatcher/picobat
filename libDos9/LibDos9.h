@@ -953,10 +953,10 @@ int _Dos9_IsFollowingByte(const char* lpChar);
 
 LIBDOS9 int Dos9_GetConsoleEncoding(char* lpEnc, size_t iSize);
 
-LIBDOS9 int Dos9_FileExists(char* lpPath);
-LIBDOS9 int Dos9_DirExists(char* lpPath);
+LIBDOS9 int Dos9_FileExists(const char* lpPath);
+LIBDOS9 int Dos9_DirExists(const char* lpPath);
 LIBDOS9 int Dos9_UpdateCurrentDir(void);
-LIBDOS9 int Dos9_SetCurrentDir(char* lpPath);
+LIBDOS9 int Dos9_SetCurrentDir(const char* lpPath);
 LIBDOS9 char* Dos9_GetCurrentDir(void);
 LIBDOS9 int Dos9_GetExePath(char* lpBuf, size_t iBufSize);
 
@@ -978,23 +978,27 @@ LIBDOS9 int      Dos9_CreateProcess(PROCESS* pId, char* lpName, char** lpArgs);
 LIBDOS9 int      Dos9_WaitForProcess(PROCESS* pId, void* iRes);
 
 /* skip blank characters ' ' and '\t' */
-LIBDOS9 char* Dos9_SkipBlanks(char* lpCh);
+LIBDOS9 char* Dos9_SkipBlanks(const char* lpCh);
 
 /* skip blanck characrers ' ' and '\t' and '@' and ';' */
-LIBDOS9 char* Dos9_SkipAllBlanks(char* lpCh);
+LIBDOS9 char* Dos9_SkipAllBlanks(const char* lpCh);
 
 /* search the first non escaped character */
-LIBDOS9 char* Dos9_SearchChar(char* lpCh, int cChar);
+LIBDOS9 char* Dos9_SearchChar(const char* lpCh, int cChar);
 
 /* search the last non-escaped chararcter */
-LIBDOS9 char* Dos9_SearchLastChar(char* lpCh, int cChar);
+LIBDOS9 char* Dos9_SearchLastChar(const char* lpCh, int cChar);
 
 /* un-escape the string */
 LIBDOS9 void Dos9_UnEscape(char* lpCh);
 
-LIBDOS9 char* Dos9_SearchToken(char* lpCh, char* lpDelims);
+LIBDOS9 char* Dos9_SearchToken(const char* lpCh, const char* lpDelims);
 
-LIBDOS9 char* Dos9_SearchLastToken(char* lpCh, char* lpDelims);
+LIBDOS9 char* Dos9_SearchLastToken(const char* lpCh, const char* lpDelims);
+
+LIBDOS9 char* Dos9_SearchChar_OutQuotes(const char* lpCh, int cChar);
+
+LIBDOS9 char* Dos9_SearchToken_OutQuotes(const char* lpCh, const char* lpDelims);
 
 
 /* end of libDos9 declaration */
