@@ -10,7 +10,8 @@
 
 SRC= ./src/tea.c ./src/out/tea_html_out.c \
      ./src/Tea_Load.c ./src/out/tea_text_out.c ./src/Tea_Node.c \
-     ./src/Tea_Output.c ./src/tea_strupr.c ./src/out/tea_ansi_out.c
+     ./src/Tea_Output.c ./src/tea_strupr.c ./src/out/tea_ansi_out.c \
+     ./src/out/tea_bb_out.c
 
 LIB=-L../lib -lDos9 @LIBS@
 TARGET=../bin${arch}/cmd/tea

@@ -83,7 +83,7 @@ int Dos9_CmdRmdir(char* lpLine)
 
 	}
 
-	if ((lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
+	while ((lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
 
 		if (!strcmp(Dos9_EsToChar(lpEstr), "/?")) {
 
@@ -96,7 +96,7 @@ int Dos9_CmdRmdir(char* lpLine)
 
 			bRecursive=TRUE;
 
-		} else if (!stricmp(Dos9_EsToChar(lpEstr), "/Q") {
+		} else if (!stricmp(Dos9_EsToChar(lpEstr), "/Q")) {
 
 			bQuiet=TRUE;
 

@@ -9,7 +9,8 @@ QUICK STARTING INFORMATION
      <darkbatcher@dos9.org> with a description of the bug, or even a fix if 
      you want to contribute.
 
-     To get information about the license, see the _license file_.
+     To get information about the license, see the license file (-> 
+     ``LICENSE'') .
 
 LEGAL NOTICE
 
@@ -35,7 +36,8 @@ LEGAL NOTICE
      command for windows distributions, the ansicon binaries are licensed 
      under the NEW BSD LICENSE, which can be found in LICENCE-ANSICON.TXT. The 
      sources of ansicon are availiable from 
-     _http://adoxa.hostmyway.net/ansicon/_
+     http://adoxa.hostmyway.net/ansicon/ (-> 
+     ``http://adoxa.hostmyway.net/ansicon/'') 
 
 BUILDING DOS9
 
