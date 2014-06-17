@@ -161,12 +161,29 @@ int Dos9_CmdSetS(char* lpLine)
 {
 	ESTR* lpEsVar=Dos9_EsInit();
 
-	while (*lpLine==' ' || *lpLine=='\t')
-		lpLine++;
+	char* lpCh;
+
+	lpLine=Dos9_SkipBlanks(lpLine);
 
 	Dos9_GetEndOfLine(lpLine, lpEsVar);
 
-	if (Dos9_PutEnv(Dos9_EsToChar(lpEsVar))) {
+	/* fixme : this is a hack that will not work fine on
+	   Other oses than MS-WINDOWS */
+
+	if (!(lpCh=strchr(Dos9_EsToChar(lpEsVar), '='))) {
+
+		Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT,
+								Dos9_EsToChar(lpEsVar),
+								FALSE);
+
+		goto error;
+
+	}
+
+	*lpCh='\0';
+	lpCh++;
+
+	if (Dos9_setenv(Dos9_EsToChar(lpEsVar), lpCh)) {
 
 		Dos9_ShowErrorMessage(DOS9_UNABLE_SET_ENVIRONMENT,
 		                      Dos9_EsToChar(lpEsVar),
@@ -204,13 +221,10 @@ int Dos9_CmdSetP(char* lpLine)
 
 		Dos9_EsGet(lpEsInput, stdin);
 
-		Dos9_EsCat(lpEsVar, "=");
-		Dos9_EsCatE(lpEsVar, lpEsInput);
-
-		if ((lpEqual=strchr(Dos9_EsToChar(lpEsVar), '\n')))
+		if ((lpEqual=strchr(Dos9_EsToChar(lpEsInput), '\n')))
 			*lpEqual='\0';
 
-		if (Dos9_PutEnv(Dos9_EsToChar(lpEsVar))) {
+		if (Dos9_setenv(Dos9_EsToChar(lpEsVar), Dos9_EsToChar(lpEsInput))) {
 
 			Dos9_ShowErrorMessage(DOS9_UNABLE_SET_ENVIRONMENT,
 			                      Dos9_EsToChar(lpEsVar),
@@ -289,7 +303,7 @@ int Dos9_CmdSetEvalFloat(ESTR* lpExpression)
 
 	lpVarName=Dos9_EsToChar(lpExpression);
 
-	while (*lpVarName==' ' || *lpVarName=='\t') lpVarName++;
+	lpVarName=Dos9_SkipBlanks(lpVarName);
 
 	/* if we don't have expression, end-up with an error */
 	if (!*lpVarName) {
@@ -367,11 +381,9 @@ int Dos9_CmdSetEvalFloat(ESTR* lpExpression)
 
 	}
 
-	snprintf(lpResult, sizeof(lpResult), "=%.16g", dVal);
+	snprintf(lpResult, sizeof(lpResult), "%.16g", dVal);
 
-	Dos9_EsCat(lpExpression, lpResult);
-
-	if (Dos9_PutEnv(Dos9_EsToChar(lpExpression))) {
+	if (Dos9_setenv(Dos9_EsToChar(lpExpression), lpResult)) {
 
 		Dos9_ShowErrorMessage(DOS9_UNABLE_SET_ENVIRONMENT,
 		                      Dos9_EsToChar(lpExpression),
@@ -529,11 +541,9 @@ int Dos9_CmdSetEvalInt(ESTR* lpExpression)
 
 	}
 
-	snprintf(lpResult, sizeof(lpResult), "=%d", iVal);
+	snprintf(lpResult, sizeof(lpResult), "%d", iVal);
 
-	Dos9_EsCat(lpExpression, lpResult);
-
-	if (Dos9_PutEnv(Dos9_EsToChar(lpExpression))) {
+	if (Dos9_setenv(Dos9_EsToChar(lpExpression), lpResult)) {
 
 		Dos9_ShowErrorMessage(DOS9_UNABLE_SET_ENVIRONMENT,
 		                      Dos9_EsToChar(lpExpression),

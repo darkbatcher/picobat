@@ -26,4 +26,18 @@
 #define DOS9_BUILDYEAR "2014"
 #define DOS9_BUILDCOMMENTS "Beta release"
 
+#if defined(WIN32)
+#define DOS9_OS "WINDOWS"
+#elif defined(__linux__)
+#define DOS9_OS "GNU/Linux"
+#elif defined(__NetBSD__)
+#define DOS9_OS "NetBSD"
+#elif defined(__DragonFly__)
+#define DOS9_OS "DragonFlyBSD"
+#elif defined(__OpenBSD__)
+#define DOS9_OS "OpenBSD"
+#else
+#define DOS9_OS "UNKNOWN"
+#endif
+
 #endif // DOS9_VERSION_INFO_H

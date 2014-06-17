@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
 	char *lpFileName="",
 	      lpFileAbs[FILENAME_MAX],
 	      lpTmp[FILENAME_MAX],
-	      lpTitle[FILENAME_MAX+10]="Dos9 [" DOS9_VERSION "] - ";
+	      lpTitle[FILENAME_MAX]="Dos9 [" DOS9_VERSION "] - ";
 
 
 	int i,
@@ -249,12 +249,12 @@ int main(int argc, char *argv[])
 			Dos9_PrintIntroduction();
 
 		strcat(lpTitle, "Command prompt");
-		Dos9_PutEnv("DOS9_IS_SCRIPT=false");
+		Dos9_setenv("DOS9_IS_SCRIPT", "false");
 
 	} else {
 
 		strncat(lpTitle, lpFileName, sizeof(lpTitle)-sizeof("Dos9 [" DOS9_VERSION "] - "));
-		Dos9_PutEnv("DOS9_IS_SCRIPT=true");
+		Dos9_setenv("DOS9_IS_SCRIPT","true");
 
 		DOS9_DBG("[dos9] Runing \"%s\"\n", lpFileName);
 
@@ -269,19 +269,18 @@ int main(int argc, char *argv[])
 
 	DOS9_DBG("Getting current executable name ...\n");
 
-	strcpy(lpTitle, "DOS9_PATH=");
+	Dos9_GetExePath(lpTitle, FILENAME_MAX);
 
-	Dos9_GetExePath(lpTitle+10, FILENAME_MAX);
+	DOS9_DBG("\tGot \"%s\" as name ...\n", lpTitle);
 
-	DOS9_DBG("\tGot \"%s\" as name ...\n", lpTitle+10);
-
-	lpInitVar[2]=lpTitle;
+	lpInitVar[4]="DOS9_PATH";
+	lpInitVar[5]=lpTitle;
 
 	DOS9_DBG("Initializing variables ...\n");
 
 	Dos9_InitVar(lpInitVar);
 
-	putenv("ERRORLEVEL=0");
+	Dos9_setenv("ERRORLEVEL","0");
 
 	DOS9_DBG("Mapping commands ... \n");
 
@@ -312,7 +311,7 @@ int main(int argc, char *argv[])
 
 	strcat(lpTitle, "/Dos9_Auto.bat");
 
-	strcpy(ifIn.lpFileName, lpTitle+10);
+	strcpy(ifIn.lpFileName, lpTitle);
 	ifIn.iPos=0;
 	ifIn.bEof=FALSE;
 

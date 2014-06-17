@@ -28,15 +28,7 @@
 
 #define LOCAL_VAR_BLOCK_SIZE 128
 
-#ifndef WIN32
-
-int Dos9_PutEnv(char* lpEnv);
-
-#else
-
-#define Dos9_PutEnv(a) putenv(a)
-
-#endif
+int Dos9_setenv(const char* name, const char* content);
 
 #define DOS9_ALL_PATH    0
 #define DOS9_DISK_LETTER 1

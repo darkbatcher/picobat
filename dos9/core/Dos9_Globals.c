@@ -46,14 +46,8 @@ extern char** environ;
 #endif
 
 char* lpInitVar[]= {
-	"DOS9_VERSION=" DOS9_VERSION,
-#ifdef WIN32
-	"DOS9_OS=WINDOWS",
-#elif defined _POSIX_C_SOURCE
-	"DOS9_OS=*NIX",
-#else
-	"DOS9_OS=UNKNOWN"
-#endif
-	NULL,
-	NULL
+	"DOS9_VERSION", DOS9_VERSION,
+	"DOS9_OS", DOS9_OS,
+	NULL, NULL,
+	NULL, NULL
 };
