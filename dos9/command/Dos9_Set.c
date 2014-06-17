@@ -42,6 +42,7 @@
 #include "../core/Dos9_Debug.h"
 
 #include "../errors/Dos9_Errors.h"
+
 double _Dos9_SetGetVarFloat(const char* lpName)
 {
 	char* lpContent;

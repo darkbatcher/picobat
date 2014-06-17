@@ -20,6 +20,10 @@
 #ifndef DOS9_GLOBALS_H
 #define DOS9_GLOBALS_H
 
+#ifdef _POSIX_C_SOURCE
+extern char** environ;
+#endif
+
 extern int bAbortCommand;
 extern int bDelayedExpansion;
 extern int bUseFloats;
