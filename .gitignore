@@ -1,8 +1,13 @@
 *~
 *.[oa]
+*.lo
+*.la
+*.m4
+m4
 Makefile
-include
-lib
 bin
 config.*
+autom4te.cache
+.libs
+.deps
 autom4te.cache

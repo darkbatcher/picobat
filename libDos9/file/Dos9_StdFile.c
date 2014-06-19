@@ -3,7 +3,7 @@
 #include <dirent.h>
 #include <string.h>
 
-#include "../LibDos9.h"
+#include "../libDos9-int.h"
 
 #include "Dos9_File.h"
 

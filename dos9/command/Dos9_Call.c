@@ -26,7 +26,7 @@
 
 #include "../core/Dos9_Core.h"
 
-#include "../lang/Dos9_Help.h"
+#include "../lang/Dos9_ShowHelp.h"
 
 #include "Dos9_Call.h"
 

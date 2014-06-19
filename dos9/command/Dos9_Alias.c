@@ -28,7 +28,7 @@
 #include "../core/Dos9_Core.h"
 
 #include "../errors/Dos9_Errors.h"
-#include "../lang/Dos9_Help.h"
+#include "../lang/Dos9_ShowHelp.h"
 
 int Dos9_CmdAlias(char* lpLine)
 {

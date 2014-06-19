@@ -1,4 +1,4 @@
-#include "../LibDos9.h"
+#include "../libDos9-int.h"
 
 
 LIBDOS9     LPSTACK Dos9_PushStack(LPSTACK lpcsStack, void* ptrContent)

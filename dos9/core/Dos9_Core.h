@@ -39,13 +39,13 @@
 #include "Dos9_Run.h"
 #include "Dos9_Expand.h"
 #include "Dos9_SplitPath.h"
-#include "Dos9_Block.h"
-#include "Dos9_Alias.h"
+#include "Dos9_ParseBlock.h"
+#include "Dos9_ExpandAlias.h"
 
 
 #include "Dos9_Globals.h"
 
-#include "Dos9_Exit.h"
+#include "Dos9_ExitInt.h"
 
 #ifdef WIN32
 

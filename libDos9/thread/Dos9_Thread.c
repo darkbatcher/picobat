@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include <errno.h>
 
-#include "../LibDos9.h"
+#include "../libDos9-int.h"
 
 
 STACK* _lpcsThreadStack=NULL;
@@ -60,7 +60,7 @@ void _Dos9_Thread_Close(void) {
 /*
     begins a thread
  */
-int Dos9_BeginThread(THREAD* lpThId, void(*lpFunction)(void*) , int iMemAmount,                      void* lpArgList)
+int Dos9_BeginThread(THREAD* lpThId, void(*lpFunction)(void*) , int iMemAmount, void* lpArgList)
 {
     int            iRet;
     pthread_t     *lpTh2;

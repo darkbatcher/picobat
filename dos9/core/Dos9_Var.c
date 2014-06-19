@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2014 DarkBatcher
+ *   Copyright (C) 2010-2014 Romain Garbi (DarkBatcher)
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -58,6 +58,9 @@ int Dos9_setenv(const char* name, const char* content)
 
 	lpCh=name;
 
+	/* loop in order to remove trailing spaces and tabs after variable
+	   name. This is necessary to conform with cmd.exe */
+
 	while (*lpCh) {
 
 		switch(*lpCh) {
@@ -95,8 +98,6 @@ int Dos9_setenv(const char* name, const char* content)
 		Dos9_EsCat(lpEsStr, content);
 
 		putenv(Dos9_EsToChar(lpEsStr));
-
-		printf("set : \"%s\"\n", Dos9_EsToChar(lpEsStr));
 
 	#elif defined(_POSIX_C_SOURCE)
 

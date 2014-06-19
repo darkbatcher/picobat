@@ -18,7 +18,7 @@
  *
  */
 
-#include "../LibDos9.h"
+#include "../libDos9-int.h"
 
 short Dos9_MakeFileAttributes(const char* lpToken)
 {
