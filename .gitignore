@@ -3,6 +3,10 @@
 *.lo
 *.la
 *.m4
+*.exe
+*.gz
+.hg
+config
 m4
 Makefile
 bin
@@ -11,3 +15,10 @@ autom4te.cache
 .libs
 .deps
 autom4te.cache
+ltmain.sh
+install-sh
+depcomp
+ylwrap
+libtool
+stamp-h1
+missing

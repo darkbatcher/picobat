@@ -32,8 +32,8 @@
 #include "Dos9_Errors.h"
 #include "../core/Dos9_Core.h"
 
-#include <libintl.h>
-
+#include "../../config.h"
+#include "../gettext.h"
 
 const char* lpErrorMsg[DOS9_ERROR_MESSAGE_NUMBER];
 const char* lpQuitMessage;

@@ -2,7 +2,9 @@
 #include <stdlib.h>
 
 #include <libDos9.h>
-#include <libintl.h>
+
+#include "../../config.h"
+#include "../gettext.h"
 
 #include "Dos9_ShowHelp.h"
 

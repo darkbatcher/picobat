@@ -189,12 +189,15 @@ int main(int argc, char *argv[])
 					break;
 
 				case '?':
-					puts("DOS9 [" DOS9_VERSION "] - Build " DOS9_BUILDDATE "\n"
+					puts("DOS9 [" DOS9_VERSION "] (" DOS9_HOST ") - " DOS9_BUILDDATE "\n"
 					     "Copyright (c) 2010-" DOS9_BUILDYEAR " " DOS9_AUTHORS "\n\n"
 					     "This is free software, you can modify and/or redistribute it under "
-					     "the terms of the GNU Genaral Public License.\n");
+					     "the terms of the GNU Genaral Public License v3 (or any later version).\n");
 
 					puts(lpHlpMain);
+
+					puts("Feel free to report bugs and submit suggestions at : <" DOS9_BUGREPORT ">\n"
+						 "For more informations see : <" DOS9_URL ">");
 					return 0;
 
 				case '/' :

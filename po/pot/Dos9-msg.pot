@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-17 00:20+0200\n"
+"POT-Creation-Date: 2014-06-23 23:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,161 +17,112 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../dos9/lang/Dos9_Lang.c:84
+#: ../dos9/lang/Dos9_Lang.c:85
 msgid "Echo command enabled"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:85
+#: ../dos9/lang/Dos9_Lang.c:86
 msgid "Echo command disabled"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:86
+#: ../dos9/lang/Dos9_Lang.c:87
 msgid "Press any key to continue..."
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:89
+#: ../dos9/lang/Dos9_Lang.c:90
 msgid "\tNo files found\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:90
+#: ../dos9/lang/Dos9_Lang.c:91
 msgid ""
 "\n"
 "Last change\t\tSize\tAttr.\tName\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:91
+#: ../dos9/lang/Dos9_Lang.c:92
 #, c-format
 msgid ""
 "\t\t\t\t\t\t%d Files\n"
 "\t\t\t\t\t\t%d Folders\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:94
+#: ../dos9/lang/Dos9_Lang.c:95
 #, c-format
-msgid "Are you sure you want to delete \"%s\" ?"
+msgid "Are you sure you want to delete file \"%s\" ?"
 msgstr ""
 
 #: ../dos9/lang/Dos9_Lang.c:96
-msgid " (Yes/no) "
-msgstr ""
-
-#: ../dos9/lang/Dos9_Lang.c:97
-msgid " (yes/No) "
+#, c-format
+msgid "Are you sure you want to remove \"%s\" directory ?"
 msgstr ""
 
 #: ../dos9/lang/Dos9_Lang.c:98
-msgid " (yes/no) "
+msgid " (Yes/no) "
+msgstr ""
+
+#: ../dos9/lang/Dos9_Lang.c:99
+msgid " (yes/No) "
 msgstr ""
 
 #: ../dos9/lang/Dos9_Lang.c:100
-msgid " (Yes/no/all) "
-msgstr ""
-
-#: ../dos9/lang/Dos9_Lang.c:101
-msgid " (yes/No/all) "
+msgid " (yes/no) "
 msgstr ""
 
 #: ../dos9/lang/Dos9_Lang.c:102
-msgid " (yes/no/All) "
+msgid " (Yes/no/all) "
 msgstr ""
 
 #: ../dos9/lang/Dos9_Lang.c:103
-msgid " (yes/no/all) "
+msgid " (yes/No/all) "
+msgstr ""
+
+#: ../dos9/lang/Dos9_Lang.c:104
+msgid " (yes/no/All) "
 msgstr ""
 
 #: ../dos9/lang/Dos9_Lang.c:105
+msgid " (yes/no/all) "
+msgstr ""
+
+#: ../dos9/lang/Dos9_Lang.c:107
 msgid "YES"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:106
+#: ../dos9/lang/Dos9_Lang.c:108
 msgid "Y"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:108
+#: ../dos9/lang/Dos9_Lang.c:110
 msgid "NO"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:109
+#: ../dos9/lang/Dos9_Lang.c:111
 msgid "N"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:111
+#: ../dos9/lang/Dos9_Lang.c:113
 msgid "ALL"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:112
+#: ../dos9/lang/Dos9_Lang.c:114
 msgid "A"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:114
+#: ../dos9/lang/Dos9_Lang.c:116
 msgid "Please enter a correct choice (or type enter to choose default) !\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:116
+#: ../dos9/lang/Dos9_Lang.c:118
 msgid ""
-"DOS9 COMMAND\n"
+"Usage:\tDOS9 [/v] [/c] [/f] [/e] [/q] [/i in] [/o out] [file]\n"
 "\n"
-"        DOS9 is a free, cross-platform command prompt used for batch "
-"scripts \n"
-"     and command processing.\n"
-"\n"
-"        DOS9 is a free software, designed to be as compatible as possible "
-"with\n"
-"     CMD.EXE proprietary software from MICROSOFT.\n"
-"\n"
-"SYNOPSIS\n"
-"\n"
-"   DOS9 [/v] [/n] [/f] [/e] [file]\n"
-"\n"
-"        Run a command file or wait for an user input.\n"
-"\n"
-"        - FILE : Path of the batch script to be run.\n"
-"\n"
-"        - /V : Enables delayed expansion (see `spec/xvar').\n"
-"\n"
-"        - /N : Enables dos9's extension (see `spec/ext').\n"
-"\n"
-"        - /F : Enables floating numbers (see `spec/exp').\n"
-"\n"
-"        - /E : Disable current directory echoing.\n"
-"\n"
-"COMPATIBILITY\n"
-"\n"
-"        Compatible with any version of DOS9. Incompatible with CMD.EXE.\n"
-"\n"
-"        Dos9 is cross-platform so that it can be run either on MS-WINDOWS "
-"or \n"
-"     GNU/LINUX. Theorically, a port of Dos9 should be possible in any \n"
-"     POSIX-compatible system just by recompiling sources using a C89 "
-"compiler.\n"
-"\n"
-"LICENSE\n"
-"\n"
-"        DOS9 is a free software distributed under GNU General Public "
-"License \n"
-"     (see `http://www.gnu.org/licenses/gpl.html') terms. For more \n"
-"     informations about free software's philosophy, see Free Software \n"
-"     Fundation's (see `http://www.fsf.org') website.\n"
-"\n"
-"AUTHOR\n"
-"\n"
-"        DOS9 have been written since 2010 by DARKBATCHER (ROMAIN GARBI). "
-"It \n"
-"     uses severals helpful free libraries from the GNU operating system "
-"(see \n"
-"     `http://www.gnu.org/'), mostly libmatheval (see \n"
-"     `http://www.gnu.org/software/libmatheval/'), gettext (see \n"
-"     `https://www.gnu.org/software/gettext/').\n"
-"\n"
-"        Dos9's windows packages also distribute some binaries from the "
-"GnuWin \n"
-"     project (see `http://gnuwin32.sourceforge.net/'). These binaries are "
-"GNU \n"
-"     iconv (see `iconv') and GNU nano (see `nano').\n"
-"\n"
-"SEE ALSO\n"
-"\n"
-"        ECHO Command (see `echo'), Command scripts (see `script'), "
-"Commands \n"
-"     list (see `commands') Commands list (see `commands')\n"
+"\t/v\tEnable delayed expansion.\n"
+"\t/c\tEnable CMDLYCORRECT option to enable more compatibility with\n"
+"\t\tcmd.exe.\n"
+"\t/f\tEnable floating numbers support.\n"
+"\t/e\tDisable echo command (disable current path printing).\n"
+"\t/q\tQuiet Mode (does not print start screen).\n"
+"\t/i in\tFile descriptor to used as input.\n"
+"\t/o out\tFile descriptor to be used as output.\n"
+"\tfile\tA batch file to be executed.\n"
 msgstr ""

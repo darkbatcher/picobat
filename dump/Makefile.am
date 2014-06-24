@@ -16,22 +16,5 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-EXTRA_DIST = m4/ChangeLog  po man scripts LICENSE README WHATSNEW
-ACLOCAL_AMFLAGS = -I m4
-AUTOMAKE_OPTIONS = foreign subdir-objects
-SUBDIRS = libinteval libmatheval libDos9 dos9 tea dump po
-
-SHAREDEXT = @SHAREDEXT@
-
-# a rule to make local distributions of dos9
-local : all
-	mkdir -p ./bin
-	cp ./dos9/@DOS9_OBJDIR@/dos9$(EXEEXT) ./bin/
-	cp ./libDos9/@DOS9_OBJDIR@/libDos9-*$(SHAREDEXT) ./bin/
-	mkdir -p ./bin/cmd
-	cp ./tea/@DOS9_OBJDIR@/tea$(EXEEXT) ./bin/cmd
-	cp ./dump/@DOS9_OBJDIR@/dump$(EXEEXT) ./bin/cmd
-	cd po && make local
-	
-po-merge:
-	cd po && make po-merge
+bin_PROGRAMS = dump
+dump_SOURCES = dump.c

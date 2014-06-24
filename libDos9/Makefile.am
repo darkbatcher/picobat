@@ -16,22 +16,17 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-EXTRA_DIST = m4/ChangeLog  po man scripts LICENSE README WHATSNEW
-ACLOCAL_AMFLAGS = -I m4
-AUTOMAKE_OPTIONS = foreign subdir-objects
-SUBDIRS = libinteval libmatheval libDos9 dos9 tea dump po
+lib_LTLIBRARIES = libDos9.la
 
-SHAREDEXT = @SHAREDEXT@
+noinst_HEADERS = libDos9-int.h
 
-# a rule to make local distributions of dos9
-local : all
-	mkdir -p ./bin
-	cp ./dos9/@DOS9_OBJDIR@/dos9$(EXEEXT) ./bin/
-	cp ./libDos9/@DOS9_OBJDIR@/libDos9-*$(SHAREDEXT) ./bin/
-	mkdir -p ./bin/cmd
-	cp ./tea/@DOS9_OBJDIR@/tea$(EXEEXT) ./bin/cmd
-	cp ./dump/@DOS9_OBJDIR@/dump$(EXEEXT) ./bin/cmd
-	cd po && make local
-	
-po-merge:
-	cd po && make po-merge
+include_HEADERS = libDos9.h
+
+libDos9_la_SOURCES = ./cmdlist/Dos9_CmdList.c ./console/Dos9_ConsoleANSI.c \
+./console/Dos9_ConsoleWin.c ./dir/Dos9_Attr.c ./dir/Dos9_Dir.c \
+./enc/Dos9_Enc.c ./estr/Dos9_Estr.c stack/Dos9_Stack.c \
+./thread/Dos9_Thread.c ./file/Dos9_StdFile.c \
+./file/Dos9_Win32File.c ./init/Dos9_Init.c ./cmdlib/Dos9_String.c 
+
+libDos9_la_LDFLAGS = -no-undefined
+libDos9_la_LIBADD = @LIBS@

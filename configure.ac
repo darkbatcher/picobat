@@ -28,12 +28,17 @@ AC_CONFIG_HEADER([config.h])
 
 AC_CANONICAL_HOST
 
+dnl This is a trick in order to define the host variable
+dnl in a decent way
+$as_echo "#define HOST \"$host\"" >> confdefs.h
+
+AS_IF([test "x" = "y"],
+      [AC_DEFINE([HOST], [1], Define to your host name)])
+
 AM_INIT_AUTOMAKE
 
 dnl We need libtool to compile shared libraries 
 LT_INIT
-
-AC_LIBTOOL_WIN32_DLL
 
 dnl Perform some checks on available programs.
 AC_PROG_CC
@@ -42,6 +47,12 @@ AC_PROG_LEX
 AC_PROG_LIBTOOL
 AC_STDC_HEADERS
 
+AM_GNU_GETTEXT([external])
+
+dnl Get .libs path
+AC_SUBST([DOS9_OBJDIR], [$objdir])
+AC_SUBST([SHAREDEXT], [$shrext_cmds])
+
 AC_ARG_ENABLE([console],
 	    [AC_HELP_STRING([--enable-console],
 			    [Use extended console features such as color (default is yes)])],
@@ -49,7 +60,7 @@ AC_ARG_ENABLE([console],
 	    [enable_console=yes])
 
 AS_IF([test "x$enable_console" = xno], 
-      [AC_DEFINE([LIBDOS9_NO_CONSOLE], [1], "Define to 1 if you want to enable console feature")])
+      [AC_DEFINE([LIBDOS9_NO_CONSOLE], [1], Define to 1 if you want to enable console feature)])
 
 dnl Perform some header checks in order to know wether headers are present in the
 dnl platform for which we build the software. Some would say it is poor
@@ -58,16 +69,13 @@ dnl sufficient enough to determine wether libraries are installed.
 AC_CHECK_HEADERS([libintl.h])
 
 dnl Perform some checks in order to know with which library we should link.
-dnl It is theorically not need to link with iconv, but if the system is based
-dnl on static-only libs, it may be necessary.
 AC_CHECK_LIB([pthread],[pthread_create],[],[])
-AC_CHECK_LIB([intl],[gettext],[],[])
-AC_CHECK_LIB([iconv],[iconv],[],[])
 AC_CHECK_LIB([m],[cos],[],[AC_MSG_ERROR("No math C library")])
 
 AC_CONFIG_SUBDIRS([libmatheval])
 
-AC_CONFIG_FILES([Makefile 
+AC_CONFIG_FILES([Makefile
+				po/Makefile
 				libDos9/Makefile
                 libinteval/Makefile
                 dos9/Makefile

@@ -20,12 +20,40 @@
 #ifndef DOS9_VERSION_INFO_H
 #define DOS9_VERSION_INFO_H
 
+#include "../../config.h"
+
+#ifdef PACKAGE_VERSION
+#define DOS9_VERSION PACKAGE_VERSION
+#else
 #define DOS9_VERSION "2014.0.9b"
+#endif
+
+#ifdef PACKAGE_BUGREPORT
+#define DOS9_BUGREPORT PACKAGE_BUGREPORT
+#else
+#define DOS9_BUGREPORT "darkbatcher@dos9.org"
+#endif
+
+#ifdef PACKAGE_URL
+#define DOS9_URL PACKAGE_URL
+#else
+#define DOS9_URL "http://www.dos9.org/"
+#endif
+
+#ifdef HOST
+#define DOS9_HOST HOST
+#else
+#define DOS9_HOST "Unknown"
+#endif
+
 #define DOS9_AUTHORS "Romain Garbi (DarkBatcher)"
 #define DOS9_BUILDDATE __DATE__
 #define DOS9_BUILDYEAR "2014"
 #define DOS9_BUILDCOMMENTS "Beta release"
 
+/* Choose between different know operating systems.
+   There is obviously more operating systems, but
+   there are those that we support */
 #if defined(WIN32)
 #define DOS9_OS "WINDOWS"
 #elif defined(__linux__)

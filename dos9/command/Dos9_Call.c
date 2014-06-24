@@ -28,8 +28,23 @@
 
 #include "../lang/Dos9_ShowHelp.h"
 
+#define DOS9_DBG_MODE
+#include "../core/Dos9_Debug.h"
+
 #include "Dos9_Call.h"
 
+/* CALL [/e] [file] [:label] [parameters ...]
+
+   /e 				: extended mode (specify file and label)
+   file 			: file to be executed (or in which look for label)
+   :label 			: label to be executed
+   parameters ... 	: parameters to be given to the script.
+
+   As a special exception to our guidelines (independent order of switches),
+   the /e switch may only be located right after the call command, this is
+   intended for compatibility purposes. Hence we could easily imagine a
+   command that takes a /e switch that would confuse call command.
+*/
 int Dos9_CmdCall(char* lpLine)
 {
 	ESTR *lpEsParameter=Dos9_EsInit(),
@@ -45,24 +60,18 @@ int Dos9_CmdCall(char* lpLine)
 	int  bIsExtended=FALSE,
 	     iNbParam=0;
 
-
 	lpLine+=4;
 
 	while (lpNxt=Dos9_GetNextParameterEs(lpLine, lpEsParameter)) {
 
 		lpCh=Dos9_EsToChar(lpEsParameter);
 
-		if (!stricmp(lpCh, "//")) {
+		DOS9_DBG("[Call] Ok, the arg is : \"%s\"\n", lpCh);
 
-			/* this is the last parameter switch, that means,
-			   the following arguments are just command
-			   arguments */
+		if (!stricmp(lpCh, "/E") && !iNbParam) {
 
-			lpLine=lpNxt;
-
-			break;
-
-		} else if (!stricmp(lpCh, "/E")) {
+			/* only accept this switch if this is the first parameter
+			   given (see description above */
 
 			if (bCmdlyCorrect == TRUE) {
 
@@ -102,7 +111,7 @@ int Dos9_CmdCall(char* lpLine)
 
 				case ':' :
 					/* this is a label, obviously, so that we must
-					   parameter ``label'' */
+					   have parameter ``label'' */
 
 					if (*(Dos9_EsToChar(lpEsLabel))) {
 
@@ -118,11 +127,11 @@ int Dos9_CmdCall(char* lpLine)
 					break;
 
 				default:
-					/* this is the ``file'', obviously */
+					/* this is the ``file'' parameter, obviously */
 
 					if (*(Dos9_EsToChar(lpEsFile))) {
 
-						/* that parameter is already set, so that it migth
+						/* that parameter is already set, so that it might
 						   be the next first argument  */
 
 						break;
@@ -217,24 +226,16 @@ int Dos9_CmdCallFile(char* lpFile, char* lpLabel, char* lpCmdLine)
 {
 	INPUT_FILE ifOldFile;
 	LOCAL_VAR_BLOCK lpvOldBlock[LOCAL_VAR_BLOCK_SIZE];
+	LOCAL_VAR_BLOCK lpvTmpBlock[LOCAL_VAR_BLOCK_SIZE]={NULL};
 	char lpAbsPath[FILENAME_MAX];
 
 	ESTR *lpEsParam=Dos9_EsInit();
 	int   c='1',
 	      iLockState;
 
-	/* We backup the old informations */
+	/* We backup the old file informations */
 
 	memcpy(&ifOldFile, &ifIn, sizeof(INPUT_FILE));
-	memcpy(lpvOldBlock,
-	       lpvLocalVars,
-	       LOCAL_VAR_BLOCK_SIZE *sizeof(LOCAL_VAR_BLOCK));
-
-	/* Now we reset local var buffer */
-
-	memset(lpvLocalVars,
-	       0,
-	       LOCAL_VAR_BLOCK_SIZE*sizeof(LOCAL_VAR_BLOCK));
 
 	/* Set the INPUT_INFO data */
 
@@ -256,7 +257,7 @@ int Dos9_CmdCallFile(char* lpFile, char* lpLabel, char* lpCmdLine)
 		         lpAbsPath
 		        );               /* sets input to given file */
 
-		Dos9_SetLocalVar(lpvLocalVars, '0', lpFile);
+		Dos9_SetLocalVar(lpvTmpBlock, '0', lpFile);
 
 	} else if (Dos9_JumpToLabel(lpLabel, lpFile)== -1) {
 
@@ -265,7 +266,7 @@ int Dos9_CmdCallFile(char* lpFile, char* lpLabel, char* lpCmdLine)
 
 	} else {
 
-		Dos9_SetLocalVar(lpvLocalVars, '0', lpLabel);
+		Dos9_SetLocalVar(lpvTmpBlock, '0', lpLabel);
 
 	}
 
@@ -274,13 +275,17 @@ int Dos9_CmdCallFile(char* lpFile, char* lpLabel, char* lpCmdLine)
 	while ((lpCmdLine=Dos9_GetNextParameterEs(lpCmdLine, lpEsParam))
 	       && (c <= '9')) {
 
-		Dos9_SetLocalVar(lpvLocalVars, c, Dos9_EsToChar(lpEsParam));
+		Dos9_SetLocalVar(lpvTmpBlock, c, Dos9_EsToChar(lpEsParam));
 
 		c++;
 
 	}
 
 	if (c > '9') {
+
+		/* if we set more then 9 argument variables. then display an
+		   error, and eventually, reset the array containing local
+		   variables. */
 
 		Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT,
 		                      Dos9_EsToChar(lpEsParam),
@@ -291,12 +296,18 @@ int Dos9_CmdCallFile(char* lpFile, char* lpLabel, char* lpCmdLine)
 
 	}
 
-	while (c<='9') {
+	/* Backup the old variables data in order to be able to push old data
+	   again on local variables. */
 
-		Dos9_SetLocalVar(lpvLocalVars, c, "");
-		c++;
+	memcpy(lpvOldBlock,
+	       lpvLocalVars,
+	       LOCAL_VAR_BLOCK_SIZE *sizeof(LOCAL_VAR_BLOCK));
 
-	}
+	/* Use the block created as the new variables block. */
+
+	memcpy(lpvLocalVars,
+	       lpvTmpBlock,
+	       LOCAL_VAR_BLOCK_SIZE *sizeof(LOCAL_VAR_BLOCK));
 
 	/* lock the stream stack */
 
@@ -314,20 +325,21 @@ int Dos9_CmdCallFile(char* lpFile, char* lpLabel, char* lpCmdLine)
 	Dos9_SetStreamStackLockState(lppsStreamStack, iLockState);
 
 	/* free variables that have been allocated while
-	   executing the batch script */
+	   executing the batch script (or the function) */
 
 	for (c=0; c < LOCAL_VAR_BLOCK_SIZE; c++) {
 
-		if (lpvLocalVars[c]) {
+		if (lpvTmpBlock[c]) {
 
-			free(lpvLocalVars[c]);
-			lpvLocalVars[c]=NULL;
+			free(lpvTmpBlock[c]);
+			lpvTmpBlock[c]=NULL;
 
 		}
 
 	}
 
-	/* restore old settings */
+	/* restore old settings before resuming to the old section */
+
 	memcpy(&ifIn, &ifOldFile, sizeof(INPUT_FILE));
 	memcpy(lpvLocalVars, lpvOldBlock, LOCAL_VAR_BLOCK_SIZE*sizeof(LOCAL_VAR_BLOCK));
 	Dos9_EsFree(lpEsParam);

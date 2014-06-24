@@ -900,3 +900,14 @@ type "some file"}
 	- Changed some source file name because {automake} was complaining about overlapping objects file names. Some of the name are more
 	logical, but, some are not really.
 	
+{{Tuesday 24th, June}}
+
+	- Corrected a bug that prevented local variable (eg. like {%1}) to be used as argument with the {call} command, thanks to Jo15 from
+	{http://batch.xoo.it|batch.xoo.it} who reported the error.
+	
+	- Added {local} target to {Makefile} that generates a local installation of {Dos9} inside the folder {./bin}. It is as simple as typing
+	
+${make local}
+
+	- Added macros from the {gnu gettext} package. Also enabled the use of the --disable-nls switch for configure.
+	
