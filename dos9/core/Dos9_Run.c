@@ -254,7 +254,7 @@ int Dos9_RunCommand(ESTR* lpCommand)
 {
 
 	int (*lpProc)(char*);
-	char lpErrorlevel[]="ERRORLEVEL=-3000000000";
+	char lpErrorlevel[]="-3000000000";
 	static int lastErrorLevel=0;
 	char *lpCmdLine;
 	int iFlag;
@@ -298,8 +298,8 @@ BackTrackExternalCommand:
 
 	if (iErrorLevel!=lastErrorLevel) {
 
-		snprintf(lpErrorlevel+11, sizeof(lpErrorlevel)-11, "%d", iErrorLevel);
-		Dos9_PutEnv(lpErrorlevel);
+		snprintf(lpErrorlevel, sizeof(lpErrorlevel), "%d", iErrorLevel);
+		Dos9_setenv("ERRORLEVEL",lpErrorlevel);
 		lastErrorLevel=iErrorLevel;
 	}
 

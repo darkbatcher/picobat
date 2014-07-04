@@ -1040,3 +1040,17 @@ MONDAY 16TH, JUNE
         - Added a functionnal /Q switch to the RMDIR command. However, it is 
           supposed to deal with the /S switch, which is not functional yet.
 
+THURSDAY 19TH, JUNE
+
+        - I eventually decided to use the GNU toolchain to compile DOS9. I 
+          previously expressed lots of criticism toward use of autotools, but 
+          libtool (which is par of the GNU toolchain) is unfortunately the 
+          only program that allows devellopers to deal with libraries 
+          (staticly or dynamically linked) in a platform independent way. This 
+          is the best solution I have, but if a newer build systems that 
+          enables to make such things emerged, I'd be glad to move to it.
+
+        - Changed some source file name because AUTOMAKE was complaining about 
+          overlapping objects file names. Some of the name are more logical, 
+          but, some are not really. 
+

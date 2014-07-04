@@ -1,12 +1,4 @@
-#include "../LibDos9.h"
-
-#ifndef DOS9_MAX_FREEBUFFER_SIZE
-    #define DOS9_MAX_FREEBUFFER_SIZE 64
-    /*
-        defines the size of string garbage collection
-    */
-#endif // DOS9_MAX_FREEBUFFER_SIZE
-
+#include "../libDos9-int.h"
 
 #define _Dos9_EsTotalLen(ptrChaine) ((strlen(ptrChaine)/DEFAULT_ESTR+1)*DEFAULT_ESTR)
 #define _Dos9_EsTotalLen2(ptrChaine, ptrString) (((strlen(ptrChaine)+strlen(ptrString))/DEFAULT_ESTR+1)*DEFAULT_ESTR)

@@ -19,7 +19,7 @@
  */
 
 #include <ctype.h>
-#include "../LibDos9.h"
+#include "../libDos9-int.h"
 
 LIBDOS9 int Dos9_RegExpMatch(char* lpRegExp, char* lpMatch)
 {

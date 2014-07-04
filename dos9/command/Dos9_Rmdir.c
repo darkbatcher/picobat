@@ -35,25 +35,12 @@
 #include "Dos9_Commands.h"
 
 #include "../lang/Dos9_Lang.h"
-#include "../lang/Dos9_Help.h"
+#include "../lang/Dos9_ShowHelp.h"
 
 // #define DOS9_DBG_MODE
 #include "../core/Dos9_Debug.h"
 
 #include "../errors/Dos9_Errors.h"
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <time.h>
-#include <string.h>
-
-#include <libDos9.h>
-
-#include "../lang/Dos9_Lang.h"
-#include "../lang/Dos9_Help.h"
-#include "../errors/Dos9_Errors.h"
-#include "../core/Dos9_Core.h"
 
 #include "Dos9_Rmdir.h"
 
@@ -65,7 +52,7 @@
    removes the 'dir' directory. It may also suppress severals directories specified in a row.
 
    /S : suppress subfolders and subfiles.
-   /Q : Quiet
+   /Q : Quiet for while browsing subfolders.
 
    */
 
@@ -88,6 +75,7 @@ int Dos9_CmdRmdir(char* lpLine)
 		if (!strcmp(Dos9_EsToChar(lpEstr), "/?")) {
 
 			Dos9_ShowInternalHelp(DOS9_HELP_RD);
+			break;
 
 		} else if (!stricmp(Dos9_EsToChar(lpEstr),"/S")) {
 

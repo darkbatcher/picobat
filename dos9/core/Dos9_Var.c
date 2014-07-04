@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2014 DarkBatcher
+ *   Copyright (C) 2010-2014 Romain Garbi (DarkBatcher)
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -35,16 +35,6 @@
 /* this file contains code of function used for parsing variables content
    (e.g. %~* and !:*! */
 
-#ifdef WIN32
-
-#define Dos9_GetFileAttributes(lpcstr) GetFileAttributes(lpcstr)
-
-#elif defined _POSIX_C_SOURCE
-
-#define Dos9_GetFileAttributes(lpcstr) GetFileAttributes(lpcstr)
-
-#endif // WIN32
-
 #ifndef WIN32
 
 void strupr(char* lpBuf)
@@ -57,12 +47,75 @@ void strupr(char* lpBuf)
 
 #endif
 
+int Dos9_setenv(const char* name, const char* content)
+{
+	ESTR* lpEsStr=Dos9_EsInit();
+	int   ret;
+	size_t size;
+
+	const char *lpLastNSpace=NULL,
+	           *lpCh;
+
+	lpCh=name;
+
+	/* loop in order to remove trailing spaces and tabs after variable
+	   name. This is necessary to conform with cmd.exe */
+
+	while (*lpCh) {
+
+		switch(*lpCh) {
+
+			case ' ':
+			case '\t':
+				if (!lpLastNSpace)
+					lpLastNSpace=lpCh;
+
+				break;
+
+			default:
+				lpLastNSpace=NULL;
+
+		}
+
+		lpCh++;
+
+	}
+
+	if (lpLastNSpace) {
+
+		size=lpLastNSpace-name;
+		Dos9_EsCpyN(lpEsStr, name, size);
+
+	} else {
+
+		Dos9_EsCpy(lpEsStr, name);
+
+	}
+
+	#if defined(WIN32)
+
+		Dos9_EsCat(lpEsStr, "=");
+		Dos9_EsCat(lpEsStr, content);
+
+		putenv(Dos9_EsToChar(lpEsStr));
+
+	#elif defined(_POSIX_C_SOURCE)
+
+		ret=setenv(Dos9_EsToChar(lpEsStr), content, 1);
+
+	#endif // defined(WIN32)
+
+	Dos9_EsFree(lpEsStr);
+
+	return ret;
+}
+
 
 int Dos9_InitVar(char* lpArray[])
 {
 	int i;
-	for (i=0; lpArray[i]; i++) {
-		Dos9_PutEnv(lpArray[i]);
+	for (i=0; lpArray[i] && lpArray[i+1]; i+=2) {
+		Dos9_setenv(lpArray[i], lpArray[i+1]);
 	}
 	return 0;
 }
@@ -429,7 +482,7 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 		stat(lpPos, &stFileInfo);
 
 #if defined WIN32
-		stFileInfo.st_mode=Dos9_GetFileAttributes(lpPos);
+		stFileInfo.st_mode=GetFileAttributes(lpPos);
 #endif
 	}
 
@@ -519,34 +572,3 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 
 	return lpName+1;
 }
-
-#ifdef _POSIX_C_SOURCE
-
-int Dos9_PutEnv(char* lpEnv)
-{
-	char *lpEnvCpy, *lpToken;
-	char lpVoid[]="";
-	int iRet;
-
-	if (!(lpEnvCpy=strdup(lpEnv)))
-		return -1;
-
-	if ((lpToken=strchr(lpEnvCpy, '='))) {
-
-		*lpToken='\0';
-		lpToken++;
-
-	} else {
-
-		lpToken=lpVoid;
-
-	}
-
-	strupr(lpEnvCpy);
-	iRet=setenv(lpEnvCpy, lpToken, TRUE);
-	free(lpEnvCpy);
-
-	return iRet;
-}
-
-#endif

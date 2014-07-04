@@ -36,7 +36,7 @@
 #include "Dos9_Echo.h"
 
 #include "../lang/Dos9_Lang.h"
-#include "../lang/Dos9_Help.h"
+#include "../lang/Dos9_ShowHelp.h"
 
 // #define DOS9_DBG_MODE
 #include "../core/Dos9_Debug.h"

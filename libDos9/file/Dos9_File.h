@@ -41,6 +41,6 @@
 
 #endif
 
-#include "../LibDos9.h"
+#include "../libDos9-int.h"
 
 #endif
