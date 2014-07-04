@@ -9,7 +9,18 @@
 /* Define the values of symlinks on process information (especially, the path
    of the current executable) via procfs. This is a big concern however,
    because there's no standards used on the procfs system, so that
-   every OS have differebt syntax
+   every OS have different syntax. On some other operating systems (MacOS X,
+   FreeBSD, SunOS, Solaris, AIX), platform dependent code sould be written in
+   order to make the file portable.
+
+	OSes Currently suppported :
+
+	* MS-Windows (NT)
+	* GNU/Linux
+	* NetBSD
+	* DragonFlyBSD
+	* OpenBSD
+
  */
 
 #if defined __linux__
