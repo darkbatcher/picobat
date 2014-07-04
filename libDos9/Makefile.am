@@ -16,6 +16,8 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+AUTOMAKE_OPTIONS = foreign subdir-objects
+
 lib_LTLIBRARIES = libDos9.la
 
 noinst_HEADERS = libDos9-int.h

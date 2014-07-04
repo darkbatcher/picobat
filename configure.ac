@@ -23,6 +23,7 @@ AC_INIT([Dos9],
 	[http://www.dos9.org/])
 
 AC_PREREQ([2.59])
+AC_CONFIG_AUX_DIR([config])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADER([config.h])
 
@@ -75,11 +76,11 @@ AC_CHECK_LIB([m],[cos],[],[AC_MSG_ERROR("No math C library")])
 AC_CONFIG_SUBDIRS([libmatheval])
 
 AC_CONFIG_FILES([Makefile
-				po/Makefile
-				libDos9/Makefile
+		po/Makefile
+		libDos9/Makefile
                 libinteval/Makefile
                 dos9/Makefile
                 tea/Makefile
-				dump/Makefile])
+		dump/Makefile])
 
 AC_OUTPUT

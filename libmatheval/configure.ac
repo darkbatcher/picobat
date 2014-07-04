@@ -21,11 +21,11 @@ dnl <http://www.gnu.org/licenses/>.
 dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.53)
 AC_INIT([libmatheval],[2014.1.0],[darkbatcher@dos9.org])
-AC_CONFIG_AUX_DIR([config])
-AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_AUX_DIR([../config])
+AC_CONFIG_MACRO_DIR([../m4])
 AC_SUBST([ac_aux_dir])
 AM_INIT_AUTOMAKE([libmatheval], [2014.1.0])
-AC_CONFIG_SRCDIR([configure.in])
+AC_CONFIG_SRCDIR([configure.ac])
 AM_CONFIG_HEADER([config.h])
 
 AC_ARG_ENABLE([guile],
@@ -43,6 +43,8 @@ AS_IF([test "x$enable_guile" != "xno"],
 AC_CONFIG_FILES([tests/matheval.sh], [chmod +x tests/matheval.sh])
 AC_CONFIG_FILES([tests/Makefile])
 ])
+
+LT_INIT
 
 AM_CONDITIONAL([ENABLE_GUILE], [test "x$enable_guile" = "xno"])
 

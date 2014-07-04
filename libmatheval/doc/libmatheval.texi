@@ -29,11 +29,11 @@ license is included in the section entitled ``Copying''.
 @end ifnottex
 
 @titlepage
-@title{GNU @code{libmatheval} manual}
-@subtitle{Manual edition @value{EDITION}}
-@subtitle{For GNU @code{libmatheval} version @value{VERSION}}
-@subtitle{Last updated @value{UPDATED}}
-@author{Aleksandar Samardzic}
+@title GNU @code{libmatheval} manual
+@subtitle Manual edition @value{EDITION}
+@subtitle For GNU @code{libmatheval} version @value{VERSION}
+@subtitle Last updated @value{UPDATED}
+@author Aleksandar Samardzic
 
 @page
 @vskip 0pt plus 1filll
@@ -55,7 +55,6 @@ GNU @code{libmatheval} is small library of procedures for evaluating
 mathematical functions.  This manual documents how to use the library;
 this is manual edition @value{EDITION}, last updated @value{UPDATED},
 corresponding to library version @value{VERSION}.
-@end ifnottex
 
 @menu
 * License::               Library license conditions.
@@ -68,6 +67,7 @@ corresponding to library version @value{VERSION}.
 * Copying::               GNU Free Documentation License.
 * Index::                 Index of concepts and symbol names.
 @end menu
+@end ifnottex
 
 @node License, Introduction, Top, Top
 @unnumbered License
