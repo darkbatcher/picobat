@@ -43,6 +43,8 @@
 
 #include "../errors/Dos9_Errors.h"
 
+#include "../../config.h"
+
 int Dos9_CmdSetLocal(char* lpLine)
 {
 	char lpName[FILENAME_MAX];
@@ -65,12 +67,22 @@ int Dos9_CmdSetLocal(char* lpLine)
 
 		} else if (!stricmp(lpName, "CMDLYCORRECT")) {
 
+#if !defined(DOS9_STATIC_CMDLYCORRECT)
 			bCmdlyCorrect=TRUE;
-
+#else
+			Dos9_ShowErrorMessage(DOS9_UNABLE_SET_OPTION,
+						"CMDLYCORRECT",
+						FALSE
+						);			
+#endif 
 		} else if (!stricmp(lpName, "CMDLYINCORRECT")) {
-
+#if !defined(DOS9_STATIC_CMDLYCORRECT)
 			bCmdlyCorrect=FALSE;
-
+#else
+			Dos9_ShowErrorMessage(DOS9_UNABLE_SET_OPTION,
+						"CMDLYINCORRECT",
+						FALSE);
+#endif
 		} else if (!stricmp(lpName, "DISABLEFLOATS")) {
 
 			bUseFloats=FALSE;

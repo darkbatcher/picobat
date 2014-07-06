@@ -19,12 +19,16 @@
 
 #include "libDos9.h"
 #include "Dos9_Core.h"
+#include "../../config.h"
 
 int bDelayedExpansion=FALSE;
 int bUseFloats=FALSE;
-int bCmdlyCorrect=FALSE;
 int bEchoOn=TRUE;
 int iErrorLevel=0;
+
+#if !defined(DOS9_STATIC_CMDLYCORRECT)
+int bCmdlyCorrect=FALSE;
+#endif
 
 int bAbortCommand=FALSE;
 LPCOMMANDLIST lpclCommands;

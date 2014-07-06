@@ -79,7 +79,7 @@ int Dos9_GetParameterPointers(char** lpPBegin, char** lpPEnd, const char* lpDeli
 }
 
 char* Dos9_GetNextParameter(char* lpLine, char* lpResponseBuffer, int iLength)
-/* determines wheter a paramater follows the position lpLinLIBDOS9LIBDOS9LIBDOS9LIBDOS9e.
+/* determines wheter a paramater follows the position lpLine.
  *
  * lpLine : A pointer to where to seek a parameter
  * lpResponse : A buffer to store the parameter
@@ -155,7 +155,8 @@ char* Dos9_GetNextBlockEs(char* lpLine, ESTR* lpReturn)
 
 }
 
-char* Dos9_GetNextParameterEs(char* lpLine, ESTR* lpReturn)
+char* Dos9_GetNextParameterEsD(char* lpLine, ESTR* lpReturn, const
+				char* lpDelims)
 /* This function returns the next parameter available on the
    command-line.
 
@@ -169,7 +170,8 @@ char* Dos9_GetNextParameterEs(char* lpLine, ESTR* lpReturn)
 	char *lpBegin,
 	     *lpEnd=NULL;
 
-	if (Dos9_GetParameterPointers(&lpBegin, &lpEnd, " ;,\t\"", lpLine)==FALSE)
+	if (Dos9_GetParameterPointers(&lpBegin, &lpEnd, lpDelims, lpLine)
+		==FALSE)
 		return NULL;
 
 	/* the following are gymnastics in order to remove to

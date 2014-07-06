@@ -192,6 +192,10 @@ void Dos9_LoadErrors(void)
 	lpErrorMsg[DOS9_UNABLE_REPLACE_COMMAND]=
 		gettext("Error : Unable to redefine \"%s\" command.\n");
 
+	lpErrorMsg[DOS9_UNABLE_SET_OPTION]=
+		gettext("Error : Unable to set option \"%s\", it is built "
+			"statically inside your version of dos9");
+
 	lpQuitMessage=
 	    gettext("\nAborting current command, press any key to end Dos9.\n");
 

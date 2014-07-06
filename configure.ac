@@ -54,6 +54,24 @@ dnl Get .libs path
 AC_SUBST([DOS9_OBJDIR], [$objdir])
 AC_SUBST([SHAREDEXT], [$shrext_cmds])
 
+AC_ARG_ENABLE([static-cmdlycorrect],
+	[AC_HELP_STRING([--enable-static-cmdlycorrect],
+		[foo])],
+	[],
+	[enable_static_cmdlycorrect=no])
+
+AS_IF([test "x$enable_static_cmdlycorrect" = x1],
+	[AC_DEFINE([DOS9_STATIC_CMDLYCORRECT],
+		[1],
+		Define to 1 or 0 if you want to have static cmdlycorrect)]
+	[test "x$enable_static_cmdlycorrect" = x0],
+	[AC_DEFINE([DOS9_STATIC_CMDLYCORRECT],
+		[0],
+		Define to 1 or 0 if you want to have static cmdlycorrect)]
+	[AS_IF([test "x$enable_static_cmdlycorrect" != xno],
+		[AC_MSG_FAILURE([Bad argument with --enable-static-cmdlycorrect]
+	)])])
+
 AC_ARG_ENABLE([console],
 	    [AC_HELP_STRING([--enable-console],
 			    [Use extended console features such as color (default is yes)])],
@@ -63,10 +81,10 @@ AC_ARG_ENABLE([console],
 AS_IF([test "x$enable_console" = xno], 
       [AC_DEFINE([LIBDOS9_NO_CONSOLE], [1], Define to 1 if you want to enable console feature)])
 
-dnl Perform some header checks in order to know wether headers are present in the
-dnl platform for which we build the software. Some would say it is poor
-dnl programming, because we don't ensure the usability of this headers, but it is
-dnl sufficient enough to determine wether libraries are installed.
+dnl Perform some header checks in order to know wether headers are present 
+dnl in the platform for which we build the software. Some would say it is poor
+dnl programming, because we don't ensure the usability of this headers, but it
+dnl is sufficient enough to determine wether libraries are installed.
 AC_CHECK_HEADERS([libintl.h])
 
 dnl Perform some checks in order to know with which library we should link.

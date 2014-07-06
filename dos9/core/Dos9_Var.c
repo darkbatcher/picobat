@@ -101,6 +101,8 @@ int Dos9_setenv(const char* name, const char* content)
 
 	#elif defined(_POSIX_C_SOURCE)
 
+		strupr(Dos9_EsToChar(lpEsStr));
+
 		ret=setenv(Dos9_EsToChar(lpEsStr), content, 1);
 
 	#endif // defined(WIN32)

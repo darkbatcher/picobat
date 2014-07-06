@@ -20,6 +20,8 @@
 #ifndef DOS9_GLOBALS_H
 #define DOS9_GLOBALS_H
 
+#include "../../config.h"
+
 #ifdef _POSIX_C_SOURCE
 extern char** environ;
 #endif
@@ -27,7 +29,13 @@ extern char** environ;
 extern int bAbortCommand;
 extern int bDelayedExpansion;
 extern int bUseFloats;
+
+#if !defined(DOS9_STATIC_CMDLYCORRECT)
 extern int bCmdlyCorrect;
+#else
+#define bCmdlyCorrect DOS9_STATIC_CMDLYCORRECT
+#endif
+
 extern int bEchoOn;
 extern int iErrorLevel;
 extern LPCOMMANDLIST lpclCommands;

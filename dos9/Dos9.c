@@ -49,6 +49,7 @@
 //#define DOS9_DBG_MODE
 #include "core/Dos9_Debug.h"
 
+#include "../config.h"
 
 void Dos9_SigHandler(int c)
 {
@@ -161,7 +162,13 @@ int main(int argc, char *argv[])
 
 				case 'C':
 					/* enable cmd-compatible mode */
-					bCmdlyCorrect=TRUE;
+                    #if !defined(DOS9_STATIC_CMDLYCORRECT)
+                    bCmdlyCorrect=TRUE;
+                    #else
+                    Dos9_ShowErrorMessage(DOS9_UNABLE_SET_OPTION,
+                                            "CMDLYCORRECT",
+                                            FALSE);
+                    #endif
 					break;
 
 				case 'Q':

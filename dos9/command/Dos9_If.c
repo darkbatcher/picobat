@@ -329,11 +329,17 @@ int Dos9_CmdIf(char* lpParam)
 
 		} else {
 
-			if (!strnicmp(lpNext, ") ELSE (", sizeof(") ELSE (")-1)) {
+            if (*lpNext==')')
+                ++ lpNext;
 
-				lpNext+=(sizeof(") ELSE (")-2);
+            lpNext=Dos9_SkipBlanks(lpNext);
 
-				if ((lpToken=Dos9_GetNextBlock(lpNext, &bkInfo))) {
+			if (!strnicmp(lpNext, "ELSE", 4)) {
+
+				lpNext+=4;
+
+				if ((lpToken=Dos9_GetNextBlock(lpNext, &bkInfo)
+                    && strchr("( \t,;", *lpNext))) {
 
 					/* if we found an else */
 					Dos9_RunBlock(&bkInfo);
