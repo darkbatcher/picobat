@@ -33,12 +33,10 @@
 
 int Dos9_CmdIf(char* lpParam)
 {
-	char lpArgument[FILENAME_MAX], *lpNext, *lpToken;
+	char lpArgument[FILENAME_MAX], *lpNext, *lpToken, *lpEnd;
 	int iFlag=0,
-	    iResult,
-	    iExp1,
-	    iExp2;
-	CMPTYPE cmpCompType;
+	    iResult;
+
 	ESTR *lpComparison, *lpOtherPart;
 	LPFILELIST lpflFileList;
 	/* syntaxe possible
@@ -50,9 +48,6 @@ int Dos9_CmdIf(char* lpParam)
 	*/
 
 	BLOCKINFO bkInfo;
-
-	double x1,
-	       x2;
 
 	lpParam+=2;
 
@@ -210,42 +205,7 @@ int Dos9_CmdIf(char* lpParam)
 
 				}
 
-				if (!stricmp(lpArgument, "EQU")) {
-
-					cmpCompType=CMP_EQUAL;
-
-				} else if (!stricmp(lpArgument, "NEQ")) {
-
-					cmpCompType=CMP_DIFFERENT;
-
-				} else if (!stricmp(lpArgument, "GEQ")) {
-
-					cmpCompType=CMP_GREATER_OR_EQUAL;
-
-				} else if (!stricmp(lpArgument, "GTR")) {
-
-					cmpCompType=CMP_GREATER;
-
-				} else if (!stricmp(lpArgument, "LEQ")) {
-
-					cmpCompType=CMP_LESSER_OR_EQUAL;
-
-				} else if (!stricmp(lpArgument, "LSS")) {
-
-					cmpCompType=CMP_LESSER;
-
-				} else if (!stricmp(lpArgument, "FEQ")) {
-
-					cmpCompType=CMP_FLOAT_EQUAL;
-
-				} else {
-
-					Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpArgument, FALSE);
-					return -1;
-
-				}
-
-				lpOtherPart=Dos9_EsInit();
+                lpOtherPart=Dos9_EsInit();
 
 				if (!(lpNext=Dos9_GetNextParameterEs(lpNext, lpOtherPart))) {
 
@@ -254,59 +214,23 @@ int Dos9_CmdIf(char* lpParam)
 
 				}
 
-				switch (cmpCompType) {
-					case CMP_EQUAL:
-						if (iFlag & DOS9_IF_CASE_UNSENSITIVE) {
+				iResult = Dos9_PerformExtendedTest(lpArgument,
+                                                    Dos9_EsToChar(lpComparison),
+                                                    Dos9_EsToChar(lpOtherPart),
+                                                    iFlag);
 
-							iResult=!stricmp(Dos9_EsToChar(lpOtherPart), Dos9_EsToChar(lpComparison));
+                printf("Result=%d\n", iResult);
 
-						} else {
+                Dos9_EsFree(lpOtherPart);
 
-							iResult=!strcmp(Dos9_EsToChar(lpOtherPart), Dos9_EsToChar(lpComparison));
+                if (iResult == -1) {
 
-						}
+                    /* there is a syntax error, obviously */
+                    return -1;
 
-						break;
+                }
 
-					case CMP_DIFFERENT:
-						if (iFlag & DOS9_IF_CASE_UNSENSITIVE) {
 
-							iResult=stricmp(Dos9_EsToChar(lpOtherPart), Dos9_EsToChar(lpComparison));
-
-						} else {
-
-							iResult=strcmp(Dos9_EsToChar(lpOtherPart), Dos9_EsToChar(lpComparison));
-
-						}
-
-						break;
-
-					case CMP_GREATER:
-						iResult = (atof(Dos9_EsToChar(lpComparison)) > atof(Dos9_EsToChar(lpOtherPart)));
-						break;
-
-					case CMP_GREATER_OR_EQUAL:
-						iResult = (atof(Dos9_EsToChar(lpComparison)) >= atof(Dos9_EsToChar(lpOtherPart)));
-						break;
-
-					case CMP_LESSER:
-						iResult = (atof(Dos9_EsToChar(lpComparison)) < atof(Dos9_EsToChar(lpOtherPart)));
-						break;
-
-					case CMP_LESSER_OR_EQUAL:
-						iResult = (atof(Dos9_EsToChar(lpComparison)) <= atof(Dos9_EsToChar(lpOtherPart)));
-						break;
-
-					case CMP_FLOAT_EQUAL:
-						x1 = frexp(atof(Dos9_EsToChar(lpComparison)), &iExp1);
-						x2 = frexp(atof(Dos9_EsToChar(lpOtherPart)), &iExp2);
-
-						/* majorate the error */
-						iResult=(fabs(x1-x2*pow(2, iExp2-iExp1)) <= DOS9_FLOAT_EQUAL_PRECISION);
-
-				}
-
-				Dos9_EsFree(lpOtherPart);
 			}
 		} else {
 
@@ -360,4 +284,230 @@ int Dos9_CmdIf(char* lpParam)
 	}
 
 	return 0;
+}
+
+
+/* Performs an extended test for the if command (ie. for 'EQU' and so on ...)
+
+   It takes as argument a pointer to the comparant, two pointers to the
+   parameters of comparant, and the flag.
+
+   It returns either 0 if the test is false, 1 if the test is true; and -1 if
+   the syntax is not valid.
+
+   Note that C89 standard specify that logical operators must evaluate to 1 or
+   0 only, so that we can not have confusion between errors, or not.
+
+ */
+int Dos9_PerformExtendedTest(const char* lpCmp, const char* lpParam1, const char* lpParam2, int iFlag)
+{
+
+    int comp_type=0,
+        irhs, /* right end side */
+        ilhs, /* left end side */
+        invalid=0;
+
+    int iExp1,
+        iExp2;
+
+    double drhs,
+            dlhs,
+            x1,
+            x2;
+
+    char* lpEnd;
+
+    printf("Comparing \"%s\" and \"%s\" with \"%s\"\n", lpParam1, lpParam2, lpCmp);
+
+    if (*lpCmp=='F' || *lpCmp=='f') {
+
+        /* use the float versions of comparisons */
+        lpCmp++;
+        comp_type=CMP_FLOAT_COMP;
+
+        drhs = strtod(lpParam1, &lpEnd);
+        if (*lpEnd != '\0') {
+            invalid=1;
+            goto next;
+        }
+
+        dlhs = strtod(lpParam2, &lpEnd);
+        if (*lpEnd != '\0') {
+            invalid=1;
+            goto next;
+        }
+
+    } else {
+
+        irhs = strtol(lpParam1, &lpEnd, 0);
+        if (*lpEnd != '\0') {
+            invalid=1;
+            goto next;
+        }
+
+        ilhs = strtol(lpParam2, &lpEnd, 0);
+        if (*lpEnd != '\0') {
+            invalid=1;
+            goto next;
+        }
+
+    }
+
+next:
+
+    if (!stricmp(lpCmp, "EQU")) {
+
+        comp_type|=CMP_EQUAL;
+
+    } else if (!stricmp(lpCmp, "NEQ")) {
+
+        comp_type|=CMP_DIFFERENT;
+
+    }  else if (invalid) {
+
+        //Dos9_ShowErrorMessage(DOS9_)
+        return -1;
+
+    } else if (!stricmp(lpCmp, "GEQ")) {
+
+        comp_type|=CMP_GREATER_OR_EQUAL;
+
+    } else if (!stricmp(lpCmp, "GTR")) {
+
+        comp_type|=CMP_GREATER;
+
+    } else if (!stricmp(lpCmp, "LEQ")) {
+
+        comp_type|=CMP_LESSER_OR_EQUAL;
+
+    } else if (!stricmp(lpCmp, "LSS")) {
+
+        comp_type|=CMP_LESSER;
+
+    } else {
+
+        Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpCmp, FALSE);
+        return -1;
+
+    }
+
+    switch (comp_type) {
+
+        case CMP_EQUAL:
+            if (invalid) {
+
+                /* if there is no valid numbers */
+
+                if (iFlag & DOS9_IF_CASE_UNSENSITIVE) {
+
+                    return !stricmp(lpParam1, lpParam2);
+
+                } else {
+
+                    return !strcmp(lpParam1, lpParam2);
+
+                }
+
+            } else {
+
+                return (irhs == ilhs);
+
+            }
+
+        case CMP_DIFFERENT:
+            if (invalid) {
+
+                    /* then, we force use of logical expressions in order
+                       to get something between 1 and 0 */
+
+                if (iFlag & DOS9_IF_CASE_UNSENSITIVE) {
+
+                    return stricmp(lpParam1, lpParam2) != 0;
+
+                } else {
+
+                    return strcmp(lpParam1, lpParam2) != 0;
+
+                }
+
+            } else {
+
+                return (irhs != ilhs);
+
+            }
+
+        case CMP_GREATER:
+            return (irhs > ilhs);
+
+        case CMP_GREATER_OR_EQUAL:
+            return (irhs >= ilhs);
+
+        case CMP_LESSER:
+            return (irhs < ilhs);
+
+        case CMP_LESSER_OR_EQUAL:
+            return (irhs <= ilhs);
+
+        case CMP_EQUAL | CMP_FLOAT_COMP:
+            if (invalid) {
+
+                if (iFlag & DOS9_IF_CASE_UNSENSITIVE) {
+
+                    return !stricmp(lpParam1, lpParam2);
+
+                } else {
+
+                    return !strcmp(lpParam1, lpParam2);
+
+                }
+
+            } else {
+
+                x1 = frexp(drhs, &iExp1);
+                x2 = frexp(dlhs, &iExp2);
+
+                /* majorate the error */
+                return (fabs(x1-x2*pow(2, iExp2-iExp1)) <= DOS9_FLOAT_EQUAL_PRECISION);
+
+            }
+
+        case CMP_DIFFERENT | CMP_FLOAT_COMP:
+            if (invalid) {
+
+                if (iFlag & DOS9_IF_CASE_UNSENSITIVE) {
+
+                    return stricmp(lpParam1, lpParam2) != 0;
+
+                } else {
+
+                    return strcmp(lpParam1, lpParam2) != 0;
+
+                }
+
+            } else {
+
+                x1 = frexp(drhs, &iExp1);
+                x2 = frexp(dlhs, &iExp2);
+
+                /* majorate the error */
+                return !(fabs(x1-x2*pow(2, iExp2-iExp1)) <= DOS9_FLOAT_EQUAL_PRECISION);
+
+            }
+
+        case CMP_GREATER | CMP_FLOAT_COMP:
+            return (drhs > dlhs);
+
+        case CMP_GREATER_OR_EQUAL | CMP_FLOAT_COMP:
+            return (drhs >= dlhs);
+
+        case CMP_LESSER | CMP_FLOAT_COMP:
+            return (drhs < dlhs);
+
+        case CMP_LESSER_OR_EQUAL | CMP_FLOAT_COMP:
+            return (drhs <= dlhs);
+
+
+    }
+
+    return -1;
 }

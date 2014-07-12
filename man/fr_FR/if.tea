@@ -66,37 +66,44 @@ ${IF [/i] chaine1 cmp chaine2 (
 	   
 	   Les valeurs possibles de {cmp} sont:
 
-		- {EQU} : (EQUal). La chaîne {chaine1} est égale à la 
-		  chaîne {chaine2}
+		- {EQU} : (EQUal). La condition est vraie si les valeurs
+		  numériques associées à {chaîne1} et à {chaîne2} sont égales.
+		  Les valeurs peuvent être dans différentes bases numériques
+		  (décimale, octale ou hexadécimale) à condition d'utiliser les
+		  préfixes adéquats ({0} pour la base octale et {0x}). Au cas ou 		  les chaines ne forment pas des expressions numéques valides
+		  (du type {[-][prefixe][valeur]}), alors le comparant {EQU} a
+		  le même effet que {==}, la comparaison a lieu 
+		  chaîne-à-chaîne. 
 		
-		- {NEQ} : (Not EQual). La chaîne {chaine1} est différente de
-		  la chaîne {chaine2}
+		- {NEQ} : (Not EQual). Exact opposé du comparant précédent.
 		
-		- {LEQ} : (Less or EQual). La chaîne {chaine1} est inférieure
-		  ou égale à la chaîne {chaine2}.
+		- {LEQ} : (Less or EQual). La valeur numérique associée à 
+		  {chaine1} est inférieure ou égale à celle associée à
+		  {chaine2}.
 		
-		- {LSS} : (LeSS). La chaîne {chaine1} est inférieure à la
-		  chaîne {chaine2}.
+		- {LSS} : (LeSS). La valeur numérique associée à {chaine1} est 
+		  inférieure (strictement) à celle associée à chaîne {chaine2}.
 		
-		- {GTR} : (GreaTeR). La chaîne {chaine1} est supérieure à 
-		  la chaîne {chaine2}.
+		- {GTR} : (GreaTeR). La valeur numérique associée à {chaine1}
+		est supérieure (strictement) à celle associée à {chaine2}.
 		
-		- {GEQ} : (Greater or EQual). La chaîne {chaine1} est 
-		  supérieure ou égale à la chaîne {chaine2}.
+		- {GEQ} : (Greater or EQual). La valeur numérique associée
+		à {chaine1} est supérieure ou égale à celle associée à la 
+		chaîne {chaine2}.
 		  
-	    - {FEQ} : (Float EQual) (Extension de {Dos9}). Les chaînes {chaine1} et {chaine2}
-		sont égale, à la précision relative de {10^-13}. Utilisé pour comparer des
-		nombres flotants, voir {setaf|Commande SET(/A)(flotants)}.
-		
-	   Les comparants {LSS}, {GTR}, {LEQ} et {GEQ} et {FEQ} supposent que {chaine1}
-	et {chaine2} soient des nombres (flotants ou non), sinon le résultat de la comparaison
-	est indéfini (i.e. le comportement peut changer d'une version à une 
-	autre ou d'un os à un autre). Toutes ces comparants acceptent aussi bien les
-	entiers que les nombres flotants.
-	   
-	   L'utilisation du commutateur {/i} permet d'ignorer la casse (utile
-	uniquement pour les comparants {EQU} et {NEQ})
+	Les comparants {LSS}, {GTR}, {LEQ} et {GEQ}  supposent que {chaine1}
+	et {chaine2} soient des nombres entiers sinon le résultat de la
+	comparaison est indéfini (i.e. le comportement peut changer d'une
+	version à une autre ou d'un os à un autre).
 	
+	Les même comparants sont disponibles sur les flotants, en préfixant les
+	comparants avec un {F}, ce qui donne {FEQU}, {FGTR}, {FGEQ}, {FLSS} et
+	{FLEQ}. A priori, l'utilisation de bases octales ou hexadécimales
+	n'est pas possible de façon portable (disponible sur les plate-formes
+	GNU/Linux, mais pas sous MS-Windows). Pour conserver la portablité sur
+	toutes les platte-formes, il faut donc ce limiter au format
+	[signe][chiffres][.chiffres][E|e][exposant].
+
 {{Synopsis - Troisième syntaxe}}
 	
 ${IF [NOT] [DEFINED | EXIST | ERRORLEVEL] objet (

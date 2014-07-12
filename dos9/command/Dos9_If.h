@@ -29,15 +29,16 @@
 
 #define DOS9_FLOAT_EQUAL_PRECISION 0.0000000000001
 
-typedef enum CMPTYPE {
-    CMP_EQUAL,
-    CMP_DIFFERENT,
-    CMP_GREATER,
-    CMP_GREATER_OR_EQUAL,
-    CMP_LESSER,
-    CMP_LESSER_OR_EQUAL,
-    CMP_FLOAT_EQUAL
-} CMPTYPE;
+#define CMPTYPE int
+#define CMP_EQUAL 1
+#define CMP_DIFFERENT 2
+#define CMP_GREATER 3
+#define CMP_GREATER_OR_EQUAL 4
+#define CMP_LESSER 5
+#define CMP_LESSER_OR_EQUAL 6
+#define CMP_FLOAT_COMP 0x10
+
+int Dos9_PerformExtendedTest(const char* lpCmp, const char* lpParam1, const char* lpParam2, int iFlag);
 
 int Dos9_CmdIf(char* lpParam); // function to support if
 
