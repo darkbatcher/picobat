@@ -296,7 +296,7 @@ int Dos9_CmdIf(char* lpParam)
    the syntax is not valid.
 
    Note that C89 standard specify that logical operators must evaluate to 1 or
-   0 only, so that we can not have confusion between errors, or not.
+   0 only, so that we can not have confusion between errors.
 
  */
 int Dos9_PerformExtendedTest(const char* lpCmp, const char* lpParam1, const char* lpParam2, int iFlag)
@@ -363,11 +363,6 @@ next:
 
         comp_type|=CMP_DIFFERENT;
 
-    }  else if (invalid) {
-
-        //Dos9_ShowErrorMessage(DOS9_)
-        return -1;
-
     } else if (!stricmp(lpCmp, "GEQ")) {
 
         comp_type|=CMP_GREATER_OR_EQUAL;
@@ -387,6 +382,18 @@ next:
     } else {
 
         Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpCmp, FALSE);
+        return -1;
+
+    }
+
+    if (invalid && (comp_type != CMP_EQUAL)
+            && (comp_type != CMP_DIFFERENT)) {
+
+        Dos9_ShowErrorMessage(DOS9_COMPARISON_FORBIDS_STRING,
+                                lpCmp,
+                                FALSE
+                                );
+
         return -1;
 
     }

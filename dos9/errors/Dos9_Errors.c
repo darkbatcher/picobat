@@ -196,6 +196,9 @@ void Dos9_LoadErrors(void)
 		gettext("Error : Unable to set option \"%s\", it is built "
 			"statically inside your version of dos9");
 
+    lpErrorMsg[DOS9_COMPARISON_FORBIDS_STRING]=
+        gettext("Error : The \"%s\" comparison forbids use of strings.\n");
+
 	lpQuitMessage=
 	    gettext("\nAborting current command, press any key to end Dos9.\n");
 

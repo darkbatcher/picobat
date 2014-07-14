@@ -233,9 +233,7 @@ ${FOR /L %%A IN (début,pas,fin) DO (
 		dépasse {fin}, la boucle s'arrête.
 		
 		
-	La boucle {FOR} nécessite que {début}, {pas} et {fin} soient des nombres entiers. Si ils sont
-	des nombres flotants, il seront tronqué à la valeur entière directement inférieure. Si ils sont
-	des chaînes, le comportement est indéfini.
+	La boucle {FOR} nécessite que {début}, {pas} et {fin} soient des nombres entiers, dans les bases décimales, octales ou hexadécimales. De plus les délimiteurs acceptés ne sont pas limités à la seule virgule; tous les délimiteurs valiides pour {Dos9} le sont aussi.
 		
 	{Exemple:} Compter de 1 à 10:
 	

@@ -77,8 +77,9 @@ void Dos9_LoadErrors(void);
 #define DOS9_UNABLE_REMAP_COMMANDS          35
 #define DOS9_TRY_REDEFINE_COMMAND           36
 #define DOS9_UNABLE_REPLACE_COMMAND         37
-#define DOS9_UNABLE_SET_OPTION		    38
-#define DOS9_ERROR_MESSAGE_NUMBER 39
+#define DOS9_UNABLE_SET_OPTION		        38
+#define DOS9_COMPARISON_FORBIDS_STRING      39
+#define DOS9_ERROR_MESSAGE_NUMBER           40
 
 #define DOS9_PRINT_C_ERROR 0x80
 
