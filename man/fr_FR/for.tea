@@ -136,8 +136,9 @@ ${FOR /F [options] %%A IN (objet) DO (
 			-- {usebackq} : Utilise la nouvelle syntaxe. Si {objet}
 			est entouré par des guillemets simples, alors {Dos9} le considérera comme une chaîne. À l'inverse, s'il
 			est entouré par des guillemets inversés, alors il sera considéré comme une ligne de commande. Ce paramètre
-			est le seul qui ne nécessite pas de signe égal ni de valeur.
-			
+			est le seul qui ne nécessite pas de signe égal ni de valeur. Ce paramètre permet d'utiliser les guillemets
+		
+
 	{Exemple 1:} Parsage de chaîne:
 
 ${:: Le premier parse une chaîne simple
@@ -212,8 +213,8 @@ ${FOR /F "tokens=1,2,3" "delims=," %%A IN (my_csv.csv) DO (
 	Le script doit alors produire la sortie suivante:
 	
 ${Alan Turing était un mathématicien qui a donné naissance à la théorique mathématique de l'informatique
-Harry Nyquist était un ingénieur américan qui a contribué à la théorie de la communication
-Nathaniel B. Nichols était un ingénieur américan qui contribué à la théorie des asservissement}
+Harry Nyquist était un ingénieur américain qui a contribué à la théorie de la communication
+Nathaniel B. Nichols était un ingénieur américain qui contribué à la théorie des asservissement}
 
 {{Synopsis - Troisième syntaxe}}
 

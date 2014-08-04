@@ -280,7 +280,7 @@ int Dos9_CmdFor(char* lpLine)
 		case FOR_LOOP_SIMPLE:
 
 			/* this handles simple for */
-			Dos9_CmdForSimple(lpInputBlock, &bkCode, cVarName, " ,:;\n\t");
+			Dos9_CmdForSimple(lpInputBlock, &bkCode, cVarName, " ,:;\n\t\"");
 
 			break;
 
@@ -319,77 +319,30 @@ error:
 int Dos9_CmdForSimple(ESTR* lpInput, BLOCKINFO* lpbkCommand, char cVarName, char* lpDelimiters)
 {
 
-	char* lpToken=Dos9_EsToChar(lpInput);
-	char* lpNextToken;
+	char *lpToken=Dos9_EsToChar(lpInput),
+         *lpBegin;
 
-	char  cInc=TRUE;
+    ESTR* lpesStr=Dos9_EsInit();
 
-	while (*lpToken) {
+	while (Dos9_GetParameterPointers(&lpBegin, &lpToken, lpDelimiters, lpToken)) {
 
-		while (*lpToken && (strchr(lpDelimiters, *lpToken))) lpToken++;
+        if (lpToken == NULL) {
 
-		if (!*lpToken)
-			break;
-		/* skip in raw delimiters */
+            Dos9_EsCpy(lpesStr, lpBegin);
 
-		if (*lpToken=='\''  || *lpToken=='"') {
+        } else {
 
-			/* the tokens begins with either a "'" or a '"'
-			   then we try to find the closing delimiter */
+            Dos9_EsCpyN(lpesStr,
+                        lpBegin,
+                        (size_t)(lpToken-lpBegin)
+                        );
 
-			/* no need to increment lpToken since quotes are
-			   preserved, as stated by the documentation */
-			lpNextToken=lpToken+1;
-
-			while (*lpNextToken) {
-
-
-				if (*lpNextToken==*lpToken) {
-
-					if ((strchr(lpDelimiters, *(lpNextToken+1)))) {
-
-						lpNextToken++;
-						if (*lpNextToken)
-							*(lpNextToken++)='\0';
-
-						cInc=FALSE;
-
-						break;
-
-					}
-
-				}
-
-				lpNextToken++;
-
-			}
-
-		} else {
-
-			/* if we do not found quotes, then
-			   look for the following delimiter */
-
-			lpNextToken=lpToken;
-
-			while (*lpNextToken && !(strchr(lpDelimiters, *lpNextToken))) {
-
-				lpNextToken++;
-
-			}
-
-			if (*lpNextToken) {
-
-				*(lpNextToken++)='\0';
-				cInc=FALSE;
-
-			}
-
-		}
+        }
 
 		/* assign the local variable */
-		if (!Dos9_SetLocalVar(lpvLocalVars, cVarName, lpToken)) {
+		if (!Dos9_SetLocalVar(lpvLocalVars, cVarName, Dos9_EsToChar(lpesStr))) {
 
-
+            Dos9_EsFree(lpesStr);
 			return -1;
 
 		}
@@ -397,28 +350,16 @@ int Dos9_CmdForSimple(ESTR* lpInput, BLOCKINFO* lpbkCommand, char cVarName, char
 		/* run the block */
 		Dos9_RunBlock(lpbkCommand);
 
-		if (*lpNextToken && cInc) {
-
-			lpToken=lpNextToken+1;
-
-		} else {
-
-			lpToken=lpNextToken;
-			cInc=TRUE;
-
-		}
-
 		/* if a goto as been executed while the for-loop
 		   was ran */
-
-		if (bAbortCommand==TRUE)
+		if (bAbortCommand==TRUE || lpToken==NULL)
 			break;
 
 	}
 
 	/* delete the special var */
 	Dos9_SetLocalVar(lpvLocalVars, cVarName, NULL);
-
+    Dos9_EsFree(lpesStr);
 
 	return 0;
 
@@ -435,7 +376,7 @@ int Dos9_CmdForL(ESTR* lpInput, BLOCKINFO* lpbkCommand, char cVarName)
 
     ESTR* lpesStr=Dos9_EsInit();
 
-	while (lpToken=Dos9_GetNextParameterEs(lpToken, lpesStr) && (i < 3)) {
+	while ((lpToken=Dos9_GetNextParameterEs(lpToken, lpesStr)) && (i < 3)) {
         /* Loop to get start, increment and end */
         /* works with both hexadecimal, octal and decimal numbers */
 		iLoopInfo[i]=strtol(Dos9_EsToChar(lpesStr),
@@ -521,7 +462,6 @@ int Dos9_CmdForF(ESTR* lpInput, BLOCKINFO* lpbkInfo, FORINFO* lpfrInfo)
 			Dos9_ForSplitTokens(lpInputToP, lpfrInfo);
 			/* split the block on subtokens */
 
-			/* printf("Running Block !\n"); */
 			Dos9_RunBlock(lpbkInfo);
 			/* split the input into tokens and then run the
 			    block */
@@ -603,8 +543,7 @@ int Dos9_ForMakeInfo(char* lpOptions, FORINFO* lpfiInfo)
 
 		} else if (!(stricmp(Dos9_EsToChar(lpParam), "skip"))) {
 
-			lpfiInfo->iSkip=atoi(lpToken);
-
+			lpfiInfo->iSkip=strtol(lpToken, NULL, 0);
 
 		} else if (!(stricmp(Dos9_EsToChar(lpParam), "eol"))) {
 
@@ -647,7 +586,7 @@ error:
 
 int  Dos9_ForMakeTokens(char* lpToken, FORINFO* lpfrInfo)
 {
-	/* this is used to determine the useffull tokens for
+	/* this is used to determine the usefull tokens for
 	   the parsing */
 
 	char* const lpOriginTok=lpToken;
@@ -1081,16 +1020,13 @@ int Dos9_ForMakeInputInfo(ESTR* lpInput, INPUTINFO* lpipInfo, FORINFO* lpfrInfo)
 
 		case '"':
 			/* the given input is a string */
-			if (bUsebackq) {
+			if (!bUsebackq) {
 
-				Dos9_ShowErrorMessage(DOS9_FOR_USEBACKQ_VIOLATION, "\"", FALSE);
-				return -1;
+                iInputType=INPUTINFO_TYPE_STRING;
+                break;
 
-			}
+            }
 
-			iInputType=INPUTINFO_TYPE_STRING;
-
-			break;
 
 		default:
 			/* the input given is a filename */
@@ -1108,9 +1044,20 @@ int Dos9_ForMakeInputInfo(ESTR* lpInput, INPUTINFO* lpipInfo, FORINFO* lpfrInfo)
 
 		case INPUTINFO_TYPE_STREAM:
 
-			lpipInfo->cType=INPUTINFO_TYPE_STREAM;
+            lpipInfo->cType=INPUTINFO_TYPE_STREAM;
 
-			if (!(lpipInfo->Info.pInputFile=fopen(lpToken, "r"))) {
+            if (Dos9_ForInputParseFileList(&(lpipInfo->Info.InputFile),
+                        lpInput))
+                        return -1;
+
+            /* Open the first file on the array. If we fail, stop the loop
+               at the beginning. Notice we do not check for *all* files
+               existence before starting the loop, Although cmd.exe may do
+               so (haven't checked yet) */
+			if (!(lpipInfo->Info.InputFile.pFile=
+                    fopen(
+                        Dos9_EsToChar(lpipInfo->Info.InputFile.lpesFiles[0])
+                        , "r"))) {
 
 				Dos9_ShowErrorMessage(DOS9_FILE_ERROR | DOS9_PRINT_C_ERROR,
                                         lpToken,
@@ -1118,6 +1065,8 @@ int Dos9_ForMakeInputInfo(ESTR* lpInput, INPUTINFO* lpipInfo, FORINFO* lpfrInfo)
 				return -1;
 
 			}
+
+			printf("... Opened\n");
 
 			break;
 
@@ -1146,6 +1095,9 @@ int Dos9_ForMakeInputInfo(ESTR* lpInput, INPUTINFO* lpipInfo, FORINFO* lpfrInfo)
 			        Dos9 /Q /N /E /V /D n
 
 			   The /Q avoid the presentation to be printed and the title to be change
+
+               Fixme: This function does not even work under GNU/Linux and BSD-based
+               operating systems, we should take a look to the code.
 
 			*/
 
@@ -1328,7 +1280,10 @@ int Dos9_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn, int
 	close(iPipeFdIn[1]);
 	close(iPipeFdOut[1]);
 
-	lpipInfo->Info.pInputFile=pFile;
+	lpipInfo->Info.InputFile.pFile=pFile;
+
+	lpipInfo->Info.InputFile.lpesFiles[1]=NULL;
+	lpipInfo->Info.InputFile.index=0;
 
 	return 0;
 
@@ -1376,7 +1331,42 @@ loop_begin:
 
 		case INPUTINFO_TYPE_COMMAND:
 		case INPUTINFO_TYPE_STREAM:
-			iReturn=!Dos9_EsGet(lpReturn, lpipInfo->Info.pInputFile);
+
+			if ((Dos9_EsGet(lpReturn,
+                            lpipInfo->Info.InputFile.pFile))) {
+
+
+                if (lpipInfo->Info.InputFile.lpesFiles[
+                        ++ (lpipInfo->Info.InputFile.index)
+                        ] == NULL) {
+
+
+                    /* there is no more remaining files to be read */
+                    break;
+
+                }
+
+                /* if the file list is not finished, then, open the next file */
+                if (!(lpipInfo->Info.InputFile.pFile =
+                        fopen(Dos9_EsToChar(lpipInfo->Info.InputFile.lpesFiles[
+                            lpipInfo->Info.InputFile.index
+                            ]), "r"))) {
+
+                    Dos9_ShowErrorMessage(DOS9_FILE_ERROR | DOS9_PRINT_C_ERROR,
+                            lpipInfo->Info.InputFile.lpesFiles[
+                            lpipInfo->Info.InputFile.index
+                            ],
+                            FALSE
+                            );
+
+                    break;
+
+                }
+
+            }
+
+            iReturn = 1;
+
 			break;
 
 		case INPUTINFO_TYPE_STRING:
@@ -1411,6 +1401,39 @@ loop_begin:
 	return iReturn;
 }
 
+int Dos9_ForInputParseFileList(FILE_LIST_T* lpList, ESTR* lpInput)
+{
+    int i=0;
+
+    char *lpToken=Dos9_EsToChar(lpInput);
+
+    ESTR *lpesStr=Dos9_EsInit();
+
+    while ((lpToken=Dos9_GetNextParameterEs(lpToken, lpesStr))
+            && (i < FILE_LIST_T_BUFSIZ)) {
+
+        /* loop to get the approriate elements */
+
+        lpList->lpesFiles[i++]=lpesStr;
+
+        printf("File to read : \"%s\"\n", Dos9_EsToChar(lpesStr));
+
+        lpesStr=Dos9_EsInit();
+
+    }
+
+    lpList->lpesFiles[i] = NULL;
+    lpList->index = 0;
+
+    if (!i)
+        return -1;
+
+
+    Dos9_EsFree(lpesStr);
+
+    return 0;
+}
+
 void Dos9_ForCloseInputInfo(INPUTINFO* lpipInfo)
 {
 
@@ -1419,7 +1442,7 @@ void Dos9_ForCloseInputInfo(INPUTINFO* lpipInfo)
 		case INPUTINFO_TYPE_STREAM:
 		case INPUTINFO_TYPE_COMMAND:
 
-			fclose(lpipInfo->Info.pInputFile);
+			fclose(lpipInfo->Info.InputFile.pFile);
 			break;
 
 

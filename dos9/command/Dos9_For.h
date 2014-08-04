@@ -78,18 +78,26 @@ typedef struct STRINGINFO {
 	/* a token to be processed */
 } STRINGINFO;
 
+#define FILE_LIST_T_BUFSIZ 128
+
+typedef struct FILE_LIST_T {
+    ESTR* lpesFiles[FILE_LIST_T_BUFSIZ+1];
+    int   index;
+    FILE* pFile;
+} FILE_LIST_T;
+
 #define INPUTINFO_TYPE_STREAM 0
 #define INPUTINFO_TYPE_STRING 1
 #define INPUTINFO_TYPE_COMMAND 2 // unused in the struct
 
 union _INPUTINFO_UNION {
-	STRINGINFO StringInfo;
-	FILE* pInputFile;
+	STRINGINFO StringInfo; /* stores data for string input */
+	FILE_LIST_T InputFile; /* informations about files to be read */
 };
 
 typedef struct INPUTINFO {
 	char cType;
-	union _INPUTINFO_UNION Info;
+	union _INPUTINFO_UNION Info; /* a pointer to the file opened */
 } INPUTINFO;
 
 
@@ -119,8 +127,10 @@ int Dos9_ForMakeInfo(char* lpOptions, FORINFO* lpfrInfo);
 */
 
 void Dos9_ForAdjustParameter(char* lpOptions, ESTR* lpParam);
+/* Adjust parametrt for for loops */
 
 int  Dos9_ForMakeTokens(char* lpToken, FORINFO* lpfrInfo);
+/* Make token descriptions on the for loop */
 
 void Dos9_ForSplitTokens(ESTR* lpContent, FORINFO* lpfrInfo);
 /*
@@ -137,20 +147,31 @@ void Dos9_ForGetToken(ESTR* lpContent, FORINFO* lpfrInfo, int iPos, ESTR* lpRetu
 
 
 int Dos9_ForMakeInputInfo(ESTR* lpInput, INPUTINFO* lpipInfo, FORINFO* lpfrInfo);
+/* Creates an inputinfo struct from a input, and a FORINFO struct */
 
 int Dos9_ForAdjustInput(char* lpInput);
+/* Adjusts the input */
+
+int Dos9_ForInputParseFileList(FILE_LIST_T* lpList, ESTR* lpInput);
 
 int Dos9_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn, int* iPipeFdOut);
+/* Start a new process for command input */
 
 int Dos9_ForGetInputLine(ESTR* lpReturn, INPUTINFO* lpipInfo);
+/* Get an input line */
 
 void Dos9_ForCloseInputInfo(INPUTINFO* lpipInfo);
+/* Free and close files of an inputinfo descriptor */
 
 int Dos9_ForGetStringInput(ESTR* lpReturn, STRINGINFO* lpsiInfo);
+/* Get an input line for string inputs */
 
 void Dos9_ForVarUnassign(FORINFO* lpfrInfo);
+/* Unassign all local variable that have been set by the for loop */
 
 int  Dos9_ForVarCheckAssignment(FORINFO* lpfrInfo);
+/* Check wether variables or ranges of variables are already assigned in order
+   to prevent overlaping variables in for loop */
 
 int  Dos9_CmdForDeprecatedWrapper(ESTR* lpMask, ESTR* lpDir, char* lpAttribute, BLOCKINFO* lpbkCode, char cVarName);
 
