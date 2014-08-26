@@ -77,6 +77,10 @@ int main(int argc, char *argv[])
 	    bQuiet=FALSE,
 	    bGetSwitch=TRUE;
 
+    DOS9_DBG("Initializing Dos9's custom environ");
+
+    lpeEnv = Dos9_InitEnv(environ);
+
 	DOS9_DBG("Initializing signal handler...\n");
 
 	signal(SIGINT, Dos9_SigHandler);
@@ -259,12 +263,12 @@ int main(int argc, char *argv[])
 			Dos9_PrintIntroduction();
 
 		strcat(lpTitle, "Command prompt");
-		Dos9_setenv("DOS9_IS_SCRIPT", "false");
+		Dos9_SetEnv(lpeEnv, "DOS9_IS_SCRIPT", "false");
 
 	} else {
 
 		strncat(lpTitle, lpFileName, sizeof(lpTitle)-sizeof("Dos9 [" DOS9_VERSION "] - "));
-		Dos9_setenv("DOS9_IS_SCRIPT","true");
+		Dos9_SetEnv(lpeEnv, "DOS9_IS_SCRIPT","true");
 
 		DOS9_DBG("[dos9] Runing \"%s\"\n", lpFileName);
 
@@ -290,7 +294,7 @@ int main(int argc, char *argv[])
 
 	Dos9_InitVar(lpInitVar);
 
-	Dos9_setenv("ERRORLEVEL","0");
+	Dos9_SetEnv(lpeEnv, "ERRORLEVEL","0");
 
 	DOS9_DBG("Mapping commands ... \n");
 

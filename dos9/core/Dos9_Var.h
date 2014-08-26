@@ -28,8 +28,6 @@
 
 #define LOCAL_VAR_BLOCK_SIZE 128
 
-int Dos9_setenv(const char* name, const char* content);
-
 #define DOS9_ALL_PATH    0
 #define DOS9_DISK_LETTER 1
 #define DOS9_PATH_PART   2

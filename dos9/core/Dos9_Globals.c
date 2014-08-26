@@ -36,6 +36,8 @@ LOCAL_VAR_BLOCK* lpvLocalVars;
 LPSTREAMSTACK lppsStreamStack;
 COLOR colColor;
 
+ENVBUF* lpeEnv;
+
 int iInputD=0,
     iOutputD=0;
 

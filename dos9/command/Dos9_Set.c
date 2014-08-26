@@ -113,12 +113,12 @@ int _Dos9_SetGetVarInt(const char* lpName)
 	and strip the following characters. Thus what we get will be `var=exp1'.
 	This behaviour introduces concerns about how the line is actually parsed
 	because remaining characters are ignored.
-	
+
 	However, for set /a, the behaviour is a little bit different; Various
 	variables may be defined through the use of `,' and quotes. This syntax
 	is really fragile because equivalent signs may not work when replaced.
 	Basically, `set "var1=1","var2=2"' may assign various variables, while
-	using a space may not. 
+	using a space may not.
 
 	Things are even worser in case of inline assigments using set /a.
 	Problems are introduced by the lack of standard precendence rules for
@@ -157,7 +157,7 @@ int Dos9_CmdSet(char *lpLine)
 	int i,
 	    bFloats;
 
-	if ((lpNextToken=Dos9_GetNextParameter(lpLine+3, lpArgBuf, 
+	if ((lpNextToken=Dos9_GetNextParameter(lpLine+3, lpArgBuf,
 		sizeof(lpArgBuf)))) {
 
 		if (!stricmp(lpArg, "/?")) {
@@ -228,25 +228,25 @@ int Dos9_CmdSetS(char* lpLine)
 
 
 		lpLine=Dos9_SkipBlanks(lpLine);
-	
+
 		if (*lpLine=='\0'){
 
 			break;
 
 		} else if (*lpLine=='"' && bCmdlyCorrect) {
-		
-			/* use the good old method of cmd.exe' set 
+
+			/* use the good old method of cmd.exe' set
 			   truncate the line at the last quote
 			*/
-			
+
 			lpLine++;
 
 			Dos9_GetEndOfLine(lpLine, lpEsVar);
-	
+
 			lpLine=NULL;
 
 			if ((lpCh=strrchr(Dos9_EsToChar(lpEsVar), '"')))
-				*lpCh='\0'; 
+				*lpCh='\0';
 
 		} else if (*lpLine=='"') {
 
@@ -254,10 +254,10 @@ int Dos9_CmdSetS(char* lpLine)
 			   and loop again */
 			lpLine=Dos9_GetNextParameterEsD(lpLine, lpEsVar,
 					"\t\" ");
-		
+
 			DOS9_DBG("GOT Token => \"%s\"\n", Dos9_EsToChar(lpEsVar)
 					);
-		
+
 		} else {
 
 			Dos9_GetEndOfLine(lpLine, lpEsVar);
@@ -275,20 +275,13 @@ int Dos9_CmdSetS(char* lpLine)
 					FALSE);
 
 			goto error;
-			
+
 		}
 
 		*lpCh='\0';
 		lpCh++;
 
-		if (Dos9_setenv(Dos9_EsToChar(lpEsVar), lpCh)) {
-
-			Dos9_ShowErrorMessage(DOS9_UNABLE_SET_ENVIRONMENT,
-					      Dos9_EsToChar(lpEsVar),
-					      FALSE);
-			goto error;
-
-		}
+		Dos9_SetEnv(lpeEnv, Dos9_EsToChar(lpEsVar), lpCh);
 
 	}
 
@@ -324,16 +317,8 @@ int Dos9_CmdSetP(char* lpLine)
 		if ((lpEqual=strchr(Dos9_EsToChar(lpEsInput), '\n')))
 			*lpEqual='\0';
 
-		if (Dos9_setenv(Dos9_EsToChar(lpEsVar),
-				Dos9_EsToChar(lpEsInput))) {
-
-			Dos9_ShowErrorMessage(DOS9_UNABLE_SET_ENVIRONMENT,
-			                      Dos9_EsToChar(lpEsVar),
-			                      FALSE);
-
-			goto error;
-
-		}
+		Dos9_SetEnv(lpeEnv, Dos9_EsToChar(lpEsVar),
+				Dos9_EsToChar(lpEsInput));
 
 	} else {
 
@@ -487,15 +472,7 @@ int Dos9_CmdSetEvalFloat(ESTR* lpExpression)
 
 	snprintf(lpResult, sizeof(lpResult), "%.16g", dVal);
 
-	if (Dos9_setenv(Dos9_EsToChar(lpExpression), lpResult)) {
-
-		Dos9_ShowErrorMessage(DOS9_UNABLE_SET_ENVIRONMENT,
-		                      Dos9_EsToChar(lpExpression),
-		                      FALSE);
-
-		goto error;
-
-	}
+	Dos9_SetEnv(lpeEnv, Dos9_EsToChar(lpExpression), lpResult);
 
 	return 0;
 
@@ -647,15 +624,7 @@ int Dos9_CmdSetEvalInt(ESTR* lpExpression)
 
 	snprintf(lpResult, sizeof(lpResult), "%d", iVal);
 
-	if (Dos9_setenv(Dos9_EsToChar(lpExpression), lpResult)) {
-
-		Dos9_ShowErrorMessage(DOS9_UNABLE_SET_ENVIRONMENT,
-		                      Dos9_EsToChar(lpExpression),
-		                      FALSE);
-
-		goto error;
-
-	}
+	Dos9_SetEnv(lpeEnv, Dos9_EsToChar(lpExpression), lpResult);
 
 	return 0;
 

@@ -299,7 +299,7 @@ BackTrackExternalCommand:
 	if (iErrorLevel!=lastErrorLevel) {
 
 		snprintf(lpErrorlevel, sizeof(lpErrorlevel), "%d", iErrorLevel);
-		Dos9_setenv("ERRORLEVEL",lpErrorlevel);
+		Dos9_SetEnv(lpeEnv, "ERRORLEVEL",lpErrorlevel);
 		lastErrorLevel=iErrorLevel;
 	}
 

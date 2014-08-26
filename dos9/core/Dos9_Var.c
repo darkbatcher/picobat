@@ -47,77 +47,12 @@ void strupr(char* lpBuf)
 
 #endif
 
-int Dos9_setenv(const char* name, const char* content)
-{
-	ESTR* lpEsStr=Dos9_EsInit();
-	int   ret;
-	size_t size;
-
-	const char *lpLastNSpace=NULL,
-	           *lpCh;
-
-	lpCh=name;
-
-	/* loop in order to remove trailing spaces and tabs after variable
-	   name. This is necessary to conform with cmd.exe */
-
-	while (*lpCh) {
-
-		switch(*lpCh) {
-
-			case ' ':
-			case '\t':
-				if (!lpLastNSpace)
-					lpLastNSpace=lpCh;
-
-				break;
-
-			default:
-				lpLastNSpace=NULL;
-
-		}
-
-		lpCh++;
-
-	}
-
-	if (lpLastNSpace) {
-
-		size=lpLastNSpace-name;
-		Dos9_EsCpyN(lpEsStr, name, size);
-
-	} else {
-
-		Dos9_EsCpy(lpEsStr, name);
-
-	}
-
-	#if defined(WIN32)
-
-		Dos9_EsCat(lpEsStr, "=");
-		Dos9_EsCat(lpEsStr, content);
-
-		putenv(Dos9_EsToChar(lpEsStr));
-
-	#elif defined(_POSIX_C_SOURCE)
-
-		strupr(Dos9_EsToChar(lpEsStr));
-
-		ret=setenv(Dos9_EsToChar(lpEsStr), content, 1);
-
-	#endif // defined(WIN32)
-
-	Dos9_EsFree(lpEsStr);
-
-	return ret;
-}
-
 
 int Dos9_InitVar(char* lpArray[])
 {
 	int i;
 	for (i=0; lpArray[i] && lpArray[i+1]; i+=2) {
-		Dos9_setenv(lpArray[i], lpArray[i+1]);
+		Dos9_SetEnv(lpeEnv, lpArray[i], lpArray[i+1]);
 	}
 	return 0;
 }
@@ -189,14 +124,6 @@ int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
 
 	}
 
-#ifndef WIN32
-
-	/* Non windows systems are case sensitive, and thus,
-	   capitalization of charcter is needed */
-	strupr(lpNameCpy);
-
-#endif
-
 	if (!(stricmp(lpNameCpy, "RANDOM"))) {
 
 		/* requested RANDOM */
@@ -217,7 +144,7 @@ int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
 		lpVarContent=lpBuf;
 		sprintf(lpBuf, "%02d:%02d:%02d,00", lTime->tm_hour, lTime->tm_min, lTime->tm_sec);
 
-	} else if (!(lpVarContent=getenv(lpNameCpy))) {
+	} else if (!(lpVarContent=Dos9_GetEnv(lpeEnv, lpNameCpy))) {
 
 		free(lpNameCpy);
 		return FALSE;

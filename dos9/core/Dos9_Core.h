@@ -23,7 +23,7 @@
 #include <libDos9.h>
 #include "../errors/Dos9_Errors.h"
 
-#include "Dos9_Context.h"
+#include "Dos9_Env.h"
 
 #include "Dos9_Var.h"
 #include "Dos9_Expand.h"

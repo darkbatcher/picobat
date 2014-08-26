@@ -170,7 +170,7 @@ int Dos9_CmdIf(char* lpParam)
 
 		/* avoid errors from conversion from 64 bits to
 		   32 bits */
-		iResult=(getenv(lpArgument) == NULL) ? FALSE : TRUE;
+		iResult=(Dos9_GetEnv(lpeEnv, lpArgument) == NULL) ? FALSE : TRUE;
 
 		if (iFlag & DOS9_IF_NEGATION)
 			iResult=!iResult;

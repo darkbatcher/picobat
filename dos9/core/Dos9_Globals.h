@@ -44,6 +44,8 @@ extern LPSTREAMSTACK lppsStreamStack;
 extern COLOR colColor;
 extern INPUT_FILE ifIn;
 
+extern ENVBUF* lpeEnv;
+
 extern char* lpInitVar[];
 
 extern int iInputD,

@@ -379,6 +379,7 @@ int Dos9_CmdForL(ESTR* lpInput, BLOCKINFO* lpbkCommand, char cVarName)
 	while ((lpToken=Dos9_GetNextParameterEs(lpToken, lpesStr)) && (i < 3)) {
         /* Loop to get start, increment and end */
         /* works with both hexadecimal, octal and decimal numbers */
+
 		iLoopInfo[i]=strtol(Dos9_EsToChar(lpesStr),
                             &lpNext,
                             0);
@@ -397,7 +398,7 @@ int Dos9_CmdForL(ESTR* lpInput, BLOCKINFO* lpbkCommand, char cVarName)
 
 	}
 
-	if (*lpToken) {
+	if (lpToken) {
 
 		Dos9_ShowErrorMessage(DOS9_FOR_BAD_INPUT_SPECIFIER, Dos9_EsToChar(lpInput), FALSE);
 		goto error;
