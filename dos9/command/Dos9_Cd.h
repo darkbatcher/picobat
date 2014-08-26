@@ -21,6 +21,13 @@
 #ifndef DOS9_CMD_CD_H
 #define DOS9_CMD_CD_H
 
-int Dos9_CmdCd(char* lpLine);
+#if defined(WIN32)
+#define Dos9_CmdCd Dos9_CmdCd_win
+#else
+#define Dos9_CmdCd Dos9_CmdCd_nix
+#endif
+
+int Dos9_CmdCd_nix(char* lpLine);
+int Dos9_CmdCd_win(char* lpLine);
 
 #endif // DOS9_CMD_ECHO_H

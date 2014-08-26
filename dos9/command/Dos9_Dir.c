@@ -70,7 +70,12 @@ void Dos9_CmdDirShow(FILELIST* lpElement)
 				lpType[0]='D';
 				iDirNb++;
 
+				strcpy(lpSize, "<REP>\t");
+
 			} else {
+
+                strcpy(lpSize, "       ");
+                Dos9_FormatFileSize(lpSize+7, 8, Dos9_GetFileSize(lpElement));
 
 				iFileNb++;
 
@@ -85,11 +90,19 @@ void Dos9_CmdDirShow(FILELIST* lpElement)
 			if (Dos9_GetFileMode(lpElement) & DOS9_FILE_ARCHIVE) lpType[5]='A';
 
 			/* !! Recyclage de la variable lpFilename pour afficher la taille du fichier */
-			Dos9_FormatFileSize(lpSize, 16, Dos9_GetFileSize(lpElement));
+
 
 			lTime=localtime(&Dos9_GetModifTime(lpElement));
 
-			printf("%02d/%02d/%02d %02d:%02d\t%s\t%s\t%s\n",lTime->tm_mday , lTime->tm_mon+1, 1900+lTime->tm_year, lTime->tm_hour, lTime->tm_min, lpSize, lpType, lpElement->lpFileName);
+			printf("%02d/%02d/%02d %02d:%02d %s\t%s\t%s\n", lTime->tm_mday,
+                                                            lTime->tm_mon+1,
+                                                            1900+lTime->tm_year,
+                                                            lTime->tm_hour,
+                                                            lTime->tm_min,
+                                                            lpSize,
+                                                            lpType,
+                                                            lpElement->lpFileName
+                                                            );
 
 		} else {
 

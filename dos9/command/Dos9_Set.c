@@ -205,7 +205,9 @@ int Dos9_CmdSet(char *lpLine)
 	} else {
 
 		/* in default cases, print environment */
-		for (i=0; environ[i]; i++) puts(environ[i]);
+		for (i=0; i < lpeEnv->index; i++)
+            printf("%s=%s\n", lpeEnv->envbuf[i]->name,
+                                    lpeEnv->envbuf[i]->content);
 
 	}
 

@@ -350,11 +350,13 @@ extern int _Dos9_TextMode;
 LIBDOS9 char* Dos9_GetNextChar(const char* lpContent);
 LIBDOS9 int Dos9_GetConsoleEncoding(char* lpEnc, size_t iSize);
 
+#define Dos9_GetCurrentDir() _Dos9_Currdir
+
+extern  char _Dos9_Currdir[FILENAME_MAX];
 LIBDOS9 int Dos9_FileExists(const char* lpPath);
 LIBDOS9 int Dos9_DirExists(const char* lpPath);
 LIBDOS9 int Dos9_UpdateCurrentDir(void);
 LIBDOS9 int Dos9_SetCurrentDir(const char* lpPath);
-LIBDOS9 char* Dos9_GetCurrentDir(void);
 LIBDOS9 int Dos9_GetExePath(char* lpBuf, size_t iBufSize);
 
 LIBDOS9 char* Dos9_SkipBlanks(const char* lpCh);

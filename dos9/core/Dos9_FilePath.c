@@ -56,7 +56,7 @@ int Dos9_GetFilePath(char* lpFullPath, const char* lpPartial, size_t iBufSize)
 
 		if (bFirstLoop) {
 
-			Dos9_EsCpy(lpEsTmp, lpPartial);
+			Dos9_MakePath(lpEsTmp, 2, Dos9_GetCurrentDir(), lpPartial);
 			bFirstLoop=FALSE;
 
 		} else {

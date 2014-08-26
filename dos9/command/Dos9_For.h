@@ -154,7 +154,15 @@ int Dos9_ForAdjustInput(char* lpInput);
 
 int Dos9_ForInputParseFileList(FILE_LIST_T* lpList, ESTR* lpInput);
 
-int Dos9_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn, int* iPipeFdOut);
+
+#if defined(WIN32)
+#define Dos9_ForInputProcess Dos9_ForInputProcess_win
+#else
+#define Dos9_ForInputProcess Dos9_ForInputProcess_nix
+#endif
+
+int Dos9_ForInputProcess_nix(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn, int* iPipeFdOut);
+int Dos9_ForInputProcess_win(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn, int* iPipeFdOut);
 /* Start a new process for command input */
 
 int Dos9_ForGetInputLine(ESTR* lpReturn, INPUTINFO* lpipInfo);

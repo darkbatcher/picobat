@@ -27,27 +27,10 @@ int Dos9_FileExists(const char* ptrName)
 
 int Dos9_DirExists(const char *ptrName)
 {
-    DIR* rep = NULL;
-    if ((rep = opendir(ptrName))==NULL) return 0; /* Ouverture d'un dossier */
-    closedir(rep);
-    return 1;
-}
+    int iAttrib = GetFileAttributes(ptrName);
 
-int Dos9_UpdateCurrentDir(void)
-{
-    _getcwd(lpCurrentDir+3, MAX_PATH);
-    return _putenv(lpCurrentDir);
-}
-
-int Dos9_SetCurrentDir(const char* lpPath)
-{
-    chdir(lpPath);
-    _getcwd(lpCurrentDir+3, MAX_PATH);
-    return _putenv(lpCurrentDir);
-}
-char* Dos9_GetCurrentDir(void)
-{
-    return lpCurrentDir+3;
+    return (iAttrib != INVALID_FILE_ATTRIBUTES &&
+            (iAttrib & FILE_ATTRIBUTE_DIRECTORY));
 }
 
 #endif

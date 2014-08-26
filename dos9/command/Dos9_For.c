@@ -1166,24 +1166,21 @@ int Dos9_ForAdjustInput(char* lpInput)
 
 }
 
-int Dos9_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn, int* iPipeFdOut)
+#if defined(WIN32)
+
+int Dos9_ForInputProcess_win(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn, int* iPipeFdOut)
 {
 	char* lpArgs[10];
 	char lpInArg[16],
-	     lpOutArg[16];
+	     lpOutArg[16],
+	     lpFileName[FILENAME_MAX];
 	FILE* pFile;
 
 	int i=0;
 
-#ifdef _POSIX_C_SOURCE
+    Dos9_GetExePath(lpFileName, FILENAME_MAX);
 
-	/* on POSIX systems, we need to know the child process ID in order
-	   to process to fork */
-	int iPid;
-
-#endif
-
-	lpArgs[i++]="dos9";
+	lpArgs[i++]=lpFileName;
 	lpArgs[i++]="/Q";
 	lpArgs[i++]="/E";
 
@@ -1209,8 +1206,6 @@ int Dos9_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn, int
 
 	lpArgs[i]=NULL;
 
-#ifdef WIN32
-
 	spawnvp(_P_NOWAIT, lpArgs[0], (char * const*)lpArgs);
 
 	if (errno == ENOENT) {
@@ -1222,41 +1217,6 @@ int Dos9_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn, int
 		return -1;
 
 	}
-
-#elif defined _POSIX_C_SOURCE
-
-	iPid=fork();
-
-	if (iPid == 0 ) {
-		/* if we are in the son */
-
-		if ( execvp(lpArgs[0], lpArgs) == -1) {
-
-			Dos9_ShowErrorMessage(DOS9_FOR_LAUNCH_ERROR | DOS9_PRINT_C_ERROR,
-			                      Dos9_EsToChar(lpInput),
-			                      FALSE);
-			return -1;
-
-		}
-
-		exit(0);
-
-	} else {
-		/* if we are in the father */
-
-		if (iPid == (pid_t)-1) {
-
-			/* the execution failed */
-			Dos9_ShowErrorMessage(DOS9_FOR_LAUNCH_ERROR | DOS9_PRINT_C_ERROR,
-			                      Dos9_EsToChar(lpInput),
-			                      FALSE);
-			return -1;
-
-		}
-
-	}
-
-#endif // WIN32
 
 	if (!(pFile=fdopen(iPipeFdIn[1], "w"))) {
 
@@ -1295,6 +1255,80 @@ error:
 
 	return -1;
 }
+
+#else
+
+#include <limits.h>
+
+int Dos9_ForInputProcess_nix(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn, int* iPipeFdOut)
+{
+
+	FILE* pFile;
+	BLOCKINFO bkBlock;
+	int iPid;
+
+	iPid=fork();
+
+	if (iPid == 0 ) {
+		/* if we are in the son, and, you know, unix is very convenient with us,
+           *really*, he lets us continue without carry much about far,
+           simplier than using windows */
+
+            Dos9_OpenOutputD(lppsStreamStack, iPipeFdOut[1], DOS9_STDOUT);
+
+            bkBlock.lpBegin = Dos9_EsToChar(lpInput);
+            bkBlock.lpEnd = bkBlock.lpBegin;
+
+            while (*(bkBlock.lpEnd ++));
+
+            fprintf(stderr, "Runing block : \"%s\" end \"%s\"\n", bkBlock.lpBegin, bkBlock.lpEnd);
+
+            Dos9_RunBlock(&bkBlock);
+
+            close (iPipeFdOut[1]);
+
+            exit(0);
+
+	} else {
+		/* if we are in the father */
+
+		if (iPid == (pid_t)-1) {
+
+			/* the execution failed */
+			Dos9_ShowErrorMessage(DOS9_FOR_LAUNCH_ERROR | DOS9_PRINT_C_ERROR,
+			                      Dos9_EsToChar(lpInput),
+			                      FALSE);
+			return -1;
+
+		}
+
+	}
+
+	if (!(pFile=fdopen(iPipeFdOut[0], "r"))) {
+
+		goto error;
+
+	}
+
+	close(iPipeFdIn[1]);
+	close(iPipeFdOut[1]);
+
+	lpipInfo->Info.InputFile.pFile=pFile;
+
+	lpipInfo->Info.InputFile.lpesFiles[1]=NULL;
+	lpipInfo->Info.InputFile.index=0;
+
+	return 0;
+
+error:
+	close(iPipeFdIn[0]);
+	close(iPipeFdOut[1]);
+	close(iPipeFdOut[0]);
+
+	return -1;
+}
+
+#endif
 
 int Dos9_ForGetStringInput(ESTR* lpReturn, STRINGINFO* lpsiInfo)
 {

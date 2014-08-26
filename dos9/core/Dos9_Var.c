@@ -31,23 +31,6 @@
 
 #include "../errors/Dos9_Errors.h"
 
-
-/* this file contains code of function used for parsing variables content
-   (e.g. %~* and !:*! */
-
-#ifndef WIN32
-
-void strupr(char* lpBuf)
-{
-	while (*lpBuf) {
-		*lpBuf=toupper(*lpBuf);
-		lpBuf++;
-	}
-}
-
-#endif
-
-
 int Dos9_InitVar(char* lpArray[])
 {
 	int i;
@@ -124,7 +107,12 @@ int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
 
 	}
 
-	if (!(stricmp(lpNameCpy, "RANDOM"))) {
+	if (!stricmp(lpNameCpy, "CD")) {
+
+        /* requested current dir */
+        lpVarContent=Dos9_GetCurrentDir();
+
+	} else if (!(stricmp(lpNameCpy, "RANDOM"))) {
 
 		/* requested RANDOM */
 		lpVarContent=lpBuf;

@@ -68,6 +68,7 @@ int main(int argc, char *argv[])
 	char *lpFileName="",
 	      lpFileAbs[FILENAME_MAX],
 	      lpTmp[FILENAME_MAX],
+	      lpExePath[FILENAME_MAX],
 	      lpTitle[FILENAME_MAX]="Dos9 [" DOS9_VERSION "] - ";
 
 
@@ -139,8 +140,35 @@ int main(int argc, char *argv[])
 		                      -1
 		                     );
 
-	DOS9_DBG("Getting command line arguments ... \n");
 
+
+    DOS9_DBG("Getting current executable name ...\n");
+
+	Dos9_GetExePath(lpExePath, FILENAME_MAX);
+
+	DOS9_DBG("\tGot \"%s\" as name ...\n", lpTitle);
+
+	lpInitVar[4]="DOS9_PATH";
+	lpInitVar[5]=lpExePath;
+
+	DOS9_DBG("Initializing variables ...\n");
+
+	Dos9_InitVar(lpInitVar);
+
+	Dos9_SetEnv(lpeEnv, "ERRORLEVEL","0");
+
+	DOS9_DBG("Mapping commands ... \n");
+
+	lpclCommands=Dos9_MapCommandInfo(lpCmdInfo, sizeof(lpCmdInfo)/sizeof(COMMANDINFO));
+
+	DOS9_DBG("Initializing streams ... \n");
+
+	lppsStreamStack=Dos9_InitStreamStack();
+
+	pErrorHandler=Dos9_Exit;
+
+
+    DOS9_DBG("Getting command line arguments ... \n");
 	/* get command line arguments */
 	for (i=1; argv[i]; i++) {
 
@@ -187,6 +215,7 @@ int main(int argc, char *argv[])
 					}
 
 					iInputD=atoi(argv[i]); // select input descriptor
+					Dos9_OpenOutputD(lppsStreamStack, iInputD, DOS9_STDIN);
 					break;
 
 				case 'O':
@@ -197,6 +226,7 @@ int main(int argc, char *argv[])
 					}
 
 					iOutputD=atoi(argv[i]); // select input descriptor
+					Dos9_OpenOutputD(lppsStreamStack, iOutputD, DOS9_STDOUT);
 					break;
 
 				case '?':
@@ -281,51 +311,11 @@ int main(int argc, char *argv[])
 
 	}
 
-	DOS9_DBG("Getting current executable name ...\n");
-
-	Dos9_GetExePath(lpTitle, FILENAME_MAX);
-
-	DOS9_DBG("\tGot \"%s\" as name ...\n", lpTitle);
-
-	lpInitVar[4]="DOS9_PATH";
-	lpInitVar[5]=lpTitle;
-
-	DOS9_DBG("Initializing variables ...\n");
-
-	Dos9_InitVar(lpInitVar);
-
-	Dos9_SetEnv(lpeEnv, "ERRORLEVEL","0");
-
-	DOS9_DBG("Mapping commands ... \n");
-
-	lpclCommands=Dos9_MapCommandInfo(lpCmdInfo, sizeof(lpCmdInfo)/sizeof(COMMANDINFO));
-
-	DOS9_DBG("Initializing streams ... \n");
-
-	lppsStreamStack=Dos9_InitStreamStack();
-
-
-	/* getting input intialised (if they are specified) */
-
-	if (iInputD) {
-
-		Dos9_OpenOutputD(lppsStreamStack, iInputD, DOS9_STDIN);
-
-	}
-
-	if (iOutputD) {
-
-		Dos9_OpenOutputD(lppsStreamStack, iOutputD, DOS9_STDOUT);
-
-	}
-
-	pErrorHandler=Dos9_Exit;
-
 	/* running auto batch initialisation */
 
-	strcat(lpTitle, "/Dos9_Auto.bat");
+	strcat(lpExePath, "/Dos9_Auto.bat");
 
-	strcpy(ifIn.lpFileName, lpTitle);
+	strcpy(ifIn.lpFileName, lpExePath);
 	ifIn.iPos=0;
 	ifIn.bEof=FALSE;
 
@@ -342,22 +332,7 @@ int main(int argc, char *argv[])
 		if (Dos9_GetFilePath(lpFileAbs, lpFileName, sizeof(lpFileAbs))==-1)
 			Dos9_ShowErrorMessage(DOS9_FILE_ERROR, lpFileName, -1);
 
-		if (*lpFileAbs) {
-			if (strncmp(lpFileAbs+1, ":\\", 2)
-			    && strncmp(lpFileAbs+1, ":/", 2)
-			    && *lpFileAbs!='/'
-			   ) {
-				/* if the file path is relative */
-
-				snprintf(lpTmp, sizeof(lpFileAbs), "%s/%s", Dos9_GetCurrentDir(), lpFileAbs);
-				strcpy(lpFileAbs, lpTmp);
-
-			}
-		}
-
-		lpFileName=lpFileAbs;
 	}
-
 
 	/* run the batch */
 	strcpy(ifIn.lpFileName, lpFileName);

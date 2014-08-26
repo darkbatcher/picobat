@@ -43,13 +43,39 @@
 
 #include "../errors/Dos9_Errors.h"
 
+/* Changes the system's current directory
+
+    CD [/d] [[drive:]path]                    (Windows)
+    CD [path]                                 (Unixes)
+
+    Changes the system current directory.
+
+        - [path] : The path for the new current directory.
+
+    ** Windows specific **
+
+        - [/d] : If the combination drive:path is located in another
+        directory, force drive change. If drive:path is located in another
+        directory, but /d is not specified, then it changes the current
+        directory on the drive, without changing the current directory on
+        that drive.
+
+    Current directory on drive are stored in environment variables (undocumented,
+    but cmd-compatible), that are named following the rule : %drive=:%.
+
+    Similar effects may be achieved using the popd and pushd in unixes commands.
+
+    ** End Windows specific **
+
+ */
+
 /* FIXME : Make it more compatible with cmd.exe
    In fact, cmd.exe supports different paths on differents drives
    through variables like %=x:% where x is the name of the drive.
    So that the /d switch is *really* usefull.
 */
 
-int Dos9_CmdCd(char* lpLine)
+int Dos9_CmdCd_nix(char* lpLine)
 {
 	char* lpNext;
 	ESTR* lpEsDir=Dos9_EsInit();
@@ -105,9 +131,7 @@ int Dos9_CmdCd(char* lpLine)
 
 		DOS9_DBG("Changing directory to : \"%s\"\n", lpLine);
 
-		chdir(lpLine);
-
-		if (errno ==  0) {
+		if (chdir(lpLine) ==  0) {
 
 			/* update the current directory buffer */
 
@@ -149,3 +173,71 @@ error:
 	return -1;
 }
 
+
+int Dos9_CmdCd_win(char* lpLine)
+{
+    char   varname[]="x=:",
+          *lpNext,
+          current=*Dos9_GetCurrentDir(),
+          passed=0;
+
+    ESTR*  lpesStr=Dos9_EsInit();
+
+    int    force=0,
+            status=0;
+
+    if (!(lpNext = Dos9_GetNextParameterEs(lpLine, lpesStr))) {
+
+        puts(Dos9_GetCurrentDir());
+
+        status = -1;
+
+        goto end;
+
+    }
+
+    if (!stricmp(Dos9_EsToChar(lpesStr), "/D")) {
+
+        lpLine = lpNext;
+        force = TRUE;
+
+    }
+
+    Dos9_GetEndOfLine(lpLine, lpesStr);
+
+    lpLine = Dos9_SkipBlanks(Dos9_EsToChar(lpesStr));
+
+    if (*lpLine && *(lpLine+1)==':') {
+
+        /* get current curent directory disk */
+        passed = *lpLine;
+
+    }
+
+    if ((passed == 0) || (passed == current) || (force == TRUE)) {
+
+        /* change the current directory, yeah */
+
+        if (chdir(lpLine)) {
+
+            Dos9_ShowErrorMessage(DOS9_DIRECTORY_ERROR | DOS9_PRINT_C_ERROR,
+                                    lpLine,
+                                    FALSE
+                                    );
+
+            status = -1;
+            goto end;
+
+        }
+
+    }
+
+    varname[0] = (passed == 0) ? (current) : (passed);
+
+    Dos9_SetEnv(lpeEnv, varname, lpLine);
+
+end:
+    Dos9_EsFree(lpesStr);
+
+    return status;
+}
