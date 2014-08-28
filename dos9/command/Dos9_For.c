@@ -1285,9 +1285,13 @@ int Dos9_ForInputProcess_nix(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn,
 
             Dos9_RunBlock(&bkBlock);
 
+            fprintf(stderr, "Ran\n");
+
             close (iPipeFdOut[1]);
 
-            exit(0);
+            fprintf(stderr, "exited\n");
+
+            exit(iErrorLevel);
 
 	} else {
 		/* if we are in the father */
@@ -1361,6 +1365,7 @@ int Dos9_ForGetInputLine(ESTR* lpReturn, INPUTINFO* lpipInfo)
 	char* lpToken;
 
 loop_begin:
+    iReturn=0;
 
 	switch (lpipInfo->cType) {
 
@@ -1409,7 +1414,7 @@ loop_begin:
 
 	}
 
-	if (bCmdlyCorrect) {
+	if (bCmdlyCorrect && iReturn) {
 
 		lpToken=Dos9_EsToChar(lpReturn);
 		lpToken=Dos9_SkipBlanks(lpToken);
@@ -1424,7 +1429,8 @@ loop_begin:
 			   strips blank lines from the input.
 			 */
 
-			goto loop_begin;
+
+            goto loop_begin;
 
 		}
 

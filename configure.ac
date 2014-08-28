@@ -60,17 +60,19 @@ AC_ARG_ENABLE([static-cmdlycorrect],
 	[],
 	[enable_static_cmdlycorrect=no])
 
+echo "x$enable_static_cmdlycorrect"
+
 AS_IF([test "x$enable_static_cmdlycorrect" = x1],
 	[AC_DEFINE([DOS9_STATIC_CMDLYCORRECT],
 		[1],
-		Define to 1 or 0 if you want to have static cmdlycorrect)]
+		Define to 1 or 0 if you want to have static cmdlycorrect)],
 	[test "x$enable_static_cmdlycorrect" = x0],
 	[AC_DEFINE([DOS9_STATIC_CMDLYCORRECT],
 		[0],
-		Define to 1 or 0 if you want to have static cmdlycorrect)]
-	[AS_IF([test "x$enable_static_cmdlycorrect" != xno],
+		Define to 1 or 0 if you want to have static cmdlycorrect)],
+	[test "x$enable_static_cmdlycorrect" != xno],
 		[AC_MSG_FAILURE([Bad argument with --enable-static-cmdlycorrect]
-	)])])
+	)])
 
 AC_ARG_ENABLE([console],
 	    [AC_HELP_STRING([--enable-console],

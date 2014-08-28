@@ -72,18 +72,8 @@ int Dos9_SetCurrentDir(const char* lpPath)
 {
     int status=chdir(lpPath);
 
-#ifdef _POSIX_C_SOURCE
-
-    if (status==0) {
-        strncpy(_Dos9_Currdir, lpPath, sizeof(_Dos9_Currdir));
-        _Dos9_Currdir[sizeof(_Dos9_Currdir)-1] = '\0';
-    }
-
-#elif defined(WIN32)
-
     getcwd(_Dos9_Currdir, FILENAME_MAX);
 
-#endif
     return status;
 }
 

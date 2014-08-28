@@ -569,13 +569,13 @@ int Dos9_RunExternalFile(char* lpFileName, char** lpArguments)
 
 		} else {
 
-			wait(&iResult);
+			waitpid(iPid, &iResult, 0);
 
 		}
 
 	}
 
-	return iResult;
+	return WEXITSTATUS(iResult);
 
 }
 
