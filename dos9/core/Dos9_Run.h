@@ -50,4 +50,6 @@ int Dos9_RunBatch(INPUT_FILE* pIn); // the function that runs the batch
 int Dos9_RunExternalCommand(char* lpCommandLine);
 int Dos9_RunExternalFile(char* lpFileName, char** lpArguments);
 
+int Dos9_RunExternalBatch(char* lpFileName, char** lpArguments);
+
 #endif

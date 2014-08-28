@@ -254,7 +254,8 @@ int Dos9_RunCommand(ESTR* lpCommand)
 {
 
 	int (*lpProc)(char*);
-	char lpErrorlevel[]="-3000000000";
+	char lpErrorlevel[sizeof("-3000000000")],
+         lpTmpLine[]="CD X:";
 	static int lastErrorLevel=0;
 	char *lpCmdLine;
 	int iFlag;
@@ -264,6 +265,20 @@ RestartSearch:
 	lpCmdLine=Dos9_EsToChar(lpCommand);
 
 	lpCmdLine=Dos9_SkipAllBlanks(lpCmdLine);
+
+#if defined(WIN32)
+
+    /* handle "A:" */
+
+	if (*lpCmdLine && *(lpCmdLine+1)==':'
+	    && *Dos9_SkipAllBlanks(lpCmdLine+2) == '\0') {
+
+        lpTmpLine[3] = *lpCmdLine;
+        lpCmdLine = lpTmpLine;
+
+    }
+
+#endif
 
 	switch((iFlag=Dos9_GetCommandProc(lpCmdLine, lpclCommands, (void**)&lpProc))) {
 
@@ -415,7 +430,8 @@ int Dos9_RunExternalCommand(char* lpCommandLine)
 
 	ESTR* lpEstr[FILENAME_MAX];
 
-	int i=0;
+	int i=0,
+        status=0;
 
 
 	Dos9_GetParamArrayEs(lpCommandLine, lpEstr, FILENAME_MAX);
@@ -438,6 +454,8 @@ int Dos9_RunExternalCommand(char* lpCommandLine)
 		Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR,
 		                      lpArguments[0],
 		                      FALSE);
+
+        status=-1;
 		goto error;
 
 	}
@@ -448,54 +466,19 @@ int Dos9_RunExternalCommand(char* lpCommandLine)
 	if (!stricmp(".bat", lpExt)
 	    || !stricmp(".cmd", lpExt)) {
 
-		/* these are batch */
+        status=Dos9_RunExternalBatch(lpFileName, lpArguments);
 
-		strncpy(lpTmp, lpFileName, sizeof(lpFileName));
+	} else {
 
-		if (!(i < FILENAME_MAX-2)) {
+		status=Dos9_RunExternalFile(lpFileName, lpArguments);
 
-			i=FILENAME_MAX-3;
-			lpArguments[i]=NULL;
-
-		}
-
-		for (; (i > 0); i--)
-			lpArguments[i+2]=lpArguments[i];
-
-		lpArguments[i+2]=NULL;
-
-		lpArguments[2]=lpTmp;
-		lpArguments[1]="//"; /* use this switch to prevent
-                                other switches from being executed */
-
-		Dos9_GetExePath(lpExePath, sizeof(lpExePath));
-
-#ifdef WIN32
-
-		snprintf(lpFileName, sizeof(lpFileName) ,"%s/dos9.exe", lpExePath);
-
-#else
-
-		snprintf(lpFileName, sizeof(lpFileName) ,"%s/dos9", lpExePath);
-
-#endif // WIN32
-
-	}
-
-	if (Dos9_RunExternalFile(lpFileName, lpArguments)==-1)
-		goto error;
-
-	for (i=0; lpEstr[i]; i++)
-		Dos9_EsFree(lpEstr[i]);
-
-	return 0;
-
+    }
 
 error:
 	for (i=0; lpEstr[i] && (i < FILENAME_MAX); i++)
 		Dos9_EsFree(lpEstr[i]);
 
-	return -1;
+	return status;
 
 }
 
@@ -507,6 +490,8 @@ int Dos9_RunExternalFile(char* lpFileName, char** lpArguments)
 	int res;
 
 	errno=0;
+
+    Dos9_ApplyEnv(lpeEnv);
 
 	/* in windows the result is directly returned */
 	res=spawnv(_P_WAIT, lpFileName, (char * const*)lpArguments);
@@ -534,6 +519,8 @@ int Dos9_RunExternalFile(char* lpFileName, char** lpArguments)
 	pid_t iPid;
 
 	int iResult;
+
+    Dos9_ApplyEnv(lpeEnv);
 
 	iPid=fork();
 
@@ -572,6 +559,12 @@ int Dos9_RunExternalFile(char* lpFileName, char** lpArguments)
 
 		if (iPid == (pid_t)-1) {
 			/* the execution failed */
+
+			Dos9_ShowErrorMessage(DOS9_FAILED_FORK | DOS9_PRINT_C_ERROR,
+                                    __FILE__ "/Dos9_RunExternalFile()",
+                                    -1
+                                    );
+
 			return -1;
 
 		} else {
@@ -582,9 +575,101 @@ int Dos9_RunExternalFile(char* lpFileName, char** lpArguments)
 
 	}
 
-	return 0;
+	return iResult;
 
 }
 
-
 #endif // WIN32 || _POSIX_C_SOURCE
+
+
+#if defined(WIN32)
+
+int Dos9_RunExternalBatch(char* lpFileName, char** lpArguments)
+{
+
+        int i;
+
+        char lpTmp[FILENAME_MAX],
+             lpExePath[FILENAME_MAX];
+             *lpArgs[FILENAME_MAX+2];
+
+        /* these are batch */
+
+		for (; (i > 0) && (i < FILENAME_MAX); i--)
+			lpArgs[i+2]=lpArguments[i];
+
+		lpArguments[i+2]=NULL;
+
+		lpArguments[2]=lpFilename;
+		lpArguments[1]="//"; /* use this switch to prevent
+                                other switches from being executed */
+
+		Dos9_GetExePath(lpExePath, sizeof(lpExePath));
+
+		snprintf(lpTmp, sizeof(lpFileName) ,"%s/dos9.exe", lpExePath);
+
+		return Dos9_RunExternalFile(lpTmp, lpArgs);
+}
+
+#elif defined(_POSIX_C_SOURCE)
+
+int Dos9_RunExternalBatch(char* lpFileName, char** lpArguments)
+{
+
+    pid_t pid;
+    int status;
+    int i;
+
+    pid = fork();
+
+    if (pid == 0) {
+
+        /* if we are in the son process */
+
+        Dos9_FreeLocalBlock(lpvLocalVars);
+        lpvLocalVars = Dos9_GetLocalBlock();
+
+        printf ("Setting local var before interpreting batch file..\n");
+
+        for (i=1;lpArguments[i] && i <= 9; i++) {
+
+            Dos9_SetLocalVar(lpvLocalVars, '0'+i, lpArguments[i]);
+
+        }
+
+        Dos9_SetLocalVar(lpvLocalVars, '0', lpFileName);
+
+        strncpy(ifIn.lpFileName, lpFileName, sizeof(ifIn.lpFileName));
+        ifIn.lpFileName[sizeof(ifIn.lpFileName)-1] = '\0';
+
+        ifIn.bEof = 0;
+        ifIn.iPos = 0;
+
+        printf("Running batch file : \"%s\", starting at \"%d\"\n",
+                ifIn.lpFileName, ifIn.iPos);
+
+        Dos9_RunBatch(&ifIn);
+
+        exit(iErrorLevel);
+
+    } else if (pid == -1) {
+
+        /* error */
+        status = -1;
+
+        Dos9_ShowErrorMessage(DOS9_FAILED_FORK | DOS9_PRINT_C_ERROR,
+                                __FILE__ "/Dos9_RunExternalFile()",
+                                -1
+                                );
+
+    } else {
+
+        wait(&status);
+
+    }
+
+    return status;
+
+}
+
+#endif /* WIN32 */

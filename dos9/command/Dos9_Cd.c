@@ -131,13 +131,8 @@ int Dos9_CmdCd_nix(char* lpLine)
 
 		DOS9_DBG("Changing directory to : \"%s\"\n", lpLine);
 
-		if (chdir(lpLine) ==  0) {
+		if (Dos9_SetCurrentDir(lpLine)) {
 
-			/* update the current directory buffer */
-
-			Dos9_UpdateCurrentDir();
-
-		} else {
 
 			/* do not perform errno checking
 			   as long as the most important reason for
@@ -176,7 +171,7 @@ error:
 
 int Dos9_CmdCd_win(char* lpLine)
 {
-    char   varname[]="x=:",
+    char   varname[]="=x:",
           *lpNext,
           current=*Dos9_GetCurrentDir(),
           passed=0;
@@ -190,7 +185,7 @@ int Dos9_CmdCd_win(char* lpLine)
 
         puts(Dos9_GetCurrentDir());
 
-        status = -1;
+        status = 0;
 
         goto end;
 
@@ -209,6 +204,34 @@ int Dos9_CmdCd_win(char* lpLine)
 
     if (*lpLine && *(lpLine+1)==':') {
 
+        if (*Dos9_SkipBlanks(lpLine+2) == '\0') {
+
+            /* only got a drive name */
+            varname[1] = *lpLine;
+
+            if (!(lpNext = Dos9_GetEnv(lpeEnv, varname))) {
+
+                lpNext = lpLine;
+
+            }
+
+            if (Dos9_SetCurrentDir(lpNext)) {
+
+                Dos9_ShowErrorMessage(DOS9_DIRECTORY_ERROR
+                                        | DOS9_PRINT_C_ERROR,
+                                      lpNext,
+                                      FALSE
+                                      );
+
+                status = -1;
+
+            }
+
+            goto end;
+
+        }
+
+
         /* get current curent directory disk */
         passed = *lpLine;
 
@@ -218,7 +241,7 @@ int Dos9_CmdCd_win(char* lpLine)
 
         /* change the current directory, yeah */
 
-        if (chdir(lpLine)) {
+        if (Dos9_SetCurrentDir(lpLine)) {
 
             Dos9_ShowErrorMessage(DOS9_DIRECTORY_ERROR | DOS9_PRINT_C_ERROR,
                                     lpLine,
@@ -232,7 +255,7 @@ int Dos9_CmdCd_win(char* lpLine)
 
     }
 
-    varname[0] = (passed == 0) ? (current) : (passed);
+    varname[1] = (passed == 0) ? (current) : (passed);
 
     Dos9_SetEnv(lpeEnv, varname, lpLine);
 

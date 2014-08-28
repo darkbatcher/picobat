@@ -70,7 +70,8 @@ ${IF [/i] chaine1 cmp chaine2 (
 		  numériques associées à {chaîne1} et à {chaîne2} sont égales.
 		  Les valeurs peuvent être dans différentes bases numériques
 		  (décimale, octale ou hexadécimale) à condition d'utiliser les
-		  préfixes adéquats ({0} pour la base octale et {0x}). Au cas ou 		  les chaines ne forment pas des expressions numéques valides
+		  préfixes adéquats ({0} pour la base octale et {0x}). Au cas ou
+ 		  les chaines ne forment pas des expressions numériques valides
 		  (du type {[-][prefixe][valeur]}), alors le comparant {EQU} a
 		  le même effet que {==}, la comparaison a lieu 
 		  chaîne-à-chaîne. 
@@ -100,9 +101,9 @@ ${IF [/i] chaine1 cmp chaine2 (
 	comparants avec un {F}, ce qui donne {FEQU}, {FGTR}, {FGEQ}, {FLSS} et
 	{FLEQ}. A priori, l'utilisation de bases octales ou hexadécimales
 	n'est pas possible de façon portable (disponible sur les plate-formes
-	GNU/Linux, mais pas sous MS-Windows). Pour conserver la portablité sur
-	toutes les platte-formes, il faut donc ce limiter au format
-	[signe][chiffres][.chiffres][E|e][exposant].
+	GNU/Linux, mais pas sous Windows ni NetBSD, par exemple). Pour
+	conserver la portablité sur toutes les platte-formes, il faut donc se
+	limiter au format [signe][chiffres][.chiffres][E|e][exposant].
 
 {{Synopsis - Troisième syntaxe}}
 	

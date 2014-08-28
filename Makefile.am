@@ -16,7 +16,7 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-EXTRA_DIST = m4/ChangeLog  po man scripts LICENSE README WHATSNEW
+EXTRA_DIST = po man scripts LICENSE README WHATSNEW
 ACLOCAL_AMFLAGS = -I m4
 AUTOMAKE_OPTIONS = foreign subdir-objects
 SUBDIRS = libinteval libmatheval libDos9 dos9 tea dump po

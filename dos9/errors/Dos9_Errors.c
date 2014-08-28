@@ -199,6 +199,9 @@ void Dos9_LoadErrors(void)
     lpErrorMsg[DOS9_COMPARISON_FORBIDS_STRING]=
         gettext("Error : The \"%s\" comparison forbids use of strings.\n");
 
+    lpErrorMsg[DOS9_FAILED_FORK]=
+        gettext("Error : Unable to fork the current process (in function %s).\n");
+
 	lpQuitMessage=
 	    gettext("\nAborting current command, press any key to end Dos9.\n");
 

@@ -7,11 +7,11 @@
 
 #include "Dos9_File.h"
 
+char _Dos9_Currdir[FILENAME_MAX]="";
+
 #ifndef WIN32
 
 #include <sys/stat.h>
-
-char _Dos9_Currdir[FILENAME_MAX]="";
 
 int Dos9_GetExePath(char* lpBuf, size_t iBufSize)
 {
@@ -70,8 +70,21 @@ int Dos9_UpdateCurrentDir(void)
 
 int Dos9_SetCurrentDir(const char* lpPath)
 {
-    chdir(lpPath);
-    return (int)getcwd(_Dos9_Currdir, FILENAME_MAX);
+    int status=chdir(lpPath);
+
+#ifdef _POSIX_C_SOURCE
+
+    if (status==0) {
+        strncpy(_Dos9_Currdir, lpPath, sizeof(_Dos9_Currdir));
+        _Dos9_Currdir[sizeof(_Dos9_Currdir)-1] = '\0';
+    }
+
+#elif defined(WIN32)
+
+    getcwd(_Dos9_Currdir, FILENAME_MAX);
+
+#endif
+    return status;
 }
 
 

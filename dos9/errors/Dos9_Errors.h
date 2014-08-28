@@ -79,7 +79,9 @@ void Dos9_LoadErrors(void);
 #define DOS9_UNABLE_REPLACE_COMMAND         37
 #define DOS9_UNABLE_SET_OPTION		        38
 #define DOS9_COMPARISON_FORBIDS_STRING      39
-#define DOS9_ERROR_MESSAGE_NUMBER           40
+#define DOS9_FAILED_FORK                    40
+#define DOS9_ERROR_MESSAGE_NUMBER           41
+
 
 #define DOS9_PRINT_C_ERROR 0x80
 
