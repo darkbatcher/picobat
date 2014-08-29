@@ -58,9 +58,44 @@ void Dos9_SigHandler(int c)
 }
 
 
+void Dos9_AssignCommandLine(char** argv)
+{
+    ESTR* lpEsStr=Dos9_EsInit(),
+          lpEsParam=Dos9_EsInit();
+
+    char*  delims=" ,;=\t&|";
+
+    while (*argv) {
+
+        Dos9_EsCpy(lpEsParam, *argv);
+        Dos9_EsReplace(lpEsParam, "\"", "^\""); /* escape parenthesis */
+
+        if (strpbrk(*argv, delims)) {
+
+            Dos9_EsCat(lpEsStr, "\"");
+            Dos9_EsCatE(lpEsStr, lpEsParam);
+            Dos9_EsCat(lpEsStr, "\" ");
+
+        } else {
+
+            Dos9_EsCatE(lpEsStr, lpEsParam);
+            Dos9_EsCat(lpEsStr, " ");
+
+        }
+
+        argv ++;
+
+    }
+
+    Dos9_SetLocalVar(lpvLocalVars, '*', Dos9_EsToChar(lpEsStr));
+
+    Dos9_EsFree(lpEsStr);
+}
+
+
 int main(int argc, char *argv[])
 {
-	/*  a function which initializes Dos9's engine,
+	/*  a function which initializes Dos9's core,
 	    parses the command line argumments,
 	    And display starting message
 	*/
@@ -79,15 +114,12 @@ int main(int argc, char *argv[])
 	    bGetSwitch=TRUE;
 
     DOS9_DBG("Initializing Dos9's custom environ");
-
     lpeEnv = Dos9_InitEnv(environ);
 
 	DOS9_DBG("Initializing signal handler...\n");
-
 	signal(SIGINT, Dos9_SigHandler);
 
 	DOS9_DBG("Initializing libDos9 ...\n");
-
 	if (Dos9_LibInit() == -1) {
 
 		puts("Error : Unable to load LibDos9. Exiting ...");
@@ -95,20 +127,15 @@ int main(int argc, char *argv[])
 	}
 
 	DOS9_DBG("Setting UNIX newlines ...\n");
-
-	/* Set new line Mode to UNIX */
 	Dos9_SetNewLineMode(DOS9_NEWLINE_UNIX);
 
 	DOS9_DBG("Allocating local variable block ... \n");
-
 	lpvLocalVars=Dos9_GetLocalBlock();
 
 	DOS9_DBG("Initializing console ...\n");
-
 	Dos9_InitConsole();
 
 	DOS9_DBG("Setting locale ...\n");
-
 #ifdef WIN32
 
 	SetThreadLocale(LOCALE_USER_DEFAULT);
@@ -120,14 +147,11 @@ int main(int argc, char *argv[])
 #endif // WINDOWS
 
 	DOS9_DBG("Loading GETTEXT messages... \n");
-
-	/* Load Messages (including errors) */
 	Dos9_LoadStrings();
 	Dos9_LoadErrors();
 	Dos9_LoadInternalHelp();
 
 	DOS9_DBG("Loading current directory...\n");
-
 	Dos9_UpdateCurrentDir();
 
 	/* **********************************
@@ -143,30 +167,23 @@ int main(int argc, char *argv[])
 
 
     DOS9_DBG("Getting current executable name ...\n");
-
 	Dos9_GetExePath(lpExePath, FILENAME_MAX);
 
 	DOS9_DBG("\tGot \"%s\" as name ...\n", lpTitle);
-
 	lpInitVar[4]="DOS9_PATH";
 	lpInitVar[5]=lpExePath;
 
 	DOS9_DBG("Initializing variables ...\n");
-
 	Dos9_InitVar(lpInitVar);
-
 	Dos9_SetEnv(lpeEnv, "ERRORLEVEL","0");
 
 	DOS9_DBG("Mapping commands ... \n");
-
 	lpclCommands=Dos9_MapCommandInfo(lpCmdInfo, sizeof(lpCmdInfo)/sizeof(COMMANDINFO));
 
 	DOS9_DBG("Initializing streams ... \n");
-
 	lppsStreamStack=Dos9_InitStreamStack();
 
 	pErrorHandler=Dos9_Exit;
-
 
     DOS9_DBG("Getting command line arguments ... \n");
 	/* get command line arguments */
@@ -269,6 +286,10 @@ int main(int argc, char *argv[])
 			lpFileName=argv[i];
 			Dos9_SetLocalVar(lpvLocalVars, '0', lpFileName);
 			c='1';
+
+			Dos9_AssignCommandLine(argv + i);
+
+			bGetSwitch = FALSE;
 		}
 
 	}

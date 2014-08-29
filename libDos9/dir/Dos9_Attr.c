@@ -18,7 +18,7 @@
  *
  */
 
-#include "../libDos9-int.h"
+#include "../libDos9.h"
 
 short Dos9_MakeFileAttributes(const char* lpToken)
 {
@@ -122,4 +122,64 @@ int Dos9_CheckFileAttributes(short wAttr, const FILELIST* lpflList)
     #endif
 
     return iReturn;
+}
+
+/* A function that checks wether files in pIn are matching attributes and
+   produce two FILELIST* struct from the first that contains matching and
+   unmatching files*/
+LIBDOS9 int Dos9_AttributesSplitFileList(short wAttr, FILELIST* pIn,
+                            FILELIST** pSelected, FILELIST** pRemaining)
+{
+
+    FILELIST *pMatch=NULL,
+             *pUnMatch=NULL;
+
+    *pSelected = NULL;
+    *pRemaining = NULL;
+
+    while (pIn) {
+
+        if (Dos9_CheckFileAttributes(wAttr, pIn)) {
+
+            if (!pMatch) {
+
+                pMatch = pIn;
+                *pSelected = pIn;
+
+            } else {
+
+                pMatch->lpflNext = pIn;
+                pMatch = pIn;
+
+            }
+
+        } else {
+
+            if (!pUnMatch) {
+
+                pUnMatch = pIn;
+                *pRemaining = pIn;
+
+            } else {
+
+                pUnMatch->lpflNext = pIn;
+                pUnMatch = pIn;
+
+            }
+
+
+        }
+
+        pIn = pIn->lpflNext;
+
+    }
+
+    if (pMatch)
+        pMatch->lpflNext = NULL;
+
+    if (pUnMatch)
+        pUnMatch->lpflNext = NULL;
+
+    return 0;
+
 }

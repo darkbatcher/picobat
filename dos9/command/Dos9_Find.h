@@ -18,37 +18,9 @@
  *
  */
 
-#ifndef DOS9_COMMAND_H
-#define DOS9_COMMAND_H
+#ifndef DOS9_FIND_H
+#define DOS9_FIND_H
 
-/* include all internal commands headers */
-#include "Dos9_Alias.h"
-#include "Dos9_Ask.h"
-#include "Dos9_Block.h"
-#include "Dos9_Call.h"
-#include "Dos9_Cd.h"
-#include "Dos9_Cls.h"
-#include "Dos9_Color.h"
-#include "Dos9_Echo.h"
-#include "Dos9_Exit.h"
-#include "Dos9_For.h"
-#include "Dos9_Goto.h"
-#include "Dos9_Help.h"
-#include "Dos9_Pause.h"
-#include "Dos9_Rem.h"
-#include "Dos9_Set.h"
-#include "Dos9_Setlocal.h"
-#include "Dos9_Shift.h"
-#include "Dos9_Title.h"
-#include "Dos9_Type.h"
-#include "Dos9_If.h"
-#include "Dos9_Del.h"
-#include "Dos9_Dir.h"
-#include "Dos9_Copy.h"
-#include "Dos9_Move.h"
-#include "Dos9_Ren.h"
-#include "Dos9_Mkdir.h"
-#include "Dos9_Rmdir.h"
-#include "Dos9_Find.h"
+int Dos9_CmdFind(char* lpLine);
 
-#endif // DOS9_CMD_ECHO_H
+#endif /* DOS9_FIND_H */

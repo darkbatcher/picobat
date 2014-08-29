@@ -202,6 +202,12 @@ void Dos9_LoadErrors(void)
     lpErrorMsg[DOS9_FAILED_FORK]=
         gettext("Error : Unable to fork the current process (in function %s).\n");
 
+    lpErrorMsg[DOS9_NO_MATCH]=
+        gettext("Error : Pathspec \"%s\" does not match any file.\n");
+
+    lpErrorMsg[DOS9_NO_VALID_FILE]=
+        gettext("Error : %s does not recieved any valid file to process.\n");
+
 	lpQuitMessage=
 	    gettext("\nAborting current command, press any key to end Dos9.\n");
 

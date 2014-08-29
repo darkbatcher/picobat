@@ -96,7 +96,9 @@ void Dos9_ExpandVar(ESTR* ptrCommandLine, char cDelimiter)
 			ptrToken=ptrNextToken+1;
 			continue;
 
-		} else if (isdigit(*ptrNextToken) || *ptrNextToken=='~') {
+		} else if (isdigit(*ptrNextToken)
+                    || *ptrNextToken == '*'
+                    || *ptrNextToken=='~') {
 
 			/* if the variable is one of the parameter variables,
 			   then skip, for compatibility purpose

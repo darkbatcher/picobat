@@ -28,7 +28,7 @@
 
 #include "../lang/Dos9_ShowHelp.h"
 
-#define DOS9_DBG_MODE
+//#define DOS9_DBG_MODE
 #include "../core/Dos9_Debug.h"
 
 #include "Dos9_Call.h"
@@ -55,12 +55,13 @@ int Dos9_CmdCall(char* lpLine)
 	     *lpNxt,
 	     *lpFile,
 	     *lpLabel,
+	     *lpFullLine,
 	     lpExt[_MAX_EXT];
 
 	int  bIsExtended=FALSE,
 	     iNbParam=0;
 
-	lpLine+=4;
+	lpFullLine= lpLine = Dos9_SkipBlanks(lpLine+4);
 
 	while (lpNxt=Dos9_GetNextParameterEs(lpLine, lpEsParameter)) {
 
@@ -177,7 +178,7 @@ int Dos9_CmdCall(char* lpLine)
 		   since the function Dos9_CmdCallFile can cope with
 		   NULL as ``file'' */
 
-		Dos9_CmdCallFile(lpFile, lpLabel, lpLine);
+		Dos9_CmdCallFile(lpFile, lpFullLine, lpLabel, lpLine);
 
 
 	} else {
@@ -194,7 +195,7 @@ int Dos9_CmdCall(char* lpLine)
 
 			/* ``file'' is a batch file, indeed */
 
-			Dos9_CmdCallFile(lpFile, NULL, lpLine);
+			Dos9_CmdCallFile(lpFile, lpFullLine, NULL, lpLine);
 
 		} else {
 
@@ -222,7 +223,7 @@ error:
 
 }
 
-int Dos9_CmdCallFile(char* lpFile, char* lpLabel, char* lpCmdLine)
+int Dos9_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 {
 	INPUT_FILE ifOldFile;
 	LOCAL_VAR_BLOCK lpvOldBlock[LOCAL_VAR_BLOCK_SIZE];
@@ -281,20 +282,8 @@ int Dos9_CmdCallFile(char* lpFile, char* lpLabel, char* lpCmdLine)
 
 	}
 
-	if (c > '9') {
-
-		/* if we set more then 9 argument variables. then display an
-		   error, and eventually, reset the array containing local
-		   variables. */
-
-		Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT,
-		                      Dos9_EsToChar(lpEsParam),
-		                      FALSE);
-
-		goto error;
-
-
-	}
+    /* set the %* parameter */
+    Dos9_SetLocalVar(lpvTmpBlock, '*', lpFull);
 
 	/* Backup the old variables data in order to be able to push old data
 	   again on local variables. */

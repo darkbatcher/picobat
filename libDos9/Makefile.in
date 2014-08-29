@@ -99,8 +99,7 @@ build_triplet = @build@
 host_triplet = @host@
 subdir = libDos9
 DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
-	$(top_srcdir)/config/depcomp $(include_HEADERS) \
-	$(noinst_HEADERS)
+	$(top_srcdir)/config/depcomp $(include_HEADERS)
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/gettext.m4 \
 	$(top_srcdir)/m4/iconv.m4 $(top_srcdir)/m4/intlmacosx.m4 \
@@ -203,7 +202,7 @@ am__can_run_installinfo = \
     n|no|NO) false;; \
     *) (install-info --version) >/dev/null 2>&1;; \
   esac
-HEADERS = $(include_HEADERS) $(noinst_HEADERS)
+HEADERS = $(include_HEADERS)
 am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)
 # Read a list of newline-separated strings from the standard input,
 # and print each of them once, without duplicates.  Input order is
@@ -365,7 +364,6 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = foreign subdir-objects
 lib_LTLIBRARIES = libDos9.la
-noinst_HEADERS = libDos9-int.h
 include_HEADERS = libDos9.h
 libDos9_la_SOURCES = ./cmdlist/Dos9_CmdList.c ./console/Dos9_ConsoleANSI.c \
 ./console/Dos9_ConsoleWin.c ./dir/Dos9_Attr.c ./dir/Dos9_Dir.c \

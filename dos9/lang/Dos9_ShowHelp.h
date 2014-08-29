@@ -44,8 +44,9 @@
 #define DOS9_HELP_EXIT      22
 #define DOS9_HELP_ALIAS     23
 #define DOS9_HELP_SHIFT     24
+#define DOS9_HELP_FIND      25
 
-#define DOS9_HELP_ARRAY_SIZE 25
+#define DOS9_HELP_ARRAY_SIZE 26
 
 /* this is to instanciate a little embedded command
    help, to provide simple syntax help if no other

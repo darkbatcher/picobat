@@ -466,7 +466,7 @@ int Dos9_RunExternalCommand(char* lpCommandLine)
 	if (!stricmp(".bat", lpExt)
 	    || !stricmp(".cmd", lpExt)) {
 
-        status=Dos9_RunExternalBatch(lpFileName, lpArguments);
+        status=Dos9_RunExternalBatch(lpFileName, lpCommandLine, lpArguments);
 
 	} else {
 
@@ -584,7 +584,7 @@ int Dos9_RunExternalFile(char* lpFileName, char** lpArguments)
 
 #if defined(WIN32)
 
-int Dos9_RunExternalBatch(char* lpFileName, char** lpArguments)
+int Dos9_RunExternalBatch(char* lpFileName, char* lpFullLine, char** lpArguments)
 {
 
         int i;
@@ -613,7 +613,7 @@ int Dos9_RunExternalBatch(char* lpFileName, char** lpArguments)
 
 #elif defined(_POSIX_C_SOURCE)
 
-int Dos9_RunExternalBatch(char* lpFileName, char** lpArguments)
+int Dos9_RunExternalBatch(char* lpFileName, char* lpFullLine, char** lpArguments)
 {
 
     pid_t pid;
@@ -629,13 +629,13 @@ int Dos9_RunExternalBatch(char* lpFileName, char** lpArguments)
         Dos9_FreeLocalBlock(lpvLocalVars);
         lpvLocalVars = Dos9_GetLocalBlock();
 
-        printf ("Setting local var before interpreting batch file..\n");
-
         for (i=1;lpArguments[i] && i <= 9; i++) {
 
             Dos9_SetLocalVar(lpvLocalVars, '0'+i, lpArguments[i]);
 
         }
+
+        Dos9_SetLocalVar(lpvLocalVars, '*', lpFullLine);
 
         Dos9_SetLocalVar(lpvLocalVars, '0', lpFileName);
 
@@ -644,9 +644,6 @@ int Dos9_RunExternalBatch(char* lpFileName, char** lpArguments)
 
         ifIn.bEof = 0;
         ifIn.iPos = 0;
-
-        printf("Running batch file : \"%s\", starting at \"%d\"\n",
-                ifIn.lpFileName, ifIn.iPos);
 
         Dos9_RunBatch(&ifIn);
 
@@ -664,11 +661,11 @@ int Dos9_RunExternalBatch(char* lpFileName, char** lpArguments)
 
     } else {
 
-        wait(&status);
+        waitpid(pid, &status, 0);
 
     }
 
-    return status;
+    return WEXITSTATUS(status);
 
 }
 

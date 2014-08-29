@@ -80,7 +80,9 @@ void Dos9_LoadErrors(void);
 #define DOS9_UNABLE_SET_OPTION		        38
 #define DOS9_COMPARISON_FORBIDS_STRING      39
 #define DOS9_FAILED_FORK                    40
-#define DOS9_ERROR_MESSAGE_NUMBER           41
+#define DOS9_NO_MATCH                       41
+#define DOS9_NO_VALID_FILE                  42
+#define DOS9_ERROR_MESSAGE_NUMBER           43
 
 
 #define DOS9_PRINT_C_ERROR 0x80

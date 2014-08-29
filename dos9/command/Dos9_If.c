@@ -219,8 +219,6 @@ int Dos9_CmdIf(char* lpParam)
                                                     Dos9_EsToChar(lpOtherPart),
                                                     iFlag);
 
-                printf("Result=%d\n", iResult);
-
                 Dos9_EsFree(lpOtherPart);
 
                 if (iResult == -1) {
@@ -316,8 +314,6 @@ int Dos9_PerformExtendedTest(const char* lpCmp, const char* lpParam1, const char
             x2;
 
     char* lpEnd;
-
-    printf("Comparing \"%s\" and \"%s\" with \"%s\"\n", lpParam1, lpParam2, lpCmp);
 
     if (*lpCmp=='F' || *lpCmp=='f') {
 

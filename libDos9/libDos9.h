@@ -339,8 +339,24 @@ LIBDOS9 int         Dos9_FormatFileSize (char* lpBuf, int iLenght, unsigned int 
 #define DOS9_CMD_ATTR_DIR_N 0x800
 #define DOS9_CMD_ATTR_ALL 0x000
 
+#define DOS9_ATTR_DIR         (DOS9_CMD_ATTR_DIR)
+#define DOS9_ATTR_NO_DIR      (DOS9_CMD_ATTR_DIR | DOS9_CMD_ATTR_DIR_N)
+#define DOS9_ATTR_VOID        (DOS9_CMD_ATTR_VOID)
+#define DOS9_ATTR_NO_VOID     (DOS9_CMD_ATTR_VOID | DOS9_CMD_ATTR_VOID_N)
+#define DOS9_ATTR_HIDEN       (DOS9_CMD_ATTR_HIDEN)
+#define DOS9_ATTR_NO_HIDEN    (DOS9_CMD_ATTR_HIDEN | DOS9_CMD_ATTR_HIDEN_N)
+#define DOS9_ATTR_READONLY    (DOS9_CMD_ATTR_READONLY)
+#define DOS9_ATTR_NO_READONLY (DOS9_CMD_ATTR_READONLY | DOS9_CMD_ATTR_READONLY_N)
+#define DOS9_ATTR_SYSTEM      (DOS9_CMD_ATTR_SYSTEM)
+#define DOS9_ATTR_NO_SYSTEM   (DOS9_CMD_ATTR_SYSTEM | DOS9_CMD_ATTR_SYSTEM_N)
+#define DOS9_ATTR_ARCHIVE     (DOS9_CMD_ATTR_ARCHIVE)
+#define DOS9_ATTR_NO_ARCHIVE  (DOS9_CMD_ATTR_ARCHIVE | DOS9_CMD_ATTR_ARCHIVE_N)
+#define DOS9_ATTR_ALL         (DOS9_CMD_ATTR_ALL)
+
 LIBDOS9 short Dos9_MakeFileAttributes(const char* lpToken);
 LIBDOS9 int Dos9_CheckFileAttributes(short wAttr, const FILELIST* lpflList);
+LIBDOS9 int Dos9_AttributesSplitFileList(short wAttr, FILELIST* pIn,
+                            FILELIST** pSelected, FILELIST** pRemaining);
 
 extern int _Dos9_TextMode;
 #define DOS9_BYTE_ENCODING 0

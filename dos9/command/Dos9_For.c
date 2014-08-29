@@ -1091,14 +1091,15 @@ int Dos9_ForMakeInputInfo(ESTR* lpInput, INPUTINFO* lpipInfo, FORINFO* lpfrInfo)
 			/* this is a litte bit more difficult (indeed, platform dependent)
 			   the program should open a pipe, print the script and then get the output
 
+                ** WINDOWS specific **
+
 			   The command is
 
 			        Dos9 /Q /N /E /V /D n
 
 			   The /Q avoid the presentation to be printed and the title to be change
 
-               Fixme: This function does not even work under GNU/Linux and BSD-based
-               operating systems, we should take a look to the code.
+               ** End WINDOWS specific **
 
 			*/
 
@@ -1270,9 +1271,9 @@ int Dos9_ForInputProcess_nix(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn,
 	iPid=fork();
 
 	if (iPid == 0 ) {
-		/* if we are in the son, and, you know, unix is very convenient with us,
-           *really*, he lets us continue without carry much about far,
-           simplier than using windows */
+         /* if we are in the son, and, you know, unix is very convenient with us,
+            *really*, he lets us continue without even start dos9 with the command
+            line, far simplier than using windows */
 
             Dos9_OpenOutputD(lppsStreamStack, iPipeFdOut[1], DOS9_STDOUT);
 
@@ -1281,15 +1282,9 @@ int Dos9_ForInputProcess_nix(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn,
 
             while (*(bkBlock.lpEnd ++));
 
-            fprintf(stderr, "Runing block : \"%s\" end \"%s\"\n", bkBlock.lpBegin, bkBlock.lpEnd);
-
             Dos9_RunBlock(&bkBlock);
 
-            fprintf(stderr, "Ran\n");
-
             close (iPipeFdOut[1]);
-
-            fprintf(stderr, "exited\n");
 
             exit(iErrorLevel);
 
