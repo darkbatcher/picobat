@@ -153,6 +153,9 @@ AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
+libinteval_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+	$(libinteval_la_LDFLAGS) $(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -375,6 +378,7 @@ lib_LTLIBRARIES = libinteval.la
 noinst_HEADERS = global.h
 include_HEADERS = inteval.h
 libinteval_la_SOURCES = parser.y lexer.l inteval.c
+libinteval_la_LDFLAGS = -static -no-undefined
 AM_YFLAGS = -d -p IntEval_
 AM_LFLAGS = -PIntEval_ -olex.yy.c
 all: all-am
@@ -390,9 +394,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign libinteval/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu libinteval/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign libinteval/Makefile
+	  $(AUTOMAKE) --gnu libinteval/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -451,7 +455,7 @@ parser.h: parser.c
 	@if test ! -f $@; then $(MAKE) $(AM_MAKEFLAGS) parser.c; else :; fi
 
 libinteval.la: $(libinteval_la_OBJECTS) $(libinteval_la_DEPENDENCIES) $(EXTRA_libinteval_la_DEPENDENCIES) 
-	$(AM_V_CCLD)$(LINK) -rpath $(libdir) $(libinteval_la_OBJECTS) $(libinteval_la_LIBADD) $(LIBS)
+	$(AM_V_CCLD)$(libinteval_la_LINK) -rpath $(libdir) $(libinteval_la_OBJECTS) $(libinteval_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)

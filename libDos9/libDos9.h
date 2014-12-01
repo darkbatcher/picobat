@@ -291,12 +291,14 @@ typedef int COLOR;
 #endif
 
 LIBDOS9 void            Dos9_ClearConsoleScreen(void);
+LIBDOS9 void            Dos9_ClearConsoleLine(void);
 LIBDOS9 void            Dos9_SetConsoleColor(COLOR cColor);
 LIBDOS9 void            Dos9_SetConsoleTextColor(COLOR cColor);
 LIBDOS9 void            Dos9_SetConsoleCursorPosition(CONSOLECOORD iCoord);
 LIBDOS9 CONSOLECOORD    Dos9_GetConsoleCursorPosition(void);
 LIBDOS9 void            Dos9_SetConsoleCursorState(int bVisible, int iSize);
 LIBDOS9 void            Dos9_SetConsoleTitle(char* lpTitle);
+LIBDOS9 int             Dos9_GetchWait(void);
 
 #define Dos9_GetAccessTime(lpList) lpList->stFileStats.st_atime
 #define Dos9_GetCreateTime(lpList) lpList->stFileStats.st_ctime
@@ -375,11 +377,14 @@ LIBDOS9 int Dos9_UpdateCurrentDir(void);
 LIBDOS9 int Dos9_SetCurrentDir(const char* lpPath);
 LIBDOS9 int Dos9_GetExePath(char* lpBuf, size_t iBufSize);
 
+#define Dos9_IsDelim(ch) \
+    ((ch==' ') || (ch=='\t') || (ch==',') || (ch==';') || (ch=='\n'))
+
 LIBDOS9 char* Dos9_SkipBlanks(const char* lpCh);
 LIBDOS9 char* Dos9_SkipAllBlanks(const char* lpCh);
 LIBDOS9 char* Dos9_SearchChar(const char* lpCh, int cChar);
 LIBDOS9 char* Dos9_SearchLastChar(const char* lpCh, int cChar);
-LIBDOS9 void  Dos9_UnEscape(const char* lpCh);
+LIBDOS9 void  Dos9_UnEscape(char* lpCh);
 LIBDOS9 char* Dos9_GetNextNonEscaped(const char* lpCh);
 LIBDOS9 char* Dos9_SearchToken(const char* lpCh, const char* lpDelims);
 LIBDOS9 char* Dos9_SearchLastToken(const char* lpCh, const char* lpDelims);

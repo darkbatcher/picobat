@@ -41,7 +41,7 @@
 int Dos9_ExecOutput(PARSED_STREAM_START* lppssStart);
 
 /* applies conditional operators */
-int Dos9_ExecOperators(PARSED_STREAM* lppsStream);
+int Dos9_ExecOperators(PARSED_STREAM** lppsStream);
 
 int Dos9_RunCommand(ESTR* lpCommand); // the fucbtions that run every command
 int Dos9_RunLine(ESTR* lpLine);

@@ -34,7 +34,7 @@ int   Dos9_GetParameterPointers(char** lpPBegin, char** lpPEnd,
 				 const char* lpDelims, const char* lpLine);
 
 #define Dos9_GetNextParameterEs(lpLine, lpReturn) \
-    Dos9_GetNextParameterEsD(lpLine, lpReturn, " ;,\t\"")
+    Dos9_GetNextParameterEsD(lpLine, lpReturn, " ;,\t\"\n")
 
 char* Dos9_GetNextParameterEsD(char* lpLine, ESTR* lpReturn, const
 					char* lpDelims);
@@ -46,6 +46,8 @@ int   Dos9_GetParamArrayEs(char* lpLine, ESTR** lpArray, size_t iLenght);
 char* Dos9_GetNextBlockEs(char* lpLine, ESTR* lpReturn);
 
 char* Dos9_GetNextBlock(char* lpLine, BLOCKINFO* lpbkInfo);
+
+char* Dos9_GetBlockLine(char* pLine, BLOCKINFO* pBk);
 
 char* Dos9_GetEndOfLine(char* lpLine, ESTR* lpReturn);
 

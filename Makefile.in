@@ -852,14 +852,33 @@ uninstall-am:
 
 
 # a rule to make local distributions of dos9
-local : all
+
+dirtree :
 	mkdir -p ./bin
-	cp ./dos9/@DOS9_OBJDIR@/dos9$(EXEEXT) ./bin/
-	cp ./libDos9/@DOS9_OBJDIR@/libDos9-*$(SHAREDEXT) ./bin/
 	mkdir -p ./bin/cmd
-	cp ./tea/@DOS9_OBJDIR@/tea$(EXEEXT) ./bin/cmd
-	cp ./dump/@DOS9_OBJDIR@/dump$(EXEEXT) ./bin/cmd
+	mkdir -p ./bin/share
+
+textfiles : all
+	for i in README WHATSNEW; do \
+		echo "- Building $$i"; \
+		./tea/tea$(EXEEXT) $$i.tea $$i /e:utf-8 /o:text-plain ; \
+	done;
+
+local : textfiles dirtree
+	cp ./dos9/dos9$(EXEEXT) ./bin/
+	cp ./tea/tea$(EXEEXT) ./bin/cmd
+	cp ./dump/dump$(EXEEXT) ./bin/cmd
+	cp ./README ./bin/
+	cp ./WHATSNEW ./bin/
+	cp ./scripts/Dos9_Auto.bat ./bin/
+	cp ./scripts/cmd/hlp.bat ./bin/cmd
+	cp -R ./man ./bin/share/man
 	cd po && make local
+
+dist-bin : local
+	cp -R ./bin ./$(distdir)-bin
+	tardir=$(distdir)-bin && $(am__tar) | GZIP=$(GZIP_ENV) gzip -c> $(distdir)-bin.tar.gz
+	rm -R $(distdir)-bin
 
 po-merge:
 	cd po && make po-merge

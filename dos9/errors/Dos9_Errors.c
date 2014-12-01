@@ -194,7 +194,7 @@ void Dos9_LoadErrors(void)
 
 	lpErrorMsg[DOS9_UNABLE_SET_OPTION]=
 		gettext("Error : Unable to set option \"%s\", it is built "
-			"statically inside your version of dos9");
+			"statically inside your version of Dos9.\n");
 
     lpErrorMsg[DOS9_COMPARISON_FORBIDS_STRING]=
         gettext("Error : The \"%s\" comparison forbids use of strings.\n");
@@ -207,6 +207,9 @@ void Dos9_LoadErrors(void)
 
     lpErrorMsg[DOS9_NO_VALID_FILE]=
         gettext("Error : %s does not recieved any valid file to process.\n");
+
+    lpErrorMsg[DOS9_INVALID_NUMBER]=
+        gettext("Error : \"%s\" is not a valid number.\n");
 
 	lpQuitMessage=
 	    gettext("\nAborting current command, press any key to end Dos9.\n");

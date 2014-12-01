@@ -31,18 +31,52 @@
 	
 {{Synopsis}}
 
-${	%DOS9_VER%}
+	${%DOS9_VER%}
 
 	Contient le numéro de la version de {Dos9}.
 	
-${	%DOS9_OS%}
+	${%DOS9_OS%}
 
-	Contient le type d'os sous lequel {Dos9} s'éxécute. Cette variable ne permet pas de distinguer la
-	version de l'os mais seulement son type (peut être {*NIX} ou {WINDOWS}), et cela pour des raisons
-	de gestion de compatibilité de scripts entre les différents os (les scripts peuvent ainsi exéctuer
-	du code différent selon les os).
+	Contient le type d'os sous lequel {Dos9} s'éxécute. Cette variable ne
+	permet pas de distinguer la version de l'os mais seulement son nom.
+	Le contenu de cette variable peut-être, selon les cas :
+	
+	- {WINDOWS} : Sur un système d'exploitation équipé de {MS-Windows}.
 
-${	%DOS9_PATH%}
+	- {GNU/Linux} : Sur un système d'exploitation basé sur Linux et le
+	système GNU (les seuls systèmes actuellement supportés fonctionnant
+	sur le noyaux Linux).
+
+	- {NetBSD} : Sur les systèmes basés sur {NetBSD}.
+
+	- {OpenBSD} : Sur les sytèmes basés sur {OpenBSD}.
+
+	- {DragonFlyBSD} : Sur les systèmes basés sur {DragonFlyBSD}.
+	
+	- Si aucun système d'exploitation n'est reconnu par {Dos9}, alors le
+	nom du système sera le triplet de l'hote pour lequel {Dos9} a été
+	compilé.
+
+	Cette variable n'a d'intérêt que pour exécuter du code spécifique à
+	chacune de ces plate-formes. Dans la majorité des cas, la distinction
+	entre les types de systèmes d'exploitation via la variable
+	{%DOS9_OS_TYPE%} suffit.
+
+
+	${%DOS9_OS_TYPE%}
+
+	Se développe en le nom du type de système d'exploitation sur lequel
+	le script est en train de s'exécuter. Le type de système d'exploitation
+	peut être :
+
+	- {*NIX} : Le système d'exploitation sur lequel {dos9|Dos9} s'exécute
+	est un système UNIX-Like.
+
+	- {WINDOWS} : Le système d'exploitation sur lequel {dos9|Dos9}
+	s'exécute est basé sur {Windows NT}.
+
+
+	${%DOS9_PATH%}
 
 	Contient le chemin de l'exécutable {Dos9.exe} (WINDOWS) ou {Dos9}(*NIX). Ce chemin est généré à chaque
 	lancement de {Dos9}. Donc, il peut s'accommoder avec toutes sortes d'installations, par exemple, une

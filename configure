@@ -2362,13 +2362,12 @@ case $host_os in *\ *) host_os=`echo "$host_os" | sed 's/ /-/g'`;; esac
 
 
 
-$as_echo "#define HOST \"$host\"" >> confdefs.h
 
-if test "x" = "y"; then :
 
-$as_echo "#define HOST 1" >>confdefs.h
+cat >>confdefs.h <<_ACEOF
+#define HOST "$host"
+_ACEOF
 
-fi
 
 am__api_version='1.14'
 

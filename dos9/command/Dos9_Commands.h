@@ -50,5 +50,6 @@
 #include "Dos9_Mkdir.h"
 #include "Dos9_Rmdir.h"
 #include "Dos9_Find.h"
+#include "Dos9_More.h"
 
 #endif // DOS9_CMD_ECHO_H

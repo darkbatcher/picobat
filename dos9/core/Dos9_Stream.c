@@ -178,7 +178,8 @@ int Dos9_OpenOutput(LPSTREAMSTACK lpssStreamStack, char* lpName, int iDescriptor
 	}
 
 	DEBUG("File is about to be loaded");
-	if ((iStd[iDescriptor]=open(lpName, iMode, S_IREAD | S_IWRITE))!= -1) {
+	if ((iStd[iDescriptor]=open(Dos9_GetOsStreamName(lpName),
+                                    iMode, S_IREAD | S_IWRITE))!= -1) {
 
 		DEBUG("File loaded !");
 		Dos9_FlushDescriptor(iStd[iDescriptor], iDescriptor);
@@ -193,6 +194,22 @@ int Dos9_OpenOutput(LPSTREAMSTACK lpssStreamStack, char* lpName, int iDescriptor
 	}
 	DEBUG("Error: Cant load file !");
 	return -1;
+}
+
+LPSTREAMSTACK Dos9_PushStreamStackIfNotPipe(LPSTREAMSTACK lpssStreamStack)
+{
+    LPSTREAMLVL lpLvl;
+
+    Dos9_GetStack(lpssStreamStack, (void**)&lpLvl);
+
+    if (!lpLvl->iPipeIndicator)
+        lpssStreamStack = Dos9_PushStreamStack(lpssStreamStack);
+
+    Dos9_GetStack(lpssStreamStack, (void**)&lpLvl);
+    lpLvl->iPipeIndicator = TRUE ;
+
+    return lpssStreamStack;
+
 }
 
 int Dos9_OpenPipe(LPSTREAMSTACK lpssStreamStack)

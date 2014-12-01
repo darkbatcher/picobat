@@ -65,7 +65,15 @@
 #elif defined(__OpenBSD__)
 #define DOS9_OS "OpenBSD"
 #else
-#define DOS9_OS "UNKNOWN"
+#define DOS9_OS DOS9_HOST /* Use build triplet as failback OS */
+#endif
+
+#if defined(WIN32)
+#define DOS9_OS_TYPE "WINDOWS"
+#elif defined(_POSIX_C_SOURCE)
+#define DOS9_OS_TYPE "*NIX"
+#else
+#define DOS9_OS_TYPE "Unknown"
 #endif
 
 #endif // DOS9_VERSION_INFO_H

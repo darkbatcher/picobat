@@ -23,6 +23,7 @@ noinst_HEADERS = global.h
 include_HEADERS = inteval.h
 
 libinteval_la_SOURCES = parser.y lexer.l inteval.c
+libinteval_la_LDFLAGS = -static -no-undefined
 
 AM_YFLAGS = -d -p IntEval_
 AM_LFLAGS = -PIntEval_ -olex.yy.c

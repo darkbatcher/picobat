@@ -219,6 +219,8 @@ LIBDOS9 COMMANDFLAG   Dos9_GetCommandProc(char* lpCommandLine, LPCOMMANDLIST lpc
                        [lpclCommandList->cfFlag & ~DOS9_ALIAS_FLAG]) {
 
                     case ' ':
+                    case ',':
+                    case ';':
                     case '\n':
                     case '\t':
                     case '\0':

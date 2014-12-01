@@ -20,8 +20,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-#include "../libDos9-int.h"
+#include "../libDos9.h"
 
 LIBDOS9 char* Dos9_SkipBlanks(const char* lpCh)
 {
@@ -29,7 +30,7 @@ LIBDOS9 char* Dos9_SkipBlanks(const char* lpCh)
 	   ',' and ';' are also valid. (even if the use of those is strongly
 	   discouraged */
 
-    while (*lpCh==' ' || *lpCh==',' || *lpCh==';' || *lpCh=='\t')
+    while (Dos9_IsDelim(*lpCh))
         lpCh++;
 
     if (*lpCh=='^')
@@ -40,11 +41,8 @@ LIBDOS9 char* Dos9_SkipBlanks(const char* lpCh)
 
 LIBDOS9 char* Dos9_SkipAllBlanks(const char* lpCh)
 {
-    while (*lpCh==' '
-           || *lpCh=='\t'
+    while (Dos9_IsDelim(*lpCh)
            || *lpCh=='@' /* this is the silent character */
-           || *lpCh==';' /* and this the default eol-char */
-           || *lpCh==','
            )
         lpCh++;
 

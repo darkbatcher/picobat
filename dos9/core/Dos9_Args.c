@@ -133,6 +133,35 @@ char* Dos9_GetNextBlock(char* lpLine, BLOCKINFO* lpbkInfo)
 
 }
 
+char* Dos9_GetBlockLine(char* pLine, BLOCKINFO* pBk)
+{
+    char *pEnd;
+
+    pEnd = Dos9_GetBlockLineEnd(pLine);
+
+    if (*pLine == ')')
+        pLine ++;
+
+    if (pEnd == NULL) {
+
+        pEnd = pLine;
+
+        while (*pEnd && *pEnd!='\n')
+            pEnd++;
+
+    } else {
+
+        pEnd++;
+
+    }
+
+    pBk->lpEnd = pEnd;
+    pBk->lpBegin = pLine;
+
+    return pEnd;
+
+}
+
 char* Dos9_GetNextBlockEs(char* lpLine, ESTR* lpReturn)
 {
 	char* lpNext;
@@ -259,12 +288,18 @@ int   Dos9_GetParamArrayEs(char* lpLine, ESTR** lpArray, size_t iLenght)
 
 		while (*lpLine=='\t' || *lpLine==' ') lpLine++;
 
+        #ifdef WIN32
 		if (*lpLine == '"') {
 
 			/* if the first character are '"', then
 			   report it back in the command arguments,
 			   since some microsoft commands would not
-			   work without these */
+			   work without these
+
+			   However, In Unix-like operating systems, the truth is the
+               absolute contradiction of this statement, ie. some
+               programs (say, GNU grep), will not work as expected using
+               quotation marks */
 
 			Dos9_EsCpy(lpTemp, "\"");
 			Dos9_EsCatE(lpTemp, lpParam);
@@ -272,8 +307,9 @@ int   Dos9_GetParamArrayEs(char* lpLine, ESTR** lpArray, size_t iLenght)
 
 			Dos9_EsCpyE(lpParam, lpTemp);
 
-		}
 
+        }
+        #endif
 
 		lpArray[iIndex]=lpParam;
 

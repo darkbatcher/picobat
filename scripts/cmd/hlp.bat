@@ -54,7 +54,8 @@ ECHO and you are welcome to redistribute it under the terms of the GNU CPL.
 ECHO.
 
 cd %DOS9_PATH%/share
-IF "%~2" equ "" (
+shift /1
+IF "%~1" equ "" (
 
    IF defined LANGUAGE (
   
@@ -68,17 +69,17 @@ IF "%~2" equ "" (
 
 ) else (
 
-   SET lang_build=%~2
-
+   SET lang_build=%~1
+   shift /1
 )
 
-IF "%~3" equ "" (
+IF "%~1" equ "" (
 
 	SET charset_build=UTF-8
 
 ) else (
 
-	SET charset_build=%~3
+	SET charset_build=%~1
 
 )
 
@@ -125,10 +126,10 @@ FOR /F "tokens=*" %%A in ('dir /b /s /a:-d man/%lang_build%') do (
 	SET path_html_build=!path_build:man/%lang_build%=doc/html!.html
 	
 	ECHO      - file : !path_ansi_build!
-	TEA %%A !path_ansi_build!.tmp /E:UTF-8 /O:TEXT-ANSI 
+	tea %%A !path_ansi_build!.tmp /E:UTF-8 /O:TEXT-ANSI 
 	
 	ECHO      - file : !path_html_build!
-    TEA %%A !path_html_build! /E:UTF-8 /O:html /T "The Dos9 Project :: "
+    	tea %%A !path_html_build! /E:UTF-8 /O:html /T "The Dos9 Project :: "
 	
 	ECHO      - converting output from UTF-8 to %charset_build%
 	
@@ -156,32 +157,47 @@ ECHO.
 GOTO:EOF
 
 
-:Show
-SET i=0
-
+:show
 cd %DOS9_PATH%/share/doc/ansi
+
+if "%~1" equ "" (
+	
+	if exist commands.ansi (
+		
+		type commands.ansi
+		exit /b 0
+	) else (
+echo Unable to find default manual page. Is the man page database really built ?
+echo If not, try to compile it using the /b switch.
+		exit /b 1
+	)
+)
+
+SET i=0
 
 FOR /F "tokens=*" %%A IN ('dir /b /s *.ansi| find /i "%~1" ') DO (
 	
-	SET /a i+=1
+	SET /a:I i+=1
 	SET HlpPath[!i!]=%%A
  	SET HlpPath[!i!].name=%%~nA
 	
 )
 
+Echo got i = %i%
+PAUSE>NULL
+
 if %i%==1 (
 
-	type %HlpPath[1]%
-	
+	more %HlpPath[1]%
 	EXIT
 
-) else (
+) else if %i%==0 (
+	
+	ECHO Error: no manual page available for "%~1"
+	ECHO.
+	exit /b 1
 
-	if %i%==0 (
-		
-		type commands.ansi
-		EXIT /b 0
-	)
+) else (
 
 	ECHO Looking for manual page "%~1"
 	ECHO.
@@ -199,7 +215,7 @@ if %i%==1 (
 
 IF not !choice!==q (
 
-	cls
-	type !HlpPath[%choice%]!
+	::cls
+	more !HlpPath[%choice%]!
 
 )

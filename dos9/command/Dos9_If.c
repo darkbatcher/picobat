@@ -256,21 +256,25 @@ int Dos9_CmdIf(char* lpParam)
 
             lpNext=Dos9_SkipBlanks(lpNext);
 
-			if (!strnicmp(lpNext, "ELSE", 4)) {
+			if (!strnicmp(lpNext, "ELSE", 4)
+                    && (Dos9_IsDelim(*(lpNext+4)) | *(lpNext+4)=='\0')) {
 
-				lpNext+=4;
+				lpNext=Dos9_SkipBlanks(lpNext+4);
 
-				if ((lpToken=Dos9_GetNextBlock(lpNext, &bkInfo)
-                    && strchr("( \t,;", *lpNext))) {
+                if (!strnicmp(lpNext, "if", 2) && Dos9_IsDelim(*(lpNext+2))) {
 
-					/* if we found an else */
-					Dos9_RunBlock(&bkInfo);
+                    /* this is a if, so take it seriously */
+                    Dos9_GetBlockLine(lpNext, &bkInfo);
+                    Dos9_RunBlock(&bkInfo);
 
-				} else {
 
-					Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
+                } else {
 
-				}
+                    Dos9_GetNextBlock(lpNext, &bkInfo);
+                    Dos9_RunBlock(&bkInfo);
+
+                }
+
 			}
 		}
 

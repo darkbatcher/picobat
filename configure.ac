@@ -31,10 +31,8 @@ AC_CANONICAL_HOST
 
 dnl This is a trick in order to define the host variable
 dnl in a decent way
-$as_echo "#define HOST \"$host\"" >> confdefs.h
 
-AS_IF([test "x" = "y"],
-      [AC_DEFINE([HOST], [1], Define to your host name)])
+AC_DEFINE_UNQUOTED([HOST], ["$host"], Define to your host name)
 
 AM_INIT_AUTOMAKE
 

@@ -60,8 +60,8 @@ void Dos9_SigHandler(int c)
 
 void Dos9_AssignCommandLine(char** argv)
 {
-    ESTR* lpEsStr=Dos9_EsInit(),
-          lpEsParam=Dos9_EsInit();
+    ESTR *lpEsStr=Dos9_EsInit(),
+          *lpEsParam=Dos9_EsInit();
 
     char*  delims=" ,;=\t&|";
 
@@ -90,7 +90,9 @@ void Dos9_AssignCommandLine(char** argv)
     Dos9_SetLocalVar(lpvLocalVars, '*', Dos9_EsToChar(lpEsStr));
 
     Dos9_EsFree(lpEsStr);
+    Dos9_EsFree(lpEsParam);
 }
+
 
 
 int main(int argc, char *argv[])

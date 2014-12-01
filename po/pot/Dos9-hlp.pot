@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-06 19:47+0200\n"
+"POT-Creation-Date: 2014-09-04 15:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -171,8 +171,8 @@ msgstr ""
 #: ../dos9/lang/Dos9_ShowHelp.c:145
 msgid ""
 "Print a file.\n"
-"Usage: TYPE [file]\n"
-"       MORE [file]\n"
+"Usage: TYPE [file ...]\n"
+"       MORE [file ...]\n"
 msgstr ""
 
 #: ../dos9/lang/Dos9_ShowHelp.c:150
@@ -188,6 +188,12 @@ msgid ""
 msgstr ""
 
 #: ../dos9/lang/Dos9_ShowHelp.c:158
+msgid ""
+"Search occurence of string in a set of files.\n"
+"Usage: FIND [/N] [/C] [/V] [/I] string [file ...]\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_ShowHelp.c:162
 msgid ""
 "This help is voluntary limited help to fit in the binary. If you need to\n"
 "see the full documentation, please type:\n"

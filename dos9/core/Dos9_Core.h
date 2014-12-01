@@ -41,7 +41,7 @@
 #include "Dos9_SplitPath.h"
 #include "Dos9_ParseBlock.h"
 #include "Dos9_ExpandAlias.h"
-
+#include "Dos9_OsStream.h"
 
 #include "Dos9_Globals.h"
 
@@ -53,7 +53,6 @@
 
 #elif defined  _POSIX_C_SOURCE
 
-#define getch getchar
 #define stricmp strcasecmp
 #define strnicmp strncasecmp
 

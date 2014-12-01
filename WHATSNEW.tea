@@ -902,12 +902,194 @@ type "some file"}
 	
 {{Tuesday 24th, June}}
 
-	- Corrected a bug that prevented local variable (eg. like {%1}) to be used as argument with the {call} command, thanks to Jo15 from
+	- Corrected a bug that prevented local variable (eg. like {%1}) to be
+	used as argument with the {call} command, thanks to Jo15 from
 	{http://batch.xoo.it|batch.xoo.it} who reported the error.
 	
-	- Added {local} target to {Makefile} that generates a local installation of {Dos9} inside the folder {./bin}. It is as simple as typing
+	- Added {local} target to {Makefile} that generates a local 
+	installation of {Dos9} inside the folder {./bin}. It is as simple as
+	typing
 	
 ${make local}
 
-	- Added macros from the {gnu gettext} package. Also enabled the use of the --disable-nls switch for configure.
+	- Added macros from the {gnu gettext} package. Also enabled the use of
+	the --disable-nls switch for configure.
 	
+{{Friday 29th, August}}
+	
+	This is the first time I write something in this file for a long time
+	now. I've been hacking around Dos9 for a little time now (haaa,
+	holidays). This is a list of improovements I made during from
+	24th June to today.
+
+		- Changed behaviour of parameter handling routines, valid
+	delimiter are now ",; " and tab. The way doubles quotes are handled
+	changed either. An quoted expression may be constituted of an
+	arbitrary long string that conforms to the following rules :
+
+		-- Any delimiter is ignored if it is surrounded by double
+	quotes.
+
+		-- If double quote, is directly preceded or followed by an
+	string characters that are not delimiter, this string is part of the
+	parameter.
+
+		-- And so on and so forth, until we reach unquoted delimiters
+	on both sides of the parameter.
+
+	@- Moreover, the quotes are removed if their position conform
+	to the following rules :
+
+		-- If a parameter begins with a double quote it will be
+	removed.
+
+		-- If a parameter ends with a double quote and begin with a
+	double quote, both are remooved.
+
+		-- Else, keep the line like this.
+
+	- Fixed some autotools options, that where never mentionned under
+	mingw system.
+
+	- Fixed incompatibilities with the IF command. Now, the {IF} command
+	returns errors on case of string used as operators for {GEQ}, {GTR}
+	{LSS}, {LEQ} comparants. Moreover, the interpretor is able to handle
+	both hexadecimal, decimal and octal bases. Finally, implemented
+	comparants for floats (same as integer comparants but prefixed with f),
+	as a {Dos9} extension.
+
+	- Fixed issues of compatibity for the SET command. It is mainly a
+	matter of quotation marks handling, and typically, the issues for both
+	SET /p and SET are fixed, while little issue (not for simple /a
+	assignments of course) still exist for the SET /a command.
+
+	- Some fixes for the FOR command, now enabling the use of the three
+	numeric bases for all the parameters and preventing overflows in FOR /l
+	loops.
+
+	- Modified the FOR command in order to accept filename sets to be
+	given as input for the FOR /F command. This puts more sense on the
+	"usebackq" option.
+
+	- Added a custom environment within {Dos9} in order to instaure
+	cross-platform syntax capabilities like use of "=" in variable names
+	(which is impossible on many systems), to set "=x:" variables for
+	CD command.
+
+	- Corrected a bug with SET command, wich displayed system environment
+	while it was suposed to display {Dos9} custom environment.
+
+	- Corrected a bug that prevented the FOR command from getting command
+	input under any *nix OS (don't know the actual reason for this, but
+	I reimplemented the code using the *nix call fork(), which is,
+	frankly, much more conviennient than tricky systems to comunicate
+	between process under windows). The command redirection now works
+	pretty well on any *nix system.
+
+	- Added a Windows specific new CD command, to be compatible with
+	Windows {cmd.exe} features. The primitive version of CD is still
+	shipped for *nix operating systems (concept of disk is a huge
+	non-sense under Unix-like operating systems, because they represent
+	filesystems like a binariy tree which root is "/", and on which
+	filesystems and devices are mounted as directories).
+
+	- Fixed a bug, that always caused wrong pid to be awaited if the
+	process was forked on time through FOR /F command (with a command input)
+	under *nix operating systems, resulting in a mess between commands and
+	commands outputs.
+
+	- Implemented new functions within libDos9 in order to quickly sort
+	files matching to some attributes and file not matching in a single
+	function call.
+
+	- Re-implemented the TYPE command to get a command compatible with
+	{cmd.exe} equivalent. The result is very closely compatible execpt for
+	on case of name printing.
+
+	- Implemented FIND command as an internal command. It matches closely
+	cmd.exe behaviour, except for some inconsistencies I've tried to
+	address (limited line length, etc).
+
+	- Implemented the %* variable, that have been lacking in the Dos9
+	implementation for a very long time (special var are implemented at
+	least since 2013). However, there is still little concerns, for
+	example, on Unix-like operating system it is impossible to retrieve
+	the original command line (arguments are passed separated to the
+	kernel). Thus, the {dos9|Dos9} tries to construct the line back the
+	best it can, by putting spaces between the arguments. This is only
+	an issue at startup, though, with call, it may not be a problem.
+
+	- Changed the version number to {2014.0.9b}, I think the interpretor
+	may be mature enough to think of a real release in a close time.
+
+{{Wednesday 3rd, September}}
+
+	- Implemented a new pipe system for Unix-like operating systems (that
+	may have broken the good-old WINDOWS implementation, haven't checked
+	yet). It uses full power of fork() system call and do not suffer from
+	output truncation due to size of kernel's pipe buffer. Also, both
+	command are now parralelized, gaining significant execution time in
+	comparison to older system. This pipe system does not apply to WINDOWS
+	operating system, which will benefit from a new pipe system in little
+	delays.
+
+	- Removed padding of arguments with {"} for external commands, on
+	Unix-like operating systems. Indeed, padding {"} around arguments often
+	cause command to fail (precisely, make the command not work the way
+	you are intending to).
+
+	- Fixed a little issue with the autotools suite. In some Unix-like
+	systems, the host triplet was not reported to program. That does not
+	matter a lot, anyway.
+
+	- Definitely set libDos9 as static by defaut. It is indeed much more
+	convenient (no installation needeed on Unix-like operating systems).
+	Some may object that it results in bigger executables. But most
+	of time, size is not really relevant, and it save setting library
+	search path anyway, thus enabling dos9 to be embedded in the a
+	memory stick for example (And yeah, size ain't too relevant, because
+	memory stick often have size of few GBs). Furthermore, static linking
+	allows compiler to perform further optimisations, that can't be
+	done with dynamic linking.
+
+	- Fixed some bugs with the SET command that did not use the custom
+	environment every time, causing the command to fail.
+
+	- Adapted the hlp.bat script to make it work on Unix-like operating
+	systems. The new scripts also uses the shift command intensively.
+
+	- Fixed some bugs in translations. Removed the en_US local which is
+	almost stupid.
+
+{{Wednesday 24th, September}}
+
+	- Implemented the {MORE} command as an internal command (why create
+	external executables when it is so simple to add little commands to
+	the interpretor ?). It includes almost every {cmd.exe} features,
+	except the formfeed expanding features (never seen it used though).
+	However, if you build {Dos9} with the option {--disable-console}, you
+	should still encounter minor bugs, due to the lack of console
+	capabilities. Finally, I thought about replacing {MORE} with {TYPE}
+	when building with {--disable-console}, but it would be obviously sad
+	not to benefit from this far better and new command.
+
+	- Implemented a special stream translation system (for streams like
+	{NUL}, {CON}, and so on and so forth), to get Unix name of their
+	counterparts. I did not implemented the translation for all streams
+	I know, though, but it won't be to annoying to be added.
+
+	- Corrected a few bugs for Unix-like systems.
+
+{{Tuesday 2nd, December}}
+
+	- Corrected a bug within the {IF} command that prevented {ELSE IF}
+	combination to be executed correctly. This was actually caused by
+	a failure to match parenthesis the right way. It was basically making
+	only the first line of the if block to be executed. Now the bug is
+	solved and the result is fully functionnal.
+
+	- Added two features within the {MORE} command that enable it to
+	accept both UTF-8 encoded text and ansi escape codes to be mixed with
+	text.
+
+

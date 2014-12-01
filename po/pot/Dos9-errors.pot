@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-06 19:47+0200\n"
+"POT-Creation-Date: 2014-09-04 15:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -218,10 +218,30 @@ msgstr ""
 #, c-format
 msgid ""
 "Error : Unable to set option \"%s\", it is built statically inside your "
-"version of dos9"
+"version of Dos9.\n"
 msgstr ""
 
 #: ../dos9/errors/Dos9_Errors.c:200
+#, c-format
+msgid "Error : The \"%s\" comparison forbids use of strings.\n"
+msgstr ""
+
+#: ../dos9/errors/Dos9_Errors.c:203
+#, c-format
+msgid "Error : Unable to fork the current process (in function %s).\n"
+msgstr ""
+
+#: ../dos9/errors/Dos9_Errors.c:206
+#, c-format
+msgid "Error : Pathspec \"%s\" does not match any file.\n"
+msgstr ""
+
+#: ../dos9/errors/Dos9_Errors.c:209
+#, c-format
+msgid "Error : %s does not recieved any valid file to process.\n"
+msgstr ""
+
+#: ../dos9/errors/Dos9_Errors.c:212
 msgid ""
 "\n"
 "Aborting current command, press any key to end Dos9.\n"

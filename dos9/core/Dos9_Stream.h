@@ -159,4 +159,6 @@ void Dos9_FlushStd(void);
 void Dos9_SetStdBuffering(void);
 LPSTREAMLVL Dos9_AllocStreamLvl(void);
 
+LPSTREAMSTACK Dos9_PushStreamStackIfNotPipe(LPSTREAMSTACK lpssStreamStack);
+
 #endif

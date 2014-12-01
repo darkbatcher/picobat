@@ -54,6 +54,7 @@ extern char** environ;
 char* lpInitVar[]= {
 	"DOS9_VERSION", DOS9_VERSION,
 	"DOS9_OS", DOS9_OS,
-	NULL, NULL,
+	NULL, NULL, /* DOS9_PATH is dinamically generated */
+    "DOS9_OS_TYPE", DOS9_OS_TYPE,
 	NULL, NULL
 };

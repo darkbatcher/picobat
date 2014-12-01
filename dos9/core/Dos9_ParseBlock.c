@@ -285,8 +285,8 @@ char* Dos9_GetBlockLineEnd(char* lpCh)
 
 	char* lpNextBlock=NULL;
 
-	if (*lpCh!='(')
-		return NULL;
+	if (!(lpCh=Dos9_GetNextBlockBegin(lpCh)))
+        return NULL;
 
 	do {
 

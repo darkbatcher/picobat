@@ -17,13 +17,13 @@ IF %DOS9_OS%==WINDOWS (
 	:: set home path for support of the gnu nano editor
 	:: broken since nano is no more includedd and it can
 	:: causes incompatibility with other *nix packages for
-	:: windows
+	:: windows (typically, Cygwin or MinGW)
 	:: SET HOME=%DOS9_PATH%/nano
 	
-    :: Set default language in windows
+	:: Set default language in windows
 	:: Usually, this line is not needed and language
 	:: is automatically detected.
-    :: SET LANGUAGE=fr_FR
+	:: SET LANGUAGE=fr_FR
 
 ) else (
 
@@ -37,7 +37,7 @@ IF %DOS9_OS%==WINDOWS (
 	SET SYSTEMROOT=/bin
 	SET PROGRAMFILES=/usr/bin
 	SET SYSTEMDRIVE=/
-	SET USERPROFILE=~
+	SET "USERPROFILE=%HOME%" 
 
 )
 

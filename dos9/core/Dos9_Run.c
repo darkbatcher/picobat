@@ -110,6 +110,8 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
 
 }
 
+#ifdef WIN32
+
 int Dos9_ExecOperators(PARSED_STREAM* lppsStream)
 {
 
@@ -153,10 +155,107 @@ int Dos9_ExecOperators(PARSED_STREAM* lppsStream)
 
 }
 
+#elif defined(_POSIX_C_SOURCE)
+
+int Dos9_ExecOperators(PARSED_STREAM** lpppsStream)
+{
+    int pipedes[2];
+    pid_t  pid;
+    PARSED_STREAM* lppsStream=*lpppsStream;
+
+loop:
+
+    if (lppsStream->lppsNode
+        && lppsStream->lppsNode->cNodeType == PARSED_STREAM_NODE_PIPE) {
+
+        /* We're under Unix-like OS, fork, fork, fork, fork,
+           so fucking convienient isn't it ? */
+        if (pipe(pipedes) == -1)
+            Dos9_ShowErrorMessage(DOS9_CREATE_PIPE | DOS9_PRINT_C_ERROR,
+                                    __FILE__ "/Dos9_ExecOperators()",
+                                    -1);
+
+        pid = fork();
+
+        if (pid == 0) {
+
+            /* don't care about redirections, this process that will *eventually* die */
+            Dos9_OpenOutputD(lppsStreamStack, pipedes[1], DOS9_STDOUT);
+
+            Dos9_RunCommand(lppsStream->lpCmdLine);
+
+            close (pipedes[1]);
+
+            exit(iErrorLevel);
+
+        } else if (pid == -1) {
+
+
+            Dos9_ShowErrorMessage(DOS9_FAILED_FORK | DOS9_PRINT_C_ERROR,
+                                    __FILE__ "/Dos9_ExecOperators()",
+                                    -1);
+
+        } else {
+
+            close(pipedes[1]); /* do not need it yeah */
+
+            /* do not create enormous stack in case of following pipes */
+            lppsStreamStack = Dos9_PushStreamStackIfNotPipe(lppsStreamStack);
+
+            /* Child process recieve's parent output */
+            Dos9_OpenOutputD(lppsStreamStack, pipedes[0], DOS9_STDIN);
+
+            if (lppsStream->lppsNode) {
+
+                lppsStream = *lpppsStream = lppsStream->lppsNode;
+                goto loop;
+
+            }
+
+        }
+
+    } else if (!lppsStream->lppsNode
+               && lppsStream->cNodeType != PARSED_STREAM_NODE_PIPE) {
+
+        lppsStreamStack = Dos9_Pipe(lppsStreamStack);
+
+    }
+
+
+
+
+	switch (lppsStream->cNodeType) {
+
+	case PARSED_STREAM_NODE_PIPE:
+        return TRUE;
+
+	case PARSED_STREAM_NODE_NONE :
+		/* this condition is alwais true */
+		lppsStreamStack = Dos9_Pipe(lppsStreamStack);
+		return TRUE;
+
+	case PARSED_STREAM_NODE_NOT :
+		/* this condition is true when the instruction
+		   before failed */
+        lppsStreamStack = Dos9_Pipe(lppsStreamStack);
+		return iErrorLevel;
+
+	case PARSED_STREAM_NODE_YES:
+        lppsStreamStack = Dos9_Pipe(lppsStreamStack);
+		return !iErrorLevel;
+
+	}
+
+	return FALSE;
+
+}
+
+#endif
+
 int Dos9_ExecOutput(PARSED_STREAM_START* lppssStart)
 {
 
-	DOS9_DBG("lppssStart->lpInputFile=%s\n"
+    DOS9_DBG("lppssStart->lpInputFile=%s\n"
 	         "          ->lpOutputFile=%s\n"
 	         "          ->cOutputMode=%d\n"
 	         "lppssStart->cOutputMode & ~PARSED_STREAM_START_MODE_TRUNCATE=%d\n"
@@ -229,15 +328,12 @@ int Dos9_RunLine(ESTR* lpLine)
 
 	do {
 
-		if (Dos9_ExecOperators(lppsStream)==FALSE || bAbortCommand)
+		if (Dos9_ExecOperators(&lppsStream)==FALSE || bAbortCommand)
 			break;
 
 		Dos9_RunCommand(lppsStream->lpCmdLine);
 
 	} while ((lppsStream=lppsStream->lppsNode));
-
-	/* deal with the remaining pipe operator */
-	Dos9_ExecOperators(NULL);
 
 	lppsStreamStack=Dos9_PopStreamStack(lppsStreamStack);
 
@@ -289,11 +385,6 @@ BackTrackExternalCommand:
 		break;
 
 	default:
-		if (iFlag
-		    && lpCmdLine[iFlag & ~DOS9_ALIAS_FLAG]!=' '
-		    && lpCmdLine[iFlag & ~DOS9_ALIAS_FLAG]!='\t'
-		    && lpCmdLine[iFlag & ~DOS9_ALIAS_FLAG]!='\0')
-			goto BackTrackExternalCommand;
 
 		if (iFlag & DOS9_ALIAS_FLAG) {
 			/* this is an alias */
@@ -634,6 +725,9 @@ int Dos9_RunExternalBatch(char* lpFileName, char* lpFullLine, char** lpArguments
             Dos9_SetLocalVar(lpvLocalVars, '0'+i, lpArguments[i]);
 
         }
+
+        for (;i <= 9;i++)
+            Dos9_SetLocalVar(lpvLocalVars, '0'+i , "");
 
         Dos9_SetLocalVar(lpvLocalVars, '*', lpFullLine);
 

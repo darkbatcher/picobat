@@ -143,8 +143,7 @@ void Dos9_LoadInternalHelp(void)
 
 	lpInternalHelp[DOS9_HELP_TYPE]
 	    =gettext("Print a file.\n"
-	             "Usage: TYPE [file ...]\n"
-	             "       MORE [file ...]\n");
+	             "Usage: TYPE [file ...]\n");
 
 	lpInternalHelp[DOS9_HELP_EXIT]
 	    =gettext("Exit from the command prompt.\n"
@@ -156,7 +155,11 @@ void Dos9_LoadInternalHelp(void)
 
     lpInternalHelp[DOS9_HELP_FIND]
         =gettext("Search occurence of string in a set of files.\n"
-                 "Usage: FIND [/N] [/C] [/V] [/I] string [file ...]");
+                 "Usage: FIND [/N] [/C] [/V] [/I] string [file ...]\n");
+
+    lpInternalHelp[DOS9_HELP_MORE]
+        =gettext("Display content of files.\n"
+                 "Usage: MORE [/E] [/P] [/S] [/C] [/T[:]n] [+n] [file ...]\n");
 
 	lpExternalMsg
 	    =gettext("This help is voluntary limited help to fit in the binary. If you need to\n"

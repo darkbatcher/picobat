@@ -145,7 +145,8 @@ am_dos9_OBJECTS = ./Dos9.$(OBJEXT) ./core/Dos9_Args.$(OBJEXT) \
 	./command/Dos9_Set.$(OBJEXT) ./command/Dos9_Setlocal.$(OBJEXT) \
 	./command/Dos9_Shift.$(OBJEXT) ./command/Dos9_Title.$(OBJEXT) \
 	./command/Dos9_Type.$(OBJEXT) ./command/Dos9_Find.$(OBJEXT) \
-	./core/Dos9_Env.$(OBJEXT)
+	./core/Dos9_Env.$(OBJEXT) ./command/Dos9_More.$(OBJEXT) \
+	./core/Dos9_OsStream.$(OBJEXT)
 dos9_OBJECTS = $(am_dos9_OBJECTS)
 dos9_DEPENDENCIES = ../libinteval/libinteval.la \
 	../libmatheval/lib/libmatheval.la ../libDos9/libDos9.la
@@ -370,7 +371,7 @@ core/Dos9_Globals.h core/Dos9_Jump.h core/Dos9_Parse.h core/Dos9_Read.h \
 core/Dos9_Run.h core/Dos9_ShowIntro.h core/Dos9_SplitPath.h \
 core/Dos9_Stream.h core/Dos9_Var.h core/Dos9_VersionInfo.h \
 errors/Dos9_Errors.h lang/Dos9_ShowHelp.h lang/Dos9_Lang.h gettext.h \
-command/Dos9_Find.h core/Dos9_Env.h
+command/Dos9_Find.h command/Dos9_More.h core/Dos9_Env.h core/Dos9_OsStream.h
 
 dos9_SOURCES = ./Dos9.c ./core/Dos9_Args.c ./core/Dos9_Expand.c \
 ./core/Dos9_Globals.c \
@@ -388,7 +389,8 @@ dos9_SOURCES = ./Dos9.c ./core/Dos9_Args.c ./core/Dos9_Expand.c \
 ./command/Dos9_Move.c ./command/Dos9_Pause.c ./command/Dos9_Rem.c \
 ./command/Dos9_Ren.c ./command/Dos9_Rmdir.c ./command/Dos9_Set.c \
 ./command/Dos9_Setlocal.c ./command/Dos9_Shift.c ./command/Dos9_Title.c \
-./command/Dos9_Type.c ./command/Dos9_Find.c ./core/Dos9_Env.c
+./command/Dos9_Type.c ./command/Dos9_Find.c ./core/Dos9_Env.c \
+./command/Dos9_More.c ./core/Dos9_OsStream.c
 
 dos9_LDADD = ../libinteval/libinteval.la ../libmatheval/lib/libmatheval.la \
 ../libDos9/libDos9.la @LIBS@
@@ -604,6 +606,10 @@ command/$(DEPDIR)/$(am__dirstamp):
 	command/$(DEPDIR)/$(am__dirstamp)
 ./core/Dos9_Env.$(OBJEXT): core/$(am__dirstamp) \
 	core/$(DEPDIR)/$(am__dirstamp)
+./command/Dos9_More.$(OBJEXT): command/$(am__dirstamp) \
+	command/$(DEPDIR)/$(am__dirstamp)
+./core/Dos9_OsStream.$(OBJEXT): core/$(am__dirstamp) \
+	core/$(DEPDIR)/$(am__dirstamp)
 
 dos9$(EXEEXT): $(dos9_OBJECTS) $(dos9_DEPENDENCIES) $(EXTRA_dos9_DEPENDENCIES) 
 	@rm -f dos9$(EXEEXT)
@@ -639,6 +645,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./command/$(DEPDIR)/Dos9_Help.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./command/$(DEPDIR)/Dos9_If.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./command/$(DEPDIR)/Dos9_Mkdir.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./command/$(DEPDIR)/Dos9_More.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./command/$(DEPDIR)/Dos9_Move.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./command/$(DEPDIR)/Dos9_Pause.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./command/$(DEPDIR)/Dos9_Rem.Po@am__quote@
@@ -658,6 +665,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./core/$(DEPDIR)/Dos9_FilePath.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./core/$(DEPDIR)/Dos9_Globals.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./core/$(DEPDIR)/Dos9_Jump.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./core/$(DEPDIR)/Dos9_OsStream.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./core/$(DEPDIR)/Dos9_Parse.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./core/$(DEPDIR)/Dos9_ParseBlock.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./core/$(DEPDIR)/Dos9_Read.Po@am__quote@

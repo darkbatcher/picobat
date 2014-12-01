@@ -38,7 +38,7 @@
 #include "../lang/Dos9_Lang.h"
 #include "../lang/Dos9_ShowHelp.h"
 
-#define DOS9_DBG_MODE
+// #define DOS9_DBG_MODE
 #include "../core/Dos9_Debug.h"
 
 #include "../errors/Dos9_Errors.h"
@@ -47,7 +47,7 @@ double _Dos9_SetGetVarFloat(const char* lpName)
 {
 	char* lpContent;
 
-	lpContent=getenv(lpName);
+	lpContent=Dos9_GetEnv(lpeEnv, lpName);
 
 	if (lpContent) {
 
@@ -76,7 +76,7 @@ int _Dos9_SetGetVarInt(const char* lpName)
 {
 	char* lpContent;
 
-	lpContent=getenv(lpName);
+	lpContent=Dos9_GetEnv(lpeEnv, lpName);
 
 	if (lpContent) {
 
@@ -124,7 +124,7 @@ int _Dos9_SetGetVarInt(const char* lpName)
 	Problems are introduced by the lack of standard precendence rules for
 	assignments. As an example, `set /a var=1+(var3=2)' evaluates to 3
 	whereas `set /a var=1+var3=2' evaluates to 2 (That does not make sense
-	anyway, can't figure how to get 2 out of this expression). Thus, this
+	anyway, can't figure how to get 2 out of this expression). Thus, these
 	features are not implemented yet.
 
 	IMPLEMENTATION:
@@ -144,7 +144,7 @@ int _Dos9_SetGetVarInt(const char* lpName)
 
 	Dos9 behaves mostly like cmd.exe when using the '/a' switch, except
 	that inline assignment are not supported. (As stated above, it may
-	hard to parse.
+	hard to parse)
 
 */
 int Dos9_CmdSet(char *lpLine)
@@ -352,7 +352,7 @@ int Dos9_CmdSetA(char* lpLine, int bFloats)
 	while (lpLine=Dos9_GetNextParameterEsD(lpLine, lpExpression , "\",")) {
 
 		/* get the expression back */
-		Dos9_GetEndOfLine(lpLine, lpExpression);
+		//Dos9_GetEndOfLine(lpLine, lpExpression);
 
 		switch(bFloats) {
 
