@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2014 DarkBatcher
+ *   Copyright (C) 2010-2015 DarkBatcher
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@
 
 #define DOS9_AUTHORS "Romain Garbi (DarkBatcher)"
 #define DOS9_BUILDDATE __DATE__
-#define DOS9_BUILDYEAR "2014"
+#define DOS9_BUILDYEAR "2015"
 #define DOS9_BUILDCOMMENTS "Beta release"
 
 /* Choose between different know operating systems.

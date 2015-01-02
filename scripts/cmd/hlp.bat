@@ -2,7 +2,7 @@
 SETLOCAL EnableDelayedExpansion
 
 ::   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
-::   Copyright (C) 2010-2014 DarkBatcher
+::   Copyright (C) 2010-2015 DarkBatcher
 ::
 ::   This program is free software: you can redistribute it and/or modify
 ::   it under the terms of the GNU General Public License as published by
@@ -182,9 +182,6 @@ FOR /F "tokens=*" %%A IN ('dir /b /s *.ansi| find /i "%~1" ') DO (
  	SET HlpPath[!i!].name=%%~nA
 	
 )
-
-Echo got i = %i%
-PAUSE>NULL
 
 if %i%==1 (
 
