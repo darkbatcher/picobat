@@ -1,6 +1,6 @@
 /*
  *
- *   libinteval, a lib for evaluating integer expression
+ *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
  *   Copyright (C) 2010-2014 DarkBatcher
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -15,24 +15,13 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
-#ifndef GLOBAL_H
-#define GLOBAL_H
+#ifndef DOS9_CMD_START
+#define DOS9_CMD_START
 
-#define	IFEXT_STYPE char*
-extern IFEXT_STYPE IfExt_lval;
+#include "../../config.h"
 
-extern char* IntEval_String;
-extern int   IntEval_Result;
-extern int	 IntEval_Error;
-extern int(*IntEval_GetVar)(const char*);
+int Dos9_CmdStart(char* line);
 
-void IntEval_InputReset();
-
-#define INTEVAL_NOERROR 0
-#define INTEVAL_ALLOCERROR 1
-#define INTEVAL_SYNTAXERROR 2
-
-#endif // GLOBAL_H
+#endif // DOS9_CMD_START

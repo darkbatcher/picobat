@@ -46,11 +46,15 @@
 int Dos9_CmdEcho(char* lpLine)
 {
 
-	ESTR* lpEsParameter;
+	ESTR* lpEsParameter,
+			lpTmp;
+	char* tmp,
+		 	buf[1];
 
-	lpLine+=4;
+	lpLine += 4;
 
 	if (*lpLine!=' '
+		&& *lpLine!='\t'
 	    && !ispunct(*lpLine)
 	    && *lpLine!='\0') {
 
@@ -67,17 +71,19 @@ int Dos9_CmdEcho(char* lpLine)
 		puts(Dos9_EsToChar(lpEsParameter));
 
 
-	} else if (Dos9_GetNextParameterEs(lpLine, lpEsParameter)) {
+	} else if (tmp = Dos9_GetNextParameterEs(lpLine, lpEsParameter)) {
 
-		if (!stricmp(Dos9_EsToChar(lpEsParameter), "OFF")) {
+		tmp = Dos9_GetNextParameter(tmp, buf, sizeof(buf));
+
+		if (!stricmp(Dos9_EsToChar(lpEsParameter), "OFF") && tmp == NULL) {
 
 			bEchoOn=FALSE;
 
-		} else if (!stricmp(Dos9_EsToChar(lpEsParameter) , "ON")) {
+		} else if (!stricmp(Dos9_EsToChar(lpEsParameter) , "ON") && tmp == NULL) {
 
 			bEchoOn=TRUE;
 
-		} else if (!strcmp(Dos9_EsToChar(lpEsParameter), "/?")) {
+		} else if (!strcmp(Dos9_EsToChar(lpEsParameter), "/?") && tmp == NULL) {
 
 			Dos9_ShowInternalHelp(DOS9_HELP_ECHO);
 

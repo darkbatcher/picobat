@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2014 DarkBatcher
+ *   Copyright (C) 2010-2015 DarkBatcher
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -80,7 +80,18 @@ int Dos9_CmdCd_nix(char* lpLine)
 	char* lpNext;
 	ESTR* lpEsDir=Dos9_EsInit();
 
-	if (!(lpLine=strchr(lpLine, ' '))) {
+	if (!strnicmp(lpNext,"CD", 2)){
+		lpNext+=2;
+	} else if (!strnicmp(lpNext, "CHDIR", 5)) {
+		lpNext+=5;
+	}
+
+	if (*lpNext!=' '
+		&& *lpNext!='\t'
+		&& *lpNext!='\0'
+		&& *lpNext!=';'
+
+		&& *lpNext!=',') {
 		Dos9_ShowErrorMessage(DOS9_BAD_COMMAND_LINE, NULL, FALSE);
 		goto error;
 	}
@@ -171,15 +182,22 @@ error:
 
 int Dos9_CmdCd_win(char* lpLine)
 {
-    char   varname[]="=x:",
-          *lpNext,
-          current=*Dos9_GetCurrentDir(),
-          passed=0;
+    char varname[]="=x:",
+		*lpNext,
+		 current=*Dos9_GetCurrentDir(),
+		 passed=0;
 
-    ESTR*  lpesStr=Dos9_EsInit();
+    ESTR* lpesStr=Dos9_EsInit();
 
-    int    force=0,
-            status=0;
+    int force=0,
+		status=0;
+
+	if (!(lpLine=strchr(lpLine, ' '))) {
+		Dos9_ShowErrorMessage(DOS9_BAD_COMMAND_LINE, NULL, FALSE);
+		status = -1;
+		goto end;
+	}
+
 
     if (!(lpNext = Dos9_GetNextParameterEs(lpLine, lpesStr))) {
 

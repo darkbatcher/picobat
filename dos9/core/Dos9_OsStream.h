@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2014 DarkBatcher
+ *   Copyright (C) 2010-2015 DarkBatcher
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -23,10 +23,24 @@
    basis */
 
 #if defined(WIN32)
-#define Dos9_GetOsStreamName(str) str
+#define TRANS(str) str
 #elif defined(_POSIX_C_SOURCE)
-#define Dos9_GetOsStreamName(str) _Dos9_GetOsStreamName(str)
+#define TRANS(str) _Dos9_GetOsStreamName(str)
 const char* _Dos9_GetOsStreamName(const char* str);
+#endif
+
+#if defined(WIN32)
+#define NUL "NUL"
+#define CON "CON"
+#define PRN "PRN"
+#define LPT "LPT"
+#define COM "COM"
+#elif defined(_POSIX_C_SOURCE)
+#define NUL "/dev/null"
+#define CON "/dev/tty"
+#define PRN "/dev/lpt0"
+#define LPT "/dev/lpt"
+#define COM "/dev/ttyS"
 #endif
 
 #endif

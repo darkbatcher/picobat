@@ -26,14 +26,7 @@ variable  [_a-zA-Z]+[_a-zA-Z0-9]*
 {blancs}  { /* On ignore */ }
 
 {variable} {
-		char* lpReturn;
-		
-		if ((lpReturn=getenv(yytext))) {
-			IntEval_lval=atoi(lpReturn);
-		} else {
-			IntEval_lval=0;
-		}
-		
+		IntEval_lval=IntEval_GetVar(yytext);
 		return(VARIABLE);
 	}
 

@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2014 DarkBatcher
+ *   Copyright (C) 2010-2015 DarkBatcher
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -178,7 +178,7 @@ int Dos9_OpenOutput(LPSTREAMSTACK lpssStreamStack, char* lpName, int iDescriptor
 	}
 
 	DEBUG("File is about to be loaded");
-	if ((iStd[iDescriptor]=open(Dos9_GetOsStreamName(lpName),
+	if ((iStd[iDescriptor]=open(TRANS(lpName),
                                     iMode, S_IREAD | S_IWRITE))!= -1) {
 
 		DEBUG("File loaded !");

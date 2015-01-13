@@ -4,6 +4,11 @@
 
 static char lpCurrentDir[FILENAME_MAX+3]="CD=";
 
+int Dos9_GetExeFilename(char* lpBuf, size_t iBufSize)
+{
+    return GetModuleFileName(NULL, lpBuf, iBufSize);;
+}
+
 int Dos9_GetExePath(char* lpBuf, size_t iBufSize)
 {
     char* lpToken;

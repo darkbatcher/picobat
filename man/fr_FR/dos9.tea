@@ -26,24 +26,30 @@
 	
 {{Synopsis}}
 
-${	DOS9 [/v] [/c] [/f] [/e] [/q] [/i entrée] [/o sortie] [fichier]}
+${	DOS9 [/A[:]attr] [/i entrée] [/o sortie] [fichier] [/c commande| /k commande]}
 
 	Exécute un fichier de commande ou attend une entrée de commande de
 	l'utilisateur.
 
 		- {fichier} : Chemin du script de commande a exécuter.
 		
-		- {/v}	  : Active {spec/exp|l'expansion retardée de variable}.
+		- {/c commande} : Exécute la commande {commande} puis quitte l'interpréteur.
 		
-		- {/c}	  : Active l'option {CMDLYCORRECT} de la commande {setlocal|SETLOCAL}.
+		- {/k commande} : Exécute la commande {commande} puis reste actif.
+		
+		- {/A[:]attr} : Attributs déterminant le comportement de {dos9|Dos9}
+		
+		@-- {v}	  : Active {spec/exp|l'expansion retardée de variable}.
+		
+		@-- {c}   : Active l'option {CMDLYCORRECT} de la commande {setlocal|SETLOCAL}.
 		ce qui permet de forcer le mode de compatibilité entre {Dos9} et {cmd.exe}.
 		
-		- {/f}	  : Active les nombres flotants dans la commande {SET}. Pour
+		@-- {f}	  : Active les nombres flotants dans la commande {SET}. Pour
 		plus d'information, consultez la page {setaf|Commande SET (nombres flotants)}.
 		
-		- {/e}	  : Désactive l'affichage du chemin courant.
+		@-- {e}	  : Désactive l'affichage du chemin courant.
 		
-		- {/q} : N'affiche pas l'écran de bienvenue.
+		@-- {q}   : N'affiche pas l'écran de bienvenue.
 		
 		- {/i entrée} : redirige le descripteur de fichier {entrée} vers
 		l'entrée standard.

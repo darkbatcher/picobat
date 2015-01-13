@@ -1092,4 +1092,43 @@ ${make local}
 	accept both UTF-8 encoded text and ansi escape codes to be mixed with
 	text.
 
+{{Thursday 6th, January 2015}}
 
+	- Did some final arrengments that make {Dos9} ready to realease on the
+	GNU/Linux platforms. There is some work left for make it run under
+	Microsoft Windows platforms.
+
+	- Fixed a little bug of the {More} command under Microsoft windows.
+	MS-Windows does not return line-feed characters using getch() function
+	but returns untranslated carriot return (0x0D). This subtilities was
+	not taken account by the {More} command, so that the enter was inactive.
+
+	- Changed the way {Dos9} command line works; Now it's possible to use
+	widespread switches like '/C' or '/K'. The way to tell the interpreter
+	which option should be enabled and which should not through the command
+	line has also changed.
+ 
+	- Fixed minor issues due to the previous behaviour change of Dos9_GetExePath()
+	that affected both _FOR_ command and Dos9_RunExternalBatch() function.
+
+	- Fixed the broken pipe system introduced by the change of pipe system
+	on GNU/Linux (and most of *nices). This is not fully tested though. But
+	the new way of handling pipes permits infinite length for both input
+	and output of commands. 
+	
+{{Tuesday 13th, January 2015}}
+	
+	- Fixed an minor issue in the {Dos9_SetEnv} function that caused some
+	rare bugs that made {SET} command to raise a segfault if it was invoked
+	to remove a variable from the environment. It wasn't that frequent because
+	usualy, variable removal didn't worked, due to another bug. This is now
+	fixed.
+	
+	- Added the {START} command on Windows, That works pretty well, even if
+	some parameters seem to be ignored by windows, such as {/Wait}. The
+	command have few option compared to cmd's version, but, it's a good start
+	point anyway.
+	
+	- Changed the version number to 214.1b, that mean, it's the beta of the
+	first stable version which is expected to be released within a short
+	time.

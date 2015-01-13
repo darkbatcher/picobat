@@ -26,8 +26,9 @@
 #include "global.h"
 
 int IntEval_Error=INTEVAL_NOERROR;
+int(*IntEval_GetVar)(const char*);
 
-int IntEval_Eval(const char* lpLine)
+int IntEval_Eval(const char* lpLine, int(*fn)(const char*))
 {
     char* lpInteval;
 
@@ -44,6 +45,7 @@ int IntEval_Eval(const char* lpLine)
 	IntEval_InputReset();
 	IntEval_Error=INTEVAL_NOERROR;
 	IntEval_Result=0;
+	IntEval_GetVar=fn;
 
     IntEval_parse();
 

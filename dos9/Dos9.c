@@ -102,18 +102,24 @@ int main(int argc, char *argv[])
 	    And display starting message
 	*/
 
+	DOS9_DBG("Initializing Dos9's custom environ");
+
 	char *lpFileName="",
 	      lpFileAbs[FILENAME_MAX],
 	      lpTmp[FILENAME_MAX],
 	      lpExePath[FILENAME_MAX],
-	      lpTitle[FILENAME_MAX]="Dos9 [" DOS9_VERSION "] - ";
+	      lpTitle[FILENAME_MAX]="Dos9 [" DOS9_VERSION "] - ",
+		 *lpCmdCSwitch=NULL;
 
 
 	int i,
 	    j,
 	    c='0',
 	    bQuiet=FALSE,
-	    bGetSwitch=TRUE;
+	    bGetSwitch=TRUE,
+	    bExitAfterCmd=TRUE;
+
+	ESTR* lpesCmd;
 
     DOS9_DBG("Initializing Dos9's custom environ");
     lpeEnv = Dos9_InitEnv(environ);
@@ -197,34 +203,45 @@ int main(int argc, char *argv[])
 			argv[i]++;
 			switch(toupper(*argv[i])) {
 
-				case 'V':
-					/* enables delayed expansion */
-					bDelayedExpansion=TRUE;
-					break;
+				case 'A':
+				if (*(argv[i]+1) == ':')
+					argv[i]++;
 
-				case 'F':
-					/* enables floats */
-					bUseFloats=TRUE;
-					break;
+				while (*(argv[i]++)) {
+					switch (toupper(*argv[i])) {
 
-				case 'E':
-					bEchoOn=FALSE;
-					break;
+						case 'V':
+							/* enables delayed expansion */
+							bDelayedExpansion=TRUE;
+							break;
 
-				case 'C':
-					/* enable cmd-compatible mode */
-                    #if !defined(DOS9_STATIC_CMDLYCORRECT)
-                    bCmdlyCorrect=TRUE;
-                    #else
-                    Dos9_ShowErrorMessage(DOS9_UNABLE_SET_OPTION,
-                                            "CMDLYCORRECT",
-                                            FALSE);
-                    #endif
-					break;
+						case 'F':
+							/* enables floats */
+							bUseFloats=TRUE;
+							break;
 
-				case 'Q':
-					bQuiet=TRUE; // run silently
-					break;
+						case 'E':
+							bEchoOn=FALSE;
+							break;
+
+						case 'C':
+							/* enable cmd-compatible mode */
+							#if !defined(DOS9_STATIC_CMDLYCORRECT)
+							bCmdlyCorrect=TRUE;
+							#else
+							Dos9_ShowErrorMessage(DOS9_UNABLE_SET_OPTION,
+													"CMDLYCORRECT",
+													FALSE);
+							#endif
+							break;
+
+						case 'Q':
+							bQuiet=TRUE; // run silently
+							break;
+					}
+
+				}
+				break;
 
 				case 'I':
 					if (!argv[++i]) {
@@ -246,6 +263,15 @@ int main(int argc, char *argv[])
 
 					iOutputD=atoi(argv[i]); // select input descriptor
 					Dos9_OpenOutputD(lppsStreamStack, iOutputD, DOS9_STDOUT);
+					break;
+
+				case 'K':
+					bExitAfterCmd = FALSE;
+				case 'C':
+					if (lpCmdCSwitch != NULL || argv[++i] == NULL)
+						Dos9_ShowErrorMessage(DOS9_BAD_COMMAND_LINE, NULL, -1);
+
+					lpCmdCSwitch = argv[i];
 					break;
 
 				case '?':
@@ -300,8 +326,6 @@ int main(int argc, char *argv[])
 	for (; c<='9'; c++)
 		Dos9_SetLocalVar(lpvLocalVars, c , "");
 
-	/* initialisation du système de génération aléatoire */
-
 	srand(time(NULL));
 
 	colColor=DOS9_COLOR_DEFAULT;
@@ -348,6 +372,17 @@ int main(int argc, char *argv[])
 
 	DOS9_DBG("\tRan\n");
 
+	if (lpCmdCSwitch != NULL) {
+
+		lpesCmd=Dos9_EsInit();
+
+		Dos9_EsCpy(lpesCmd, lpCmdCSwitch);
+		Dos9_RunLine(lpesCmd);
+
+		if (bExitAfterCmd == TRUE)
+			goto skip;
+	}
+
 	if (*lpFileName!='\0') {
 
 		/* generates real path if the path is uncomplete */
@@ -368,6 +403,7 @@ int main(int argc, char *argv[])
 
 	DOS9_DBG("\t Ran\nExiting...\n");
 
+skip:
 
 	Dos9_Exit();
 

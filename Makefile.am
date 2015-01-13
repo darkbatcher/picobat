@@ -20,15 +20,14 @@ EXTRA_DIST = po man scripts LICENSE README WHATSNEW
 ACLOCAL_AMFLAGS = -I m4
 AUTOMAKE_OPTIONS = foreign subdir-objects
 SUBDIRS = libinteval libmatheval libDos9 dos9 tea dump po
-
 SHAREDEXT = @SHAREDEXT@
 
 # a rule to make local distributions of dos9
 
 dirtree :
-	mkdir -p ./bin
-	mkdir -p ./bin/cmd
-	mkdir -p ./bin/share
+	for i in ./bin ./bin/cmd ./bin/share ./bin/share/hlp; do \
+		$(MKDIR_P) $$i;\
+	done;
 
 textfiles : all
 	for i in README WHATSNEW; do \
@@ -44,7 +43,7 @@ local : textfiles dirtree
 	cp ./WHATSNEW ./bin/
 	cp ./scripts/Dos9_Auto.bat ./bin/
 	cp ./scripts/cmd/hlp.bat ./bin/cmd
-	cp -R ./man ./bin/share/man
+	cp -R ./man ./bin/share/hlp
 	cd po && make local
 
 dist-bin : local

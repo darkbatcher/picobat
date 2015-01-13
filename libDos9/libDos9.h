@@ -376,6 +376,7 @@ LIBDOS9 int Dos9_DirExists(const char* lpPath);
 LIBDOS9 int Dos9_UpdateCurrentDir(void);
 LIBDOS9 int Dos9_SetCurrentDir(const char* lpPath);
 LIBDOS9 int Dos9_GetExePath(char* lpBuf, size_t iBufSize);
+LIBDOS9 int Dos9_GetExeFilename(char* lpBuf, size_t iBuffSize);
 
 #define Dos9_IsDelim(ch) \
     ((ch==' ') || (ch=='\t') || (ch==',') || (ch==';') || (ch=='\n'))

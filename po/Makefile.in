@@ -59,3 +59,5 @@ m-pot: ../dos9/lang/Dos9_Lang.c ../dos9/lang/Dos9_ShowHelp.c ../dos9/errors/Dos9
 	$(XGETTEXT) -d Dos9-errors -o pot/Dos9-errors.pot "../dos9/errors/Dos9_Errors.c" -c="//"
 	$(XGETTEXT) -d Dos9-msg -o pot/Dos9-msg.pot "../dos9/lang/Dos9_Lang.c" -c="//"
 	$(XGETTEXT) -d Dos9-hlp -o pot/Dos9-hlp.pot "../dos9/lang/Dos9_ShowHelp.c" -c="//"
+	
+clean:

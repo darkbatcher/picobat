@@ -26,5 +26,5 @@ Name: libmatheval
 Description: Library of functions for evaluating mathematical expressions
 Version: 1.1.11
 Libs: -L${libdir} -lmatheval
-Libs.private: -lfl -lm
+Libs.private:  -lm
 Cflags: -I${includedir}

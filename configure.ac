@@ -17,7 +17,7 @@ dnl   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 dnl
 
 AC_INIT([Dos9],
-	[2014.0.9b],
+	[214.1b],
 	[darkbatcher@dos9.org],
 	[Dos9],
 	[http://www.dos9.org/])
@@ -47,6 +47,9 @@ AC_PROG_LIBTOOL
 AC_STDC_HEADERS
 
 AM_GNU_GETTEXT([external])
+LIBS="$LIBS $LIBINTL"
+
+echo $LIBINTL - $LTLIBINTL
 
 dnl Get .libs path
 AC_SUBST([DOS9_OBJDIR], [$objdir])
@@ -57,8 +60,6 @@ AC_ARG_ENABLE([static-cmdlycorrect],
 		[foo])],
 	[],
 	[enable_static_cmdlycorrect=no])
-
-echo "x$enable_static_cmdlycorrect"
 
 AS_IF([test "x$enable_static_cmdlycorrect" = x1],
 	[AC_DEFINE([DOS9_STATIC_CMDLYCORRECT],

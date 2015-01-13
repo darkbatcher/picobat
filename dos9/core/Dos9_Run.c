@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2014 DarkBatcher
+ *   Copyright (C) 2010-2015 DarkBatcher
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -112,27 +112,124 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
 
 #ifdef WIN32
 
-int Dos9_ExecOperators(PARSED_STREAM* lppsStream)
+int Dos9_ExecOperators(PARSED_STREAM** lpppsStream)
 {
+	PARSED_STREAM* lppsStream = *lpppsStream;
+	ESTR* lpCommand;
+
+	char lpProgName[FILENAME_MAX],
+		 lpAttrArgs[16]="/A:QE",
+		 input[16],
+		 output[16];
+	char* lpArgs[FILENAME_MAX];
+
+	int i,
+		j=5,
+		pipedes[2];
+
+	int olddes = 0;
 
 	lppsStreamStack=Dos9_Pipe(lppsStreamStack);
 
-	if (lppsStream==NULL)
-		return 0;
+loop:
 
-	//fprintf(stderr, "Stream Status: cNodeType=%d\n", lppsStream->cNodeType);
-	//Dos9_DumpStreamStack(lppsStreamStack);
+    if (lppsStream->lppsNode
+        && lppsStream->lppsNode->cNodeType == PARSED_STREAM_NODE_PIPE) {
 
-	if (lppsStream->lppsNode != NULL) {
+		/* OK, so we are running on Micro$oft Windows... This is pretty annoying
+		   because the lack of fork equivalent call messes everything up,
+		   resulting in harder job */
 
-		if (lppsStream->lppsNode->cNodeType
-		    == PARSED_STREAM_NODE_PIPE)
-			Dos9_OpenPipe(lppsStreamStack);
-	}
+		/* Get pipe file descriptors */
+		if (pipe(pipedes, 1024, O_TEXT) == -1)
+            Dos9_ShowErrorMessage(DOS9_CREATE_PIPE | DOS9_PRINT_C_ERROR,
+                                    __FILE__ "/Dos9_ExecOperators()",
+                                    -1);
 
-	//Dos9_DumpStreamStack(lppsStreamStack);
+		/* prepare the command-line arguments befaure launching the program */
+		Dos9_GetExeFilename(lpProgName, sizeof(lpProgName));
 
-	//while (getchar()!='\n');
+		lpArgs[(i=0)] = lpProgName;
+		lpArgs[++i] = lpAttrArgs;
+
+		if (bDelayedExpansion)
+			lpAttrArgs[j++] = 'V';
+
+		if (bCmdlyCorrect)
+			lpAttrArgs[j++] = 'C';
+
+		lpAttrArgs[j] = '\0';
+
+		/* if the input descriptor is from a previous pipe */
+		if (olddes != 0) {
+
+			snprintf(input, sizeof(input), "%d", olddes);
+
+			lpArgs[++i] =  "/I";
+			lpArgs[++i] =  input;
+
+		}
+
+		snprintf(output, sizeof(output), "%d", pipedes[1]);
+
+		lpArgs[++i] = "/O";
+		lpArgs[++i] = output;
+
+		/* Start the line */
+		lpArgs[++i] = "/C";
+
+		lpCommand = Dos9_EsInit();
+		Dos9_EsCpy(lpCommand, "\"");
+		Dos9_EsCatE(lpCommand, lppsStream->lpCmdLine);
+		Dos9_EsCat(lpCommand, "\"");
+
+		lpArgs[++i] = Dos9_EsToChar(lpCommand);
+
+		/* The la parameter must be NULL */
+		lpArgs[++i] = NULL;
+
+		/* Launches a sub Dos9 command prompt */
+		spawnv(_P_NOWAIT, lpArgs[0], (char * const*)lpArgs);
+
+		if (errno == ENOENT) {
+
+			Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR | DOS9_PRINT_C_ERROR,
+		        	              lpArgs[0],
+		    	    			  FALSE);
+
+			return FALSE;
+
+		}
+
+		/* Save the output of the pipe */
+		close(pipedes[1]);
+
+		if (olddes != 0)
+			close(olddes);
+
+		olddes = pipedes[0];
+
+		Dos9_EsFree(lpCommand);
+
+    	if (lppsStream->lppsNode) {
+
+    		lppsStream = *lpppsStream = lppsStream->lppsNode;
+    		goto loop;
+
+    	}
+
+    } else if (olddes != 0) {
+
+    	/* This is logically the last pipe of a series of pipes */
+    	lppsStreamStack = Dos9_PushStreamStackIfNotPipe(lppsStreamStack);
+		Dos9_OpenOutputD(lppsStreamStack, olddes, DOS9_STDIN);
+
+    } else if (!lppsStream->lppsNode
+               && lppsStream->cNodeType != PARSED_STREAM_NODE_PIPE) {
+
+        lppsStreamStack = Dos9_Pipe(lppsStreamStack);
+
+    }
 
 	switch (lppsStream->cNodeType) {
 
@@ -144,9 +241,11 @@ int Dos9_ExecOperators(PARSED_STREAM* lppsStream)
 	case PARSED_STREAM_NODE_NOT :
 		/* this condition is true when the instruction
 		   before failed */
+		   Dos9_Pipe(lppsStreamStack);
 		return iErrorLevel;
 
 	case PARSED_STREAM_NODE_YES:
+		   Dos9_Pipe(lppsStreamStack);
 		return !iErrorLevel;
 
 	}
@@ -179,7 +278,7 @@ loop:
 
         if (pid == 0) {
 
-            /* don't care about redirections, this process that will *eventually* die */
+            /* don't care about redirections, this process will *eventually* die */
             Dos9_OpenOutputD(lppsStreamStack, pipedes[1], DOS9_STDOUT);
 
             Dos9_RunCommand(lppsStream->lpCmdLine);
@@ -533,7 +632,9 @@ int Dos9_RunExternalCommand(char* lpCommandLine)
 	Dos9_EsReplace(lpEstr[0], "\"", "");
 
 	for (; lpEstr[i] && (i < FILENAME_MAX); i++) {
+
 		lpArguments[i]=Dos9_EsToChar(lpEstr[i]);
+
 	}
 
 	lpArguments[i]=NULL;
@@ -579,13 +680,20 @@ error:
 int Dos9_RunExternalFile(char* lpFileName, char** lpArguments)
 {
 	int res;
-
+	char str[FILENAME_MAX+2],
+		 *tmp;
 	errno=0;
 
     Dos9_ApplyEnv(lpeEnv);
 
+	snprintf(str, sizeof(str), "\"%s\"", lpArguments[0]);
+	tmp = lpArguments[0];
+	lpArguments[0] = str;
+
 	/* in windows the result is directly returned */
 	res=spawnv(_P_WAIT, lpFileName, (char * const*)lpArguments);
+
+	lpArguments[0] = tmp;
 
 	if (errno==ENOENT) {
 
@@ -678,26 +786,25 @@ int Dos9_RunExternalFile(char* lpFileName, char** lpArguments)
 int Dos9_RunExternalBatch(char* lpFileName, char* lpFullLine, char** lpArguments)
 {
 
-        int i;
+        int i=FILENAME_MAX-1;
 
         char lpTmp[FILENAME_MAX],
-             lpExePath[FILENAME_MAX];
+             lpExePath[FILENAME_MAX],
              *lpArgs[FILENAME_MAX+2];
 
         /* these are batch */
 
-		for (; (i > 0) && (i < FILENAME_MAX); i--)
+		for (i; (i > 0) && (i < FILENAME_MAX); i--)
 			lpArgs[i+2]=lpArguments[i];
-
-		lpArguments[i+2]=NULL;
-
-		lpArguments[2]=lpFilename;
-		lpArguments[1]="//"; /* use this switch to prevent
-                                other switches from being executed */
 
 		Dos9_GetExePath(lpExePath, sizeof(lpExePath));
 
-		snprintf(lpTmp, sizeof(lpFileName) ,"%s/dos9.exe", lpExePath);
+		snprintf(lpTmp, sizeof(lpTmp) ,"%s/dos9.exe", lpExePath);
+
+		lpArgs[0]=lpTmp;
+		lpArgs[2]=lpFileName;
+		lpArgs[1]="//"; /* use this switch to prevent
+                                other switches from being executed */
 
 		return Dos9_RunExternalFile(lpTmp, lpArgs);
 }

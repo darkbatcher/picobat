@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2014 DarkBatcher
+ *   Copyright (C) 2010-2015 DarkBatcher
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -56,5 +56,10 @@ char* lpInitVar[]= {
 	"DOS9_OS", DOS9_OS,
 	NULL, NULL, /* DOS9_PATH is dinamically generated */
     "DOS9_OS_TYPE", DOS9_OS_TYPE,
+    "NUL", NUL,
+    "CON", CON,
+    "COM", COM,
+    "PRN", PRN,
+    "LPT", LPT,
 	NULL, NULL
 };

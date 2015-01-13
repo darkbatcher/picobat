@@ -798,20 +798,13 @@ case 2:
 YY_RULE_SETUP
 #line 28 "lexer.l"
 {
-		char* lpReturn;
-		
-		if ((lpReturn=getenv(IntEval_text))) {
-			IntEval_lval=atoi(lpReturn);
-		} else {
-			IntEval_lval=0;
-		}
-		
+		IntEval_lval=IntEval_GetVar(IntEval_text);
 		return(VARIABLE);
 	}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 40 "lexer.l"
+#line 33 "lexer.l"
 {
       IntEval_lval=strtol(IntEval_text, NULL, 0);
       return(NOMBRE);
@@ -819,96 +812,96 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 45 "lexer.l"
+#line 38 "lexer.l"
 return(PLUS);
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 46 "lexer.l"
+#line 39 "lexer.l"
 return(MOINS);
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 48 "lexer.l"
+#line 41 "lexer.l"
 return(FOIS);
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 49 "lexer.l"
+#line 42 "lexer.l"
 return(DIVISE);
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 50 "lexer.l"
+#line 43 "lexer.l"
 return(MODULO);
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 52 "lexer.l"
+#line 45 "lexer.l"
 return(PARENTHESE_GAUCHE);
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 53 "lexer.l"
+#line 46 "lexer.l"
 return(PARENTHESE_DROITE);
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 55 "lexer.l"
+#line 48 "lexer.l"
 return(NON_LOG);
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 56 "lexer.l"
+#line 49 "lexer.l"
 return(NON_BAB);
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 58 "lexer.l"
+#line 51 "lexer.l"
 return(OU_LOG);
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 59 "lexer.l"
+#line 52 "lexer.l"
 return(ET_LOG); 
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 61 "lexer.l"
+#line 54 "lexer.l"
 return(OU_BAB);
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 62 "lexer.l"
+#line 55 "lexer.l"
 return(ET_BAB);
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 63 "lexer.l"
+#line 56 "lexer.l"
 return(XOR_BAB);
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 65 "lexer.l"
+#line 58 "lexer.l"
 return(DEC_DROITE);
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 66 "lexer.l"
+#line 59 "lexer.l"
 return(DEC_GAUCHE);
 	YY_BREAK
 case 20:
 /* rule 20 can match eol */
 YY_RULE_SETUP
-#line 68 "lexer.l"
+#line 61 "lexer.l"
 return(FIN);
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 70 "lexer.l"
+#line 63 "lexer.l"
 ECHO;
 	YY_BREAK
-#line 912 "lexer.c"
+#line 905 "lexer.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1906,7 +1899,7 @@ void IntEval_free (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 70 "lexer.l"
+#line 63 "lexer.l"
 
 
 

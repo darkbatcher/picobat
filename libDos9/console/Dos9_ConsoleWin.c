@@ -94,7 +94,7 @@ void Dos9_ClearConsoleLine(void)
                                 &written
                                 );
 
-    SetCurrentCursorPosition(hConsole, pt);
+    SetConsoleCursorPosition(hConsole, pt);
 }
 
 void Dos9_ClearConsoleScreen(void)
@@ -218,7 +218,7 @@ LIBDOS9 int             Dos9_GetchWait(void)
 
 #elif defined(WIN32)
 
-int Dos9_GetchWait(void),
+int Dos9_GetchWait(void)
 {
     int c;
 

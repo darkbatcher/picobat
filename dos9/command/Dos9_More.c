@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2014 DarkBatcher
+ *   Copyright (C) 2010-2015 DarkBatcher
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -425,12 +425,12 @@ int Dos9_GetMoreNb(void)
 
 int Dos9_MorePrompt(int* toprint, int* skip, int* ok)
 {
-
+	int i;
     printf("-- More --");
 
     while (1) {
 
-        switch(Dos9_GetchWait()) {
+        switch(i=Dos9_GetchWait()) {
 
             case 'q':
             case 'Q':
@@ -452,6 +452,8 @@ int Dos9_MorePrompt(int* toprint, int* skip, int* ok)
                 *toprint = Dos9_GetMoreNb();
                 goto end;
 
+			case '\r': /* Windows actually returns a '\r' (ie 0x0D) when the
+						  user hits enter key, instead of returning '\n' */
             case '\n':
                 *toprint = 23;
                 goto end;

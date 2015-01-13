@@ -312,7 +312,7 @@ int Dos9_CmdSetP(char* lpLine)
 		*lpEqual='\0';
 		lpEqual++;
 
-		puts(lpEqual);
+		printf("%s", lpEqual);
 
 		Dos9_EsGet(lpEsInput, stdin);
 
@@ -523,7 +523,7 @@ int Dos9_CmdSetEvalInt(ESTR* lpExpression)
 
 	}
 
-	iResult=IntEval_Eval(lpEqual+1);
+	iResult=IntEval_Eval(lpEqual+1, _Dos9_SetGetVarInt);
 
 	if (IntEval_Error != INTEVAL_NOERROR) {
 

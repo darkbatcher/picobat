@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2014 DarkBatcher
+ *   Copyright (C) 2010-2015 DarkBatcher
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -235,8 +235,12 @@ void Dos9_SetEnv(ENVBUF* pEnv, const char* name, const char* content)
 
     int i;
 
-    if (content == NULL)
+    if (content == NULL || *content == '\0') {
+
         Dos9_UnSetEnv(pEnv, name);
+    	return;
+
+    }
 
     if (!(namecpy = strdup(name)))
         goto error;
@@ -323,9 +327,10 @@ error:
 void  Dos9_UnSetEnv(ENVBUF* pEnv, const char* name)
 {
     ENVVAR **pRes,
-            key={name, NULL};
+            key={name, NULL},
+            *pKey = &key;
 
-    pRes = bsearch(&key, pEnv->envbuf, pEnv->index, sizeof(ENVVAR*), Dos9_EnvCompName);
+    pRes = bsearch(&pKey, pEnv->envbuf, pEnv->index, sizeof(ENVVAR*), Dos9_EnvCompName);
 
     if (pRes) {
 
@@ -372,7 +377,7 @@ void Dos9_ApplyEnv(ENVBUF* pEnv)
 
         #if defined(_POSIX_C_SOURCE)
         setenv(pEnv->envbuf[i]->name, pEnv->envbuf[i]->content, 1);
-        #elif defined(_POSIX_C_SOURCE)
+        #elif defined(WIN32)
         SetEnvironmentVariable(pEnv->envbuf[i]->name,
                                             pEnv->envbuf[i]->content);
         #endif

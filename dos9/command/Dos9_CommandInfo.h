@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2014 DarkBatcher
+ *   Copyright (C) 2010-2015 DarkBatcher
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -47,6 +47,7 @@ COMMANDINFO lpCmdInfo[]= {
 	{"MORE", Dos9_CmdMore, STRLEN("MORE")},
 	{"GOTO", Dos9_CmdGoto, STRLEN("GOTO")},
 	{"GOTO:", Dos9_CmdGoto, 0},
+	{"START", Dos9_CmdStart, STRLEN("START")},
 	{"CD", Dos9_CmdCd, STRLEN("CD")},
 	{"CHDIR", Dos9_CmdCd, STRLEN("CHDIR")},
 	{"DIR", Dos9_CmdDir, STRLEN("DIR")},

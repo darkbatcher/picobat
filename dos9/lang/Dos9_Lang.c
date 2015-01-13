@@ -115,14 +115,16 @@ void Dos9_LoadStrings(void)
 
 	lpAskInvalid=gettext("Please enter a correct choice (or type enter to choose default) !\n");
 
-	lpHlpMain=gettext("Usage:\tDOS9 [/v] [/c] [/f] [/e] [/q] [/i in] [/o out] [file]\n\n\
-\t/v\tEnable delayed expansion.\n\
-\t/c\tEnable CMDLYCORRECT option to enable more compatibility with\n\
-\t\tcmd.exe.\n\
-\t/f\tEnable floating numbers support.\n\
-\t/e\tDisable echo command (disable current path printing).\n\
-\t/q\tQuiet Mode (does not print start screen).\n\
-\t/i in\tFile descriptor to used as input.\n\
-\t/o out\tFile descriptor to be used as output.\n\
-\tfile\tA batch file to be executed.\n");
+	lpHlpMain=gettext("Usage:\tDOS9 [/A[:]attr] [/I in] [/O out] [file] [/K cmd|/C cmd]\n\n\
+\t/A:attr\tA list of attributes for Dos9\n\
+\t\tC\tEnable CMDLYCORRECT option to enable more compatibility\n\
+\t\t\twith cmd.exe.\n\
+\t\tF\tEnable floating numbers support.\n\
+\t\tE\tDisable echo command (disable current path printing).\n\
+\t\tQ\tQuiet Mode (does not print start screen).\n\
+\t/I in\tFile descriptor to used as input.\n\
+\t/O out\tFile descriptor to be used as output.\n\
+\tfile\tA batch file to be executed.\n\
+\t/C cmd\tRun cmd command and exit\n\
+\t/K cmd\tRun cmd command and stay active\n");
 }

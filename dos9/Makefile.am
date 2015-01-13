@@ -17,6 +17,7 @@
 #
 
 AUTOMAKE_OPTIONS = foreign subdir-objects
+dos9_LDFLAGS = -static -no-undefined
 
 bin_PROGRAMS = dos9
 
@@ -35,7 +36,8 @@ core/Dos9_Globals.h core/Dos9_Jump.h core/Dos9_Parse.h core/Dos9_Read.h \
 core/Dos9_Run.h core/Dos9_ShowIntro.h core/Dos9_SplitPath.h \
 core/Dos9_Stream.h core/Dos9_Var.h core/Dos9_VersionInfo.h \
 errors/Dos9_Errors.h lang/Dos9_ShowHelp.h lang/Dos9_Lang.h gettext.h \
-command/Dos9_Find.h command/Dos9_More.h core/Dos9_Env.h core/Dos9_OsStream.h
+command/Dos9_Find.h command/Dos9_More.h core/Dos9_Env.h core/Dos9_OsStream.h \
+command/Dos9_Start.h
 
 dos9_SOURCES = ./Dos9.c ./core/Dos9_Args.c ./core/Dos9_Expand.c \
 ./core/Dos9_Globals.c \
@@ -54,9 +56,9 @@ dos9_SOURCES = ./Dos9.c ./core/Dos9_Args.c ./core/Dos9_Expand.c \
 ./command/Dos9_Ren.c ./command/Dos9_Rmdir.c ./command/Dos9_Set.c \
 ./command/Dos9_Setlocal.c ./command/Dos9_Shift.c ./command/Dos9_Title.c \
 ./command/Dos9_Type.c ./command/Dos9_Find.c ./core/Dos9_Env.c \
-./command/Dos9_More.c ./core/Dos9_OsStream.c
+./command/Dos9_More.c ./core/Dos9_OsStream.c ./command/Dos9_Start.c
 
 dos9_LDADD = ../libinteval/libinteval.la ../libmatheval/lib/libmatheval.la \
-../libDos9/libDos9.la @LIBS@
+../libDos9/libDos9.la 
 
 AM_CFLAGS = -I../libinteval -I../libmatheval/lib -I../libDos9 @CFLAGS@

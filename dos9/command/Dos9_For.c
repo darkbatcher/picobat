@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2014 DarkBatcher
+ *   Copyright (C) 2010-2015 DarkBatcher
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -505,7 +505,7 @@ int Dos9_ForMakeInfo(char* lpOptions, FORINFO* lpfiInfo)
 	char* lpToken;
 	int iReturn=0;
 
-	while ((lpOptions = Dos9_GetNextParameterEs(lpOptions, lpParam))) {
+	while ((lpOptions = Dos9_GetNextParameterEsD(lpOptions, lpParam, " "))) {
 
 		if (!(stricmp(Dos9_EsToChar(lpParam), "usebackq"))) {
 			/* if the script specifies "usebackq" it will change dos9 behaviour
@@ -1056,9 +1056,9 @@ int Dos9_ForMakeInputInfo(ESTR* lpInput, INPUTINFO* lpipInfo, FORINFO* lpfrInfo)
                existence before starting the loop, Although cmd.exe may do
                so (haven't checked yet) */
 			if (!(lpipInfo->Info.InputFile.pFile=
-                    fopen(
+                    fopen(TRANS(
                         Dos9_EsToChar(lpipInfo->Info.InputFile.lpesFiles[0])
-                        , "r"))) {
+                        ), "r"))) {
 
 				Dos9_ShowErrorMessage(DOS9_FILE_ERROR | DOS9_PRINT_C_ERROR,
                                         lpToken,
@@ -1174,22 +1174,25 @@ int Dos9_ForInputProcess_win(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn,
 	char* lpArgs[10];
 	char lpInArg[16],
 	     lpOutArg[16],
+	     lpAttrArg[16]="/A:QE",
 	     lpFileName[FILENAME_MAX];
 	FILE* pFile;
 
-	int i=0;
+	int i=0,
+		j=5;
 
-    Dos9_GetExePath(lpFileName, FILENAME_MAX);
+    Dos9_GetExeFilename(lpFileName, FILENAME_MAX);
 
 	lpArgs[i++]=lpFileName;
-	lpArgs[i++]="/Q";
-	lpArgs[i++]="/E";
+	lpArgs[i++]=lpAttrArg;
 
 	if (bDelayedExpansion)
-		lpArgs[i++]="/V";
+		lpAttrArg[j++]='V';
 
 	if (bCmdlyCorrect)
-		lpArgs[i++]="/C";
+		lpAttrArg[j++]='C';
+
+	lpAttrArg[j]='\0';
 
 	lpArgs[i++]="/I";
 
@@ -1207,7 +1210,7 @@ int Dos9_ForInputProcess_win(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn,
 
 	lpArgs[i]=NULL;
 
-	spawnvp(_P_NOWAIT, lpArgs[0], (char * const*)lpArgs);
+	spawnv(_P_NOWAIT, lpArgs[0], (char * const*)lpArgs);
 
 	if (errno == ENOENT) {
 
@@ -1384,8 +1387,8 @@ loop_begin:
                 /* if the file list is not finished, then, open the next file */
                 if (!(lpipInfo->Info.InputFile.pFile =
                         fopen(Dos9_EsToChar(lpipInfo->Info.InputFile.lpesFiles[
-                            lpipInfo->Info.InputFile.index
-                            ]), "r"))) {
+                            		lpipInfo->Info.InputFile.index
+                            	]), "r"))) {
 
                     Dos9_ShowErrorMessage(DOS9_FILE_ERROR | DOS9_PRINT_C_ERROR,
                             lpipInfo->Info.InputFile.lpesFiles[

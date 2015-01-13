@@ -26,6 +26,7 @@ tea_SOURCES = src/Tea_Load.c src/Tea_Node.c src/Tea_Output.c \
 src/out/tea_ansi_out.c src/out/tea_html_out.c src/out/tea_text_out.c \
 src/tea.c src/tea_strupr.c
 
+tea_LDFLAGS = -static -no-undefined
 tea_LDADD = ../libDos9/libDos9.la @LIBS@
 
 AM_CFLAGS = -I../libDos9 @CFLAGS@

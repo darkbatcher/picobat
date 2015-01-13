@@ -25,11 +25,18 @@
 
 #include <libDos9.h>
 
-// #define DOS9_DBG_MODE
+//#define DOS9_DBG_MODE
 #include "Dos9_Debug.h"
 
 #include "Dos9_Core.h"
 #include "Dos9_FilePath.h"
+
+#ifdef _POSIX_C_SOURCE
+#define TEST_ABSOLUTE_PATH(p) (*p == '/')
+#elif defined WIN32
+#define TEST_ABSOLUTE_PATH(p) (*p && *(p+1)==':' && (*(p+2)=='\\' || *(p+2)=='/'))
+#endif // _POSIX_C_SOURCE
+
 
 int Dos9_GetFilePath(char* lpFullPath, const char* lpPartial, size_t iBufSize)
 {
@@ -44,11 +51,22 @@ int Dos9_GetFilePath(char* lpFullPath, const char* lpPartial, size_t iBufSize)
 #ifdef WIN32
 
 	char *lpPathExtToken,
-	     *lpPathExtBegin=Dos9_GetEnv(lpEnv, "PATHEXT");
+	     *lpPathExtBegin=Dos9_GetEnv(lpeEnv, "PATHEXT");
 	int bFirstSubLoop;
 
 #endif // WIN32
 
+	if (TEST_ABSOLUTE_PATH(lpPartial)) {
+		/* if the path is already absolute */
+
+		if (!Dos9_FileExists(lpPartial))
+			return -1;
+
+		strncpy(lpFullPath, lpPartial, iBufSize);
+		lpFullPath[iBufSize-1] = '\0';
+
+		return 0;
+	}
 	DOS9_DBG("[Dos9_GetFilePath()]*** Start research of file : \"%s\"\n\n", lpPartial);
 
 	do {
