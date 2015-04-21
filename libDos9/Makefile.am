@@ -20,7 +20,7 @@ AUTOMAKE_OPTIONS = foreign subdir-objects
 
 lib_LTLIBRARIES = libDos9.la
 
-include_HEADERS = libDos9.h
+include_HEADERS = libDos9.h libDos9-int.h ./file/Dos9_File.h
 
 libDos9_la_SOURCES = ./cmdlist/Dos9_CmdList.c ./console/Dos9_ConsoleANSI.c \
 ./console/Dos9_ConsoleWin.c ./dir/Dos9_Attr.c ./dir/Dos9_Dir.c \

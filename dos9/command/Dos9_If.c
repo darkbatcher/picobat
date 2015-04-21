@@ -128,7 +128,7 @@ int Dos9_CmdIf(char* lpParam)
 
 		}
 
-		iResult=!strcmp(getenv("ERRORLEVEL"), lpArgument);
+		iResult=!strcmp(Dos9_GetEnv(lpeEnv, "ERRORLEVEL"), lpArgument);
 
 		if (iFlag & DOS9_IF_NEGATION)
 			iResult=!iResult;
@@ -146,7 +146,8 @@ int Dos9_CmdIf(char* lpParam)
 
 		}
 
-		lpflFileList=Dos9_GetMatchFileList(lpArgument, DOS9_SEARCH_DEFAULT);
+		lpflFileList=Dos9_GetMatchFileList(lpArgument, DOS9_SEARCH_GET_FIRST_MATCH
+                                                | DOS9_SEARCH_NO_STAT);
 
 		iResult=(lpflFileList == NULL) ? FALSE : TRUE;
 
@@ -182,7 +183,20 @@ int Dos9_CmdIf(char* lpParam)
 		/* the script uses normal comparisons */
 		lpComparison=Dos9_EsInit();
 
-		if ((lpNext=Dos9_GetNextParameterEs(lpParam, lpComparison))) {
+        lpNext=Dos9_GetNextParameterEs(lpParam, lpComparison);
+
+         if (!strcmp(lpComparison->str, "[")) {
+
+            lpNext = Dos9_IfExp_Compute(lpParam, &iResult, iFlag);
+
+            if (iResult == -1) {
+
+                Dos9_ShowErrorMessage(DOS9_INVALID_IF_EXPRESSION, lpParam, FALSE);
+                return -1;
+
+            }
+
+		 } else if (lpNext) {
 
 			if ((lpToken=strstr(Dos9_EsToChar(lpComparison), "=="))) {
 				/* if scipt uses old c-style comparison */
@@ -209,7 +223,7 @@ int Dos9_CmdIf(char* lpParam)
 
 				if (!(lpNext=Dos9_GetNextParameterEs(lpNext, lpOtherPart))) {
 
-					Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", TRUE);
+					Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
 					return -1;
 
 				}

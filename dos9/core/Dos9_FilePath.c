@@ -59,6 +59,8 @@ int Dos9_GetFilePath(char* lpFullPath, const char* lpPartial, size_t iBufSize)
 	if (TEST_ABSOLUTE_PATH(lpPartial)) {
 		/* if the path is already absolute */
 
+		DOS9_DBG("[Dos9_GetFilePath()]*** Path is absolute");
+
 		if (!Dos9_FileExists(lpPartial))
 			return -1;
 
@@ -194,7 +196,7 @@ int Dos9_MakePath(ESTR* lpReturn, int nOps, ...)
 
 	va_start(vaList, nOps);
 
-	Dos9_EsCpy(lpReturn, "");
+	*Dos9_EsToChar(lpReturn) = '\0';
 
 	for (i=0; i<nOps; i++) {
 

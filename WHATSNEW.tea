@@ -1109,7 +1109,7 @@ ${make local}
 	line has also changed.
  
 	- Fixed minor issues due to the previous behaviour change of Dos9_GetExePath()
-	that affected both _FOR_ command and Dos9_RunExternalBatch() function.
+	that affected both {FOR} command and Dos9_RunExternalBatch() function.
 
 	- Fixed the broken pipe system introduced by the change of pipe system
 	on GNU/Linux (and most of *nices). This is not fully tested though. But
@@ -1132,3 +1132,56 @@ ${make local}
 	- Changed the version number to 214.1b, that mean, it's the beta of the
 	first stable version which is expected to be released within a short
 	time.
+
+{{Tuesday 21th, April 2014}}
+
+	- Fixed a minor issue in the error system for the {IF} command, 
+	the command used to exit the interpretor uppon minor error.
+
+	- Added number of new command to deal with files. Among this command,
+	we have {MOVE}, {COPY}, {DEL}, {MD}, {RD} and some others.
+
+	- Changed the ESTR syntax. I think it is actually easier to access
+	the string by using a -> rather than an obscure macro. Moreover, it
+	renders the code more simple, it add less symbols.
+
+	- Continued french translation.
+
+	- New and reviewed man pages. Some manual pages were clearly outdated
+	as some had more than two years although the command changed. To clear
+	this out, man page content as been revised to be more relevant.
+
+	- Added a brand new Dos9 extension to the {IF} command. I found pretty
+	anoying that cmd (and thus Dos9) lacked support for multiple
+	conditions for a single if (e.g. logical expressions). Obviously
+	this could have been done previously by using the {SET} command to
+	evaluate an expression but this was time- and code-wasting. The
+	interpretor currently supports only {or} and {and} logical connectors.
+	These are widely sufficient for most cases, except some rare cases
+	that requires you to have {xor} either. This is not a big concern, it
+	is just about writing a few more code.
+
+	@- The syntax is pretty simple, but must include blanks around
+	brackets:
+
+		-- {expression} or {expression} : True if one of the two
+		expressions (at least) is true.
+
+		-- {expression} and {expression} : True if both expressions
+		are true.
+
+		-- [ expression ] : Denotes a higher precedence.
+
+	@- As you can see, the syntax is clear but efficient. You can use
+	test that are provided by the {IF} command : 
+
+		-- {not}
+
+		-- {defined}, {errorlevel}, {exist}
+	
+		-- {equ}, {neq}, {leq}, {geq}, {lss}, {gtr} and derivatives
+
+	@- Note that the {IF} command only interpret expressions as such if
+	they are surrounded by brackets, like in this example :
+
+	${if [ a equ b ] echo no, seriously ?}

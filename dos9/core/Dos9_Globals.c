@@ -63,3 +63,5 @@ char* lpInitVar[]= {
     "LPT", LPT,
 	NULL, NULL
 };
+
+jmp_buf jbBreak;

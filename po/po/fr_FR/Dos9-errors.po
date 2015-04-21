@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dos9 0.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-03 17:56+0200\n"
+"POT-Creation-Date: 2015-04-21 23:57+0200\n"
 "PO-Revision-Date: 2014-03-12 16:18+0100\n"
 "Last-Translator: DarkBatcher <darkbatcher@gmail.com>\n"
 "Language-Team: French <darkbatcher@dos9.org>\n"
@@ -240,8 +240,8 @@ msgid ""
 "Error : Unable to set option \"%s\", it is built statically inside your "
 "version of Dos9.\n"
 msgstr ""
-"Erreur : Impossible d'activer l'option \"%s\" qui est compilée à l'intérieur"
-"de Dos9.\n"
+"Erreur : Impossible d'activer l'option \"%s\" qui est compilée à "
+"l'intérieurde Dos9.\n"
 
 #: ../dos9/errors/Dos9_Errors.c:200
 #, c-format
@@ -264,6 +264,21 @@ msgid "Error : %s does not recieved any valid file to process.\n"
 msgstr "Erreur : %s n'a reçu aucun fichier valide à traiter.\n"
 
 #: ../dos9/errors/Dos9_Errors.c:212
+#, c-format
+msgid "Error : \"%s\" is not a valid number.\n"
+msgstr "Erreur :   \"%s\" n'est pas un nombre valide.\n"
+
+#: ../dos9/errors/Dos9_Errors.c:215
+#, c-format
+msgid "Error : Too many arguments for %s command\n"
+msgstr "Erreur : Trop d'arguments pour la commande %s.\n"
+
+#: ../dos9/errors/Dos9_Errors.c:218
+#, fuzzy, c-format
+msgid "Error : \"%s\" is not a valid expression for IF command.\n"
+msgstr "Erreur :   \"%s\" n'est pas une expreession mathématique valide.\n"
+
+#: ../dos9/errors/Dos9_Errors.c:221
 msgid ""
 "\n"
 "Aborting current command, press any key to end Dos9.\n"

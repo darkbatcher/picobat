@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2014 DarkBatcher
+ *   Copyright (C) 2010-2015 DarkBatcher
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -17,37 +17,10 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <math.h>
-#include <ctype.h>
-#include <string.h>
-#include <errno.h>
 
-#include <matheval.h>
-#include <inteval.h>
+#ifndef DOS9_CMD_BREAK
+#define DOS9_CMD_BREAK
 
-#include <libDos9.h>
+int Dos9_CmdBreak(char* line);
 
-#include "../core/Dos9_Core.h"
-
-#include "Dos9_Commands.h"
-
-#include "../lang/Dos9_Lang.h"
-#include "../lang/Dos9_ShowHelp.h"
-
-// #define DOS9_DBG_MODE
-#include "../core/Dos9_Debug.h"
-
-#include "../errors/Dos9_Errors.h"
-
-#include "Dos9_Move.h"
-
-/* Fixme : Introduce real code for the command which
-   is only a stub now */
-
-int Dos9_CmdMove(char* lpLine)
-{
-	return 0;
-}
+#endif

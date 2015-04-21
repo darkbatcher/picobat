@@ -77,7 +77,7 @@ int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
 	time_t iTime;
 
 	/* empty the line */
-	Dos9_EsCpy(lpRecieve, "");
+	*Dos9_EsToChar(lpRecieve) = '\0';
 
 	if (!(lpNameCpy=strdup(lpName)))
 		return FALSE;
@@ -251,7 +251,7 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 
 	int i=0;
 
-	Dos9_EsCpy(lpRecieve, "");
+    *Dos9_EsToChar(lpRecieve) = '\0';
 
 
 	if (*lpName!='~') {
@@ -420,7 +420,9 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 	}
 
 	if (cFlag[0]!=DOS9_ALL_PATH) {
-		Dos9_EsCpy(lpRecieve, "");
+
+		*Dos9_EsToChar(lpRecieve) = '\0';
+
 		for (i=0; cFlag[i]!=0; i++) {
 			switch (cFlag[i]) {
 

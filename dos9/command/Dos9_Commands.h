@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2014 DarkBatcher
+ *   Copyright (C) 2010-2015 DarkBatcher
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -42,15 +42,16 @@
 #include "Dos9_Title.h"
 #include "Dos9_Type.h"
 #include "Dos9_If.h"
+#include "Dos9_IfExp.h"
 #include "Dos9_Del.h"
 #include "Dos9_Dir.h"
 #include "Dos9_Copy.h"
-#include "Dos9_Move.h"
 #include "Dos9_Ren.h"
 #include "Dos9_Mkdir.h"
 #include "Dos9_Rmdir.h"
 #include "Dos9_Find.h"
 #include "Dos9_More.h"
 #include "Dos9_Start.h"
+#include "Dos9_Break.h"
 
 #endif // DOS9_CMD_ECHO_H

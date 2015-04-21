@@ -22,6 +22,7 @@
 #include <string.h>
 #include <errno.h>
 #include <assert.h>
+#include <setjmp.h>
 
 #ifdef _POSIX_C_SOURCE
 #include <sys/wait.h>
@@ -48,6 +49,17 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
 	     *lpTmp;
 
 	int res;
+    struct sigaction action;
+    memset(&action, 0, sizeof(action));
+
+	/* Create a non-local jump to get back to here if the user presses CTRL-C (ie. break)
+       Note that by using break, the user admits some part of memory leakage...
+       */
+    if (setjmp(jbBreak));
+
+    action.sa_handler=Dos9_SigHandlerBreak;
+    action.sa_flags=SA_NODEFER;
+	sigaction(SIGINT, &action, NULL); /* Sets the default signal handler */
 
 	while (!(pIn->bEof)) {
 
@@ -824,6 +836,11 @@ int Dos9_RunExternalBatch(char* lpFileName, char* lpFullLine, char** lpArguments
 
         /* if we are in the son process */
 
+        //Dos9_SetStreamStackLockState(lppsStreamStack, TRUE);
+
+        Dos9_ClearStack(lppsStreamStack, (void(*)(void*))free);
+        lppsStreamStack = Dos9_InitStreamStack();
+
         Dos9_FreeLocalBlock(lpvLocalVars);
         lpvLocalVars = Dos9_GetLocalBlock();
 
@@ -871,3 +888,8 @@ int Dos9_RunExternalBatch(char* lpFileName, char* lpFullLine, char** lpArguments
 }
 
 #endif /* WIN32 */
+
+void Dos9_SigHandlerBreak(int sig)
+{
+    longjmp(jbBreak, 1);
+}

@@ -251,6 +251,9 @@ LIBDOS9 LPFILELIST  Dos9_GetMatchFileList(char* lpPathMatch, int iFlag)
 	                        NULL  /* no callback */
 	                       };
 
+    if (strlen(lpPathMatch) > FILENAME_MAX-1)
+        return NULL;
+
 	if (iFlag & DOS9_SEARCH_NO_STAT) {
 		fpParam.bStat=FALSE;
 	}
@@ -464,6 +467,37 @@ Dos9_DirRecursive:
 		closedir(pDir);
 	}
 	return NULL;
+}
+
+LIBDOS9 int Dos9_GetStaticPart(const char* lpPathMatch, char* lpStaticPart, size_t size)
+{
+    char garbage;
+
+    return _Dos9_SplitMatchPath(lpPathMatch, lpStaticPart, size, &garbage, sizeof(garbage));
+}
+
+LIBDOS9 size_t Dos9_GetStaticLength(const char* str)
+{
+    char *ptr = str,
+         *orig = str;
+
+    while (*str) {
+
+        if (*str == '\\' || *str == '/') {
+
+            ptr = str;
+
+        } else if (*str == '*' || *str == '?') {
+
+            break;
+
+        }
+
+        str ++;
+
+    }
+
+    return (size_t)(ptr-orig);
 }
 
 int _Dos9_SplitMatchPath(const char* lpPathMatch, char* lpStaticPart, size_t iStaticSize,  char* lpMatchPart, size_t iMatchSize)

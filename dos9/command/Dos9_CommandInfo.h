@@ -56,7 +56,7 @@ COMMANDINFO lpCmdInfo[]= {
 	{"ERASE", Dos9_CmdDel, STRLEN("ERASE")},
 	{"REN", Dos9_CmdRen, STRLEN("REN")},
 	{"RENAME", Dos9_CmdRen, STRLEN("RENAME")},
-	{"MOVE", Dos9_CmdMove, STRLEN("MOVE")},
+	{"MOVE", Dos9_CmdCopy, STRLEN("MOVE")},
 	{"MD", Dos9_CmdMkdir, STRLEN("MD")},
 	{"MKDIR", Dos9_CmdMkdir, STRLEN("MKDIR")},
 	{"RD", Dos9_CmdRmdir, STRLEN("RD")},
@@ -68,7 +68,8 @@ COMMANDINFO lpCmdInfo[]= {
 	{"CALL:", Dos9_CmdCall, 0},
 	{"ALIAS", Dos9_CmdAlias, STRLEN("ALIAS")},
 	{"SHIFT", Dos9_CmdShift, STRLEN("SHIFT")},
-	{"FIND", Dos9_CmdFind, STRLEN("FIND")}
+	{"FIND", Dos9_CmdFind, STRLEN("FIND")},
+	{"BREAK", Dos9_CmdBreak, STRLEN("BREAK")}
 };
 
 #endif

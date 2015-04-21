@@ -21,9 +21,12 @@ SETLOCAL EnableDelayedExpansion
 if not exist !DOS9_PATH!/share/hlp MKDIR !DOS9_PATH!/share/hlp
 cd %DOS9_PATH%/share/hlp
 
-if not exist hlp.conf.bat call :config
-call hlp.conf.bat
+if not exist hlp.conf.bat (
+	echo No hlp.conf.bat
+	call :config
+)
 
+call hlp.conf.bat
 
 if /i "%~1" equ "/l" goto :list
 if /i "%~1" equ "/b" goto :build
@@ -35,7 +38,7 @@ ECHO Hlp - Manual page viewier Copyright ^(C^) 2013-2015 Romain Garbi ^(Darkbatc
 ECHO This program comes with ABSOLUTELY NO WARRANTY; This is free software,
 ECHO and you are welcome to redistribute it under the terms of the GNU CPL.
 ECHO.
-ECHO Hlp [page-name ^| /b [language [charset]] ^| /l ^| /d]
+ECHO Hlp [page-name ^| /b [language [charset]] ^| /c ^| /d]
 ECHO.
 ECHO     - page-name : The page to be opened
 ECHO.
@@ -62,6 +65,7 @@ ECHO This program comes with ABSOLUTELY NO WARRANTY; This is free software,
 ECHO and you are welcome to redistribute it under the terms of the GNU CPL.
 ECHO.
 
+ECHO first param "%~1"
 shift /1
 IF "%~1" equ "" (
 
@@ -132,7 +136,7 @@ FOR /F "tokens=*" %%A in ('dir /b /s /a:-d man/%lang_build%') do (
 	SET path_html_build=!path_build:man/%lang_build%=doc/html!.html
 	SET path_txt_build=!path_build:man/%lang_build%=doc/txt!.txt
 	
-	ECHO 	- file : !path_txt_build! 
+	ECHO      - file : !path_txt_build! 
 	tea %%A !path_txt_build!.tmp /E:UTF-8 /O:TEXT
 	
 	ECHO      - file : !path_ansi_build!
@@ -154,7 +158,7 @@ FOR /F "tokens=*" %%A in ('dir /b /s /a:-d man/%lang_build%') do (
 ECHO.
 ECHO.4] Create title search system
 FOR /F "tokens=*" %%A in ('dir /b /s /a:-D doc/txt/*.txt') do (
-	SET /p title= < "%%A" >NUL
+	SET /p title= < "%%A" > NUL
 	ECHO !title!@%%A
 ) > hlpdb
 
@@ -259,8 +263,9 @@ ECHO.
 :mode_retry
 set /p conf_mode=Please choose a mode (HTML/ansi/txt) : 
 if not defined conf_mode (
-	set conf_mode=HTML
-) else if /i !conf_mode! neq HTML if /i !conf_mode! neq ANSI if /i !conf_mode! neq TXT goto :mode_retry
+	set conf_mode=html
+) else if [ x!conf_mode! neq xhtml or x!conf_mode! neq xansi or x!conf_mode! ^
+neq xtxt ] goto :mode_retry
 ECHO.
 ECHO 2] Choosing locale :
 ECHO.
@@ -307,24 +312,15 @@ ECHO        * mode : %conf_mode%
 ECHO        * locale : %conf_locale%
 ECHO        * charset : %conf_charset%
 ECHO.
+ECHO 	If you are using a UNIX-based system that does not include the xdg-open
+ECHO program, You will probably need to edit the configuration file hlp.conf.bat
+ECHO to set the correct path to program to be used when opening html files.
 :Ok_retry
 set /p Ok=Do you really want to continue and save configuration (y/N) : 
-if not defined Ok (
-	GOTO :show_quit
-) else if /i !Ok! equ N (
+if /i [ not defined Ok or x!Ok! equ N ] (
 	GOTO :show_quit
 ) else if /i !Ok! neq Y (
 	GOTO :Ok_retry
-)
-
-if /i %conf_mode% equ HTML (
-    if %DOS9_OS_TYPE%==*NIX (
-	set conf_prg=%BROWSER%
-    ) else (
-	set conf_prg=start
-    )
-) else (
-    set conf_prg=more
 )
 
 (ECHO :: Hlp Configuration file
@@ -335,14 +331,15 @@ ECHO :: The command to view the stream
 ECHO set locale=%conf_locale%
 ECHO :: The locale to use when compiling
 ECHO set charset=%conf_charset%
+ECHO set html_prg=start
+ECHO set txt_prg=more
+ECHO set ansi_prg=more
+ECHO set view_cmd=!!%%mode%%_prg!!
 ECHO :: The charset to use when compiling) > hlp.conf.bat
 
 ECHO 5] Deleting outdated files :
 :: If we either change locale or encoding, we must regen files
-IF %conf_locale% neq !locale! (
-	if exist hlpdb del hlpdb
-)
-IF %conf_charset% neq !charset! (
+IF [ x%conf_locale% neq x!locale! or x%conf_charset% neq x!charset! ] (
 	if exist hlpdb del hlpdb
 )
 ECHO.

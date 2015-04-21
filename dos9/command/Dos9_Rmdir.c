@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2014 DarkBatcher
+ *   Copyright (C) 2010-2015 DarkBatcher
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -43,6 +43,7 @@
 #include "../errors/Dos9_Errors.h"
 
 #include "Dos9_Rmdir.h"
+#include "Dos9_Del.h"
 
 #include "Dos9_Ask.h"
 
@@ -58,77 +59,165 @@
 
 int Dos9_CmdRmdir(char* lpLine)
 {
-	ESTR* lpEstr=Dos9_EsInit();
-	int	bQuiet=FALSE,
-		bRecursive=FALSE,
-		iChoice;
+	ESTR *lpEstr=Dos9_EsInit(),
+          *name[FILENAME_MAX];
 
-	if (!(lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
+	int	mode=DOS9_SEARCH_DEFAULT | DOS9_SEARCH_NO_PSEUDO_DIR | DOS9_SEARCH_DIR_MODE,
+		param=DOS9_ASK_CONFIRMATION,
+		choice,
+		n=0,
+		i;
 
-		Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "RD/RMDIR", FALSE);
-		goto error;
+    FILELIST *next,
+             *dir,
+             *files = NULL;
 
-	}
+    if (!strnicmp(lpLine, "RD", 2)) {
+
+        lpLine +=2;
+
+    } else {
+
+        lpLine +=5;
+    }
 
 	while ((lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
 
 		if (!strcmp(Dos9_EsToChar(lpEstr), "/?")) {
 
 			Dos9_ShowInternalHelp(DOS9_HELP_RD);
-			break;
+			goto end;
 
 		} else if (!stricmp(Dos9_EsToChar(lpEstr),"/S")) {
 
 			/* FIXME : Empty the given directory and then try to suppress
 			   the directory */
 
-			bRecursive=TRUE;
+			mode|=DOS9_SEARCH_RECURSIVE;
 
 		} else if (!stricmp(Dos9_EsToChar(lpEstr), "/Q")) {
 
-			bQuiet=TRUE;
+			param=0;
 
 		} else {
 
-			if (!bQuiet && bRecursive) {
 
-				iChoice=Dos9_AskConfirmation(DOS9_ASK_YNA
-												| DOS9_ASK_INVALID_REASK
-												| DOS9_ASK_DEFAULT_Y,
-												lpRmdirConfirm,
-												Dos9_EsToChar(lpEstr));
+            if (n < FILENAME_MAX) {
 
-				if (iChoice == DOS9_ASK_NO) {
+                name[n] = Dos9_EsInit();
+                Dos9_EsCpyE(name[n++], lpEstr);
 
-					/* Do not remove the current directory, and look for
-					   another directory in the command line */
-					continue;
-
-				} else if (iChoice == DOS9_ASK_ALL) {
-
-					bQuiet=TRUE;
-
-				}
-
-			}
-
-			if (rmdir(Dos9_EsToChar(lpEstr))) {
-
-				Dos9_ShowErrorMessage(DOS9_RMDIR_ERROR | DOS9_PRINT_C_ERROR,
-										Dos9_EsToChar(lpEstr),
-										FALSE);
-				goto error;
-
-			}
+            }
 
 		}
 
 	}
 
+    if (!(mode & DOS9_SEARCH_RECURSIVE) && n == 1) {
+
+        /* This is simple case where we just need to remove the dir */
+        Dos9_CmdRmdirFile(Dos9_EsToChar(name[0]), param, &choice);
+
+    } else if (n == 0) {
+
+        Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "RD/RMDIR", FALSE);
+        goto error;
+
+    } else {
+
+        for (i=0; i < n; i++) {
+
+            if (!(dir = Dos9_GetMatchFileList(Dos9_EsToChar(name[i]), mode))) {
+
+                Dos9_ShowErrorMessage(DOS9_NO_MATCH,
+                                        Dos9_EsToChar(name[i]),
+                                        FALSE);
+                goto error;
+
+            }
+
+            if (files == NULL) {
+
+                files = dir;
+
+            } else {
+
+                next->lpflNext = dir;
+
+            }
+
+            while (next->lpflNext)
+                next=next->lpflNext;
+
+        }
+
+        Dos9_AttributesSplitFileList(DOS9_CMD_ATTR_DIR,
+                                        files,
+                                        &dir,
+                                        &files
+                                        );
+
+        next = files;
+
+        while (next) {
+
+            Dos9_CmdDelFile(next->lpFileName, param, &choice);
+            next = next->lpflNext;
+
+        }
+
+        next = dir;
+
+        while (next) {
+
+            Dos9_CmdRmdirFile(next->lpFileName, param, &choice);
+            next = next->lpflNext;
+
+        }
+
+        Dos9_FreeFileList(dir);
+        Dos9_FreeFileList(files);
+
+    }
+
+end:
+    for (i=0;i < n; i++)
+        Dos9_EsFree(name[i]);
+
 	Dos9_EsFree(lpEstr);
 	return 0;
 
 error:
+    for (i=0;i < n; i++)
+        Dos9_EsFree(name[i]);
+
 	Dos9_EsFree(lpEstr);
 	return -1;
+}
+
+int Dos9_CmdRmdirFile(char* dir, int param, int* choice)
+{
+    int res = *choice;
+
+    if ((res == 0) && (param & DOS9_ASK_CONFIRMATION)) {
+
+				res=Dos9_AskConfirmation(DOS9_ASK_YNA
+				                             | DOS9_ASK_INVALID_REASK
+				                             | DOS9_ASK_DEFAULT_N,
+				                             lpDelConfirm,
+				                             dir
+				                            );
+        if (res == DOS9_ASK_ALL)
+            *choice = res;
+
+    }
+
+    if ((res == DOS9_ASK_ALL) || (res == DOS9_ASK_YES)) {
+
+        printf("#lol #del Removing dir \"%s\"\n", dir);
+
+    }
+
+    return 0;
+
 }

@@ -49,8 +49,6 @@ AC_STDC_HEADERS
 AM_GNU_GETTEXT([external])
 LIBS="$LIBS $LIBINTL"
 
-echo $LIBINTL - $LTLIBINTL
-
 dnl Get .libs path
 AC_SUBST([DOS9_OBJDIR], [$objdir])
 AC_SUBST([SHAREDEXT], [$shrext_cmds])
@@ -88,6 +86,12 @@ dnl programming, because we don't ensure the usability of this headers, but it
 dnl is sufficient enough to determine wether libraries are installed.
 AC_CHECK_HEADERS([libintl.h])
 
+dnl check start equivalent existence
+AC_PATH_PROG([XDG_OPEN], [xdg-open])  
+AS_IF([test "x$XDG_OPEN" != x],
+	[AC_DEFINE_UNQUOTED([XDG_OPEN], ["$XDG_OPEN"],
+		Define to 1 if have xdg-open)]
+	) 
 dnl Perform some checks in order to know with which library we should link.
 AC_CHECK_LIB([pthread],[pthread_create],[],[])
 AC_CHECK_LIB([m],[cos],[],[AC_MSG_ERROR("No math C library")])

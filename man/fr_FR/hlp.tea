@@ -24,7 +24,7 @@
 
 {{Synopsis}}
 
-${HLP [nom | /b langue [encodage] | /l | /d]}
+${hlp.bat [nom | /b [langue [encodage]] | /c | /d]}
 
 	Affiche une page manuel formattée.
 	
@@ -56,6 +56,45 @@ ${HLP [nom | /b langue [encodage] | /l | /d]}
 	{http://www.dos9.org}. Ce commutateur requiert que la commande {wget} soit
 	disponible sur le système courrant.
 	
+	- {/c} : Configure les paramètres de la commande {hlp.bat}. Demande successivement
+	à l'utilisateur la langue, le format (html/texte/ansi) et l'encodage qu'il veut
+	utiliser. Cette option est une façon simple de configurer le fichier
+	{%DOS9_PATH%/share/hlp/hlp.conf.bat}.
+
+{{Fichiers de Configuration}}
+
+${%DOS9_PATH%/share/hlp/hlp.conf.bat}
+
+	Script batch qui définit la configuration de hlp via des variables. Ce fichier peut
+	être généré via le commutateur {/c}. Ce fichier est lu à chaque exécution de {hlp.bat}.
+	Les variables de configurations sont qui doivent y être définies sont:
+
+		- {%mode%} : Le format de l'aide que {hlp.bat} doit utiliser. Il existe
+		trois formats supportés :
+	
+			-- {html} : {hlp.bat} affichera des pages html. Ce mode nécessite un navigateur
+			internet et le support d'une interfaçe de type {start} par dos9.
+
+			-- {ansi} : {hlp.bat} affichera des fichiers textes dans la console. Ces fichiers
+			sont formatés pour afficher de la couleur sur les terminals compatibles ANSI.
+
+			-- {txt} : {hlp.bat} affichera des fichiers textes pur dans la console.
+	
+		- {%locale%} : Le langage a utiliser sous la forme d'une locale {POSIX} (ie {langue_PAYS}).
+		Ce nom de locale doit correspondre à une locale installée dans {%DOS9_PATH%/share/hlp/man}.
+
+		- {%view_cmd%} : La commande à utiliser pour voir les pages de manuels. Cette commande peut
+		être interne ou externe. Par défaut on utilise la définition suivante :
+
+		${set view_cmd=!%mode%_prg!}
+
+		@- Et l'on définit les variables {%txt_prg%}, {%html_prg%} et {%ansi_prg%} qui contiennent
+		les commandes à exécuter pour chaque format.
+
+${%DOS9_PATH%/share/hlp/hlpdb}
+
+	Un fichier texte qui liste toutes les pages de manuels et leur titres, qui est utilisé lors de
+	la recherche des pages. Il est généré automatiquement par la commande {hlp.bat /b}.
 
 {{Compatibilité}}
 

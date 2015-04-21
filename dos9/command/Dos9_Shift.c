@@ -200,7 +200,10 @@ int Dos9_CmdShift(char* lpLine)
 
 	}
 
+
+
 	Dos9_EsFree(lpEsArg);
+
 	return 0;
 
 error:

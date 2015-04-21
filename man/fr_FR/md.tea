@@ -27,23 +27,24 @@ ${	MD dossier
 	
 	Crée un dossier.
 	
-		- {dossier} :  chemin du dossier à créer.
+		- {dossier} :  chemin du dossier à créer. Si {dossier} est une
+		est un chemin comprenant plusieurs dossier n'existant pas, alors
+		tous les dossiers n'existant pas sont crées. Par exemple, si ni
+		{a} ni {b} ni {c} n'existent, alors
+
+${MD a/b/c}
+		@- est équivalent à :
+
+${MD a
+MD a/b
+MD a/b/c}
 		
 {{Compatibilité}}
 
 	Disponible depuis la version {0.4}.
 	
-	   Partiellement compatible avec {cmd.exe}. En effet cette commande ne
-	permet pas de créer simutanément. Par exemple, il est possible avec 
-	{cmd.exe} de faire, si le dossier {dossier1} n'existe pas:
-	
-${	md dossier1/dossier2/dossier3}
+	Complètement compatible avec {cmd.exe} depuis la version {215.1b}.
 
-	alors qu'avec {dos9|Dos9} le code équivalent est :
-	
-${	md dossier1
-	md dossier1/dossier2
-	md dossier1/dossier2/dossier3}
 	
 {{A voir aussi}}
 

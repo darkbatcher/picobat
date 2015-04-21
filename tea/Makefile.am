@@ -27,6 +27,6 @@ src/out/tea_ansi_out.c src/out/tea_html_out.c src/out/tea_text_out.c \
 src/tea.c src/tea_strupr.c
 
 tea_LDFLAGS = -static -no-undefined
-tea_LDADD = ../libDos9/libDos9.la @LIBS@
+tea_LDADD = $(top_builddir)/libDos9/libDos9.la @LIBS@
 
-AM_CFLAGS = -I../libDos9 @CFLAGS@
+AM_CFLAGS = -I$(top_srcdir)/libDos9 @CFLAGS@

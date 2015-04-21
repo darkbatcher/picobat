@@ -51,7 +51,7 @@ void Dos9_LoadInternalHelp(void)
 
 	lpInternalHelp[DOS9_HELP_COPY]
 	    =gettext("Copy file(s) to another location.\n"
-	             "Usage: COPY [/-Y | /Y] [/A[:]attributes] source destination\n");
+	             "Usage: COPY [/R] [/-Y | /Y] [/A[:]attributes] source destination\n");
 
 	lpInternalHelp[DOS9_HELP_CALL]
 	    =gettext("Call a script or a label from the current context.\n"
@@ -161,11 +161,15 @@ void Dos9_LoadInternalHelp(void)
         =gettext("Display content of files.\n"
                  "Usage: MORE [/E] [/P] [/S] [/C] [/T[:]n] [+n] [file ...]\n");
 
+    lpInternalHelp[DOS9_HELP_BREAK]
+        =gettext("[Obsolete] Sets or Clears Extended CTRL+C checking on DOS system. (Do nothing)\n"
+                 "Usage: BREAK [ON | OFF]\n");
+
 	lpExternalMsg
 	    =gettext("This help is voluntary limited help to fit in the binary. If you need to\n"
 	             "see the full documentation, please type:\n"
 	             "\n"
-	             "\tHLP command");
+	             "\tHELP command");
 
 }
 

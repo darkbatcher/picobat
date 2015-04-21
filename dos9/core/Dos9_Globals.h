@@ -20,6 +20,8 @@
 #ifndef DOS9_GLOBALS_H
 #define DOS9_GLOBALS_H
 
+#include <setjmp.h>
+
 #include "../../config.h"
 
 #ifdef _POSIX_C_SOURCE
@@ -51,5 +53,8 @@ extern char* lpInitVar[];
 extern int iInputD,
        iOutputD;
 extern void(*pErrorHandler)(void);
+
+extern jmp_buf jbBreak;
+
 
 #endif

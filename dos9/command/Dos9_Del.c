@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2014 DarkBatcher
+ *   Copyright (C) 2010-2015 DarkBatcher
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -46,72 +46,65 @@
 
 #include "Dos9_Ask.h"
 
-/* TODO : Make extended test and decide wether deleting
-   files should really be enabled */
 
 int Dos9_CmdDel(char* lpLine)
 {
-	char *lpNextToken,
-	     *lpToken;
-	ESTR* lpEstr=Dos9_EsInit();
+	char *lpToken;
+	ESTR *lpEstr=Dos9_EsInit(),
+         *name[FILENAME_MAX];
 
-	char  bParam=0,
-	      bDel=TRUE;
+	char  param=0;
 
-	short wAttr=0;
+	short attr=DOS9_CMD_ATTR_DIR | DOS9_CMD_ATTR_DIR_N;
 
-	char  lpName[FILENAME_MAX]="\0";
+	int flag=DOS9_SEARCH_DEFAULT | DOS9_SEARCH_NO_PSEUDO_DIR,
+	    choice,
+	    status = 0,
+	    n=0,
+	    i;
 
-	int iFlag=DOS9_SEARCH_DEFAULT,
-	    iChoice;
+	FILELIST *next=NULL,
+             *end,
+             *list=NULL;
 
-	FILELIST* lpFileList, *lpSaveList;
+    if (!strnicmp(lpLine, "DEL", 3)) {
+        lpLine += 3;
+    } else {
+        lpLine += 5;
+    }
 
-	if (!(lpLine=strchr(lpLine, ' '))) {
-
-		Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "DEL / ERASE", FALSE);
-		Dos9_EsFree(lpEstr);
-		return -1;
-
-	}
-
-	while ((lpNextToken=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
+	while ((lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
 
 		lpToken=Dos9_EsToChar(lpEstr);
 
 		if (!stricmp(lpToken, "/P")) {
 
-			/* Demande une confirmation avant la suppression */
-
-			bParam|=DOS9_ASK_CONFIRMATION;
+			/* Ask before suppressing */
+			param|=DOS9_ASK_CONFIRMATION;
 
 		} else if (!stricmp(lpToken, "/F")) {
 
-			/* supprime les fichiers en lecture seule */
-
-			bParam|=DOS9_DELETE_READONLY;
+			/* do not ignore read-only files */
+			param|=DOS9_DELETE_READONLY;
 
 		} else if (!stricmp(lpToken, "/S")) {
 
-			/* procède récursivement */
-
-			iFlag|=DOS9_SEARCH_RECURSIVE;
+			/*  recursive */
+			flag|=DOS9_SEARCH_RECURSIVE;
 
 		} else if (!stricmp(lpToken, "/Q")) {
 
-			/* pas de confirmation pour suppression avec caractères génériques */
-
-			bParam|=DOS9_DONT_ASK_GENERIC;
+			/* no confirmation with use of joker */
+			param|=DOS9_DONT_ASK_GENERIC;
 
 		} else if (!strnicmp(lpToken, "/A", 2)) {
 
-			/* gestion des attributs */
+			/* attributes managment */
 			lpToken+=2;
-			if (*lpToken==':') lpToken++;
+			if (*lpToken==':')
+                lpToken++;
 
-			wAttr=Dos9_MakeFileAttributes(lpToken);
-
-			iFlag^=DOS9_SEARCH_NO_STAT;
+			attr=Dos9_MakeFileAttributes(lpToken);
 
 		} else if (!strcmp("/?", lpToken)) {
 
@@ -122,105 +115,143 @@ int Dos9_CmdDel(char* lpLine)
 
 		} else {
 
-			if (*lpName != '\0') {
+            if (n < FILENAME_MAX) {
 
-				/* si un nom a été donné, on affiche, l'erreur */
+                name[n] = Dos9_EsInit();
+                Dos9_EsCpy(name[n++], lpToken);
 
-				Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpToken, FALSE);
-				Dos9_EsFree(lpEstr);
-				return -1;
+            }
 
-			}
-
-			strncpy(lpName, lpToken, FILENAME_MAX);
 		}
 
-		lpLine=lpNextToken;
+	}
+
+	if (n == 0) {
+
+        Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "DEL/ERASE", FALSE);
+        status = -1;
+        goto end;
 
 	}
 
-	if (*lpName== '\0') { /* si aucun nom n'a été donné */
+	for  (i=0; i < n; i++) {
 
-		Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "DEL / ERASE", FALSE);
-		Dos9_EsFree(lpEstr);
-		return -1;
+        printf("Looking for `%s'\n", Dos9_EsToChar(name[i]));
 
-	}
+        if (!(next = Dos9_GetMatchFileList(Dos9_EsToChar(name[i]), flag))) {
 
-	if (!(bParam & DOS9_DELETE_READONLY)) {
+            Dos9_ShowErrorMessage(DOS9_NO_MATCH,
+                                    Dos9_EsToChar(name[i]),
+                                    FALSE);
+            status = -1;
 
-		/* par défaut, la recherche ne prend pas en compte la recherche des fichiers en lecture seule */
-		wAttr|=DOS9_CMD_ATTR_READONLY_N | DOS9_CMD_ATTR_READONLY;
+            goto end;
+        }
 
-	}
+        if (strpbrk(Dos9_EsToChar(name[i]), "*?") != NULL)
+            param |= DOS9_USE_JOKER;
 
-	/* ne sélectionne que le fichiers */
-	wAttr|=DOS9_CMD_ATTR_DIR | DOS9_CMD_ATTR_DIR_N;
+        if (list == NULL) {
 
-	if ((Dos9_StrToken(lpName, '*') || Dos9_StrToken(lpName, '?'))
-	    && !(bParam & DOS9_DONT_ASK_GENERIC)) {
+            list = next;
 
-		/* si la recherche est générique on met la demande de
-		  confirmation sauf si `/Q` a été spécifié */
-		bParam|=DOS9_ASK_CONFIRMATION;
-	}
+        } else {
 
-	printf("Looking for `%s'\n", lpName);
+            end->lpflNext = next;
 
-	if ((lpFileList=Dos9_GetMatchFileList(lpName, iFlag))) {
-		lpSaveList=lpFileList;
-		while (lpFileList) {
+        }
 
-			/* on demande confirmation si la demande de confirmation est
-			   active */
-			if (bParam & DOS9_ASK_CONFIRMATION) {
+        while (next->lpflNext)
+            next = next ->lpflNext;
 
-				iChoice=Dos9_AskConfirmation(DOS9_ASK_YNA
-				                             | DOS9_ASK_INVALID_REASK
-				                             | DOS9_ASK_DEFAULT_Y,
-				                             lpDelConfirm,
-				                             lpFileList->lpFileName
-				                            );
-
-				if (iChoice==DOS9_ASK_NO) {
-					/* si l'utilisateur refuse la suppression du fichier */
-					printf("Pas suppression !\n");
-					lpFileList=lpFileList->lpflNext;
-					continue;
-
-				} else if (iChoice==DOS9_ASK_ALL) {
-					/* si l'utilisateur autorise tous les fichiers */
-					bParam&=~DOS9_ASK_CONFIRMATION;
-
-				}
-			}
-
-			/* on vérifie que le fichier possède les bons attributs pour la suppression */
-			if ((Dos9_CheckFileAttributes(wAttr, lpFileList))) {
-
-				printf("<DEBUG> supression de `%s'\n", lpFileList->lpFileName);
-
-			} else {
-
-				printf("<DEBUG> Fichier `%s' non suprimmé (attributs incorrects)\n", lpFileList->lpFileName);
-
-			}
-
-			/* on passe au fichier suivant */
-			lpFileList=lpFileList->lpflNext;
-		}
-
-		Dos9_FreeFileList(lpSaveList);
-	} else {
-
-		Dos9_ShowErrorMessage(DOS9_FILE_ERROR, lpName, FALSE);
-		Dos9_EsFree(lpEstr);
-
-		return -1;
+        end = next;
 
 	}
+
+
+    if (attr == 0) {
+
+        if (!(param & DOS9_DELETE_READONLY))
+            attr |= DOS9_CMD_ATTR_READONLY_N | DOS9_CMD_ATTR_READONLY;
+
+        if (!(flag  & DOS9_SEARCH_RECURSIVE))
+            attr|=DOS9_CMD_ATTR_DIR | DOS9_CMD_ATTR_DIR_N;
+
+    }
+
+	if ((param & DOS9_USE_JOKER)
+	    && !(param & DOS9_DONT_ASK_GENERIC)) {
+        /* If one of the path given included Joker and /Q has not been
+            specified, ask the user for the file to *really delete */
+		param|=DOS9_ASK_CONFIRMATION;
+	}
+
+    Dos9_AttributesSplitFileList(attr,
+                                 list,
+                                 &list,
+                                 &end
+                                 );
+
+    Dos9_AttributesSplitFileList(DOS9_ATTR_NO_DIR,
+                                 list,
+                                 &list,
+                                 &next
+                                 );
+
+
+    Dos9_FreeFileList(end);
+
+    choice = 0;
+    end = list;
+    while (end) {
+
+        Dos9_CmdDelFile(end->lpFileName, param, &choice);
+        end = end->lpflNext;
+
+    }
+
+    end = next;
+    while (end) {
+
+        Dos9_CmdRmdirFile(end->lpFileName, param, &choice);
+        end = end->lpflNext;
+
+    }
+
+end:
+    for (i=0; i < n; i++)
+        Dos9_EsFree(name[i]);
+
+    Dos9_FreeFileList(list);
+    Dos9_FreeFileList(next);
 
 	Dos9_EsFree(lpEstr);
-	return 0;
+	return status;
 }
 
+int Dos9_CmdDelFile(char* file, int param, int* choice)
+{
+    int res = *choice;
+
+    if ((res == 0) && (param & DOS9_ASK_CONFIRMATION)) {
+
+				res=Dos9_AskConfirmation(DOS9_ASK_YNA
+				                             | DOS9_ASK_INVALID_REASK
+				                             | DOS9_ASK_DEFAULT_N,
+				                             lpDelConfirm,
+				                             file
+				                            );
+        if (res == DOS9_ASK_ALL)
+            *choice = res;
+
+    }
+
+    if ((res == DOS9_ASK_ALL) || (res == DOS9_ASK_YES)) {
+
+        printf("#lol #del Deleting file \"%s\"\n", file);
+
+    }
+
+    return 0;
+
+}

@@ -22,8 +22,8 @@
 	
 {{Synopsis}}
 
-${	DEL [/P] [/F] [/S] [/Q] [/A[:]attributs] nom
-	ERASE [/P] [/F] [/S] [/Q] [/A[:]attributs] nom}
+${	DEL [/P] [/F] [/S] [/Q] [/A[:]attributs] nom ...
+	ERASE [/P] [/F] [/S] [/Q] [/A[:]attributs] nom ...}
 	
 	Supprime un ou plusieurs fichier.
 	
@@ -36,12 +36,16 @@ ${	DEL [/P] [/F] [/S] [/Q] [/A[:]attributs] nom
 		
 		- {/A[:]attributs} : Supprime le fichier en fonction de ses
 		  attributs. (non portable en raisons des différences
-		  d'attributs entre {WINDOWS} et {GNU/Linux}.)
-		  
-		  Attributs de {WINDOWS}:
+		  d'attributs entre {WINDOWS} et {GNU/Linux}.). Par défaut,
+		  les dossiers sont ignorés lors de la recherche de fichiers
+		  a supprimer, mais il est possible de le réactiver.
+
+		@-  Attributs de {WINDOWS}:
 		
 			-- {R} : Fichiers en lecture seule
-			
+		
+			-- {D} : Dossiers
+
 			-- {H} : Fichiers cachés
 			
 			-- {I} : Fichiers indexés sans contenu (vides)
@@ -54,17 +58,25 @@ ${	DEL [/P] [/F] [/S] [/Q] [/A[:]attributs] nom
 			
 			-- {-} : Préfixe de négation
 			
-		  Attributs de {GNU/Linux}
+		  @- Attributs de {GNU/Linux}
 		  
 			-- {R} : Fichiers en lecture seule
 			
+			-- {D} : Dossiers
+
 			-- {I} : Fichiers indexés sans contenu (vides)
 			
 			-- {-} : Préfixe de négation
 			
 		- {nom} : Le chemin du fichier à supprimer. Ce chemin peut
-		  contenir {spec/regexp|des caractères génériques}, comme le * et
-		  le ?.
+		contenir {spec/regexp|des caractères génériques}, comme le {*}
+		et le {?}. Il est possible de spécifier plusieurs paramètres
+		{nom}, dans ce cas, il faut savoir que la suppression n'est
+		pas séquentielle, la suppression n'a pas lieu l'une à la suite
+		de l'autre, mais de manière simultanée. Les fichiers peuvent
+		donc être supprimés dans un ordre arbitraire. Le nombre de
+		{nom} maximum pouvant être spécifiés simultanément est
+		{FILENAME_MAX}, les suivants seront ignorés.
 		  
 {{Notes}}
 

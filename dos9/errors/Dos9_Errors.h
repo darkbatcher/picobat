@@ -83,8 +83,10 @@ void Dos9_LoadErrors(void);
 #define DOS9_NO_MATCH                       41
 #define DOS9_NO_VALID_FILE                  42
 #define DOS9_INVALID_NUMBER                 43
-#define DOS9_ERROR_MESSAGE_NUMBER           44
+#define DOS9_TOO_MANY_ARGS                  44
+#define DOS9_INVALID_IF_EXPRESSION          45
 
+#define DOS9_ERROR_MESSAGE_NUMBER           46
 
 #define DOS9_PRINT_C_ERROR 0x80
 

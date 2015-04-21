@@ -52,9 +52,17 @@ int Dos9_CmdRen(char* lpLine)
 	char lpFileName[FILENAME_MAX]= {0}, lpFileDest[FILENAME_MAX]= {0};
 	char* lpToken;
 
-	if (!(lpLine=strchr(lpLine, ' '))) {
+	if (!strnicmp(lpLine, "RENAME", 6)) {
 
-		Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "DEL / ERASE", FALSE);
+        lpLine += 6;
+
+    } else if (!strnicmp(lpLine, "REN", 3)) {
+
+        lpLine += 3;
+
+    } else {
+
+		Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "REN / RENAME", FALSE);
 		Dos9_EsFree(lpEstr);
 
 		return -1;

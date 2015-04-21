@@ -40,6 +40,7 @@
 #define DOS9_VAR_MAX_OPTION 16
 
 #define Dos9_GetLocalBlock() (LOCAL_VAR_BLOCK*)calloc(LOCAL_VAR_BLOCK_SIZE, sizeof(LOCAL_VAR_BLOCK))
+#define Dos9_IsLocalVarValid(c)  (c < 0x80 && c > 0x20)
 #define Dos9_FreeLocalBlock(lpBlock) free(lpBlock)
 
 

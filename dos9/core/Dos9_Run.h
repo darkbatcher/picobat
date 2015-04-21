@@ -52,4 +52,6 @@ int Dos9_RunExternalFile(char* lpFileName, char** lpArguments);
 
 int Dos9_RunExternalBatch(char* lpFileName, char* lpFullLine, char** lpArguments);
 
+void Dos9_SigHandlerBreak(int c);
+
 #endif

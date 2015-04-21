@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-04 15:24+0200\n"
+"POT-Creation-Date: 2015-04-21 23:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -242,6 +242,21 @@ msgid "Error : %s does not recieved any valid file to process.\n"
 msgstr ""
 
 #: ../dos9/errors/Dos9_Errors.c:212
+#, c-format
+msgid "Error : \"%s\" is not a valid number.\n"
+msgstr ""
+
+#: ../dos9/errors/Dos9_Errors.c:215
+#, c-format
+msgid "Error : Too many arguments for %s command\n"
+msgstr ""
+
+#: ../dos9/errors/Dos9_Errors.c:218
+#, c-format
+msgid "Error : \"%s\" is not a valid expression for IF command.\n"
+msgstr ""
+
+#: ../dos9/errors/Dos9_Errors.c:221
 msgid ""
 "\n"
 "Aborting current command, press any key to end Dos9.\n"

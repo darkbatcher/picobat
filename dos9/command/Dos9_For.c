@@ -858,7 +858,7 @@ void Dos9_ForGetToken(ESTR* lpContent, FORINFO* lpfrInfo, int iPos, ESTR* lpRetu
 	      iTokenBegin=HIGHWORD(lpfrInfo->lpToken[iPos]),
 	      iTokenEnd=LOWWORD(lpfrInfo->lpToken[iPos]);
 
-	Dos9_EsCpy(lpReturn, "");
+	*Dos9_EsToChar(lpReturn) = '\0';
 
 	/*  the type of line that arrives here is already truncated
 	    at the first character specified in eof parameter */

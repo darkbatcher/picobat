@@ -44,9 +44,18 @@
 
 #include "Dos9_Mkdir.h"
 
+#ifdef WIN32
+#define IS_DIR_DELIM(c) (c=='/' || c=='\\')
+#define MKDIR_MACRO(dir, mode) mkdir(dir)
+#else
+#define IS_DIR_DELIM(c) (c=='/')
+#define MKDIR_MACRO(dir, mode) mkdir(dir, mode)
+#endif // WIN32
+
 int Dos9_CmdMkdir(char* lpLine)
 {
 	ESTR* lpEstr=Dos9_EsInit();
+
 
 	if (!(lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
 
@@ -55,36 +64,16 @@ int Dos9_CmdMkdir(char* lpLine)
 
 	}
 
-	if ((lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
+	while ((lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
 		if (!strcmp(Dos9_EsToChar(lpEstr), "/?")) {
 
 			Dos9_ShowInternalHelp(DOS9_HELP_MD);
+			break;
 
 		} else {
 
-			#if defined(_POSIX_C_SOURCE)
-
-			/* FIXME : Do not use systematically the 0777 rights
-			   because it main simply not work if the user is not
-			   rooted or something like this. */
-
-			/* use POSIX-Conforming mkdir function */
-
-			if (mkdir(Dos9_EsToChar(lpEstr), 0777)) {
-
-			#elif defined(WIN32)
-
-			/* use WINDOWS mkdir function */
-
-			if (mkdir(Dos9_EsToChar(lpEstr))) {
-
-			#endif // defined _POSIX_C_SOURCE
-
-				Dos9_ShowErrorMessage(DOS9_MKDIR_ERROR, Dos9_EsToChar(lpEstr), FALSE);
-				goto error;
-
-			}
-
+            if (Dos9_CmdMakeDirs(Dos9_EsToChar(lpEstr)))
+                goto error;
 
 		}
 	}
@@ -97,3 +86,48 @@ error:
 	return -1;
 
 }
+
+int Dos9_CmdMakeDirs(char* str)
+{
+    char c,
+         *dir = str;
+
+    while (*str) {
+
+        if (IS_DIR_DELIM(*str)) {
+
+            /* Descent throught the tree to create *every* non-existing
+                dir in the path */
+
+            c = *str;
+            *str = '\0';
+
+            if (!Dos9_DirExists(dir)
+                && MKDIR_MACRO(dir, 0777)) {
+
+                Dos9_ShowErrorMessage(DOS9_MKDIR_ERROR | DOS9_PRINT_C_ERROR,
+                                      dir,
+                                      FALSE);
+                return -1;
+
+            }
+
+            *str = c;
+
+        }
+
+        str ++;
+
+    }
+
+    if (!Dos9_DirExists(dir)
+        && MKDIR_MACRO(dir, 0777)) {
+
+        Dos9_ShowErrorMessage(DOS9_MKDIR_ERROR | DOS9_PRINT_C_ERROR,
+                              dir,
+                              FALSE);
+        return -1;
+
+    }
+}
+

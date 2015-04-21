@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-04 15:24+0200\n"
+"POT-Creation-Date: 2015-04-21 23:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,7 +45,7 @@ msgstr ""
 #: ../dos9/lang/Dos9_ShowHelp.c:53
 msgid ""
 "Copy file(s) to another location.\n"
-"Usage: COPY [/-Y | /Y] [/A[:]attributes] source destination\n"
+"Usage: COPY [/R] [/-Y | /Y] [/A[:]attributes] source destination\n"
 msgstr ""
 
 #: ../dos9/lang/Dos9_ShowHelp.c:57
@@ -172,31 +172,43 @@ msgstr ""
 msgid ""
 "Print a file.\n"
 "Usage: TYPE [file ...]\n"
-"       MORE [file ...]\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:150
+#: ../dos9/lang/Dos9_ShowHelp.c:149
 msgid ""
 "Exit from the command prompt.\n"
 "Usage: EXIT [/b code]\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:154
+#: ../dos9/lang/Dos9_ShowHelp.c:153
 msgid ""
 "Change positions of command-line parameters.\n"
 "Usage: SHIFT [/start_number | /s[:]start_number] [/d[:]displacement]\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:158
+#: ../dos9/lang/Dos9_ShowHelp.c:157
 msgid ""
 "Search occurence of string in a set of files.\n"
 "Usage: FIND [/N] [/C] [/V] [/I] string [file ...]\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:162
+#: ../dos9/lang/Dos9_ShowHelp.c:161
+msgid ""
+"Display content of files.\n"
+"Usage: MORE [/E] [/P] [/S] [/C] [/T[:]n] [+n] [file ...]\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_ShowHelp.c:165
+msgid ""
+"[Obsolete] Sets or Clears Extended CTRL+C checking on DOS system. (Do "
+"nothing)\n"
+"Usage: BREAK [ON | OFF]\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_ShowHelp.c:169
 msgid ""
 "This help is voluntary limited help to fit in the binary. If you need to\n"
 "see the full documentation, please type:\n"
 "\n"
-"\tHLP command"
+"\tHELP command"
 msgstr ""

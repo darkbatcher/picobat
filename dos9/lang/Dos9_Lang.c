@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2014 DarkBatcher
+ *   Copyright (C) 2010-2015 DarkBatcher
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -44,6 +44,7 @@ const char* lpHlpDeprecated;
 
 const char* lpDelConfirm;
 const char* lpRmdirConfirm;
+const char* lpCopyConfirm;
 
 const char* lpAskYn;
 const char* lpAskyN;
@@ -95,6 +96,8 @@ void Dos9_LoadStrings(void)
 	lpDelConfirm=gettext("Are you sure you want to delete file \"%s\" ?");
 	lpRmdirConfirm=gettext("Are you sure you want to remove \"%s\" directory ?");
 
+	lpCopyConfirm=gettext("File \"%s\" already exists, replace it by \"%s\" ?");
+
 	lpAskYn=gettext(" (Yes/no) ");
 	lpAskyN=gettext(" (yes/No) ");
 	lpAskyn=gettext(" (yes/no) ");
@@ -125,6 +128,6 @@ void Dos9_LoadStrings(void)
 \t/I in\tFile descriptor to used as input.\n\
 \t/O out\tFile descriptor to be used as output.\n\
 \tfile\tA batch file to be executed.\n\
-\t/C cmd\tRun cmd command and exit\n\
-\t/K cmd\tRun cmd command and stay active\n");
+\t/C cmd\tRun cmd command and exit.\n\
+\t/K cmd\tRun cmd command and stay active.\n");
 }

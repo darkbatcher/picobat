@@ -16,11 +16,13 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-EXTRA_DIST = po man scripts LICENSE README WHATSNEW
+EXTRA_DIST = po man scripts COPYING README WHATSNEW
 ACLOCAL_AMFLAGS = -I m4
 AUTOMAKE_OPTIONS = foreign subdir-objects
 SUBDIRS = libinteval libmatheval libDos9 dos9 tea dump po
 SHAREDEXT = @SHAREDEXT@
+distbdir =$(distdir)-bin
+rm_distbdir =rm -R $(distbdir)
 
 # a rule to make local distributions of dos9
 
@@ -35,21 +37,35 @@ textfiles : all
 		./tea/tea$(EXEEXT) $$i.tea $$i /e:utf-8 /o:text-plain ; \
 	done;
 
-local : textfiles dirtree
+bin : textfiles dirtree
 	cp ./dos9/dos9$(EXEEXT) ./bin/
 	cp ./tea/tea$(EXEEXT) ./bin/cmd
 	cp ./dump/dump$(EXEEXT) ./bin/cmd
 	cp ./README ./bin/
 	cp ./WHATSNEW ./bin/
+	cp ./COPYING ./bin/
 	cp ./scripts/Dos9_Auto.bat ./bin/
 	cp ./scripts/cmd/hlp.bat ./bin/cmd
 	cp -R ./man ./bin/share/hlp
 	cd po && make local
 
-dist-bin : local
+bin-strip: bin
+	for i in ./bin/dos9$(EXEEXT) ./bin/cmd/tea$(EXEEXT) \
+		./bin/cmd/dump$(EXEEXT); do \
+		$(STRIP) $$i;\
+	done;
+
+dist-bin-dir:
 	cp -R ./bin ./$(distdir)-bin
-	tardir=$(distdir)-bin && $(am__tar) | GZIP=$(GZIP_ENV) gzip -c> $(distdir)-bin.tar.gz
-	rm -R $(distdir)-bin
+
+dist-bin : dist-bin-dir	
+	tardir=$(distbdir) && $(am__tar) | GZIP=$(GZIP_ENV) gzip -c> $(distbdir)-bin.tar.gz
+	$(rm_distbdir)
+
+dist-bin-zip: dist-bin-dir
+	-rm -f $(distbdir).zip
+	zip -rq $(distbdir).zip $(distbdir)
+	$(rm_distbdir)
 
 po-merge:
 	cd po && make po-merge

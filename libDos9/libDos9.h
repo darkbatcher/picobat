@@ -147,12 +147,12 @@ LIBDOS9     int Dos9_GetStack(LPSTACK lpcsStack, void** ptrContent);
 LIBDOS9     int Dos9_ClearStack(LPSTACK lpcsStack, void(*pFunc)(void*));
 
 typedef struct ESTR {
-    char* ptrString;
-    int iLenght;
+    char* str;
+    int len;
 } ESTR, *LPESTR;
 
-#define EsToChar(a) a->ptrString
-#define Dos9_EsToChar(a) a->ptrString
+#define EsToChar(a) a->str
+#define Dos9_EsToChar(a) a->str
 
 #define DOS9_NEWLINE_WINDOWS 0
 #define DOS9_NEWLINE_UNIX 1
@@ -326,6 +326,8 @@ LIBDOS9 LPFILELIST  Dos9_GetMatchFileList(char* lpPathMatch, int iFlag);
 LIBDOS9 int         Dos9_GetMatchFileCallback(char* lpPathMatch, int iFlag, void(*pCallBack)(FILELIST*));
 LIBDOS9 THREAD      Dos9_FreeFileList(LPFILELIST lpflFileList);
 LIBDOS9 int         Dos9_FormatFileSize (char* lpBuf, int iLenght, unsigned int iSize);
+LIBDOS9 int         Dos9_GetStaticPart(const char* lpPathMatch, char* lpStaticPart, size_t size);
+LIBDOS9 size_t      Dos9_GetStaticLength(const char* str);
 
 #define DOS9_CMD_ATTR_READONLY 0x01
 #define DOS9_CMD_ATTR_READONLY_N 0x02

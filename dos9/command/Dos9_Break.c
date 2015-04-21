@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2014 DarkBatcher
+ *   Copyright (C) 2010-2015 DarkBatcher
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -17,17 +17,48 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <math.h>
+#include <ctype.h>
+#include <string.h>
+#include <errno.h>
 
-#ifndef DOS9_CMD_COPY_H
-#define DOS9_CMD_COPY_H
+#include <matheval.h>
+#include <inteval.h>
 
-int Dos9_CmdCopy(char* lpLine);
-int Dos9_CmdCopyFile(const char* file, const char* dest, int* flags);
-int Dos9_CmdCopyRecursive(const char* file, const char* dest, short attr, int* flags);
+#include <libDos9.h>
 
-#define DOS9_COPY_SILENCE   0x01
-#define DOS9_COPY_MULTIPLE  0x02
-#define DOS9_COPY_MOVE      0x04
-#define DOS9_COPY_RECURSIVE 0x08
+#include "../core/Dos9_Core.h"
 
-#endif // DOS9_CMD_ECHO_H
+#include "Dos9_Commands.h"
+
+#include "../lang/Dos9_Lang.h"
+#include "../lang/Dos9_ShowHelp.h"
+
+// #define DOS9_DBG_MODE
+#include "../core/Dos9_Debug.h"
+
+#include "../errors/Dos9_Errors.h"
+
+#include "Dos9_Break.h"
+
+#include "Dos9_Ask.h"
+
+/* BREAK [ON | OFF]
+
+    Does nothing */
+
+int Dos9_CmdBreak(char* line)
+{
+    char param[4];
+
+    if (Dos9_GetNextParameter(line+5, param, sizeof(param))
+        && !strcmp(param, "/?")) {
+
+        Dos9_ShowInternalHelp(DOS9_HELP_BREAK);
+
+    }
+
+}

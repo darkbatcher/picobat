@@ -1,0 +1,75 @@
+{{Commande MORE}}
+
+	La commande {MORE} permet d'afficher un fichier page par page.
+
+{{Synopsis}}
+
+	${MORE [/E] [/C] [/P] [/T[:]n] [/S] [+n] [fichier ...]}
+
+	Affiche le contenu d'un fichier page par page, et attend une action
+	de l'utilisateur à chaque nouvelle page affichée.
+
+	- {/E} : Active le mode étendu. Ce commutateur doit être passé à
+	{MORE} pour que les commutateurs {/C}, {/P} et {/S} ainsi que le {+n}
+	soient interprétés par {cmd.exe}. Cependant, ce commutateur n'est
+	fourni par {dos9|Dos9} que pour des raisons de compatibilité avec
+	{cmd.exe} mais ce commutateur est ignoré.
+
+	- {/C} : Efface l'écran avant l'affichage de chaque nouvelle page. Ce
+	commutateur est ignoré si la sortie ne fait pas référence à une
+	console ou un terminal (ie. si la sortie est redirigée ou pipée). Si
+	vous utilisez ce commutateur, alors le défilement du texte ne peut se
+	faire {que} page-par-page.
+
+	- {/P} : Développe les charactères de fin de formulaire (form-feed).
+	Ce commutateur n'est pas implémenté par {dos9|Dos9}.
+
+	- {/S} : Fusionne les lignes vides situées à la suite les unes des
+	autres.
+
+	- {/T[:]n} : Utilise des tabulations de {n} espaces de large. {cmd.exe}
+	supporte uniquement la syntaxe {/Tn}.
+
+	- {+n} : commence l'affichage du ficher à la ligne {n}.
+
+	- {fichier ...} : Une liste de fichiers. Si des noms de fichiers
+	(contenant éventuellement des {spec/regexp|expressions régulières})
+	sont donnés mais ne correspondent à aucun fichier, alors la commande
+	s'arrête et retourne une erreur. Si aucun nom de fichier n'est donné,
+	la commande prend l'entrée sur l'entrée standard.
+
+	Si la sortie standard de la commande n'est pas redirigée, alors la
+	commande {MORE} fonctionne en mode interractif, c'est-à-dire que la
+	commande affiche l'invité {MORE}.
+
+	${-- MORE --}
+
+	La commande {MORE} accepte alors les commandes suivantes :
+	
+	- {Pn} : Affiche les {n} prochaines lignes.
+
+	- {Sn} : Saute les {n} prochaines lignes.
+
+	- {F} : Affiche le fichier suivant.
+
+	- {=} : Affiche le numéro de line.
+
+	- {Q} : Quitte la commande en cours.
+
+	Si {dos9|Dos9} a été compilé avec l'option {--disable-console}, alors
+	la commande more utilisera le commutateur {/C} obligatoirement. Le
+	défilement ligne par ligne ne sera donc plus possible.
+
+{{Compatibilité}}
+
+	Compatible avec {cmd.exe}, à l'exception des commutateur {/Tn} et {/P},
+	qui ne sont pas supportés.
+
+	Disponible depuis la version {2014.0.9b}. Avant cette version, {MORE}
+	n'était qu'un alias sur la commande {TYPE}.
+
+{{À voir aussi}}
+
+	{commands|Liste de Commandes}, {type|Commande TYPE}, 
+	{dump|Commande DUMP}
+

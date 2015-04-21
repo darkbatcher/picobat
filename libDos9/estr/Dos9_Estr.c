@@ -1,5 +1,8 @@
-#include "../libDos9-int.h"
+#include "../libDos9.h"
+#include <stdlib.h>
+#include <string.h>
 
+#define DEFAULT_ESTR 64
 #define _Dos9_EsTotalLen(ptrChaine) ((strlen(ptrChaine)/DEFAULT_ESTR+1)*DEFAULT_ESTR)
 #define _Dos9_EsTotalLen2(ptrChaine, ptrString) (((strlen(ptrChaine)+strlen(ptrString))/DEFAULT_ESTR+1)*DEFAULT_ESTR)
 #define _Dos9_EsTotalLen3(ptrChaine,iSize) (((strlen(ptrChaine)+iSize)/DEFAULT_ESTR+1)*DEFAULT_ESTR)
@@ -30,12 +33,12 @@ ESTR* Dos9_EsInit(void)
     if (ptrESTR)
     {
 
-        ptrESTR->ptrString=malloc(DEFAULT_ESTR);
+        ptrESTR->str=malloc(DEFAULT_ESTR);
 
-        if (!(ptrESTR->ptrString))
+        if (!(ptrESTR->str))
             goto Dos9_EsInit_Error;
 
-        ptrESTR->iLenght=DEFAULT_ESTR;
+        ptrESTR->len=DEFAULT_ESTR;
 
     } else {
 
@@ -49,7 +52,7 @@ ESTR* Dos9_EsInit(void)
 
     }
 
-    *(ptrESTR->ptrString)='\0';
+    *(ptrESTR->str)='\0';
 
     /* Release the lock */
 
@@ -60,7 +63,7 @@ LIBDOS9 int Dos9_EsFree(ESTR* ptrESTR)
 {
     /* free the string buffer */
 
-    free(ptrESTR->ptrString);
+    free(ptrESTR->str);
 
     /* free the structure itself */
     free(ptrESTR);
@@ -78,8 +81,8 @@ LIBDOS9 int Dos9_EsGet(ESTR* ptrESTR, FILE* ptrFile)
          *ptrCursor=NULL,
          *lpResult;
 
-    ptrCursor=ptrESTR->ptrString;
-    iCurrentL=ptrESTR->iLenght-1;
+    ptrCursor=ptrESTR->str;
+    iCurrentL=ptrESTR->len-1;
 
     while (1)
     {
@@ -104,30 +107,30 @@ LIBDOS9 int Dos9_EsGet(ESTR* ptrESTR, FILE* ptrFile)
 
         }
 
-        crLf=strchr(ptrESTR->ptrString, '\n');
+        crLf=strchr(ptrESTR->str, '\n');
 
         if (crLf!=NULL)
             break;
 
-        iCurrentL=ptrESTR->iLenght;
+        iCurrentL=ptrESTR->len;
 
-        ptrESTR->iLenght=ptrESTR->iLenght*2;
+        ptrESTR->len=ptrESTR->len*2;
 
-        crLf=realloc(ptrESTR->ptrString, ptrESTR->iLenght);
+        crLf=realloc(ptrESTR->str, ptrESTR->len);
 
         if (crLf==NULL) {
                 /* make if more fault tolerant, abort the loop,
                    and just read a part of the real line (not
                    so bad however). */
 
-                ptrESTR->iLenght=iCurrentL;
+                ptrESTR->len=iCurrentL;
 
                 return -1;
         }
 
-        ptrESTR->ptrString=crLf;
+        ptrESTR->str=crLf;
 
-        ptrCursor=ptrESTR->ptrString+iCurrentL-1;
+        ptrCursor=ptrESTR->str+iCurrentL-1;
 
     }
 
@@ -166,14 +169,14 @@ LIBDOS9 int Dos9_EsGet(ESTR* ptrESTR, FILE* ptrFile)
 LIBDOS9 int Dos9_EsCpy(ESTR* ptrESTR, const char* ptrChaine)
 {
     size_t iLen=_Dos9_EsTotalLen(ptrChaine);
-    char* ptrBuf=ptrESTR->ptrString;
-    if (ptrESTR->iLenght < iLen) {
+    char* ptrBuf=ptrESTR->str;
+    if (ptrESTR->len < iLen) {
 
         if (!(ptrBuf=realloc(ptrBuf, iLen)))
             return -1;
 
-        ptrESTR->ptrString=ptrBuf;
-        ptrESTR->iLenght=iLen;
+        ptrESTR->str=ptrBuf;
+        ptrESTR->len=iLen;
     }
 
     strcpy(ptrBuf, ptrChaine);
@@ -184,14 +187,14 @@ LIBDOS9 int Dos9_EsCpy(ESTR* ptrESTR, const char* ptrChaine)
 LIBDOS9 int Dos9_EsCpyN(ESTR* ptrESTR, const char* ptrChaine, size_t iSize)
 {
     size_t iLen=_Dos9_EsTotalLen4(iSize);
-    char* ptrBuf=ptrESTR->ptrString;
-    if (ptrESTR->iLenght < iLen)
+    char* ptrBuf=ptrESTR->str;
+    if (ptrESTR->len < iLen)
     {
         if (!(ptrBuf=realloc(ptrBuf, iLen)))
             return -1;
 
-        ptrESTR->ptrString=ptrBuf;
-        ptrESTR->iLenght=iLen;
+        ptrESTR->str=ptrBuf;
+        ptrESTR->len=iLen;
 
     }
 
@@ -210,16 +213,16 @@ LIBDOS9 int Dos9_EsCpyN(ESTR* ptrESTR, const char* ptrChaine, size_t iSize)
 
 LIBDOS9 int Dos9_EsCat(ESTR* ptrESTR, const char* ptrChaine)
 {
-   int iLen=_Dos9_EsTotalLen2(ptrESTR->ptrString,ptrChaine);
-   char *lpBuf=ptrESTR->ptrString;
+   int iLen=_Dos9_EsTotalLen2(ptrESTR->str,ptrChaine);
+   char *lpBuf=ptrESTR->str;
 
-   if ((ptrESTR->iLenght<iLen)) {
+   if ((ptrESTR->len<iLen)) {
 
         if (!(lpBuf=realloc(lpBuf,iLen)))
             return -1;
 
-        ptrESTR->ptrString=lpBuf;
-        ptrESTR->iLenght=iLen;
+        ptrESTR->str=lpBuf;
+        ptrESTR->len=iLen;
    }
 
    strcat(lpBuf, ptrChaine);
@@ -229,15 +232,15 @@ LIBDOS9 int Dos9_EsCat(ESTR* ptrESTR, const char* ptrChaine)
 
 LIBDOS9 int Dos9_EsCatN(ESTR* ptrESTR, const char* ptrChaine, size_t iSize)
 {
-   int iLen=_Dos9_EsTotalLen3(ptrESTR->ptrString,iSize+1);
-   char *lpBuf=ptrESTR->ptrString;
-   if (ptrESTR->iLenght<iLen) {
+   int iLen=_Dos9_EsTotalLen3(ptrESTR->str,iSize+1);
+   char *lpBuf=ptrESTR->str;
+   if (ptrESTR->len<iLen) {
 
         if (!(lpBuf=realloc(lpBuf,iLen)))
             return -1;
 
-        ptrESTR->ptrString=lpBuf;
-        ptrESTR->iLenght=iLen;
+        ptrESTR->str=lpBuf;
+        ptrESTR->len=iLen;
    }
 
    strncat(lpBuf, ptrChaine, iSize);
@@ -247,38 +250,38 @@ LIBDOS9 int Dos9_EsCatN(ESTR* ptrESTR, const char* ptrChaine, size_t iSize)
 
 LIBDOS9 int Dos9_EsCpyE(ESTR* ptrDest, const ESTR* ptrSource)
 {
-    int iLen=_Dos9_EsTotalLen(ptrSource->ptrString);
-    char* ptrBuf=ptrDest->ptrString;
+    int iLen=_Dos9_EsTotalLen(ptrSource->str);
+    char* ptrBuf=ptrDest->str;
 
-    if (iLen > ptrDest->iLenght)
+    if (iLen > ptrDest->len)
     {
         if (!(ptrBuf=realloc(ptrBuf, iLen)))
             return -1;
 
-        ptrDest->ptrString=ptrBuf;
-        ptrDest->iLenght=iLen;
+        ptrDest->str=ptrBuf;
+        ptrDest->len=iLen;
     }
 
-    strcpy(ptrBuf, ptrSource->ptrString);
+    strcpy(ptrBuf, ptrSource->str);
 
     return 0;
 }
 
 LIBDOS9 int Dos9_EsCatE(ESTR* ptrDest, const ESTR* ptrSource)
 {
-    int iLen=_Dos9_EsTotalLen2(ptrDest->ptrString, ptrSource->ptrString);
-    char* lpBuf=ptrDest->ptrString;
+    int iLen=_Dos9_EsTotalLen2(ptrDest->str, ptrSource->str);
+    char* lpBuf=ptrDest->str;
 
-    if (ptrDest->iLenght<iLen) {
+    if (ptrDest->len<iLen) {
 
         if (!(lpBuf=realloc(lpBuf,iLen)))
             return -1;
 
-        ptrDest->ptrString=lpBuf;
-        ptrDest->iLenght=iLen;
+        ptrDest->str=lpBuf;
+        ptrDest->len=iLen;
     }
 
-    strcat(lpBuf, ptrSource->ptrString);
+    strcat(lpBuf, ptrSource->str);
 
     return 0;
 }

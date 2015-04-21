@@ -22,5 +22,6 @@
 #define DOS9_CMD_MKDIR_H
 
 int Dos9_CmdMkdir(char* lpLine);
+int Dos9_CmdMakeDirs(char* str);
 
 #endif // DOS9_CMD_ECHO_H

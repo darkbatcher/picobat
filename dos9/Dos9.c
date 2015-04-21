@@ -1,5 +1,4 @@
 /*
-/*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
  *   Copyright (C) 2010-2014 DarkBatcher
@@ -50,12 +49,6 @@
 #include "core/Dos9_Debug.h"
 
 #include "../config.h"
-
-void Dos9_SigHandler(int c)
-{
-	/* this is to prevent ctrl-C or SIGINT to close the
-	   the command prompt. */
-}
 
 
 void Dos9_AssignCommandLine(char** argv)
@@ -125,7 +118,6 @@ int main(int argc, char *argv[])
     lpeEnv = Dos9_InitEnv(environ);
 
 	DOS9_DBG("Initializing signal handler...\n");
-	signal(SIGINT, Dos9_SigHandler);
 
 	DOS9_DBG("Initializing libDos9 ...\n");
 	if (Dos9_LibInit() == -1) {
@@ -393,7 +385,7 @@ int main(int argc, char *argv[])
 	}
 
 	/* run the batch */
-	strcpy(ifIn.lpFileName, lpFileName);
+	strcpy(ifIn.lpFileName, lpFileAbs);
 	ifIn.iPos=0;
 	ifIn.bEof=FALSE;
 

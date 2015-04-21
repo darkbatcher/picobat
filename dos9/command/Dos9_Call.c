@@ -282,6 +282,9 @@ int Dos9_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 
 	}
 
+	while (c <= '9')
+        Dos9_SetLocalVar(lpvTmpBlock, c++, "");
+
     /* set the %* parameter */
     Dos9_SetLocalVar(lpvTmpBlock, '*', lpFull);
 
@@ -303,11 +306,13 @@ int Dos9_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 	iLockState=Dos9_GetStreamStackLockState(lppsStreamStack);
 	Dos9_SetStreamStackLockState(lppsStreamStack, TRUE);
 
+
 	/* run the  command */
 
 	Dos9_RunBatch(&ifIn);
 
-	bAbortCommand=FALSE;
+    bAbortCommand=FALSE;
+
 
 	/* restore the stream stack */
 
@@ -318,13 +323,8 @@ int Dos9_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 
 	for (c=0; c < LOCAL_VAR_BLOCK_SIZE; c++) {
 
-		if (lpvTmpBlock[c]) {
-
-			free(lpvTmpBlock[c]);
-			lpvTmpBlock[c]=NULL;
-
-		}
-
+        if (Dos9_IsLocalVarValid(c))
+            Dos9_SetLocalVar(lpvLocalVars, c, NULL);
 	}
 
 	/* restore old settings before resuming to the old section */

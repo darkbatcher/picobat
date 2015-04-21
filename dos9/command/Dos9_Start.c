@@ -68,8 +68,124 @@ int Dos9_StartFile(const char* file, const char* args, const char* dir,
 	return 0;
 }
 
-#elif defined(HAVE_XDG_OPEN) && defined(_POSIX_C_SOURCE)
-#else
+#elif defined(XDG_OPEN) && defined(_POSIX_C_SOURCE)
+
+int Dos9_StartFile(const char* file, const char* args, const char* dir,
+					int mode, int wait)
+{
+    pid_t pid;
+
+    pid = fork();
+
+    ESTR* tmp;
+    char* arg[FILENAME_MAX];
+    int status, i;
+
+    if (pid == 0) {
+
+        /* we are in the son */
+        if (dir && chdir(dir) == -1) {
+            Dos9_ShowErrorMessage(DOS9_DIRECTORY_ERROR | DOS9_PRINT_C_ERROR,
+                                    dir,
+                                    FALSE);
+            exit(-1);
+        }
+
+        arg[0] = XDG_OPEN;
+        arg[1] = file;
+
+        i=2;
+
+        while ((i < (FILENAME_MAX-1))
+               && (args = Dos9_GetNextParameterEs(args, tmp=Dos9_EsInit()))) {
+            arg[i++] = Dos9_EsToChar(tmp);
+        }
+
+        arg[i] = NULL;
+
+        Dos9_OpenOutput(lppsStreamStack, "NULL", DOS9_STDOUT | DOS9_STDERR, 0);
+
+        if (execvp(XDG_OPEN, arg) == -1) {
+            Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR | DOS9_PRINT_C_ERROR,
+                                    XDG_OPEN,
+                                    FALSE);
+            exit(-1);
+        }
+
+    } else if (pid == -1) {
+
+        Dos9_ShowErrorMessage(DOS9_FAILED_FORK | DOS9_PRINT_C_ERROR,
+                        __FILE__ "/Dos9_StartFile()",
+                        FALSE);
+        return -1;
+
+    } else {
+
+        if (wait)
+            waitpid(pid, &status, 0);
+
+    }
+
+    return 0;
+
+}
+
+#elif defined _POSIX_C_SOURCE
+
+int Dos9_StartFile(const char* file, const char* args, const char* dir,
+					int mode, int wait)
+{
+    pid_t pid;
+
+    pid = fork();
+
+    ESTR* tmp;
+    char* arg[FILENAME_MAX];
+    int status, i;
+
+    if (pid == 0) {
+
+        Dos9_OpenOutput(lppsStreamStack, "NULL", DOS9_STDOUT | DOS9_STDERR, 0);
+
+        /* we are in the son */
+        if (dir && chdir(dir) == -1)
+            Dos9_ShowErrorMessage(DOS9_DIRECTORY_ERROR | DOS9_PRINT_C_ERROR,
+                                    dir,
+                                    1);
+
+        arg[0] = file;
+        i=1;
+
+        while ((i < (FILENAME_MAX-1))
+               && (args = Dos9_GetNextParameterEs(args, tmp=Dos9_EsInit()))) {
+            arg[i++] = Dos9_EsToChar(tmp);
+        }
+
+        arg[i] = NULL;
+
+        if (execvp(file, arg) == -1)
+            Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR | DOS9_PRINT_C_ERROR,
+                                    file,
+                                    1);
+
+    } else if (pid == -1) {
+
+        Dos9_ShowErrorMessage(DOS9_FAILED_FORK | DOS9_PRINT_C_ERROR,
+                        __FILE__ "/Dos9_StartFile()",
+                        FALSE);
+        return -1;
+
+    } else {
+
+        if (wait)
+            waitpid(pid, &status, 0);
+
+    }
+
+    return 0;
+
+}
+
 #endif // defined
 
 void Dos9_UseBackSlash(char* line)

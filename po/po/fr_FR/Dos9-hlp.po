@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dos9 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-03 17:56+0200\n"
+"POT-Creation-Date: 2015-04-21 23:57+0200\n"
 "PO-Revision-Date: 2014-04-15 18:03+0100\n"
 "Last-Translator: DarkBatcher <darkbatcher@gmail.com>\n"
 "Language-Team: French <darkbatcher@dos9.org>\n"
@@ -54,9 +54,10 @@ msgstr ""
 "Usage: COLOR [code]\n"
 
 #: ../dos9/lang/Dos9_ShowHelp.c:53
+#, fuzzy
 msgid ""
 "Copy file(s) to another location.\n"
-"Usage: COPY [/-Y | /Y] [/A[:]attributes] source destination\n"
+"Usage: COPY [/R] [/-Y | /Y] [/A[:]attributes] source destination\n"
 msgstr ""
 "Copie des fichiers vers un autre répertoire.\n"
 "Usage: COPY [/-Y | /Y] [/A[:]attributs] source destination\n"
@@ -241,16 +242,15 @@ msgstr ""
 "Usage: TITLE titre\n"
 
 #: ../dos9/lang/Dos9_ShowHelp.c:145
+#, fuzzy
 msgid ""
 "Print a file.\n"
 "Usage: TYPE [file ...]\n"
-"       MORE [file ...]\n"
 msgstr ""
 "Affiche le contenu d'un fichier.\n"
 "Usage: TYPE [fichier ...]\n"
-"       MORE [fichier ...]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:150
+#: ../dos9/lang/Dos9_ShowHelp.c:149
 msgid ""
 "Exit from the command prompt.\n"
 "Usage: EXIT [/b code]\n"
@@ -258,7 +258,7 @@ msgstr ""
 "Quitte l'invité de commande.\n"
 "Usage: EXIT [/b code]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:154
+#: ../dos9/lang/Dos9_ShowHelp.c:153
 msgid ""
 "Change positions of command-line parameters.\n"
 "Usage: SHIFT [/start_number | /s[:]start_number] [/d[:]displacement]\n"
@@ -266,7 +266,7 @@ msgstr ""
 "Change les positions des paramètres de ligne de commande.\n"
 "Usage: SHIFT [/nombre_début | /s[:]nombre_début] [/d[:]déplacement\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:158
+#: ../dos9/lang/Dos9_ShowHelp.c:157
 msgid ""
 "Search occurence of string in a set of files.\n"
 "Usage: FIND [/N] [/C] [/V] [/I] string [file ...]\n"
@@ -274,15 +274,33 @@ msgstr ""
 "Recherche les occurences d'une chaîne dans un groupe de fichiers.\n"
 "Usage: FIND [/N] [/C] [/V] [/I] chaîne [fichier ...]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:162
+#: ../dos9/lang/Dos9_ShowHelp.c:161
+msgid ""
+"Display content of files.\n"
+"Usage: MORE [/E] [/P] [/S] [/C] [/T[:]n] [+n] [file ...]\n"
+msgstr ""
+"Affiche le contenu d'un ou plusieur fichiers.\n"
+"Usage: MORE [/E] [/P] [/S] [/C] [/T[:]n] [+n] [fichier...]\n"
+
+#: ../dos9/lang/Dos9_ShowHelp.c:165
+msgid ""
+"[Obsolete] Sets or Clears Extended CTRL+C checking on DOS system. (Do "
+"nothing)\n"
+"Usage: BREAK [ON | OFF]\n"
+msgstr ""
+"[Obsolète] Active ou désactive le contrôle de CTRL+C sur les systèmesDOS. "
+"(Ne fait rien)\n"
+"Usage: Break [ON | OFF]\n"
+
+#: ../dos9/lang/Dos9_ShowHelp.c:169
 msgid ""
 "This help is voluntary limited help to fit in the binary. If you need to\n"
 "see the full documentation, please type:\n"
 "\n"
-"\tHLP command"
+"\tHELP command"
 msgstr ""
 "Cette aide est volontairement réduite pour tenir dans l'exécutable. Si vous "
 "avez\n"
 "besoin de lire la documentation complète, merci d'entrer :\n"
 "\n"
-"\tHLP commande"
+"\tHELP commande"

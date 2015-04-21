@@ -24,7 +24,9 @@
 #define DOS9_ASK_CONFIRMATION 0x01
 #define DOS9_DELETE_READONLY  0x02
 #define DOS9_DONT_ASK_GENERIC 0x04
+#define DOS9_USE_JOKER        0x08
 
 int Dos9_CmdDel(char* lpLine);
+int Dos9_CmdDelFile(char* file, int param, int* choice);
 
 #endif // DOS9_CMD_ECHO_H

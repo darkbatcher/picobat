@@ -80,18 +80,18 @@ int Dos9_CmdCd_nix(char* lpLine)
 	char* lpNext;
 	ESTR* lpEsDir=Dos9_EsInit();
 
-	if (!strnicmp(lpNext,"CD", 2)){
-		lpNext+=2;
-	} else if (!strnicmp(lpNext, "CHDIR", 5)) {
-		lpNext+=5;
+	if (!strnicmp(lpLine,"CD", 2)){
+		lpLine+=2;
+	} else if (!strnicmp(lpLine, "CHDIR", 5)) {
+		lpLine+=5;
 	}
 
-	if (*lpNext!=' '
-		&& *lpNext!='\t'
-		&& *lpNext!='\0'
-		&& *lpNext!=';'
+	if (*lpLine!=' '
+		&& *lpLine!='\t'
+		&& *lpLine!='\0'
+		&& *lpLine!=';'
 
-		&& *lpNext!=',') {
+		&& *lpLine!=',') {
 		Dos9_ShowErrorMessage(DOS9_BAD_COMMAND_LINE, NULL, FALSE);
 		goto error;
 	}

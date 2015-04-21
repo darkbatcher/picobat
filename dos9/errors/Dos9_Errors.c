@@ -211,6 +211,12 @@ void Dos9_LoadErrors(void)
     lpErrorMsg[DOS9_INVALID_NUMBER]=
         gettext("Error : \"%s\" is not a valid number.\n");
 
+    lpErrorMsg[DOS9_TOO_MANY_ARGS] =
+        gettext("Error : Too many arguments for %s command\n");
+
+    lpErrorMsg[DOS9_INVALID_IF_EXPRESSION] =
+        gettext("Error : \"%s\" is not a valid expression for IF command.\n");
+
 	lpQuitMessage=
 	    gettext("\nAborting current command, press any key to end Dos9.\n");
 

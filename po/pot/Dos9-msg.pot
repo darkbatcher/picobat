@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-04 15:24+0200\n"
+"POT-Creation-Date: 2015-04-21 23:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,112 +17,119 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../dos9/lang/Dos9_Lang.c:85
+#: ../dos9/lang/Dos9_Lang.c:86
 msgid "Echo command enabled"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:86
+#: ../dos9/lang/Dos9_Lang.c:87
 msgid "Echo command disabled"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:87
+#: ../dos9/lang/Dos9_Lang.c:88
 msgid "Press any key to continue..."
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:90
+#: ../dos9/lang/Dos9_Lang.c:91
 msgid "\tNo files found\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:91
+#: ../dos9/lang/Dos9_Lang.c:92
 msgid ""
 "\n"
 "Last change\t\tSize\tAttr.\tName\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:92
+#: ../dos9/lang/Dos9_Lang.c:93
 #, c-format
 msgid ""
 "\t\t\t\t\t\t%d Files\n"
 "\t\t\t\t\t\t%d Folders\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:95
+#: ../dos9/lang/Dos9_Lang.c:96
 #, c-format
 msgid "Are you sure you want to delete file \"%s\" ?"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:96
+#: ../dos9/lang/Dos9_Lang.c:97
 #, c-format
 msgid "Are you sure you want to remove \"%s\" directory ?"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:98
+#: ../dos9/lang/Dos9_Lang.c:99
+#, c-format
+msgid "File \"%s\" already exists, replace it by \"%s\" ?"
+msgstr ""
+
+#: ../dos9/lang/Dos9_Lang.c:101
 msgid " (Yes/no) "
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:99
+#: ../dos9/lang/Dos9_Lang.c:102
 msgid " (yes/No) "
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:100
+#: ../dos9/lang/Dos9_Lang.c:103
 msgid " (yes/no) "
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:102
+#: ../dos9/lang/Dos9_Lang.c:105
 msgid " (Yes/no/all) "
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:103
+#: ../dos9/lang/Dos9_Lang.c:106
 msgid " (yes/No/all) "
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:104
+#: ../dos9/lang/Dos9_Lang.c:107
 msgid " (yes/no/All) "
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:105
+#: ../dos9/lang/Dos9_Lang.c:108
 msgid " (yes/no/all) "
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:107
+#: ../dos9/lang/Dos9_Lang.c:110
 msgid "YES"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:108
+#: ../dos9/lang/Dos9_Lang.c:111
 msgid "Y"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:110
+#: ../dos9/lang/Dos9_Lang.c:113
 msgid "NO"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:111
+#: ../dos9/lang/Dos9_Lang.c:114
 msgid "N"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:113
+#: ../dos9/lang/Dos9_Lang.c:116
 msgid "ALL"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:114
+#: ../dos9/lang/Dos9_Lang.c:117
 msgid "A"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:116
+#: ../dos9/lang/Dos9_Lang.c:119
 msgid "Please enter a correct choice (or type enter to choose default) !\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:118
+#: ../dos9/lang/Dos9_Lang.c:121
 msgid ""
-"Usage:\tDOS9 [/v] [/c] [/f] [/e] [/q] [/i in] [/o out] [file]\n"
+"Usage:\tDOS9 [/A[:]attr] [/I in] [/O out] [file] [/K cmd|/C cmd]\n"
 "\n"
-"\t/v\tEnable delayed expansion.\n"
-"\t/c\tEnable CMDLYCORRECT option to enable more compatibility with\n"
-"\t\tcmd.exe.\n"
-"\t/f\tEnable floating numbers support.\n"
-"\t/e\tDisable echo command (disable current path printing).\n"
-"\t/q\tQuiet Mode (does not print start screen).\n"
-"\t/i in\tFile descriptor to used as input.\n"
-"\t/o out\tFile descriptor to be used as output.\n"
+"\t/A:attr\tA list of attributes for Dos9\n"
+"\t\tC\tEnable CMDLYCORRECT option to enable more compatibility\n"
+"\t\t\twith cmd.exe.\n"
+"\t\tF\tEnable floating numbers support.\n"
+"\t\tE\tDisable echo command (disable current path printing).\n"
+"\t\tQ\tQuiet Mode (does not print start screen).\n"
+"\t/I in\tFile descriptor to used as input.\n"
+"\t/O out\tFile descriptor to be used as output.\n"
 "\tfile\tA batch file to be executed.\n"
+"\t/C cmd\tRun cmd command and exit.\n"
+"\t/K cmd\tRun cmd command and stay active.\n"
 msgstr ""

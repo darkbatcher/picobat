@@ -15,12 +15,11 @@
 
 //#define DOS9_DBG_MODE
 #include "Dos9_Debug.h"
-
-void Dos9_ExpandSpecialVar(ESTR* ptrCommandLine)
+void Dos9_ExpandSpecialVar(ESTR* ptrCommandLine, ESTR** buf)
 {
 
-	ESTR* lpVarContent=Dos9_EsInit();
-	ESTR* lpExpanded=Dos9_EsInit();
+	ESTR *lpVarContent=buf[0],
+         *lpExpanded=buf[1];
 
 	char *lpToken=Dos9_EsToChar(ptrCommandLine),
 	      *lpNextToken,
@@ -55,18 +54,15 @@ void Dos9_ExpandSpecialVar(ESTR* ptrCommandLine)
 	Dos9_EsCat(lpExpanded, lpPreviousToken);
 	Dos9_EsCpyE(ptrCommandLine, lpExpanded);
 
-	Dos9_EsFree(lpVarContent);
-	Dos9_EsFree(lpExpanded);
-
 	DOS9_DBG("[ExpandSpecialVar] : \"%s\".\n", Dos9_EsToChar(ptrCommandLine));
 
 }
 
-void Dos9_ExpandVar(ESTR* ptrCommandLine, char cDelimiter)
+void Dos9_ExpandVar(ESTR* ptrCommandLine, char cDelimiter, ESTR** buf)
 {
 
-	ESTR* lpExpanded=Dos9_EsInit();
-	ESTR* lpVarContent=Dos9_EsInit();
+	ESTR *lpExpanded=buf[0],
+         *lpVarContent=buf[1];
 
 	char *ptrToken=Dos9_EsToChar(ptrCommandLine),
 	      *ptrNextToken,
@@ -75,7 +71,6 @@ void Dos9_ExpandVar(ESTR* ptrCommandLine, char cDelimiter)
 	char lpDelimiter[3]= {cDelimiter, 0, 0};
 
 	/* initialisation du buffer de sortie */
-	Dos9_EsCpy(lpExpanded,"");
 
 	while ((ptrNextToken=Dos9_SearchChar(ptrToken, cDelimiter))) {
 
@@ -148,20 +143,37 @@ void Dos9_ExpandVar(ESTR* ptrCommandLine, char cDelimiter)
 	         Dos9_EsToChar(ptrCommandLine)
 	        );
 
-	Dos9_EsFree(lpExpanded);
-	Dos9_EsFree(lpVarContent);
+}
+
+void Dos9_ReplaceVars(ESTR* lpEsStr)
+{
+    ESTR* buf[2] = {Dos9_EsInit(), Dos9_EsInit()};
+
+    Dos9_ExpandVar(lpEsStr, '%', buf);
+
+    Dos9_EsFree(buf[0]);
+    Dos9_EsFree(buf[1]);
 
 }
 
+
 void Dos9_DelayedExpand(ESTR* ptrCommandLine, char cEnableDelayedExpansion)
 {
-	Dos9_ExpandSpecialVar(ptrCommandLine);
+    ESTR* buf[2] = {Dos9_EsInit(), Dos9_EsInit()};
+
+	Dos9_ExpandSpecialVar(ptrCommandLine, buf);
+
+	*Dos9_EsToChar(buf[0]) = '\0';
+    *Dos9_EsToChar(buf[1]) = '\0';
 
 	if (cEnableDelayedExpansion) {
 
-		Dos9_ExpandVar(ptrCommandLine, '!');
+		Dos9_ExpandVar(ptrCommandLine, '!', buf);
 
 	}
+
+    Dos9_EsFree(buf[0]);
+    Dos9_EsFree(buf[1]);
 }
 
 void Dos9_RemoveEscapeChar(char* lpLine)
