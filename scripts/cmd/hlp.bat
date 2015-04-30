@@ -331,11 +331,11 @@ ECHO :: The command to view the stream
 ECHO set locale=%conf_locale%
 ECHO :: The locale to use when compiling
 ECHO set charset=%conf_charset%
+ECHO :: The charset to use when compiling
 ECHO set html_prg=start
 ECHO set txt_prg=more
 ECHO set ansi_prg=more
-ECHO set view_cmd=!!%%mode%%_prg!!
-ECHO :: The charset to use when compiling) > hlp.conf.bat
+ECHO set view_cmd=!!%%mode%%_prg!!) > hlp.conf.bat
 
 ECHO 5] Deleting outdated files :
 :: If we either change locale or encoding, we must regen files

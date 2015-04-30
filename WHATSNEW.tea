@@ -1133,7 +1133,7 @@ ${make local}
 	first stable version which is expected to be released within a short
 	time.
 
-{{Tuesday 21th, April 2014}}
+{{Tuesday 21rd, April}}
 
 	- Fixed a minor issue in the error system for the {IF} command, 
 	the command used to exit the interpretor uppon minor error.
@@ -1185,3 +1185,29 @@ ${make local}
 	they are surrounded by brackets, like in this example :
 
 	${if [ a equ b ] echo no, seriously ?}
+
+{{Friday 24th, April}}
+
+	- Fixed a few remaining bugs in the implementation of if extended
+	expression. As a example, in some case, an {or} used to be computed as
+	an {and}. These issues are now fixed and the command great.
+
+	- Merged tests of the {If} command. In fact, some test were duplicated
+	in different sources, but for maintenability reason, it try to give
+	up with the copy and past approach.
+
+	- Corrected an issue of the {TEA} text processor. When poducing html
+	output, {TEA} often failed to recognize path that refer to actual other
+	{TEA} based pages and others files. One of the typical issue was
+	that TEA sometimes appended ".html" to URIs (that already contained
+	an ".html" anyway). Now, {TEA} also check for protocol prefixes in order
+	to chose wether a ".html" suffix should be appended. Recognised
+	protocols are :
+
+	-- {http://}
+
+	-- {https://}
+
+	-- {mail://}
+
+

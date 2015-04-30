@@ -205,7 +205,7 @@ int Dos9_CmdDel(char* lpLine)
     end = list;
     while (end) {
 
-        Dos9_CmdDelFile(end->lpFileName, param, &choice);
+        status |= Dos9_CmdDelFile(end->lpFileName, param, &choice);
         end = end->lpflNext;
 
     }
@@ -213,7 +213,7 @@ int Dos9_CmdDel(char* lpLine)
     end = next;
     while (end) {
 
-        Dos9_CmdRmdirFile(end->lpFileName, param, &choice);
+        status |= Dos9_CmdRmdirFile(end->lpFileName, param, &choice);
         end = end->lpflNext;
 
     }
@@ -248,10 +248,25 @@ int Dos9_CmdDelFile(char* file, int param, int* choice)
 
     if ((res == DOS9_ASK_ALL) || (res == DOS9_ASK_YES)) {
 
-        printf("#lol #del Deleting file \"%s\"\n", file);
+        return Dos9_DelFile(file);
 
     }
 
     return 0;
 
+}
+
+int Dos9_DelFile(const char* file)
+{
+    if (remove(file)) {
+
+        Dos9_ShowErrorMessage(DOS9_UNABLE_DELETE | DOS9_PRINT_C_ERROR,
+                                file,
+                                0);
+
+        return -1;
+
+    }
+
+    return 0;
 }

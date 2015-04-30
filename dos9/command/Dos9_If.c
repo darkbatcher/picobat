@@ -128,7 +128,7 @@ int Dos9_CmdIf(char* lpParam)
 
 		}
 
-		iResult=!strcmp(Dos9_GetEnv(lpeEnv, "ERRORLEVEL"), lpArgument);
+        DOS9_IF_ERRORLEVEL_TEST(iResult, lpArgument, lpeEnv);
 
 		if (iFlag & DOS9_IF_NEGATION)
 			iResult=!iResult;
@@ -146,13 +146,7 @@ int Dos9_CmdIf(char* lpParam)
 
 		}
 
-		lpflFileList=Dos9_GetMatchFileList(lpArgument, DOS9_SEARCH_GET_FIRST_MATCH
-                                                | DOS9_SEARCH_NO_STAT);
-
-		iResult=(lpflFileList == NULL) ? FALSE : TRUE;
-
-		if (lpflFileList)
-			Dos9_FreeFileList(lpflFileList);
+		DOS9_IF_EXIST_TEST(iResult, lpArgument, lpflFileList);
 
 		if (iFlag & DOS9_IF_NEGATION)
 			iResult=!iResult;
@@ -171,7 +165,7 @@ int Dos9_CmdIf(char* lpParam)
 
 		/* avoid errors from conversion from 64 bits to
 		   32 bits */
-		iResult=(Dos9_GetEnv(lpeEnv, lpArgument) == NULL) ? FALSE : TRUE;
+        DOS9_IF_DEFINED_TEST(iResult, lpArgument, lpeEnv)
 
 		if (iFlag & DOS9_IF_NEGATION)
 			iResult=!iResult;

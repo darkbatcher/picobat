@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dos9 0.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-21 23:57+0200\n"
+"POT-Creation-Date: 2015-04-30 16:01+0200\n"
 "PO-Revision-Date: 2014-03-12 16:18+0100\n"
 "Last-Translator: DarkBatcher <darkbatcher@gmail.com>\n"
 "Language-Team: French <darkbatcher@dos9.org>\n"
@@ -171,7 +171,7 @@ msgstr ""
 #: ../dos9/errors/Dos9_Errors.c:157
 #, c-format
 msgid "Error : \"%s\" is not a valid mathematical expression.\n"
-msgstr "Erreur :   \"%s\" n'est pas une expreession mathématique valide.\n"
+msgstr "Erreur : \"%s\" n'est pas une expression mathématique valide.\n"
 
 #: ../dos9/errors/Dos9_Errors.c:160
 #, c-format
@@ -274,11 +274,37 @@ msgid "Error : Too many arguments for %s command\n"
 msgstr "Erreur : Trop d'arguments pour la commande %s.\n"
 
 #: ../dos9/errors/Dos9_Errors.c:218
-#, fuzzy, c-format
+#, c-format
 msgid "Error : \"%s\" is not a valid expression for IF command.\n"
-msgstr "Erreur :   \"%s\" n'est pas une expreession mathématique valide.\n"
+msgstr "Erreur : \"%s\" n'est pas une expression valide pour la commande"
+"IF.\n"
 
 #: ../dos9/errors/Dos9_Errors.c:221
+#, c-format
+msgid "Error : Unable to copy file \"%s\".\n"
+msgstr "Erreur : Impossible de copier le fichier\"%s\".\n"
+
+#: ../dos9/errors/Dos9_Errors.c:224
+#, c-format
+msgid "Error : Unable to move file \"%s\".\n"
+msgstr "Erreur : Impossible de déplacer le fichier \"%s\".\n"
+
+#: ../dos9/errors/Dos9_Errors.c:227
+#, c-format
+msgid "Error : Unable to create directory \"%s\".\n"
+msgstr "Erreur : Impossible de créer le dossier \"%s\".\n"
+
+#: ../dos9/errors/Dos9_Errors.c:230
+#, c-format
+msgid "Error : Unable to delete file \"%s\".\n"
+msgstr "Erreur : Impossible de suprimmer le dossier \"%s\"\n"
+
+#: ../dos9/errors/Dos9_Errors.c:233
+#, c-format
+msgid "Error : Unable to delete directory \"%s\".\n"
+msgstr "Erreur : Impossible de suprimmer le dossier \"%s\"\n"
+
+#: ../dos9/errors/Dos9_Errors.c:236
 msgid ""
 "\n"
 "Aborting current command, press any key to end Dos9.\n"

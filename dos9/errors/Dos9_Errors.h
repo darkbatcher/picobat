@@ -85,8 +85,13 @@ void Dos9_LoadErrors(void);
 #define DOS9_INVALID_NUMBER                 43
 #define DOS9_TOO_MANY_ARGS                  44
 #define DOS9_INVALID_IF_EXPRESSION          45
+#define DOS9_UNABLE_MOVE                    46
+#define DOS9_UNABLE_COPY                    47
+#define DOS9_UNABLE_DELETE                  48
+#define DOS9_UNABLE_MKDIR                   49
+#define DOS9_UNABLE_RMDIR                   50
 
-#define DOS9_ERROR_MESSAGE_NUMBER           46
+#define DOS9_ERROR_MESSAGE_NUMBER           51
 
 #define DOS9_PRINT_C_ERROR 0x80
 

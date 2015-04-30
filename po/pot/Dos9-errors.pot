@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-21 23:57+0200\n"
+"POT-Creation-Date: 2015-04-30 16:01+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -257,6 +257,31 @@ msgid "Error : \"%s\" is not a valid expression for IF command.\n"
 msgstr ""
 
 #: ../dos9/errors/Dos9_Errors.c:221
+#, c-format
+msgid "Error : Unable to copy file \"%s\".\n"
+msgstr ""
+
+#: ../dos9/errors/Dos9_Errors.c:224
+#, c-format
+msgid "Error : Unable to move file \"%s\".\n"
+msgstr ""
+
+#: ../dos9/errors/Dos9_Errors.c:227
+#, c-format
+msgid "Error : Unable to create directory \"%s\".\n"
+msgstr ""
+
+#: ../dos9/errors/Dos9_Errors.c:230
+#, c-format
+msgid "Error : Unable to delete file \"%s\".\n"
+msgstr ""
+
+#: ../dos9/errors/Dos9_Errors.c:233
+#, c-format
+msgid "Error : Unable to delete directory \"%s\".\n"
+msgstr ""
+
+#: ../dos9/errors/Dos9_Errors.c:236
 msgid ""
 "\n"
 "Aborting current command, press any key to end Dos9.\n"

@@ -156,7 +156,7 @@ int Dos9_CmdCopy(char* line)
     if (flags & DOS9_COPY_RECURSIVE) {
 
         for (i=0;i < len - 1 ; i++)
-            Dos9_CmdCopyRecursive(Dos9_EsToChar(file[i]),
+            status = Dos9_CmdCopyRecursive(Dos9_EsToChar(file[i]),
                         Dos9_EsToChar(file[len-1]), attr, flags);
 
         goto end;
@@ -205,7 +205,7 @@ int Dos9_CmdCopy(char* line)
 
     while (files) {
 
-        Dos9_CmdCopyFile(files->lpFileName, Dos9_EsToChar(file[len-1]), &flags);
+        status |= Dos9_CmdCopyFile(files->lpFileName, Dos9_EsToChar(file[len-1]), &flags);
 
         files = files->lpflNext;
     }
@@ -287,8 +287,18 @@ int Dos9_CmdCopyFile(const char* file, const char* dest, int* flags)
         }
     }
 
-    if (ok == 1)
-        printf("#Debug #lol %s \"%s\" to \"%s\"\n", (*flags & DOS9_COPY_MOVE) ? "moving" : "copying", file, Dos9_EsToChar(dest_real));
+    if (ok == 1) {
+
+        if (*flags & DOS9_COPY_MOVE) {
+
+            Dos9_MoveFile(file, dest_real->str);
+
+        } else {
+
+            Dos9_CopyFile(file, dest_real->str);
+        }
+
+    }
 
     Dos9_EsFree(dest_real);
 
@@ -343,7 +353,8 @@ int Dos9_CmdCopyRecursive(const char* file, const char* dest, short attr, int* f
 
         Dos9_MakePath(real_dest, 2, dest, (item->lpFileName)+(size+1));
 
-        printf("What about copying \"%s\" to \"%s\" ?\n", item->lpFileName, Dos9_EsToChar(real_dest));
+
+        status |= Dos9_CmdMakeDirs(real_dest->str);
 
         item = item->lpflNext;
 
@@ -355,9 +366,23 @@ int Dos9_CmdCopyRecursive(const char* file, const char* dest, short attr, int* f
 
         Dos9_MakePath(real_dest, 2, dest, (item->lpFileName)+(size));
 
-        printf("What about copying \"%s\" to \"%s\" ?\n", item->lpFileName, Dos9_EsToChar(real_dest));
+        status |= Dos9_CmdCopyFile(item->lpFileName, real_dest->str, &flags);
 
-        item = item->lpflNext;
+    }
+
+    if (*flags & DOS9_COPY_MOVE) {
+
+        item = dirs;
+
+        while (item) {
+
+            Dos9_MakePath(real_dest, 2, dest, (item->lpFileName)+(size+1));
+
+            status = Dos9_Rmdir(real_dest->str);
+
+            item = item->lpflNext;
+
+        }
 
     }
 
@@ -368,5 +393,79 @@ end:
     Dos9_FreeFileList(dirs);
 
     return status;
+
+}
+
+int Dos9_MoveFile(const char* file, const char* dest)
+{
+    if (rename(file, dest)) {
+
+        Dos9_ShowErrorMessage(DOS9_UNABLE_MOVE | DOS9_PRINT_C_ERROR,
+                                file,
+                                0);
+
+        return -1;
+    }
+
+    return 0;
+}
+
+int Dos9_CopyFile(const char* file, const char* dest)
+{
+    int old, new;
+    char buf[2048];
+    size_t count;
+    struct stat info;
+
+    old = open(file, O_RDONLY,0);
+
+    fstat(file, &info);
+
+    if (old == -1) {
+
+        Dos9_ShowErrorMessage(DOS9_UNABLE_COPY
+                                | DOS9_PRINT_C_ERROR, file, 0);
+
+
+        return -1;
+
+    }
+
+
+    new = open(file, O_WRONLY | O_CREAT, info.st_mode);
+
+    if (new == -1) {
+
+        close(old);
+
+        Dos9_ShowErrorMessage(DOS9_UNABLE_COPY
+                                | DOS9_PRINT_C_ERROR, file, 0);
+
+
+        return -1;
+
+    }
+
+    while ((count = read(old, buf, sizeof(buf))) != 0) {
+
+        if (count == -1 || write(new, buf, count) != count) {
+
+
+            close(old);
+            close(new);
+
+            Dos9_ShowErrorMessage(DOS9_UNABLE_COPY
+                                    | DOS9_PRINT_C_ERROR, file, 0);
+
+            return -1;
+
+        }
+
+    }
+
+    close(old);
+    close(new);
+
+    return 0;
 
 }
