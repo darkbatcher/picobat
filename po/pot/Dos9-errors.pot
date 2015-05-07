@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-30 16:01+0200\n"
+"POT-Creation-Date: 2015-05-07 23:54+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -282,6 +282,14 @@ msgid "Error : Unable to delete directory \"%s\".\n"
 msgstr ""
 
 #: ../dos9/errors/Dos9_Errors.c:236
+#, c-format
+msgid ""
+"Error : \"%s\" is a relative path, RENAME (or REN) do not handles relative "
+"path. If you want to move the file and rename it at the same time, you "
+"should use MOVE command.\n"
+msgstr ""
+
+#: ../dos9/errors/Dos9_Errors.c:241
 msgid ""
 "\n"
 "Aborting current command, press any key to end Dos9.\n"

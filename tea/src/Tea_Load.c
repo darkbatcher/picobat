@@ -254,6 +254,7 @@ char* Tea_SeekNextDelimiter(const char* lpBeginPos, const char** lpToken, int* i
 		lpToken++;
 		iTokenPos++;
 	}
+
 	return lpDelimPos;
 }
 

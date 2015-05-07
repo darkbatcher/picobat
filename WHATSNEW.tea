@@ -1210,4 +1210,18 @@ ${make local}
 
 	-- {mail://}
 
+{{Thursday 7th, May}}
+
+	- Fixed lots of man pages for the Dos9 project. Also fixed some little
+	bugs in the TEA text processor, dealing with some sort of {\\} that where
+	mishandled in previous patches.
+
+	- Changed regexp implementation after discovery of some bugs (eg "test" was
+	not matching "*e*s*"). The new implementation is less faulty and clearer to
+	use.
+
+	- Added a new {/e} switch to the {FIND} command (to produce somewhat similar
+	to UNIX's well known {grep -e} command). It enables use of joker expressions
+	on patterns. With this option {FIND} checks that the entire line matches
+	the expression.
 

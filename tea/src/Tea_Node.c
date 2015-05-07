@@ -25,10 +25,6 @@
 #include "Tea.h"
 #include "libDos9.h"
 
-const char* lpDelimsInlineOpen[]= {"\\{","{", NULL};
-const char* lpDelimsInlineClose[]= {"\\}","}", NULL};
-const char* lpDelimsInlineLink[]= {"\\|","|", NULL};
-
 TEANODE*    Tea_AllocTeaNode(void)
 {
 	TEANODE* lpTeaNode;
@@ -58,6 +54,32 @@ void        Tea_FreeTeaNode(TEANODE* lpTeaNode)
 	free(lpTeaNode);
 }
 
+char*       Tea_SeekNodeDelim(const char* line, char delim)
+{
+    char *ret,
+         delims[3]={'\\', delim, 0};
+
+    while (ret = strpbrk(line, delims)) {
+
+        if (*ret == '\\') {
+
+            if (*(ret+1)) {
+                line = ret + 2;
+                continue;
+            } else {
+                return NULL;
+            }
+        } else {
+
+            break;
+
+        }
+
+    }
+
+    return ret;
+}
+
 TEANODE*    Tea_ParseStringNode(char* lpContent, LP_PARSE_HANDLER pHandler)
 {
 	TEANODE *lpTeaNode, *lpTeaNodeBegin;
@@ -71,15 +93,7 @@ TEANODE*    Tea_ParseStringNode(char* lpContent, LP_PARSE_HANDLER pHandler)
 	lpTeaNode=Tea_AllocTeaNode();
 	lpTeaNodeBegin=lpTeaNode;
 
-	while ((lpNextToken=Tea_SeekNextDelimiter(lpSearchBegin, lpDelimsInlineOpen, &iTokenPos))) {
-
-		if (iTokenPos==0) {
-
-			/* si le { est échappé, on passe au { suivant */
-			lpSearchBegin=lpNextToken+2;
-			continue;
-
-		}
+	while ((lpNextToken=Tea_SeekNodeDelim(lpSearchBegin, '{'))) {
 
 		/* on découpe la ligne */
 		*lpNextToken='\0';
@@ -94,19 +108,7 @@ TEANODE*    Tea_ParseStringNode(char* lpContent, LP_PARSE_HANDLER pHandler)
 		lpContent=lpNextToken+1;
 		lpSearchBegin=lpContent;
 
-		while ((lpNextToken=Tea_SeekNextDelimiter(lpSearchBegin, lpDelimsInlineClose, &iTokenPos))) {
-
-			if (iTokenPos==0) {
-
-				/* si le { est échappé, on passe au { suivant */
-				lpSearchBegin=lpNextToken+2;
-				continue;
-
-			} else {
-				break;
-			}
-
-		}
+		lpNextToken = Tea_SeekNodeDelim(lpSearchBegin, '}');
 
 		/* si le bloc n'est pas fermé */
 		if (lpNextToken==NULL) {
@@ -127,21 +129,7 @@ TEANODE*    Tea_ParseStringNode(char* lpContent, LP_PARSE_HANDLER pHandler)
 		lpSearchBegin=lpContent;
 		lpContent=lpNextToken+1;
 
-		while ((lpNextToken=Tea_SeekNextDelimiter(lpSearchBegin, lpDelimsInlineLink, &iTokenPos))) {
-
-			if (iTokenPos==0) {
-
-				/* si le | est échappé, on passe au | suivant */
-				lpSearchBegin=lpNextToken+2;
-				continue;
-
-			} else {
-
-				break;
-
-			}
-
-		}
+		lpNextToken=Tea_SeekNodeDelim(lpSearchBegin, '|');
 
 		if (lpNextToken==NULL) {
 			/* le noeud est une emphase */

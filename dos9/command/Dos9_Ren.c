@@ -80,6 +80,18 @@ int Dos9_CmdRen(char* lpLine)
 
 		if ((lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
 
+			if (strchr(lpEstr->str, '/') || strchr(lpEstr->str, '\\')) {
+
+                Dos9_ShowErrorMessage(DOS9_MOVE_NOT_RENAME,
+                                        lpEstr->str,
+                                        0);
+
+                Dos9_EsFree(lpEstr);
+                return -1;
+
+			}
+
+
 			/* removing old filename */
 			lpLine=strrchr(lpFileDest, '\\');
 			lpToken=strrchr(lpFileDest, '/');
@@ -98,7 +110,8 @@ int Dos9_CmdRen(char* lpLine)
 			lpFileDest[FILENAME_MAX-1]='\0';
 			/* can't assume that what was buffered is NULL-terminated
 			   see the C-89,99,11 standards for further informations */
-			if (!printf("<DEBUG> renaming `%s` to `%s`\n", lpFileName, lpFileDest)) {
+			if (!printf("<DEBUG> renaming `%s` to `%s`\n", lpFileName, lpFileDest)
+                /* rename(lpFileName, lpFileDest) */) {
 
 				Dos9_ShowErrorMessage(DOS9_UNABLE_RENAME, lpFileName, FALSE);
 				Dos9_EsFree(lpEstr);

@@ -11,11 +11,11 @@
 	
 {{Syntaxe}}
 
-	Les {expression régulières} ont la syntaxe suivante :
+	Les {expression régulières} ont la syntaxe précédente :
 	
 	${expresion}
 	
-	Où expression est composée de n'importe quelle séquence de caractères. La signification est la suivante :
+	Où expression est composée de n'importe quelle séquence de caractères. La signification est la précédente :
 	
 		- {*} : accepte n'importe quelle séquence de caractères.
 		
@@ -45,13 +45,13 @@
 		- {mon} : {Dos9} cherche les dossiers nommés {mon} dans le répertoire courrant.
 		
 		- {expr*} : {Dos9} recherche les dossiers dont le nom correspond à {expr*}
-		dans les dossiers qu'on a trouvés à l'étape suivante.
+		dans les dossiers qu'on a trouvés à l'étape précédente.
 		
 		- {regulie?e} : {Dos9} recherche les dossiers dont le nom correspond à {regulie?e}
-		dans les dossiers qu'on a trouvés à l'étape suivante.
+		dans les dossiers qu'on a trouvés à l'étape précédente.
 		
 		- {*.*} : {Dos9} recherche les dossiers et les fichiers
-		dont le nom correspond à {*.*} dans les dossiers qu'on a trouvés à l'étape suivante.
+		dont le nom correspond à {*.*} dans les dossiers qu'on a trouvés à l'étape précédente.
 		
 	Il est possible d'utiliser le mode de recherche récursive. Dans ce cas, tous les morceaux
 	à l'exception du dernier sont utilisés pour déterminer les dossier dans lesquels la recherche
@@ -63,17 +63,15 @@
 		- {mon/expr*/regulie?e} : {Dos9} cherche les dossiers qui correspondent à l'expression 
 		{mon/expr*/regulie?e}.
 		
-		- {*.*} : Dos9 cherche les fichiers et dossiers qui correspondent à {*.*} et se situe dans
+		- {*.*} : Dos9 cherche les fichiers et dossiers qui correspondent à {*.*} et se situent dans
 		un des dossiers déterminés à l'étape précédente, ou dans un des sous dossier.
-		
-{{Exemples}}
 
 {{Compatibilité}}
 
 	Les expressions régulières sont compatibles avec {cmd.exe} depuis la version {0.7.2.0}. Auparavant,
 	certaines combinaisions innatendues pouvaient donner des erreurs ou des résultats incorrects.
 
-	Les {expressions sont disponibles depuis la version {0.0.50}
+	Les {expressions} sont disponibles depuis la version {0.0.50}
 
 {{A voir aussi}}
 

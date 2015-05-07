@@ -885,11 +885,11 @@ bin-strip: bin
 		$(STRIP) $$i;\
 	done;
 
-dist-bin-dir:
+dist-bin-dir: bin-strip
 	cp -R ./bin ./$(distdir)-bin
 
 dist-bin : dist-bin-dir	
-	tardir=$(distbdir) && $(am__tar) | GZIP=$(GZIP_ENV) gzip -c> $(distbdir)-bin.tar.gz
+	tardir=$(distbdir) && $(am__tar) | GZIP=$(GZIP_ENV) gzip -c> $(distbdir).tar.gz
 	$(rm_distbdir)
 
 dist-bin-zip: dist-bin-dir

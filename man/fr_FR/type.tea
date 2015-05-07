@@ -16,14 +16,13 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-{{Commande TYPE, Commande MORE}}
+{{Commande TYPE}}
 
 	Affiche le contenu d'un fichier texte.
 
 {{Synopsis}}
 
-${TYPE [fichier ...]
-MORE [fichier ...]}
+${TYPE [fichier ...]}
 
 	Affiche un ou plusieurs fichiers.
 
@@ -34,13 +33,10 @@ MORE [fichier ...]}
 		n'affiche rien et retourne une erreur. Si le chemin correspond
 		à des dossiers, alors ces dossiers ne seront pas affichés.
 
-	Contrairement, à l'implémentation de {cmd.exe}, l'affichage des noms de 	fichiers n'a lieu que si plusieurs fichiers sont à afficher (cmd.exe
+	Contrairement, à l'implémentation de {cmd.exe}, l'affichage des noms de
+ 	fichiers n'a lieu que si plusieurs fichiers sont à afficher (cmd.exe
 	affiche aussi les noms de fichiers si il n'y a qu'un seul fichier mais
 	que le chemin donné contient des caractères génériques.
-
-	L'implémentation proposée par {dos9|Dos9} de la commande {MORE} est
-	en fait l'implémentation de la commande {TYPE}, la compatiblité de la
-	commande {MORE} n'est donc que basique.
 
 	L'affichage de fichiers binaires a un résultat inderterminé. Pour
 	visualiser le contenu de tels fichiers, il est préférable d'utiliser
@@ -65,10 +61,9 @@ MORE [fichier ...]}
 
 	Partiellement compatible avec {cmd.exe}. La commande {TYPE} est
 	parfaitement compatible avec {cmd.exe} (execpté pour l'affichage des
-	noms de fichies). La commande {MORE}, elle, n'est pas compatible avec
-	{cmd.exe}. 
+	noms de fichiers).
 	
 {{A voir aussi}}
 
-	{nano|Commande NANO}, {iconv|Commande ICONV}
+	{more|Commande MORE}, {iconv|Commande ICONV}
 	

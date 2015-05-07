@@ -89,13 +89,15 @@ int Dos9_CmdCopy(char* line)
 
     int i=0,
         len=0,
-        flags=(*line == 'C') ? 0 : DOS9_COPY_MOVE,
+        flags=((*line | 'c'-'C' )== 'c' ) ? 0 : DOS9_COPY_MOVE,
         status=0;
 
     char *str;
     short attr;
 
     line +=4;
+
+    printf("Belief : MOVE = %d", DOS9_COPY_MOVE & flags);
 
     while (line = Dos9_GetNextParameterEs(line, param)) {
 
@@ -190,6 +192,13 @@ int Dos9_CmdCopy(char* line)
 
     }
 
+    end = files;
+
+    while (end) {
+        printf("#Got : \"%s\"\n", end->lpFileName);
+        end = end->lpflNext;
+    }
+
     /* Get matching attributes */
     Dos9_AttributesSplitFileList(attr | DOS9_ATTR_NO_DIR,
                                     files,
@@ -198,7 +207,14 @@ int Dos9_CmdCopy(char* line)
 
     end = files;
 
-    while ((end = end->lpflNext) && (i++ < 2));
+    while (end) {
+        printf("Got : \"%s\"\n", end->lpFileName);
+        end = end->lpflNext;
+    }
+
+    end = files;
+
+    while (end && (end = end->lpflNext) && (i++ < 2));
 
     if (i == 3)
         flags |= DOS9_COPY_MULTIPLE;
@@ -263,6 +279,8 @@ int Dos9_CmdCopyFile(const char* file, const char* dest, int* flags)
 
     }
 
+    printf("Copying \"%s\" to \"%s\"\n", file, dest_real->str);
+
     if (Dos9_FileExists(Dos9_EsToChar(dest_real))
         && !(*flags & DOS9_COPY_SILENCE)) {
 
@@ -319,8 +337,6 @@ int Dos9_CmdCopyRecursive(const char* file, const char* dest, short attr, int* f
 
     if (size = Dos9_GetStaticLength(file))
         size ++;
-
-    printf("Got size=%d\n", size);
 
     if (!(files = Dos9_GetMatchFileList(file, DOS9_SEARCH_DIR_MODE
                                              | DOS9_SEARCH_RECURSIVE
@@ -398,6 +414,9 @@ end:
 
 int Dos9_MoveFile(const char* file, const char* dest)
 {
+
+    printf("Copy %s to %s\n", file, dest);
+
     if (rename(file, dest)) {
 
         Dos9_ShowErrorMessage(DOS9_UNABLE_MOVE | DOS9_PRINT_C_ERROR,
@@ -414,12 +433,14 @@ int Dos9_CopyFile(const char* file, const char* dest)
 {
     int old, new;
     char buf[2048];
-    size_t count;
+    size_t count, writen;
     struct stat info;
+
+    printf("Copy %s to %s\n", file, dest);
 
     old = open(file, O_RDONLY,0);
 
-    fstat(file, &info);
+    fstat(old, &info);
 
     if (old == -1) {
 
@@ -432,7 +453,7 @@ int Dos9_CopyFile(const char* file, const char* dest)
     }
 
 
-    new = open(file, O_WRONLY | O_CREAT, info.st_mode);
+    new = open(dest, O_WRONLY | O_CREAT, info.st_mode);
 
     if (new == -1) {
 
@@ -448,7 +469,9 @@ int Dos9_CopyFile(const char* file, const char* dest)
 
     while ((count = read(old, buf, sizeof(buf))) != 0) {
 
-        if (count == -1 || write(new, buf, count) != count) {
+        printf("Read = %d", count);
+
+        if (count == -1) {
 
 
             close(old);
@@ -461,7 +484,27 @@ int Dos9_CopyFile(const char* file, const char* dest)
 
         }
 
+        writen = 0;
+
+        while ((writen += write(new, buf + writen, count - writen)) != count) {
+
+            if (writen == -1) {
+
+                close(old);
+                close(new);
+
+                Dos9_ShowErrorMessage(DOS9_UNABLE_COPY
+                                        | DOS9_PRINT_C_ERROR, file, 0);
+
+                return -1;
+
+            }
+
+        }
+
     }
+
+    fsync(new);
 
     close(old);
     close(new);

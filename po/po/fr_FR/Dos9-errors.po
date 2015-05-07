@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dos9 0.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-30 16:01+0200\n"
+"POT-Creation-Date: 2015-05-01 16:38+0200\n"
 "PO-Revision-Date: 2014-03-12 16:18+0100\n"
 "Last-Translator: DarkBatcher <darkbatcher@gmail.com>\n"
 "Language-Team: French <darkbatcher@dos9.org>\n"
@@ -36,7 +36,7 @@ msgid ""
 "operable program or a batch file.\n"
 msgstr ""
 "Erreur : \"%s\" n'est pas reconnu en tant que commande interne ou externe, "
-"programme exécutable è ou fichier batch.\n"
+"programme exécutable ou fichier batch.\n"
 
 #: ../dos9/errors/Dos9_Errors.c:74
 #, c-format
@@ -276,8 +276,7 @@ msgstr "Erreur : Trop d'arguments pour la commande %s.\n"
 #: ../dos9/errors/Dos9_Errors.c:218
 #, c-format
 msgid "Error : \"%s\" is not a valid expression for IF command.\n"
-msgstr "Erreur : \"%s\" n'est pas une expression valide pour la commande"
-"IF.\n"
+msgstr "Erreur : \"%s\" n'est pas une expression valide pour la commandeIF.\n"
 
 #: ../dos9/errors/Dos9_Errors.c:221
 #, c-format
@@ -305,6 +304,17 @@ msgid "Error : Unable to delete directory \"%s\".\n"
 msgstr "Erreur : Impossible de suprimmer le dossier \"%s\"\n"
 
 #: ../dos9/errors/Dos9_Errors.c:236
+#, c-format
+msgid ""
+"Error : \"%s\" is a relative path, RENAME (or REN) do not handles relative "
+"path. If you want to move the file and rename it at the same time, you "
+"should use MOVE command.\n"
+msgstr ""
+"Erreur : \"%s\" est un chemin relatif. Les commandes RENAME et REN ne "
+"supportent pas les chemins relatifs. Pour déplacer et renommer un fichier "
+"de façon simultanée, utilisez la commande MOVE.\n"
+
+#: ../dos9/errors/Dos9_Errors.c:241
 msgid ""
 "\n"
 "Aborting current command, press any key to end Dos9.\n"

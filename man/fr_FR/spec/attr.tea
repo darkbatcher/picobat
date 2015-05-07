@@ -1,11 +1,64 @@
 {{Les attributs de fichiers}}
 
-	   Chaque fichiers a ses attributs qui sont définis par le systèrme
+	Chaque fichiers a ses attributs qui sont définis par le systèrme
 	d'exploitation. {../dos9|Dos9} vous permet d'utiliser ces attributs pour
 	modifier le fonctionnement de vos scripts de commandes.
 	   
-	   {Attention:} Tous ces attributs ne sont pas portables sur {GNU\Linux} !
-	Cependant, si des attributs non supportés par le système d'exploitation
-	{GNU\Linux} sont utilisés sur cette platte-forme, ils seront ignorés
-	par l'interpréteur {../dos9|Dos9}.
-	
+	{Attention:} Tous ces attributs ne sont pas portables sur les systemes
+	Unix-like. Cependant, si vous décidez de les utiliser, ils seront juste
+	ignorés par l'interpréteur {../dos9|Dos9}. 
+
+{{Synopsis}}
+
+	En général, {../dos9|Dos9} fournit un commutateur standard pour spécifier
+	les attributs. Cette  syntaxe est:
+
+	${/a[:]attr}
+
+	L'usage des deux points n'est pas obligatoire mais est recommandée pour des
+	raisons de lisibilité.
+
+		- {attr} : Une suite de lettres (éventuellement précédé du signe
+		{-}) qui décrivent les attributs des fichiers.
+
+{{Les attributs}}
+
+	Les différents lettres qui dénottent les attributs sont les suivantes:
+
+		- Pour les systêmes {WINDOWS} et {UNIX-like}:
+
+			-- {D} : Le fichier est un répertoire.
+
+			-- {R} : Le fichier est en lecture seule.
+
+			-- {I} : Le fichier est vide.
+
+		- Pour les systèmes {WINDOWS} uniquement:
+
+			-- {H} : Le fichier est caché.
+
+			-- {S} : Le fichier est système.
+
+			-- {A} : Le fichier est archivé.
+
+			-- {L} : Le fichier est un point d'analyse.
+
+	Il est possible de sélectionner les fichiers n'ayant pas un attribut en
+	préfixant la lettre correspondante à l'atribut par le préfixe {-} (négation).
+
+{{Exemple}}
+
+	${/A:R-I}
+
+	Sélectionne les fichier en lecture seule et non vides.
+
+{{Compatibilité}}
+
+	Les sélecteurs d'attributs d'attributs sont disponibles depuis la version
+	{0.4.0.2}.
+
+	Totalement compatible avec {cmd.exe}
+
+{{À voir aussi}}
+
+	{index|Index des spécifications}, {../dir|Commande DIR}, {../del|Commande DEL}

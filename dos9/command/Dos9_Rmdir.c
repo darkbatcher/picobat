@@ -62,7 +62,7 @@ int Dos9_CmdRmdir(char* lpLine)
 	ESTR *lpEstr=Dos9_EsInit(),
           *name[FILENAME_MAX];
 
-	int	mode=DOS9_SEARCH_DEFAULT | DOS9_SEARCH_NO_PSEUDO_DIR | DOS9_SEARCH_DIR_MODE,
+	int	mode=DOS9_SEARCH_DEFAULT | DOS9_SEARCH_NO_PSEUDO_DIR,
 		param=DOS9_ASK_CONFIRMATION,
 		choice,
 		n=0,
@@ -98,7 +98,8 @@ int Dos9_CmdRmdir(char* lpLine)
 
 		} else if (!stricmp(Dos9_EsToChar(lpEstr), "/Q")) {
 
-			param=0;
+			param = 0;
+			choice = DOS9_ASK_ALL;
 
 		} else {
 
@@ -140,6 +141,7 @@ int Dos9_CmdRmdir(char* lpLine)
             if (files == NULL) {
 
                 files = dir;
+                next = dir;
 
             } else {
 
@@ -207,7 +209,7 @@ int Dos9_CmdRmdirFile(char* dir, int param, int* choice)
 				res=Dos9_AskConfirmation(DOS9_ASK_YNA
 				                             | DOS9_ASK_INVALID_REASK
 				                             | DOS9_ASK_DEFAULT_N,
-				                             lpDelConfirm,
+				                             lpRmdirConfirm,
 				                             dir
 				                            );
         if (res == DOS9_ASK_ALL)

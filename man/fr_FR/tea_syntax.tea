@@ -1,14 +1,99 @@
-{{Syntaxe des fichiers TEA}}
+﻿{{Spécifications du langage TEA}}
 
-	Le fichiers {TEA} sont des fichiers utilisés par la commande {tea|TEA} pour formatter un document
-	texte. Ces fichiers sont conçus pour être simple et clairs à écrire.
+	Le {langage TEA} est un langage permettant la mise en page de texte, via le processeur de texte {tea|TEA}. Il consiste a
+	insérer dans le texte des délimiteurs qui permettent de distinguer la nature des différentes parties du texte.
 	
-	Les possibilités de TEA sont volontairement très restreintes afin de rester simple et afin de
-	faciliter l'apprentissage de l'utilsateur. C'est pourquoi si vous voulez produire
-	des documents plus avancées, utilisez plutôt un préprocesseur de texte offrant des commandes
-	plus nombreuses comme {LaTex} ou {GNU groff}.
+	Le langage {TEA} possède par défaut 5 différents délimiteurs. 3 délimiteurs, les {délimiteurs de type bloc}, servent à distinguer 
+	les différents types de paragraphes, et 2 délimiteurs, {les délimiteurs de type inline}, qui peuvent être placés dans
+	un paragraphe pour modifier l'apparence du texte. Il est cependant possible d'ajouter des délimiteurs via les extensions, ce qui sera traité plus bas
+	dans le présent document.
 	
-{{Synopsis - Les blocs}}
+{{Les délimiteurs de type bloc}}
 
-	{TEA} traite les document en utilisant deux types d'objets différents. Les premiers sont les {blocs}.
-	Ceux-ci sont l'équivalent du paragraphe.
+${{{...}}
+
+${...}
+
+- ...}
+   
+   - Les {délimiteurs de type bloc} servent à modifier le type des paragraphes. Un paragraphe est formé par des lignes de texte
+   se suivant, éventuellement séparés par des retours à la ligne. Les paragraphes sont séparés les uns des autres par des
+   sauts de lignes (lignes vides ou ne contennant que des caractères transparents). Les trois types de délimiteurs sont :
+   
+	  - {\{\{...\}\}} : Spécifie un bloc de {titre}. Le paragraphe placé entre les deux accolades est considéré comme un titre.
+		Il n'y a pas de mise en page spécifique à ces titres, cela dit, il est d'usage de les débuter à la première colonne et
+		de les ecrire en majuscule. Les espaces et tablutions superflus sont éliminés. Si la ligne dépasse de l'écran, elle est 
+		poursuivie en dessous sans alinéa.
+
+	   - {$\{...\}} : Spécifie un bloc de {code}. Le paragraphe placé entre les deux accolades est considéré comme du code informatique
+	   La mise en page est la suivante:
+	   
+			-- Le paragraphe conserve ses espaces et tabulations superflus, mais les tabulations sont converties en
+				espaces simples. 
+			 
+			-- Le paragraphe ne possède pas d'alinéa
+			
+			-- Les lignes trop longues recommencent sur la ligne suivante avec un alinéa.
+
+	-	{- ...} : Spécifie que le paragraphe suivant est un élément d'une liste. La suite du paragraphe est interprétée comme si il
+		s'agissait d'un paragraphe normal. Vous pouvez spécifier plusieurs niveau de liste, en plaçant successivement plusieurs {-}
+		les uns à la suite des autres, dans ce cas, il n'y aura tout de même qu'un seul {-} dans la sortie. La présentation est la même
+		que pour les paragraphes normaux.
+	
+	-	Les paragraphes qui ne possèdent pas de délimiteurs de blocs, sont considérés comme des paragraphes de texte conventionnels.
+		leur présentation est la suivante :
+		
+			-- Les espaces et les tabulations superflus sont supprimés.
+				
+			-- Le début du paragraphe possède un alinéa.
+				
+			-- Les lignes trop longues recommencent sur la ligne suivante en dessous du paragraphe.
+		
+		
+
+{{Les délimiteurs de type inline}}
+
+${{...}
+{...|...}}
+	
+	Les délimiteurs de type {inline} permettent de modifier l'allure du texte à l'intérieur d'un paragraphe. Pour des raisons évidentes,
+	il n'est par exemple pas possibles qu'un délimiteur de ce type soit présent, où, du moins, soit interprété dans un block de type {titre}
+	ou {code}. Il en existe deux différents, les deux suivants :
+
+	- {\{...\}} : Spécifie une {portion de texte emphasée}, c'est-à-dire à mettre en valeur par rapport au reste du texte. Ce délimiteur peut être
+	utilisé pour les noms de personnes, ou de programmes, ou alors un idée importante par exemple. La présentation finale du contenu de cet délimiteur
+	n'est pas définie, et dépend des capacitées du format de sortie. Par exemple, dans un fichier texte brut, le rendu sera obtenu sera le texte en
+	{majuscule}, alors que dans un fichier html, le rendu obtenu sera le texte entres balises {<strong></strong>}.
+
+	- {\{..\|..\}} : Désigne un {lien}, comme un lien hypertexte que l'on trouve sur les pages internets. Il permet d'indiquer à l'utilisateur une page
+	ou une ressource externe qui peut être utile pour la compréhension de la page courrante. La première partie, avant le {\|} indique le chemin où
+	la ressource doit être recherchée, ce chemin peut être à la fois une addresse internet, ou simplement un chemin de fichier. Dans le cas d'un chemin de
+	fichier, si le chemin ne porte aucune extension, alors, l'extension du format de sortie est ajoutée à l'extension, ce qui permet de ne pas se soucier
+	du format de sortie si on construit un document en plusieurs pages ou fichiers. La seconde partie, elle, est constituée du texte qui compose le lien,
+	l'idée qui est liée à la ressource désignée par le lien, et qui le justifie. 
+	La sortie obtenue avec ce type de fichier dépend du type de format de sortie. Par exemple, dans un ficher texte brut, le rendu sera traditionnellement
+	{... (voir ``...'')}, dans le cas d'un fichier {HTML}, le rendu sera traditionnelement une balise {<a></a>}.
+
+{{Les commentaires}}
+	
+	Il est possible de spécifier des commentaires dans une page source pour {tea|TEA}. Il suffit d'utiliser l'écriture suivante :
+	
+${	# commentaire}
+
+	Dans ce cas, il est important que le {dièse (#)} se trouve à la première colonne de la page source. Le commentaire dure toute la ligne.
+	Dans une page source, on se passe aisément de commentaire, si la présentation est correcte.
+	
+{{Les caractères échappés}}
+
+	Il est possible d'échapper un caractère si on ne veut pas qu'il soit interprété par {tea|TEA}. Pour cela, il faut le faire précèder
+	d'un {antislash (\\)}.
+
+${	\\caractère}
+
+	Avec :
+	
+	- {caractère} :  le caractère à échapper.
+
+{{À voir aussi}}
+
+	{tea|Commande TEA}

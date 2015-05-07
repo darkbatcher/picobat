@@ -21,6 +21,11 @@
 #ifndef DOS9_FIND_H
 #define DOS9_FIND_H
 
+#define DOS9_FIND_CASE_UNSENSITIVE 1
+#define DOS9_FIND_CASE_SENSITIVE   0
+#define DOS9_FIND_TRADITIONAL      0
+#define DOS9_FIND_REGEXP           0x02
+
 int Dos9_CmdFind(char* lpLine);
 
 #endif /* DOS9_FIND_H */

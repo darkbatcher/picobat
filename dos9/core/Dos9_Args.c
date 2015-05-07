@@ -197,11 +197,16 @@ char* Dos9_GetNextParameterEsD(char* lpLine, ESTR* lpReturn, const
 	size_t iSize;
 
 	char *lpBegin,
-	     *lpEnd=NULL;
+	     *lpEnd=NULL,
+	     quote;
+
+next:
 
 	if (Dos9_GetParameterPointers(&lpBegin, &lpEnd, lpDelims, lpLine)
 		==FALSE)
 		return NULL;
+
+    quote = *lpBegin;
 
 	/* the following are gymnastics in order to remove to
 	   which quotes should be remooved from the parmaters */
@@ -262,6 +267,13 @@ char* Dos9_GetNextParameterEsD(char* lpLine, ESTR* lpReturn, const
 		}
 
 		Dos9_EsCpyN(lpReturn, lpBegin, iSize);
+
+	}
+
+	if (*(lpReturn->str) == '^' && !*(lpReturn->str+1)) {
+
+        lpLine = lpEnd;
+        goto next;
 
 	}
 

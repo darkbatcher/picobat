@@ -22,7 +22,7 @@
 
 {{Synopsis}}
 
-	${FIND [/c] [/n] [/i] [/v] chaine [fichier ...]}
+	${FIND [/c] [/n] [/i] [/v] [/e] chaine [fichier ...]}
 
 	Cherche les occurences d'une chaine de caractères dans un ou plusieurs
 	fichiers, ou dans l'entrée standard ({stdin}).
@@ -42,7 +42,13 @@
 	{fichier ...} a été spécifié mais qu'aucun fichier ne correspond à la
 	liste, la commande s'interrompt et affiche un message d'erreur.
 
-		- {/c} : Affiche seulement le nombre de lignes de {fichiers ...}	qui contiennent au moins une occurence de {chaine}.
+		- {/e} : Signale que {chaîne} doît être traitée comme une
+	{spec/regexp|expression régulière}. La recherche cherche alors les
+	lignes qui correspondent entièrement à l'expression régulière contenue
+	dans {chaîne}.
+
+		- {/c} : Affiche seulement le nombre de lignes de {fichiers ...}
+	qui contiennent au moins une occurence de {chaine}.
 
 		- {/n} : Affiche le numéro des lignes qui contiennent au moins
 	une occurence de {chaine} conjointement avec les lignes en question.
@@ -84,7 +90,7 @@
 
 {{Compatibilité}}
 
-	Compatible avec {cmd.exe}. À l'exption du cas des guillemets de 
+	Compatible avec {cmd.exe}. À l'exception du cas des guillemets de 
 	{chaine}.
 
 	Disponible depuis la version {2014.0.9b}.

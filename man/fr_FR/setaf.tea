@@ -186,7 +186,7 @@ ${fonction(expression)}
 		
 		- {2_pi} : 2/pi
 		
-		- {2_sqrtpi} : 2/sqrt(pi}
+		- {2_sqrtpi} : 2/sqrt(pi)
 		
 		- {sqrt2} : sqrt(2)
 		
@@ -232,8 +232,8 @@ ${2*10^60-2*10^60+1}
 	Un autre problème peut être la comparaison de deux résultats de nombres flotants. En effet, il est possible que les
 	arrondi donnent deux résultat distincts (et néanmoins très proches) pour deux expression qui rigoureusement donnent
 	le même résultat. Un tel exemple est {1/3*3} qui donnera {0.999999...} et non {1}. Ce type de petites imprécisions est
-	problématique pour la comparaision de nombres flotants. Pour rendre cette comparaison correcte, le comparateur {FEQ} de
-	la {if|commande IF}.
+	problématique pour la comparaision de nombres flotants. Pour rendre cette comparaison correcte, il faut utiliser le
+	comparant {FEQ} de la {if|commande IF}.
 			
 {{Notes}}
 	

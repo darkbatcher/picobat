@@ -17,7 +17,7 @@ dnl   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 dnl
 
 AC_INIT([Dos9],
-	[214.1b],
+	[215.1],
 	[darkbatcher@dos9.org],
 	[Dos9],
 	[http://www.dos9.org/])

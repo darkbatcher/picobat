@@ -53,7 +53,7 @@ ${IF [/i] [NOT] chaine1==chaine2 (
 	La seconde syntaxe est utilisée pour comparer à la fois des chaines
 	et des nombres. Elle permet aussi d'effectuer des tests plus diversifiés
 	sur les opérandes. Cette syntaxe doit aussi être préférée à la précédente
-	car elle est plus résistante aux bogues d'{expansion|spec/exp} (pour cela
+	car elle est plus résistante aux bogues d'{spec/exp|expansion} (pour cela
 	voir les sections suivantes sur les bogues).
 		 
 ${IF [/i] chaine1 cmp chaine2 (
@@ -130,8 +130,52 @@ ${IF [NOT] [DEFINED | EXIST | ERRORLEVEL] objet (
 ${			IF %ERRORLEVEL%==valeur}
 		
 	   Si vous spécifiez l'opérateur {NOT} alors le code à exécuter est
-	exécuté si la condition est fausse
-	
+	exécuté si la condition est fausse.
+
+{{Synopsis - Expressions (Quatrième syntaxe)}}
+
+	{Dos9} offre une quatrième syntaxe pour la commande {IF}. Cette
+	syntaxe permet d'insérer des liens logiques entres différents tests,
+	ce qui manquait grandement à la commande if.
+
+${IF [/i] [ expression ] (
+	:: code à exécuter
+...
+)}
+
+	Exécute le code à exécuter si la condition exprimmée par {expression}
+	est vraie.
+
+		- {/i} : Ignore la casse.
+
+		- {[ expression ]} : Condition à exprimer pour que le code
+		soit exécuté. Il est important d'entourer expression par des
+		crochets et de respecter les espaces entre les différents
+		éléments de l'expression. 
+		
+		@- Une expression est formée de tests séparés par des
+		opérateurs.
+
+		-- Les tests peuvent se présenter sous deux formes :
+
+${[NOT] cmp1 comparant cmp2
+[NOT] [Defined|Errorlevel|Exist] objet}
+
+		@-- Ces deux formes de test on le même effet que les tests
+		décrits plus haut.
+
+		-- Les opérateurs sont au nombres de deux :
+
+			--- {or} : Ou logique
+			
+			--- {and} : Et logique
+
+		@-- Le {and} est prioritaire sur le {ou}.
+
+		@- Enfin, il est possible de spécifier une sous-expression à
+		évaluer en premier en utilisant des crochets {[]}.
+
+
 {{Synopsis - sous commande ELSE}}
 	
 	À la suite de n'importe quel type de {if} précédemment décrit, un mot-clé
