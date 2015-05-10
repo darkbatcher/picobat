@@ -49,17 +49,23 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
 	     *lpTmp;
 
 	int res;
-    struct sigaction action;
-    memset(&action, 0, sizeof(action));
+
+	#ifdef _POSIX_C_SOURCE
+    	struct sigaction action;
+    	memset(&action, 0, sizeof(action));
+	#endif
 
 	/* Create a non-local jump to get back to here if the user presses CTRL-C (ie. break)
        Note that by using break, the user admits some part of memory leakage...
        */
     if (setjmp(jbBreak));
-
-    action.sa_handler=Dos9_SigHandlerBreak;
-    action.sa_flags=SA_NODEFER;
-	sigaction(SIGINT, &action, NULL); /* Sets the default signal handler */
+	#ifdef _POSIX_C_SOURCE
+    	action.sa_handler=Dos9_SigHandlerBreak;
+    	action.sa_flags=SA_NODEFER;
+		sigaction(SIGINT, &action, NULL); /* Sets the default signal handler */
+	#elif defined(WIN32)
+		SetConsoleCtrlHandler(Dos9_SigHandler, TRUE); /* set default signal handler */
+	#endif // WINDOWS
 
 	while (!(pIn->bEof)) {
 
@@ -889,7 +895,26 @@ int Dos9_RunExternalBatch(char* lpFileName, char* lpFullLine, char** lpArguments
 
 #endif /* WIN32 */
 
+#ifdef _POSIX_C_SOURCE
+
 void Dos9_SigHandlerBreak(int sig)
 {
     longjmp(jbBreak, 1);
 }
+
+#elif defined WIN32
+
+BOOL WINAPI Dos9_SigHandler(DWORD dwCtrlType)
+{
+	switch(dwCtrlType) {
+		case CTRL_C_EVENT:
+		case CTRL_BREAK_EVENT:
+
+		longjmp(jbBreak, 1);
+
+	}
+
+	return TRUE;
+}
+
+#endif // _POSIX_C_SOURCE

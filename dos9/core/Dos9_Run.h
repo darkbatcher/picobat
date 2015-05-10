@@ -52,6 +52,13 @@ int Dos9_RunExternalFile(char* lpFileName, char** lpArguments);
 
 int Dos9_RunExternalBatch(char* lpFileName, char* lpFullLine, char** lpArguments);
 
+#ifdef _POSIX_C_SOURCE
+
 void Dos9_SigHandlerBreak(int c);
 
+#elif defined(WIN32)
+
+BOOL WINAPI Dos9_SigHandler(DWORD dwCtrlType);
+
+#endif
 #endif
