@@ -19,35 +19,35 @@
 
 	   Les commnde {DEL} et {ERASE} permettent de supprimer de fichiers ou
 	des listes de fichiers sur un disque.
-	
+
 {{Synopsis}}
 
 ${DEL [/P] [/F] [/S] [/Q] [/A[:]attributs] nom ...
 ERASE [/P] [/F] [/S] [/Q] [/A[:]attributs] nom ...}
-	
+
 	Supprime un ou plusieurs fichier.
-	
+
 		- {/P} : Demande confirmation avant de supprimer un fichier.
-		
+
 		- {/F} : Force la suppression des fichiers en lecture seule.
-		
+
 		- {/Q} : Ne demande pas de confimation lors d'une suppression
 		  avec caractères génériques.
-		
+
 		- {/A[:]attributs} : Sélectionne les fichier à supprimer en
-		fonction de leurs attributs. voir {spec/attr|les attributs 
-		de fichier}. 
-			
+		fonction de leurs attributs. voir {spec/attr|les attributs
+		de fichier}.
+
 		- {nom} : Le chemin du fichier à supprimer. Ce chemin peut
 		contenir {spec/regexp|des caractères génériques}.
 
-	
+
 {{Compatibilité}}
 
 	Disponible depuis la version {0.4}.
 
 	Parfaitement compatible avec {cmd.exe}.
-	
+
 {{A voir aussi}}
 
 	{rd|Commandes RD et RMDIR},  {md|Commandes MD et MKDIR},

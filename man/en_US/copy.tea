@@ -28,13 +28,13 @@ ${COPY [/-Y | /Y] [/R] [/A[:]attributes] source [...] destination}
 	- {/-Y} : Prompt the user for confirmation.
 
 	- {/Y} : Do not prompt the user for confirmation.
-	
+
 	- {source} : The path of files to be copied (can include
 	{spec/regexp|regular expressions}).
-		
+
 	- {destination} : The path of the new files to be created (can not
 	include {spec/regexp|regular expression}).
-		
+
 	@- {destination} is considered to be the path of the destination files,
 	unless,
 
@@ -46,13 +46,13 @@ ${COPY [/-Y | /Y] [/R] [/A[:]attributes] source [...] destination}
 
 	@- In any of the previous cases, {destination} is considered to be the
 	folder where files refered to by {source} must be copied. Thus files
-	resulting from copy will keep their original names.			
+	resulting from copy will keep their original names.
 
 	- {/R} : Turn on recursive mode. This mode allow copying a complete
 	tree. If {sources} refers to various tree, then the tree will be merged
 	in the {destination} folder. If {source} is a {spec/regexp|regular
 	expression}, then the static part of the regular expression will be
-	removed from files absolute path to produce relative path in 
+	removed from files absolute path to produce relative path in
 	{destination} folder.
 
 	@- As an example, if {source} is {path/to/folder/*.*} then the file
@@ -68,7 +68,7 @@ ${COPY [/-Y | /Y] [/R] [/A[:]attributes] source [...] destination}
 	Partially compatible with {cmd.exe}. Some {cmd.exe} are ignored
 	because they do not make sense anymore. The {/A} switch is a
 	{dos9|Dos9} extension.
-	
+
 {{See also}}
 
 	{del|DEL and ERASE commands}, {move|MOVE command}

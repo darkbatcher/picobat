@@ -18,33 +18,33 @@
 
 {{Commande IF}}
 
-	   La commande {IF} permet le traitement conditionnel des 
+	   La commande {IF} permet le traitement conditionnel des
 	information et {spec/cond|l'exécution conditionnelle} de commandes.
-	
-	   Cette commande est très importante dans la création de 
+
+	   Cette commande est très importante dans la création de
 	script batch avancés.
-	   
-	   Il faut aussi préférer les {IF} multilignes à la combinaison 
+
+	   Il faut aussi préférer les {IF} multilignes à la combinaison
 	{IF}-{goto|GOTO}, dans la mesure du possible
-	
+
 {{Synopsis - Première syntaxe}}
 
 	La première syntaxe de la commande {IF} permet uniquement de comparer
 	deux chaînes de caractères et d'exécuter une liste de commandes si
 	elles sont égales. La syntaxe est :
-	
+
 ${IF [/i] [NOT] chaine1==chaine2 (
 	:: code à exécuter
 	...
 )}
-	
+
 	Vérifie si {chaine1} et {chaine2} sont égales et exécute le code
 	spécifié si c'est le cas. Le comportement de la commande peut être
 	modifié comme suit:
-		
-		- {/i}  : La comparaison ne tient pas en compte la casse. 
+
+		- {/i}  : La comparaison ne tient pas en compte la casse.
 		('Dos9' sera égal à 'dOs9')
-		
+
 		- {NOT} : Négation. Le code a exécuter le sera si {chaine1}
 		 n'est pas égale à {chaine2}
 
@@ -55,15 +55,15 @@ ${IF [/i] [NOT] chaine1==chaine2 (
 	sur les opérandes. Cette syntaxe doit aussi être préférée à la précédente
 	car elle est plus résistante aux bogues d'{spec/exp|expansion} (pour cela
 	voir les sections suivantes sur les bogues).
-		 
+
 ${IF [/i] chaine1 cmp chaine2 (
 	:: code à exécuter
 	...
 )}
-	
+
 	   Applique la comparaison induite par {cmp} aux chaînes {chaine1} et
 	{chaine2} et exécute le code à exécuter si la condition est vraie.
-	   
+
 	   Les valeurs possibles de {cmp} sont:
 
 		- {EQU} : (EQUal). La condition est vraie si les valeurs
@@ -73,30 +73,30 @@ ${IF [/i] chaine1 cmp chaine2 (
 		  préfixes adéquats ({0} pour la base octale et {0x}). Au cas ou
  		  les chaines ne forment pas des expressions numériques valides
 		  (du type {[-][prefixe][valeur]}), alors le comparant {EQU} a
-		  le même effet que {==}, la comparaison a lieu 
-		  chaîne-à-chaîne. 
-		
+		  le même effet que {==}, la comparaison a lieu
+		  chaîne-à-chaîne.
+
 		- {NEQ} : (Not EQual). Exact opposé du comparant précédent.
-		
-		- {LEQ} : (Less or EQual). La valeur numérique associée à 
+
+		- {LEQ} : (Less or EQual). La valeur numérique associée à
 		  {chaine1} est inférieure ou égale à celle associée à
 		  {chaine2}.
-		
-		- {LSS} : (LeSS). La valeur numérique associée à {chaine1} est 
+
+		- {LSS} : (LeSS). La valeur numérique associée à {chaine1} est
 		  inférieure (strictement) à celle associée à chaîne {chaine2}.
-		
+
 		- {GTR} : (GreaTeR). La valeur numérique associée à {chaine1}
 		est supérieure (strictement) à celle associée à {chaine2}.
-		
+
 		- {GEQ} : (Greater or EQual). La valeur numérique associée
-		à {chaine1} est supérieure ou égale à celle associée à la 
+		à {chaine1} est supérieure ou égale à celle associée à la
 		chaîne {chaine2}.
-		  
+
 	Les comparants {LSS}, {GTR}, {LEQ} et {GEQ}  supposent que {chaine1}
 	et {chaine2} soient des nombres entiers sinon le résultat de la
 	comparaison est indéfini (i.e. le comportement peut changer d'une
 	version à une autre ou d'un os à un autre).
-	
+
 	Les même comparants sont disponibles sur les flotants, en préfixant les
 	comparants avec un {F}, ce qui donne {FEQU}, {FGTR}, {FGEQ}, {FLSS} et
 	{FLEQ}. A priori, l'utilisation de bases octales ou hexadécimales
@@ -106,29 +106,29 @@ ${IF [/i] chaine1 cmp chaine2 (
 	limiter au format [signe][chiffres][.chiffres][E|e][exposant].
 
 {{Synopsis - Troisième syntaxe}}
-	
+
 ${IF [NOT] [DEFINED | EXIST | ERRORLEVEL] objet (
 	:: code à exécuter
 	...
 )}
-	
+
 	   Vérifie si la condition induite sur la chaine {objet} est respectée
 	et exécute le code à  exécuter si c'est le cas. Les conditions induites
 	peuvent être :
-		
+
 		- {DEFINED} : Condition vraie s'il existe une variable
 		  d'environnement nommée {objet}
-		
+
 		- {EXIST} : Condition vraie s'il existe un fichier dont le nom
 		  est {objet}. Dans ce cas, {objet} peut contenir des
 		  caractères génériques ('*' et '?').
-		
+
 		- {ERRORLEVEL} : {Déprécié} Condition vraie si la variable
 		  d'environnement {errolevel|%ERRORLEVEL%} est égale à {objet}.
 		  Son usage est déprécié, utilisez plutôt :
 
 ${			IF %ERRORLEVEL%==valeur}
-		
+
 	   Si vous spécifiez l'opérateur {NOT} alors le code à exécuter est
 	exécuté si la condition est fausse.
 
@@ -151,8 +151,8 @@ ${IF [/i] [ expression ] (
 		- {[ expression ]} : Condition à exprimer pour que le code
 		soit exécuté. Il est important d'entourer expression par des
 		crochets et de respecter les espaces entre les différents
-		éléments de l'expression. 
-		
+		éléments de l'expression.
+
 		@- Une expression est formée de tests séparés par des
 		opérateurs.
 
@@ -167,7 +167,7 @@ ${[NOT] cmp1 comparant cmp2
 		-- Les opérateurs sont au nombres de deux :
 
 			--- {or} : Ou logique
-			
+
 			--- {and} : Et logique
 
 		@-- Le {and} est prioritaire sur le {ou}.
@@ -177,11 +177,11 @@ ${[NOT] cmp1 comparant cmp2
 
 
 {{Synopsis - sous commande ELSE}}
-	
+
 	À la suite de n'importe quel type de {if} précédemment décrit, un mot-clé
 	{ELSE} peut être inséré. Dans ce cas, le code spécifié après le {ELSE}
 	sera exécuté.
-	
+
 ${IF /i %var1%==%var2% (
 	:: code à executer si la condition est vraie
 ) ELSE (
@@ -191,17 +191,17 @@ ${IF /i %var1%==%var2% (
 	Chaque code correspondant au corps du {IF} et du {ELSE} doit être obligatoiremnt
 	entouré de parenthèses. Dans le cas contraire, l'interpréteur l'exécutera
 	comme une unique ligne.
-	
+
 	Les deux codes suivant fonctionneront comme prévu :
-	
+
 ${IF /i %var1%==%var2% (
 	ECHO %var1% est égal à %var2%
 ) ELSE (
 	ECHO %var1% diffère de %var2%
 )
-        
+
 IF /i %var1%==%var2% (ECHO %var1% est égal à %var2%) ELSE (ECHO %var1% diffère de %var2%)
-        
+
 :: La sortie sera:
 ::  - ``%var1% est égal à %var2%''
 ::    quand %var1% sera égal à %var2%
@@ -212,7 +212,7 @@ IF /i %var1%==%var2% (ECHO %var1% est égal à %var2%) ELSE (ECHO %var1% diffèr
 
 ${IF /i %var1%==%var2% ECHO %var1% est égal à %var2% ELSE ECHO %var1% est différent de %var2%
 
-:: Affichera 
+:: Affichera
 :: ``ECHO %var1% est égal à %var2% ELSE ECHO %var1% est différent de %var2%''
 :: seulement quand %var1% sera égal à %var2%}
 
@@ -220,7 +220,7 @@ ${IF /i %var1%==%var2% ECHO %var1% est égal à %var2% ELSE ECHO %var1% est diff
 
 	A peut près n'importe qui a déjà obtenu le message suivant depuis
 	l'invité de commande (que ce soit {Dos9} ou cmd.exe):
-	
+
 ${Erreur : ``Truc'' était innatendu.}
 
 	Cette erreur à deux causes principales. D'une part, ce bug est assez
@@ -229,7 +229,7 @@ ${Erreur : ``Truc'' était innatendu.}
 	partie de ces messages d'erreurs. D'autre part, cet erreur apparaît
 	quand une variable est dévellopée alors qu'elle contient un caractère de
 	type espace. Prenons un exemple :
-	
+
 ${IF %ma_var%==test (
 	ECHO Le test est correct
 }
@@ -241,24 +241,24 @@ ${IF %ma_var%==test (
 	{ma_var} esy dévellopée avant que la ligne soit exécutée, si bien que les
 	caractères contenus dans {ma_var} seront interprétés. Il y a plusieurs
 	manières de résoudre ce bogue.
-	
+
 		- On peut entourer {ma_var} avec des guillemets (doubles ou simples),
 		ce qui empêche les
 		caractères blancs d'être interprétés. Cepandant, les caractères tels
-		que {&} et {\|} contenus dans {ma_var} seront toujours interprétés, et 
+		que {&} et {\|} contenus dans {ma_var} seront toujours interprétés, et
 		{ma_var} ne poura plus contenir de guillemets (doubles ou simples).
 
 		- La seconde, et meilleure des solutions est d'utiliser l'{spec/exp|expansion retardée}
 		plutôt que l'{spec/exp|expansion conventionnelle}. De cette façon, aucun
 		des caractères contenus dans {ma_var} ne peut causer de problème.
-		
+
 	Ainsi, lors de création de scripts qui doivent nécessairement être robustes
 	comme les scripts modifiant le registre, utilisez la syntaxe suivante:
-	
+
 ${SETLOCAL EnableDelayedExpansion
 
 IF !my_var!==test (
-	ECHO Le test est correct 
+	ECHO Le test est correct
 )}
 
 {{Le bogue des ==}}
@@ -268,12 +268,12 @@ IF !my_var!==test (
 	ont été données précedemmment pour les éviter, il n'est pas garanti qu'il
 	résiste à tous les bogues. Ce script serait en effet sensible au ``bogue des ==''.
 	Le code suivant est sujet à ce bogue :
-	
+
 ${SETLOCAL EnableDelayedExpansion
 
 IF !ma_var!==test (
-	ECHO Le Test est bon 
-)		
+	ECHO Le Test est bon
+)
 }
 
 	Comme précisé plus haut, ce script est tout à fait invulnérable au bogues
@@ -282,45 +282,45 @@ IF !ma_var!==test (
 	``=='' rencontré est utilisé pour la comparaison. Dans la plupart des cas, ce
 	bogue n'est pas important pour le fonctionnement du script, mais il quand même
 	rendre la comparaison mauvaise.
-	
+
 	Si un tel scénario est possible à l'exécution du script, préférez la syntaxe
 	suivante :
-	
+
 ${SETLOCAL EnableDelayedExpansion
 
 IF !ma_var! EQU test (
 	ECHO Le test est bon
-)		
+)
 }
 
 {{Notes}}
-	
+
 	Quelques comparaisons peuvent causer des résultats inattendus. En particulier,
 	si des caractères d'échappement ({^}) sont utilisés, il se peut que de chaînes qui sont
 	en apparence différentes soient jugées comme étant égales. En effet, les caractères
 	d'échappement ne sont supprimés qu'a la fin de l'exécution, lors de la lecture des paramètres,
 	en même temps que les guillemets sont enlevés. Il y a donc plusieurs manières de spécifier la
 	même chaîne, même si les guillemets sont fortement recommendés.
-	
+
 	Ansi, le code suivant affichera le texte, même si les deux chaînes sont en apparence distinctes:
-	
+
 ${if foo^ bar equ "foo bar" echo les chaines sont egales}
 
 	Il est possible d'activer un remplacement des caractères d'échappement compatible avec {cmd.exe},
 	c'est-à-dire de désactiver cette fonctionnalité avec l'option {CMDLYCORRECT} de la commande
 	{setlocal|SETLOCAL}.
-	
+
 {{Compatibilité}}
 
 	Partiellement compatible avec {cmd.exe}. En effet, le résultat de
 	l'utilisation de {IF ERRORLEVEL} n'est pas garanti comme compatible
 	avec {cmd.exe} dans la mesure où le comportement de cette comparaison
 	n'est pas très claire avec {cmd.exe}.
-	
+
 	Disponible depuis la version {0.4}.
-	
+
 	Le comparant {FEQ} est disponible depuis la version {0.7.0.1}
-	
+
 {{A voir aussi}}
 
 	{for|Commande FOR}, {goto|Commande GOTO}, {call|Commande CALL},

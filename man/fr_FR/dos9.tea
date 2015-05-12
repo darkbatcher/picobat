@@ -20,10 +20,10 @@
 
 	{Dos9} est un interpréteur de commande utilisé pour les scripts
 	batch et les entrées de commandes.
-	
+
 	{Dos9} est un logiciel libre conçu pour être le plus compatible possible
 	avec {cmd.exe} de {Microsoft}.
-	
+
 {{Synopsis}}
 
 ${	DOS9 [/A[:]attr] [/i entrée] [/o sortie] [fichier] [/c commande| /k commande]}
@@ -32,36 +32,36 @@ ${	DOS9 [/A[:]attr] [/i entrée] [/o sortie] [fichier] [/c commande| /k commande
 	l'utilisateur.
 
 		- {fichier} : Chemin du script de commande a exécuter.
-		
+
 		- {/c commande} : Exécute la commande {commande} puis quitte l'interpréteur.
-		
+
 		- {/k commande} : Exécute la commande {commande} puis reste actif.
-		
+
 		- {/A[:]attr} : Attributs déterminant le comportement de {dos9|Dos9}
-		
+
 		@-- {v}	  : Active {spec/exp|l'expansion retardée de variable}.
-		
+
 		@-- {c}   : Active l'option {CMDLYCORRECT} de la commande {setlocal|SETLOCAL}.
 		ce qui permet de forcer le mode de compatibilité entre {Dos9} et {cmd.exe}.
-		
+
 		@-- {f}	  : Active les nombres flotants dans la commande {SET}. Pour
 		plus d'information, consultez la page {setaf|Commande SET (nombres flotants)}.
-		
+
 		@-- {e}	  : Désactive l'affichage du chemin courant.
-		
+
 		@-- {q}   : N'affiche pas l'écran de bienvenue.
-		
+
 		- {/i entrée} : redirige le descripteur de fichier {entrée} vers
 		l'entrée standard.
-		
+
 		- {/o sortie} : redirige la sortie standard vers le descripteur de
 		fichier {sortie}.
-		
+
 {{Notes}}
 
 	Les commutateurs {/o} et {/i} ne sont pas destinés à être utilisés d'eux même,
 	ils sont conçus pour être utilisé par les boucles {for|FOR}.
-	
+
 	Si vous voulez spécifier des commutateurs comme arguments pour un script, vous
 	devez placer le commutateur {//} avant le début des options.
 
@@ -69,18 +69,18 @@ ${	DOS9 [/A[:]attr] [/i entrée] [/o sortie] [fichier] [/c commande| /k commande
 
 	   Compatible avec toutes les versions de {Dos9}. Incompatible avec
 	   {cmd.exe}.
-	   
+
 	   {Dos9} est multiplate-forme, et peut donc fonction à la fois sous {MS-WINDOWS} et
 	   sous {GNU/Linux}. En théorie, un portage de {Dos9} sur un système d'exploitation
 	   compatible {POSIX} nécessite juste une recompilation via un compilateur {C89}.
 
 {{Licence}}
 
-	{Dos9} est un logiciel libre distribué sous les termes de la 
+	{Dos9} est un logiciel libre distribué sous les termes de la
 	{http://www.gnu.org/licenses/gpl.html|Licence Publique Générale GNU}.
 	Pour plus d'information à propose de la philosophie du logiciel libre, consultez le
 	site web de la {http://www.fsf.org|Free Software Fundation}.
-	   
+
 {{Auteur}}
 
 	{Dos9} a été écrit par {DarkBatcher (Romain Garbi)} depuis 2010. Il
@@ -90,8 +90,8 @@ ${	DOS9 [/A[:]attr] [/i entrée] [/o sortie] [fichier] [/c commande| /k commande
 	Les paquets de {Dos9} pour windows incluent aussi des binaires provenant du
 	{http://gnuwin32.sourceforge.net/|projet GnuWin}. Ces binaires sont {iconv|GNU iconv}
 	ete {nano|GNU Nano}.
-	 
+
 {{À voir aussi}}
 
 	{echo|Commande ECHO}, {scripts|Scripts de commandes},
-	{commands|Liste des commandes}	
+	{commands|Liste des commandes}

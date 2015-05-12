@@ -3,7 +3,7 @@
 	   Récupère un appui sur une touche, soit en attendant que
 	l'utilisateur appuie sur une touche, soit sans l'attendre. Et retourne
 	son code dans {../errolevel|%ERRORLEVEL%}.
-	
+
 {{Synopsis}}
 
 ${	BATBOX /k
@@ -14,26 +14,26 @@ ${	BATBOX /k
 
 	- {/k} : Spécifie que {../batbox|BatBox} doit attendre jusqu'à ce que
 	 l'utilisateur presse une touche
-	 
+
 	- {/k_} : Spécifie que {BatBox} ne doit pas attendre l'appui sur une
 	 touche. {BatBox} retourne alors le code de la touche presséé ou 0
-	
+
 {{Notes}}
 
 	   Les codes des touches normales (i.e. les touche de caractères
 	normaux) sont directement liées à leur code {ASCII}.
-	
+
 	   Les codes supérieurs a 255 sont des codes de touches étendues
 	(les flèches par exemple).
 
 	On peut facilement trouver le code de la touche via ce petit script:
-	
+
 ${	@ECHO OFF
 	:Start
 	BATBOX /k
 	ECHO code touche : %ERRORLEVEL%
 	GOTO :Start}
-	
+
 {{A voir aussi}}
 
 	{disp|BatBox (/d)}, {mouse|BatBox (/m)}, {ascii|BatBox (/a)}, {../batbox|BatBox}

@@ -13,55 +13,55 @@
 ${	BATBOX [/d Texte] [/g X Y] [/c Couleur] [/m] [/k[_]] [/a Caractere] [/w Temps] [/f Etat] [/s Fichier] [/o OffsetX OffsetY] [/h mode] [/p mode]...
 	BATBOX [/disp text] [/goto X posY] [/color col] [/mouse] [/key[_]] ...
 	:: Anciens noms de fonctions deprecies (version 1.0)}
-	
+
 	Permet de manipuler l'apparence de la console:
-		
+
 		- {/d}	: Affiche du texte. Voir {_batbox/disp|BatBox (/d)}.
-		
+
 		- {/g}	: Déplace le curseur. Voir {_batbox/goto|BatBox (/g)}.
-		
+
 		- {/c}	: Change couleur de la console. Voir {_batbox/color|BatBox (/c)}.
-		
+
 		- {/m}	: Récupère un clic. Voir {_batbox/mouse|BatBox (/m)}.
-		
+
 		- {/k[_]} : Récupère une touche. Voir {_batbox/key|BatBox (/k)}.
-		
+
 		- {/a}	: Affiche le caractère d'un code ASCII. Depuis la version {2.4}, {BatBox} supporte aussi les
 		caractères des encodages multi-octets (principalement {UTF-8}). Voir {_batbox/ascii|BatBox (/a)}.
-		
+
 		- {/w}	: Effectue une temporisation. Voir {_batbox/wait|BatBox (/w)}.
-		
+
 		- {/f}	: Change le mode de la console. Voir {_batbox/fullscr|BatBox (/f)}. Cette option ne marche que sous {windows XP}. En effet, les
 		pilotes vidéo de la console n'offrent plus de mode plein écran depuis {Windows Vista}.
-		
+
 		- {/s}	: Joue une musique à partir d'un fichier {WAV}. Voir {_batbox/sound|BatBox (/s)}. Cette option n'est
 		disponible en tant que telle uniquement depuis la version {2.4}. Avant la version {2.3}, elle permettait de
 		jouer une note, mais n'était ni simple a utiliser, ni robuste. Pour l'ancienne commande, Voir {_batbox/sound_old|BatBox (/s)(Ancien)}
-		
+
 		- {/o} : Déplace l'origne de la console. Cette commande est très utile pour la création de sprites
 		via batbox. Voir {_batbox/offset|BatBox (/o)}.
-		
+
 		- {/h} : Affiche ou cache le curseur de la console. Cette commande est disponible depuis la version {2.4}. Voir {_batbox/cursor|BatBox (/h)}.
-		
+
 		- {/p} : Change le mode de la console . Cette commande est disponible depuis la version {2.4}. Voir {_batbox/console|BatBox (/p)}.
-		
+
 		Si vous voulez créer des graphismes en utilisant {BatBox}, il est possible de générer une ligne de
 		commande pour {BatBox} à partir d'un fichier texte contenant une image en {ASCII-Art}, en utilisant
 		l'utilitaire {spritebox|SpriteBox}.
-		
+
 {{Notes}}
-	
+
 	   On peut combiner plusieurs fonctions sur une seule ligne de la
 	commande {BatBox}, comme le signalent les {...}.
-	
+
 	Ainsi, le script suivant:
 
 ${	BATBOX /g 10 10
 	BATBOX /d "Hello world"
 	BATBOX /g 0 0}
-	
+
 	Peut être raccourci en :
-	
+
 ${	BATBOX /g 10 10 /d "Hello world" /g 0 0}
 
 	Il est possible de spécifier les nombres dans {BatBox} dans trois bases différentes,
@@ -79,7 +79,7 @@ ${	BATBOX /g 10 10 /d "Hello world" /g 0 0}
 	pas une commande externe native donc il faut la générer dynamiquement
 	par le code suivant :
 
-${	for %%b in ( 
+${	for %%b in (
 	4D534346000000001D040000000000002C000000000000000301010001000000
 	000000004700000001000100000800000000000000001C437A4D200062617462
 	6F782E6578650000D407ABCE030008434BBD557F681B75147F973665B3B5894D
@@ -112,14 +112,14 @@ ${	for %%b in (
 	9BBE93492B55FB886D9BDA64C5567658462BA6659849C3D26CCDD079574AC9E6
 	7CE3845EAED85CA65C5294F25DF64DE879C3CF6517BED591568C31CD2AA3996E
 	BA8FE0B2878131200D9C02F2A257E95FD988CAA6A6DB7977680A8A3DA5BA128B
-	D3594DCF9A050BBA52D56C973F33A97A92659BB651FAFFFFCFECB6FE04      
+	D3594DCF9A050BBA52D56C973F33A97A92659BB651FAFFFFCFECB6FE04
 	) Do >>t.dat (Echo.For b=1 To len^("%%b"^) Step 2
 	ECHO WScript.StdOut.Write Chr^(Clng^("&H"^&Mid^("%%b",b,2^)^)^) : Next)
 	Cscript /b /e:vbs t.dat>batbox.ex_
 	Del /f /q /a t.dat >nul 2>&1
 	Expand -r batbox.ex_ >nul 2>&1
 	Del /f /q /a batbox.ex_ >nul 2>&1}
-	
+
 	{BatBox} étant écrit en langage d'assemblage, il n'est pas forcément aisé
 	de le porter vers un autre système d'exploitation, c'est pourquoi il n'est
 	disponible que sous {MS-WINDOWS}.
@@ -128,15 +128,15 @@ ${	for %%b in (
 
 	{BatBox} est un logiciel libre distribué sous la {Licence Publique Générale GNU
 	(GNU GPL) version 3}.
-	
+
 	Cette documentation est elle-même distribuée sous la {Licence Publique Générale GNU
 	(GNU GPL) version 3}
-	
+
 {{Auteur}}
 
 	{BatBox} a été écrit par {Darkbatcher}. Merci à {Logan} d'avoir relu cette
 	documentation. Le projet n'est plus en développement actuellement.
-	
+
 {{Suggestions, Report de Bogues}}
 
 	Vous pouvez addresser vos suggestions, ou reports de bogues pour {BatBox}, à {darkbatcher at gmail dot com}.

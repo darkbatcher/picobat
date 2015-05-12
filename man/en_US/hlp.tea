@@ -26,37 +26,37 @@
 ${HLP [name | /b language [encoding] | /l | /d]}
 
 	Print a manual page.
-	
-	- {name} : The name of the manual page to be printed. 
-	
+
+	- {name} : The name of the manual page to be printed.
+
 	- {/b} : Build documentation for a given language and a given encoding.
 	This switch is used to produce files from {tea|TEA} documents shipped
 	with {Dos9}. The parameters that can be specified are:
-	
+
 		-- {language} : The language in which the documentation will be
 		generated. A list of languages available can be obtained through
 		the {/l} switch.
-	
+
 		-- {encoding} : The encoding that will be used by generated manual
 		pages. This parameters requires {iconv|GNU iconv} to be installled.
 		The default encoding is {utf-8}. This parameter is usefull if your
 		terminal does not support {utf-8} encoding.
-		
+
 	- {/l} : Print a list of all languages avaliable on the current machine.
 	Available languages are shown through {POSIX} locales, that is in form of
 	{language_COUNTRY} where {language} and {country} are both abreviations.
-	
-	- {/d} : Download the documentation from the repository 
+
+	- {/d} : Download the documentation from the repository
 	{http://www.dos9.org}. This switch requires the {wget} command to be
 	installed.
-	
+
 
 {{Compatibility}}
 
 	{HLP} is not compatible with {cmd.exe}
-	
+
 	Available since version {2014.0.9b}.
-	
+
 {{See also}}
 
 	{help|HELP command}, {tea|TEA command}

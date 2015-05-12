@@ -20,30 +20,30 @@
 
 	   La variable {%DOS9_VER%} permet d'obtenir la version de {dos9|Dos9}
 	en cours d'execution.
-	
+
 	   La variable {%DOS9_OS%} permet d'obenir l'os sur lequel
 	{dos9|Dos9} s'exécute.
 
 	La variable {%DOS9_OS_TYPE%}, d'obtenir le type d'os sur lequel
-	{dos9|Dos9} s'exécute.		
-	
+	{dos9|Dos9} s'exécute.
+
 	La variable {%DOS9_PATH%} permet d'obtenir le chemin de l'exécutable
 	{dos9|Dos9}.
-	
+
 	Ces variable sont directement définies par {Dos9}.
-	
+
 {{Synopsis}}
 
 	${%DOS9_VER%}
 
 	Contient le numéro de la version de {Dos9}.
-	
+
 	${%DOS9_OS%}
 
 	Contient le type d'os sous lequel {Dos9} s'éxécute. Cette variable ne
 	permet pas de distinguer la version de l'os mais seulement son nom.
 	Le contenu de cette variable peut-être, selon les cas :
-	
+
 	- {WINDOWS} : Sur un système d'exploitation équipé de {MS-Windows}.
 
 	- {GNU/Linux} : Sur un système d'exploitation basé sur Linux et le
@@ -55,7 +55,7 @@
 	- {OpenBSD} : Sur les sytèmes basés sur {OpenBSD}.
 
 	- {DragonFlyBSD} : Sur les systèmes basés sur {DragonFlyBSD}.
-	
+
 	- Si aucun système d'exploitation n'est reconnu par {Dos9}, alors le
 	nom du système sera le triplet de l'hote pour lequel {Dos9} a été
 	compilé.
@@ -88,9 +88,9 @@
 {{Compatibilité}}
 
 	Non-compatible avec {cmd.exe}, ces variables n'y sont pas définies.
-	
+
 	Disponible depuis la version {0.7}.
-	
+
 {{A voir aussi}}
 
 	{spec/var|Les variables d'environement}, {spec/index|Index des spécifications}

@@ -11,54 +11,54 @@
 
 	   Vous pouvez définir, modifier ou suppprimmer une variable
 	d'environement via la commande {../set|SET}.
-	
+
 	   Ensuite, les variables peuvent être dévellopées dans les entrées
 	de commande (voir {exp|l'expansion des variables}).
-	
+
 {{Variables définies automatiquement}}
 
 	   {Dos9} définie et supporte de manière native plusieurs
 	{variables d'environnement}.
-	
+
 	Il y a huit variables natives :
 
 		- {../dos9var|%DOS9_OS%}      : Contient le type d'os sous lequel
 		  {Dos9} s'exécute ({LINUX} ou {WINDOWS})
-		
+
 		- {../dos9var|%DOS9_PATH%}    : Contient le chemin de
 		  l'exécutable {Dos9}
-		
+
 		- {../dos9var|%DOS9_VERSION%} : Contient le numéro de version de
 		  {Dos9}
-		
+
 		- {../errorlevel|%ERRORLEVEL%}   : Contient la valeur de retour de
 		  la dernière commande exécutée
-		
+
 		- {../cd|%CD%}           : Contient le chemin courrant
-		
+
 		- {../random|%RANDOM%}       : Retourne un nombre aléatoire
-		
+
 		- {../time|%DATE%}         : Contient la date du jour
-		
+
 		- {../time|%TIME%}         : Contient l'heure
-		
+
 	   D'autres variables sont définies par {Windows} ou par le ficher
 	{../dos9auto|Dos9_Auto.bat}
-	
+
 		- {../path|%PATH%}        : Contient la variable path du système
 		  modifiée par {Dos9}
-		
+
 		- {../systemdrive|%SYSTEMDRIVE%} : Contient la racine du disque
 		  (ou la racine sous LINUX)
-		
+
 		- {../systemroot|%SYSTEMROOT%}  : Contient le chemin du système
 		  d'exploitation
-		
+
 		- {../userprofile|%USERPROFILE%} : Contient le chemain du dossier
 		  de l'utilisateur
-		
+
 {{Note}}
-	
+
 	   Les noms de variables sont insensibles à la casse (i.e.
 	{%erRorlEveL%} désigne la même variable que {%errorlevel%})
 

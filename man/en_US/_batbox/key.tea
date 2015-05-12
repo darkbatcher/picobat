@@ -6,7 +6,7 @@
 	   Récupère un appui sur une touche, soit en attendant que
 	l'utilisateur appuie sur une touche, soit sans l'attendre. Et retourne
 	son code dans {errolevel|%ERRORLEVEL%}.
-	
+
 {{Synopsis}}
 
 ${	BATBOX /k
@@ -16,23 +16,23 @@ ${	BATBOX /k
 	Gets a keystroke, whether waiting for user to hit a key or not.
 
 	- {/k} : {../batbox|BatBox} will wait until the user hit a key.
-	 
+
 	- {/k_} : {../batbox|BatBox} will not wait until the user hit a key.
 	If no key is pressed, then it returns 0.
-	
+
 {{Notes}}
 
 	Standard key(ie. corresponding to a character of basic {US-ASCII} charset)
 	codes are linked directly with their {ASCII} codes.
 
 	Other key codes can be retrieved by the simple following script :
-	
+
 ${	@ECHO OFF
 	:Start
 	BATBOX /k
 	ECHO code touche : %ERRORLEVEL%
 	GOTO :Start}
-	
+
 {{See also}}
 
 	{disp|BatBox (/d)}, {mouse|BatBox (/m)}, {ascii|BatBox (/a)}, {../batbox|BatBox}

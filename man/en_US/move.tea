@@ -28,13 +28,13 @@ ${MOVE [/-Y | /Y] [/R] [/A[:]attributes] source [...] destination}
 	- {/-Y} : Prompt the user for confirmation.
 
 	- {/Y} : Do not prompt the user for confirmation.
-	
+
 	- {source} : The path of files to be moved (can include
 	{spec/regexp|regular expressions}).
-		
+
 	- {destination} : The new path of the files (can not
 	include {spec/regexp|regular expression}).
-		
+
 	@- {destination} is considered to be the new path of the files,
 	unless,
 
@@ -46,13 +46,13 @@ ${MOVE [/-Y | /Y] [/R] [/A[:]attributes] source [...] destination}
 
 	@- In any of the previous cases, {destination} is considered to be the
 	folder where files refered to by {source} must be move. Thus files
-	resulting from move will keep their original names.			
+	resulting from move will keep their original names.
 
 	- {/R} : Turn on recursive mode. This mode allow moving a complete
 	tree. If {sources} refers to various tree, then the tree will be merged
 	in the {destination} folder. If {source} is a {spec/regexp|regular
 	expression}, then the static part of the regular expression will be
-	removed from files absolute path to produce relative path in 
+	removed from files absolute path to produce relative path in
 	{destination} folder.
 
 	@- As an example, if {source} is {path/to/folder/*.*} then the file
@@ -67,16 +67,16 @@ ${MOVE [/-Y | /Y] [/R] [/A[:]attributes] source [...] destination}
 	moving other file passed through {source}. Obviously, {MOVE} returns
 	an error, but this behaviour can lead to mess on file, or even loss of
 	data. For something that need to be bug prof, rather use a combination
-	of {copy|COPY} and {del|DEL}.	
+	of {copy|COPY} and {del|DEL}.
 
 {{Compatibility}}
 
 	Available since version {0.4}
-	
-	Fully compatible with {cmd.exe}. The {/R} and {/A} switches are 
+
+	Fully compatible with {cmd.exe}. The {/R} and {/A} switches are
 	{dos9|Dos9} extension.
-		
- 
+
+
 {{See also}}
 
 	{del|DEL and ERASE commands}, {copy|COPY command}

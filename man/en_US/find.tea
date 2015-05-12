@@ -27,13 +27,13 @@
 	the standard input ({stdin}).
 
 	- {string} : The text string or the expression to be searched in {files}
-	or in the standard input. Unlike {Windows} native implementation of 
+	or in the standard input. Unlike {Windows} native implementation of
 	{FIND}, {dos9|Dos9} does not require the use of quotes to delimit
 	{string}.
 
 	- {files ...} : A list of files (that may include {spec/regexp|regular
 	expression}) in which the {FIND} is to search {string}. Folders that
-	match regular expressions are ignored. If {files} is empty, then 
+	match regular expressions are ignored. If {files} is empty, then
 	{FIND} uses standard input as a file input.
 
 	- {/e} : Assume that {string} is a {spec/regexp|regular expression}.
@@ -52,7 +52,7 @@
 	Obviously, the {/c} and {/n} switches can not be mixed. If {FIND}
 	encounters {/c} and {/n} switches together, does will take account
 	of the last specified switches.
-	
+
 	The {FIND} command has no line length limit, unlike {Windows}
 	implementation which supports a maximum length of about 1024
 	characters.
@@ -78,4 +78,4 @@
 
 	{commands|Command list}, {type|TYPE command}, {more|MORE command}
 
-	
+

@@ -3,7 +3,7 @@
 	La ligne de commande de commande est le concept central de la programmation
 	batch. Elle permet de décrire le comportement des commandes et est utilisée
 	pour le parsage des scripts.
-	
+
 	Les conventions de noms présentés ici seront utilisés dans toute la documentation
 	de {../dos9|Dos9}.
 
@@ -12,58 +12,58 @@
 	Il existe typement deux types de structures dans les scripts de commandes. Les premières
 	sont les {commandes}, la partie élémentaire du langage batch, et la seconde sont les
 	{blocs de commandes} qui sont, eux, des groupes de {commandes}:
-	
+
 		- les {commandes} sont la structure élémentaire du langage {batch}, chaque action est
 		exécutée au travers d'une commande. Les commandes sont une ligne (ou une partie, si des
 		{condop|opérateurs conditionnels} sont utilisés), qui dénote une action a exécuter. Typiquement
 		les commandes sont notées de la manière suivante:
-		
+
 		${COMMANDE argument_obligatoire [argument_optionel] [choix1|choix2]}
-		
+
 		@- Où les différentes notations sont expliquées ci-après:
-		
+
 			-- {COMMANDE} : le nom de la commande a exécuter.
-			
+
 			-- {argument_obligatoire} : Un argument qui doît être spécifié pour que la commande
 			fonctionne. Un argument est soit un mot, séparé des autres arguments par des espaces
 			dans la commande, où alors un groupe de mot soit entouré par des {'} ou {"} ou dont
 			les espaces ont été échappés via le caractère '^'. Ansi, il existe plusieurs manières
 			de spécifier un argument possédant des espaces, par exemple pour l'argument {foo bar}:
-		
+
 ${COMMANDE "foo bar"
 COMMANDE 'foo bar'
 COMMANDE foo^ bar}
 
 			@-- Et ces trois manières sont bien évidemment équivalentes, ont peut les permuter sans
 			aucune incompatibilité.
-			
+
 			-- {[argument optionel]} : Il s'agit d'un argument que le peut spécifier optionnellement,
 			c'est-à-dire que la commande va tout de même s'exécuter, cet argument modifie juste le
 			comportement de la commande. La même syntaxe peut être utilisée pour dénoter deux arguments
 			qui sont optionnels ensemble, et qu'on doit spécifier les deux ensemble si on les spécifie,
 			comme dans l'exemple suivant:
-			
+
 			${COMMANDE [argument_1 argument_2]}
-			
+
 			@-- Dans ce cas, on peut ne pas spécifer {argument_1} ni {argument_2}, mais on ne peux pas
 			spécifier un seul des deux, il faut spécifier {argument_1} et {argument_2} simultanément. Il
 			ne faut évidemment pas conserver les {[]} dans la ligne de commande, mais se contenter de
 			placer les arguments dans la ligne de commande.
-			
+
 			-- {[choix1\|choix2]} : Spécifie qu'un choix doît être fait entre {choix1} et {choix2}. En
 			général, il n'est pas nécessaire de spécifier un des paramètres {choix1} et {choix2} puisque
 			les {[]} dénottent l'optionallité. Certaines personnes considèrent alors qu'il y a ambiguité,
 			et signalent l'obligation de spécifier un des deux paramètres {choix1} et {choix2} en utilisant
 			la syntaxe suivante:
-			
+
 			${COMMANDE {choix1|choix2}}
-			
+
 			@-- Nous n'utilisons pas cette syntaxe, car les commandes bien conçues n'imposent normalement pas
 			à l'utilisateur un choix au sens strict, ces choix ne doivent servir que pour rendre modifier
 			le comportement de la commande. L'exemple type de cette usage sont les commutateurs. les commutateurs
 			sont des arguments qui sont précédées d'un "{/}" pour signaler qu'ils activent ou désativent certaines
 			fonctionnalitées de la commande. Les commutateurs doivent {toujours} être optionnels.
-			
+
 		- les {blocs de commandes} sont des blocks qui contiennent plusieurs commandes devant être exécutées ensemble,
 		à noter que le lien entre ces commandes est plus {logique} que temporel.
 		Pour cela, il faut entourer les commandes à mettre dans un block à l'intérieur de parenthèses "{(}", comme ci-après:
@@ -76,16 +76,16 @@ COMMANDE_N
 
 		@- Il ne faut pas reproduire les {...} qui sont bien évidement une ellipse montrant qu'il est possible de mettre autant de
 		commandes dans un bloc qu'on le désire.
-		
+
 		@- Les {condop|opérateurs conditionnels} et les {red|redirections} ne sont pas actives dans les {blocs} par défaut, c'est-à-dire
 		que les caractères {\|},{^},{&},{<},{>} ne doivent pas être échappés avec le {^} à l'intérieur des blocs. Cependant, si vous avez
 		spécifié l'option {CMDLYCORRECT} de la commande {setlocal|SETLOCAL}, alors cet aspect sera compatible avec {cmd.exe} et vous devrez
 		donc les échapper.
-		
+
 		@- Il est possible d'intégrer des blocs comme arguments dans certaines commandes. Ces commandes sont restreintes, et sont les commandes
 		{for|FOR} et {if|IF}. Un bloc peut en plus être entré comme tel dans un script et il sera exécuté. Un exemple d'utilisation de
 		blocs pour a commande {if|IF} est:
-		
+
 ${IF 1==1 (
 ECHO une ligne
 ECHO une autre ligne
@@ -93,7 +93,7 @@ ECHO une autre ligne
 
 		@- Pour obtenir d'avantage d'information sur la manière dont les {condop|Opérateurs conditionels} et les {red|redirections} agissent à
 		l'intéreur d'un block, vous pouvez consultez les pages qui leur sont dédiées.
-		
+
 {{À voir aussi}}
 
 	{condop|Les opérateurs conditionels}, {red|Les redirections}

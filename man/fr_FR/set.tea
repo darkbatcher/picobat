@@ -20,14 +20,14 @@
 
 	   La commande {SET} permet d'affecter des variables d'environement,
 	que l'on peut ensuite récuperer via {spec/exp|l'expansion des variables}
-	
+
 {{Synopsis}}
 
 	${SET variable=contenu}
 
 	Affecte le contenu {contenu} à la variable {variable}. Si {contenu} n'est pas
 	spécifié, alors la variable est supprimée.
-	
+
 	${SET /a[[:][i|f]] variable=expression}
 
 	Affecte la valeur d'une {expression mathématique} à la variable
@@ -43,15 +43,15 @@
 
 	Pour de plus amples information à propos des {expressions mathématiques},
 	consultez le manuel {setai|SET (/a)(entiers)} et {setaf|SET (/a)(flotants)}.
-	
+
 	${SET /p variable=question}
-	
+
 	   Affiche le texte {question} à l'invité de commande, puis attend
 	que l'utilisateur entre quelque chose au clavier, puis affecte ce que
 	l'utilisateur a entré à la variable {variable}.
 
 {{À voir aussi}}
-	
+
 	{commands|Liste des commandes}, {echo|Commande ECHO},
-	{pause|Commande PAUSE}, {setai|Commande SET (/A)(entiers)}, 
+	{pause|Commande PAUSE}, {setai|Commande SET (/A)(entiers)},
 	{setaf|Commande SET (/a)(flotants)}.

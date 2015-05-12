@@ -3,66 +3,66 @@
 	Les {expressions régulières} sont un moyen de choisir certains élément respectant
 	une syntaxe donnée dans un ensemble d'éléments. Elle permettent ainsi de sélectionner
 	des élément et des fichiers sur la base d'une {expression}.
-	
+
 	Les {expression régulières} fournies par {dos9|Dos9} sont directement calquées sur celles
 	fournies dans les versions précédentes de {cmd.exe}. Elle sont par conséquent nettement
 	moins puissantes que les expressions très avancées comme les expressions {PCRE} (Perl Compatible
 	Regular expressions).
-	
+
 {{Syntaxe}}
 
 	Les {expression régulières} ont la syntaxe précédente :
-	
+
 	${expresion}
-	
+
 	Où expression est composée de n'importe quelle séquence de caractères. La signification est la précédente :
-	
+
 		- {*} : accepte n'importe quelle séquence de caractères.
-		
+
 		- {?} : accepte n'importe quel caractère.
-		
+
 		- Pour n'importe quel autre caractères, l'élément examiné doit possèder n'importe quel autre caractère.
 
 	Lors de l'utilisation de {*}, {Dos9} utilise la plus petite correspondance entre
 	l'expression régulière et la chaine testée. Par exemple la chaîne {untest_test} ne
 	peut pas correspondre avec l'expression {u*test}, alors qu'elle correspond à l'expression
 	régulière {u*_test}.
-	
+
 	Depuis la version {0.7.0.1}, il est possible de spécifier des combinaisons absurdes telles que
 	{*?} et {**}. Dans tous les cas, ces combinaisons seront considérés comme un unique symbole {*}.
-	
+
 {{Expression pour la recherche de fichiers}}
 
 	Les {expressions régulières} peuvent être utilisées pour la recheche de fichier dans le
 	système de fichiers. Dans ce cas, chaque délimiteur de dossier ({\\} ou {/}) est utilisé
 	pour découper l'expression régulière en plusieurs morceaux, {Dos9} utilise ensuite chaque
 	morceaux ainsi découpé pour recherche les fichiers dans l'aboressence.
-	
+
 	Par exemple, pour l'{expression régulière} suivante, sera exécutée comme suit:
-	
+
 	${mon/expr*/regulie?e/*.*}
-	
+
 		- {mon} : {Dos9} cherche les dossiers nommés {mon} dans le répertoire courrant.
-		
+
 		- {expr*} : {Dos9} recherche les dossiers dont le nom correspond à {expr*}
 		dans les dossiers qu'on a trouvés à l'étape précédente.
-		
+
 		- {regulie?e} : {Dos9} recherche les dossiers dont le nom correspond à {regulie?e}
 		dans les dossiers qu'on a trouvés à l'étape précédente.
-		
+
 		- {*.*} : {Dos9} recherche les dossiers et les fichiers
 		dont le nom correspond à {*.*} dans les dossiers qu'on a trouvés à l'étape précédente.
-		
+
 	Il est possible d'utiliser le mode de recherche récursive. Dans ce cas, tous les morceaux
 	à l'exception du dernier sont utilisés pour déterminer les dossier dans lesquels la recherche
 	va continuer. Ensuite, {Dos9} utilise le dernier morceau pour sélectionner les fichiers
 	spécifiés dans les dossiers trouvés précédemment et leurs sous dossiers.
-	
+
 	En reprenant l'expression régulière donnée:
-	
-		- {mon/expr*/regulie?e} : {Dos9} cherche les dossiers qui correspondent à l'expression 
+
+		- {mon/expr*/regulie?e} : {Dos9} cherche les dossiers qui correspondent à l'expression
 		{mon/expr*/regulie?e}.
-		
+
 		- {*.*} : Dos9 cherche les fichiers et dossiers qui correspondent à {*.*} et se situent dans
 		un des dossiers déterminés à l'étape précédente, ou dans un des sous dossier.
 
