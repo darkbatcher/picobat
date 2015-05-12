@@ -16,40 +16,32 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-{{Commande SETLOCAL}}
+{{SETLOCAL command}}
 
-	La commande {SETLOCAL} permet de changer le mode de l'interpréteur
-	de commande {Dos9}. Elle permet par exemple d'activer
-	{spec/exp|l'expansion retardée de variable}.
+	The {SETLOCAL} command allows changing {dos9|Dos9} interpretors
+	settings at runtime.
 
 {{Synopsis}}
 
 ${	SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] [ENABLEFLOATS | DISABLEFLOATS] [CMDLYCORRECT | CMDLYINCORRECT]}
 	
-	Active/désactive les modes suivants:
+	Enable or disable following modes :
 	
-		- {ENABLEDELAYEDEXPANSION}, {DISABLEDELAYEDEXPANSION} : Active/désactive 
-		  {spec/exp|l'expansion retardée de variable}.
+	- {ENABLEDELAYEDEXPANSION}, {DISABLEDELAYEDEXPANSION} :
+	Enable or disable {spec/exp|delayed expansion}.
 		
-		- {ENABLEFLOATS}, {DISABLEFLOATS} : Active/désactive les {spec/floats|nombres flotants}.
+	- {ENABLEFLOATS}, {DISABLEFLOATS} : Enable or disable 
+	{spec/floats|floating numbers}.
 		
-		- {CMDLYCORRECT}, {CMDLYINCORRECT} : Active/désactive les options de compatibilité
-		avec {cmd.exe}.
+	- {CMDLYCORRECT}, {CMDLYINCORRECT} : Enable or disable more
+	compatibility with {cmd.exe}.
 
-{{Compatibilite}}
+{{Compatibility}}
 
-	Complètement compatible avec {cmd.exe}. Les modes {ENABLEEXTENSION}
-	et {DISABLEEXTENSION} seront simplements ignorés, car ils sont supportés par
-	défauts, et il n'est plus d'aucun intérêt de les désactiver pour créer des
-	scripts portables sur les version anciennes de {windows} comme {MS-WINDOWS 98}.
-	
-	Les paramètres {ENABLEFLOATS} et {DISABLEFLOATS} sont disponibles
-	depuis la version {0.5}.
-	
-	Les paramètres {CMDLYCORRECT} et {CMDLYINCORRECT} sont disponibles depuis
-	la version {2014.0.9}. Auparavant, ils étaient nommés {DISABLEDOS9MODE} et 
-	{DISABLEDOS9MODE}, depuis la version {0.7}.
-	
-{{A voir aussi}}
+	Fully compatible with {cmd.exe}. {ENABLEEXTENSION} and 
+	{DISABLEEXTENSIONS} are ignored by {dos9|Dos9}, every extensions are
+	enabled.
+
+{{See also}}
 
 	{set|Commande SET}, {commands|Liste des commandes}

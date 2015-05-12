@@ -30,15 +30,15 @@
 
 {{User-interface command}}
 
-	- {agraf|AGraf}  {[ext]} : Enable to make {GUI} rather than using the traditionnnal
-	console interface. This command is no more develloped and is only provided for
-	legacy support under windows.
+#	- {agraf|AGraf}  {[ext]} : Enable to make {GUI} rather than using the traditionnnal
+#	console interface. This command is no more develloped and is only provided for
+#	legacy support under windows.
 	
-	- {batbox|BatBox} {[ext]} : Allow to use console in a {graphical} way and extend basic
-	user interraction through mouse, keys etc.
+#	- {batbox|BatBox} {[ext]} : Allow to use console in a {graphical} way and extend basic
+#	user interraction through mouse, keys etc.
 	
-	- {bg|BG}     {[ext]} : Allow to use console in a {graphical} way. Slightly equivalent
-	to {batbox|BatBox}.
+#	- {bg|BG}     {[ext]} : Allow to use console in a {graphical} way. Slightly equivalent
+#	to {batbox|BatBox}.
 	
 	- {color|COLOR}  {[int]} : Change the console screen color.
 	
@@ -48,39 +48,53 @@
 	
 	- {pause|PAUSE}  {[int]} : Make a pause in a batch script
 	
-	- {set|SET}    {[int]} : Modify an environment variable. Either through a string litteral,
-	a mathematical expression or an user input.
+
 	
 	- {title|TITLE}  {[int]} : Change console title.
-	
+
+	- {break|BREAK} {[int]} : Enable/disable CTRL-C handling.
+
 {{Scripting command}}
+
+	- {alias|ALIAS} {[int]} : Define an alias.
+
+	- {shift|SHIFT} {[int]} : Change position of command-line arguments
+	in batch files.
 
 	- {for|FOR}      {[int]} : Loop in a script.
 	
 	- {goto|GOTO}     {[int]} : Jump to a label in a script.
 	
-	- {if|IF}       {[int]} : Make a conditionnnal execution within a script.
+	- {call|CALL} {[int]} : Call a external script or a routine, within
+	the current command context.
+
+	- {set|SET}    {[int]} : Modify an environment variable. Either
+	through a string litteral, a mathematical expression or an user input.
 	
-	- {setlocal|SETLOCAL} {[int]} - Changes {dos9|Dos9} mode.
+	- {setlocal|SETLOCAL} {[int]} : Changes {dos9|Dos9} mode.
 	
+	- {exit|EXIT} {[int]} : Exit {dos9|Dos9}.
+
 {{File commands}}
 
-	- {copy|COPY}       {[int]} : Copy files.
-	
 	- {cd|CD, CHDIR}  {[int]} : Change current directory.
 	
-	- {dir|DIR}        {[int]} : Browse a subdirectory.
+	- {dir|DIR}        {[int]} : Browse subdirectories.
 	
 	- {del|DEL, ERASE} {[int]} : Delete files. 
 	
-	- {md|MD, MKDIR}  {[int]} : Create a directory.
+	- {md|MD, MKDIR}  {[int]} : Create directory.
 	
-	- {more|MORE, TYPE} {[int]} : Type files content.
+	- {rd|RD, RMDIR}  {[int]} : Delete directory.
+	
+	- {type|TYPE} {[int]} : Type files.
+	
+	- {more|MORE} {[int]} : Display files screen by screen.
 	
 	- {move|MOVE}       {[int]} : Move files.
 	
-	- {rd|RD, RMDIR}  {[int]} : Delete a directory.
+	- {copy|COPY}	{[int]} : Copy files.
+
+	- {ren|RENAME, REN} {[int]} : Rename files.	
 	
-	- {tree|TREE}       {[ext]} : show a tree of file
-	
-	- {xcopy|XCOPY}      {[ext]} : Copy a folder tree.
+	- {find|FIND} {[int]} : Find strings in files.

@@ -15,32 +15,27 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+{{TYPE command}}
 
-{{Commande TYPE, Commande MORE}}
-
-	Affiche le contenu d'un fichier texte.
+	Display a text file.
 
 {{Synopsis}}
 
-${	TYPE [fichier]
-	MORE [fichier]}
+${TYPE [files]}
 
-	Affiche un fichier.
+	Display a text file.
+	
+		- {files} : A list of files to display. File names may be
+		{spec/regexp|regular expressions}.
 
-		- {fichier} : Chemin du fichier a afficher. Ce nom de fichier
-		  peut pas contenir de {spec/regexp|caractères génériques}.
+	If {files} is empty, then {TYPE} uses the standard input as input.
 		  
-	Si aucun fichier {fichier} n'est spécifié, alors les commandes
-	{MORE} et {TYPE} utilisent l'entrée de la console.
-	
-{{Compatibilité}}
+{{Compatibility}}
 
-	Disponible depuis la version {0.4}.
+	Available since revision {0.4}.
 
-	Partiellement compatible avec {cmd.exe}. Certaines options supportées
-	par cmd.exe ne sont pas supportées par {dos9|Dos9}.
+	Fully compatible with {cmd.exe}.
 	
-{{A voir aussi}}
+{{See also}}
 
-	{nano|Commande NANO}, {iconv|Commande ICONV}
-	
+	{more|MORE command}, {commands|Command list}	

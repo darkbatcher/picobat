@@ -1,37 +1,51 @@
-{{Commandes RD, RMDIR}}
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+{{RD and RMDIR commands}}
 
-	Permet de supprimer un répertoire.
+	Removes a directory.
 	
 {{Synopsis}}
 
-${	RMDIR [/S] [/Q] dossier
-	RD [/S] [/Q] dossier}
+${RMDIR [/S] [/Q] directory
+RD [/S] [/Q] directory}
 	
+	Removes a directory.	
+
+	- {directory} : The folder to be suppressed.
+
+	- {/Q} : Enable silenced mode; do not prompt the user for
+	confirmation.
 	
-	Supprime un répertoire.
-	
-		- {dossier} : Chemin du répertoire à supprimer.
-		
-		- {/Q} : Active le mode silencieux. Ne demandande pas de
-		  confimartion pour supprimer l'arboressence avec {/S}. N'a
-		  aucun effet si le commutateur {/S} n'est pas activé.
-		
-		- {/S} : Supprime tous les dossiers et les sous dossiers
-		  contenus dans le dossier {dossier}.
-		  
+	- {/S} : Deletes files and subfolders contained by {directory}.
+	Use this switch to delete an entire tree.
+
 {{Notes}}
 
-	   Par défaut, les commandes {RD} et {RMDIR} ne suppriment pas les
-	dossiers non-vides. Pour forcer la suppression du dossier, il faut
-	utiliser le commutateur {/S}
-	
-{{Compatibilité}}
+	By default, {RD} and {RMDIR} do not delete non empty folder. To force
+	folder deletion, use the {/S} switch.
 
-	Disponible depuis la version {0.4}.
-	
-	Parfaitement compatible avec {cmd.exe}.
+{{Compatibility}}
 
-{{A voir aussi}}
+	Available since {0.4} revision.	
 
-	{md|Commandes MD, MKDIR}, {del|Commanndes DEL, ERASE},
-	{move|Commande MOVE}
+	Fully compatible with {cmd.exe}.
+
+{{See also}}
+
+	{md|MD and MKDIR commands}, {del|DEL and ERASE commands},
+	{move|MOVE command}

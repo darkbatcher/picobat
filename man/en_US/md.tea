@@ -1,33 +1,50 @@
-{{Commandes MD et MKDIR}}
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+{{MD and MKDIR commands}}
 
-	Les commandes {MD} et {MKDIR} permettent de créer un dossier.
+	Creates a new directory.
 	
 {{Synopsis}}
 
-${	MD dossier
-	MKDIR dossier}
+${MD directory
+MKDIR directory}
 	
-	Crée un dossier.
-	
-		- {dossier} :  chemin du dossier à créer.
+	Creates a new folder.
+
+	- {directory} : Path of the directory to be created. If {directory}
+	contain several folder names that do not already exist, these are
+	created either. For exemple, if neither {a}, {b} nor {c} are existing,
+	then:
+
+${MD a/b/c}
+	@- Is the same as :
+
+${MD a
+MD a/b
+MD a/b/c}
 		
-{{Compatibilité}}
+{{Compatibility}}
 
-	Disponible depuis la version {0.4}.
-	
-	   Partiellement compatible avec {cmd.exe}. En effet cette commande ne
-	permet pas de créer simutanément. Par exemple, il est possible avec 
-	{cmd.exe} de faire, si le dossier {dossier1} n'existe pas:
-	
-${	md dossier1/dossier2/dossier3}
+	Available since version {0.4}.
 
-	alors qu'avec {dos9|Dos9} le code équivalent est :
+	Fully compatible with {cmd.exe}.
 	
-${	md dossier1
-	md dossier1/dossier2
-	md dossier1/dossier2/dossier3}
-	
-{{A voir aussi}}
+{{See also}}
 
-	{rd|Commandes RD et RMDIR}, {del|Commandes DEL et ERASE},
-	{move|Commande MOVE}, {copy|Commande COPY}
+	{rd|RD and RMDIR command}, {del|DEL and ERASE command},
+	{move|MOVE command}, {copy|COPY command}
