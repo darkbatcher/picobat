@@ -31,7 +31,7 @@
 #include "Dos9_Core.h"
 #include "Dos9_FilePath.h"
 
-#ifdef _POSIX_C_SOURCE
+#ifndef WIN32
 #define TEST_ABSOLUTE_PATH(p) (*p == '/')
 #elif defined WIN32
 #define TEST_ABSOLUTE_PATH(p) (*p && *(p+1)==':' && (*(p+2)=='\\' || *(p+2)=='/'))

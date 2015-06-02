@@ -70,7 +70,7 @@
 
 #if defined(WIN32)
 #define DOS9_OS_TYPE "WINDOWS"
-#elif defined(_POSIX_C_SOURCE)
+#elif !defined(WIN32)
 #define DOS9_OS_TYPE "*NIX"
 #else
 #define DOS9_OS_TYPE "Unknown"

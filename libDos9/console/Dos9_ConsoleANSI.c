@@ -21,7 +21,7 @@
 #include <stdlib.h>
 #include <fcntl.h>
 
-#ifdef _POSIX_C_SOURCE
+#ifndef WIN32
 #include <termios.h>
 #endif
 

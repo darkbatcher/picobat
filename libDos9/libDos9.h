@@ -30,29 +30,7 @@
 
 #define LIBDOS9
 
-#ifdef _POSIX_C_SOURCE
-
-    #include <pthread.h>
-
-    #define DOS9_FILE_DIR S_IFDIR
-    #define DOS9_FILE_EXECUTE S_IXUSR
-    #define DOS9_FILE_READ S_IRUSR
-    #define DOS9_FILE_WRITE S_IWUSR
-    #define DOS9_FILE_REGULAR S_IFREG
-    #define DOS9_FILE_ARCHIVE 0
-    #define DOS9_FILE_COMPRESSED 0
-    #define DOS9_FILE_HIDDEN 0
-    #define DOS9_FILE_OFFLINE 0
-    #define DOS9_FILE_READONLY 0
-    #define DOS9_FILE_SYSTEM 0
-
-    #define _Dos9_Pipe(descriptors, size, mode) pipe(descriptors)
-
-    #define stricmp strcasecmp
-    #define strnicmp strncasecmp
-
-
-#elif defined WIN32
+#if defined WIN32
 
     #include <windows.h>
     #include <io.h>
@@ -85,12 +63,28 @@
     #define read(a,b,c) _read(a,b,c)
     #define access(a,b) _access(a,b)
     #define _Dos9_Pipe(descriptors, size, mode) _pipe(descriptors, size, mode)
-
 #else
 
-#error build under non posix platforms and non windows platforms is imposible yet.
+    #include <pthread.h>
 
-#endif
+    #define DOS9_FILE_DIR S_IFDIR
+    #define DOS9_FILE_EXECUTE S_IXUSR
+    #define DOS9_FILE_READ S_IRUSR
+    #define DOS9_FILE_WRITE S_IWUSR
+    #define DOS9_FILE_REGULAR S_IFREG
+    #define DOS9_FILE_ARCHIVE 0
+    #define DOS9_FILE_COMPRESSED 0
+    #define DOS9_FILE_HIDDEN 0
+    #define DOS9_FILE_OFFLINE 0
+    #define DOS9_FILE_READONLY 0
+    #define DOS9_FILE_SYSTEM 0
+
+    #define _Dos9_Pipe(descriptors, size, mode) pipe(descriptors)
+
+    #define stricmp strcasecmp
+    #define strnicmp strncasecmp
+
+#endif // WIN32
 
 /* define TRUE and FALSE CONSTANTS if they are not
    defined yet */
@@ -104,18 +98,17 @@
 #endif // TRUE
 
 
-#ifdef _POSIX_C_SOURCE
-
-typedef pthread_t       THREAD;
-typedef pthread_mutex_t MUTEX;
-typedef pid_t           PROCESS;
-
-
-#elif defined WIN32
+#ifdef WIN32
 
 typedef DWORD THREAD;
 typedef HANDLE MUTEX;
 typedef int    PROCESS;
+
+#else
+
+typedef pthread_t       THREAD;
+typedef pthread_mutex_t MUTEX;
+typedef pid_t           PROCESS;
 
 #endif
 

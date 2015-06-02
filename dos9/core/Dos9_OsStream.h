@@ -24,7 +24,7 @@
 
 #if defined(WIN32)
 #define TRANS(str) str
-#elif defined(_POSIX_C_SOURCE)
+#elif !defined(WIN32)
 #define TRANS(str) _Dos9_GetOsStreamName(str)
 const char* _Dos9_GetOsStreamName(const char* str);
 #endif
@@ -35,7 +35,7 @@ const char* _Dos9_GetOsStreamName(const char* str);
 #define PRN "PRN"
 #define LPT "LPT"
 #define COM "COM"
-#elif defined(_POSIX_C_SOURCE)
+#elif !defined(WIN32)
 #define NUL "/dev/null"
 #define CON "/dev/tty"
 #define PRN "/dev/lpt0"

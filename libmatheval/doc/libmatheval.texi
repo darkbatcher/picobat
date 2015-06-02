@@ -7,7 +7,6 @@
 @c %**end of header
 
 @include version.texi
-@syncodeindex fn cp
 
 @dircategory GNU libraries
 @direntry

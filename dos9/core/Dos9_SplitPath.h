@@ -20,7 +20,7 @@
 
 #ifndef DOS9_SPLITPATH_H
 
-#ifdef _POSIX_C_SOURCE
+#ifndef WIN32
 
 #define _MAX_DRIVE FILENAME_MAX
 #define _MAX_DIR FILENAME_MAX

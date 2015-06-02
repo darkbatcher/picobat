@@ -68,7 +68,7 @@ int Dos9_StartFile(const char* file, const char* args, const char* dir,
 	return 0;
 }
 
-#elif defined(XDG_OPEN) && defined(_POSIX_C_SOURCE)
+#elif defined(XDG_OPEN) && !defined(WIN32)
 
 int Dos9_StartFile(const char* file, const char* args, const char* dir,
 					int mode, int wait)
@@ -130,7 +130,7 @@ int Dos9_StartFile(const char* file, const char* args, const char* dir,
 
 }
 
-#elif defined _POSIX_C_SOURCE
+#elif !defined(WIN32)
 
 int Dos9_StartFile(const char* file, const char* args, const char* dir,
 					int mode, int wait)

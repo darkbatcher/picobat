@@ -21,7 +21,7 @@
 #ifndef DOS9_FILEPATH_H
 #define DOS9_FILEPATH_H
 
-#ifdef _POSIX_C_SOURCE
+#ifndef WIN32
 
 #define DOS9_PATH_DELIMITER ':'
 

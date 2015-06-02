@@ -51,7 +51,7 @@
 
 #include <conio.h>
 
-#elif defined  _POSIX_C_SOURCE
+#elif !defined(WIN32)
 
 #define stricmp strcasecmp
 #define strnicmp strncasecmp

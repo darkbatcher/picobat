@@ -48,13 +48,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-
-
-
 #ifdef WIN32
-
-
-
+#define _WIN32_WINNT 0x0502
 #include <windows.h>
 #include <process.h>
 #include <io.h>
@@ -136,21 +131,19 @@
 
 #define Dos9_GetFileAttributes(lpName)
 #define _Dos9_Pipe(descriptors, size, mode) pipe(descriptors)
-
 #endif
 
-#ifdef _POSIX_C_SOURCE
-
-typedef pthread_t       THREAD;
-typedef pthread_mutex_t MUTEX;
-typedef pid_t           PROCESS;
-
-
-#elif defined WIN32
+#ifdef WIN32
 
 typedef DWORD  THREAD;
 typedef HANDLE MUTEX;
 typedef int    PROCESS;
+
+#else
+
+typedef pthread_t       THREAD;
+typedef pthread_mutex_t MUTEX;
+typedef pid_t           PROCESS;
 
 #endif
 

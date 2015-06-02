@@ -24,7 +24,7 @@
 
 #include "../../config.h"
 
-#ifdef _POSIX_C_SOURCE
+#ifndef WIN32
 extern char** environ;
 #endif
 

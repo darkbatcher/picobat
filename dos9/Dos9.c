@@ -45,7 +45,7 @@
 #include "command/Dos9_Commands.h"
 #include "command/Dos9_CommandInfo.h"
 
-//#define DOS9_DBG_MODE
+#define DOS9_DBG_MODE
 #include "core/Dos9_Debug.h"
 
 #include "../config.h"
@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
 	DOS9_DBG("Initializing Dos9's custom environ");
 
 	char *lpFileName="",
-	      lpFileAbs[FILENAME_MAX],
+	      lpFileAbs[FILENAME_MAX]="",
 	      lpTmp[FILENAME_MAX],
 	      lpExePath[FILENAME_MAX],
 	      lpTitle[FILENAME_MAX]="Dos9 [" DOS9_VERSION "] - ",
@@ -140,7 +140,7 @@ int main(int argc, char *argv[])
 
 	SetThreadLocale(LOCALE_USER_DEFAULT);
 
-#elif defined _POSIX_C_SOURCE
+#elif !defined(WIN32)
 
 	setlocale(LC_ALL, "");
 
@@ -378,6 +378,8 @@ int main(int argc, char *argv[])
 	if (*lpFileName!='\0') {
 
 		/* generates real path if the path is uncomplete */
+
+        DOS9_DBG("Looking for \"%s\" absolute path\n.");
 
 		if (Dos9_GetFilePath(lpFileAbs, lpFileName, sizeof(lpFileAbs))==-1)
 			Dos9_ShowErrorMessage(DOS9_FILE_ERROR, lpFileName, -1);

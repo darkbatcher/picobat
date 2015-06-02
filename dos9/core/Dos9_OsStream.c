@@ -22,7 +22,7 @@
 
 #include "Dos9_Core.h"
 
-#ifdef _POSIX_C_SOURCE
+#ifndef WIN32
 
 #define STREAM_CASE(str, k) \
             case k: \

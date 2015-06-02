@@ -24,7 +24,7 @@
 #include <assert.h>
 #include <setjmp.h>
 
-#ifdef _POSIX_C_SOURCE
+#ifndef WIN32
 #include <sys/wait.h>
 #endif
 
@@ -50,7 +50,7 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
 
 	int res;
 
-	#ifdef _POSIX_C_SOURCE
+	#ifndef WIN32
     	struct sigaction action;
     	memset(&action, 0, sizeof(action));
 	#endif
@@ -59,7 +59,7 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
        Note that by using break, the user admits some part of memory leakage...
        */
     if (setjmp(jbBreak));
-	#ifdef _POSIX_C_SOURCE
+	#ifndef WIN32
     	action.sa_handler=Dos9_SigHandlerBreak;
     	action.sa_flags=SA_NODEFER;
 		sigaction(SIGINT, &action, NULL); /* Sets the default signal handler */
@@ -272,7 +272,7 @@ loop:
 
 }
 
-#elif defined(_POSIX_C_SOURCE)
+#elif !defined(WIN32)
 
 int Dos9_ExecOperators(PARSED_STREAM** lpppsStream)
 {
@@ -729,7 +729,7 @@ int Dos9_RunExternalFile(char* lpFileName, char** lpArguments)
 
 }
 
-#elif defined _POSIX_C_SOURCE
+#elif !defined(WIN32)
 
 int Dos9_RunExternalFile(char* lpFileName, char** lpArguments)
 {
@@ -827,7 +827,7 @@ int Dos9_RunExternalBatch(char* lpFileName, char* lpFullLine, char** lpArguments
 		return Dos9_RunExternalFile(lpTmp, lpArgs);
 }
 
-#elif defined(_POSIX_C_SOURCE)
+#elif !defined(WIN32)
 
 int Dos9_RunExternalBatch(char* lpFileName, char* lpFullLine, char** lpArguments)
 {
@@ -895,7 +895,7 @@ int Dos9_RunExternalBatch(char* lpFileName, char* lpFullLine, char** lpArguments
 
 #endif /* WIN32 */
 
-#ifdef _POSIX_C_SOURCE
+#ifndef WIN32
 
 void Dos9_SigHandlerBreak(int sig)
 {

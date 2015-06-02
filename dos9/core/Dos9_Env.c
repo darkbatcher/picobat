@@ -375,7 +375,7 @@ void Dos9_ApplyEnv(ENVBUF* pEnv)
         if (pEnv->envbuf[i]->name == NULL)
             continue;
 
-        #if defined(_POSIX_C_SOURCE)
+        #if !defined(WIN32)
         setenv(pEnv->envbuf[i]->name, pEnv->envbuf[i]->content, 1);
         #elif defined(WIN32)
         SetEnvironmentVariable(pEnv->envbuf[i]->name,

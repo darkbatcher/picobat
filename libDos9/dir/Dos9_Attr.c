@@ -109,7 +109,7 @@ int Dos9_CheckFileAttributes(short wAttr, const FILELIST* lpflList)
         iReturn=iReturn && iResult;
     }
 
-    #elif defined _POSIX_C_SOURCE
+    #elif !defined(WIN32)
 
     if (wAttr & DOS9_CMD_ATTR_READONLY) {
 

@@ -40,7 +40,7 @@ int _Dos9_Thread_Init(void) {
 
 }
 
-#ifdef _POSIX_C_SOURCE
+#ifndef WIN32
 
     #include <pthread.h>
 
@@ -356,8 +356,6 @@ LIBDOS9 int     Dos9_ReleaseMutex(MUTEX* lpMuId)
 
 #else
 
-    //#define _WIN32_WINNT _WIN32_WINNT_WINXP
-
     #include <windows.h>
 
     /* use the windows interface */
@@ -658,7 +656,7 @@ LIBDOS9 int      Dos9_WaitForAllThreads(int iDelay)
 
     STACK* lpStack;
 
-    #ifdef _POSIX_C_SOURCE
+    #ifndef WIN32
         struct timespec tDelay={0,iDelay*10};
 
     #else
@@ -680,7 +678,7 @@ LIBDOS9 int      Dos9_WaitForAllThreads(int iDelay)
            wait for at most iDelay Milliseconds */
         iAttempt++;
 
-        #ifdef _POSIX_C_SOURCE
+        #ifndef WIN32
 
             nanosleep(&tDelay, NULL);
 

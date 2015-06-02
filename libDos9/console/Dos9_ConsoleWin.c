@@ -21,10 +21,6 @@
 #include <stdlib.h>
 #include <fcntl.h>
 
-#ifdef _POSIX_C_SOURCE
-#include <termios.h>
-#endif
-
 #include "../libDos9.h"
 #include "../../config.h"
 
@@ -178,7 +174,7 @@ void Dos9_SetConsoleTitle(char* lpTitle)
 
 #endif
 
-#ifdef _POSIX_C_SOURCE
+#ifndef WIN32
 
 LIBDOS9 int             Dos9_GetchWait(void)
 {

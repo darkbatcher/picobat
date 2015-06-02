@@ -52,7 +52,7 @@ int Dos9_RunExternalFile(char* lpFileName, char** lpArguments);
 
 int Dos9_RunExternalBatch(char* lpFileName, char* lpFullLine, char** lpArguments);
 
-#ifdef _POSIX_C_SOURCE
+#ifndef WIN32
 
 void Dos9_SigHandlerBreak(int c);
 
