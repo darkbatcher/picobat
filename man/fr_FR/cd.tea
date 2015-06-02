@@ -20,26 +20,26 @@
 
 	   La commande {CD} permet de changer et d'afficher le dossier courant
         de l'invité de commande {dos9|Dos9}.
-		
-		
+
+
 	   La variable {%CD%} permet d'accèder au chemin courant de l'invité
 	de commande.
-	
+
 {{Synopsis}}
 
 ${	CD  [[/d] chemin]
 	CHDIR [[/d] chemin]}
 
 	Change ou affiche le chemin courant de l'invité de commande.
-	
+
 		- {/d} : Force le changement de disque courant sous {Windows}.
 		Ce commutateur n'a aucun effet sur les systèmes {UNIX}-like
 		car la notion de disque n'existe pas sous ces systèmes,
 		l'arboressence du système de fichiers a une racine unique,
-		nommée {/}. 
-		
+		nommée {/}.
+
 		- {chemin} : Chemin du nouveau dossier courant
-		
+
 	   Si vous ne spécifiez ni {/d} ni {chemin}, alors la commande {CD}
 	affichera le chemin courant.
 
@@ -56,19 +56,19 @@ ${	CD  [[/d] chemin]
 
 		- Si {chemin} est un chemin absolu (ie. mentionnant le disque,
 	mais pas uniquement), alors le chemin courant associé au disque est
-	changé en {chemin}. Si l'option {/f} n'est pas spécifiée, alors la
+	changé en {chemin}. Si l'option {/d} n'est pas spécifiée, alors la
 	commande {CD} ne changera pas le chemin courant, à moins que le disque
 	spécifié soit le disque courant.
 
 		- Si {chemin} est un chemin qui ne mentionne pas de disque
-	(ou qui mentionne le disque courant), 
+	(ou qui mentionne le disque courant),
 	alors la commande utilise {chemin} comme chemin courant et comme
 	chemin courant associé au disque courrant. Cette syntaxe est la
 	seul garantie comme étant portable de {Windows} vers les os de
 	type {UNIX}.
 
 {{Variables}}
-	
+
 	${%CD%}
 
 	Se développe en le chemin courant actuel. Cette variable est dynamique
@@ -77,14 +77,14 @@ ${	CD  [[/d] chemin]
 	par l'interpréteur, cette variable est bel et bien disponible sous le
 	{cmd.exe} original, même si elle n'est pas documentée; Quoi qu 'il en
 	soit, l'usage de cette variable est fortement découragée.
-	
+
 	${%=X:%}
-	
+
 	Se développe le chemin courant associé au disque {X:}. Ces variables
 	sont disponibles sous {cmd.exe}, même si celui-ci ne les documente pas.
 	Par contre, ces variables ne sont pas accessibles depuis un
 	environnement {UNIX}-like.
-		
+
 {{Bogues}}
 
 	Sous le système d'exploitation {MS-WINDOWS} le résultat de commande est
@@ -92,16 +92,16 @@ ${	CD  [[/d] chemin]
 	correctement les erreurs. Par exemple, la commande suivante ignorera
 	silencieusement l'erreur causée par le fait que le répertoire
 	{...} n'existe pas:
-	
+
 	${CD ...}
-	
+
 {{Compatibilité}}
 
 	Complètement compatible avec {cmd.exe} seulement sous {Windows} et
 	depuis la version {2014.0.9b}.
-	
+
 	Disponible depuis la version {0.4}.
-	
+
 {{A voir aussi}}
 
 	{spec/var|Les variables}, {spec/index|Index des spécifications},

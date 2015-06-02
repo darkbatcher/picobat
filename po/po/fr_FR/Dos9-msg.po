@@ -65,7 +65,7 @@ msgstr "Êtes-vous sûr  de vouloir supprimer le dossier \"%s\" ?"
 #: ../dos9/lang/Dos9_Lang.c:99
 #, c-format
 msgid "File \"%s\" already exists, replace it by \"%s\" ?"
-msgstr ""
+msgstr "Le fichier \"%s\" existe déjà, voulez vous le remplacer par \"%s\" ?"
 
 #: ../dos9/lang/Dos9_Lang.c:101
 msgid " (Yes/no) "

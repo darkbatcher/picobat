@@ -1,40 +1,82 @@
-{{Commande MOVE}}
+#
+#   Dos9 Manual pages, The Dos9 project
+#   MOVEright (C) 2012-2015 Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a MOVE of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+{{MOVE command}}
 
-	   La commande {MOVE} permet de déplacer un fichier dans un nouveau
-	répertoire. A l'inverse de la commande {copy|COPY}, aucune copie n'est
-	conservée dans le répertoire d'origine. Il est aussi possible renommer
-	des répertoire via cette commande.
-	
+	MOVE one or several files to another location.
+
 {{Synopsis}}
 
-${	MOVE [/Y | /-Y] chemin destination}
+${MOVE [/-Y | /Y] [/R] [/A[:]attributes] source [...] destination}
 
-	Déplace un fichier ou un dossier.
-	
-		- {chemin} : chemin du fichier ou du fichier à déplacer. Ce
-		  chemin peut contenir des {spec/regexp|caractères génériques}.
-		  Au quel cas, le chemin {destination} doit être le chemin d'un
-		  répertoire.
-		  
-		- {destination} : chemin du dossier ou du fichier d'arrivée. Si
-		  il s'agit d'un nom de fichier, alors le chemin {chemin} doit
-		  se référer à un unique fichier et ne pas contenir de
-		  {spec/regexp|caractères génériques}. Il est alors possible de
-		  modifier le nom du fichier dans son répertoire d'arrivée.
-		  
-		- {/Y} : Force l'affichage d'un message de confirmation avant
-		  le déplacemen du fichier.
-		  
-		- {/-Y} : Supprime l'affichage d'une demande de confirmation.
-		  paramètre obsolète.
-		  
-{{Compatibilité}}
+	Move one or several files to another location.
 
-	Disponible depuis la version {0.4}
-	
-	Parfaitement compatible avec {cmd.exe}.
-	
-{{A voir aussi}}
+	- {/-Y} : Prompt the user for confirmation.
 
-	{ren|Commandes REN et RENAME}, {del|Commandes DEL et ERASE},
-	{copy|Commande COPY}
+	- {/Y} : Do not prompt the user for confirmation.
+
+	- {source} : The path of files to be moved (can include
+	{spec/regexp|regular expressions}).
+
+	- {destination} : The new path of the files (can not
+	include {spec/regexp|regular expression}).
+
+	@- {destination} is considered to be the new path of the files,
+	unless,
+
+		-- {destination} refers to a folder;
+
+		-- {destination} ends with {/} or {\\};
+
+		-- {source} refers to multiple source files;
+
+	@- In any of the previous cases, {destination} is considered to be the
+	folder where files refered to by {source} must be move. Thus files
+	resulting from move will keep their original names.
+
+	- {/R} : Turn on recursive mode. This mode allow moving a complete
+	tree. If {sources} refers to various tree, then the tree will be merged
+	in the {destination} folder. If {source} is a {spec/regexp|regular
+	expression}, then the static part of the regular expression will be
+	removed from files absolute path to produce relative path in
+	{destination} folder.
+
+	@- As an example, if {source} is {path/to/folder/*.*} then the file
+	{path/to/folder/my/file} will be moved to {destination}/{my/file}.
+
+	- {/A[:]attributes} : Copies only files that match {attributes}. For
+	more details, check {spec/attr|files attributes}.
+
+{{Notes}}
+
+	If an error occurs while moving a file, the {MOVE} command continues
+	moving other file passed through {source}. Obviously, {MOVE} returns
+	an error, but this behaviour can lead to mess on file, or even loss of
+	data. For something that need to be bug prof, rather use a combination
+	of {copy|COPY} and {del|DEL}.
+
+{{Compatibility}}
+
+	Available since version {0.4}
+
+	Fully compatible with {cmd.exe}. The {/R} and {/A} switches are
+	{dos9|Dos9} extension.
+
+
+{{See also}}
+
+	{del|DEL and ERASE commands}, {copy|COPY command}

@@ -1,0 +1,54 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2015  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+{{Commande ALIAS}}
+
+	La commande alias permet de définir des alias sur une commande. Une fois
+	défini, l'alias peut être utilisé comme la commande d'origine.
+
+{{Synopsis}}
+
+	${ALIAS nom=commande}
+
+	Définit un alias.
+
+	- {nom} : Le nom de l'alias à creer. Celui-ci pourra ensuite
+	être appelé via la commande {nom}.
+
+	- {commande} : La commande à appeler lors d'un appel à {nom}. Il est
+	possible de spécifier des commutateurs et des paramètres, mais il
+	n'est pas possible de modifier directement la commande.
+
+	Il est possible de réassigner une commande interne. Cette fonctionalité
+	peut être intéressante pour émuler un comportement différent des
+	commandes internes de {dos9|Dos9}, en les modifiant.
+
+	Lorsque {dos9|Dos9} crée l'alias, Il ne vérifie pas qu'il n'y a pas de
+	déclaration circulaire (ie. {nom} est dans {commande}). Il revient
+	donc à l'utilisateur de ne pas en produire. En produire n'est pas en
+	soit problématique, mais va juste déboucher sur une boucle infinie.
+
+	Par défaut, il existe un seul alias dans {dos9|Dos9}, il lie la commande
+	{hlp|HLP} et la commande {help|HELP}.
+
+{{Compatibilité}}
+
+	Inexistant sur {cmd.exe}.
+
+{{À voir aussi}}
+
+	{commands|Liste de Commandes}

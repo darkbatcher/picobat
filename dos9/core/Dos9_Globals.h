@@ -31,6 +31,7 @@ extern char** environ;
 extern int bAbortCommand;
 extern int bDelayedExpansion;
 extern int bUseFloats;
+extern int bIsScript;
 
 #if !defined(DOS9_STATIC_CMDLYCORRECT)
 extern int bCmdlyCorrect;

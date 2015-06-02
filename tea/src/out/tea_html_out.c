@@ -319,14 +319,32 @@ error:
 
 void Tea_HtmlOutputParagraph(TEANODE* lpTeaNode, FILE* pFile)
 {
-	char* lpCh;
+	char* lpCh, *ext;
 	int   bFirstLine=TRUE;
 
 	while (lpTeaNode) {
 
 		if (lpTeaNode->iNodeType==TEA_NODE_LINK) {
 
-			fprintf(pFile, "<a href=\"%s.html\">", lpTeaNode->lpTarget);
+            if (!(ext = strrchr(lpTeaNode->lpTarget, '/')))
+                ext = lpTeaNode->lpTarget;
+
+            if (!(ext = strchr(ext, '.'))) {
+
+                ext = ".html";
+
+            } else {
+
+                ext = "";
+
+            }
+
+            if (!strncmp(lpTeaNode->lpTarget, "http://", 7)
+                || !strncmp(lpTeaNode->lpTarget, "https://", 8)
+                || !strncmp(lpTeaNode->lpTarget, "mail://", 7))
+                ext = "";
+
+			fprintf(pFile, "<a href=\"%s%s\">", lpTeaNode->lpTarget, ext);
 
 		} else if (lpTeaNode->iNodeType==TEA_NODE_EMPHASIS) {
 

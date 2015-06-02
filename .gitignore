@@ -5,6 +5,7 @@
 *.m4
 *.exe
 *.gz
+*.zip
 .hg
 config
 m4
@@ -22,3 +23,5 @@ ylwrap
 libtool
 stamp-h1
 missing
+.dirstamp
+po/share

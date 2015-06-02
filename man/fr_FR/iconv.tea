@@ -22,13 +22,13 @@
 	{GNU} et la {Free Software Foundation}. Ce logiciel fait usage de
 	bibilothèque libre {GNU libiconv}. Il permet de convertir un fichier
 	d'un grands nombres d'encodages de caractères entre ces encodages.
-	
+
 	   Ceci est très utile pour porter un fichier batch sans trop se
 	soucier des problèmes d'accents, car GNU/LINUX utilise l'encodage
 	universel {UTF-8}, alors que par exemple, WINDOWS, peut utiliser
 	diférentes pages de code, comme pour le français, la page de code
 	{863}, ou {CP863}.
-	
+
 	   La commande iconv est distribuée en tant que logiciel libre par le
 	projet {GNU}, sous licence {GNU GPLv3}
 
@@ -36,35 +36,35 @@
 
 ${	ICONV [-c] [-s] [-f encodage1] [-t encodage2] [fichier]
 	ICONV -l}
-	
+
 	Convertit un texte d'un encodage à un autre.
-		
+
 		- {-c} : Ignore silencieusement les caractère ne pouvant pas
 		  être convertis dans l'encodage destination.
-		  
+
 		- {-s} : Ignore les message d'erreurs causés par des caractères
 		  ne pouvant pas être convertis, mais ces caractères ne sont
 		  pas ignorés et placés dans le texte de destination
-		  
+
 		- {-f encodage1} : Définit {encodage1} comme l'encodage source
 		  du fichier à convertir, ou de l'entrée.
-		
+
 		- {-t encodage2} : Définit {encodage2} comme l'encodage de
 		  destination pour le texte converti.
-		  
+
 	   Les encodages disponibles dépendent de la plate-forme sur laquelle
 	{ICONV} s'éxecute. Pour consulter la liste des encodages disponibles
 	entrez:
-	
+
 ${	ICONV -l}
 
 {{Compatibilité}}
 
 	Disponible depuis la version {0.7}.
-	
+
 	   Non compatible avec {cmd.exe}, cette commande est une commande du
 	système {GNU/Linux}
 
 {{A voir aussi}}
 
-	{nano|Commande NANO / GNU Nano}, {dman|Commande DMAN}
+	{commands|Liste des commandes}, {more|Commande MORE}, {type|Commande TYPE}

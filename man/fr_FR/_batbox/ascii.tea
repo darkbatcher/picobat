@@ -12,7 +12,7 @@ ${	BATBOX /a code}
 	et de renverser l'ordre des octets, comme les processeurs x86 sont petit-boutiens. Par
 	exemple, le caractère {UTF-8} ``█'' se code normalement {0xE2 0x96 0x88} ce qui donne
 	finalement le code {0x8898E2} pour {../batbox|BatBox}.
-	
+
 {{Notes}}
 
 	   Pour obtenir facilement la table des codes {ASCII} et des caractères
@@ -26,7 +26,7 @@ ${	@ECHO OFF
 	SET /a code=%code%+1
 	IF NOT %code%==256 GOTO :Boucle
 	PAUSE}
-	
+
 {{A voir aussi}}
 
 	{disp|BatBox (/d)}, {fullscr|BatBox (/f)}, {sound|BatBox (/s)}, {../batbox|BatBox}

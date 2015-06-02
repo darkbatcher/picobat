@@ -19,18 +19,18 @@
 {{Commandes MD et MKDIR}}
 
 	Les commandes {MD} et {MKDIR} permettent de créer un dossier.
-	
+
 {{Synopsis}}
 
-${	MD dossier
-	MKDIR dossier}
-	
+${MD dossier
+MKDIR dossier}
+
 	Crée un dossier.
-	
+
 		- {dossier} :  chemin du dossier à créer. Si {dossier} est une
 		est un chemin comprenant plusieurs dossier n'existant pas, alors
 		tous les dossiers n'existant pas sont crées. Par exemple, si ni
-		{a} ni {b} ni {c} n'existent, alors
+		{a} ni {b} ni {c} n'existent, alors:
 
 ${MD a/b/c}
 		@- est équivalent à :
@@ -38,14 +38,14 @@ ${MD a/b/c}
 ${MD a
 MD a/b
 MD a/b/c}
-		
+
 {{Compatibilité}}
 
 	Disponible depuis la version {0.4}.
-	
+
 	Complètement compatible avec {cmd.exe} depuis la version {215.1b}.
 
-	
+
 {{A voir aussi}}
 
 	{rd|Commandes RD et RMDIR}, {del|Commandes DEL et ERASE},

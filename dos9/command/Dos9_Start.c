@@ -43,20 +43,33 @@
 #if defined(WIN32)
 
 #include <windows.h>
+#include <shellapi.h>
+
+#define SEE_MASK_NOASYNC 0x00000100
 
 int Dos9_StartFile(const char* file, const char* args, const char* dir,
 					int mode, int wait)
 {
 	SHELLEXECUTEINFO info;
+	char buf[FILENAME_MAX],
+         *chr;
 
 	memset(&info, 0, sizeof(info));
 	info.cbSize = sizeof(info);
-	info.fMask = SEE_MASK_INVOKEIDLIST;
-	info.lpVerb = "open";
-	info.lpFile = file;
+	info.fMask =  SEE_MASK_NOASYNC;
+	info.lpVerb = NULL;
+	info.lpFile = buf;
 	info.lpParameters = args;
 	info.lpDirectory = dir;
 	info.nShow = mode;
+
+    snprintf(buf, sizeof(buf), "%s", file);
+
+    /* shellexecute seem to have trouble to handle forward slashes */
+    for (chr = buf;*chr;chr ++) {
+        if (*chr == '/')
+            *chr = '\\';
+    }
 
 	ShellExecuteEx(&info);
 

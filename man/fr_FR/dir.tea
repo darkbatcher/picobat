@@ -21,40 +21,40 @@
 	    La commande {DIR} permet d'affficher le contenu d'un dossier, de
 	sélectionner ces fichiers en fonction de leur attributs, et de
 	rechercher des fichiers grâce aux {regexp|caractères génériques}.
-	
-{{Synopsis}} 
-	
+
+{{Synopsis}}
+
 ${	DIR [/A[:]attributs] [/S] [/B] [chemin]}
 
 	Recherche et affiche des fichiers et des dossiers.
-	
+
 		- {chemin} : Chemin du fichier ou du dossier à rechercher. Peut
-	      {regexp|caractères génériques}. Si aucun {chemin} n'est 
+	      contenir des {regexp|caractères génériques}. Si aucun {chemin} n'est
 	      spécifié, alors {dos9|Dos9} affichera le contenu du chemin
 	      courant.
-	          
-		- {/A[:]attributs} : Spécifie une liste d'{attributs} qui 
+
+		- {/A[:]attributs} : Spécifie une liste d'{attributs} qui
 		  détermine les fichiers qui seront affichés dans la liste.
-		  Pour plus d'information voir la page {_spec/attr|Commutateur
-		  /A[:]attributs}
-		  
+		  Pour plus d'information voir la page {spec/attr|sélecteur
+		  d'attributs}.
+
 		- {/B} : Affichage simplifié. N'affiche que les noms des
 		  fichiers et des répertoires sans afficher ni date, ni taille
 		  ni attributs du fichier. Cette option facilite le traitement
 		  par boucle {for|FOR}
-		
-		- {/S} : Active la recherche récursive. Voir la page {regexp|
+
+		- {/S} : Active la recherche récursive. Voir la page {spec/regexp|
 		  Caractères génériques} pour plus d'information.
 
 {{Compatibilité}}
 
 	Disponible depuis la version {0.4}
-	
+
 	    Partiellement compatible avec {cmd.exe}. En effets, de nombreux
 	commutateurs pour la présentation du texte supportés par {cmd.exe}
 	ne sont pas supportés.
 
 {{A voir aussi}}
-	
+
 	{copy|Commande COPY}, {ren|Commandes REN et RENAME}, {move|Commande Move},
 	{del|Commandes DEL et ERASE}

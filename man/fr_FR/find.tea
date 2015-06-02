@@ -22,7 +22,7 @@
 
 {{Synopsis}}
 
-	${FIND [/c] [/n] [/i] [/v] chaine [fichier ...]}
+	${FIND [/c] [/n] [/i] [/v] [/e] chaine [fichier ...]}
 
 	Cherche les occurences d'une chaine de caractères dans un ou plusieurs
 	fichiers, ou dans l'entrée standard ({stdin}).
@@ -31,8 +31,8 @@
 	fichiers ou l'entrée standard. Contrairement à l'implémentation native
 	de {FIND} de {Windows} (et donc celle utilisée par {cmd.exe}), il
 	n'est pas nécessaire de mettre des guillemets autour de {chaine} pour
-	que la ligne de commande soit valide. 
-			 
+	que la ligne de commande soit valide.
+
 		- {fichier ...} : Une liste de fichiers (pouvant contenir des
 	{spec/regexp|caractères génériques}) dans lequels la commande {FIND}
 	doit rechercher les occurences de {chaine}. Les dossiers qui pourraient
@@ -42,7 +42,13 @@
 	{fichier ...} a été spécifié mais qu'aucun fichier ne correspond à la
 	liste, la commande s'interrompt et affiche un message d'erreur.
 
-		- {/c} : Affiche seulement le nombre de lignes de {fichiers ...}	qui contiennent au moins une occurence de {chaine}.
+		- {/e} : Signale que {chaîne} doît être traitée comme une
+	{spec/regexp|expression régulière}. La recherche cherche alors les
+	lignes qui correspondent entièrement à l'expression régulière contenue
+	dans {chaîne}.
+
+		- {/c} : Affiche seulement le nombre de lignes de {fichiers ...}
+	qui contiennent au moins une occurence de {chaine}.
 
 		- {/n} : Affiche le numéro des lignes qui contiennent au moins
 	une occurence de {chaine} conjointement avec les lignes en question.
@@ -52,7 +58,7 @@
 
 		- {/v} : Inverse la recherche, les lignes séléctionnées seront
 	donc les lignes qui ne contiennent pas d'occurence de {chaine}.
-	
+
 	Il est évident que l'on ne peut pas mixer les options {/c} et {/n}, si
 	la commande {FIND} rencontre à la fois {/c} et {/n} sur la même ligne
 	de commande, alors, le comportement adopté par {FIND} sera celui
@@ -84,11 +90,11 @@
 
 {{Compatibilité}}
 
-	Compatible avec {cmd.exe}. À l'exption du cas des guillemets de 
+	Compatible avec {cmd.exe}. À l'exception du cas des guillemets de
 	{chaine}.
 
 	Disponible depuis la version {2014.0.9b}.
 
 {{A voir aussi}}
 
-	
+

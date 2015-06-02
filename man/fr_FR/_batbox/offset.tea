@@ -2,24 +2,24 @@
 
 	Déplace l'origine (le point considéré par {BatBox} comme le point de coordonnées {(0,0)} dans la console).
 	Cette commande affecte le comportement des commandes {goto|BatBox (/g)} suivants.
-	
+
 {{Synopsis}}
 
 ${	BATBOX /o OffsetX OffsetY}
 
 	Déplace l'origine.
-	
+
 	- {OffsetX} : {L'abscisse} de la nouvelle origine par rapport au coin supérieur gauche (commence à 0).
-	
+
 	- {OffsetY} : {L'ordonnée} de la nouvelle origine par rapport au coin supérieur gauche (commence à 0).
-	
+
 	Les appels à la commande {goto|BatBox (/g)} suivant la commande {BatBox (/o)} se comporteront comme
 	si ils déplaçaient le curseur au point de coordonées {(X+OffsetX,Y+OffsetY)}.
 
 {{Compatibilité}}
 
 	Cette commande est disponible depuis la version {2.3}.
-	
+
 {{A voir aussi}}
 
 	{goto|BatBox (/g)}, {ascii|BatBox (/a)}, {color|BatBox (/c)}, {../batbox|BatBox}

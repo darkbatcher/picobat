@@ -371,8 +371,7 @@ int Dos9_CmdSetA(char* lpLine, int bFloats)
 			break;
 
 		}
-	}
-
+    }
 
 	Dos9_EsFree(lpExpression);
 	return 0;
@@ -473,6 +472,9 @@ int Dos9_CmdSetEvalFloat(ESTR* lpExpression)
 	}
 
 	snprintf(lpResult, sizeof(lpResult), "%.16g", dVal);
+
+    if (!bIsScript)
+        printf("\t\t\t\t%.16g", dVal);
 
 	Dos9_SetEnv(lpeEnv, Dos9_EsToChar(lpExpression), lpResult);
 
@@ -625,6 +627,9 @@ int Dos9_CmdSetEvalInt(ESTR* lpExpression)
 	}
 
 	snprintf(lpResult, sizeof(lpResult), "%d", iVal);
+
+    if (!bIsScript)
+        printf("\t\t\t\t\t\t%d", iVal);
 
 	Dos9_SetEnv(lpeEnv, Dos9_EsToChar(lpExpression), lpResult);
 

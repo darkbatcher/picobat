@@ -22,77 +22,107 @@
 	inclues dans {dos9|Dos9}. Les Commandes marquées par {[int]} sont des
 	commandes {internes} les commandes marquées par {[ext]} sont des
 	commandes {externes}.
-	
+
 	   Une commande interne est une commande qui est directement integrée
 	dans {dos9|Dos9} et qui ne nécessite donc pas de programme externe.
 	Ces Commandes sont globalement plus {rapides} et plus {compatibles}
 	entre une même version de {Dos9}.
-	  
+
 	 À l'inverse les commandes externes nécessitent un programme
 	externe. Elle sont donc moins rapides mais permettent d'assurer une
 	{flexibilité importante} et une compatibilité ameliorée notement
 	avec {cmd.exe}.
 
+{{Commandes d'aides}}
+
+	- {help|HELP} {[int]} : Affiche l'aide des commandes de {dos9|Dos9}.
+
+	- {hlp|HLP} {[ext]} : Gestionnaire de pages de manuel pour {dos9|Dos9}.
+
 {{Commande pour l'interface utilisateur}}
 
-	- {agraf|AGraf}  {[ext]} : Permet d'afficher une interface graphique
-	  ({GUI}) plutôt que l'interface en console traditionnelle.
-	
-	- {batbox|BatBox} {[ext]} : Permet d'utiliser la console en mode
-	  {graphique} et de faire de nombreuses manipulations sur celle-ci.
-	
-	- {bg|BG}     {[ext]} : Permet d'utiliser la console en mode {graphique}.
-	  Sensiblement equivalent à {BatBox}.
-	
-	- {color|COLOR}  {[int]} : Permet de changer la couleur de toute la 
+#	- {agraf|AGraf}  {[ext]} : Permet d'afficher une interface graphique
+#	  ({GUI}) plutôt que l'interface en console traditionnelle.
+#
+#	- {batbox|BatBox} {[ext]} : Permet d'utiliser la console en mode
+#	  {graphique} et de faire de nombreuses manipulations sur celle-ci.
+#
+#	- {bg|BG}     {[ext]} : Permet d'utiliser la console en mode {graphique}.
+#	  Sensiblement equivalent à {BatBox}.
+
+	- {color|COLOR}  {[int]} : Permet de changer la couleur de toute la
 	  console.
-	
+
 	- {cls|CLS}    {[int]} : Vide la console.
-	
+
 	- {echo|ECHO}   {[int]} : Affiche du texte dans la console.
-	 
+
 	- {pause|PAUSE}  {[int]} : Effectue une pause dans un script de commandes.
-	
-	- {set|SET}    {[int]} : Permet de recupérer une saisie au clavier.
-	
+
 	- {title|TITLE}  {[int]} : Modifie le titre de la console.
+
+	- {break|BREAK} {[int]} : Active/désatice l'usage de CTRL-C.
 
 {{Commandes pour les scripts}}
 
+	- {alias|ALIAS} {[int]} : Définit un alias d'une commande.
+
+	- {shift|SHIFT} {[int]} : Déplace la position d'un paramètre d'un
+	script.
+
 	- {for|FOR}      {[int]} : Fait une {boucle} dans un script.
-	
+
 	- {goto|GOTO}     {[int]} : Fait un {saut} vers une étiquette.
-	
-	- {if|IF}       {[int]} : Permet d'effectuer une {exécution 
+
+	- {if|IF}       {[int]} : Permet d'effectuer une {exécution
 	  conditionelle} dans un script.
-	
+
+	- {call|CALL} {[int]} : Appelle un script externe ou une procédure
+	dans le contexte de commande courrant.
+
 	- {setlocal|SETLOCAL} {[int]} : Permet de changer le mode de
 	  l'interpréteur {Dos9}.
-	
+
 	- {set|SET}      {[int]} : Permet d'affecter une {variable
 	  d'environnement}.
 
 	- {rem|REM}		 {[int]} : Permet d'entrer un commentaire.
 
+	- {exit|EXIT} {[int]} : Quitte l'interpréteur de commande.
+
 {{Commandes pour fichiers et dossiers}}
 
 	- {copy|COPY}       {[int]} : Copie des fichiers.
-	
+
+	- {move|MOVE}       {[int]} : Déplace un ou plusieurs fichiers.
+
+	- {ren|REN, RENAME {[int]} : Renommme un fichier.
+
+	- {del|DEL, ERASE} {[int]} : Supprime un ou plusieurs fichiers.
+
 	- {cd|CD, CHDIR}  {[int]} : Change le chemin courant.
-	
+
 	- {dir|DIR}        {[int]} : Affiche une liste de dossier et de sous
 	  dossiers.
-	
-	- {del|DEL, ERASE} {[int]} : Supprime un ou plusieurs fichiers.
-	
+
 	- {md|MD, MKDIR}  {[int]} : Crée un dossier.
-	
-	- {more|MORE, TYPE} {[int]} : Affiche le contenu d'un fichier texte.
-	
-	- {move|MOVE}       {[int]} : Déplace un ou plusieurs fichiers.
-	 
+
 	- {rd|RD, RMDIR}  {[int]} : Supprime un dossier.
-	
-	- {tree|TREE}       {[ext]} : Affiche une arboressance de dossiers.
-	
-	- {xcopy|XCOPY}      {[ext]} : Copie une arboressence de fichiers.
+
+	- {type|TYPE} {[int]} : Affiche le contenu d'un ou plusieurs
+	fichiers texte.
+
+	- {more|MORE} {[int]} : Affiche le contenu d'un ou plusieurs
+	fichiers texte, page par page.
+
+	- {dump|DUMP} {[ext]} : Affiche le contenu d'un fichier en hexadécimal
+	(pour les fichiers textes et les fichiers binaires).
+
+	- {find|FIND} {[int]} : Cherche les occurences d'une chaîne de
+	caractères dans un fichier.
+
+	- {tea|TEA} {[ext]} : Processeur de texte simple et rapide.
+
+#	- {tree|TREE}       {[ext]} : Affiche une arboressance de dossiers.
+
+#	- {xcopy|XCOPY}      {[ext]} : Copie une arboressence de fichiers.

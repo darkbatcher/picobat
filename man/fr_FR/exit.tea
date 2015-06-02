@@ -2,37 +2,37 @@
 
 	La commande de quitter l'interpréteur de commande {Dos9}, en retournant
 	(éventuellement) un code particulier.
-	
+
 {{Synopsis}}
 
 ${EXIT [/b code]}
 
 	Quitte l'interpréteur de commande.
-	
+
 		- {/b code} : spécifie le code à retourner lors de la fin de l'exécution
 		de {Dos9}. Ce code est traditionnellement compris entre {2 147 483 647}
 		et {-2 147 483 648}, même si cette valeur peut varier en fonction du
 		système d'exploitation.
-		
+
 {{Notes}}
 
 	Bien que l'effet de {EXIT} semble similaire à l'effet de {goto|GOTO:EOF}, il n'en
 	est rien, leurs comportements sont biens différents :
-	
+
 		- {EXIT} quitte purement et simplement le programme de commande, même si
 		l'exécution d'une fonction ou d'un script par {call|CALL} est en cours.
-		
+
 		- {GOTO:EOF} quitte seulement le script de plus haut niveaux, et cela sans
 		retourner de code. Si la partie de code exécutée n'est pas une fonction, il
 		n'y a pas de différence, mais si on est bel et bien dans une fonction, alors
 		le script retourne au point qui a appellé le script ou la fonction.
-		
+
 {{Compatibilité}}
 
 	Disponible depuis la version {0.4}.
-	
+
 	Entièrement compatible avec {cmd.exe}
-	
+
 {{À voir aussi}}
 
 	{goto|Commande GOTO},  {commands|Liste des commandes}

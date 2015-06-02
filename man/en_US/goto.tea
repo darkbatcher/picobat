@@ -17,45 +17,45 @@
 #
 
 {{GOTO command}}
-	   
+
 	Jump to a label in a batch script. This command is among the first
 	commands learned while learning batch script, and it is usefull since
-	it allow {conditional execution}.	
+	it allow {conditional execution}.
 
 	It might be preferable to use {if|multiline if}, especially in the case
 	of a quite short piece of instructions.
 
 {{Synopsis}}
-	
+
 ${	GOTO [:]label [file] [/Q}}
 
 	Jump to a label.
 
         - {label} : the label where {dos9|Dos9} will jump. A {label} is a word, or even
 	    a couple of words, which are used to identify the different pieces of codes, and
-	    this couple of words must be preceded by a column {:}. It is not necessary for 
+	    this couple of words must be preceded by a column {:}. It is not necessary for
 	    labels to start at colum 1.
-		
+
         - {file} : The file in which {dos9|Dos9} will seek the specified {label}. This
 		option requires the {spec/ext|dos9 extensions} to be enabled.
-		
+
 		- {/Q} : Silently ignore warning if the given {label} is not found on the given
 		{file} and continue script execution at next line. However, it sets {errorlevel|%ERRORLEVEL%},
 		to {0} if jump is actually perform or {-1} if it does not. This switch enables
 		creating a kind of {switch/case} statement.
-		
+
 	If the {GOTO} command is called within a command bloc (such as within a {for|FOR
 	loop} or within a {if|IF}), then block execution is aborted and execution
-	restart at given label. 
-	
+	restart at given label.
+
 {{Constructing a switch/case statement}}
 
-	The {GOTO} command allows constructing conditionnal statements such as 
+	The {GOTO} command allows constructing conditionnal statements such as
 	{switch/case}. This functionnality relies on the fact that {[:]lable}
 	is subject to {spec/exp|expansion}, as any other batch-language element.
 	Thus, using the {/Q} switch, a batch using somewhat of a {switch/case}
 	statement can be achieved.
-	
+
 ${@ECHO OFF
 
 :menu
@@ -102,7 +102,7 @@ ECHO You choosed 3
 
 	This command is compatible with {cmd.exe}, excepted the {file} parameter
 	which is only supported by {Dos9}, since version {0.7}
-	
+
 {{See also}}
 
 	{if|IF command}, {for|FOR loop}, {spec/cond|Conditional running}

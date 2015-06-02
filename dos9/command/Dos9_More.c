@@ -219,7 +219,7 @@ int Dos9_MoreFile(int flags, int tabsize, int begin, char* filename)
 
         if (!(file = fopen(filename, "r"))) {
 
-            Dos9_ShowErrorMessage(DOS9_FILE_ERROR,
+            Dos9_ShowErrorMessage(DOS9_FILE_ERROR | DOS9_PRINT_C_ERROR,
                                     filename,
                                     FALSE
                                     );
@@ -275,7 +275,7 @@ int Dos9_MoreFile(int flags, int tabsize, int begin, char* filename)
      }
 
 end:
-     if (filename)
+     if (file)
         fclose(file);
 
      return status;

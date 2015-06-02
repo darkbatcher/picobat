@@ -23,34 +23,62 @@
 
 {{Synopsis}}
 
-${	COPY [/-Y | /Y] [/A[:]attributs] source destination}
+${	COPY [/-Y | /Y] [/R] [/A[:]attributs] source [...] destination}
 
 	   Copie un ou plusieurs fichiers d'un dossier à un autre. Pour copier
 	une arboressence complète, utilisez la commande {xcopy|XCOPY}.
-	
+
 		- {/-Y} : provoque la demande de confirmation à l'utilisateur.
-		
+
 		- {/Y} : supprimme la demande de confirmation
 
 		- {source} : Le chemin du ou des fichiers à copier. Ce chemin
 		  peut comporter des {spec/regexp|caractères génériques}.
-		  
+
 		- {destination} : Le chemin de destination des fichiers copiés.
 		  Il ne peut pas contenir de {spec/regexp|caractères génériques}.
-		  
-		- {/A[:]attributs} : Ne copie que les fichiers ayant les 
-		  attributs correspondants, pour consulter la liste des 
+		{destination} est considéré comme le nom du fichier de
+		destination.
+
+		@- Cependant, si :
+
+			-- {destination} fait référence à un dossier;
+
+			-- {destination} se termine par {/} ou {\\};
+
+			-- {source} contient de multiples fichiers à copier vers
+			{destination};
+
+		@- Alors, {destination} est considéré comme le dossier dans
+		lequel le fichier doît être copié. Les fichier résultants de la
+		copie conserveront alors leur nom de fichier d'origine.
+
+		- {/R} : active le mode récursif. Permet la copie d'une
+		arboressence dans une autre arboressence. Si plusieurs {sources}
+		sont spécifiées alors les arboressances seront fusionnées. Si
+		{source} est une {spec/regexp|expression régulière}, alors la
+		partie statique de l'expression sera retranchée des {chemins}
+		de fichiers trouvés afin de produire des chemins relatifs par
+		rapport à {destination} (qui est alors obligatoirement
+		considérée comme un dossier.
+
+		@- par exemple, si {source} est {chemin/vers/dossier/*.*}
+		alors le fichier {chemin/vers/dossier/mon/fichier} sera copié
+		vers {destination}/{mon/fichier}.
+
+		- {/A[:]attributs} : Ne copie que les fichiers ayant les
+		  attributs correspondants, pour consulter la liste des
 		  attributs disponibles, voir la page : {spec/attr|Les attributs de fichier}
 
 {{Compatibilité}}
 
 	Disponible depuis la version {0.4}.
-	
-	Partiellement compatible avec {cmd.exe}. En effet, certains commutateurs sont ignorés car ils ne présentent qu'un 
+
+	Partiellement compatible avec {cmd.exe}. En effet, certains commutateurs sont ignorés car ils ne présentent qu'un
 	intérêt relatif. D'autre part, le fonctionnement des {_spec/regexp|caractères génériques}
 	n'estpas clair pour {cmd.exe}. Le commutateur {/A[:]attributs} est une extension de {Dos9}
-		
- 
+
+
 {{A voir aussi}}
 
 	{del|Commandes DEL et ERASE}, {move|Comande MOVE}, {xcopy|Commande XCOPY}

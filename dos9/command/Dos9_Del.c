@@ -58,7 +58,7 @@ int Dos9_CmdDel(char* lpLine)
 	short attr=DOS9_CMD_ATTR_DIR | DOS9_CMD_ATTR_DIR_N;
 
 	int flag=DOS9_SEARCH_DEFAULT | DOS9_SEARCH_NO_PSEUDO_DIR,
-	    choice,
+	    choice = DOS9_ASK_ALL,
 	    status = 0,
 	    n=0,
 	    i;
@@ -136,8 +136,6 @@ int Dos9_CmdDel(char* lpLine)
 
 	for  (i=0; i < n; i++) {
 
-        printf("Looking for `%s'\n", Dos9_EsToChar(name[i]));
-
         if (!(next = Dos9_GetMatchFileList(Dos9_EsToChar(name[i]), flag))) {
 
             Dos9_ShowErrorMessage(DOS9_NO_MATCH,
@@ -184,6 +182,7 @@ int Dos9_CmdDel(char* lpLine)
         /* If one of the path given included Joker and /Q has not been
             specified, ask the user for the file to *really delete */
 		param|=DOS9_ASK_CONFIRMATION;
+		choice = 0;
 	}
 
     Dos9_AttributesSplitFileList(attr,
@@ -201,11 +200,10 @@ int Dos9_CmdDel(char* lpLine)
 
     Dos9_FreeFileList(end);
 
-    choice = 0;
     end = list;
     while (end) {
 
-        Dos9_CmdDelFile(end->lpFileName, param, &choice);
+        status |= Dos9_CmdDelFile(end->lpFileName, param, &choice);
         end = end->lpflNext;
 
     }
@@ -213,7 +211,7 @@ int Dos9_CmdDel(char* lpLine)
     end = next;
     while (end) {
 
-        Dos9_CmdRmdirFile(end->lpFileName, param, &choice);
+        status |= Dos9_CmdRmdirFile(end->lpFileName, param, &choice);
         end = end->lpflNext;
 
     }
@@ -248,10 +246,25 @@ int Dos9_CmdDelFile(char* file, int param, int* choice)
 
     if ((res == DOS9_ASK_ALL) || (res == DOS9_ASK_YES)) {
 
-        printf("#lol #del Deleting file \"%s\"\n", file);
+        return Dos9_DelFile(file);
 
     }
 
     return 0;
 
+}
+
+int Dos9_DelFile(const char* file)
+{
+    if (remove(file)) {
+
+        Dos9_ShowErrorMessage(DOS9_UNABLE_DELETE | DOS9_PRINT_C_ERROR,
+                                file,
+                                0);
+
+        return -1;
+
+    }
+
+    return 0;
 }

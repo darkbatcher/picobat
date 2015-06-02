@@ -45,7 +45,7 @@
 #include "command/Dos9_Commands.h"
 #include "command/Dos9_CommandInfo.h"
 
-#define DOS9_DBG_MODE
+//#define DOS9_DBG_MODE
 #include "core/Dos9_Debug.h"
 
 #include "../config.h"
@@ -333,11 +333,13 @@ int main(int argc, char *argv[])
 
 		strcat(lpTitle, "Command prompt");
 		Dos9_SetEnv(lpeEnv, "DOS9_IS_SCRIPT", "false");
+		bIsScript = 0;
 
 	} else {
 
 		strncat(lpTitle, lpFileName, sizeof(lpTitle)-sizeof("Dos9 [" DOS9_VERSION "] - "));
-		Dos9_SetEnv(lpeEnv, "DOS9_IS_SCRIPT","true");
+		Dos9_SetEnv(lpeEnv, "DOS9_IS_SCRIPT", "true");
+        bIsScript = 1;
 
 		DOS9_DBG("[dos9] Runing \"%s\"\n", lpFileName);
 

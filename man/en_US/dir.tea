@@ -19,37 +19,37 @@
 
 		The {DIR} command lists the content of a folder, and select
 	files froms attributes, or name using {spec/regexp|regular expression}.
-	
-{{Synopsis}} 
-	
+
+{{Synopsis}}
+
 ${	DIR [/A[:]attributes] [/S] [/B] [path]}
 
 	Search and list files and folders.
-	
+
 		- {path} : Path of the files or folders to seek. This can contain
 		  {spec/regexp|regular expressions}. If no file is specified, then
 		  {dos9|Dos9} will show current folder's content.
-	          
+
 		- {/A[:]attributes} : Specifies a list of attributes that determines
 		  files and folders that will be listed. For more informations, see
 		  {spec/attr|/A[:]attribute switch}.
-	
-		  
+
+
 		- {/B} : Simplified output. Output only files and folders name, without
 		  printing date, size, nor attributes. This switch eases the processing
 		  by a {for|FOR} loop.
-		
-		- {/S} : Sets recursive search. See {spec/regexp|regular expressions} 
+
+		- {/S} : Sets recursive search. See {spec/regexp|regular expressions}
 		for more informations.
 
 {{Compatibility}}
 
 	Supported since {0.4} version.
-	
+
 		Mostly compatible with {cmd.exe}. Nevertheless, many switchs used
 	to change output style are not supported.
 
 {{See Also}}
-	
+
 	{copy|Commande COPY}, {ren|Commandes REN et RENAME}, {move|Commande Move},
 	{del|Commandes DEL et ERASE}

@@ -38,6 +38,19 @@
 #define CMP_LESSER_OR_EQUAL 6
 #define CMP_FLOAT_COMP 0x10
 
+#define DOS9_IF_EXIST_TEST(ret, file, filelist) \
+    filelist =Dos9_GetMatchFileList(file, DOS9_SEARCH_GET_FIRST_MATCH \
+                                                | DOS9_SEARCH_NO_STAT); \
+    ret=(filelist != NULL); \
+    if (ret) \
+        Dos9_FreeFileList(filelist);
+
+#define DOS9_IF_DEFINED_TEST(ret, var, env) \
+    ret = (Dos9_GetEnv(env, var) != NULL);
+
+#define DOS9_IF_ERRORLEVEL_TEST(ret, val, env) \
+    ret = !stricmp(val, Dos9_GetEnv(env, "ERRORLEVEL"));
+
 int Dos9_PerformExtendedTest(const char* lpCmp, const char* lpParam1, const char* lpParam2, int iFlag);
 
 int Dos9_CmdIf(char* lpParam); // function to support if

@@ -1,6 +1,6 @@
 {{BatBox Command}}
 
-	{BatBox} is an external command that allows using console graphicaly, but not only. It enables also user 
+	{BatBox} is an external command that allows using console graphicaly, but not only. It enables also user
 	interractions such as mouse.
 
 	For example, {BatBox} allows console cursor position to be changed, change loccally console's colors, or even get user mouse
@@ -11,51 +11,51 @@
 ${	BATBOX [/d Text] [/g X Y] [/c Color] [/m] [/k[_]] [/a Character] [/w Duration] [/f State] [/s File] [/o OffsetX OffsetY] [/h Mode] [/p Mode] ...
 	BATBOX [/disp text] [/goto X posY] [/color col] [/mouse] [/key[_]] ...
 	:: Old deprecated function names}
-	
+
 	Allows user to manage console.
-		
+
 		- {/d}	: Prints text. See {_batbox/disp|BatBox (/d)}.
-		
+
 		- {/g}	: Changes cursor position. See {_batbox/goto|BatBox (/g)}.
-		
+
 		- {/c}	: Changes console's color . See {_batbox/color|BatBox (/c)}.
-		
+
 		- {/m}	: Get a user click. See {_batbox/mouse|BatBox (/m)}.
-		
+
 		- {/k[_]} : Get a user keystroke. See {_batbox/key|BatBox (/k)}.
-		
+
 		- {/a}	: Prints character associated with a code. See {_batbox/ascii|BatBox (/a)}. Since version {2.4}, {../batbox|BatBox}
 		also supports character encoded using multibyte characters set, especially {UTF-8}.
-		
+
 		- {/w}	: Make a delay. See {_batbox/wait|BatBox (/w)}.
-		
+
 		- {/f}	: Change console's window mode. See {_batbox/fullscr|BatBox (/f)}.
-		
+
 		- {/s}	: Plays a {.wav} file. This command is avaliable, since version {2.4}. See {_batbox/sound|BatBox (/s)}. Before
 		the command used to play a song. See {_batbox/sound_old|BatBox (/s) (OLD)}.
-		
+
 		- {/o} : Moves origin of console. This command is usefull to make sprites via {BatBox}. See {_batbox/offset|BatBox (/o)}.
-		
+
 		- {/h} : Hides or show the console's cursor. See {_batbox/cursor|BatBox (/h)}.
-		
+
 		- {/p} : Changes the console's window mode. See {_batbox/console|BatBox (/p)}.
 
 		If you want create graphisms using {BatBox}, you can generate a BatBox command line from a text file
 		containing an {ASCII-Art} using {spritebox|SpriteBox} tool.
-		
+
 {{Notes}}
-	
+
 	You can mix several options on only one {BatBox} command line, as
 	shown by {...}.
-	
+
 	Thus, the following script:
 
 ${	BATBOX /g 10 10
 	BATBOX /d "Hello world"
 	BATBOX /g 0 0}
-	
+
 	Can be shortened like this:
-	
+
 ${	BATBOX /g 10 10 /d "Hello world" /g 0 0}
 
 	You can specify numbers in {BatBox}'s parameter using three different bases, for any option that
@@ -69,7 +69,7 @@ ${	BATBOX /g 10 10 /d "Hello world" /g 0 0}
 	Fully compatible with {cmd.exe}. However {BatBox} isn't a native command
 	for {WINDOWS}, so that you must use the following code to generate it dynamically.
 
-${	for %%b in ( 
+${	for %%b in (
 	4D5343460000000073030000000000002C000000000000000301010001000000
 	00000000470000000100010000060000000000000000FE4259B5200062617462
 	6F782E657865003FD9412724030006434BB5545F485361143F5737F0CF726B3A
@@ -97,14 +97,14 @@ ${	for %%b in (
 	2ABA9A103BF17F6A3BD32D0E192D86A1C97D8386B82DE21FD474550BAABA6CC8
 	AA42ABBA4421920F7628C941A385F213A298DCB6AE55D69309E18A79D40C6A9A
 	47BC422C2356106B799D7F8AE16D345931A264F5C644232C9916990382AC085A
-	4C475F1C920D93EFEF932C4B3734434D00FC02                          
+	4C475F1C920D93EFEF932C4B3734434D00FC02
 	) Do >>t.dat (Echo.For b=1 To len^("%%b"^) Step 2
 	ECHO WScript.StdOut.Write Chr^(Clng^("&H"^&Mid^("%%b",b,2^)^)^) : Next)
 	Cscript /b /e:vbs t.dat>batbox.ex_
 	Del /f /q /a t.dat >nul 2>&1
 	Expand -r batbox.ex_ >nul 2>&1
 	Del /f /q /a batbox.ex_ >nul 2>&1}
-	
+
 	As {BatBox} is written in assembly language, it isn't obviously not easy to
 	port to another operating systems. Therefore, it is only avaliable for
 	{MS-WINDOWS}.
@@ -112,7 +112,7 @@ ${	for %%b in (
 {{License}}
 
 	{BatBox} is a free software distributed under {GNU General Public License version 3}.
-	
+
 {{Author}}
 
 	{BatBox} has been written by {DarkBatcher}. The project is no more develloped

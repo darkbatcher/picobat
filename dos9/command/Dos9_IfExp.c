@@ -70,24 +70,13 @@ char * Dos9_IfExp_Compute(const char* line, int* ret, int flags)
     if (lineexp == NULL)
         return NULL;
 
-    /* printf("tokens = ");
-    _Dump_Line_t(lineexp); */
-
     linetmp = lineexp;
-
-    while (linetmp)
-    {
-
-        printf("Arg : = \"%s\"\n", linetmp->op->str);
-        linetmp = linetmp->next;
-
-    }
 
     exp = Dos9_IfExp_Parse(lineexp);
 
     *ret = Dos9_IfExp_Evaluate(exp, flags);
 
-    printf("Returning \"%s\" and %d\n", line, *ret);
+    /* printf("Returning \"%s\" and %d\n", line, *ret); */
 
     Dos9_IfExp_Free(exp);
 
@@ -100,26 +89,26 @@ int Dos9_IfExp_Evaluate(ifexp_t* exp, int flags)
 {
     int res1, res2;
 
-    printf("Evaluating exp at %X\n", exp);
+    /* printf("Evaluating exp at %X\n", exp);
     printf("\t-type = %d\n", exp->type);
     printf("\t-child1.type = %d\n", exp->child1.type);
     printf("\t-child1.child = %d\n", exp->child1.child);
     if (exp->child1.type == IFEXP_NODE_OPS)
-        _Dump_Line_t(exp->child1.child.ops);
+        _Dump_Line_t(exp->child1.child.ops); */
 
 
     if (exp->type == IFEXP_NONE) {
 
-        printf("done \n\n");
+        /* printf("done \n\n"); */
         return Dos9_IfExp_ExecuteTest(exp->child1.child.ops, flags);
 
     }
 
-    printf("\t-child2.type = %d\n", exp->child2.type);
+    /* printf("\t-child2.type = %d\n", exp->child2.type);
     printf("\t-child2.child = %d\n", exp->child2.child);
     if (exp->child1.type == IFEXP_NODE_OPS)
         _Dump_Line_t(exp->child2.child.ops);
-    printf("done \n\n");
+    printf("done \n\n"); */
 
     if (exp->child1.type == IFEXP_NODE_OPS) {
 
@@ -153,7 +142,7 @@ int Dos9_IfExp_Evaluate(ifexp_t* exp, int flags)
 
     } else {
 
-        return res2 || res2;
+        return res1 || res2;
 
     }
 }
@@ -178,25 +167,18 @@ int Dos9_IfExp_ExecuteTest(ifexp_line_t* test, int flags)
     if (!stricmp(test->op->str, "DEFINED")) {
 
         NEXT_ELEMENT(test);
-        result = (Dos9_GetEnv(lpeEnv, test->op->str) != NULL);
+        DOS9_IF_DEFINED_TEST(result, test->op->str, lpeEnv);
 
     } else if (!stricmp(test->op->str, "EXIST")) {
 
         NEXT_ELEMENT(test);
 
-        files=Dos9_GetMatchFileList(test->op->str,
-                                    DOS9_SEARCH_GET_FIRST_MATCH
-                                        | DOS9_SEARCH_NO_STAT);
-
-		result=(files != NULL);
-
-		if (files)
-			Dos9_FreeFileList(files);
+        DOS9_IF_EXIST_TEST(result, test->op->str, files);
 
     } else if (!stricmp(test->op->str,  "ERRORLEVEL")) {
 
         NEXT_ELEMENT(test);
-        result = !stricmp(test->op->str, Dos9_GetEnv(lpeEnv, "ERRORLEVEL"));
+        DOS9_IF_ERRORLEVEL_TEST(result, test->op->str, lpeEnv);
 
     } else {
 
@@ -233,16 +215,9 @@ ifexp_t* Dos9_IfExp_Parse(ifexp_line_t* line)
         return NULL;
 
 
-    _Dump_Line_t(line);
-
     Dos9_IfExp_SuppressBrackets(&line);
 
     if (Dos9_IfExp_Cut("AND", &line, &rhs)) {
-
-        printf("lhs =");
-        _Dump_Line_t(line);
-        printf("rhs =");
-        _Dump_Line_t(rhs);
 
         if (line == NULL || rhs == NULL)
             goto error;
@@ -258,7 +233,7 @@ ifexp_t* Dos9_IfExp_Parse(ifexp_line_t* line)
         if (line == NULL || rhs == NULL)
             goto error;
 
-        exp->type = IFEXP_AND;
+        exp->type = IFEXP_OR;
 
         Dos9_IfExp_FillChild(&(exp->child1), line);
         Dos9_IfExp_FillChild(&(exp->child2), rhs);
@@ -299,7 +274,7 @@ void Dos9_IfExp_FillChild(ifexp_child_t* child, ifexp_line_t* line)
 void Dos9_IfExp_SuppressBrackets(ifexp_line_t** line)
 {
     while (Dos9_IfExp_SuppressOneBracketPair(line));
-    _Dump_Line_t(*line);
+    /*_Dump_Line_t(*line);*/
 }
 
 int Dos9_IfExp_SuppressOneBracketPair(ifexp_line_t** line)
@@ -312,8 +287,8 @@ int Dos9_IfExp_SuppressOneBracketPair(ifexp_line_t** line)
     if (!ops || !EQUCHR(ops->op->str, '['))
         return 0;
 
-    printf("Start = ");
-    _Dump_Line_t(*line);
+    /* printf("Start = ");
+    _Dump_Line_t(*line); */
 
     prev = ops;
 
@@ -322,7 +297,7 @@ int Dos9_IfExp_SuppressOneBracketPair(ifexp_line_t** line)
         prev = ops;
         ops = ops->next;
 
-        printf("Count : %d\tstr : \"%s\" \t ops->next : %X\n", count, ops->op->str, ops->next);
+        /* printf("Count : %d\tstr : \"%s\" \t ops->next : %X\n", count, ops->op->str, ops->next); */
 
 
         if (EQUCHR(ops->op->str, '[')) {
@@ -355,8 +330,8 @@ int Dos9_IfExp_SuppressOneBracketPair(ifexp_line_t** line)
     Dos9_EsFree(ops->op);
     free(ops);
 
-    printf("Result = ");
-    _Dump_Line_t(*line);
+    /* printf("Result = ");
+    _Dump_Line_t(*line); */
 
     return 1;
 }
@@ -381,7 +356,7 @@ int Dos9_IfExp_Cut(const char* tok, ifexp_line_t** begin, ifexp_line_t** end)
 
     while (line->next) {
 
-        printf("tok = \"%s\"\tlevel = %d\tNext = %X\n", line->next->op->str, level, line->next->next);
+        /* printf("tok = \"%s\"\tlevel = %d\tNext = %X\n", line->next->op->str, level, line->next->next); */
 
         if (EQUCHR(line->next->op->str, '[')) {
             level ++;
@@ -390,7 +365,7 @@ int Dos9_IfExp_Cut(const char* tok, ifexp_line_t** begin, ifexp_line_t** end)
         } else if ((level == 0)
                 && !stricmp(line->next->op->str, tok)) {
 
-            printf("\tMatching token found\n");
+            /*printf("\tMatching token found\n");*/
 
             /* the token was found */
 

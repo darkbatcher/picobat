@@ -34,6 +34,18 @@
 #include "../errors/Dos9_Errors.h"
 #include "../lang/Dos9_ShowHelp.h"
 
+#include "Dos9_Find.h"
+
+char* Dos9_FindRegExpMatch(const char* s, const char* exp)
+{
+    return (char*)Dos9_RegExpMatch(exp, s);
+}
+
+char* Dos9_FindRegExpCaseMatch(const char* s, const char* exp)
+{
+    return (char*)Dos9_RegExpCaseMatch(exp, s);
+}
+
 /* This function come from FreeBSD (and, BSD I think) implementation of
    strcasestr(), renamed for conflict avoiding purposes */
 char* Dos9_strcasestr(const char* s, const char* find)
@@ -55,7 +67,7 @@ char* Dos9_strcasestr(const char* s, const char* find)
 	return ((char *)s);
 }
 
-void Dos9_FileFind(char* str, char* name, int count, int igncase, int reverse)
+void Dos9_FileFind(char* str, char* name, int count, int flag, int reverse)
 {
     FILE* pFile;
     ESTR* lpEsLine=Dos9_EsInit();
@@ -81,14 +93,25 @@ void Dos9_FileFind(char* str, char* name, int count, int igncase, int reverse)
 
     }
 
-    switch (igncase) {
+    switch (flag) {
 
-    case 0:
+    case DOS9_FIND_CASE_UNSENSITIVE |
+        DOS9_FIND_TRADITIONAL:
         searchfn = strstr;
         break;
 
-    default:
+    case DOS9_FIND_CASE_SENSITIVE |
+        DOS9_FIND_TRADITIONAL:
         searchfn = Dos9_strcasestr;
+        break;
+
+    case DOS9_FIND_CASE_UNSENSITIVE |
+        DOS9_FIND_REGEXP:
+        searchfn = Dos9_FindRegExpCaseMatch;
+        break;
+
+    default:
+        searchfn = Dos9_FindRegExpMatch;
 
     }
 
@@ -98,14 +121,16 @@ void Dos9_FileFind(char* str, char* name, int count, int igncase, int reverse)
 
         line++;
 
+        Dos9_RmTrailingNl(lpEsLine->str);
+
         res = searchfn(Dos9_EsToChar(lpEsLine), str);
 
         if (!reverse ^ !res) {
 
             if (count == 1)
-                printf("[%d]%s", line, Dos9_EsToChar(lpEsLine));
+                printf("[%d]%s\n", line, Dos9_EsToChar(lpEsLine));
             else if (count == 0)
-                printf("%s", Dos9_EsToChar(lpEsLine));
+                printf("%s\n", Dos9_EsToChar(lpEsLine));
 
             i++;
         }
@@ -152,7 +177,7 @@ int Dos9_CmdFind(char* lpLine)
 
     int status=0,
         count=0,
-        igncase=0,
+        flag=0,
         reverse=0,
         passed_names=0;
 
@@ -180,7 +205,11 @@ int Dos9_CmdFind(char* lpLine)
 
         } else if (!stricmp(Dos9_EsToChar(lpEsParam), "/I")) {
 
-            igncase = 1;
+            flag |= DOS9_FIND_CASE_UNSENSITIVE;
+
+        } else if (!stricmp(Dos9_EsToChar(lpEsParam), "/E")) {
+
+            flag |= DOS9_FIND_REGEXP;
 
         } else if (!stricmp(Dos9_EsToChar(lpEsParam), "/V")) {
 
@@ -278,11 +307,11 @@ int Dos9_CmdFind(char* lpLine)
 
     if (!pBegin) {
 
-        Dos9_FileFind(str, NULL, count, igncase, reverse);
+        Dos9_FileFind(str, NULL, count, flag, reverse);
 
     } else if (pBegin == pEnd) {
 
-        Dos9_FileFind(str, pBegin->lpFileName, count, igncase, reverse);
+        Dos9_FileFind(str, pBegin->lpFileName, count, flag, reverse);
 
     } else {
 
@@ -291,7 +320,7 @@ int Dos9_CmdFind(char* lpLine)
         while (pTmp) {
 
             printf("---------- %s\n", pTmp->lpFileName);
-            Dos9_FileFind(str, pTmp->lpFileName, count, igncase, reverse);
+            Dos9_FileFind(str, pTmp->lpFileName, count, flag, reverse);
 
             pTmp = pTmp->lpflNext;
 

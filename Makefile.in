@@ -54,10 +54,11 @@ host_triplet = @host@
 subdir = .
 DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(srcdir)/config.h.in \
-	$(top_srcdir)/configure $(top_srcdir)/po/Makefile.in \
-	config/config.guess config/config.rpath config/config.sub \
-	config/depcomp config/install-sh config/ltmain.sh \
-	config/missing config/ylwrap
+	$(top_srcdir)/configure $(top_srcdir)/po/Makefile.in COPYING \
+	config/compile config/config.guess config/config.rpath \
+	config/config.sub config/depcomp config/install-sh \
+	config/ltmain.sh config/mdate-sh config/missing \
+	config/texinfo.tex config/ylwrap
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/gettext.m4 \
 	$(top_srcdir)/m4/iconv.m4 $(top_srcdir)/m4/intlmacosx.m4 \
@@ -801,11 +802,11 @@ bin-strip: bin
 		$(STRIP) $$i;\
 	done;
 
-dist-bin-dir:
+dist-bin-dir: bin-strip
 	cp -R ./bin ./$(distdir)-bin
 
 dist-bin : dist-bin-dir	
-	tardir=$(distbdir) && $(am__tar) | GZIP=$(GZIP_ENV) gzip -c> $(distbdir)-bin.tar.gz
+	tardir=$(distbdir) && $(am__tar) | GZIP=$(GZIP_ENV) gzip -c> $(distbdir).tar.gz
 	$(rm_distbdir)
 
 dist-bin-zip: dist-bin-dir

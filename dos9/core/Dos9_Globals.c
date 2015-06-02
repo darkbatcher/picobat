@@ -25,6 +25,7 @@ int bDelayedExpansion=FALSE;
 int bUseFloats=FALSE;
 int bEchoOn=TRUE;
 int iErrorLevel=0;
+int bIsScript;
 
 #if !defined(DOS9_STATIC_CMDLYCORRECT)
 int bCmdlyCorrect=FALSE;

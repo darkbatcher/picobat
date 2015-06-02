@@ -16,147 +16,147 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-{{Commande SET (/A)(entiers)}} 
+{{Commande SET (/A)(entiers)}}
 
 	La commande {SET /A} permet d'assigner la valeur d'une expression mathématique à
 	une variable.
-	
+
 	Ce manuel traite uniquement de l'option {/A} de la commande {SET}, dans le cas
 	particulier des expressions utilisant des nombres entiers. Pour
 	consulter le manuel de la commande {SET}, rendez vous sur le manuel {set|SET}.
 	Vous pouvez aussi consulter le manuel traitant des expression a nombres flotants
 	à la page {setaf|SET (/A)(flotants)}.
-	
+
 {{Synopsis}}
 
-${SET [/a | /a[:]f] variable=expression}
+${SET [/a | /a[:]i] variable=expression}
 
 	   Affecte la valeur d'une {expression mathématique} à la variable
 	   {variable}. Cette command à un comportement dépendent du mode fixé par
 	   la commande {setlocal|SETLOCAL} avec le paramètre {ENABLEFLOATS}.
-	   
+
 	   L'opérateur {=} peut être remplacé dans cet exemple par les opérateurs suivants:
-	   
+
 		  - Opérateurs arithmétiques :
-	   
+
 			-- {+=} : Addition du résultat à {variable}.
-			
+
 			-- {-=} : Soustraction du résultat à {variable}.
-			
+
 			-- {*=} : Multiplication de {variable} par le résultat.
-			
+
 			-- {/=} : Division de {variable} par le résultat.
-		
+
 		 - Opérateurs logiques :
-		 
+
 			-- {&&=} : Et logique entre {variable} et le résultat.
-			
-			-- {||=} : Ou logique entre {variable} et le résultat.
-			
+
+			-- {\|\|=} : Ou logique entre {variable} et le résultat.
+
 		 - Opérateurs binaires :
-		 
+
 			-- {&=} : Et bit-à-bit entre {variable} et le résultat.
-			
-			-- {|=} : Ou bit-à-bit entre {variable} et le résultat.
-			
+
+			-- {\|=} : Ou bit-à-bit entre {variable} et le résultat.
+
 			-- {^=} : Ou exclusif bit-à-bit entre {variable} et le résultat.
-			
+
 			-- {>>=} : Décallage des bits de {variable} de résultat bit vers la gauche.
-			
+
 			-- {<<=} : Décallage des bits de {variable} de résultat bit vers la droite.
-			
+
 {{Opérateurs}}
 
 	   L'expression mathématique doit être constituée d'une suite d'opérateurs et d'opérandes. Chaque opérande
 	   doît être séparé de l'opérande suivant par un opérateur.
-	   
+
 	   Les opérateurs utilisables avec les nombres {entiers} sont:
-			
+
 			- Opérateurs arithmétiques:
-			
+
 			-- {*} : Multiplication.
-			
+
 			-- {/} : Division.
-			
+
 			-- {%} : Modulo (reste de la division Euclidienne).
-			
+
 			-- {+} : Addition.
-			
+
 			-- {-} : Soustraction.
-			
+
 			- Opérateurs bit-à-bit:
-			
+
 			-- {\|} : Ou inclusif bit-à-bit.
-			
+
 			-- {^} : Ou exclusif bit-à-bit.
-			
+
 			-- {&} : Et bit-à-bit.
-			
+
 			-- {>>} : Décalage des bits vers la droite.
-			
+
 			-- {<<} : Décalage des bits vers la gauche.
-			
+
 			- Opérateurs logiques:
-			
+
 			-- {\|\|} : Ou logique.
-			
+
 			-- {&&} : Et logique.
-		
+
 		La priorité des opérateurs est la suivante :
 
 			- {*}, {/}, {%}
-			
+
 			- {+}, {-}
-			
+
 			- {>>}, {<<}
-			
+
 			- {&&}, {&}
-			
+
 			- {^}
-			
+
 			- {\|\|}, {\|}
-			
+
 		La priorité des opérateurs peut cepandent être modifiée en utilisant les
 		parenthèses {(} et {)}.
-		
+
 		Il est également possible d'utiliser des opérateurs unaires, c'est-à-dire des opérateur affectant
 		uniquement l'opérande qui le suit à droite. Ces opérateurs sont :
-		
+
 			- {-} : Signe négatif.
-			
+
 			- {~} : Non bit-à-bit.
-			
+
 			- {!} : Non logique.
-			
+
 		Les opérateurs unaires ont la priorité la plus haute.
-		
+
 {{Bases}}
 
 	Les nombres des {expression mathématiques} peuvent être spécifiés dans trois bases différentes:
 	décimal, octal et hexadécimal. Par défaut, un nombre est considéré comme étant décimal, mais il
 	est possible de spécifier un préfixe pour signifier l'utilisation d'une base. Ces préfixes sont:
-	
+
 		- {0x} : Spécifie un nombre en base {hexadécimale} (base 16). Cette base est largement utilisée
 		pour écrire des nombres binaires en informatique.
-		
+
 		- {0} : Spécifie un nombre en base {octale} (base 16}. Cette base n'est plus vraiment usitée,
 		donc cette notation est comme obsolète et vivement découragée. Malheureusement, la syntaxe est
 		ambiguë, car des nombres tels que {070} sont normalement lus en tant que {70} plutôt qu'en tant
 		que {56}, car les zéro précédent les nombres sont généralement supperflus.
-		
+
 {{Note}}
 
 	Cette commande utilise {libinteval}, un parseur produit avec
 	{YACC}.
-	
+
 {{Compatibilité}}
-		
-	Parfaitement compatible avec {cmd.exe}. Néanmoins Dos9 à apporté les opérateurs logiques {&&} et 
+
+	Parfaitement compatible avec {cmd.exe}. Néanmoins Dos9 à apporté les opérateurs logiques {&&} et
 	{\|\|}.
-	
+
 	Disponible depuis la version {0.7.1.0}. Auparavant, le support des expression était beaucoup plus sommaire.
-	
+
 {{À voir aussi}}
 
 	{set|Commande SET}, {setaf|Commande SET (/A)(flotants)}, {setlocal|Commande SETLOCAL}
-		
+

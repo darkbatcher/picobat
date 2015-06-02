@@ -823,7 +823,7 @@ typedef struct FILELIST {
     \return Return TRUE if lpMatch matches to lpRegExp, FALSE otherwise
     \attention The comparison is case-sensitive
 */
-LIBDOS9 int         Dos9_RegExpMatch(char* lpRegExp, char* lpMatch);
+LIBDOS9 int         Dos9_RegExpMatch(const char* lpRegExp, const char* lpMatch);
 
 /** \brief Determine wether a string match to an regular expression or not
     The functions uses dos-like regular expression, using wildcard '*' and joker '?'.
@@ -831,7 +831,7 @@ LIBDOS9 int         Dos9_RegExpMatch(char* lpRegExp, char* lpMatch);
     \param lpMatch: A pointer to a NULL-terminated string that stores the string to be compared
     \return Return TRUE if lpMatch matches to lpRegExp, FALSE otherwise */
 
-LIBDOS9 int         Dos9_RegExpCaseMatch(char* lpRegExp, char* lpMatch);
+LIBDOS9 int         Dos9_RegExpCaseMatch(const char* lpRegExp, const char* lpMatch);
 
 /** \brief Retrieves a list of matching files
     \param lpPathMatch : A pointer to a NULL-terminated string that stores the regular expression to which the file have to match

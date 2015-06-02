@@ -137,7 +137,7 @@ FOR /F "tokens=*" %%A in ('dir /b /s /a:-d man/%lang_build%') do (
 	SET path_txt_build=!path_build:man/%lang_build%=doc/txt!.txt
 	
 	ECHO      - file : !path_txt_build! 
-	tea %%A !path_txt_build!.tmp /E:UTF-8 /O:TEXT
+	tea %%A !path_txt_build!.tmp /E:UTF-8 /O:TEXT-PLAIN
 	
 	ECHO      - file : !path_ansi_build!
 	tea %%A !path_ansi_build!.tmp /E:UTF-8 /O:TEXT-ANSI 
@@ -159,9 +159,12 @@ ECHO.
 ECHO.4] Create title search system
 FOR /F "tokens=*" %%A in ('dir /b /s /a:-D doc/txt/*.txt') do (
 	SET /p title= < "%%A" > NUL
-	ECHO !title!@%%A
+	ECHO !title!%%A
 ) > hlpdb
 
+ECHO.
+ECHO.5] Cleanning temporary files
+del /s /q doc/*.tmp
 
 GOTO:EOF
 
@@ -190,7 +193,7 @@ if "%~1" equ "" (
 
 SET i=0
 
-FOR /F "tokens=1,* delims=@" %%A IN ('type hlpdb | find /i "%~1" ') DO (
+FOR /F "tokens=1,* delims=" %%A IN ('type hlpdb | find /i /e "*%~1**" ') DO (
 	SET /a:I i+=1
 	SET tmp=%%B
 	SET HlpPath[!i!]=!tmp:txt=%mode%!
@@ -264,8 +267,7 @@ ECHO.
 set /p conf_mode=Please choose a mode (HTML/ansi/txt) : 
 if not defined conf_mode (
 	set conf_mode=html
-) else if [ x!conf_mode! neq xhtml or x!conf_mode! neq xansi or x!conf_mode! ^
-neq xtxt ] goto :mode_retry
+) else if [ x!conf_mode! neq xhtml and  x!conf_mode! neq xansi and x!conf_mode! neq xtxt ] goto :mode_retry
 ECHO.
 ECHO 2] Choosing locale :
 ECHO.
@@ -331,11 +333,11 @@ ECHO :: The command to view the stream
 ECHO set locale=%conf_locale%
 ECHO :: The locale to use when compiling
 ECHO set charset=%conf_charset%
+ECHO :: The charset to use when compiling
 ECHO set html_prg=start
 ECHO set txt_prg=more
 ECHO set ansi_prg=more
-ECHO set view_cmd=!!%%mode%%_prg!!
-ECHO :: The charset to use when compiling) > hlp.conf.bat
+ECHO set view_cmd=!!%%mode%%_prg!!) > hlp.conf.bat
 
 ECHO 5] Deleting outdated files :
 :: If we either change locale or encoding, we must regen files

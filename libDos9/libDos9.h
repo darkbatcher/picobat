@@ -313,8 +313,8 @@ typedef struct FILELIST {
     struct FILELIST* lpflNext;
 } FILELIST,*LPFILELIST;
 
-LIBDOS9 int         Dos9_RegExpMatch(char* lpRegExp, char* lpMatch);
-LIBDOS9 int         Dos9_RegExpCaseMatch(char* lpRegExp, char* lpMatch);
+LIBDOS9 int         Dos9_RegExpMatch(const char* lpRegExp, const char* lpMatch);
+LIBDOS9 int         Dos9_RegExpCaseMatch(const char* lpRegExp, const char* lpMatch);
 LIBDOS9 LPFILELIST  Dos9_GetMatchFileList(char* lpPathMatch, int iFlag);
 LIBDOS9 int         Dos9_GetMatchFileCallback(char* lpPathMatch, int iFlag, void(*pCallBack)(FILELIST*));
 LIBDOS9 THREAD      Dos9_FreeFileList(LPFILELIST lpflFileList);

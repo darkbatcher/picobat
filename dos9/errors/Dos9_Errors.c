@@ -217,6 +217,26 @@ void Dos9_LoadErrors(void)
     lpErrorMsg[DOS9_INVALID_IF_EXPRESSION] =
         gettext("Error : \"%s\" is not a valid expression for IF command.\n");
 
+    lpErrorMsg[DOS9_UNABLE_COPY] =
+        gettext("Error : Unable to copy file \"%s\".\n");
+
+    lpErrorMsg[DOS9_UNABLE_MOVE] =
+        gettext("Error : Unable to move file \"%s\".\n");
+
+    lpErrorMsg[DOS9_UNABLE_MKDIR] =
+        gettext("Error : Unable to create directory \"%s\".\n");
+
+    lpErrorMsg[DOS9_UNABLE_DELETE] =
+        gettext("Error : Unable to delete file \"%s\".\n");
+
+    lpErrorMsg[DOS9_UNABLE_RMDIR] =
+        gettext("Error : Unable to delete directory \"%s\".\n");
+
+    lpErrorMsg[DOS9_MOVE_NOT_RENAME] =
+        gettext("Error : \"%s\" is a relative path, RENAME (or REN) do not "
+                "handles relative path. If you want to move the file and "
+                "rename it at the same time, you should use MOVE command.\n");
+
 	lpQuitMessage=
 	    gettext("\nAborting current command, press any key to end Dos9.\n");
 
@@ -238,7 +258,7 @@ void Dos9_ShowErrorMessage(unsigned int iErrorNumber,
 	if (iErrorNumber & DOS9_PRINT_C_ERROR) {
 
 		fprintf(stderr,
-				"Returned error : \"%s\"\n",
+				"\tReason: %s\n",
 				strerror(errno)
 				);
 

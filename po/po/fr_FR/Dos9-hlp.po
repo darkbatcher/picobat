@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dos9 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-21 23:57+0200\n"
+"POT-Creation-Date: 2015-05-07 23:54+0200\n"
 "PO-Revision-Date: 2014-04-15 18:03+0100\n"
 "Last-Translator: DarkBatcher <darkbatcher@gmail.com>\n"
 "Language-Team: French <darkbatcher@dos9.org>\n"
@@ -54,13 +54,12 @@ msgstr ""
 "Usage: COLOR [code]\n"
 
 #: ../dos9/lang/Dos9_ShowHelp.c:53
-#, fuzzy
 msgid ""
 "Copy file(s) to another location.\n"
 "Usage: COPY [/R] [/-Y | /Y] [/A[:]attributes] source destination\n"
 msgstr ""
 "Copie des fichiers vers un autre répertoire.\n"
-"Usage: COPY [/-Y | /Y] [/A[:]attributs] source destination\n"
+"Usage: COPY [/R] [/-Y | /Y] [/A[:]attributs] source destination\n"
 
 #: ../dos9/lang/Dos9_ShowHelp.c:57
 msgid ""
@@ -242,7 +241,6 @@ msgstr ""
 "Usage: TITLE titre\n"
 
 #: ../dos9/lang/Dos9_ShowHelp.c:145
-#, fuzzy
 msgid ""
 "Print a file.\n"
 "Usage: TYPE [file ...]\n"
@@ -269,10 +267,10 @@ msgstr ""
 #: ../dos9/lang/Dos9_ShowHelp.c:157
 msgid ""
 "Search occurence of string in a set of files.\n"
-"Usage: FIND [/N] [/C] [/V] [/I] string [file ...]\n"
+"Usage: FIND [/N] [/C] [/V] [/I] [/E] string [file ...]\n"
 msgstr ""
 "Recherche les occurences d'une chaîne dans un groupe de fichiers.\n"
-"Usage: FIND [/N] [/C] [/V] [/I] chaîne [fichier ...]\n"
+"Usage: FIND [/N] [/C] [/V] [/I] [/E] chaîne [fichier ...]\n"
 
 #: ../dos9/lang/Dos9_ShowHelp.c:161
 msgid ""

@@ -19,17 +19,17 @@
 {{Commande FOR (Technique)}}
 
 	{Attention : cette page de manuel est la version techinque de la description
-	de la commande FOR.} Cette page fournit les spécifications complètes de la 
+	de la commande FOR.} Cette page fournit les spécifications complètes de la
 	commande. Cependant, la plupart des gens n'ont pas besoin de savoir tout ce qui
 	est décrit dans cette page puisque elle traite de nombreux cas particuliers. Si
 	vous ne recherchez pas une information précise, consultez la version résumée
 	{for|FOR} à la place.
-	
+
 	La boucle {FOR} est certainement l'outil le plus puissant que fournisse le
 	langage batch. Elle permet de traiter de nombreux types d'objets, entiers,
 	fichiers, sorties de commandes. Ainsi, la boucle {FOR}
 	est un outil important pour élaborer des scripts avancés.
-	
+
 	Les boucles {FOR} peuvent sembler difficiles à apréhender, néanmoins il
 	s'agit d'un outil très utile par les programmeurs batch.
 
@@ -40,13 +40,13 @@
 ${FOR %%A IN (chaine) DO (
 	:: des commandes
 )}
-	
+
 	Découpe {chaine} en éléments et exécute les commandes spécifiées sur
 	chaque élément.
-	
+
 		- {%%A} : Le nom de la {spec/xvar|variable spéciale} qui va recevoir
-		l'élément sur lequel exécuter les commandes. 
-		
+		l'élément sur lequel exécuter les commandes.
+
 		@- Le logiciel privateur {cmd.exe} forçait les utilisateurs à utiliser deux
 		différentes syntaxes, en fonction du mode d'entrée de la commande
 		(console ou batch). Dans le premier cas, l'utilsateur devait
@@ -55,27 +55,27 @@ ${FOR %%A IN (chaine) DO (
 		ne supporte que l'utilisation de {%%} pour les {spec/xvar|variables
 		spéciales} (exception faite pour les variables {%0} à {%9}, pour lesquelles
 		les deux sont supportées).
-		
+
 		- {chaine} : La chaîne à découper en éléments. Les délimiteurs utilisés sont:
-		
+
 			-- {' '} : Les espaces.
-			
+
 			-- {'	'} : La tabulation.
-			
+
 			-- {'\\n'} : Les retours à la ligne.
-			
+
 			-- {:} : Les deux-points.
-			
+
 			-- {;} : Les points-virgule.
-			
+
 			-- {,} : La virgule.
-			
+
 	@- Chacun des ces délimiteurs (à l'exception des retours à la ligne) peuvent être
-	ignorés en entourant l'élément par des guillemets simples ou doubles. 
+	ignorés en entourant l'élément par des guillemets simples ou doubles.
 	Ces guillemets seront alors conservés en tant que partie des éléments découpés.
 	Pour éviter la présence des guillemets, utilisez seulement {%%~A} à la place
 	de {%%A} (Pour plus d'information, voir {spec/xvar|variables spéciales}).
-	
+
 	Example :
 ${FOR %%A IN (des trucs "des trucs") DO (
 	ECHO L'élement courrant est %%A
@@ -88,10 +88,10 @@ L'élement courrant est "des trucs"}
 
 {{Synopsis - Seconde syntaxe}}
 
-	La seconde syntaxe est basée sur l'usage du commutateur {/f}. Elle permet d'effectuer des 
+	La seconde syntaxe est basée sur l'usage du commutateur {/f}. Elle permet d'effectuer des
 	opérations sur des chaînes, des commandes ou des fichiers. À noter que les chaînes ne sont
 	pas découpées de la même façon qu'en utilisant la syntaxe précédente.
-	
+
 ${FOR /F [options] %%A IN (objet) DO (
 	:: des commandes
 )}
@@ -103,36 +103,36 @@ ${FOR /F [options] %%A IN (objet) DO (
 		- {objet} : L'objet qui doît être utilisé comme entrée de la boucle {FOR}. Ce paramètre
 		doît être constitué d'une chaîne qui peut être (ou non) encadré par un seul type des délimteurs
 		suivants :
-		
-			-- {'} : L'objet {objet} est considéré comme une ligne de commande. 
+
+			-- {'} : L'objet {objet} est considéré comme une ligne de commande.
 			La boucle {FOR} va donc exécuter cette ligne de commande et ensuite
-			exécuter la boucle {FOR} en prenant comme entréee la sortie de la ligne 
+			exécuter la boucle {FOR} en prenant comme entréee la sortie de la ligne
 			de commande.
-			
+
 			@-- La ligne de commande est exécutée de manière asynchrone
 			(c-à-d, les commandes de la boucle {FOR} et de {objet} sont exécutées simultanément).
-			
+
 			@-- Sous {cmd.exe}, si la ligne de commande contenait des caractères de fin de ligne, ils étaient
 			enlevés de la ligne de commande et la ligne était donc exécutée comme si il s'agissait d'une
 			ligne unique, empéchant l'utilisateur d'utilser des scripts complexes comme {objet}.
 			Cette limitation n'existe plus dans {Dos9}, il est possible d'utilser des lignes de commandes
 			de plusieurs lignes, ainsi que des lignes de commandes plus complexes (y compris des boucles
 			{FOR}), ceci n'est néanmoins pas recommandé.
-			
+
 			-- {"} : L'objet {objet} est considéré comme une simple chaîne. La boucle {FOR} va donc
 			utiliser la chaîne {objet}. Si la chaîne contient des caractères de fin de ligne, alors
 			la chaine sera utilisée ligne par ligne.
-			
+
 			-- Si aucun des délimiteurs précédents n'entoure {objet}, alors {objet} sera considéré
 			comme un nom de fichier. La boucle {FOR} va alors ouvrir le fichier dont le nom est
 			donné par {objet} et lire entièrement son contenu, et finalement exécuter les commandes
-			sur ce contenu. 
-			
+			sur ce contenu.
+
 			@-- Le fichier peut évidemment être multiligne, mais il est supposé être
 			un fichier {texte} (ie. le fichier ne doit pas contenir de caractères {NUL}). Si le fichier
 			n'est pas un fichier texte, alors le comportement est indéfini (de manière générale, cela
 			aura pour effet de découper les lignes contenant des caractères {NUL} en plusieurs lignes).
-			
+
 			@- Contrairement à {cmd.exe}, {Dos9} ne retire pas les lignes vides de l'entrée de la boucle
 			{FOR}. Néanmoins, un comportement compatible peut être obtenu avec l'option {CMDLYCORRECT} de
 			la commande {setlocal|SETLOCAL}.
@@ -142,81 +142,81 @@ ${FOR /F [options] %%A IN (objet) DO (
 		paramètres qui contiennent chacun une partie des options totales. Chaque option doit être
 		spécifiée en utilisant le nom de l'option suivi d'un signe ``='' et enfin la valeur que doit prendre
 		l'option.
-			
+
 			-- {eol} : Spécifie des caractères qui seront utilisés comme des caractères de fin de ligne.
 			Tous les caractères suivant la première ocurrence d'un caractère qui fait partie de ceux qui sont
 			sont spécifiés sont ignorés. La valeur par défaut de ce paramètre est le point-virgule, (ie. {``;'')}.
-			
+
 			@-- Il est possible de spécifier au plus {FILENAME_MAX-1} (259 sous
 			windows) caractères différents de la table {ASCII}, ou d'un encodage
 			contenu sur un octet (Mais il n'est pour l'instant pas possible d'utiliser
 			des caractères {UTF-8}).
-			
+
 			@-- Si ce paramètre est spécifié plus d'une fois, alors la commande {FOR} ne prendra en
 			compte que le dernier des paramètres spécifiés, sans s'occuper des paramètres précédents.
-			
+
 			-- {skip} : Spécifie le nombre de lines qui doivent être enlevées dans l'entrée avant de
 			commencer l'exécution de la boucle.
-			
+
 			@-- Si la valeur spécifiée est plus grande que le nombre de
 			ligne de l'entrée, alors la boucle {FOR} ne sera tout simplement pas exécutée.
 			Sa valeur par défaut est bien évidemment {0}.
-			
-			-- {tokens} : Une liste spécifiant les éléments qui seront assignés à une 
-			{spec/xvar|variable spéciale}, comme {%%A}. La liste doit être conforme au format 
+
+			-- {tokens} : Une liste spécifiant les éléments qui seront assignés à une
+			{spec/xvar|variable spéciale}, comme {%%A}. La liste doit être conforme au format
 			défini par les règles suivantes, pouvant éventuellement être séparés par des virgules:
-			
+
 				--- {n} : Où {n} est un nombre entier. Sélectionne le {n}-ième élément.
-				
+
 				--- {n-p} : Où {n} et {p} sont des nombre entiers. Sélectionne la réunion de
 				tous les élément compris entre le {n}-ième et {p}-ième élement inclus.
-				
+
 				--- {*} : Sélectionne la réunion tous les élémént restants (tous ceux qui se trouvent après
 				le dernier élément sélectioné). Ce paramètre peut aussi être utilisé pour le {p} de la
 				syntaxe {n-p}, dans ce cas, la réunion de tous les élément suivant le {n}-ième élément (inclus)
 				est sélectionnée.
-				
+
 			@-- Chaque élément spécifié sera assigné
 			à une variable locale différente, en commençant par la variable donnée en argument
 			à la boucle {FOR}, puis en incrémentant le code {ASCII} correspondant pour chaque nouvel
 			élément (correspond grossièrement à une évolution alphabétique, en commençant par les
 			capitales et en finissant par les minuscules). Si le code {ASCII} dépasse la plage
 			de codes de caractères {ASCII} ({0x7F}), alors le code {ASCII} qui sera utilisé ensuite
-			sera le point-de-code {0x21} (ie. ``!''). 
-			
+			sera le point-de-code {0x21} (ie. ``!'').
+
 			@-- Si la boucle {FOR} doit ré-assigner une variable
-			spéciale déjà utilisée, celle-ci s'arrête et retourne un message d'erreur. 
-			
+			spéciale déjà utilisée, celle-ci s'arrête et retourne un message d'erreur.
+
 			@-- Le premier élément est désigné par le nombre {1}. Notez,
-			que contrairement au logiciel propriétaire {cmd.exe}, l'ordre des 
+			que contrairement au logiciel propriétaire {cmd.exe}, l'ordre des
 			opération n'est pas importante pour {Dos9} (Voir section {Compatibilité}}.
-				
+
 			-- {delims} : spécifie les caractères à utiliser comme délimiteurs pour découper l'entrée
 			obtenue avec {objet} en éléments. Par défaut, le seul délimiteur
 			utilisé par {Dos9} est l'espace (`` '').
-			
+
 			@-- Si vous spécifiez ce paramètre, l'utilisation de l'espace
 			comme délimiteur sera remplacé par les caractères saisis. Si {Dos9} rencontre plusieurs délimiteurs
 			se suivant dans une chaîne, ces délimiteurs seront considérés comme un seul délimiteur et il ne sera crée
 			qu'un seul élément ({Dos9} ne crée pas d'élément vide ``'').
-			
+
 			@-- Vous pouvez spécifier au plus {FILENAME_MAX-1} délimiteurs
 			en utilisant un encodage orienté octet. Si le même délimiteur est spécifié plus d'une fois, alors
 			il occupera deux fois l'espace necessaire dans le programme {dos9|Dos9}.
-			
+
 			@-- Si ce paramètre est spécifié plusieurs fois, la commande {FOR} ne prendra en compte
 			que le dernier de ces paramètres, sans s'occuper des autres.
-				
+
 			-- {usebackq} : Utilise la nouvelle syntaxe. Cette syntaxe a été introduite avec {Windows NT}. Si {objet}
 			est entouré par des guillemets simples, alors {Dos9} le considérera comme une chaîne. À l'inverse, s'il
 			est entouré par des guillemets inversés, alors il sera considéré comme une ligne de commande. Ce paramètre
 			est le seul qui ne nécessite pas de signe égal ni de valeur
-			
+
 			@-- Ce paramètre avait un réel intérêt avec {cmd.exe} qui tronquait souvent les chaînes spécifiées dans
 			les boucles {FOR} si celles-ci contenaient des paramètres, cependant, ce problème n'étant plus présent
 			avec {DOS9}, cette option est fournie pour la compatibilité, même si elle n'est pas dénuée d'un certain
 			esthétisme.
-			
+
 	{Exemple 1:} Parsage de chaîne:
 
 ${:: Le premier parse une chaîne simple
@@ -232,7 +232,7 @@ Connection: keep-alive") DO (
 	::		- La réunion de tous les élément suivants à %%B
 	:: Si a ' ' suit un ':', un seul délimiteur sera pris en
 	:: compte
-	
+
 	ECHO L'entrée du header est : %%A
 	ECHO La valeur du header est: %%B
 )}
@@ -245,11 +245,11 @@ La valeur du header est: keep alive
 }
 
 	{Example 2:} Obtention des sous répertoire d'un répertoire:
-	
+
 ${FOR /F "tokens=*" %%A IN ('dir /b /a:D') DO (
 
 	:: "tokens=*" assigne toute la ligne à %%A
-	
+
 	:: La boucle for récupère la sortie de la commande
 	:: ``dir /b /a:D'' qui affiche seulement les sous-
 	:: répertoires.
@@ -264,31 +264,31 @@ ${Un sous répertoire est "share"
 Un sous répertoire est "cmd"}
 
 	{Exemple 3:} Obtention du contenu d'un fichier {.csv}:
-	
+
 	Supposons que nous disposons d'un fichier nommé ``mon_csv.csv'' qui contient:
-	
+
 ${Alan Turing,anglais,mathématicien,a donné naissance à la théorie mathématique de l'informatique
 Harry Nyquist,américain,ingénieur,a contribué à la théorie de la communication
 Nathaniel B. Nichols,américain,ingénieur,a contribué à la théorie des asservissements}
 
 	Donc il s'agit d'une liste d'hommmes célèbres qui on contribué à la théorie informatique;
 	Nous pouvons l'afficher avec une boucle {FOR}:
-	
+
 	(Remarquez la variante de la syntaxe pour la spécification des options de la
 	commande.)
-	
+
 ${FOR /F "tokens=1,2,3" "delims=," %%A IN (my_csv.csv) DO (
 	:: découpe le fichier en éléments
 	:: %%A recevra le nom
 	:: %%B recevra la nationalité
 	:: %%C recevra la profession
 	:: %%D recevra la description
-	
+
 	ECHO %%A était un %%C %%B qui %%C
 )}
 
 	Le script doit alors produire la sortie suivante:
-	
+
 ${Alan Turing était un mathématicien anglais qui a donné naissance à la théorie mathématique de l'informatique
 Harry Nyquist était un ingénieur américain qui a contribué à la théorie de la communication
 Nathaniel B. Nichols était un ingénieur américain qui contribué à la théorie des asservissement}
@@ -296,27 +296,27 @@ Nathaniel B. Nichols était un ingénieur américain qui contribué à la théor
 {{Synopsis - Troisième syntaxe}}
 
 	La troisième syntaxe permet d'effectuer des boucles {FOR} traditionnelles (ie. une boucle
-	qui incrémente une variable à chaque boucle, comme pour le langage de programmation {C}).  
+	qui incrémente une variable à chaque boucle, comme pour le langage de programmation {C}).
 
 ${FOR /L %%A IN (début,pas,fin) DO (
 	:: des commandes
 )}
 
 		- {début} : La première valeur qui sera assignée à {%%A}.
-		
+
 		- {pas} : La valeur des pas effectués à chaque boucle.
-		
+
 		- {fin} : La valeur maximale que peut atteindre {%%A}. Dès que {%%A}
 		dépasse {fin}, la boucle s'arrête. Si {fin} est plus petit que {début}, alors
 		aucune action ne sera effectuée.
-		
-		
+
+
 	La boucle {FOR} nécessite que {début}, {pas} et {fin} soient des nombres entiers. Si ils sont
 	des nombres flotants, il seront tronqué à la valeur entière directement inférieure. Si ils sont
 	des chaînes, le comportement est indéfini.
-		
+
 	{Example:} Compter de 1 à 10:
-	
+
 ${FOR /L %%A IN (1,1,10) DO (
 	ECHO %%A
 )}
@@ -342,16 +342,16 @@ ${1
 
 	La première syntaxe permet d'obtenir les fichiers localisés dans un dossier et dans ses
 	sous dossier, qui concorde avec une {regexp|expression régulier}.
-	
+
 ${FOR /R basedir %%A IN (masque) DO (
 	:: some stuff
 )}
 
 		- {basedir} : Le dossier dans lequel la recherche va commencer.
-		
+
 		- {masque} : Un masque utilisé pour sélectionner les fichiers.
 		peut contenir une {spec/regexp|expression régulière}.
-		
+
 	Cette syntaxe est déprecié parce que l'on peut optenir le même résultat avec un script plus
 	flexible, en utilisant la syntaxe suivante.
 
@@ -361,27 +361,26 @@ ${FOR /F "tokens=*" %%A IN ('dir /b /s /a:-D basedir/masque') DO (
 
 	La seconde syntaxe permet d'effectuer le même type de recherche, mais sur les répertoires. La
 	syntaxe de la commande est similaire mais en remplaçant {/R} par {/D}.
-	
+
 {{Compatibilité}}
 
 	Majoritairement compatible avec {cmd.exe}. Cependant, la syntaxe est compatible avec {cmd.exe},
 	si bien que tout code provenant de {cmd.exe} pourra fonctionner sous {Dos9}.
-	
+
 	Notez tout de même que l'option {tokens} peut causer des problèmes. En effet, si les éléments
 	sont désordonées (par exemple, ``8,7''), {cmd.exe} triait silencieusement les élément pour
 	qu'ils soient dans l'orde. Néanmoins {Dos9} n'effectue ce triage, ce qui résulte en un comportement
 	légèrement différent. Notez que {Dos9} n'a pas de problème avec les intervalles d'éléments qui se
 	recouvrent (par exemple ``4-6,5-7''), alors que de tels intervalles seront en général mal découpés
 	par {cmd.exe}, en fonction de la fonction.
-	
+
 	Notez également qu'avec l'option {/F} les lignes vides ne sont pas retirées de l'entrée, comme avec
 	{cmd.exe}.
-	
+
 	La commande {FOR} est disponible depuis la version {0.7.0.0}. Le {FOR /F} est complètement
 	fonctionnel depuis la version {0.7.0.2}.
-	
+
 {{A voir aussi}}
 
 {for|Commande FOR (Non technique)}, {if|Commande IF}
-	
-	
+

@@ -155,7 +155,7 @@ void Dos9_LoadInternalHelp(void)
 
     lpInternalHelp[DOS9_HELP_FIND]
         =gettext("Search occurence of string in a set of files.\n"
-                 "Usage: FIND [/N] [/C] [/V] [/I] string [file ...]\n");
+                 "Usage: FIND [/N] [/C] [/V] [/I] [/E] string [file ...]\n");
 
     lpInternalHelp[DOS9_HELP_MORE]
         =gettext("Display content of files.\n"

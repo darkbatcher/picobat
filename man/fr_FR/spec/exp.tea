@@ -3,126 +3,126 @@
 	   L'expansion des variables est une étape du {parse|parsage} au
 	cours de laquelle les variables sont remplacés dans l'entrée de
 	commande.
-	   
+
 	   Il y a en réalité deux types d'expansions {l'expansion
 	conventionnelle} et {l'expansion retardée}. La première a lieu lors
 	de la lecture du fichier et la seconde a lieu lors de l'exécution de
 	la ligne.
-	
+
 {{L'expansion conventionnelle}}
 
 	   L'expansion conventionnelle a lieu à chaque lecture de ligne. On
 	ne peut pas la désactiver.
-	
+
 	   Lors de cette étape {../dos9|Dos9} recherche les chaines délimitées
 	par des {%}. Si Dos9 trouve de telles chaines, il considère qu'il
 	s'agit de noms de {var|variables} et les remplace par leur contenu.
-	
+
 	Lorsque {Dos9} rencontre une chaîne entourée par des {%} (pour-cent) sucessifs,
 	alors {Dos9} procède de la façon suivante:
-	
+
 		- Si la chaîne définit un nom de variable valide, alors {Dos9} dévellope
 		l'entrée en le contenu de la variable:
-		
+
 		@- Par exemple :
-		
+
 ${SET var=hello world !
 ECHO %var%}
 
 		@- affichera :
-		
+
 ${hello world !}
-		
+
 		- Si les deux {%} sont accolés, alors Dos9 les remplace par
 		  un unique {%}.
 
 		@- Par exemple, le code suivant :
-		
+
 		${ECHO copie : 10%%}
-		
-		@- Affichera : 
-		
+
+		@- Affichera :
+
 		${copie 10%}
-		
+
 		- Si on n'est dans aucun des deux cas, alors la chaine est
 		  (ainsi que les {%}) sont supprimés.
-		  
+
 		@- Par exemple :
-		
+
 ${SET foo=
 ECHO %foo% hello world !
 }
-		
+
 		@- Affichera la sortie suivante :
-		
+
 ${hello world !}
-			
+
 	   On peut aussi spécifier des options lors de l'expansion. Pour cela
 	il suffit d'insérer un signe {:} entre les signes {%} et après le nom
 	de la variable. On peut donc utiliser les options suivantes :
 
-		- La troncature du contenu de la variable en utilisant l'option 
+		- La troncature du contenu de la variable en utilisant l'option
 		${	nom_variable:~nb1,nb2}
-		
+
 			-- {nb1} : position du caractère de {nom_variable} où
 			  commence la chaîne qui doit être vraiment
 			  remplacée. le premier caractère est le caractère 0.
-			
+
 			-- {nb2} : nombre de caractères a conserver après le
 			  {nb1}-ième caractère de {nom_variable}. Si {nb2}
 			  est négatif, alors la chaine qui sera remplacée
 			  s'arrêtera {nb2} caractères avant la fin de
 			  {nom_variable}
-			
+
 		@- Par exemple:
-		
+
 ${SET foo=Hello world
 ECHO %foo:~2,3%
 ECHO %foo:~2,-3%}
-			
+
 		@- Affichera la sortie suivante :
 
 ${llo
 llo wo}
-		
 
-		
-		- Le remplacement d'une sous chaîne en utilisant l'option 
+
+
+		- Le remplacement d'une sous chaîne en utilisant l'option
 		${	nom_variable:chaine1=chaine2}
-		
+
 			-- {chaine1} : chaine à remplacer dans la variable
 			  {nom_variable}
-			
+
 			-- {chaine2} : chaine remplaçant {chaine1} dans la
 			  variable {nom_variable}
-			
+
 		@- Par exemple:
 
 ${SET foo=Ceci est un test
 ECHO %foo:est=pingouin%}
-			
+
 		@- Affichera la sortie suivante :
-		
+
 ${Ceci pingouin un tpingouin}
-	
+
 {{L'expansion retardée}}
 
 	   L'expansion retardée a lieu juste avant l'exécution de la ligne.
 	Cette étape peut être activée ou désactivée via la commande
 	{../setlocal|SETLOCAL} en utilisant les options {ENABLEDELAYEDEXPANSION}
 	ou {DISABLEDELAYEDEXPANSION}.
-	   
-	   L'expansion des variables d'environnement se fait selon les même 
+
+	   L'expansion des variables d'environnement se fait selon les même
 	méthodes et options sauf qu'il faut alors remplacer les {%} par des {!}.
-	
+
 	Elle permet de résoudre de nombreux problèmes courrants auquels on est forcément
 	confronté lors de la programmation batch. Ces problèmes sont :
-	
+
 		- {Gérer convenablement} les variables à l'intérieur d'une boucle {../for|FOR} ou d'un
 		{../if|IF}, car les variables sont dévellopées à chaque nouvelle boucle, à l'inverse de
 		l'expansion traditionnelle, qui ne dévellope les variables qu'une fois, à la lecture de la
 		ligne.
-		
+
 		@- Par exemple, le code suivant qui n'utilise que l'expansion convientionnelle, et a un comportement étrange.
 
 ${SET var=1
@@ -131,13 +131,13 @@ IF %var% equ 1 (
 	SET var=2
 	echo 2: %var%
 )}
-	
+
 		@- La sortie est surprenante, car on a l'impression que {%var%} n'as pas été modifiée, alors qu'en réalité
 		elle l'a été, mais les variables n'ont été dévellopées qu'a la lecture de la ligne.
 
 		@- Pour obtenir un résultat correct, il faut donc utiliser l'expansion retardée des variables, c'est à dire
 		modifier le code de la façon suivante:
-		
+
 ${SETLOCAL EnableDelayedExpansion
 SET var=1
 ECHO 1: %var%
@@ -145,44 +145,44 @@ IF %var% equ 1 (
 	SET var=2
 	echo 2: !var!
 )}
-		
-	
+
+
 	- {Contouner
 	certains problème de parsage} qui apparaissent traditionelement dans
 	les scripts batch, notamment le problème de l'expansion de variables
-	contenant des espace. 
-	
+	contenant des espace.
+
 	@- Par exemple, le script suivant échouera, car les espaces dans {%var%} causent une erreur de syntaxe:
 
 ${SET var=variable avec des espaces
 IF %var% equ test (
 :: du code
 )}
-	
+
 	@- La meilleure solution à ce problème est d'utiliser l'expansion retardée de variables. (D'autres méthodes
 	et la raison pour laquelle celle-ci est la meilleure sont discutées sur la page de la {../if|commande IF})
-	
+
 ${SETLOCAL EnableDelayedExpansion
 SET var=variable avec des espaces
 IF !var! equ test (
 :: du code
 )}
-	
+
 {{L'expansion des variables spéciales}}
 
 	   Les {xvar|Variables spéciales} sont aussi remplacées lors de
 	l'exécution de la ligne. (Voir la page pour plus d'infos)
-	
+
 {{Compatibilité}}
 
 	   Compatible avec {cmd.exe} pour la majorité des tests, mais on ne
 	peut pas être sûr que ce soit le cas étant donné que microsoft ne
 	publie pas les spécifications de {cmd.exe}.
-	
+
 	   L'expansion suit les règles annoncées depuis la version {0.7},
 	avant, l'expansion était beaucoup plus annarchique.
 
 {{A voir aussi}}
-	
+
 	{var|Variables d'environnement}, {xvar|Variables spéciales},
 	{../setlocal|Commande SETLOCAL}, {index|Index des spécifications}

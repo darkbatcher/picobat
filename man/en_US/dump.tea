@@ -21,56 +21,56 @@
 	The {DUMP} command allows binary files to be dumped. It allows printing
 	binary in various data types and in various numeric bases. It can be
 	an interesting tool for generating embed file generators in batch.
-	
+
 {{Synopsis}}
 
 ${DUMP file [output] [/P] [/H] [/T[:]type] [/B] [/E[:]endianness] /L}
 
 	Dump a binary file.
-	
+
 		- {file} : A path to the file to be dumped.
-		
+
 		- {output} : A path to the output file. If no output file is given,
 		then the result is to be printed in the screen.
-		
+
 		- {/P} : Enable page-by-page view.
-		
+
 		- {/H} : Enable hexadecimal mode. This switch only works for types
 		{I}, {S}, and {C}.
-		
+
 		- {/T[:]type} : Specify the data type to be printed. It must be
 		choosed from the following list:
-		
+
 			-- {C} : Byte
-			
+
 			-- {S} : Word (2 bytes}
-			
+
 			-- {I} : Double-word {4 bytes}
-			
+
 			-- {F} : Simple precision float
-			
+
 			-- {D} : Double precision float
-			
+
 		- {/B} : Disable title, array head, adresses and char dump. Usefull for
 		creating embed file generators in a batch file.
-		
+
 		- {/E[:]endianess} : Correct endianess issue. The {endianess} must be
 		one of the following value:
-		
+
 			-- {B} : Big endian
-			
+
 			-- {L} : Little endian.
-			
+
 		- {/L} : Show an extract from {DUMP} license.
-		
+
 	By default, the printed text is configured like :
-	
+
 ${DUMP file /T:C /H}
 
 {{License}}
 
 	{DUMP} is free software distributed under the {GNU General Public License}.
-	
+
 {{Authors}}
 
 	{DUMP} has been written in 2013 by {DarkBatcher} for the {Dos9 Project}.

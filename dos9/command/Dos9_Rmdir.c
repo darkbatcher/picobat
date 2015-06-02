@@ -62,10 +62,11 @@ int Dos9_CmdRmdir(char* lpLine)
 	ESTR *lpEstr=Dos9_EsInit(),
           *name[FILENAME_MAX];
 
-	int	mode=DOS9_SEARCH_DEFAULT | DOS9_SEARCH_NO_PSEUDO_DIR | DOS9_SEARCH_DIR_MODE,
+	int	mode=DOS9_SEARCH_DEFAULT | DOS9_SEARCH_NO_PSEUDO_DIR,
 		param=DOS9_ASK_CONFIRMATION,
 		choice,
 		n=0,
+		status = 0,
 		i;
 
     FILELIST *next,
@@ -97,7 +98,8 @@ int Dos9_CmdRmdir(char* lpLine)
 
 		} else if (!stricmp(Dos9_EsToChar(lpEstr), "/Q")) {
 
-			param=0;
+			param = 0;
+			choice = DOS9_ASK_ALL;
 
 		} else {
 
@@ -139,6 +141,7 @@ int Dos9_CmdRmdir(char* lpLine)
             if (files == NULL) {
 
                 files = dir;
+                next = dir;
 
             } else {
 
@@ -161,7 +164,8 @@ int Dos9_CmdRmdir(char* lpLine)
 
         while (next) {
 
-            Dos9_CmdDelFile(next->lpFileName, param, &choice);
+            status |= Dos9_CmdDelFile(next->lpFileName, param, &choice);
+
             next = next->lpflNext;
 
         }
@@ -170,7 +174,8 @@ int Dos9_CmdRmdir(char* lpLine)
 
         while (next) {
 
-            Dos9_CmdRmdirFile(next->lpFileName, param, &choice);
+            status |= Dos9_CmdRmdirFile(next->lpFileName, param, &choice);
+
             next = next->lpflNext;
 
         }
@@ -185,7 +190,7 @@ end:
         Dos9_EsFree(name[i]);
 
 	Dos9_EsFree(lpEstr);
-	return 0;
+	return status;
 
 error:
     for (i=0;i < n; i++)
@@ -204,7 +209,7 @@ int Dos9_CmdRmdirFile(char* dir, int param, int* choice)
 				res=Dos9_AskConfirmation(DOS9_ASK_YNA
 				                             | DOS9_ASK_INVALID_REASK
 				                             | DOS9_ASK_DEFAULT_N,
-				                             lpDelConfirm,
+				                             lpRmdirConfirm,
 				                             dir
 				                            );
         if (res == DOS9_ASK_ALL)
@@ -214,7 +219,23 @@ int Dos9_CmdRmdirFile(char* dir, int param, int* choice)
 
     if ((res == DOS9_ASK_ALL) || (res == DOS9_ASK_YES)) {
 
-        printf("#lol #del Removing dir \"%s\"\n", dir);
+        return Dos9_Rmdir(dir);
+
+    }
+
+    return 0;
+
+}
+
+int Dos9_Rmdir(const char* dir)
+{
+
+    if (rmdir(dir)) {
+
+        Dos9_ShowErrorMessage(DOS9_UNABLE_RMDIR
+                                | DOS9_PRINT_C_ERROR, dir, 0);
+
+        return -1;
 
     }
 

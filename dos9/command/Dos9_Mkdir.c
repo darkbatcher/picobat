@@ -105,7 +105,7 @@ int Dos9_CmdMakeDirs(char* str)
             if (!Dos9_DirExists(dir)
                 && MKDIR_MACRO(dir, 0777)) {
 
-                Dos9_ShowErrorMessage(DOS9_MKDIR_ERROR | DOS9_PRINT_C_ERROR,
+                Dos9_ShowErrorMessage(DOS9_UNABLE_MKDIR | DOS9_PRINT_C_ERROR,
                                       dir,
                                       FALSE);
                 return -1;

@@ -13,7 +13,7 @@ ${	BATBOX /a code}
 	you must specify all byte used to code the character, in a reversed order. For example the character
 	``█'' is coded by {0xE2 0x96 0x88} in {UTF-8}, so that the {code} to be passed to {../batbox|BatBox}
 	should be {0x8898E2}.
-	
+
 {{Notes}}
 
 	To get easely a table of characters and their associated codes, you can
@@ -27,7 +27,7 @@ ${	@ECHO OFF
 	SET /a code=%code%+1
 	IF NOT %code%==256 GOTO :Boucle
 	PAUSE}
-	
+
 {{See also}}
 
 	{disp|BatBox (/d)}, {fullscr|BatBox (/f)}, {sound|BatBox (/s)}, {../batbox|BatBox}

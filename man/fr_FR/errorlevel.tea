@@ -19,16 +19,16 @@
 {{Variable %ERRORLEVEL%}}
 
 	{%ERRORLEVEL%} est une variable d'environnement définie automatiquement par {dos9|Dos9} lors de l'exécution d'une commande.
-	Elle permet de détecter si une erreur a eu lieu et si oui de quel type s'agit t'il. 
+	Elle permet de détecter si une erreur a eu lieu et si oui de quel type s'agit t'il.
 	De manière générale, si {%ERRORLEVEL%} est nulle, alors aucune erreur ne s'est produite.
 
 {{Synopsis}}
 
 ${	%ERRORLEVEL%}
 
-	De manière générale, il ne faut pas accorder de sens spécial aux valeurs de {%ERRORLEVEL%} si elles sont différentes de 
+	De manière générale, il ne faut pas accorder de sens spécial aux valeurs de {%ERRORLEVEL%} si elles sont différentes de
 	0, car les codes de retour sont spécifiques à chaque commande.
-	
+
 	Il faut plutôt considérer qu'une valeur non nulle de {%ERRORLEVEL%} est une erreur quelquonque, qui sera affichée à l'invité.
 
 {{A voir aussi}}

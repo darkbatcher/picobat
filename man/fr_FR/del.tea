@@ -19,80 +19,35 @@
 
 	   Les commnde {DEL} et {ERASE} permettent de supprimer de fichiers ou
 	des listes de fichiers sur un disque.
-	
+
 {{Synopsis}}
 
-${	DEL [/P] [/F] [/S] [/Q] [/A[:]attributs] nom ...
-	ERASE [/P] [/F] [/S] [/Q] [/A[:]attributs] nom ...}
-	
+${DEL [/P] [/F] [/S] [/Q] [/A[:]attributs] nom ...
+ERASE [/P] [/F] [/S] [/Q] [/A[:]attributs] nom ...}
+
 	Supprime un ou plusieurs fichier.
-	
+
 		- {/P} : Demande confirmation avant de supprimer un fichier.
-		
+
 		- {/F} : Force la suppression des fichiers en lecture seule.
-		
+
 		- {/Q} : Ne demande pas de confimation lors d'une suppression
 		  avec caractères génériques.
-		
-		- {/A[:]attributs} : Supprime le fichier en fonction de ses
-		  attributs. (non portable en raisons des différences
-		  d'attributs entre {WINDOWS} et {GNU/Linux}.). Par défaut,
-		  les dossiers sont ignorés lors de la recherche de fichiers
-		  a supprimer, mais il est possible de le réactiver.
 
-		@-  Attributs de {WINDOWS}:
-		
-			-- {R} : Fichiers en lecture seule
-		
-			-- {D} : Dossiers
+		- {/A[:]attributs} : Sélectionne les fichier à supprimer en
+		fonction de leurs attributs. voir {spec/attr|les attributs
+		de fichier}.
 
-			-- {H} : Fichiers cachés
-			
-			-- {I} : Fichiers indexés sans contenu (vides)
-			
-			-- {S} : Fichiers système
-			
-			-- {A} : Fichiers archivés
-			
-			-- {L} : Points d'analyse
-			
-			-- {-} : Préfixe de négation
-			
-		  @- Attributs de {GNU/Linux}
-		  
-			-- {R} : Fichiers en lecture seule
-			
-			-- {D} : Dossiers
-
-			-- {I} : Fichiers indexés sans contenu (vides)
-			
-			-- {-} : Préfixe de négation
-			
 		- {nom} : Le chemin du fichier à supprimer. Ce chemin peut
-		contenir {spec/regexp|des caractères génériques}, comme le {*}
-		et le {?}. Il est possible de spécifier plusieurs paramètres
-		{nom}, dans ce cas, il faut savoir que la suppression n'est
-		pas séquentielle, la suppression n'a pas lieu l'une à la suite
-		de l'autre, mais de manière simultanée. Les fichiers peuvent
-		donc être supprimés dans un ordre arbitraire. Le nombre de
-		{nom} maximum pouvant être spécifiés simultanément est
-		{FILENAME_MAX}, les suivants seront ignorés.
-		  
-{{Notes}}
+		contenir {spec/regexp|des caractères génériques}.
 
-	   La faible diversité des attributs sur les systèmes {GNU/Linux}
-	s'explique par la simplicité de la gestion des droits sous {UNIX},
-	qui se fait avec le {chmod} (l'aide est disponible via la commande
-	${man chmod} sous un système compatible {UNIX}).
-	
-	   Les fichiers cachés étant simplement nommés avec un nom
-	commençant par un  point.
-	
+
 {{Compatibilité}}
 
 	Disponible depuis la version {0.4}.
+
 	Parfaitement compatible avec {cmd.exe}.
-	
+
 {{A voir aussi}}
 
 	{rd|Commandes RD et RMDIR},  {md|Commandes MD et MKDIR},

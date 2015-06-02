@@ -21,91 +21,244 @@
 #include <ctype.h>
 #include "../libDos9-int.h"
 
-LIBDOS9 int Dos9_RegExpMatch(char* lpRegExp, char* lpMatch)
+LIBDOS9 char* Dos9_SeekPattern(const char* match, const char* pattern, size_t len)
 {
-	char* lpNextPos;
+    const char* tok;
+    int   i = 0;
 
-	if (!(lpRegExp && lpMatch)) return FALSE;
+    //printf("Looking for pattern \"%s\"[%d] in\"%s\"\n", pattern, len, match);
 
-	for (; *lpRegExp && *lpMatch;
-	     lpRegExp=Dos9_GetNextChar(lpRegExp),
-	     lpMatch=Dos9_GetNextChar(lpMatch)
-	    ) {
-		switch(*lpRegExp) {
-		case '?':
+    while (*match) {
 
-			break;
+        i = 0;
 
-		case '*':
+    //    printf("\tAt \"%s\"\n", match);
 
-			lpRegExp=Dos9_GetNextChar(lpRegExp);
+        while ((i < len) && (match[i] == pattern[i]))
+            i ++;
 
-			while (*lpRegExp=='*' && *lpRegExp=='?') lpRegExp=Dos9_GetNextChar(lpRegExp);
+        if (len == i) {
+    //        printf("OK\n");
+            return match;
+        }
+        match ++;
+    }
 
-			if (!*lpRegExp) return TRUE;
-
-
-			if ((lpNextPos=_Dos9_SeekPatterns(lpMatch,lpRegExp))) lpMatch=lpNextPos; /* search if matching patterns exist*/
-			else return FALSE;
-
-			if (!*lpMatch) return TRUE; /* if there is no match string to test, the match is true */
-
-			if (*lpRegExp) while (*lpRegExp!='*' && *lpRegExp!='?' && *lpRegExp) lpRegExp=Dos9_GetNextChar(lpRegExp);
-			/* skip the next symbols, i.e. two '**' or '*?' are useless and so ignored */
-			lpRegExp--;
-			break;
-
-		default:
-			if (*lpRegExp != *lpMatch) return FALSE;
-		}
-	}
-
-	if (*lpRegExp) lpRegExp=Dos9_GetNextChar(lpRegExp);
-	if (!(!*lpMatch && !*lpRegExp)) return FALSE;
-	return TRUE;
+    //printf("FAIL\n");
+    return NULL;
 }
 
-LIBDOS9 int Dos9_RegExpCaseMatch(char* lpRegExp, char* lpMatch)
+LIBDOS9 int Dos9_EndWithPattern(const char* match, const char* pattern, size_t len)
 {
-	char* lpNextPos;
+    size_t size = strlen(match);
 
-	if (!(lpRegExp && lpMatch)) return FALSE;
+    //printf("Comparing \"%s\" and \"%s\" with len %d[%d]...\n", match, pattern, len, size);
 
-	for (; *lpRegExp && *lpMatch;
-	     lpRegExp=Dos9_GetNextChar(lpRegExp),
-	     lpMatch=Dos9_GetNextChar(lpMatch)
-	    ) {
-		switch(*lpRegExp) {
-		case '?':
+    if (size < len)
+        return 0;
 
-			break;
+    match += size - len;
 
-		case '*':
+    //printf("====\"%s\" and \"%s\"\n", match, pattern);
 
-			lpRegExp=Dos9_GetNextChar(lpRegExp);
+    return !strcmp(match, pattern);
 
-			while (*lpRegExp=='*' && *lpRegExp=='?') lpRegExp=Dos9_GetNextChar(lpRegExp);
+}
 
-			if (!*lpRegExp) return TRUE;
+LIBDOS9 int Dos9_RegExpMatch(const char* regexp, const char* match)
+{
+	char* next;
+    size_t size;
 
-			if ((lpNextPos=_Dos9_SeekCasePatterns(lpMatch,lpRegExp))) lpMatch=lpNextPos; /* search if matching patterns exist*/
-			else return FALSE;
+    //printf("*** Comparing \"%s\" et \"%s\"\n", regexp, match);
 
-			if (!*lpMatch) return TRUE; /* if there is no match string to test, the match is true */
+    if (!(regexp && match)) return FALSE;
 
-			if (*lpRegExp) while (*lpRegExp!='*' && *lpRegExp!='?' && *lpRegExp) lpRegExp=Dos9_GetNextChar(lpRegExp);
-			/* skip the next symbols, i.e. two '**' or '*?' are useless and so ignored */
-			lpRegExp--;
-			break;
+    while (*regexp && *match) {
 
-		default:
-			if (toupper(*lpRegExp) != toupper(*lpMatch)) return FALSE;
-		}
-	}
+        switch (*regexp) {
 
-	if (*lpRegExp) lpRegExp=Dos9_GetNextChar(lpRegExp);
-	if (!(!*lpMatch && !*lpRegExp)) return FALSE;
-	return TRUE;
+            case '?':
+                break;
+
+            case '*':
+                while (*regexp == '*' || *regexp == '?')
+                    regexp ++;
+
+                if (*regexp == '\0')
+                    return 1;
+
+                if (next = strpbrk(regexp, "*?")) {
+
+                    size = next - regexp;
+
+                    if (match = Dos9_SeekPattern(match, regexp, size)) {
+
+                        //printf("Match found\n");
+
+                        regexp += size;
+                        match += size;
+
+                        //printf("Next : \"%s\" and \"%s\"\n", match, regexp);
+
+                        continue;
+
+                    } else {
+
+                        //printf("Failed\n");
+
+                        return 0;
+
+                    }
+
+                } else {
+
+                    //printf("Checking final point\n");
+
+                    size = strlen(regexp);
+                    return Dos9_EndWithPattern(match, regexp, size);
+
+                }
+
+                break;
+
+            default:
+                if (*regexp  != *match)
+                    return 0;
+        }
+
+        regexp = Dos9_GetNextChar(regexp);
+        match = Dos9_GetNextChar(match);
+
+    }
+
+    if (*match || *regexp)
+        return 0;
+
+    //printf ("*** RETURN : OK\n");
+
+    return 1;
+
+}
+
+LIBDOS9 char* Dos9_SeekCasePattern(const char* match, const char* pattern, size_t len)
+{
+    const char* tok;
+    int   i = 0;
+
+    //printf("Looking for pattern \"%s\"[%d] in\"%s\"\n", pattern, len, match);
+
+    while (*match) {
+
+        i = 0;
+
+    //    printf("\tAt \"%s\"\n", match);
+
+        while ((i < len) && (toupper(match[i]) == toupper(pattern[i])))
+            i ++;
+
+        if (len == i) {
+    //        printf("OK\n");
+            return match;
+        }
+        match ++;
+    }
+
+    //printf("FAIL\n");
+    return NULL;
+}
+
+LIBDOS9 int Dos9_EndWithCasePattern(const char* match, const char* pattern, size_t len)
+{
+    size_t size = strlen(match);
+
+    //printf("Comparing \"%s\" and \"%s\" with len %d[%d]...\n", match, pattern, len, size);
+
+    if (size < len)
+        return 0;
+
+    match += size - len;
+
+    //printf("====\"%s\" and \"%s\"\n", match, pattern);
+
+    return !stricmp(match, pattern);
+
+}
+
+LIBDOS9 int Dos9_RegExpCaseMatch(const char* regexp, const char* match)
+{
+	char* next;
+    size_t size;
+
+    //printf("*** Comparing \"%s\" et \"%s\"\n", regexp, match);
+
+    if (!(regexp && match)) return FALSE;
+
+    while (*regexp && *match) {
+
+        switch (*regexp) {
+
+            case '?':
+                break;
+
+            case '*':
+                while (*regexp == '*' || *regexp == '?')
+                    regexp ++;
+
+                if (*regexp == '\0')
+                    return 1;
+
+                if (next = strpbrk(regexp, "*?")) {
+
+                    size = next - regexp;
+
+                    if (match = Dos9_SeekCasePattern(match, regexp, size)) {
+
+                        //printf("Match found\n");
+
+                        regexp += size;
+                        match += size;
+
+                        //printf("Next : \"%s\" and \"%s\"\n", match, regexp);
+
+                        continue;
+
+                    } else {
+
+                        //printf("Failed\n");
+
+                        return 0;
+
+                    }
+
+                } else {
+
+                    //printf("Checking final point\n");
+
+                    size = strlen(regexp);
+                    return Dos9_EndWithCasePattern(match, regexp, size);
+
+                }
+
+                break;
+
+            default:
+                if (toupper(*regexp)  != toupper(*match))
+                    return 0;
+        }
+
+        regexp = Dos9_GetNextChar(regexp);
+        match = Dos9_GetNextChar(match);
+
+    }
+
+    if (*match || *regexp)
+        return 0;
+
+    //printf ("*** RETURN : OK\n");
+
+    return 1;
+
 }
 
 
@@ -190,11 +343,16 @@ LIBDOS9 int         Dos9_GetMatchFileCallback(char* lpPathMatch, int iFlag, void
 
 	if (*lpStaticPart && !*lpMatchPart) {
 
-		if (Dos9_DirExists(lpStaticPart) && (iFlag & DOS9_SEARCH_DIR_MODE)) {
+		if (Dos9_DirExists(lpStaticPart)
+                && (iFlag & (DOS9_SEARCH_DIR_MODE | DOS9_SEARCH_RECURSIVE))) {
 
 			/* if the regexp is trivial but corresponds to a directory and
 			   if the dir-compliant mode has been set, then the regexp will
 			   browse the directory */
+
+            if (iFlag & DOS9_SEARCH_RECURSIVE)
+                write(iFileDescriptors[1], lpStaticPart, FILENAME_MAX);
+
 
 			*lpMatchPart='*';
 			lpMatchPart[1]='\0';
@@ -294,11 +452,16 @@ LIBDOS9 LPFILELIST  Dos9_GetMatchFileList(char* lpPathMatch, int iFlag)
 
 	if (*lpStaticPart && !*lpMatchPart) {
 
-		if (Dos9_DirExists(lpStaticPart) && (iFlag & DOS9_SEARCH_DIR_MODE)) {
+        if (Dos9_DirExists(lpStaticPart)
+                && (iFlag & (DOS9_SEARCH_DIR_MODE | DOS9_SEARCH_RECURSIVE))) {
 
 			/* if the regexp is trivial but corresponds to a directory and
 			   if the dir-compliant mode has been set, then the regexp will
 			   browse the directory */
+
+            if (iFlag & DOS9_SEARCH_RECURSIVE)
+                write(iFileDescriptors[1], lpStaticPart, FILENAME_MAX);
+
 
 			*lpMatchPart='*';
 			lpMatchPart[1]='\0';
@@ -804,66 +967,4 @@ int _Dos9_FreeFileList(LPFILELIST lpflFileList)
 	}
 
 	return 0;
-}
-
-char* _Dos9_SeekCasePatterns(char* lpSearch, char* lpPattern)
-{
-	const char* lpPatternBegin=(const char*)lpPattern;
-	char* lpLastBegin;
-	while (TRUE) {
-		for (; *lpSearch && (toupper(*lpPattern)!=toupper(*lpSearch)); lpSearch++);
-
-		lpLastBegin=lpSearch;
-
-		for (; *lpSearch && *lpPattern && *lpPattern!='*' && *lpPattern!='?' && (toupper(*lpPattern)==toupper(*lpSearch)); lpSearch++, lpPattern++);
-
-		if (!*lpPattern || *lpPattern=='*' || *lpPattern=='?') {
-			//printf("<FOUND> (returns: '%s')\n",lpLastBegin, lpSearch);
-			return lpSearch;
-		}
-
-		if (!*lpSearch) {
-			//printf("[WRONG] ('%s')\n", lpLastBegin);
-			return NULL;
-		}
-
-		lpSearch=lpLastBegin+1;
-		lpPattern=(char*)lpPatternBegin;
-	}
-}
-
-char* _Dos9_SeekPatterns(char* lpSearch, char* lpPattern)
-{
-	const char* lpPatternBegin=(const char*)lpPattern;
-	char* lpLastBegin;
-	while (TRUE) {
-
-		/* search the next character identical to the given character */
-		for (; *lpSearch && (*lpPattern!=*lpSearch); lpSearch++) {
-		}
-
-		lpLastBegin=lpSearch;
-
-		/* loop until the loop encounter a character '*' or '?'
-		   (the next regexp symbol) */
-		for (; *lpSearch && *lpPattern && *lpPattern!='*' && *lpPattern!='?' && (*lpPattern==*lpSearch); lpSearch++, lpPattern++) {
-		}
-
-		/* return if the pattern true is either finished or '*' or '?' */
-		if (!*lpPattern || *lpPattern=='*' || *lpPattern=='?') {
-			//printf("<FOUND> (returns: '%s')\n",lpLastBegin, lpSearch);
-			return lpSearch;
-		}
-
-		/* return false if the loop browsed all the string without
-		   valiable match */
-		if (!*lpSearch) {
-			//printf("[WRONG] ('%s')\n", lpLastBegin);
-			return NULL;
-		}
-
-		lpSearch=lpLastBegin+1;
-		lpPattern=(char*)lpPatternBegin;
-
-	}
 }
