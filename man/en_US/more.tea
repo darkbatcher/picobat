@@ -6,7 +6,7 @@
 
 {{Synopsis}}
 
-	${MORE [/E] [/C] [/P] [/T[:]n] [/S] [+n] [files ...]}
+	${MORE [/E] [/C] [/P] [/T[:]n] [/S] [/A] [/U] [+n] [files ...]}
 
 	Displays output one screen at a time, pausing between two screens.
 
@@ -30,6 +30,11 @@
 
 	- {+n} : Display files starting at line {n}.
 
+	- {/A} : Count ANSI escape codes as printed characters.
+	
+	- {/U} : Do not consider text to be utf-8. Consider instead that it is
+	byte-based encoding. 
+	
 	- {files ...} : A list of files to be displayed (possibly containing
 	{spec/regexp|regular expressions}. If {files} is empty, then {MORE}
 	use the standard input as input.

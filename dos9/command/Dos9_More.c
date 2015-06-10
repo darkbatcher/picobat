@@ -284,6 +284,54 @@ end:
 
 int more_void(int c, FILE* p) {}
 
+#ifdef WIN32
+
+int more_fputc_u8_wrapper (int c, FILE* p)
+{
+    static char chrs[5];
+    static int i = 0;
+
+    //fprintf (p, "more_fputc_u8_wrapper %X %X\n", c & 0x40, c & 0x80);
+
+    if ((c & 0x80) && (c & 0x40)) {
+
+        if (i) {
+            chrs[i]='\0';
+            fprintf(p, "%s", chrs);
+        }
+
+        /* this is an utf leading byte */
+        i=1;
+        chrs[0] = c;
+
+    } else if ((c & 0x80) && !(c & 0x40)) {
+
+        /* this is an utf following byte */
+        if (i==4) {
+            chrs[i]='\0';
+            fprintf(p, "%s", chrs);
+            fputc(c,p);
+            i=0;
+        } else {
+            chrs[i] = c;
+            i++;
+        }
+
+    } else {
+
+        if (i) {
+            chrs[i]='\0';
+            fprintf(p, "%s", chrs);
+            i=0;
+        }
+
+        fputc(c, p);
+
+    }
+
+}
+#endif
+
 int Dos9_MoreWriteLine(int* begin, int flags, int tabsize, FILE* file)
 {
     int c,
@@ -295,6 +343,12 @@ int Dos9_MoreWriteLine(int* begin, int flags, int tabsize, FILE* file)
                          the preceding line */
 
     int(*more_fputc)(int,FILE*)=fputc;
+
+#ifdef WIN32
+    if (flags & DOS9_MORE_USEU8)
+        more_fputc = more_fputc_u8_wrapper;
+
+#endif // WIN32
 
     if (*begin) {
 
@@ -354,8 +408,9 @@ int Dos9_MoreWriteLine(int* begin, int flags, int tabsize, FILE* file)
 
             }
 
-        } else if ((flags & DOS9_MORE_USEU8) && (c & 0x80)) {
+        } else if ((flags & DOS9_MORE_USEU8) && (c & 0x80) && !(c & 0x40)) {
 
+            /* this is a following utf-8 byte */
             more_fputc(c, stdout);
 
         } else {

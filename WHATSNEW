@@ -1393,3 +1393,15 @@ THURSDAY 7TH, MAY
           joker expressions on patterns. With this option _FIND_ checks that 
           the entire line matches the expression.
 
+THUSDAY 2ND, JUNE
+
+        - Corrected some issues compatibility issue with the newest MinGW 
+          version that now defines __POSIX_C_SOURCE_.
+
+        - Fixed a bug with the start command. Apparently, the ShellExecuteEx 
+          function do cares wether or not the filenames passed to it contains 
+          forward slashes instead of backslashes.
+
+        - Added some little info message to the _SET_ command in order to 
+          print the result of the expression when using _/A_ slash.
+

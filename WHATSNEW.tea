@@ -1229,7 +1229,7 @@ ${make local}
 	on patterns. With this option {FIND} checks that the entire line matches
 	the expression.
 
-{{Thusday 2nd, June}}
+{{Thursday 2nd, June}}
 
 	- Corrected some issues compatibility issue with the newest MinGW
 	version that now defines {_POSIX_C_SOURCE}.
@@ -1240,5 +1240,13 @@ ${make local}
 
 	- Added some little info message to the {SET} command in order to
 	print the result of the expression when using {/A} slash.
-
 	
+{{Thursday 10th, June}}
+
+	- Added a wrapper to the {MORE} command to make it display utf-8 text the
+	way it is intended to. Indeed {windows} does not implement implement the
+	fputc() function as specified by the standard and considers that it
+	receive character instead of bytes.
+
+	- Fixed a bug of the {MORE} command that caused miscomputation of utf-8
+	characters number.
