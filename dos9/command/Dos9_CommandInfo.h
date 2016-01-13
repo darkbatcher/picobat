@@ -69,7 +69,8 @@ COMMANDINFO lpCmdInfo[]= {
 	{"ALIAS", Dos9_CmdAlias, STRLEN("ALIAS")},
 	{"SHIFT", Dos9_CmdShift, STRLEN("SHIFT")},
 	{"FIND", Dos9_CmdFind, STRLEN("FIND")},
-	{"BREAK", Dos9_CmdBreak, STRLEN("BREAK")}
+	{"BREAK", Dos9_CmdBreak, STRLEN("BREAK")},
+	{"CHCP", Dos9_CmdChcp, STRLEN("CHCP")}
 };
 
 #endif

@@ -75,7 +75,7 @@ void Dos9_LoadErrors(void)
 	// TRANSLATORS : Don't remove the %s because the program needs it
 
 	lpErrorMsg[DOS9_BAD_COMMAND_LINE]=
-	    gettext("Error : Invalid command line.\n");
+	    gettext("Error : Invalid command line for %s.\n");
 
 	lpErrorMsg[DOS9_LABEL_ERROR]=
 	    gettext("Error : Unable to find label \"%s\".\n");
@@ -231,6 +231,9 @@ void Dos9_LoadErrors(void)
 
     lpErrorMsg[DOS9_UNABLE_RMDIR] =
         gettext("Error : Unable to delete directory \"%s\".\n");
+
+    lpErrorMsg[DOS9_INVALID_CODEPAGE] =
+        gettext("Error : \"%s\" is not a valid codepage on your system.\n");
 
     lpErrorMsg[DOS9_MOVE_NOT_RENAME] =
         gettext("Error : \"%s\" is a relative path, RENAME (or REN) do not "

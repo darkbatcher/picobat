@@ -28,10 +28,10 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADER([config.h])
 
 AC_CANONICAL_HOST
-
+AC_CANONICAL_BUILD
+AC_CANONICAL_TARGET
 dnl This is a trick in order to define the host variable
 dnl in a decent way
-
 AC_DEFINE_UNQUOTED([HOST], ["$host"], Define to your host name)
 
 AM_INIT_AUTOMAKE
@@ -75,7 +75,15 @@ AC_ARG_ENABLE([console],
 	    [AC_HELP_STRING([--enable-console],
 			    [Use extended console features such as color (default is yes)])],
 	    [],
-	    [enable_console=yes])
+	    [enable_console=yes]
+	)
+		
+AC_ARG_ENABLE([libcu8],
+		[AC_HELP_STRING([--enable-libcu8],
+                 [Use libcu8 to add utf8 support using msvcrt using windows])],
+		[],
+		[enable_libcu8=yes]
+	)
 
 AS_IF([test "x$enable_console" = xno], 
       [AC_DEFINE([LIBDOS9_NO_CONSOLE], [1], Define to 1 if you want to enable console feature)])
@@ -91,19 +99,29 @@ AC_PATH_PROG([XDG_OPEN], [xdg-open])
 AS_IF([test "x$XDG_OPEN" != x],
 	[AC_DEFINE_UNQUOTED([XDG_OPEN], ["$XDG_OPEN"],
 		Define to 1 if have xdg-open)]
-	) 
+	)
+	
 dnl Perform some checks in order to know with which library we should link.
 AC_CHECK_LIB([pthread],[pthread_create],[],[])
 AC_CHECK_LIB([m],[cos],[],[AC_MSG_ERROR("No math C library")])
+
+if test "x$enable_libcu8" != xno; then
+	   AC_DEFINE([DOS9_USE_LIBCU8], [1], [Define to 1 if you want to enable libcu8])
+	   AC_SUBST([libcu8], [libcu8])
+	   AC_SUBST([libcu8_lib], [$\(top_srcdir\)/libcu8/src/libcu8.la])
+	   AC_SUBST([libcu8_inc], [$\(top_srcdir\)/libcu8/include])
+	   AC_CONFIG_SUBDIRS([libcu8])
+fi
 
 AC_CONFIG_SUBDIRS([libmatheval])
 
 AC_CONFIG_FILES([Makefile
 		po/Makefile
 		libDos9/Makefile
-                libinteval/Makefile
-                dos9/Makefile
-                tea/Makefile
-		dump/Makefile])
+        libinteval/Makefile
+        dos9/Makefile
+        tea/Makefile
+		dump/Makefile
+		dos9ize/Makefile])
 
 AC_OUTPUT

@@ -91,8 +91,9 @@ void Dos9_LoadErrors(void);
 #define DOS9_UNABLE_MKDIR                   49
 #define DOS9_UNABLE_RMDIR                   50
 #define DOS9_MOVE_NOT_RENAME                51
+#define DOS9_INVALID_CODEPAGE               52
 
-#define DOS9_ERROR_MESSAGE_NUMBER           52
+#define DOS9_ERROR_MESSAGE_NUMBER           53
 
 #define DOS9_PRINT_C_ERROR 0x80
 

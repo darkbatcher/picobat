@@ -151,16 +151,7 @@ int Dos9_GetConsoleEncoding(char* lpEnc, size_t iSize)
 
     iCodePageId=GetConsoleOutputCP();
 
-    for (i=0;i<sizeof(EncodingInfo);i++) {
-
-        if (iCodePageId==EncodingInfo[i].iCodePage) {
-
-            lpResult=EncodingInfo[i].lpCodePageName;
-			break;
-
-        }
-
-    }
+    lpResult = Dos9_ConsoleCP2Encoding(iCodePageId);
 
     if (lpResult) {
 
@@ -176,6 +167,19 @@ int Dos9_GetConsoleEncoding(char* lpEnc, size_t iSize)
 
 }
 
+const char* Dos9_ConsoleCP2Encoding(int cp)
+{
+    int i;
+
+    for (i=0;i<sizeof(EncodingInfo)/sizeof(ENCODINGINFO);i++) {
+
+        if (cp == EncodingInfo[i].iCodePage)
+            return EncodingInfo[i].lpCodePageName;
+
+    }
+
+    return NULL;
+}
 
 #else
 

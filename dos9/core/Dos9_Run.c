@@ -23,6 +23,7 @@
 #include <errno.h>
 #include <assert.h>
 #include <setjmp.h>
+#include <signal.h>
 
 #ifndef WIN32
 #include <sys/wait.h>
@@ -31,7 +32,6 @@
 #include "Dos9_Core.h"
 
 //#define DOS9_DBG_MODE
-
 #include "Dos9_Debug.h"
 
 #include "../errors/Dos9_Errors.h"
@@ -86,9 +86,13 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
 
 		}
 
+        DOS9_DBG("[*] Reading line ...");
+
 		/* the line we read was a void line */
 		if (Dos9_GetLine(lpLine, pIn))
 			continue;
+
+        DOS9_DBG(" Got \"%s\"\n", lpLine->str);
 
 		lpCh=Dos9_EsToChar(lpLine);
 
@@ -429,6 +433,8 @@ int Dos9_RunLine(ESTR* lpLine)
 #endif
 
 	Dos9_RmTrailingNl(Dos9_EsToChar(lpLine));
+
+    DOS9_DBG("\t[*] Parsing line \"%s\"\n", lpLine->str);
 
 	lppssStreamStart=Dos9_ParseLine(lpLine);
 
@@ -910,6 +916,7 @@ BOOL WINAPI Dos9_SigHandler(DWORD dwCtrlType)
 		case CTRL_C_EVENT:
 		case CTRL_BREAK_EVENT:
 
+        printf("CTRL-C caught\n");
 		longjmp(jbBreak, 1);
 
 	}

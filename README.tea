@@ -1,14 +1,48 @@
-{{Quick starting information}}
+{{Dos9 - Quick starting information}}
 
-	This is a litte document that describes first steps with the Dos9 command prompt. This is an {experimental work} 
-	(as it is a beta) so it might be possible that some aspect
-	described here, or in the documentation might be buggy, or would'nt simply work.
-	
-	If you encounter such bugs or issues, feel free to send an email to <darkbatcher@dos9.org> with a description
-	of the bug, or even a fix if you want to contribute.
-	
-	To get information about the license, see the {LICENSE|license file}.
+	{Dos9} is a open source command prompt designed to mean superset of {cmd.exe}
+	script language (known as {batch} by most devellopers). It is designed to
+	be as simple to use as possible, reliable and portable and lightweight.
 
+	{Dos9} implements a wide part of {cmd.exe} instruction set, but also supports
+	it own extensions, such as :
+	
+		- Full support for {if} command and extended comparision capabilities using
+		logical operators such as {or} and {and}.
+		
+		- Full support of {for} command, with a few minor extensions.
+		
+		- Full support of {call} command, with some major extensions.
+		
+		- Support environment variables, and arithmetical expression through {set},
+		also providing floating point arithmetics.
+		
+		- Full support of pipes and stream redirection, with some extensions.
+		
+		- Support of usual scripting internal command, including {echo}, {set},
+		{goto} and many more.
+		
+		- Reliable support of file managment commands, including {copy}, {move}
+		{del} and many more.
+		
+		- And even more !
+		
+	{Dos9} is also cross platform, enabling it to be ran on various platforms,
+	including (but not limited to) {Windows}, {Linux}, {NetBsd}...
+	
+{{Getting started}}
+
+	As promised, get {Dos9} to run on your computer is pretty straightforward,
+	you just need to browse directories until you reach {Dos9.exe}, run it and
+	you're done. It's pretty all you have to know about it...
+	
+	Usually, you should not be too confused about what you'll see, at least
+	for those who are used to {cmd.exe}. Though, do not forget that {Dos9} isn't
+	an exact duplicate of {cmd.exe}, and thus, brings some minor changes, such
+	as spaces between switches. So, if you need some help, don't forget to use 
+	the {help} command ! 
+	1
+	
 {{Legal notice}}
 
 ${Dos9 - Command prompt and interpreter for windows batch files
@@ -26,136 +60,4 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.}
-
-	Note : This project include binaries from other project, especially
-	{GNU} projects. These project are distributed under the terms of the
-	{GNU GPL} license (ie. the preceeding licence). It also includes
-	the ansicon command for windows distributions, the ansicon binaries
-	are licensed under the {New Bsd License}, which can be found in {LICENCE-ansicon.txt}.
-	The sources of ansicon are availiable from {http://adoxa.hostmyway.net/ansicon/|http://adoxa.hostmyway.net/ansicon/}
-	
-
-{{Building dos9}}
-
-	To get {Dos9} binaries, you have two options :
-	
-	- Download precompiled binaries package from
-	{Dos9}'s sourceforge page. Then you just have to unpack the package on your computer.
-	This method is only availiable for {windows}, and this is the recommended path for these.
-	Indeed, for {*nix} systems, it's about going mad to make distribution-portable binaries,
-	for {*nix} users, the second solution must be used.
-	
-	- Download sources and then build them yourself. To eases this work, just download
-	sources package from {Dos9}'s sourceforge page, or just get them from the git repository
-	using :
-	
-${git clone ssh://git.code.sf.net/p/dos9/code dos9-code}
-
-	@- If you get the source from the repos by the given command-line, note that you will
-	not be able to push patches and update without modifying your git configuration, thus
-	if you have already a sourceforge account, it might be easier for you to download it
-	from your account.
-
-	@- When you have downloaded sources, you just need to compile them using any C compiler. 
-	For {windows} system, it is more complicated than getting precompiled binaries because
-	you need to have gcc and gmake installed on your system. On {Windows}, you should also
-	have a {*nix} compatible shell. If not, you can get one from the {MinGW} project.
-	For {*nix} system, doing so is as simple as typing :
-	
-${./configure
-make arch='postfix'}
-
-	@- The {arch} variables only appends {postfix} to the traditionnal {bin} directory. This
-	variable is usefull if you have to maintain different architectures for {Dos9}. 
-	
-	@- {Windows} might have to copy dependencies in the {Dos9} folder if they need to make to
-	make it portable.
-	
-	@- An install target is not provided yet because we think that is not an important task
-	(copying on usr/bin), and because no tests have been performed to check if such installation work.
-	Finally, installing the program should just putting a symbolic link on the {/bin} or {/usr/bin}
-	directory.
-	
-	@- {Dos9} only depends on {libiconv} and {libintl}, thus, any mingw environment enables to build
-	it.
-	
-	@- Note that getting {x64} binaries working on {MS-WINDOWS} is somewhat really annoying since
-	official {MinGW} only provide {x32} compiler, preventing you from compiling {x64}. Having {x64}
-	binaries compiled by {MinGW} needs  a special setup, that makes it so tough. 
-	
-{{First steps}}
-	
-	Once you have binaries, you can run {Dos9} since it has no need to be installed in order to 
-	work. If you want to associate it with {.bat} or {.cmd} files though, do not associate it with both file types,
-	as {Dos9} is still an unstable software.
-	
-	To run {Dos9} you must execute the file {Dos9.exe} located in the ``bin'' directory of the folder where you
-	built files or where you extracted the archive you get from the site.
-	
-	Once you launched {Dos9}, you can type batch commands lines. The command prompt is very similar to
-	{cmd.exe}, so that you should not be dissapointed (for those who already use {cmd.exe}, obviously). Commands
-	are very similar to {cmd.exe}'s with a few exceptions, which most important is the obligation to put blank characters
-	between switches.
-	
-{{Getting help}}
-
-	{Dos9} provides a manual page manager and a text processor, that allows to make simple manual page. When you first
-	use {Dos9}, a good thing would be to initialize it. This operation is language dependant, so you can't avoid some
-	manual setup. The help program is named {HLP}, the setup needed is on steps :
-	
-		- {Step 1} : You need to check the languages already installed with your version
-		  of {dos9}, by the following line.
-		  
-${hlp /l local}
-
-		@- If your language is already installed, just jump to step 4
-		
-		- {Step 2} : Check the languages availiables from the repository. This allow you to know all the
-		languages avaliable with {Dos9}.
-		
-${hlp /l}
-
-		@- If your language is not displayed, then, there is no language manual tree, you should use another
-		language, or produce a translation as explained in the next part. Alternatively, you can use {cmd.exe}
-		documentation, however, we do not recommand it.
-		
-		- {Step 3} : Get your language from the repository. Replace {lang_COUNTRY} in the following line by
-		your language and your country.
-		
-${hlp /d lang_COUNTRY}
-
-		- {Step 4} : Build the manual pages from the repositories. Replace {lang_COUNTRY} in the following line by
-		your language and your country. You may add an optional encoding {ENC} to specify that you need to have the
-		manual pages in {ENC}, rather than {UTF-8}. Note that it will not apply to {html} documents.
-	
-${hlp /b lang_COUNTRY ENC}
-	
-	Once you've done that few things, you can access the help for a command or for syntax at any moment, just by typing:
-	
-${hlp command}
-	
-{{Changing the language}}
-
-	If the language of the interpretor or of the documentation is in your langage under {MS-WINDOWS}, then
-	you should configure the ``Dos9_Auto.bat'' script that {Dos9} launches at startup. Normally this is not
-	necessary as {GNU gettext} automatically chose your langage. Modify the following line :
-	
-${:: SET LANGUAGE=en_US}
-
-	Uncomment the line and replace {en_US} by the name of your locale. It is still possible that the langage does not work though, this means that
-	{Dos9} is not translated yet in your language. Note that dos9 might be translated into your language, and manual page
-	can be not translated, so if you use {HLP}, it might crash. Nevertheless, this should'nt occur as {HLP} failsback to english.
-	
-{{Making translations and contributing}}
-
-	Translations uses the {GNU gettext} tool. To make translation, run the ``dos9-build-gettext.bat'' script to produce
-	{.po} files (avaliable from the sources) for your language, and then, translate it via a po editor like {poedit} or {kbabel}.
-	
-	Making translations of the external documentation is much more simple, just go in the {share/man} directory, copy one
-	of the existing directories (possible one you can understand) rename it to your locale and start translating pages. Of
-	course, don't forget to submit your translation !
-	
-	Feel free to submit sugestion and improovements, either by submiting ideas or by improoving the code.
-	
-	To submit translation, send it to : <darkbatcher@dos9.org>
 	

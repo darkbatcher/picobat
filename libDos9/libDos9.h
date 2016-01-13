@@ -35,6 +35,8 @@
     #include <windows.h>
     #include <io.h>
 
+    #define strdup Dos9_strdup
+
     #define DOS9_FILE_ARCHIVE FILE_ATTRIBUTE_ARCHIVE
     #define DOS9_FILE_COMPRESSED FILE_ATTRIBUTE_COMPRESSED
     #define DOS9_FILE_HIDDEN FILE_ATTRIBUTE_HIDDEN
@@ -156,6 +158,7 @@ typedef struct ESTR {
 
 LIBDOS9 extern int      _Dos9_NewLine;
 LIBDOS9 ESTR*           Dos9_EsInit(void);
+LIBDOS9 char*           Dos9_strdup(const char* src);
 LIBDOS9 int             Dos9_EsGet(ESTR* ptrESTR, FILE* ptrFile);
 LIBDOS9 int             Dos9_EsCpy(ESTR* ptrESTR, const char* ptrChaine);
 LIBDOS9 int             Dos9_EsCpyN(ESTR* ptrESTR, const char* ptrChaine, size_t iSize);
@@ -362,6 +365,7 @@ extern int _Dos9_TextMode;
 
 LIBDOS9 char* Dos9_GetNextChar(const char* lpContent);
 LIBDOS9 int Dos9_GetConsoleEncoding(char* lpEnc, size_t iSize);
+LIBDOS9 const char* Dos9_ConsoleCP2Encoding(int cp);
 
 #define Dos9_GetCurrentDir() _Dos9_Currdir
 

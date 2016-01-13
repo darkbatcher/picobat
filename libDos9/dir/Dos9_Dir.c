@@ -405,7 +405,7 @@ LIBDOS9 LPFILELIST  Dos9_GetMatchFileList(char* lpPathMatch, int iFlag)
 	FILEPARAMETER fpParam= {TRUE, /* include informations on the
                                     FILEPARAMETER Structures returned */
 	                        0,    /* defines the descriptor through which
-                                    the callback funtion will read */
+                                    the callback function will read */
 	                        NULL  /* no callback */
 	                       };
 
@@ -536,7 +536,6 @@ LPFILELIST _Dos9_SeekFiles(char* lpDir, char* lpRegExp, int iLvl, int iMaxLvl, i
 
 		while ((lpDirElement=readdir(pDir))) {
 
-
 			if ((
 			        !iFlagRecursive
 			        && Dos9_RegExpCaseMatch(lpRegExpLvl, lpDirElement->d_name)
@@ -628,6 +627,7 @@ Dos9_DirRecursive:
 		}
 
 		closedir(pDir);
+
 	}
 	return NULL;
 }

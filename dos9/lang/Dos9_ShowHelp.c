@@ -165,6 +165,10 @@ void Dos9_LoadInternalHelp(void)
         =gettext("[Obsolete] Sets or Clears Extended CTRL+C checking on DOS system. (Do nothing)\n"
                  "Usage: BREAK [ON | OFF]\n");
 
+    lpInternalHelp[DOS9_HELP_CHCP]
+        =gettext("Set Console codepage or encoding.\n"
+                 "Usage: CHCP [ codepage | encoding]\n");
+
 	lpExternalMsg
 	    =gettext("This help is voluntary limited help to fit in the binary. If you need to\n"
 	             "see the full documentation, please type:\n"

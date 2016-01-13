@@ -421,10 +421,10 @@ dist-info: $(INFO_DEPS)
 
 mostlyclean-aminfo:
 	-rm -rf libmatheval.aux libmatheval.cp libmatheval.cps libmatheval.fn \
-	  libmatheval.ky libmatheval.kys libmatheval.log \
-	  libmatheval.pg libmatheval.pgs libmatheval.tmp \
-	  libmatheval.toc libmatheval.tp libmatheval.tps \
-	  libmatheval.vr libmatheval.vrs
+	  libmatheval.fns libmatheval.ky libmatheval.kys \
+	  libmatheval.log libmatheval.pg libmatheval.pgs \
+	  libmatheval.tmp libmatheval.toc libmatheval.tp \
+	  libmatheval.tps libmatheval.vr libmatheval.vrs
 
 clean-aminfo:
 	-test -z "libmatheval.dvi libmatheval.pdf libmatheval.ps libmatheval.html" \

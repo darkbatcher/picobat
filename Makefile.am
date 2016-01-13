@@ -19,7 +19,7 @@
 EXTRA_DIST = po man scripts COPYING README WHATSNEW
 ACLOCAL_AMFLAGS = -I m4
 AUTOMAKE_OPTIONS = foreign subdir-objects
-SUBDIRS = libinteval libmatheval libDos9 dos9 tea dump po
+SUBDIRS = libinteval libmatheval libDos9 @libcu8@ dos9 tea dump po dos9ize
 SHAREDEXT = @SHAREDEXT@
 distbdir =$(distdir)-bin
 rm_distbdir =rm -R $(distbdir)
@@ -34,13 +34,14 @@ dirtree :
 textfiles : all
 	for i in README WHATSNEW; do \
 		echo "- Building $$i"; \
-		./tea/tea$(EXEEXT) $$i.tea $$i /e:utf-8 /o:text-plain ; \
+		./tea/tea$(EXEEXT) //e:utf-8 //o:text-plain $$i.tea $$i ; \
 	done;
 
 bin : textfiles dirtree
 	cp ./dos9/dos9$(EXEEXT) ./bin/
 	cp ./tea/tea$(EXEEXT) ./bin/cmd
 	cp ./dump/dump$(EXEEXT) ./bin/cmd
+	cp ./dos9ize/dos9ize$(EXEEXT) ./bin/cmd
 	cp ./README ./bin/
 	cp ./WHATSNEW ./bin/
 	cp ./COPYING ./bin/
@@ -50,8 +51,7 @@ bin : textfiles dirtree
 	cd po && make local
 
 bin-strip: bin
-	for i in ./bin/dos9$(EXEEXT) ./bin/cmd/tea$(EXEEXT) \
-		./bin/cmd/dump$(EXEEXT); do \
+	-for i in `find ./bin -name "*$(EXEEXT)"` ; do \
 		$(STRIP) $$i;\
 	done;
 
@@ -64,7 +64,7 @@ dist-bin : dist-bin-dir
 
 dist-bin-zip: dist-bin-dir
 	-rm -f $(distbdir).zip
-	zip -rq $(distbdir).zip $(distbdir)
+	zip -rq9 $(distbdir).zip $(distbdir)
 	$(rm_distbdir)
 
 po-merge:

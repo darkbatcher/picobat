@@ -40,6 +40,11 @@
 
 #include "core/Dos9_Core.h"
 
+#if defined(WIN32) && defined(DOS9_USE_LIBCU8)
+#include <libcu8.h>
+#endif
+
+
 /* those are codes of internal commands */
 
 #include "command/Dos9_Commands.h"
@@ -113,6 +118,15 @@ int main(int argc, char *argv[])
 	    bExitAfterCmd=TRUE;
 
 	ESTR* lpesCmd;
+
+#if defined(WIN32) && defined(DOS9_USE_LIBCU8)
+    if (libcu8_init(&argv)) {
+
+        fprintf(stderr, "Unable to load libcu8...\n");
+        return -1;
+
+    }
+#endif // defined
 
     DOS9_DBG("Initializing Dos9's custom environ");
     lpeEnv = Dos9_InitEnv(environ);

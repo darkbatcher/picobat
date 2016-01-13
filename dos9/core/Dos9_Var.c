@@ -103,6 +103,10 @@ int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
 			}
 			iBegin=atol(lpToken);
 			iVarState=2;
+		} else {
+            *lpToken='\0';
+            lpToken++;
+            iVarState=3;
 		}
 
 	}
@@ -133,6 +137,12 @@ int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
 		sprintf(lpBuf, "%02d:%02d:%02d,00", lTime->tm_hour, lTime->tm_min, lTime->tm_sec);
 
 	} else if (!(lpVarContent=Dos9_GetEnv(lpeEnv, lpNameCpy))) {
+
+        if (iVarState == 3) {
+            Dos9_EsCpy(lpRecieve, lpToken);
+            free(lpNameCpy);
+            return TRUE;
+        }
 
 		free(lpNameCpy);
 		return FALSE;

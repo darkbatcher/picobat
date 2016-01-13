@@ -53,5 +53,6 @@
 #include "Dos9_More.h"
 #include "Dos9_Start.h"
 #include "Dos9_Break.h"
+#include "Dos9_Chcp.h"
 
 #endif // DOS9_CMD_ECHO_H

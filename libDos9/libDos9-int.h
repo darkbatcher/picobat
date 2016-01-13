@@ -945,6 +945,7 @@ LIBDOS9 char* Dos9_GetNextChar(const char* lpContent);
 int _Dos9_IsFollowingByte(const char* lpChar);
 
 LIBDOS9 int Dos9_GetConsoleEncoding(char* lpEnc, size_t iSize);
+LIBDOS9 const char* Dos9_ConsoleCP2Encoding(int cp);
 
 LIBDOS9 int Dos9_FileExists(const char* lpPath);
 LIBDOS9 int Dos9_DirExists(const char* lpPath);

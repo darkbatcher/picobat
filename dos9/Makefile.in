@@ -53,6 +53,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+target_triplet = @target@
 bin_PROGRAMS = dos9$(EXEEXT)
 subdir = dos9
 DIST_COMMON = $(noinst_HEADERS) $(srcdir)/Makefile.am \
@@ -103,7 +104,8 @@ am_dos9_OBJECTS = ./Dos9.$(OBJEXT) ./core/Dos9_Args.$(OBJEXT) \
 	./command/Dos9_Type.$(OBJEXT) ./command/Dos9_Find.$(OBJEXT) \
 	./core/Dos9_Env.$(OBJEXT) ./command/Dos9_More.$(OBJEXT) \
 	./core/Dos9_OsStream.$(OBJEXT) ./command/Dos9_Start.$(OBJEXT) \
-	./command/Dos9_Break.$(OBJEXT) ./command/Dos9_IfExp.$(OBJEXT)
+	./command/Dos9_Break.$(OBJEXT) ./command/Dos9_IfExp.$(OBJEXT) \
+	./command/Dos9_Chcp.$(OBJEXT)
 dos9_OBJECTS = $(am_dos9_OBJECTS)
 dos9_DEPENDENCIES = $(top_builddir)/libinteval/libinteval.la \
 	$(top_builddir)/libmatheval/lib/libmatheval.la \
@@ -249,6 +251,9 @@ htmldir = @htmldir@
 includedir = @includedir@
 infodir = @infodir@
 install_sh = @install_sh@
+libcu8 = @libcu8@
+libcu8_inc = @libcu8_inc@
+libcu8_lib = @libcu8_lib@
 libdir = @libdir@
 libexecdir = @libexecdir@
 localedir = @localedir@
@@ -265,7 +270,11 @@ sharedstatedir = @sharedstatedir@
 srcdir = @srcdir@
 subdirs = @subdirs@
 sysconfdir = @sysconfdir@
+target = @target@
 target_alias = @target_alias@
+target_cpu = @target_cpu@
+target_os = @target_os@
+target_vendor = @target_vendor@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
@@ -287,7 +296,8 @@ core/Dos9_Run.h core/Dos9_ShowIntro.h core/Dos9_SplitPath.h \
 core/Dos9_Stream.h core/Dos9_Var.h core/Dos9_VersionInfo.h \
 errors/Dos9_Errors.h lang/Dos9_ShowHelp.h lang/Dos9_Lang.h gettext.h \
 command/Dos9_Find.h command/Dos9_More.h core/Dos9_Env.h core/Dos9_OsStream.h \
-command/Dos9_Start.h command/Dos9_Break.h command/Dos9_IfExp.h
+command/Dos9_Start.h command/Dos9_Break.h command/Dos9_IfExp.h \
+command/Dos9_Chcp.h
 
 dos9_SOURCES = ./Dos9.c ./core/Dos9_Args.c ./core/Dos9_Expand.c \
 ./core/Dos9_Globals.c \
@@ -307,12 +317,15 @@ dos9_SOURCES = ./Dos9.c ./core/Dos9_Args.c ./core/Dos9_Expand.c \
 ./command/Dos9_Setlocal.c ./command/Dos9_Shift.c ./command/Dos9_Title.c \
 ./command/Dos9_Type.c ./command/Dos9_Find.c ./core/Dos9_Env.c \
 ./command/Dos9_More.c ./core/Dos9_OsStream.c ./command/Dos9_Start.c \
-./command/Dos9_Break.c ./command/Dos9_IfExp.c
+./command/Dos9_Break.c ./command/Dos9_IfExp.c ./command/Dos9_Chcp.c
 
 dos9_LDADD = $(top_builddir)/libinteval/libinteval.la \
-$(top_builddir)/libmatheval/lib/libmatheval.la $(top_builddir)/libDos9/libDos9.la 
+$(top_builddir)/libmatheval/lib/libmatheval.la $(top_builddir)/libDos9/libDos9.la \
+@libcu8_lib@
 
-AM_CFLAGS = -I$(top_srcdir)/libinteval -I$(top_srcdir)/libmatheval/lib -I$(top_srcdir)/libDos9 @CFLAGS@
+AM_CFLAGS = -I$(top_srcdir)/libinteval -I$(top_srcdir)/libmatheval/lib \
+-I$(top_srcdir)/libDos9 -I@libcu8_inc@ @CFLAGS@
+
 all: all-am
 
 .SUFFIXES:
@@ -525,6 +538,8 @@ command/$(DEPDIR)/$(am__dirstamp):
 	command/$(DEPDIR)/$(am__dirstamp)
 ./command/Dos9_IfExp.$(OBJEXT): command/$(am__dirstamp) \
 	command/$(DEPDIR)/$(am__dirstamp)
+./command/Dos9_Chcp.$(OBJEXT): command/$(am__dirstamp) \
+	command/$(DEPDIR)/$(am__dirstamp)
 dos9$(EXEEXT): $(dos9_OBJECTS) $(dos9_DEPENDENCIES) 
 	@rm -f dos9$(EXEEXT)
 	$(dos9_LINK) $(dos9_OBJECTS) $(dos9_LDADD) $(LIBS)
@@ -538,6 +553,7 @@ mostlyclean-compile:
 	-rm -f ./command/Dos9_Break.$(OBJEXT)
 	-rm -f ./command/Dos9_Call.$(OBJEXT)
 	-rm -f ./command/Dos9_Cd.$(OBJEXT)
+	-rm -f ./command/Dos9_Chcp.$(OBJEXT)
 	-rm -f ./command/Dos9_Cls.$(OBJEXT)
 	-rm -f ./command/Dos9_Color.$(OBJEXT)
 	-rm -f ./command/Dos9_Copy.$(OBJEXT)
@@ -595,6 +611,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./command/$(DEPDIR)/Dos9_Break.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./command/$(DEPDIR)/Dos9_Call.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./command/$(DEPDIR)/Dos9_Cd.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./command/$(DEPDIR)/Dos9_Chcp.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./command/$(DEPDIR)/Dos9_Cls.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./command/$(DEPDIR)/Dos9_Color.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./command/$(DEPDIR)/Dos9_Copy.Po@am__quote@

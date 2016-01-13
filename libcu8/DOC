@@ -1,0 +1,127 @@
+                    ,--.    ,--. ,--.                     ,---.  
+                    |  |    `--' |  |-.   ,---. ,--.,--. |  o  | 
+                    |  |    ,--. | .-. ' | .--' |  ||  | .'   '. 
+                    |  '--. |  | | `-' | \ `--. '  ''  ' |  o  | 
+                    `-----' `--'  `---'   `---'  `----'   `---'
+                                  Documentation
+
+Introduction
+
+    This document documents the functions provided by libcu8, and specify
+    their behaviours.
+
+Initialisation function
+
+     Synopsis 
+     
+             int libcu8_init(const char*** argv)
+
+          The libcu8_init() function provides initialization for libcu8. 
+          Upon a call, libcu8_init() tries to allocate memory for libcu8 
+          internal states, and try to inject libcu8 modified function into 
+          msvcrt functions. It is also an easy way to get the utf-8
+          encoded argument array (usually called argv).
+          
+     Parameters
+     
+        - ***argv : A pointer to an array of strings parameters of the program
+          that will be allocated by the libcu8_init() function. It may be NULL
+          if no program parameters are needed.
+
+     Return value
+
+          Upon succesfull return, the return value is 0. If an error occured,
+          the return value is 0.
+          
+File encoding management functions
+
+    To handle safely files from different encoding, libcu8 provides functions
+    to set the source encoding of files. That is, whenever a file is not
+    encoded using utf-8, it is possible to specify an appropriate source
+    encoding that libcu8 will use during any reading/writting operations on
+    files. In the following part of this document, we refer to the source
+    encoding as the ANSI encoding.
+    
+     Synopsis 
+     
+             void libcu8_get_fencoding(char* enc, size_t size);
+             int libcu8_set_fencoding(const char* enc);
+
+          The libcu8_get_fencoding() and libcu8_set_fencoding() are used to
+          retrieve and set libcu8 global ANSI encoding.
+          
+     Parameters
+     
+        - *enc : A pointer to a null terminated-string that will set a new
+          ANSI encoding (libcu8_set_fencoding) or recieve the current ANSI
+          encoding (libcu8_get_fencoding).
+        
+        - size : The length (in bytes) of the array pointed by *enc.
+        
+     Return value
+
+          libcu8_get_fencoding() always succeeds.
+         
+          libcu8_set_fencoding() returns 0 on success, non-zero on error.
+     
+     Note
+     
+          By default, the ANSI encoding is utf-8 (ie. no conversion at all).
+
+Encoding conversion functions
+
+    Libcu8 provides a bunch of functions to convert string from one encoding
+    to another easily. Theses functions use libcu8 global ANSI encoding.
+    
+     Synopsis 
+     
+             char* libcu8_convert(int mode, char* src, size_t size,
+                                       char* remainder, size_t* rcount,
+                                              size_t rlen, size_t* converted);
+             char* libcu8_xconvert(int mode, char* src,
+                                            size_t size, size_t* converted);
+
+          Both functions convert a string from one encoding to another one.
+          However, libcu8_xconvert() assumes that the source string has only
+          complete utf-8 characters, while libcu8_convert() can be used to
+          handle incomplete characters.
+          
+     Parameters
+     
+        - mode : A constant describing the conversion mode. It must be one of
+          LIBCU8_TO_U16, LIBCU8_FROM_U16, LIBCU8_TO_ANSI, LIBCU8_FROM_ANSI.
+
+        - *src : A pointer to the string to be converted.
+        
+        - size : The size (in bytes) of the string pointed by *src.
+        
+        - *remainder : A pointer to a buffer that will provide non-terminated
+          characters at the begining of conversion and recieve non-terminated
+          characters at the end of the conversion.
+        
+        - *rcount : A pointer to the length (in bytes) of non-terminated 
+          characters in the buffer pointed by *remainder, at the beginning and
+          the end of translation.
+        
+        - rlen : The largest amount (in bytes) of available space in the
+          buffer pointed by *remainder
+        
+        - *converted : A pointer to the number of bytes converted during the
+          translation.
+          
+     Return value
+
+          libcu8_xconvert() and libcu8_convert() return a pointer to a buffer
+          holding the translated string, which must be freed when no more
+          needed. If an error occurs, both functions return NULL.
+          
+File buffering in text mode
+
+    When using files in text mode, libcu8 uses an internal buffer to store
+    uncomplete characters that input or output function are provided with.
+    This behaviour as little consequences on functions like tell() that
+    will only return character-begin positions.
+    
+Examples
+
+    A bunch of simple examples can be found in the sub-directory test/.

@@ -24,6 +24,17 @@ void _Dos9_Estr_Close(void)
 
 }
 
+char* Dos9_strdup(const char* src)
+{
+    char* ret;
+
+    if (!(ret = malloc(strlen(src)+1)))
+        return NULL;
+
+    strcpy(ret, src);
+    return ret;
+}
+
 ESTR* Dos9_EsInit(void)
 {
     ESTR* ptrESTR=NULL;

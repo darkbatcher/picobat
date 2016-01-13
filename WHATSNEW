@@ -2,7 +2,7 @@ WHAT'S NEW ?
 
      This a list of fixed bugs and improvements made :
 
-     _NOTE_ : This list is not a complete list of improovements. The changes 
+     NOTE : This list is not a complete list of improovements. The changes 
      made before october 2012 were not included since the version started in 
      this dates used almost new code.
 
@@ -155,52 +155,52 @@ SUNDAY 27TH, OCTOBER
 
         - Some bug fixes, including a bug that appeared with ``%~A''.
 
-        - Added primary support of _FOR_ loops (ie. simple for loop without 
+        - Added primary support of FOR loops (ie. simple for loop without 
           options).
 
 FRIDAY 13TH, DECEMBER
 
         - Solved some bugs in libDos9 (a hazardous non initialized var)
 
-        - Added support _FOR /F_ loops with files as input.
+        - Added support FOR /F loops with files as input.
 
 THURSDAY 2ND, JUNUARY 2014
 
-        - Corrected _Dos9_ScriptCommand.c_ bugs in which the delayed expansion 
+        - Corrected Dos9_ScriptCommand.c bugs in which the delayed expansion 
           was not executed even if it was enabled.
 
         - Corrected some manual page
 
         - added some translated pages
 
-        - added new _make_ system.
+        - added new make system.
 
-        - added expressions (both _interger_ and _float_ mode) for the _SET 
-          /A_ command.
+        - added expressions (both interger and float mode) for the SET /A 
+          command.
 
-        - added _FOR /F_ loop support with string as input.
+        - added FOR /F loop support with string as input.
 
         - added support for top-level blocks.
 
 THURSDAY 14TH, JUNUARY
 
-        - added final support of _FOR /F_ including the use of command outputs 
-          as _FOR_ input.
+        - added final support of FOR /F including the use of command outputs 
+          as FOR input.
 
-        - added _DOS9_SEARCH_NO_CURRENT_DIR_ which does not include the pseudo 
+        - added DOS9_SEARCH_NO_CURRENT_DIR which does not include the pseudo 
           directories '..' and '.'.
 
-        - corrected a compatibility bug with _cmd.exe_: _DIR /b_ returned the 
+        - corrected a compatibility bug with cmd.exe: DIR /b returned the 
           pseudo directories '..' and '.'.
 
-        - corrected an expansion bug with _%%~a_ (and similar var because the 
-          interpretor missinterpreted the command if, for example _%%~ax_ was 
-          badly expanded if _%%x_ was not defined). Now, the choosed varaible 
-          is the largest match defined.
+        - corrected an expansion bug with %%~a (and similar var because the 
+          interpretor missinterpreted the command if, for example %%~ax was 
+          badly expanded if %%x was not defined). Now, the choosed varaible is 
+          the largest match defined.
 
-        - corrected bug with simple _FOR_ processing.
+        - corrected bug with simple FOR processing.
 
-        - added partial support of _FOR /R_. (Note: this is provided for 
+        - added partial support of FOR /R. (Note: this is provided for 
           compatibility purpose, and that new scripts should not use theses 
           switches anymore.)
 
@@ -215,10 +215,10 @@ THURSDAY 14TH, JUNUARY
 
 WEDNESDAY 15TH, JUNUARY
 
-        - fixed a bug that prevented both _FOR /R_ and _FOR /D_ to be executed 
-          the right way.
+        - fixed a bug that prevented both FOR /R and FOR /D to be executed the 
+          right way.
 
-        - fixed a bug with use of _._ in file searches.
+        - fixed a bug with use of . in file searches.
 
 FRIDAY 17TH, JUNUARY
 
@@ -229,42 +229,40 @@ FRIDAY 17TH, JUNUARY
           operators are no prioritary.
 
         - Modified version information management. Now version are numbered in 
-          the folowing way: _YYYY.major.minor[tag]_. Where :
+          the folowing way: YYYY.major.minor[tag]. Where :
 
-             - _YYYY_ : Is the year the version was released.
+             - YYYY : Is the year the version was released.
 
-             - _major_ : The major version of _Dos9_.
+             - major : The major version of Dos9.
 
-             - _minor_ : The minor version of _Dos9_.
+             - minor : The minor version of Dos9.
 
-             - _tag_ : An optionnal character, meaning :
+             - tag : An optionnal character, meaning :
 
-                  - _d_ : Develloper version.
+                  - d : Develloper version.
 
-                  - _b_ : Beta version.
+                  - b : Beta version.
 
         - Fixed problem with broken make.
 
-        - Enhanced features of _FILELIST*_ functions of libDos9. Search is now 
-          quicker. It also resulted in better execution times of the _FOR /R_ 
+        - Enhanced features of FILELIST* functions of libDos9. Search is now 
+          quicker. It also resulted in better execution times of the FOR /R 
           function (even though still deprecated).
 
 MONDAY 20TH, JUNUARY
 
         - Corrected a but that cause line like ``:: comment & command'' to 
-          execute the command _command_, unlike _cmd.exe_'s behaviour.
+          execute the command command, unlike cmd.exe's behaviour.
 
-        - Added _REM_ command and comments manual page.
+        - Added REM command and comments manual page.
 
-        - Fixed broken make that did not build _DUMP_ command.
+        - Fixed broken make that did not build DUMP command.
 
-        - Added endianness support to _DUMP_ command.
+        - Added endianness support to DUMP command.
 
-        - Behaviour of _Dos9_ is now the same as _cmd.exe_'s one towards 
-          block.
+        - Behaviour of Dos9 is now the same as cmd.exe's one towards block.
 
-        - Fixed a bug that required both _@_ and _:_ signs to be at first 
-          column.
+        - Fixed a bug that required both @ and : signs to be at first column.
 
         - Fixed a bug that prevented redirection to be executed in a top-level 
           block.
@@ -276,28 +274,28 @@ MONDAY 20TH, JUNUARY
 
 THURSDAY 23TH, JUNUARY
 
-        - Fixed a bug with the _TITLE_ command. The _TITLE_ command set a 
-          title that was the whole command line (including _TITLE_ statement).
+        - Fixed a bug with the TITLE command. The TITLE command set a title 
+          that was the whole command line (including TITLE statement).
 
-        - Fixed a bug with the _FILELIST_ features. It now works as expected 
+        - Fixed a bug with the FILELIST features. It now works as expected 
           with both '/' (filesystem root sign) and '[driveletter]:/' with 
           windows.
 
 FRIDAY 24TH, JUNUARY
 
-        - Started working on an enhanced version of _TEA_ text preprocessor.
+        - Started working on an enhanced version of TEA text preprocessor.
 
 SATURDAY 1ST, FEBRUARY
 
-        - Final version of _TEAv2_. Added support for both _HTML 5_, _HTML 
-          4.01_ and _xHTML_. Others formats have been dropped.
+        - Final version of TEAv2. Added support for both HTML 5, HTML 4.01 and 
+          xHTML. Others formats have been dropped.
 
         - Fixed a bug with the parsing of command line parameter. If, the 
           final parameter was enclosed in quotes (simple or double), it 
           resulted in undefined behaviour.
 
-        - Fixed a bug that prevented user from include pipes in _FOR /F_ 
-          command input.
+        - Fixed a bug that prevented user from include pipes in FOR /F command 
+          input.
 
         - Enhanced pipe features.
 
@@ -305,43 +303,43 @@ SATURDAY 1ST, FEBRUARY
 
              Error : Unable to release mutex
 
-          to be printed at exit, due to an undefined behavior with _atexit()_ 
+          to be printed at exit, due to an undefined behavior with atexit() 
           function.
 
 FRIDAY 7TH, FEBRUARY
 
-        - Fixed a bug of _SET /P_ subcommand. The bug caused a SEGFAULT to be 
+        - Fixed a bug of SET /P subcommand. The bug caused a SEGFAULT to be 
           raised on execution.
 
         - Fixed a major bug that prevented command search to be executed 
           normally, it returned the shortest match available instead of the 
           largest available one.
 
-        - Added an error message if the _SET_ command is unable to set 
+        - Added an error message if the SET command is unable to set 
           environment variable.
 
 WEDNESDAY 12TH, FEBRUARY
 
-        - Fixed a bug of _SET /P_ subcommand, that didn't not removed the 
+        - Fixed a bug of SET /P subcommand, that didn't not removed the 
           carriage return at the end of the input.
 
 THURSDAY 13TH, FEBRUARY
 
-        - Found a bug that occurs when using _CD_ command from inside a batch 
-          script, if the path to the script given is relative, _Dos9_ tries to 
+        - Found a bug that occurs when using CD command from inside a batch 
+          script, if the path to the script given is relative, Dos9 tries to 
           open it in the new current path, and fail, or execute a different 
           script depending on circumstances. This is to be fixed in next 
-          release (that will include a bunch of improvements, like _CALL_, I 
+          release (that will include a bunch of improvements, like CALL, I 
           hope).
 
 FRIDAY 14TH, FEBRUARY
 
-        - Started working in version _2014.0.8_, a version that will include 
+        - Started working in version 2014.0.8, a version that will include 
           more features, (including use of intelligent help browsing, and 
           improved command searching (through a own procedure, instead of what 
           was used previously).
 
-        - Fixed a bug with multiple lists in _TEA_ html mode.
+        - Fixed a bug with multiple lists in TEA html mode.
 
         - Added own function to search files in path. It is not used 
           everywhere though.
@@ -362,17 +360,17 @@ FRIDAY 21TH, FEBRUARY
 
 MONDAY 24TH, FEBRUARY
 
-        - Solve a bug that prevented correct _%ERROLEVEL%_ values from being 
+        - Solve a bug that prevented correct %ERROLEVEL% values from being 
           correctly used, it used to be ignored when using internal commands.
 
         - Decided of a change in the way to deal with variables, in order to 
-          enable more compatibility between _Dos9_ and _CMD.exe_. The changes 
+          enable more compatibility between Dos9 and CMD.exe. The changes 
           resides in the way var and special vars are parsed.
 
           On the one hand, to make the difference between the two kind of 
           variables, I decided the only way to denote a special var (ie. like 
-          _%%A_) is to prefix it with two percent. Except for variables like 
-          _%0, %1_ and so on, which can be accessed with a single _%_ for 
+          %%A) is to prefix it with two percent. Except for variables like %0, 
+          %1 and so on, which can be accessed with a single % for 
           compatibility purposes. This new conventions provides more stylished 
           script and prevent ``name crashes'', (ie. unexpected behaviour 
           caused for exemple by the following code) :
@@ -392,26 +390,26 @@ MONDAY 24TH, FEBRUARY
           will work either, but well, it can just happen on a very few cases, 
           so that it is preferable not to use this notation.
 
-        - Changed _Dos9_ behaviour towards _%0, ..., %9_ variables. Those 
-          which are not explicitelly specified at startup will be filled with 
-          an empty string, and will expand to the empty string.
+        - Changed Dos9 behaviour towards %0, ..., %9 variables. Those which 
+          are not explicitelly specified at startup will be filled with an 
+          empty string, and will expand to the empty string.
 
 THESSDAY 25TH, FEBRUARY
 
-        - Finalized behaviour change for variables. Singles _%_ are now 
-          splited from the input at parsing, exception made for the special 
-          variables _%0, ..., %9_ for which the use of a single percent is 
-          still valid (for compatibility purposes) as stated previously. This 
-          prevent users from using single '%' to denote a special var other 
-          than these specified previously.
+        - Finalized behaviour change for variables. Singles % are now splited 
+          from the input at parsing, exception made for the special variables 
+          %0, ..., %9 for which the use of a single percent is still valid 
+          (for compatibility purposes) as stated previously. This prevent 
+          users from using single '%' to denote a special var other than these 
+          specified previously.
 
-        - Fixed a bug that made _SET /P_ subfunction to return inconsistent 
-          _%ERRORLEVEL%_ codes. In fact, it was the reverse of normal 
-          behaviour, that is :
+        - Fixed a bug that made SET /P subfunction to return inconsistent 
+          %ERRORLEVEL% codes. In fact, it was the reverse of normal behaviour, 
+          that is :
 
-             - Returning _-1_ on error.
+             - Returning -1 on error.
 
-             - Returning _0_ on success.
+             - Returning 0 on success.
 
         - Added an example of batch powered by Dos9, a multifunction caculator 
           using both floating point arithmetics and integer arithmetics.
@@ -429,7 +427,7 @@ THURSDAY 6TH, MARCH
           might occurs (in some very special case) if the previous is run. 
           This is still to be fixed.
 
-        - Added more compatible version of _ECHO_ command. The command now 
+        - Added more compatible version of ECHO command. The command now 
           tolerates various non-mainstream syntax (ie. using other characters 
           than '.' to force print). The following variants are accepted :
 
@@ -459,19 +457,18 @@ THURSDAY 6TH, MARCH
           cause obvious syntax errors, and are only provided for compatibility 
           purposes.
 
-          The characters that were given are those specified by the _ISO-C 
-          90_ standard, so that some locale may provide additionnal 
-          characters.
+          The characters that were given are those specified by the ISO-C 90 
+          standard, so that some locale may provide additionnal characters.
 
-        - Switched to _Autoconf_ build system. This allows more standard 
-          builds, with _GNU_ build toolchain. It can be compiled through a 
-          _*NIX_-shell typing:
+        - Switched to Autoconf build system. This allows more standard builds, 
+          with GNU build toolchain. It can be compiled through a *NIX-shell 
+          typing:
 
              ./configure
              make
 
           The install target is not supported yet. It also does not use 
-          _Automake_, since it is hard to see the point of writing awfull 
+          Automake, since it is hard to see the point of writing awfull 
           Makefile.am in order to produce a Makefile that can be written by 
           hand.
 
@@ -503,7 +500,7 @@ SATURDAY 8TH, MARCH
 
         - Lots of bugfixes, particularly with the new parser and reader.
 
-        - _Dos9_ is much more unstable than it was, but it is to be fixed 
+        - Dos9 is much more unstable than it was, but it is to be fixed 
           quickly since new version are easier to maintain.
 
         - Changed behaviour of function than are used to get command-line 
@@ -513,30 +510,30 @@ SATURDAY 8TH, MARCH
 
              echo ^!test^!
 
-          This will output _!test!_, without expanding the variable, even if 
-          _test_ is defined.
+          This will output !test!, without expanding the variable, even if 
+          test is defined.
 
           It is also important to note that, syntax with escaping and with 
-          quotes are _strictly_ equivalent. As an example, take the following 
+          quotes are strictly equivalent. As an example, take the following 
           code :
 
              if foo^ bar equ "foo bar" echo YES
 
-          Using, _Dos9_, the code will output _YES_. However, _cmd.exe_ will 
-          not. It as been chosen to promote the first syntax since it is more 
-          easy to handle and far less tricky than escaping characters with 
-          _cmd.exe_, which require an almost random number of '^' to escape 
-          some character. 
+          Using, Dos9, the code will output YES. However, cmd.exe will not. It 
+          as been chosen to promote the first syntax since it is more easy to 
+          handle and far less tricky than escaping characters with cmd.exe, 
+          which require an almost random number of '^' to escape some 
+          character. 
 
-        - Optimised _Dos9_RunBlock()_ function.
+        - Optimised Dos9_RunBlock() function.
 
 WEDNESDAY 12TH, MARCH
 
-        - Changed behavior of the thread functions of libDos9. The _THREAD_ 
+        - Changed behavior of the thread functions of libDos9. The THREAD 
           structure now refers to the thread ID rather than to a handle to 
           that thread. This new behaviour make it possible to work with thread 
           without left a handle on this thread opened. It also enables the 
-          stack to contain _THREAD_ structures on both _*nix_ and _windows_.
+          stack to contain THREAD structures on both *nix and windows.
 
         - Added timeout to the Dos9_WaitForAllThreads function. This is 
           usefull in case of deadlocks or in case of thread that does not 
@@ -551,43 +548,42 @@ WEDNESDAY 12TH, MARCH
           undefinetely, because function Dos9_WaitForAllThread and 
           Dos9_EndThread sometimes deadlocked, in a random basis.
 
-        - Re-enable _GOTO_ function, that works now (even with cross file 
+        - Re-enable GOTO function, that works now (even with cross file 
           argument).
 
-        - Added _TEXT-ANSI_ target to the _tea_ text processor. It enables 
+        - Added TEXT-ANSI target to the tea text processor. It enables 
           creation of colorized output using ansi escapes code. the use of 
-          this is native in _*nix_ and requires ansicon in _windows_.
+          this is native in *nix and requires ansicon in windows.
 
         - Fixed a bug that caused infinite loop if the file read was no more 
           accessible. It now returns and just prints error message.
 
-        - Fixed a bug causing _eof_ not to be detected in some circumstances.
+        - Fixed a bug causing eof not to be detected in some circumstances.
 
         - Fixed a bug that caused an error to be printed in the case that a 
-          script that was loaded with the _GOTO_ command contained a _CD_ 
-          command so that the file could not be retrieved because it was kept 
-          with a relative path.
+          script that was loaded with the GOTO command contained a CD command 
+          so that the file could not be retrieved because it was kept with a 
+          relative path.
 
 THURSDAY 13TH, MARCH
 
-        - Fixed bugs with the run functions. The use of _program || goto 
-          error_ to perform feature test is avaliable for both windows and 
-          *nix.
+        - Fixed bugs with the run functions. The use of program || goto error 
+          to perform feature test is avaliable for both windows and *nix.
 
-        - Fixed bugs with _Dos9_SplitPath_ command in *nix.
+        - Fixed bugs with Dos9_SplitPath command in *nix.
 
-        - Added a search in _%PATH%_ and _%PATHEXT%_ (only in windows) before 
+        - Added a search in %PATH% and %PATHEXT% (only in windows) before 
           running any command.
 
-        - Added a redirection for command that have _.cmd_ or _.bat_ as 
-          extension. Those files are now executed by a subprocess of _Dos9_ 
-          instead of being loaded by _cmd.exe_.
+        - Added a redirection for command that have .cmd or .bat as extension. 
+          Those files are now executed by a subprocess of Dos9 instead of 
+          being loaded by cmd.exe.
 
-        - Fixed bug with _Dos9_GetFilePath_ function. It prevented executables 
-          that were in one of the _%PATH%_ directory to be found if a folder 
+        - Fixed bug with Dos9_GetFilePath function. It prevented executables 
+          that were in one of the %PATH% directory to be found if a folder 
           with the same name was in the same directory.
 
-        - Fixed bug with the _Dos9_FileExists_ function from libDos9. It 
+        - Fixed bug with the Dos9_FileExists function from libDos9. It 
           sometimes returned true for files that where in the path though not 
           in the current directory.
 
@@ -598,120 +594,118 @@ THURSDAY 13TH, MARCH
         - Improved block support by providing more routines and by making the 
           code more efficient.
 
-        - Fixed a bug in _Dos9_ExpandVar_ function that was introduced build 
-          ago when rules for expansion changed. I'm affraid not to have seen 
-          it before.
+        - Fixed a bug in Dos9_ExpandVar function that was introduced build ago 
+          when rules for expansion changed. I'm affraid not to have seen it 
+          before.
 
-        - Fixed a bug with _Dos9_EsCpyN_ function in libDos9. If the functions 
+        - Fixed a bug with Dos9_EsCpyN function in libDos9. If the functions 
           with 0 as iSize argument, although the function is expected to 
           produce a void string, it failed in windows, thanks to microsoft's 
           crt implementation, that throws a SIGSEGV if the last parameter of 
-          _strncpy_ is 0.
+          strncpy is 0.
 
-        - Fixed a bug with _FOR_ command. The tokenizer did not behave like it 
+        - Fixed a bug with FOR command. The tokenizer did not behave like it 
           is describded in the documenntation : If several delimiters were 
           encountered in a raw, they were not skipped.
 
-        - Fixed a bug with the _ECHO_ command. The prompt line (ie. _DOS9 
-          ...>_) was displayed whenever the _ECHO off_ flag was set, on direct 
-          input mode.
+        - Fixed a bug with the ECHO command. The prompt line (ie. DOS9 ...>) 
+          was displayed whenever the ECHO off flag was set, on direct input 
+          mode.
 
         - Fixed a bug that caused some commands to print error messages on 
-          _FOR_ commands. Most notably, the _FIND_ command (or at least, 
-          windows's implementation) fails if there is no space at end of line, 
-          so it added automatically now.
+          FOR commands. Most notably, the FIND command (or at least, windows's 
+          implementation) fails if there is no space at end of line, so it 
+          added automatically now.
 
-        - Fixed a bug with _SET /A_ subcommand. It prefixed variable name with 
-          a space, making the result inconsistent.
+        - Fixed a bug with SET /A subcommand. It prefixed variable name with a 
+          space, making the result inconsistent.
 
-        - Made the hlp to work again, without problem, since version _0.7_ and 
-          the deep changes made into _Dos9_ core to get something more modern.
+        - Made the hlp to work again, without problem, since version 0.7 and 
+          the deep changes made into Dos9 core to get something more modern.
 
 SUNDAY 16TH, MARCH
 
-        - Started building a _x64_ version of Dos9. I experienced troubles 
-          because of the lack of _x64_ version of _MinGW_. However, I managed 
-          to get a distribution of mingw-w64, the _MinGW_ compiler adapted for 
-          _x64_, in the TDM-gcc. The install of _libintl_ (and libiconv, on 
-          which libintl depends) must be done by downloading packages from GNU 
+        - Started building a x64 version of Dos9. I experienced troubles 
+          because of the lack of x64 version of MinGW. However, I managed to 
+          get a distribution of mingw-w64, the MinGW compiler adapted for 
+          x64, in the TDM-gcc. The install of libintl (and libiconv, on which 
+          libintl depends) must be done by downloading packages from GNU 
           ports, and do some tricks to get it compiled in the x64 version. 
           This is actually difficult to build, and unstable as a did not 
           perform further tests.
 
-        - Started profiling the _Dos9_ codebase, looking for making _Dos9_ 
-          more fast. The use of _gprof_ has brought several interesting 
-          analysis. On the one hand, I can't get explaination why is 
-          _cmd.exe_ faster for long files, although if both are run at the 
-          same time, _Dos9_ perform about twice as much commands by second. 
-          The things to be updated are:
+        - Started profiling the Dos9 codebase, looking for making Dos9 more 
+          fast. The use of gprof has brought several interesting analysis. On 
+          the one hand, I can't get explaination why is cmd.exe faster for 
+          long files, although if both are run at the same time, Dos9 perform 
+          about twice as much commands by second. The things to be updated 
+          are:
 
-             - _Dos9_EsInit_ and _Dos9_EsFree_ function are far too expensive. 
-               It sometimes consumes _10%_ of the global time-run, thus, we 
-               removed parts of code from the _libDos9_ library.
+             - Dos9_EsInit and Dos9_EsFree function are far too expensive. It 
+               sometimes consumes 10% of the global time-run, thus, we removed 
+               parts of code from the libDos9 library.
 
-             - _Dos9_GetCommandProc_ is far too expensive. I'm currently 
-               looking for an alternative, such as hash function. I haven't 
-               found a good one yet (however), and i will probably write it by 
-               myself.
+             - Dos9_GetCommandProc is far too expensive. I'm currently looking 
+               for an alternative, such as hash function. I haven't found a 
+               good one yet (however), and i will probably write it by myself.
 
-             - I'm also to optimise the execution times of _Dos9_String.h_. 
+             - I'm also to optimise the execution times of Dos9_String.h. 
                Those functions are allmost ubiquitus in the code, so that 
                large parts of code will benefit from better execution rates. 
-               I'm especially targetting _Dos9_SearchChar_ and 
-               _Dos9_SearchToken_, that account for a large share (about 10% 
+               I'm especially targetting Dos9_SearchChar and 
+               Dos9_SearchToken, that account for a large share (about 10% 
                time execution overall).
 
           All those test have be made for normal script optimisation, it was 
-          tested from a file that implement _goto_, _if_, _set_ and _echo 
-          command_. I also performed some tests on _for_ command, as expected, 
-          functions that are the most time consuming are not the same. Though, 
-          the functions i listed before were also much more time consuming 
-          than they need to be.
+          tested from a file that implement goto, if, set and echo command. I 
+          also performed some tests on for command, as expected, functions 
+          that are the most time consuming are not the same. Though, the 
+          functions i listed before were also much more time consuming than 
+          they need to be.
 
-        - Improoved efficiency of _Dos9_String.h_ and _Dos9_Estr.c_ from the 
-          _libDos9_ library. Also dissabled some piece of code that ran thread 
-          in some functions, that basically made them slow down. _Dos9_ now 
-          achieve allmost equivalent performances in _for_ loops (about 100 
-          lines/s less than _cmd.exe_, without further optimisation), it also 
+        - Improoved efficiency of Dos9_String.h and Dos9_Estr.c from the 
+          libDos9 library. Also dissabled some piece of code that ran thread 
+          in some functions, that basically made them slow down. Dos9 now 
+          achieve allmost equivalent performances in for loops (about 100 
+          lines/s less than cmd.exe, without further optimisation), it also 
           reach got execution rates at script level (with about 3250 lines/s 
           while cmd.exe runs at 2720 lines/s on average). It is suprisingly 
           good because I did not even finished optimisation yet, so much 
           better performances can be expected.
 
-        - Fixed a bug of _IF_ command. The _lss_ comparison operator was 
-          interpreted as _leq_.
+        - Fixed a bug of IF command. The lss comparison operator was 
+          interpreted as leq.
 
 THURSDAY 20TH, MARCH
 
-        - Started comparisions between _GCC_ optimisation levels.
+        - Started comparisions between GCC optimisation levels.
 
-        - Fixed a bug introduced in the function _Dos9_SearchLastToken_. It 
-          appears that, on windows, the code runs faster using _-O2_ than 
-          using _-O3_ optimisation switches, this might be caused by processor 
+        - Fixed a bug introduced in the function Dos9_SearchLastToken. It 
+          appears that, on windows, the code runs faster using -O2 than using 
+          -O3 optimisation switches, this might be caused by processor 
           caching, but however, this should not be expected to have the same 
           effect on variouss platform however. I ended up optimisation 
           operations there, since the functions used by gprof account for 
-          about _70%_ of the execution time, so that I'm not sure it is 
-          reliable now. With _gprof_ version, i've be able to achieve speeds 
-          of about _3700 l/s_, so the result are expected to be at least 
-          double. In fact, by experimenting, I got only about _4000 l/s_, 
-          which it the speed of _cmd_ on my computer when it consumes about 
-          80%-90% of the cpu, in random occasion, because cmd.exe's has really 
-          random performances. Instead, _Dos9_ is limited to approximately 
-          _25%_.
+          about 70% of the execution time, so that I'm not sure it is reliable 
+          now. With gprof version, i've be able to achieve speeds of about 
+          3700 l/s, so the result are expected to be at least double. In fact, 
+          by experimenting, I got only about 4000 l/s, which it the speed of 
+          cmd on my computer when it consumes about 80%-90% of the cpu, in 
+          random occasion, because cmd.exe's has really random performances. 
+          Instead, Dos9 is limited to approximately 25%.
 
 SATURDAY 23TH, MARCH
 
-        - Fixed a bug in _Dos9_SearchLastChar_ function.
+        - Fixed a bug in Dos9_SearchLastChar function.
 
-        - Fixed a bug with redirection that was not right delt with. _Dos9_ 
-          did not check wether several block are in a row on the same line.
+        - Fixed a bug with redirection that was not right delt with. Dos9 did 
+          not check wether several block are in a row on the same line.
 
-        - Added some functionnalities to the _cmd/hlp.bat_ script, which is 
-          meant to replace old-fashioned _hlp_ manual page viewer. It is 
+        - Added some functionnalities to the cmd/hlp.bat script, which is 
+          meant to replace old-fashioned hlp manual page viewer. It is 
           bassically designed to act as a manual page manager rather than just 
           a viewer, by providing interfaces to build manual trees, and to get 
-          manual tress from the repositories at _dos9.org_ (this is to be 
+          manual tress from the repositories at dos9.org (this is to be 
           implented later).
 
         - Changed names of the manual-pages subdirectories, they now match up 
@@ -721,44 +715,44 @@ SATURDAY 23TH, MARCH
 
 TUESDAY 25TH, MARCH
 
-        - Implemented replacement for old _ENABLE/DISABLEDOS9MODE_. Instead of 
-          the variable, _Dos9_ provides the _CMDLYCORRECT_ options that can be 
-          set through _SETLOCAL_, and that enables more compatibility features 
-          for _cmd.exe_.
+        - Implemented replacement for old ENABLE/DISABLEDOS9MODE. Instead of 
+          the variable, Dos9 provides the CMDLYCORRECT options that can be set 
+          through SETLOCAL, and that enables more compatibility features for 
+          cmd.exe.
 
-        - Option _CMDLYCORRECT_ now affects _FOR_ loops: If the option is set, 
+        - Option CMDLYCORRECT now affects FOR loops: If the option is set, 
           then all blank lines are to be stripped for the output.
 
         - Changed switch to specify part of lines that are not consituted of 
-          switches but by text. It is now _//_, a bit like *NIX's _--_.
+          switches but by text. It is now //, a bit like *NIX's --.
 
 WEDNESDAY 26TH, MARCH
 
         - Added a short internal documentation to get help for internal 
           functions. These are however much tinier that the full documentation 
-          given in _HLP_. This is voluntary, to fit in the executable.
+          given in HLP. This is voluntary, to fit in the executable.
 
-        - First implementation of the _CALL_ command is now working. This is 
+        - First implementation of the CALL command is now working. This is 
           somewhat blured because i've not written the full man page now, but 
           it seems functionnal.
 
         - Fixed bug in Makefiles.
 
-        - Fixed a file from libDos9 that still used old name _CALLSTACK_ 
-          instead of stack.
+        - Fixed a file from libDos9 that still used old name CALLSTACK instead 
+          of stack.
 
-        - Found out that in some cases, _tea_ breaks unicode sequences by 
+        - Found out that in some cases, tea breaks unicode sequences by 
           intruding some line feed in the file, This remains to be fixed. This 
           was actually fixed quickly.
 
-        - Fixed a bug that cause _tea_ to loop infinitely if a word turned out 
+        - Fixed a bug that cause tea to loop infinitely if a word turned out 
           to be to wide to fit on a single line. This is now fixed and long 
           words are now splitted in multiple lines.
 
         - Fixed numerous bugs introduced by use of various encoding in the 
-          documentation, that is, some file were not builded by _hlp_ because 
+          documentation, that is, some file were not builded by hlp because 
           iconv was not able to convert file from erroneous encoding. This has 
-          been fixed and all pages builds up well with _hlp_.
+          been fixed and all pages builds up well with hlp.
 
         - Added a couple of manual pages. It is also combined with new pages 
           and translations.
@@ -767,130 +761,129 @@ WEDNESDAY 2ND, APRIL
 
         - Implemented aliases within Dos9
 
-        - Added _ALIAS_ command.
+        - Added ALIAS command.
 
-        - Improved robustness of _Dos9_AddCommandDynamic_.
+        - Improved robustness of Dos9_AddCommandDynamic.
 
-        - Fixed some bugs with _CALL_ function that was not really functional. 
+        - Fixed some bugs with CALL function that was not really functional. 
           It works much better now, but the features have not been all tested 
           yet.
 
-        - Fixed a bug that caused _%0_ not to be set to the correct value by 
-          the _CALL_ command. Now, the behaviour is the following:
+        - Fixed a bug that caused %0 not to be set to the correct value by the 
+          CALL command. Now, the behaviour is the following:
 
-             - if a _label_ was given, _%0_ contains this label.
+             - if a label was given, %0 contains this label.
 
-             - if no _label_ was given, _%0_ contains the file name.
+             - if no label was given, %0 contains the file name.
 
 TUESDAY 3RD, APRIL
 
-        - Updated build system, so that building _Dos9_ can allmost be done 
+        - Updated build system, so that building Dos9 can allmost be done 
           without user intervention. It's as simple as typing the following 
           line:
 
              make
 
-        - Switched to version _2014.0.9_, because _dos9_ is becoming pretty 
+        - Switched to version 2014.0.9, because dos9 is becoming pretty 
           develloped now.
 
 MONDAY 7TH, APRIL
 
-        - Fixed numerous bugs on the _GNU/Linux_ version. Before that update, 
-          it would have been fairly difficult to make it work. I posted only 
+        - Fixed numerous bugs on the GNU/Linux version. Before that update, it 
+          would have been fairly difficult to make it work. I posted only 
           fixes for GNU/Linux, but very few incompatibilities can be expected 
           for BSD based operating systems (and anyway, the only BSD based os 
           i've got is NetBSD, so that compatibility may not be achievied for 
           other versions. The major fixes included are :
 
-             - A fix for the _autotools_ build system, indeed, the old 
-               _configure.ac_ did not appended needed libraries (for examples, 
-               there was confusions for _libintl_, that is included in 
-               _GLibc_ on _GNU/linux_). I think i'll consider choosing a 
-               better buid systems, because in facts, _autotools_ adds endless 
-               complications even for building quite simple code. The most 
-               Anoying drawback is that in fact, you can't use _autoconf_ 
-               without using _automake_, otherwise, some bugs are introduced 
-               that you'll never hear of reading the documentation. 
-               Nevertheless, we don't need using _automake_ to generate 
-               Makefile that we could write, especially when the output 
-               Makefile is about hundreds of KiB, and is constituted of almost 
-               hacks to make it work with _make_. Thus, it's a bit like using 
-               a program to produce garbage. _autoconf_ provides lots of 
-               interesting features, but these advantages are superseeded by 
-               its drawbacks. In particular, the fact that it does not meet 
-               the UNIX conception standards (e.g. each program should do only 
-               do one thing, and do it the best), so that the dependencies 
-               between apparently distinct _autotools_ programs make the 
-               developper to use all the _autotools_ programs.
+             - A fix for the autotools build system, indeed, the old 
+               configure.ac did not appended needed libraries (for examples, 
+               there was confusions for libintl, that is included in GLibc on 
+               GNU/linux). I think i'll consider choosing a better buid 
+               systems, because in facts, autotools adds endless complications 
+               even for building quite simple code. The most Anoying drawback 
+               is that in fact, you can't use autoconf without using 
+               automake, otherwise, some bugs are introduced that you'll never 
+               hear of reading the documentation. Nevertheless, we don't need 
+               using automake to generate Makefile that we could write, 
+               especially when the output Makefile is about hundreds of KiB, 
+               and is constituted of almost hacks to make it work with make. 
+               Thus, it's a bit like using a program to produce garbage. 
+               autoconf provides lots of interesting features, but these 
+               advantages are superseeded by its drawbacks. In particular, the 
+               fact that it does not meet the UNIX conception standards (e.g. 
+               each program should do only do one thing, and do it the best), 
+               so that the dependencies between apparently distinct autotools 
+               programs make the developper to use all the autotools programs.
 
-             - A fix for the _Dos9_ code itself. The last revisions of _Dos9_ 
+             - A fix for the Dos9 code itself. The last revisions of Dos9 
                included a lot of features that had not been tested on *NIX 
                operating systems. So that numerous incompatibilities were 
-               introduced along source code modification. Mainly, the 
-               _thread_ part of _libDos9_ had been left totally untested on 
-               real system for versions. I apologize for that, I should not 
-               have been waiting for such a long time to upgrade. So, fixes in 
-               the code that have been made are:
+               introduced along source code modification. Mainly, the thread 
+               part of libDos9 had been left totally untested on real system 
+               for versions. I apologize for that, I should not have been 
+               waiting for such a long time to upgrade. So, fixes in the code 
+               that have been made are:
 
                   - Make wrapper arround undefined symbols comming from 
-                    windows like _stricmp_ (_strcasecmp_ is used instead). 
+                    windows like stricmp (strcasecmp is used instead). 
 
-                  - Fixed bugs from _libDos9/threads_, It caused double free 
+                  - Fixed bugs from libDos9/threads, It caused double free 
                     exception for some errors.
 
-                  - Fixed used of _strupr_ in _tea_. In fact, the symbol for 
-                    _strupr_ that was intended to be used on _GNU/Linux_ was 
-                    used on _Windows_ platforms instead.
+                  - Fixed used of strupr in tea. In fact, the symbol for 
+                    strupr that was intended to be used on GNU/Linux was used 
+                    on Windows platforms instead.
 
-                  - Fixed incompatibilities in _libDos9/file_. In fact, 
-                    default routines for *NIX used the functions _fopen_ to 
-                    check whether a file existed or not. The bug was 
-                    introduced because in many *NIX systems, directories are 
-                    indeed files that can be opened. _libDos9_ now checks for 
-                    regular files using the _lstat_ function instead.
+                  - Fixed incompatibilities in libDos9/file. In fact, default 
+                    routines for *NIX used the functions fopen to check 
+                    whether a file existed or not. The bug was introduced 
+                    because in many *NIX systems, directories are indeed files 
+                    that can be opened. libDos9 now checks for regular files 
+                    using the lstat function instead.
 
                   - Fixed incompatibilities with environment variables. This 
                     issue was caused by the fact that environment variables 
                     are case-sentitive for *NIX operating systems while they 
-                    are not for Windows systems. In fact, _Dos9_ already 
+                    are not for Windows systems. In fact, Dos9 already 
                     capitilized variable names when variables were set, 
                     however, similar feature was not provided for expansion. 
                     This is now fixed.
 
              - Fixes on other files, (I mean, on files that are not required 
-               in order to make _Dos9_ runing). Those fixes include:
+               in order to make Dos9 runing). Those fixes include:
 
-                  - Changed the name of the _Dos9_ executable from _Dos9_ to 
-                    _dos9_. This change will have no effect on windows, but it 
+                  - Changed the name of the Dos9 executable from Dos9 to 
+                    dos9. This change will have no effect on windows, but it 
                     is usual, however, to have command executable names in 
-                    lower characters. I may implement a feature for 
-                    _GNU/linux_ that ignore case for the command line. 
-                    However, I now recommand using uncapitalized characters 
-                    for command name, if you need compatibility, of course.
+                    lower characters. I may implement a feature for GNU/linux 
+                    that ignore case for the command line. However, I now 
+                    recommand using uncapitalized characters for command name, 
+                    if you need compatibility, of course.
 
                   - Fixed a bug with the translation system. It used to scan 
-                    file _dos9/lang/Dos9_Help.c_ instead of file 
-                    _dos9/lang/Dos9_Lang.c_.
+                    file dos9/lang/Dos9_Help.c instead of file 
+                    dos9/lang/Dos9_Lang.c.
 
-                  - Fixed a bug from _Dos9_Auto.bat_, the current version dit 
-                    not included the path _%DOS9_PATH%_ in the _%PATH%_ 
-                    variable, that was problematic for *NIX systems, however, 
-                    the _Dos9_ executable filename should be looked up by the 
-                    program itself, rather than being included in _%PATH%_.
+                  - Fixed a bug from Dos9_Auto.bat, the current version dit 
+                    not included the path %DOS9_PATH% in the %PATH% variable, 
+                    that was problematic for *NIX systems, however, the Dos9 
+                    executable filename should be looked up by the program 
+                    itself, rather than being included in %PATH%.
 
         - Changed the way libraries are built. They are now build from within 
-          the current direction, and they are located in _./lib_ and headers 
-          for libraries are located in _./include_.
+          the current direction, and they are located in ./lib and headers for 
+          libraries are located in ./include.
 
         - Fixed a bug in Makefiles that caused the manual pages to be copied 
-          in a wrong directory (ie. _./bin/share/man_ instead of 
-          _./bin/share/man/man_ that was wrong.
+          in a wrong directory (ie. ./bin/share/man instead of 
+          ./bin/share/man/man that was wrong.
 
 THURSDAY 10TH, APRIL
 
         - Discovered a strange bug with pipes. This bug appears when input 
           have several lines, when the pipe is closed, the input is not 
-          restored (or, at least, the input is not splitted from _stdin_). In 
+          restored (or, at least, the input is not splitted from stdin). In 
           fact, this should not occur since when the pipe is no more 
           redirected, there is no more input left. This is strange though, as 
           this problem does not happen with single-lines input that appears to 
@@ -900,30 +893,30 @@ THURSDAY 10TH, APRIL
           produce somewhat of a pipe effect, because I haven't actually found 
           a way to override the problem.
 
-        - Fixed a bug with the _Dos9_ParseOutput_ function. It wasn't possible 
-          to specify _2>&1_ and _> foo_ simultaneously, so, you it was not 
-          possible to specify a redirection for _stdin_ and _stdout_ with 
-          _truncate_ attribute.
+        - Fixed a bug with the Dos9_ParseOutput function. It wasn't possible 
+          to specify 2>&1 and > foo simultaneously, so, you it was not 
+          possible to specify a redirection for stdin and stdout with 
+          truncate attribute.
 
 MONDAY 14TH, APRIL
 
         - Added some corections that make the pipe function quite well on both 
-          _GNU/Linux_ and _Windows_ architectures (I also tested on _NetBSD_ 
-          and it worked pretty well, without further tests however). 
+          GNU/Linux and Windows architectures (I also tested on NetBSD and it 
+          worked pretty well, without further tests however). 
 
         - Added a few fixes on languages, and I'm starting adding new messages 
-          for the _file_ commands.
+          for the file commands.
 
-        - Checked build on NetBSD. I've found out that _Dos9_ conforms with 
-          _POSIX.1-2001_. Thus, On some platform, if you want to build if, you 
-          may specoify a configuration that defines the __POSIX_C_SOURCE_ 
-          macro, that is, type the configure line :
+        - Checked build on NetBSD. I've found out that Dos9 conforms with 
+          POSIX.1-2001. Thus, On some platform, if you want to build if, you 
+          may specoify a configuration that defines the _POSIX_C_SOURCE macro, 
+          that is, type the configure line :
 
              ./configure CFLAGS='-D_POSIX_C_SOURCE=200112'
 
-          However, The NetBSD headers does not conform to _POSIX.1_ and 
-          perform wrong function exposures, so that if you use, it, you might 
-          need to specify __NETBSD_SOURCE_ macro.
+          However, The NetBSD headers does not conform to POSIX.1 and perform 
+          wrong function exposures, so that if you use, it, you might need to 
+          specify _NETBSD_SOURCE macro.
 
 THURSDAY 17TH, APRIL
 
@@ -931,11 +924,11 @@ THURSDAY 17TH, APRIL
 
         - Added new manual pages and lots of fixes in the manual pages.
 
-        - Added _SHIFT_ command. It can be really easy to manage argument, 
-          now, however, I did not preform deep test on the command so that it 
-          might still be not reliable.
+        - Added SHIFT command. It can be really easy to manage argument, now, 
+          however, I did not preform deep test on the command so that it might 
+          still be not reliable.
 
-        - Added _/f_ switch to _ALIAS_ command. This allows user to redefine 
+        - Added /f switch to ALIAS command. This allows user to redefine 
           internal commands and symbols, what was not possible previously. I 
           decided to let user override internal commands because I found it to 
           be an interesting thing to hack arround, allowing to set up 
@@ -943,7 +936,7 @@ THURSDAY 17TH, APRIL
           compatibility features (although they should not need such 
           compatibility features).
 
-        - Fixed a bug in _Dos9_Thread.c_, threads functions were making casts 
+        - Fixed a bug in Dos9_Thread.c, threads functions were making casts 
           from different pointer sizes, ommiting the pointed object were 
           different. Thus, writing 8 bytes to a location which was supposed to 
           be 4 bytes long, depending on the locations of those data in the 
@@ -958,42 +951,42 @@ THURSDAY 17TH, APRIL
 
 SATURDAY 20TH, APRIL
 
-        - Fixed a bug that caused _Dos9_ to crash if either _%PATH%_ or 
-          _%PATHEXT%_ (only for windows) were not in the command environment.
+        - Fixed a bug that caused Dos9 to crash if either %PATH% or %PATHEXT% 
+          (only for windows) were not in the command environment.
 
-        - Corrected a bug with _tea_ in _html_ mode. The parser did used to 
-          escape the reserved characters _>_ and _<_ but did not care of _&_. 
-          This bug is corrected, enabling _html_ codes to work perfectly well. 
-          I hadn't noticed it until yet because most recents browsers do not 
-          care about such errors, preventing error to be easilly trigered.
+        - Corrected a bug with tea in html mode. The parser did used to escape 
+          the reserved characters > and < but did not care of &. This bug is 
+          corrected, enabling html codes to work perfectly well. I hadn't 
+          noticed it until yet because most recents browsers do not care about 
+          such errors, preventing error to be easilly trigered.
 
-        - Fixed omition of _ansicon_ on the _Dos9_Auto.bat_, which is launched 
-          at startup.
+        - Fixed omition of ansicon on the Dos9_Auto.bat, which is launched at 
+          startup.
 
 SATURDAY 14TH, JUNE
 
         - Following advices of guys for dostips.org, changed the delimiters 
           and the way quotes are handled:
 
-             - The available delimiters are the following _(space),;(tab)_. 
-               This is now fully compatible with _cmd.exe_. I also introduced 
-               functions in order no to take care of some of them (_,;_) since 
+             - The available delimiters are the following (space),;(tab). This 
+               is now fully compatible with cmd.exe. I also introduced 
+               functions in order no to take care of some of them (,;) since 
                they may be used by some programs for switches. (The first 
-               example I have is _gcc_, and options like:)
+               example I have is gcc, and options like:)
 
                   gcc -Wl,import
 
              - Changed the way quotes are handled. Quotes have now precedence 
-               over conditionnal operators (_|&_) and command blocks (_()_). 
-               This enables to make statements more secure using quotes. The 
-               new behaviour also conforms to cmd.exe behavior. Typically, the 
+               over conditionnal operators (|&) and command blocks (()). This 
+               enables to make statements more secure using quotes. The new 
+               behaviour also conforms to cmd.exe behavior. Typically, the 
                following code :
 
                   IF foo==foo echo  ") else ("
 
-               was understood differently by _Dos9_ and _cmd.exe_. Now, the 
-               _") else ("_ is considered to be escaped, and is no more 
-               interpreted as a subcommand of _if_, as it did before.
+               was understood differently by Dos9 and cmd.exe. Now, the ") 
+               else (" is considered to be escaped, and is no more interpreted 
+               as a subcommand of if, as it did before.
 
              - Choosed a standard way to handle quotation marks, an to cut 
                parameter. In fact, any delimiter that is between two quotation 
@@ -1014,7 +1007,7 @@ SATURDAY 14TH, JUNE
 
              - behaviour of function to remove quotation marks in parameters 
                have also changed in order to achieve more compatibility with 
-               _cmd.exe_. Basically, the algorithm that _Dos9_ follows when 
+               cmd.exe. Basically, the algorithm that Dos9 follows when 
                removing parameters quotation marks is:
 
                   - If the parameter begin with a quotation mark, then remove 
@@ -1024,13 +1017,13 @@ SATURDAY 14TH, JUNE
                     either. But, do not remove it if the parameter does not 
                     begin with a quotation mark.
 
-        - Cancelled the conversion of _Dos9_ code to wide char. This was 
-          indeed far too hard (it implied modifying allmost any piece of 
-          code), and had little advantages (huge incompatibilities between 
-          various platform, particularly for non-c99 function that are 
-          obviously required in order to make thing working). Thus, I decided 
-          to make a wrapper over libC functions in order to be able to use 
-          utf-8 internally. This way, I keep the code like it is, and preserve 
+        - Cancelled the conversion of Dos9 code to wide char. This was indeed 
+          far too hard (it implied modifying allmost any piece of code), and 
+          had little advantages (huge incompatibilities between various 
+          platform, particularly for non-c99 function that are obviously 
+          required in order to make thing working). Thus, I decided to make a 
+          wrapper over libC functions in order to be able to use utf-8 
+          internally. This way, I keep the code like it is, and preserve 
           compatibility with other platforms (Windows, Linux, NetBSD, 
           DragonFly BSD, OpenBSD) and with POSIX. Moreover, this support for 
           unicode may easily be remooved for platforms that do not handle 
@@ -1039,18 +1032,17 @@ SATURDAY 14TH, JUNE
 MONDAY 16TH, JUNE
 
         - Reorganized the source tree for internal commands. Before that, 
-          every file of the _command_ subdirectory contained several different 
+          every file of the command subdirectory contained several different 
           commands. I found that is was not really practical for maintaining 
           code, the code is now splitted in files that contains each a 
           different internal command.
 
-        - Added a functionnal _/Q_ switch to the _RMDIR_ command. However, it 
-          is supposed to deal with the _/S_ switch, which is not functional 
-          yet.
+        - Added a functionnal /Q switch to the RMDIR command. However, it is 
+          supposed to deal with the /S switch, which is not functional yet.
 
 THURSDAY 19TH, JUNE
 
-        - I eventually decided to use the GNU toolchain to compile _Dos9_. I 
+        - I eventually decided to use the GNU toolchain to compile Dos9. I 
           previously expressed lots of criticism toward use of autotools, but 
           libtool (which is par of the GNU toolchain) is unfortunately the 
           only program that allows devellopers to deal with libraries 
@@ -1058,23 +1050,22 @@ THURSDAY 19TH, JUNE
           is the best solution I have, but if a newer build systems that 
           enables to make such things emerged, I'd be glad to move to it.
 
-        - Changed some source file name because _automake_ was complaining 
-          about overlapping objects file names. Some of the name are more 
-          logical, but, some are not really.
+        - Changed some source file name because automake was complaining about 
+          overlapping objects file names. Some of the name are more logical, 
+          but, some are not really.
 
 TUESDAY 24TH, JUNE
 
-        - Corrected a bug that prevented local variable (eg. like _%1_) to be 
-          used as argument with the _call_ command, thanks to Jo15 from 
-          batch.xoo.it (<http://batch.xoo.it>) who reported the error.
+        - Corrected a bug that prevented local variable (eg. like %1) to be 
+          used as argument with the call command, thanks to Jo15 from 
+          batch.xoo.it who reported the error.
 
-        - Added _local_ target to _Makefile_ that generates a local 
-          installation of _Dos9_ inside the folder _./bin_. It is as simple as 
-          typing
+        - Added local target to Makefile that generates a local installation 
+          of Dos9 inside the folder ./bin. It is as simple as typing
 
              make local
 
-        - Added macros from the _gnu gettext_ package. Also enabled the use of 
+        - Added macros from the gnu gettext package. Also enabled the use of 
           the --disable-nls switch for configure.
 
 FRIDAY 29TH, AUGUST
@@ -1111,12 +1102,12 @@ FRIDAY 29TH, AUGUST
         - Fixed some autotools options, that where never mentionned under 
           mingw system.
 
-        - Fixed incompatibilities with the IF command. Now, the _IF_ command 
-          returns errors on case of string used as operators for _GEQ_, _GTR_ 
-          _LSS_, _LEQ_ comparants. Moreover, the interpretor is able to handle 
+        - Fixed incompatibilities with the IF command. Now, the IF command 
+          returns errors on case of string used as operators for GEQ, GTR 
+          LSS, LEQ comparants. Moreover, the interpretor is able to handle 
           both hexadecimal, decimal and octal bases. Finally, implemented 
           comparants for floats (same as integer comparants but prefixed with 
-          f), as a _Dos9_ extension.
+          f), as a Dos9 extension.
 
         - Fixed issues of compatibity for the SET command. It is mainly a 
           matter of quotation marks handling, and typically, the issues for 
@@ -1131,13 +1122,13 @@ FRIDAY 29TH, AUGUST
           given as input for the FOR /F command. This puts more sense on the 
           "usebackq" option.
 
-        - Added a custom environment within _Dos9_ in order to instaure 
+        - Added a custom environment within Dos9 in order to instaure 
           cross-platform syntax capabilities like use of "=" in variable names 
           (which is impossible on many systems), to set "=x:" variables for CD 
           command.
 
         - Corrected a bug with SET command, wich displayed system environment 
-          while it was suposed to display _Dos9_ custom environment.
+          while it was suposed to display Dos9 custom environment.
 
         - Corrected a bug that prevented the FOR command from getting command 
           input under any *nix OS (don't know the actual reason for this, but 
@@ -1147,7 +1138,7 @@ FRIDAY 29TH, AUGUST
           pretty well on any *nix system.
 
         - Added a Windows specific new CD command, to be compatible with 
-          Windows _cmd.exe_ features. The primitive version of CD is still 
+          Windows cmd.exe features. The primitive version of CD is still 
           shipped for *nix operating systems (concept of disk is a huge 
           non-sense under Unix-like operating systems, because they represent 
           filesystems like a binariy tree which root is "/", and on which 
@@ -1163,8 +1154,8 @@ FRIDAY 29TH, AUGUST
           function call.
 
         - Re-implemented the TYPE command to get a command compatible with 
-          _cmd.exe_ equivalent. The result is very closely compatible execpt 
-          for on case of name printing.
+          cmd.exe equivalent. The result is very closely compatible execpt for 
+          on case of name printing.
 
         - Implemented FIND command as an internal command. It matches closely 
           cmd.exe behaviour, except for some inconsistencies I've tried to 
@@ -1175,13 +1166,12 @@ FRIDAY 29TH, AUGUST
           least since 2013). However, there is still little concerns, for 
           example, on Unix-like operating system it is impossible to retrieve 
           the original command line (arguments are passed separated to the 
-          kernel). Thus, the Dos9 (<dos9>) tries to construct the line back 
-          the best it can, by putting spaces between the arguments. This is 
-          only an issue at startup, though, with call, it may not be a 
-          problem.
+          kernel). Thus, the Dos9 tries to construct the line back the best it 
+          can, by putting spaces between the arguments. This is only an issue 
+          at startup, though, with call, it may not be a problem.
 
-        - Changed the version number to _2014.0.9b_, I think the interpretor 
-          may be mature enough to think of a real release in a close time.
+        - Changed the version number to 2014.0.9b, I think the interpretor may 
+          be mature enough to think of a real release in a close time.
 
 WEDNESDAY 3RD, SEPTEMBER
 
@@ -1194,8 +1184,8 @@ WEDNESDAY 3RD, SEPTEMBER
           to WINDOWS operating system, which will benefit from a new pipe 
           system in little delays.
 
-        - Removed padding of arguments with _"_ for external commands, on 
-          Unix-like operating systems. Indeed, padding _"_ around arguments 
+        - Removed padding of arguments with " for external commands, on 
+          Unix-like operating systems. Indeed, padding " around arguments 
           often cause command to fail (precisely, make the command not work 
           the way you are intending to).
 
@@ -1224,18 +1214,18 @@ WEDNESDAY 3RD, SEPTEMBER
 
 WEDNESDAY 24TH, SEPTEMBER
 
-        - Implemented the _MORE_ command as an internal command (why create 
+        - Implemented the MORE command as an internal command (why create 
           external executables when it is so simple to add little commands to 
-          the interpretor ?). It includes almost every _cmd.exe_ features, 
+          the interpretor ?). It includes almost every cmd.exe features, 
           except the formfeed expanding features (never seen it used though). 
-          However, if you build _Dos9_ with the option _--disable-console_, 
-          you should still encounter minor bugs, due to the lack of console 
-          capabilities. Finally, I thought about replacing _MORE_ with _TYPE_ 
-          when building with _--disable-console_, but it would be obviously 
-          sad not to benefit from this far better and new command.
+          However, if you build Dos9 with the option --disable-console, you 
+          should still encounter minor bugs, due to the lack of console 
+          capabilities. Finally, I thought about replacing MORE with TYPE when 
+          building with --disable-console, but it would be obviously sad not 
+          to benefit from this far better and new command.
 
         - Implemented a special stream translation system (for streams like 
-          _NUL_, _CON_, and so on and so forth), to get Unix name of their 
+          NUL, CON, and so on and so forth), to get Unix name of their 
           counterparts. I did not implemented the translation for all streams 
           I know, though, but it won't be to annoying to be added.
 
@@ -1243,35 +1233,34 @@ WEDNESDAY 24TH, SEPTEMBER
 
 TUESDAY 2ND, DECEMBER
 
-        - Corrected a bug within the _IF_ command that prevented _ELSE IF_ 
+        - Corrected a bug within the IF command that prevented ELSE IF 
           combination to be executed correctly. This was actually caused by a 
           failure to match parenthesis the right way. It was basically making 
           only the first line of the if block to be executed. Now the bug is 
           solved and the result is fully functionnal.
 
-        - Added two features within the _MORE_ command that enable it to 
-          accept both UTF-8 encoded text and ansi escape codes to be mixed 
-          with text.
+        - Added two features within the MORE command that enable it to accept 
+          both UTF-8 encoded text and ansi escape codes to be mixed with text.
 
 THURSDAY 6TH, JANUARY 2015
 
-        - Did some final arrengments that make _Dos9_ ready to realease on the 
+        - Did some final arrengments that make Dos9 ready to realease on the 
           GNU/Linux platforms. There is some work left for make it run under 
           Microsoft Windows platforms.
 
-        - Fixed a little bug of the _More_ command under Microsoft windows. 
+        - Fixed a little bug of the More command under Microsoft windows. 
           MS-Windows does not return line-feed characters using getch() 
           function but returns untranslated carriot return (0x0D). This 
-          subtilities was not taken account by the _More_ command, so that the 
+          subtilities was not taken account by the More command, so that the 
           enter was inactive.
 
-        - Changed the way _Dos9_ command line works; Now it's possible to use 
+        - Changed the way Dos9 command line works; Now it's possible to use 
           widespread switches like '/C' or '/K'. The way to tell the 
           interpreter which option should be enabled and which should not 
           through the command line has also changed.
 
         - Fixed minor issues due to the previous behaviour change of 
-          Dos9_GetExePath() that affected both _FOR_ command and 
+          Dos9_GetExePath() that affected both FOR command and 
           Dos9_RunExternalBatch() function.
 
         - Fixed the broken pipe system introduced by the change of pipe system 
@@ -1281,16 +1270,16 @@ THURSDAY 6TH, JANUARY 2015
 
 TUESDAY 13TH, JANUARY 2015
 
-        - Fixed an minor issue in the _Dos9_SetEnv_ function that caused some 
-          rare bugs that made _SET_ command to raise a segfault if it was 
+        - Fixed an minor issue in the Dos9_SetEnv function that caused some 
+          rare bugs that made SET command to raise a segfault if it was 
           invoked to remove a variable from the environment. It wasn't that 
           frequent because usualy, variable removal didn't worked, due to 
           another bug. This is now fixed.
 
-        - Added the _START_ command on Windows, That works pretty well, even 
-          if some parameters seem to be ignored by windows, such as _/Wait_. 
-          The command have few option compared to cmd's version, but, it's a 
-          good start point anyway.
+        - Added the START command on Windows, That works pretty well, even if 
+          some parameters seem to be ignored by windows, such as /Wait. The 
+          command have few option compared to cmd's version, but, it's a good 
+          start point anyway.
 
         - Changed the version number to 214.1b, that mean, it's the beta of 
           the first stable version which is expected to be released within a 
@@ -1298,11 +1287,11 @@ TUESDAY 13TH, JANUARY 2015
 
 TUESDAY 21RD, APRIL
 
-        - Fixed a minor issue in the error system for the _IF_ command, the 
+        - Fixed a minor issue in the error system for the IF command, the 
           command used to exit the interpretor uppon minor error.
 
         - Added number of new command to deal with files. Among this command, 
-          we have _MOVE_, _COPY_, _DEL_, _MD_, _RD_ and some others.
+          we have MOVE, COPY, DEL, MD, RD and some others.
 
         - Changed the ESTR syntax. I think it is actually easier to access the 
           string by using a -> rather than an obscure macro. Moreover, it 
@@ -1315,38 +1304,37 @@ TUESDAY 21RD, APRIL
           clear this out, man page content as been revised to be more 
           relevant.
 
-        - Added a brand new Dos9 extension to the _IF_ command. I found pretty 
+        - Added a brand new Dos9 extension to the IF command. I found pretty 
           anoying that cmd (and thus Dos9) lacked support for multiple 
           conditions for a single if (e.g. logical expressions). Obviously 
-          this could have been done previously by using the _SET_ command to 
+          this could have been done previously by using the SET command to 
           evaluate an expression but this was time- and code-wasting. The 
-          interpretor currently supports only _or_ and _and_ logical 
-          connectors. These are widely sufficient for most cases, except some 
-          rare cases that requires you to have _xor_ either. This is not a big 
-          concern, it is just about writing a few more code.
+          interpretor currently supports only or and and logical connectors. 
+          These are widely sufficient for most cases, except some rare cases 
+          that requires you to have xor either. This is not a big concern, it 
+          is just about writing a few more code.
 
           The syntax is pretty simple, but must include blanks around 
           brackets:
 
-             - _expression_ or _expression_ : True if one of the two 
-               expressions (at least) is true.
+             - expression or expression : True if one of the two expressions 
+               (at least) is true.
 
-             - _expression_ and _expression_ : True if both expressions are 
-               true.
+             - expression and expression : True if both expressions are true.
 
              - [ expression ] : Denotes a higher precedence.
 
           As you can see, the syntax is clear but efficient. You can use test 
-          that are provided by the _IF_ command : 
+          that are provided by the IF command : 
 
-             - _not_
+             - not
 
-             - _defined_, _errorlevel_, _exist_
+             - defined, errorlevel, exist
 
-             - _equ_, _neq_, _leq_, _geq_, _lss_, _gtr_ and derivatives
+             - equ, neq, leq, geq, lss, gtr and derivatives
 
-          Note that the _IF_ command only interpret expressions as such if 
-          they are surrounded by brackets, like in this example :
+          Note that the IF command only interpret expressions as such if they 
+          are surrounded by brackets, like in this example :
 
              if [ a equ b ] echo no, seriously ?
 
@@ -1357,51 +1345,61 @@ SUNDAY 10TH, MAY
 FRIDAY 24TH, APRIL
 
         - Fixed a few remaining bugs in the implementation of if extended 
-          expression. As a example, in some case, an _or_ used to be computed 
-          as an _and_. These issues are now fixed and the command great.
+          expression. As a example, in some case, an or used to be computed as 
+          an and. These issues are now fixed and the command great.
 
-        - Merged tests of the _If_ command. In fact, some test were duplicated 
+        - Merged tests of the If command. In fact, some test were duplicated 
           in different sources, but for maintenability reason, it try to give 
           up with the copy and past approach.
 
-        - Corrected an issue of the _TEA_ text processor. When poducing html 
-          output, _TEA_ often failed to recognize path that refer to actual 
-          other _TEA_ based pages and others files. One of the typical issue 
-          was that TEA sometimes appended ".html" to URIs (that already 
-          contained an ".html" anyway). Now, _TEA_ also check for protocol 
-          prefixes in order to chose wether a ".html" suffix should be 
-          appended. Recognised protocols are :
+        - Corrected an issue of the TEA text processor. When poducing html 
+          output, TEA often failed to recognize path that refer to actual 
+          other TEA based pages and others files. One of the typical issue was 
+          that TEA sometimes appended ".html" to URIs (that already contained 
+          an ".html" anyway). Now, TEA also check for protocol prefixes in 
+          order to chose wether a ".html" suffix should be appended. 
+          Recognised protocols are :
 
-             - _http://_
+             - http://
 
-             - _https://_
+             - https://
 
-             - _mail://_
+             - mail://
 
 THURSDAY 7TH, MAY
 
         - Fixed lots of man pages for the Dos9 project. Also fixed some little 
-          bugs in the TEA text processor, dealing with some sort of _\_ that 
+          bugs in the TEA text processor, dealing with some sort of \ that 
           where mishandled in previous patches.
 
         - Changed regexp implementation after discovery of some bugs (eg 
           "test" was not matching "*e*s*"). The new implementation is less 
           faulty and clearer to use.
 
-        - Added a new _/e_ switch to the _FIND_ command (to produce somewhat 
-          similar to UNIX's well known _grep -e_ command). It enables use of 
-          joker expressions on patterns. With this option _FIND_ checks that 
-          the entire line matches the expression.
+        - Added a new /e switch to the FIND command (to produce somewhat 
+          similar to UNIX's well known grep -e command). It enables use of 
+          joker expressions on patterns. With this option FIND checks that the 
+          entire line matches the expression.
 
-THUSDAY 2ND, JUNE
+THURSDAY 2ND, JUNE
 
         - Corrected some issues compatibility issue with the newest MinGW 
-          version that now defines __POSIX_C_SOURCE_.
+          version that now defines _POSIX_C_SOURCE.
 
         - Fixed a bug with the start command. Apparently, the ShellExecuteEx 
           function do cares wether or not the filenames passed to it contains 
           forward slashes instead of backslashes.
 
-        - Added some little info message to the _SET_ command in order to 
-          print the result of the expression when using _/A_ slash.
+        - Added some little info message to the SET command in order to print 
+          the result of the expression when using /A slash.
+
+THURSDAY 10TH, JUNE
+
+        - Added a wrapper to the MORE command to make it display utf-8 text 
+          the way it is intended to. Indeed windows does not implement 
+          implement the fputc() function as specified by the standard and 
+          considers that it receive character instead of bytes.
+
+        - Fixed a bug of the MORE command that caused miscomputation of utf-8 
+          characters number. 
 
