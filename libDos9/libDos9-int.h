@@ -1,7 +1,7 @@
 /*
  *
  *   libDos9 - The Dos9 project
- *   Copyright (C) 2010-2014 DarkBatcher
+ *   Copyright (C) 2010-2016 Romain GARBI
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -49,6 +49,7 @@
 #include <sys/stat.h>
 
 #ifdef WIN32
+#undef _WIN32_WINNT
 #define _WIN32_WINNT 0x0502
 #include <windows.h>
 #include <process.h>
@@ -959,8 +960,8 @@ LIBDOS9 int Dos9_GetExePath(char* lpBuf, size_t iBufSize);
 // LIBDOS9 int      Dos9_BeginThread(THREAD* lpThId, void(*pFunc)(void*), int iMemAmount, void* arg);
 LIBDOS9 void     Dos9_EndThread(void* iReturn);
 LIBDOS9 void     Dos9_AbortThread(THREAD * lpThId);
-LIBDOS9 int      Dos9_WaitForThread(THREAD* thId, void* lpRet);
-LIBDOS9 int      Dos9_WaitForAllThreads(int iDelay);
+LIBDOS9 int      Dos9_WaitForThread(THREAD* thId, void** ret);
+LIBDOS9 int      Dos9_WaitForAllThreads(void);
 LIBDOS9 void     Dos9_AbortAllThreads(void);
 
 LIBDOS9 int      Dos9_CreateMutex(MUTEX* lpMuId);

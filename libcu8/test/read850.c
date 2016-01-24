@@ -1,7 +1,7 @@
 /*
 
  libcu8 - A wrapper to fix msvcrt utf8 incompatibilities issues
- Copyright (c) 2014, 2015 Romain GARBI (Darkbatcher)
+ Copyright (c) 2014, 2015, 2016 Romain GARBI (Darkbatcher)
 
  All rights reserved.
  Redistribution and use in source and binary forms, with or without
@@ -42,8 +42,8 @@
 int main(void)
 {
     char check_u8[] = "Proin fam\xC3\xA8s vulputate conubi\xC3\xA9 n\xC3\xBBllam justo mauris "
-    "condiment\xC3\xBBm s\xC3\xA8n\xC3\xA8ktus du aenean elit.",
-         buf[sizeof(check_u8)];
+    "condiment\xC3\xBBm s\xC3\xA8n\xC3\xA8ktus du aenean elit",
+         buf[sizeof(check_u8)-1];
 
     int fd, rd, i;
 

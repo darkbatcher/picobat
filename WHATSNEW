@@ -1387,7 +1387,7 @@ THURSDAY 2ND, JUNE
           version that now defines _POSIX_C_SOURCE.
 
         - Fixed a bug with the start command. Apparently, the ShellExecuteEx 
-          function do cares wether or not the filenames passed to it contains 
+          function does care wether or not the filenames passed to it contains 
           forward slashes instead of backslashes.
 
         - Added some little info message to the SET command in order to print 
@@ -1401,5 +1401,15 @@ THURSDAY 10TH, JUNE
           considers that it receive character instead of bytes.
 
         - Fixed a bug of the MORE command that caused miscomputation of utf-8 
-          characters number. 
+          characters number.
+
+WEDNESDAY 13TH, JUNUARY, 2016
+
+        - Added support of libcu8, a library designed to handle utf-8 
+          efficiently with msvcrt in windows. This is part of a large ongoing 
+          effort that attempts to make Dos9 more internationalizable. To do 
+          so, We had to kind short-circuit msvcrt with brand this brand new 
+          library. Although still experimental, this works quite great.
+
+        - Added new CHCP command to handle efficiently the new libcu8 library.
 

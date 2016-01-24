@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2015 DarkBatcher
+ *   Copyright (C) 2010-2016 Romain GARBI
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -68,6 +68,29 @@
         FOR /F "options" %%A IN (`string`) DO command
 
  */
+
+#if defined(WIN32) && defined(DOS9_USE_LIBCU8)
+#include <libcu8.h>
+#elif defined(WIN32)
+int libcu8_fd_set_inheritance(int fd, int mode)
+{
+    HANDLE handle = osfhnd(fd);
+
+    SetHandleInformation(handle, HANDLE_FLAG_INHERIT, mode);
+
+    osfile(fd) &= ~ NOINHERIT;
+
+    return 0;
+}
+#else
+#include <fcntl.h>
+int libcu8_fd_set_inheritance(int fd, int mode)
+{
+    fcntl(fd, F_SETFD, (mode == 0) ?
+          (fcntl(fd, F_GETFD) & ~FD_CLOEXEC) :
+                (fcntl(fd, F_GETFD) | FD_CLOEXEC));
+}
+#endif /* libcu8 */
 
 int Dos9_CmdFor(char* lpLine)
 {
@@ -1067,7 +1090,7 @@ int Dos9_ForMakeInputInfo(ESTR* lpInput, INPUTINFO* lpipInfo, FORINFO* lpfrInfo)
 
 			}
 
-			printf("... Opened\n");
+			//printf("... Opened\n");
 
 			break;
 
@@ -1122,6 +1145,8 @@ int Dos9_ForMakeInputInfo(ESTR* lpInput, INPUTINFO* lpipInfo, FORINFO* lpfrInfo)
 				return -1;
 			}
 
+			/* Launch the actual command from which we get input on a separate
+               Dos9 process */
 			if (Dos9_ForInputProcess(lpInput, lpipInfo, iPipeFdIn, iPipeFdOut)==-1) {
 
 				return -1;
@@ -1210,6 +1235,9 @@ int Dos9_ForInputProcess_win(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn,
 
 	lpArgs[i]=NULL;
 
+	libcu8_fd_set_inheritance(iPipeFdIn[1], 0);
+	libcu8_fd_set_inheritance(iPipeFdOut[0], 0);
+
 	spawnv(_P_NOWAIT, lpArgs[0], (char * const*)lpArgs);
 
 	if (errno == ENOENT) {
@@ -1222,19 +1250,10 @@ int Dos9_ForInputProcess_win(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn,
 
 	}
 
-	if (!(pFile=fdopen(iPipeFdIn[1], "w"))) {
+    _write(iPipeFdIn[1], lpInput->str, strlen(lpInput->str));
+    _write(iPipeFdIn[1], "&exit\n", sizeof("&exit\n")-1);
 
-		close(iPipeFdIn[1]);
-		goto error;
-
-	}
-
-	fputs(Dos9_EsToChar(lpInput), pFile);
-	fputs(" & exit\n", pFile);
-	fflush(pFile);
-	/* write the command given on the for command */
-
-	fclose(pFile);
+    _close (iPipeFdIn[1]);
 
 	if (!(pFile=fdopen(iPipeFdOut[0], "r"))) {
 
@@ -1242,7 +1261,7 @@ int Dos9_ForInputProcess_win(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn,
 
 	}
 
-	close(iPipeFdIn[1]);
+    close(iPipeFdIn[0]);
 	close(iPipeFdOut[1]);
 
 	lpipInfo->Info.InputFile.pFile=pFile;
@@ -1455,7 +1474,7 @@ int Dos9_ForInputParseFileList(FILE_LIST_T* lpList, ESTR* lpInput)
 
         lpList->lpesFiles[i++]=lpesStr;
 
-        printf("File to read : \"%s\"\n", Dos9_EsToChar(lpesStr));
+        //printf("File to read : \"%s\"\n", Dos9_EsToChar(lpesStr));
 
         lpesStr=Dos9_EsInit();
 

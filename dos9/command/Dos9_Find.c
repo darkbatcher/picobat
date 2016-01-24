@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2014 DarkBatcher
+ *   Copyright (C) 2010-2014 Romain Garbi
  *   Copyright (c) 1990, 1993
  *	 The Regents of the University of California.  All rights reserved.
  *

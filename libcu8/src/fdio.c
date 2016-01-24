@@ -1,7 +1,7 @@
 /*
 
  libcu8 - A wrapper to fix msvcrt utf8 incompatibilities issues
- Copyright (c) 2014, 2015 Romain GARBI
+ Copyright (c) 2014, 2015, 2016 Romain GARBI
 
  All rights reserved.
  Redistribution and use in source and binary forms, with or without
@@ -119,4 +119,15 @@ __LIBCU8__IMP __cdecl int libcu8_lseek(int fd, long offset, int origin)
     libcu8_fd_buffers[fd].len = 0;
 
     return ret;
+}
+
+__LIBCU8__IMP __cdecl int libcu8_fd_set_inheritance(int fd, int mode)
+{
+    HANDLE handle = osfhnd(fd);
+
+    SetHandleInformation(handle, HANDLE_FLAG_INHERIT, mode);
+
+    osfile(fd) &= ~ NOINHERIT;
+
+    return 0;
 }

@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2015 DarkBatcher
+ *   Copyright (C) 2010-2015 Romain GARBI
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -79,7 +79,11 @@ void Dos9_LoadStrings(void)
 	snprintf(lpSharePath, FILENAME_MAX, "%s/share/locale", lpPath);
 
 	bindtextdomain("Dos9-msg", lpSharePath);
+#if !(defined(WIN32) && defined(DOS9_USE_LIBCU8)
+    /* This is not useful at all, libcu8 is able to convert utf-8 by
+       itself */
 	bind_textdomain_codeset("Dos9-msg", lpEncoding);
+#endif
 	textdomain("Dos9-msg");
 
 	/* texte des commandes ECHO et PAUSE */

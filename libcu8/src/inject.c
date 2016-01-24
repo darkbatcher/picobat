@@ -1,7 +1,7 @@
 /*
 
  libcu8 - A wrapper to fix msvcrt utf8 incompatibilities issues
- Copyright (c) 2014, 2015 Romain GARBI
+ Copyright (c) 2014, 2015, 2016 Romain GARBI
 
  All rights reserved.
  Redistribution and use in source and binary forms, with or without
@@ -39,50 +39,127 @@
 #include "internals.h"
 #include "libcu8.h"
 
-#if defined(__x86_64__)
-#define CODE x86_64_code
-#define PTR_OFFSET 2
-#elif defined(__i386__)
-#define CODE i386_code
-#define PTR_OFFSET 1
-#endif // __x86_64__
+static HANDLE self = INVALID_HANDLE_VALUE;
+
+/* A pointer array that hold absolute address of libcu8 functions
+   near the actual location of msvcrt functions, so that relative
+   addressing can be use  */
+static void** fn_tbl = NULL;
+
+/* Reserve memory for the array of pointers */
+int libcu8_reserve_fn_table(int nb, void* base_fn)
+{
+    /* compute a base address for fn_tbl, close enough to be in
+       2GB range arround the original function position  */
+    void *base = (void*)((INT64)_read & 0xffffffffff000000);
+    int size;
+    SYSTEM_INFO sysinfo;
+
+    /* get basic informations about the OS */
+    GetSystemInfo(&sysinfo);
+
+    size = ((nb * sizeof(void*) + sysinfo.dwPageSize) / sysinfo.dwPageSize)
+                * sysinfo.dwPageSize;
+
+    if (!(fn_tbl = VirtualAlloc(base, size, MEM_RESERVE | MEM_COMMIT,
+                                                       PAGE_EXECUTE_READWRITE))) {
+
+        return -1;
+
+    }
+
+    //printf("fn_tbl = %p\n", fn_tbl);
+
+    return 0;
+}
+
+void** libcu8_get_fn_pointer(void* fn)
+{
+    void** ret;
+    if (!fn_tbl)
+        return NULL;
+
+    *fn_tbl = fn;
+    //printf("Pointer at %p : %p", fn_tbl , fn);
+    ret = fn_tbl ++;
+
+    return ret;
+}
+
 
 /* Replace oldfn and newfn for the entire process at runtime.
    Note: We have to be careful and check that oldfn isn't used when
    replacing it */
-int __cdecl libcu8_replace_fn(void* oldfn, void* newfn)
+int __cdecl libcu8_replace_fn(void* oldfn, void* newfn, int n)
 {
     /* These inject code for x86_64 or i386 are derived from asm code of the
        kind of :
 
-            mov %eax, newfn
-            jmp %eax
+            jmp [rel32]
+
+       Where rel32 obviously refer to the relative location of a function
+       pointer stored in tbl_fn.
+
+       Note there is another constraint, the sequence will be inserted within
+       msvcrt function, so it needs to be really short, otherwise it won't
+       fit and subsquent replacement may overwrite parts of it.
 
        These codes have the advantage to be simple and not to affect most of the
        calling conventions on windows, such as __cdecl, __stdcall, __fastcall
        or so. */
-    unsigned char x86_64_code[]={0x48, 0xb8, 0x00, 0x00, 0x00, 0x00,
-                                    0x00, 0x00, 0x00, 0x00, 0xff, 0xe0},
-                  i386_code[] = {0xb8, 0x00, 0x00, 0x00, 0x00, 0xff, 0xe0};
+    unsigned char code[]={0xff, 0x25, 0x00, 0x00, 0x00, 0x00};
     size_t written;
     int ret;
-    HANDLE self;
+    void** tbl_fn;
+    int rel;
 
-    if ((self = GetCurrentProcess()) == NULL)
+    if ((self == INVALID_HANDLE_VALUE
+        && (self = GetCurrentProcess()) == NULL)
+        || (fn_tbl == NULL &&
+            libcu8_reserve_fn_table(n, oldfn) == -1 ))
         return 1;
 
+
+    if ((tbl_fn = libcu8_get_fn_pointer(newfn)) == NULL)
+        return 1;
+
+#if defined(__x86_64__)
+    rel = (void*)tbl_fn - oldfn; /* compute relative adress */
+    rel -= sizeof(code);
+#else
+    rel = tbl_fn; /* compute absolute address */
+#endif
+
+    //printf("newfn = %p, diff = %p - %p :  %X\n", newfn, tbl_fn, oldfn, rel);
+    //printf("_read = %p", _read);
+    //printf(" *tbl_fn  = %p\n",  *tbl_fn);
+
     /* copy the actual function pointer in the inject code */
-    memcpy ( CODE + PTR_OFFSET, &newfn, sizeof(newfn));
+    memcpy ( code + 2, &rel, sizeof(code)-2);
+
+    //int i;
+    //printf("{");
+    //for (i=0; i < sizeof(code); i++)
+    //    printf("0x%X, ", code[i]);
+    //printf("}\n");
 
     /* put the inject code at the address of the function to
        replace */
-    ret = WriteProcessMemory(self, oldfn, CODE,
-                                    sizeof(CODE), &written);
+    ret = WriteProcessMemory(self, oldfn, code,
+                                    sizeof(code), &written);
 
-    if (!ret || written != sizeof(CODE))
+    //printf("Return %d\n", ret);
+
+    if (!ret || written != sizeof(code))
         return 2;
 
-    CloseHandle(self);
+    //CloseHandle(self);
 
     return 0;
+}
+
+void __cdecl libcu8_save_changes(void)
+{
+    if (self != INVALID_HANDLE_VALUE)
+        CloseHandle(self);
 }

@@ -1,3 +1,22 @@
+/*
+ *
+ *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
+ *   Copyright (C) 2010-2014 Romain GARBI
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -29,7 +48,11 @@ void Dos9_LoadInternalHelp(void)
 	snprintf(lpSharePath, FILENAME_MAX, "%s/share/locale", lpPath);
 
 	bindtextdomain("Dos9-hlp", lpSharePath);
+#if !(defined(WIN32) && defined(DOS9_USE_LIBCU8)
+    /* This is not useful at all, libcu8 is able to convert utf-8 by
+       itself */
 	bind_textdomain_codeset("Dos9-hlp", lpEncoding);
+#endif
 	textdomain("Dos9-hlp");
 
 	lpInternalHelp[DOS9_HELP_ALIAS]

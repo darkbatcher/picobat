@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2015 DarkBatcher
+ *   Copyright (C) 2010-2016 Romain GARBI
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
 #include <sys/types.h>
 #include <string.h>
 #include <errno.h>
@@ -211,7 +210,7 @@ loop:
 		lpArgs[++i] = NULL;
 
 		/* Launches a sub Dos9 command prompt */
-		spawnv(_P_NOWAIT, lpArgs[0], (char * const*)lpArgs);
+		_spawnv(_P_NOWAIT, lpArgs[0], (char * const*)lpArgs);
 
 		if (errno == ENOENT) {
 

@@ -1,7 +1,7 @@
 /*
 
  libcu8 - A wrapper to fix msvcrt utf8 incompatibilities issues
- Copyright (c) 2014, 2015 Romain GARBI
+ Copyright (c) 2014, 2015, 2016 Romain GARBI
 
  All rights reserved.
  Redistribution and use in source and binary forms, with or without
@@ -55,6 +55,10 @@ __LIBCU8__IMP __cdecl int libcu8_read(int fd, void* buf, unsigned int cnt)
 
     }
 
+    //printf("read() !\n");
+
+    //*((char*)NULL) = NULL;
+
     /* lock fd and call nolock version */
     EnterCriticalSection(&(info->lock));
 
@@ -90,16 +94,8 @@ __LIBCU8__IMP __cdecl int libcu8_read_nolock(int fd, void* b, unsigned int cnt_a
 
     DWORD nbread=0, wrt;
 
-
-
-    //printf("Called my_read_nolock(%d, %p, %d)\n", fd, buf, cnt);
-
     mode = osfile(fd);
     file = osfhnd(fd);
-
-    //fprintf(stderr, "[%d] mode = %X\ttty = %d\tpipe = %d\ttext = %d\n",
-    //            fd, mode, IS_TTY(mode), IS_PIPE(mode), IS_TEXTMODE(mode));
-
 
     if (buf == NULL || cnt == 0 || IS_ATEOF(mode) ) {
 
@@ -135,8 +131,9 @@ __LIBCU8__IMP __cdecl int libcu8_read_nolock(int fd, void* b, unsigned int cnt_a
 
         /* For other files (such as regular files, pipes or device) opened in text
            mode, just convert from ascii to utf8 characters. */
+        //fprintf(stderr, "Calling readfile(%d, %p, %p , &written)\n", fd, buf, cnt);
         ret = libcu8_readfile(fd, buf, cnt, &written);
-        //fprintf(stderr, "%d = ReadFile(%p, %p, %d, %d, NULL);\n", ret, file, buf, cnt, written);
+        //fprintf(stderr, "%d = readfile(%d, %p, %p , %d)\n", ret, fd, buf, cnt, written);
 
     }
 
@@ -150,11 +147,6 @@ __LIBCU8__IMP __cdecl int libcu8_read_nolock(int fd, void* b, unsigned int cnt_a
 
     nbread += written;
 
-    //fprintf(stderr, "Read %d bytes : {", nbread);
-    //for (p=orig; p < orig + nbread; p ++)
-    //  fprintf(stderr, "%X, ", (unsigned char)*p);
-    //fprintf(stderr, "}\n");
-
     return nbread;
 }
 
@@ -166,16 +158,24 @@ int libcu8_readfile(int fd, char* buf, size_t size, size_t* written)
          ansi[FILENAME_MAX],
          *pin,
          *pout,
-         last = 0;
+         last = pipech(fd);
     int  ret = 0;
     size_t su8=sizeof(utf8), sansi = 0 ;
+
+    //fprintf(stderr, "Starting (Size = %d)\n", size);
+
+    pipech(fd) = 0; /* Clear remaining \r if set */
 
     iconv_t context = libcu8_mode2context(LIBCU8_FROM_ANSI);
 
     if (context == (iconv_t) -1)
         return -1;
 
+    //fprintf(stderr, "[libcu8_readfile] {\n");
+
     while (size) {
+
+        //fprintf(stderr, "Getting byte (Size = %d)\n", size);
 
         ret = libcu8_get_file_byte(handle, ansi, &sansi);
 
@@ -191,22 +191,34 @@ int libcu8_readfile(int fd, char* buf, size_t size, size_t* written)
 
         }
 
+        //fprintf(stderr, "Trying to convert\n");
+
         ret = libcu8_try_convert(context, ansi, &sansi, utf8, &su8);
 
         switch (ret) {
 
             case 0:
-                if (*utf8 == '\n' && last == '\r')
-                    continue;
+                if (last == '\r' && *utf8 != '\n') {
+                    //fprintf(stderr, "Got \\r without following  \\n\n");
+                    //fprintf(stderr, "Writing %d {0x%x, 0x%x, 0x%x, 0x%x}\n", su8, utf8[0], utf8[1], utf8[2], utf8[3]);
+                    libcu8_write_buffered(fd, &buf, &size, &last, 1);
+
+                    if (*utf8 == '\r' && size == 0) {
+                        pipech(fd) = '\r';
+                        continue;
+                    }
+                }
 
                 if (*utf8 == '\r') {
                     last = '\r';
-                    *utf8 = '\n';
+                    //fprintf(stderr, "Got \\r\n");
+                    continue;
                 } else {
                     last = 0;
                 }
 
                 /* We were able to get an utf8 character, write it*/
+                //fprintf(stderr, "Writing %d {0x%x, 0x%x, 0x%x, 0x%x}\n", su8, utf8[0], utf8[1], utf8[2], utf8[3]);
                 libcu8_write_buffered(fd, &buf, &size, utf8, su8);
                 su8 = sizeof(utf8);
                 break;
@@ -216,12 +228,18 @@ int libcu8_readfile(int fd, char* buf, size_t size, size_t* written)
 
         }
 
+        //fprintf(stderr, "%d, ", size);
+
     }
+
 next:
+
+    //fprintf(stderr,"End\n");
 
     iconv_close(context);
 
     *written = orig - size;
+
     return 1;
 
 err:
@@ -232,18 +250,25 @@ err:
 
 int libcu8_get_file_byte(void* handle, char* buf, size_t* sansi)
 {
-    DWORD wrt;
+    DWORD wrt = 0;
     int ret;
 
     if (*sansi >= FILENAME_MAX)
         return -1; /* we ran out of space in the buffer, report error */
 
+    //fprintf(stderr, "Calling ReadFile(%d, %p, %d, %p, NULL)\n", handle, buf + *sansi, 1, &wrt);
+
     ret = ReadFile(handle, buf + *sansi, 1, &wrt, NULL);
 
-    if (!ret)
+    //fprintf(stderr, "Read %d bytes ret = %d\n", wrt, ret);
+
+    if ((!ret) && GetLastError() != ERROR_BROKEN_PIPE)
         return -1; /* report error */
 
-    if (wrt != 1)
+    //if (GetLastError() == ERROR_BROKEN_PIPE)
+    //    fprintf(stderr, "ERROR_BROKEN_PIPE\n");
+
+    if (wrt == 0)
         return 0; /* we do not read anything */
 
     *sansi += 1;

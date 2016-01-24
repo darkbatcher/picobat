@@ -1,7 +1,7 @@
 /*
 
  libcu8 - A wrapper to fix msvcrt utf8 incompatibilities issues
- Copyright (c) 2014, 2015 Romain GARBI
+ Copyright (c) 2014, 2015, 2016 Romain GARBI
 
  All rights reserved.
  Redistribution and use in source and binary forms, with or without
@@ -44,6 +44,9 @@
 extern "C" {
 #endif /* __cplusplus */
 
+#include <sys/stat.h>
+#include <io.h>
+
 /* initialization function */
 __LIBCU8__IMP __cdecl int libcu8_init(const char*** pargv);
 
@@ -58,10 +61,11 @@ __LIBCU8__IMP __cdecl int libcu8_set_fencoding(const char* enc);
 #define LIBCU8_FROM_ANSI    3
 
 /* Convert function */
-__LIBCU8__IMP __cdecl char* libcu8_convert(int mode, char* src, size_t size,
-                                            char* remainder, size_t* rcount,
-                                              size_t rlen, size_t* converted);
-__LIBCU8__IMP __cdecl char* libcu8_xconvert(int mode, char* src,
+__LIBCU8__IMP __cdecl char* libcu8_convert(int mode, const char* src,
+                                            size_t size, char* remainder,
+                                            size_t* rcount, size_t rlen,
+                                            size_t* converted);
+__LIBCU8__IMP __cdecl char* libcu8_xconvert(int mode, const char* src,
                                             size_t size, size_t* converted);
 
 /* CRT function replacement for low-level io */
@@ -84,17 +88,62 @@ __LIBCU8__IMP __cdecl int libcu8_dup2_nolock(int fd1, int fd2);
 __LIBCU8__IMP __cdecl int libcu8_remove(const char* file);
 __LIBCU8__IMP __cdecl int libcu8_rename(const char* oldn, const char* newn);
 __LIBCU8__IMP __cdecl int libcu8_unlink(const char* file);
-__LIBCU8__IMP __cdecl int libcu8_stat(const char* file, struct _stat* buf);
+
+#ifndef __x86_64__
 __LIBCU8__IMP __cdecl int libcu8_stat32(const char* file,
                                             struct _stat32* buf);
-__LIBCU8__IMP __cdecl int libcu8_stat64(const char* file,
-                                            struct _stat64* buf);
 __LIBCU8__IMP __cdecl int libcu8_stat32i64(const char* file,
                                             struct _stat32i64* buf);
-__LIBCU8__IMP __cdecl int libcu8_stat64i32(const char* file,
-                                            struct _stat64i32* buf);
-__LIBCU8__IMP __cdecl int libcu8_chmod(const char* file, int mode);
+#endif
 
+__LIBCU8__IMP __cdecl int libcu8_stat64(const char* file,
+                                            struct _stat64* buf);
+__LIBCU8__IMP __cdecl int libcu8_stat64i32(const char* file, struct _stat64i32* buf);
+__LIBCU8__IMP __cdecl int libcu8_chmod(const char* file, int mode);
+__LIBCU8__IMP __cdecl int libcu8_dup(int fd);
+__LIBCU8__IMP __cdecl int libcu8_dup_nolock(int fd);
+__LIBCU8__IMP __cdecl int libcu8_dup2(int fd1, int fd2);
+__LIBCU8__IMP __cdecl int libcu8_dup2_nolock(int fd1, int fd2);
+
+
+/* CRT functions replacement for spawn*/
+__LIBCU8__IMP __cdecl intptr_t libcu8_spawnl(int mode, const char* file, ...);
+__LIBCU8__IMP __cdecl intptr_t libcu8_spawnle(int mode, const char* file, ...);
+__LIBCU8__IMP __cdecl intptr_t libcu8_spawnlp(int mode, const char* file, ...);
+__LIBCU8__IMP __cdecl intptr_t libcu8_spawnlpe(int mode, const char* file, ...);
+__LIBCU8__IMP __cdecl intptr_t libcu8_spawnv(int mode, const char* file,
+                                                    const char* const *argv);
+__LIBCU8__IMP __cdecl intptr_t libcu8_spawnve(int mode, const char* file,
+                            const char* const *argv, const char *const *envp);
+__LIBCU8__IMP __cdecl intptr_t libcu8_spawnvp(int mode, const char* file,
+                                                const char* const *argv);
+__LIBCU8__IMP __cdecl intptr_t libcu8_spawnvpe(int mode, const char* file,
+                                                    const char* const *argv,
+                                                    const char *const *envp);
+
+#define _finddata64_t __finddata64_t
+/* CRT functions replacement for find* familly */
+__LIBCU8__IMP __cdecl intptr_t libcu8_findfirst64(const char* file,
+                                                    struct _finddata64_t* inf);
+__LIBCU8__IMP __cdecl intptr_t libcu8_findfirst64i32(const char* file,
+                                                struct _finddata64i32_t* inf);
+__LIBCU8__IMP __cdecl int libcu8_findnext64(intptr_t handle,
+                                                struct _finddata64_t* info);
+__LIBCU8__IMP __cdecl int libcu8_findnext64i32(intptr_t handle,
+                                                struct _finddata64i32_t* info);
+
+#ifndef __x86_64__
+__LIBCU8__IMP __cdecl intptr_t libcu8_findfirst32(const char* file,
+                                                    struct _finddata32_t* inf);
+__LIBCU8__IMP __cdecl intptr_t libcu8_findfirst32i64(const char* file,
+                                                struct _finddata32i64_t* inf);
+__LIBCU8__IMP __cdecl int libcu8_findnext32(intptr_t handle,
+                                                struct _finddata32_t* info);
+__LIBCU8__IMP __cdecl int libcu8_findnext32i64(intptr_t handle,
+                                                struct _finddata32i64_t* info);
+#endif // __x86_64__
+
+__LIBCU8__IMP __cdecl int libcu8_fd_set_inheritance(int fd, int mode);
 
 /* enable c++ compatibility */
 #ifdef __cplusplus

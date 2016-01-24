@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2014 DarkBatcher
+ *   Copyright (C) 2010-2016 Romain GARBI
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -53,8 +52,13 @@ int Dos9_GetLine(ESTR* lpesLine, INPUT_FILE* pIn)
 
 	} else {
 
-		fseek(pFile, pIn->iPos, SEEK_SET);
-
+    /* Libcu8 kind of perturbates the C lib because libcu8 does not
+       perform byte to byte conversion, misleading file telling
+       positions ... Thus discard C buffering from libcu8*/
+#if defined(WIN32) && defined(DOS9_USE_LIBCU8)
+        setvbuf(pFile, NULL, _IONBF, 0);
+#endif
+        fseek(pFile, pIn->iPos, SEEK_SET);
 	}
 
 	*(Dos9_EsToChar(lpesLine))='\0';
@@ -93,8 +97,6 @@ int Dos9_GetLine(ESTR* lpesLine, INPUT_FILE* pIn)
 		fclose(pFile);
 
 	}
-
-
 
 	if (!*Dos9_EsToChar(lpesLine)) {
 
@@ -152,7 +154,7 @@ int Dos9_CheckBlocks(ESTR* lpesLine)
 
 		return FALSE;
 
-	}
+    }
 
 	if (strchr(lpCh, '\n')
 	    && !Dos9_SearchChar(lpCh, '\n'))

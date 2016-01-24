@@ -1,7 +1,7 @@
 /*
  *
  *   libDos9 - The Dos9 project
- *   Copyright (C) 2010-2014 DarkBatcher
+ *   Copyright (C) 2010-2016 Romain GARBI
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 
 #include <ctype.h>
 #include "../libDos9-int.h"
@@ -289,7 +290,7 @@ LIBDOS9 int         Dos9_GetMatchFileCallback(char* lpPathMatch, int iFlag, void
 	     lpMatchPart[FILENAME_MAX];
 
 	int iFileDescriptors[2];
-	size_t iReturn;
+	void* ret;
 
 	THREAD hThread;
 
@@ -384,12 +385,12 @@ Dos9_GetMatchFileList_End:
 	if (write(iFileDescriptors[1], "\1", 1)==-1)
 		return 0;
 
-	Dos9_WaitForThread(&hThread, &iReturn);
+	Dos9_WaitForThread(&hThread, &ret);
 
 	close(iFileDescriptors[0]);
 	close(iFileDescriptors[1]);
 
-	return iReturn;
+	return (int)ret;
 
 }
 
@@ -400,7 +401,7 @@ LIBDOS9 LPFILELIST  Dos9_GetMatchFileList(char* lpPathMatch, int iFlag)
 	     lpMatchPart[FILENAME_MAX];
 	int iFileDescriptors[2];
 	THREAD hThread;
-	LPFILELIST lpReturn;
+	LPFILELIST lpReturn = NULL;
 
 	FILEPARAMETER fpParam= {TRUE, /* include informations on the
                                     FILEPARAMETER Structures returned */
@@ -708,13 +709,11 @@ int _Dos9_SplitMatchPath(const char* lpPathMatch, char* lpStaticPart, size_t iSt
 
 			/* the token is just '/' which means
 			   volume root */
-			printf("Incrementing Size");
 			iSize++;
 
 		} else if ((iSize==3) && (*(lpPathMatch+1)==':'))  {
 
 			/* the token is a windows drive letter */
-			printf("Incrementing Size");
 			iSize++;
 
 		}
@@ -884,7 +883,6 @@ LPFILELIST _Dos9_WaitForFileList(LPFILEPARAMETER lpParam)
 				break;
 
 			if ((lpflCurrent=malloc(sizeof(FILELIST)))) {
-
 				strcpy(lpflCurrent->lpFileName, lpFileName);
 				lpflCurrent->lpflNext=lpflLast;
 
@@ -960,10 +958,12 @@ int _Dos9_FreeFileList(LPFILELIST lpflFileList)
 {
 	LPFILELIST lpflNext;
 
-	for (; lpflFileList; lpflFileList=lpflNext) {
+	while (lpflFileList) {
 
 		lpflNext=lpflFileList->lpflNext;
 		free(lpflFileList);
+        lpflFileList = lpflNext;
+
 	}
 
 	return 0;

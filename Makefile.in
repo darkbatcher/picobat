@@ -55,7 +55,7 @@ target_triplet = @target@
 subdir = .
 DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(srcdir)/config.h.in \
-	$(top_srcdir)/configure $(top_srcdir)/po/Makefile.in COPYING \
+	$(top_srcdir)/configure $(top_srcdir)/po/Makefile.in \
 	config/compile config/config.guess config/config.rpath \
 	config/config.sub config/depcomp config/install-sh \
 	config/ltmain.sh config/mdate-sh config/missing \

@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2014 Romain Garbi (DarkBatcher)
+ *   Copyright (C) 2010-2016 Romain Garbi
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -96,17 +96,22 @@ int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
 			/* string is about to be truncated */
 			*lpToken='\0';
 			lpToken+=2;
+
 			if ((lpNextToken=strchr(lpToken, ','))) {
 				*lpNextToken='\0';
 				lpNextToken++;
 				iLen=atol(lpNextToken);
 			}
+
 			iBegin=atol(lpToken);
 			iVarState=2;
+
 		} else {
+
             *lpToken='\0';
             lpToken++;
             iVarState=3;
+
 		}
 
 	}
@@ -153,13 +158,30 @@ int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
 
 	if (iVarState==2) {
 
-		if (iBegin<0 || iBegin>= iTotalLen) {
+		if (iBegin < 0) {
+
+            if (iLen > 0) {
+
+                if ( (iTotalLen+iBegin) >= iLen)
+                    iBegin = iTotalLen + iBegin;
+
+            } else {
+
+                if ( iBegin <= iLen )
+                    iBegin = iTotalLen + iBegin;
+
+            }
+
+        }
+
+        if (iBegin < 0 || iBegin > iTotalLen) {
+
 
 			/* skip because these values are not valid
 			    indeed iBegin must not be negative and
 			    must not overflow the buffer */
 
-		} else if (iLen>=0) {
+		} else if (iLen > 0) {
 
 			if ((iBegin+iLen)<= iTotalLen) {
 				/* if the strings is right */
@@ -171,7 +193,7 @@ int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
 
 			}
 
-		} else if (iLen < 0) {
+		} else if (iLen <= 0) {
 
 			if (abs(iLen) <= iTotalLen-iBegin) {
 
@@ -200,7 +222,7 @@ int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
 
 	}
 
-	if (iVarState==2) {
+	if (iVarState==2 && lpZeroPos != NULL) {
 		*lpZeroPos=cCharSave;
 	}
 

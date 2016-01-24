@@ -1,7 +1,7 @@
 /*
 
  libcu8 - A wrapper to fix msvcrt utf8 incompatibilities issues
- Copyright (c) 2014, 2015 Romain GARBI
+ Copyright (c) 2014, 2015, 2016 Romain GARBI
 
  All rights reserved.
  Redistribution and use in source and binary forms, with or without
@@ -123,8 +123,11 @@ int libcu8_cat_chunk(char** buf, size_t* size, size_t* pos,
     char* tmp;
 
     /* alloc the new buffer */
-    if ((tmp = realloc(*buf, newsize)) == NULL)
+    if ((tmp = realloc(*buf, newsize)) == NULL) {
+
+        //fprintf(stderr, "Failed to reallocate buffer [%d]", newsize);
         return -1;
+    }
 
     /* copy char used in chunk in the new buff */
     memcpy(tmp + *pos, chunk, in_chunk);
@@ -139,10 +142,10 @@ int libcu8_cat_chunk(char** buf, size_t* size, size_t* pos,
 
 /* Convert a complete byte string to another encoding. The returned
    string must be freed using *free* */
-__LIBCU8__IMP __cdecl char* libcu8_xconvert(int mode, char* src,
+__LIBCU8__IMP __cdecl char* libcu8_xconvert(int mode, const char* src,
                                             size_t size, size_t* converted)
 {
-    iconv_t context = libcu8_mode2context(mode);
+    iconv_t context;
 
     char chunk_buf[CHUNK_SIZE],
          *chunk = chunk_buf,
@@ -151,7 +154,10 @@ __LIBCU8__IMP __cdecl char* libcu8_xconvert(int mode, char* src,
     size_t chunk_size = CHUNK_SIZE,
             retsize = 0,
             retpos = 0,
-            count;
+            count = 0;
+
+    //fprintf(stderr, "Getting context\n");
+    context = libcu8_mode2context(mode);
 
     if (context == (iconv_t) -1)
         return NULL;
@@ -159,9 +165,13 @@ __LIBCU8__IMP __cdecl char* libcu8_xconvert(int mode, char* src,
     /* reset iconv context */
     iconv(context, NULL, NULL, &chunk, &chunk_size);
 
+    //fwprintf(stderr, L"Converting \"%s\" (%d)\n", src, size);
+
     while (1) {
 
         count = iconv(context, &src, &size, &chunk, &chunk_size);
+
+        //fprintf(stderr, "Count : %d\tSize = %d\n", count, size);
 
         if (count == (size_t) -1) {
 
@@ -169,6 +179,7 @@ __LIBCU8__IMP __cdecl char* libcu8_xconvert(int mode, char* src,
 
                 case E2BIG:
                     /* chunck is full, copy it to ret */
+                    //fprintf(stderr, "[E2BIG]Catting chunck !\n");
                     if (libcu8_cat_chunk(&ret, &retsize, &retpos,
                                            chunk_buf, chunk_size)) {
 
@@ -183,10 +194,12 @@ __LIBCU8__IMP __cdecl char* libcu8_xconvert(int mode, char* src,
                     break;
 
                 case EILSEQ:
+                    //fprintf(stderr, "EILSEQ triggered\n");
                 case EINVAL:
                     /* We encountered invalid or incomplete byte sequence in
                        the input. As we have no way to get more input, give
                        up with conversion. */
+                    //fprintf(stderr, "Bad character found  [%d]\n", CHUNK_SIZE - chunk_size);
                     if (ret)
                         free(ret);
                     iconv_close(context);
@@ -202,6 +215,7 @@ __LIBCU8__IMP __cdecl char* libcu8_xconvert(int mode, char* src,
         }
     }
 
+    //fprintf(stderr, "[END]Catting chunck !\n");
     if (libcu8_cat_chunk(&ret, &retsize, &retpos, chunk_buf, chunk_size)) {
 
         iconv_close(context);
@@ -220,9 +234,10 @@ __LIBCU8__IMP __cdecl char* libcu8_xconvert(int mode, char* src,
 
 /* convert a possibly incomplete string to another encoding and return
    remaining bytes */
-__LIBCU8__IMP __cdecl char* libcu8_convert(int mode, char* src, size_t size,
-                                            char* remainder, size_t* rcount,
-                                              size_t rlen, size_t* converted)
+__LIBCU8__IMP __cdecl char* libcu8_convert(int mode, const char* src,
+                                            size_t size, char* remainder,
+                                            size_t* rcount, size_t rlen,
+                                            size_t* converted)
 {
     char chunk_buf[CHUNK_SIZE],
          *chunk = chunk_buf,

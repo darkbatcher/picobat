@@ -1,4 +1,4 @@
-dnl Copyright (c) 2014, 2015 Romain GARBI
+dnl Copyright (c) 2014, 2015, 2016 Romain GARBI
 dnl 
 dnl All rights reserved.
 dnl Redistribution and use in source and binary forms, with or without

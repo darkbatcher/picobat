@@ -1,7 +1,7 @@
 /*
 
  libcu8 - A wrapper to fix msvcrt utf8 incompatibilities issues
- Copyright (c) 2014, 2015 Romain GARBI (Darkbatcher)
+ Copyright (c) 2014, 2015, 2016 Romain GARBI (Darkbatcher)
 
  All rights reserved.
  Redistribution and use in source and binary forms, with or without
@@ -78,9 +78,10 @@ __LIBCU8__IMP __cdecl int libcu8_write_nolock(int fd, void* buf,
     int mode,
         ret;
     DWORD wrt;
-    size_t origin = cnt,
+    size_t cvt,
             size = cnt,
             written;
+    char* text;
 
     file = osfhnd(fd);
     mode = osfile(fd);
@@ -98,15 +99,30 @@ __LIBCU8__IMP __cdecl int libcu8_write_nolock(int fd, void* buf,
         ret = WriteFile(osfhnd(fd), buf, cnt, &wrt, NULL);
         written = wrt;
 
-    } else if (libcu8_is_tty(file)) {
-
-        /* this is a real tty, convert to unicode before writing anything */
-        ret = libcu8_write_console(fd, buf, cnt, &written);
-
     } else {
 
-        /* this is a regular file (aka. ansi, convert it back to ansi) */
-        ret = libcu8_write_file(fd, buf, cnt, &written);
+
+        if (libcu8_is_tty(file)) {
+
+            /* this is a real tty, convert to unicode before writing anything */
+            ret = libcu8_write_console(fd, buf, cnt, &written);
+
+        } else {
+
+            if (!(text = libcu8_lf_to_crlf(buf, cnt, &cvt)))
+                return -1;
+
+            /* this is a regular file (aka. ansi, convert it back to ansi) */
+            ret = libcu8_write_file(fd, text, cvt, &written);
+
+            /* In case of success, return count without counting added \r */
+            if (written)
+                written = cnt;
+
+            free(text);
+
+        }
+
 
     }
 
@@ -164,6 +180,7 @@ int libcu8_write_file(int fd, void* buf, size_t cnt, size_t* written)
     size_t size;
     DWORD wrt;
     HANDLE file = osfhnd(fd);
+
     struct fd_buffering_t* buffering = &(libcu8_fd_buffers[fd]);
 
     if ((str = libcu8_convert(LIBCU8_TO_ANSI, buf, cnt, buffering->remainder,
@@ -194,4 +211,40 @@ int libcu8_write_file(int fd, void* buf, size_t cnt, size_t* written)
     free(str);
 
     return 1;
+}
+
+char* libcu8_lf_to_crlf(const char* buf, size_t len, size_t* cvt)
+{
+    char  *tmp=buf,
+          *end = buf + len;
+    char *ret;
+
+    *cvt = len;
+
+    /* compute the number of \n to be converted back to '\n' */
+    while (tmp < end) {
+
+        if (*tmp == '\n')
+            (*cvt) ++;
+
+        tmp ++;
+
+    }
+
+    if (!(ret = malloc(*cvt)))
+        return NULL;
+
+    tmp = ret;
+
+    while (len) {
+
+        if (*buf == '\n')
+            *(tmp ++) = '\r';
+
+        *(tmp ++) = *(buf ++);
+        len --;
+
+    }
+
+    return ret;
 }

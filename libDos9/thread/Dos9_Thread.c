@@ -1,7 +1,7 @@
 /*
  *
  *   libDos9 - The Dos9 project
- *   Copyright (C) 2010-2014 DarkBatcher
+ *   Copyright (C) 2010-2016 Romain GARBI
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -360,6 +361,12 @@ LIBDOS9 int     Dos9_ReleaseMutex(MUTEX* lpMuId)
 
     /* use the windows interface */
 
+struct threadstack_info {
+    THREAD id; /* thread identifier */
+    void* ret; /* thread return value (have to deal with WIN32 threads only
+                  able to return dword, fucks up everything with pointers) */
+};
+
 void _Dos9_Thread_Close(void)
 {
     Dos9_LockMutex(&_threadStack_Mutex);
@@ -376,6 +383,7 @@ LIBDOS9 int  Dos9_BeginThread(THREAD* lpThId, void(*pFunc)(void*), int iMemAmoun
 {
 
     HANDLE hThread;
+    struct threadstack_info* pInfo;
 
     hThread=CreateThread(NULL,
                          0,
@@ -400,13 +408,17 @@ LIBDOS9 int  Dos9_BeginThread(THREAD* lpThId, void(*pFunc)(void*), int iMemAmoun
 
     #endif
 
-    if (hThread!=INVALID_HANDLE_VALUE) {
+    if (hThread!=INVALID_HANDLE_VALUE
+        && (pInfo = malloc(sizeof(struct threadstack_info)))) {
 
         Dos9_LockMutex(&_threadStack_Mutex);
 
+        pInfo->id = *lpThId;
+        pInfo->ret = NULL;
+
         _lpcsThreadStack=
             Dos9_PushStack(_lpcsThreadStack,
-                           (void*)*lpThId
+                           pInfo
                            );
 
 
@@ -426,8 +438,9 @@ LIBDOS9 void     Dos9_AbortThread(THREAD* lpThId)
 
     STACK *lpStackElement,
           *lpLastStackElement;
-    size_t iCurrent=*lpThId,
-		   iSearch;
+    size_t iCurrent=*lpThId;
+
+    struct threadstack_info* pInfo;
 
     HANDLE hThread;
 
@@ -438,21 +451,21 @@ LIBDOS9 void     Dos9_AbortThread(THREAD* lpThId)
 
     while (lpStackElement) {
 
-        Dos9_GetStack(lpStackElement, (void**)&iSearch);
+        Dos9_GetStack(lpStackElement, &pInfo);
 
-        if (iCurrent == iSearch) {
+        if (iCurrent == pInfo->id) {
 
             if (lpLastStackElement) {
 
                 lpLastStackElement->lpcsPrevious=
                     lpStackElement->lpcsPrevious;
 
-
+                free(pInfo);
                 free(lpStackElement);
 
             } else {
 
-                _lpcsThreadStack=Dos9_PopStack(_lpcsThreadStack, NULL);
+                _lpcsThreadStack=Dos9_PopStack(_lpcsThreadStack, free);
 
             }
 
@@ -483,8 +496,9 @@ LIBDOS9 void     Dos9_EndThread(void* iReturn)
 
     STACK *lpStackElement,
           *lpLastStackElement;
-    size_t   iCurrent,
-          	 iSearch;
+    size_t   iCurrent;
+
+    struct threadstack_info* pInfo;
 
     iCurrent=(size_t)GetCurrentThreadId();
 
@@ -495,23 +509,11 @@ LIBDOS9 void     Dos9_EndThread(void* iReturn)
 
     while (lpStackElement) {
 
-        Dos9_GetStack(lpStackElement, (void**)&iSearch);
+        Dos9_GetStack(lpStackElement, &pInfo);
 
-        if (iCurrent == iSearch) {
+        if (iCurrent == pInfo->id) {
 
-            if (lpLastStackElement) {
-
-                lpLastStackElement->lpcsPrevious=
-                    lpStackElement->lpcsPrevious;
-
-
-                free(lpStackElement);
-
-            } else {
-
-                _lpcsThreadStack=Dos9_PopStack(_lpcsThreadStack, NULL);
-
-            }
+            pInfo->ret = iReturn;
 
             break;
 
@@ -529,11 +531,14 @@ LIBDOS9 void     Dos9_EndThread(void* iReturn)
     //fprintf(stderr, "Thread ended\n");
 }
 
-LIBDOS9 int      Dos9_WaitForThread(THREAD* thId, void* lpRet)
+LIBDOS9 int      Dos9_WaitForThread(THREAD* thId, void** lpRet)
 {
     int iRet;
-
     HANDLE hThread;
+    struct threadstack_info* pInfo;
+
+    STACK *lpStackElement,
+          *lpLastStackElement;
 
     hThread=OpenThread(THREAD_ALL_ACCESS,
                        FALSE,
@@ -562,7 +567,43 @@ LIBDOS9 int      Dos9_WaitForThread(THREAD* thId, void* lpRet)
     if (iRet)
         return iRet;
 
-    iRet=GetExitCodeThread(hThread, (PDWORD)lpRet);
+    Dos9_LockMutex(&_threadStack_Mutex);
+
+    lpLastStackElement=NULL;
+    lpStackElement=_lpcsThreadStack;
+
+    while (lpStackElement) {
+
+        Dos9_GetStack(lpStackElement, &pInfo);
+
+        if (*thId == pInfo->id) {
+
+            *lpRet = pInfo->ret;
+
+            if (lpLastStackElement) {
+
+                lpLastStackElement->lpcsPrevious=
+                    lpStackElement->lpcsPrevious;
+
+                free(pInfo);
+                free(lpStackElement);
+
+            } else {
+
+                _lpcsThreadStack=Dos9_PopStack(_lpcsThreadStack, free);
+
+            }
+
+            break;
+
+        }
+
+        lpLastStackElement=lpStackElement;
+        lpStackElement=lpStackElement->lpcsPrevious;
+
+    }
+
+    Dos9_ReleaseMutex(&_threadStack_Mutex);
 
     return iRet;
 
@@ -649,53 +690,52 @@ LIBDOS9 int      Dos9_ReleaseMutex(MUTEX* lpMuId)
 
 #endif
 
-LIBDOS9 int      Dos9_WaitForAllThreads(int iDelay)
+LIBDOS9 int      Dos9_WaitForAllThreads(void)
 {
+    THREAD thId;
+    #ifdef WIN32
+        struct threadstack_info* pInfo;
+    #endif // WIN32
+
     int iContinue=TRUE,
         iAttempt=0;
 
-    STACK* lpStack;
-
-    #ifndef WIN32
-        struct timespec tDelay={0,iDelay*10};
-
-    #else
-        iDelay/=10;
-    #endif
-
-
+    void* garbage;
 
     do {
 
         Dos9_LockMutex(&_threadStack_Mutex);
 
-        iContinue=(_lpcsThreadStack!=NULL);
+        if (_lpcsThreadStack ==NULL) {
+
+            iContinue = FALSE;
+            break;
+
+        }
+
+        /* retrieve the next thread id */
+        #ifdef WIN32
+            Dos9_GetStack(_lpcsThreadStack, &pInfo);
+            thId = pInfo->id;
+        #else
+            Dos9_GetStack(_lpcsThreadStack, (void*)&thId);
+        #endif
 
         Dos9_ReleaseMutex(&_threadStack_Mutex);
 
-        /* increment the counter to avoid deadlock if
-           a process never returns, the function will
-           wait for at most iDelay Milliseconds */
-        iAttempt++;
+        Dos9_WaitForThread(&thId, &garbage);
 
-        #ifndef WIN32
+    } while (iContinue);
 
-            nanosleep(&tDelay, NULL);
-
-        #elif defined WIN32
-
-           Sleep(10);
-
-        #endif
-
-    } while (iContinue && (iAttempt <= iDelay));
-
-    return (iAttempt > iDelay);
+    return 0;
 }
 
 LIBDOS9 void     Dos9_AbortAllThreads(void)
 {
     THREAD thId;
+#ifdef WIN32
+    struct threadstack_info* pInfo;
+#endif // WIN32
     int iContinue=TRUE;
 
     while (iContinue) {
@@ -710,13 +750,17 @@ LIBDOS9 void     Dos9_AbortAllThreads(void)
         }
 
         /* retrieve the next thread id */
-        Dos9_GetStack(_lpcsThreadStack, (void*)&thId);
+        #ifdef WIN32
+            Dos9_GetStack(_lpcsThreadStack, &pInfo);
+            thId = pInfo->id;
+        #else
+            Dos9_GetStack(_lpcsThreadStack, (void*)&thId);
+        #endif
 
         Dos9_ReleaseMutex(&_threadStack_Mutex);
 
         Dos9_AbortThread(&thId);
 
     }
-
 }
 

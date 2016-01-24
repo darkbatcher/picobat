@@ -1,7 +1,7 @@
 /*
 
  libcu8 - A wrapper to fix msvcrt utf8 incompatibilities issues
- Copyright (c) 2014, 2015 Romain GARBI
+ Copyright (c) 2014, 2015, 2016 Romain GARBI
 
  All rights reserved.
  Redistribution and use in source and binary forms, with or without
@@ -102,7 +102,10 @@ extern _CRTIMP struct ioinfo* __pioinfo[];
 */
 
 /* A function to inject new enhanced functions */
-int libcu8_replace_fn(void* oldfn, void* newfn);
+int libcu8_replace_fn(void* oldfn, void* newfn, int n);
+int libcu8_reserve_fn_table(int nb, void* base_fn);
+void** libcu8_get_fn_pointer(void* fn);
+void __cdecl libcu8_save_changes(void);
 
 /*
 *******************************************************************************
@@ -138,9 +141,9 @@ int libcu8_cat_chunk(char** buf, size_t* size, size_t* pos,
 /* A structure to buffer fd transmission. This is terribly harmful but
    we have to do this to ensure good text conversion. */
 struct fd_buffering_t {
-    char remain[3];
+    char remain[4];
     size_t len;
-    char remainder[3];
+    char remainder[4];
     size_t rcount;
 };
 
@@ -154,7 +157,7 @@ void libcu8_write_buffered(int fd, char** buf, size_t* size,
                                             char* utf8, size_t len);
 void libcu8_read_buffered(int fd, char** buf, size_t* size);
 #define libcu8_cp_buffering(fd1, fd2) \
-            memcpy(libcu8_fd_buffers[(fd1)], libcu8_fd_buffers[(fd2)],\
+            memcpy(&libcu8_fd_buffers[(fd1)], &libcu8_fd_buffers[(fd2)],\
                    sizeof(struct fd_buffering_t))
 #define libcu8_reset_buffered(fd) \
             memset(&libcu8_fd_buffers[(fd)], 0, sizeof(struct fd_buffering_t))
@@ -191,6 +194,7 @@ void libcu8_delete_console_wchar(void* handle, char type);
 
 int libcu8_write_console(int fd, void* buf, size_t cnt, size_t* written);
 int libcu8_write_file(int fd, void* buf, size_t cnt, size_t* written);
+char* libcu8_lf_to_crlf(const char* buf, size_t len, size_t* cvt);
 
 
 

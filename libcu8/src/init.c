@@ -35,37 +35,23 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <windows.h>
+#include <process.h>
+#include <sys/stat.h>
+
 
 #include <iconv.h>
 
 #include "internals.h"
-#include "libcu8.h"
+#include <libcu8.h>
 
-#define nitems(array) (sizeof(array)/sizeof(array[0]))
 
-struct libcu8_init_context_t {
-    void* oldfn;
-    void* newfn;
-};
+#define REPLACE_FN( )
 
-#define CONTEXT(old, new) {(void*) old, (void*) new}
 
 /* initialize the new functions */
 __LIBCU8__IMP __cdecl int libcu8_init(const char*** pargv)
 {
     int i;
-    struct libcu8_init_context_t array[] = {
-        /* Hook low level io functions so that standard file functions do
-           not have to be hooked */
-        CONTEXT(_read, libcu8_read),
-        CONTEXT(_write, libcu8_write),
-        CONTEXT(_open, libcu8_open),
-        CONTEXT(_creat, libcu8_creat),
-        CONTEXT(_commit, libcu8_commit),
-        CONTEXT(_lseek, libcu8_lseek),
-        CONTEXT(NULL, NULL)
-    };
-    struct libcu8_init_context_t* func = array;
 
     /* Initialize the lock for fencoding */
     InitializeCriticalSection(&libcu8_fencoding_lock);
@@ -73,6 +59,9 @@ __LIBCU8__IMP __cdecl int libcu8_init(const char*** pargv)
     sprintf(libcu8_fencoding, "UTF-8");
 
     LeaveCriticalSection(&libcu8_fencoding_lock);
+
+
+    //fprintf(stderr, "Allocating buffers\n");
 
     /* Allocate memory for libcu8 internal buffers */
     if (!(libcu8_fd_buffers = malloc(FD_BUFFERS_SIZE
@@ -83,21 +72,57 @@ __LIBCU8__IMP __cdecl int libcu8_init(const char*** pargv)
     for (i=0;i < FD_BUFFERS_SIZE; i++)
         libcu8_reset_buffered(i); /* reset all the buffers */
 
+    //fprintf(stderr, "Getting argv\n");
     /* Get utf-8 encoded argv */
     if (pargv != NULL && libcu8_get_argv(pargv) == -1 )
         return -1;
 
-    while (func->newfn && func->oldfn) {
+    //fprintf(stderr, "Replace with functions\n");
+    //printf("_read = %p, libcu8_read = %p, oldfn = %p\n", _read, libcu8_read);
 
-        if (libcu8_replace_fn(func->oldfn, func->newfn) != 0) {
+    /* replace functions from msvcrt by functions from libcu8 */
+    if (libcu8_replace_fn(_read, libcu8_read , 52) != 0
+        || libcu8_replace_fn(_write, libcu8_write , 52) != 0
+        || libcu8_replace_fn(_open, libcu8_open , 52) != 0
+        || libcu8_replace_fn(_creat, libcu8_creat , 52) != 0
+        || libcu8_replace_fn(_lseek, libcu8_lseek , 52) != 0
+        || libcu8_replace_fn(_commit, libcu8_commit , 52) != 0
+        || libcu8_replace_fn(_dup, libcu8_dup , 52) != 0
+        || libcu8_replace_fn(_dup2, libcu8_dup2 , 52) != 0
+        || libcu8_replace_fn(_spawnl, libcu8_spawnl , 52) != 0
+        || libcu8_replace_fn(_spawnlp, libcu8_spawnlp , 52) != 0
+        || libcu8_replace_fn(_spawnlpe, libcu8_spawnlpe , 52) != 0
+        || libcu8_replace_fn(_spawnle, libcu8_spawnle , 52) != 0
+        || libcu8_replace_fn(_spawnv, libcu8_spawnv , 52) != 0
+        || libcu8_replace_fn(_spawnve, libcu8_spawnve , 52) != 0
+        || libcu8_replace_fn(_spawnvp, libcu8_spawnvp , 52) != 0
+        || libcu8_replace_fn(_spawnvpe, libcu8_spawnvpe , 52) != 0
+#ifndef __x86_64__
+        || libcu8_replace_fn(_stat32, libcu8_stat32, 52) != 0
+        || libcu8_replace_fn(_stat32i64, libcu8_stat32i64, 52) != 0
+#endif
+        || libcu8_replace_fn(_stat64i32, libcu8_stat64i32, 52) != 0
+        || libcu8_replace_fn(_stat64, libcu8_stat64, 52) != 0
+#ifndef __x86_64__
+        || libcu8_replace_fn(_findfirst32, libcu8_findfirst32, 52) != 0
+        || libcu8_replace_fn(_findnext32, libcu8_findnext32, 52) != 0
+        || libcu8_replace_fn(_findfirst32i64, libcu8_findfirst32i64, 52) != 0
+        || libcu8_replace_fn(_findnext32i64, libcu8_findnext32i64, 52) != 0
+#endif
+        || libcu8_replace_fn(_findfirst64, libcu8_findfirst64, 52) != 0
+        || libcu8_replace_fn(_findnext64, libcu8_findnext64, 52) != 0
+        || libcu8_replace_fn(_findfirst64i32, libcu8_findfirst64i32, 52) != 0
+        || libcu8_replace_fn(_findnext64i32, libcu8_findnext64i32, 52) != 0
+        ) {
 
-            free(libcu8_fd_buffers);
-            return -1;
+        free(libcu8_fd_buffers);
+        return -1;
 
-        }
-
-        func ++;
     }
+
+    libcu8_save_changes();
+
+    //fprintf(stderr, "Returning \n");
 
     return 0;
 
@@ -119,8 +144,12 @@ int libcu8_get_argv(const char*** pargv)
 
     __wgetmainargs(&argc, &wargv, &wenv, 0, &stinfo);
 
-    if (!(argv = malloc(argc * sizeof(char*)))) {
+    //fprintf(stderr, "Getting memory for argv\n");
 
+    if (!(argv = malloc((argc + 1) * sizeof(char*)))) {
+
+
+        //fprintf(stderr, "Failed to get memory for argv\n");
         errno = ENOMEM;
         return -1;
 
@@ -130,14 +159,19 @@ int libcu8_get_argv(const char*** pargv)
 
     for (i=0; i < argc; i ++) {
 
-        if (!(argv[i] = libcu8_xconvert(LIBCU8_FROM_U16, (char*)wargv[i],
-                                wcslen(wargv[i])+sizeof(wchar_t), &converted))) {
+        //fwprintf(stderr, L"Converting %d th argumenent \"%s\"\n", i, wargv[i]);
 
+        if (!(argv[i] = libcu8_xconvert(LIBCU8_FROM_U16, (char*)wargv[i],
+                                (wcslen(wargv[i])+1)*sizeof(wchar_t), &converted))) {
+
+            //fprintf(stderr, "Failed to convert %d th argumenent\n", i);
             return -1;
 
         }
 
     }
+
+    //fprintf(stderr, "End lol");
 
     *pargv = (const char**)argv;
 

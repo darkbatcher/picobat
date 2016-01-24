@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2013 DarkBatcher
+ *   Copyright (C) 2010-2016 Romain GARBI
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -39,10 +39,10 @@
 #define CMP_FLOAT_COMP 0x10
 
 #define DOS9_IF_EXIST_TEST(ret, file, filelist) \
-    filelist =Dos9_GetMatchFileList(file, DOS9_SEARCH_GET_FIRST_MATCH \
+    filelist = Dos9_GetMatchFileList(file, DOS9_SEARCH_GET_FIRST_MATCH \
                                                 | DOS9_SEARCH_NO_STAT); \
     ret=(filelist != NULL); \
-    if (ret) \
+    if (filelist) \
         Dos9_FreeFileList(filelist);
 
 #define DOS9_IF_DEFINED_TEST(ret, var, env) \

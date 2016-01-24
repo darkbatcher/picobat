@@ -1,6 +1,6 @@
 dnl
 dnl   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
-dnl   Copyright (C) 2010-2014 Romain Garbi (DarkBatcher)
+dnl   Copyright (C) 2010-2014 Romain Garbi
 dnl
 dnl   This program is free software: you can redistribute it and/or modify
 dnl   it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@ dnl   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 dnl
 
 AC_INIT([Dos9],
-	[215.1],
+	[216.1],
 	[darkbatcher@dos9.org],
 	[Dos9],
 	[http://www.dos9.org/])

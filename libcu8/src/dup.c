@@ -1,7 +1,7 @@
 /*
 
  libcu8 - A wrapper to fix msvcrt utf8 incompatibilities issues
- Copyright (c) 2014, 2015 Romain GARBI
+ Copyright (c) 2014, 2015, 2016 Romain GARBI
 
  All rights reserved.
  Redistribution and use in source and binary forms, with or without
@@ -65,16 +65,17 @@ __LIBCU8__IMP __cdecl int libcu8_dup(int fd)
 
     return ret;
 }
+
 __LIBCU8__IMP __cdecl int libcu8_dup_nolock(int fd)
 {
     int newfd;
-    long handle, duplicate;
+    void *handle, *duplicate;
 
-    handle = osfile(fd);
+    handle = osfhnd(fd);
 
     if (!(DuplicateHandle(GetCurrentProcess(), (HANDLE)handle,
-                            GetCurrentProcess(), (HANDLE*)&duplicate), 0,
-                            TRUE, DUPLICATE_SAME_ACESS)) {
+                            GetCurrentProcess(), (HANDLE*)&duplicate, 0,
+                            TRUE, DUPLICATE_SAME_ACCESS))) {
 
         /* FIXME : Do something better with errno */
         errno = EBADF;
@@ -84,8 +85,12 @@ __LIBCU8__IMP __cdecl int libcu8_dup_nolock(int fd)
 
     /* allocate new fd to store duplicated handle. Do not tamper to
        much with msvcrt internals */
-    if ((newfd = _open_osfhandle(duplicate, osfile(fd))) == -1)
+    if ((newfd = _open_osfhandle(duplicate, _O_APPEND)) == -1) {
+
+        CloseHandle(duplicate);
         return -1;
+
+    }
 
     /* Do not duplicate NOINHERIT attribute */
     osfile(newfd) = osfile(fd) & ~NOINHERIT;
@@ -95,7 +100,8 @@ __LIBCU8__IMP __cdecl int libcu8_dup_nolock(int fd)
 
     return  newfd;
 }
-__LIBCU8__IMP __cdecl int libcu8_dup2(int fd1, int fd2);
+
+__LIBCU8__IMP __cdecl int libcu8_dup2(int fd1, int fd2)
 {
     struct ioinfo *info2,
                 *info1;
@@ -110,7 +116,6 @@ __LIBCU8__IMP __cdecl int libcu8_dup2(int fd1, int fd2);
        msvcrt internals.
        */
     if (!IS_VALID(fd1) || !IS_VALID(fd2)) {
-
         errno = EBADF;
         return -1;
 
@@ -121,7 +126,7 @@ __LIBCU8__IMP __cdecl int libcu8_dup2(int fd1, int fd2);
 
         /* Both file descriptors refer to the same file, e.g. duplication
            does not make sense. Return success according to POSIX standard */
-        return fd;
+        return fd2;
 
     }
 
@@ -145,14 +150,14 @@ __LIBCU8__IMP __cdecl int libcu8_dup2(int fd1, int fd2);
     return ret;
 }
 
-__LIBCU8__IMP __cdecl int libcu8_dup2_nolock(int fd1, int fd2);
+__LIBCU8__IMP __cdecl int libcu8_dup2_nolock(int fd1, int fd2)
 {
-    long handle, duplicate;
-    handle = osfile(fd1);
+    void *handle, *duplicate;
+    handle = osfhnd(fd1);
 
     if (!(DuplicateHandle(GetCurrentProcess(), (HANDLE)handle,
-                            GetCurrentProcess(), (HANDLE*)&duplicate), 0,
-                            TRUE, DUPLICATE_SAME_ACESS)) {
+                            GetCurrentProcess(), (HANDLE*)&duplicate, 0,
+                            TRUE, DUPLICATE_SAME_ACCESS))) {
 
         /* FIXME : Do something better with errno */
         errno = EBADF;

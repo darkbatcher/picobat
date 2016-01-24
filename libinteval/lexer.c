@@ -505,6 +505,25 @@ int IntEval__flex_debug = 0;
 char *IntEval_text;
 #line 1 "lexer.l"
 #line 2 "lexer.l"
+/*
+ *
+ *   libinteval, a lib for evaluating integer expression
+ *   Copyright (C) 2010-2016 Romain GARBI
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 
 #include "global.h"
 #include "parser.h"
@@ -516,7 +535,7 @@ char *IntEval_text;
 
 static int IntEval_InputFromString(char* buffer, int max_size);
 
-#line 520 "lexer.c"
+#line 539 "lexer.c"
 
 #define INITIAL 0
 
@@ -703,10 +722,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 24 "lexer.l"
+#line 43 "lexer.l"
 
 
-#line 710 "lexer.c"
+#line 729 "lexer.c"
 
 	if ( !(yy_init) )
 		{
@@ -791,12 +810,12 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 26 "lexer.l"
+#line 45 "lexer.l"
 { /* On ignore */ }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 28 "lexer.l"
+#line 47 "lexer.l"
 {
 		IntEval_lval=IntEval_GetVar(IntEval_text);
 		return(VARIABLE);
@@ -804,7 +823,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 33 "lexer.l"
+#line 52 "lexer.l"
 {
       IntEval_lval=strtol(IntEval_text, NULL, 0);
       return(NOMBRE);
@@ -812,96 +831,96 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 38 "lexer.l"
+#line 57 "lexer.l"
 return(PLUS);
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 39 "lexer.l"
+#line 58 "lexer.l"
 return(MOINS);
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 41 "lexer.l"
+#line 60 "lexer.l"
 return(FOIS);
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 42 "lexer.l"
+#line 61 "lexer.l"
 return(DIVISE);
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 43 "lexer.l"
+#line 62 "lexer.l"
 return(MODULO);
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 45 "lexer.l"
+#line 64 "lexer.l"
 return(PARENTHESE_GAUCHE);
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 46 "lexer.l"
+#line 65 "lexer.l"
 return(PARENTHESE_DROITE);
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 48 "lexer.l"
+#line 67 "lexer.l"
 return(NON_LOG);
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 49 "lexer.l"
+#line 68 "lexer.l"
 return(NON_BAB);
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 51 "lexer.l"
+#line 70 "lexer.l"
 return(OU_LOG);
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 52 "lexer.l"
+#line 71 "lexer.l"
 return(ET_LOG); 
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 54 "lexer.l"
+#line 73 "lexer.l"
 return(OU_BAB);
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 55 "lexer.l"
+#line 74 "lexer.l"
 return(ET_BAB);
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 56 "lexer.l"
+#line 75 "lexer.l"
 return(XOR_BAB);
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 58 "lexer.l"
+#line 77 "lexer.l"
 return(DEC_DROITE);
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 59 "lexer.l"
+#line 78 "lexer.l"
 return(DEC_GAUCHE);
 	YY_BREAK
 case 20:
 /* rule 20 can match eol */
 YY_RULE_SETUP
-#line 61 "lexer.l"
+#line 80 "lexer.l"
 return(FIN);
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 63 "lexer.l"
+#line 82 "lexer.l"
 ECHO;
 	YY_BREAK
-#line 905 "lexer.c"
+#line 924 "lexer.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1899,7 +1918,7 @@ void IntEval_free (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 63 "lexer.l"
+#line 82 "lexer.l"
 
 
 

@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2015 DarkBatcher
+ *   Copyright (C) 2010-2016 Romain GARBI
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -47,6 +47,94 @@
 
 #define SEE_MASK_NOASYNC 0x00000100
 
+#if defined(DOS9_USE_LIBCU8)
+#include <libcu8.h>
+
+int Dos9_StartFile(const char* file, const char* args, const char* dir,
+					int mode, int wait)
+{
+	SHELLEXECUTEINFOW info;
+	wchar_t *chr;
+	size_t cvt;
+
+	memset(&info, 0, sizeof(info));
+	info.cbSize = sizeof(info);
+	info.fMask =  SEE_MASK_NOASYNC;
+	info.lpVerb = NULL;
+	info.lpDirectory = NULL;
+	info.nShow = mode;
+
+    if (!(info.lpFile = libcu8_xconvert(LIBCU8_TO_U16, file,
+                                        strlen(file) + 1, &cvt))
+        || !(info.lpParameters = libcu8_xconvert(LIBCU8_TO_U16, args,
+                                                    strlen(args)+1, &cvt))) {
+
+            if (info.lpFile)
+                free(info.lpFile);
+
+            if (info.lpParameters)
+                free(info.lpParameters);
+
+            if (info.lpDirectory)
+                free(info.lpDirectory);
+
+            Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION, "libcu8_xconvert()", FALSE);
+
+            return -1;
+    }
+
+    if (dir) {
+
+        if  (!(info.lpDirectory = libcu8_xconvert(LIBCU8_TO_U16, dir,
+                                                    strlen(dir)+1, &cvt))) {
+
+            if (info.lpFile)
+                free(info.lpFile);
+
+            if (info.lpParameters)
+                free(info.lpParameters);
+
+            if (info.lpDirectory)
+                free(info.lpDirectory);
+
+            Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION, "libcu8_xconvert()", FALSE);
+
+            return -1;
+
+        }
+
+        for (chr = info.lpDirectory;*chr;chr ++) {
+            if (*chr == L'/')
+                *chr = L'\\';
+        }
+
+    }
+
+    /* shellexecute seem to have trouble to handle forward slashes */
+    for (chr = info.lpFile;*chr;chr ++) {
+        if (*chr == L'/')
+            *chr = L'\\';
+    }
+
+
+
+	ShellExecuteExW(&info);
+
+	if (wait)
+		WaitForSingleObject(info.hProcess, INFINITE);
+
+	CloseHandle(info.hProcess);
+
+
+    free(info.lpFile);
+    free(info.lpParameters);
+    free(info.lpDirectory);
+
+	return 0;
+}
+
+
+#else
 int Dos9_StartFile(const char* file, const char* args, const char* dir,
 					int mode, int wait)
 {
@@ -71,7 +159,7 @@ int Dos9_StartFile(const char* file, const char* args, const char* dir,
             *chr = '\\';
     }
 
-	ShellExecuteEx(&info);
+	ShellExecuteExW(&info);
 
 	if (wait)
 		WaitForSingleObject(info.hProcess, INFINITE);
@@ -80,6 +168,7 @@ int Dos9_StartFile(const char* file, const char* args, const char* dir,
 
 	return 0;
 }
+#endif
 
 #elif defined(XDG_OPEN) && !defined(WIN32)
 

@@ -1,6 +1,6 @@
 @(
 :: Dos9 initialization script
-:: copyright (c) 2010-2014 Darkbatcher  
+:: copyright (c) 2010-2016 Romain GARBI
 ::
 :: This is free software. You can redistribute it and/or modify under the terms
 :: of the GNU General Public Licence V3

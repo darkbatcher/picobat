@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2014 DarkBatcher
+ *   Copyright (C) 2010-2014 Romain GARBI
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -100,8 +100,6 @@ int main(int argc, char *argv[])
 	    And display starting message
 	*/
 
-	DOS9_DBG("Initializing Dos9's custom environ");
-
 	char *lpFileName="",
 	      lpFileAbs[FILENAME_MAX]="",
 	      lpTmp[FILENAME_MAX],
@@ -120,15 +118,17 @@ int main(int argc, char *argv[])
 	ESTR* lpesCmd;
 
 #if defined(WIN32) && defined(DOS9_USE_LIBCU8)
-    if (libcu8_init(&argv)) {
+	DOS9_DBG("Initializing libcu8\n");
+
+    if (libcu8_init(&argv) == -1) {
 
         fprintf(stderr, "Unable to load libcu8...\n");
         return -1;
 
     }
-#endif // defined
+#endif
 
-    DOS9_DBG("Initializing Dos9's custom environ");
+    DOS9_DBG("Initializing Dos9's custom environ\n");
     lpeEnv = Dos9_InitEnv(environ);
 
 	DOS9_DBG("Initializing signal handler...\n");
@@ -178,12 +178,10 @@ int main(int argc, char *argv[])
 		                      -1
 		                     );
 
-
-
     DOS9_DBG("Getting current executable name ...\n");
 	Dos9_GetExePath(lpExePath, FILENAME_MAX);
 
-	DOS9_DBG("\tGot \"%s\" as name ...\n", lpTitle);
+	DOS9_DBG("\tGot \"%s\" as name ...\n", lpExePath);
 	lpInitVar[4]="DOS9_PATH";
 	lpInitVar[5]=lpExePath;
 
@@ -244,9 +242,10 @@ int main(int argc, char *argv[])
 						case 'Q':
 							bQuiet=TRUE; // run silently
 							break;
-					}
 
-				}
+                    }
+
+                }
 				break;
 
 				case 'I':
@@ -385,7 +384,11 @@ int main(int argc, char *argv[])
 		lpesCmd=Dos9_EsInit();
 
 		Dos9_EsCpy(lpesCmd, lpCmdCSwitch);
+        DOS9_DBG("Running \"%s\"\n", lpesCmd->str);
+
 		Dos9_RunLine(lpesCmd);
+
+        DOS9_DBG("\tRan\n");
 
 		if (bExitAfterCmd == TRUE)
 			goto skip;
@@ -395,7 +398,7 @@ int main(int argc, char *argv[])
 
 		/* generates real path if the path is uncomplete */
 
-        DOS9_DBG("Looking for \"%s\" absolute path\n.");
+        DOS9_DBG("Looking for \"%s\" absolute path\n.", lpFileName);
 
 		if (Dos9_GetFilePath(lpFileAbs, lpFileName, sizeof(lpFileAbs))==-1)
 			Dos9_ShowErrorMessage(DOS9_FILE_ERROR, lpFileName, -1);

@@ -58,7 +58,7 @@ int Dos9_CmdChcp(char* line)
 
     line += 4;
 
-    if (Dos9_GetNextParameterEs(line, param) == NULL) {
+    if ((line = Dos9_GetNextParameterEs(line, param)) == NULL) {
 
         Dos9_ShowErrorMessage(DOS9_BAD_COMMAND_LINE, "CHCP", 0);
         return -1;

@@ -1,7 +1,7 @@
 /*
 
  libcu8 - A wrapper to fix msvcrt utf8 incompatibilities issues
- Copyright (c) 2014, 2015 Romain GARBI (Darkbatcher)
+ Copyright (c) 2014, 2015, 2016 Romain GARBI (Darkbatcher)
 
  All rights reserved.
  Redistribution and use in source and binary forms, with or without
