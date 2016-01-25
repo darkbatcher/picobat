@@ -159,7 +159,7 @@ int Dos9_StartFile(const char* file, const char* args, const char* dir,
             *chr = '\\';
     }
 
-	ShellExecuteExW(&info);
+	ShellExecuteEx(&info);
 
 	if (wait)
 		WaitForSingleObject(info.hProcess, INFINITE);

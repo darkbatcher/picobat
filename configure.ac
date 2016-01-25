@@ -95,14 +95,22 @@ dnl is sufficient enough to determine wether libraries are installed.
 AC_CHECK_HEADERS([libintl.h])
 
 dnl check start equivalent existence
-AC_PATH_PROG([XDG_OPEN], [xdg-open])  
-AS_IF([test "x$XDG_OPEN" != x],
-	[AC_DEFINE_UNQUOTED([XDG_OPEN], ["$XDG_OPEN"],
-		Define to 1 if have xdg-open)]
-	)
 	
 dnl Perform some checks in order to know with which library we should link.
-AC_CHECK_LIB([pthread],[pthread_create],[],[])
+case $host_os in
+	*darwin*|*linux*|*BSD*)
+dnl link to pthread only on *nix target
+		AC_CHECK_LIB([pthread],[pthread_create],[],[])
+		AC_PATH_PROG([XDG_OPEN], [xdg-open])  
+		AS_IF([test "x$XDG_OPEN" != x],
+			[AC_DEFINE_UNQUOTED([XDG_OPEN], ["$XDG_OPEN"],
+			Define to 1 if have xdg-open)]
+		)
+	;;
+	
+	*);;
+esac
+
 AC_CHECK_LIB([m],[cos],[],[AC_MSG_ERROR("No math C library")])
 
 if test "x$enable_libcu8" != xno; then

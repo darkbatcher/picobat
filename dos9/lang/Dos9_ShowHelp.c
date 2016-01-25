@@ -48,7 +48,7 @@ void Dos9_LoadInternalHelp(void)
 	snprintf(lpSharePath, FILENAME_MAX, "%s/share/locale", lpPath);
 
 	bindtextdomain("Dos9-hlp", lpSharePath);
-#if !(defined(WIN32) && defined(DOS9_USE_LIBCU8)
+#if !(defined(WIN32) && defined(DOS9_USE_LIBCU8))
     /* This is not useful at all, libcu8 is able to convert utf-8 by
        itself */
 	bind_textdomain_codeset("Dos9-hlp", lpEncoding);

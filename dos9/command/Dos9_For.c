@@ -72,6 +72,27 @@
 #if defined(WIN32) && defined(DOS9_USE_LIBCU8)
 #include <libcu8.h>
 #elif defined(WIN32)
+struct ioinfo {
+    void* osfhnd;
+    unsigned char osfile;
+    unsigned char pipech;
+    int lockinitflag;
+    CRITICAL_SECTION lock;
+};
+
+extern _CRTIMP struct ioinfo* __pioinfo[];
+
+/* define some macros to deal with __pioinfo buffer (which stores
+   data file information */
+#define IOINFO_TABLE_SIZE (1 << 5)
+#define IOINFO_MAX_TABLE 64
+#define MAKE_FD(table,index)  ( (table) << 5 + (index))
+
+#define pioinfo(i)  (__pioinfo[((i) >> 5)] + \
+                                    ((i) & (IOINFO_TABLE_SIZE - 1)))
+#define osfile(i)   (pioinfo(i)->osfile)
+#define osfhnd(i)   (pioinfo(i)->osfhnd)
+#define NOINHERIT   0x10 /* not inheritable file */
 int libcu8_fd_set_inheritance(int fd, int mode)
 {
     HANDLE handle = osfhnd(fd);

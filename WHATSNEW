@@ -1413,3 +1413,22 @@ WEDNESDAY 13TH, JUNUARY, 2016
 
         - Added new CHCP command to handle efficiently the new libcu8 library.
 
+MONDAY, 25, JUNUARY
+
+        - Changed version of Dos9 to emphasize the important changes of Dos9 
+          since new year 2016.
+
+        - Added functions to restrict fd inheritance, to make sure the 
+          appropriate fds are closed on exec. It is basically usefull for FOR 
+          commands.
+
+        - Hugely modified the libcu8 to fit with libDos9. It is still an 
+          experimental, though, but it works way better now.
+
+        - Added some new behaviours in file expansion. Now, it is legal to 
+          specify negative offsets during variable expansion. Quickly, 
+          negative offsets refers to the absolute value of the offset, counted 
+          from the end of the variable. For instance, this is now allowed :
+
+             %var:~-2,-1
+
