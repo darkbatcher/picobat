@@ -14517,6 +14517,7 @@ _ACEOF
 
 
 fi
+		enable_libcu8 = no
 	;;
 
 	*);;
@@ -14589,7 +14590,7 @@ fi
 subdirs="$subdirs libmatheval"
 
 
-ac_config_files="$ac_config_files Makefile po/Makefile libDos9/Makefile libinteval/Makefile dos9/Makefile tea/Makefile dump/Makefile dos9ize/Makefile"
+ac_config_files="$ac_config_files Makefile po/Makefile libDos9/Makefile libinteval/Makefile dos9/Makefile tea/Makefile dump/Makefile dos9ize/Makefile"
 
 
 cat >confcache <<\_ACEOF
@@ -15614,13 +15615,13 @@ do
     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
     "libtool") CONFIG_COMMANDS="$CONFIG_COMMANDS libtool" ;;
     "po-directories") CONFIG_COMMANDS="$CONFIG_COMMANDS po-directories" ;;
-    "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
-    "po/Makefile") CONFIG_FILES="$CONFIG_FILES po/Makefile" ;;
-    "libDos9/Makefile") CONFIG_FILES="$CONFIG_FILES libDos9/Makefile" ;;
-    "libinteval/Makefile") CONFIG_FILES="$CONFIG_FILES libinteval/Makefile" ;;
-    "dos9/Makefile") CONFIG_FILES="$CONFIG_FILES dos9/Makefile" ;;
-    "tea/Makefile") CONFIG_FILES="$CONFIG_FILES tea/Makefile" ;;
-    "dump/Makefile") CONFIG_FILES="$CONFIG_FILES dump/Makefile" ;;
+    "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
+    "po/Makefile") CONFIG_FILES="$CONFIG_FILES po/Makefile" ;;
+    "libDos9/Makefile") CONFIG_FILES="$CONFIG_FILES libDos9/Makefile" ;;
+    "libinteval/Makefile") CONFIG_FILES="$CONFIG_FILES libinteval/Makefile" ;;
+    "dos9/Makefile") CONFIG_FILES="$CONFIG_FILES dos9/Makefile" ;;
+    "tea/Makefile") CONFIG_FILES="$CONFIG_FILES tea/Makefile" ;;
+    "dump/Makefile") CONFIG_FILES="$CONFIG_FILES dump/Makefile" ;;
     "dos9ize/Makefile") CONFIG_FILES="$CONFIG_FILES dos9ize/Makefile" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5 ;;

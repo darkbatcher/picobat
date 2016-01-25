@@ -101,11 +101,14 @@ case $host_os in
 	*darwin*|*linux*|*BSD*)
 dnl link to pthread only on *nix target
 		AC_CHECK_LIB([pthread],[pthread_create],[],[])
+dnl look for xdg-open
 		AC_PATH_PROG([XDG_OPEN], [xdg-open])  
 		AS_IF([test "x$XDG_OPEN" != x],
 			[AC_DEFINE_UNQUOTED([XDG_OPEN], ["$XDG_OPEN"],
 			Define to 1 if have xdg-open)]
 		)
+dnl No libcu8 for *nixes
+		enable_libcu8 = no
 	;;
 	
 	*);;
