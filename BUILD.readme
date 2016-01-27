@@ -1,0 +1,10 @@
+Dos9 uses autotools as build system, so building it is quite straightforward.
+First we don't recommand you to install dos9 in the system directory as it is
+still a little bit unstable.
+I recommand some folder in your home directory (such as ~/dos9) to install it.
+To build it and install it, just type the following line :
+
+./configure --prefix=your_folder --bindir=your_folder --libdir=your_folder
+make
+make install dos9-install-clean
+

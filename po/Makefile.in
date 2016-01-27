@@ -16,7 +16,7 @@ SHARE_DIR=./share/locale
 MSGFMT = @MSGFMT@
 XGETTEXT = @XGETTEXT@
 MSGMERGE = @MSGMERGE@
-
+prefix = @prefix@
 all: m-po
 
 dist:
@@ -26,7 +26,7 @@ local:
 	cp -R ./share ../bin/
 
 install:
-	cp -R ./share/locale ${prefix}/share/locale
+	cp -R ./share/locale $(prefix)/share/locale
 
 m-po: po-tree
 	mkdir -p $(SHARE_DIR)

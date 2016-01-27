@@ -243,7 +243,7 @@ LIBDOS9 void     Dos9_EndThread(void* iReturn)
 /*
     Waits for a thread and get its return value
  */
-LIBDOS9 int     Dos9_WaitForThread(THREAD* thId, void* lpRet)
+LIBDOS9 int     Dos9_WaitForThread(THREAD* thId, void** lpRet)
 {
 
     /* join the thread to get the exit code */

@@ -37,7 +37,7 @@ AC_DEFINE_UNQUOTED([HOST], ["$host"], Define to your host name)
 AM_INIT_AUTOMAKE
 
 dnl We need libtool to compile shared libraries 
-LT_INIT
+LT_INIT([shared,win32-dll])
 
 dnl Perform some checks on available programs.
 AC_PROG_CC
@@ -55,7 +55,7 @@ AC_SUBST([SHAREDEXT], [$shrext_cmds])
 
 AC_ARG_ENABLE([static-cmdlycorrect],
 	[AC_HELP_STRING([--enable-static-cmdlycorrect],
-		[foo])],
+		[Enable static cmdlycorrect setlocal])],
 	[],
 	[enable_static_cmdlycorrect=no])
 
@@ -108,7 +108,7 @@ dnl look for xdg-open
 			Define to 1 if have xdg-open)]
 		)
 dnl No libcu8 for *nixes
-		enable_libcu8 = no
+		enable_libcu8=no
 	;;
 	
 	*);;
@@ -129,10 +129,11 @@ AC_CONFIG_SUBDIRS([libmatheval])
 AC_CONFIG_FILES([Makefile
 		po/Makefile
 		libDos9/Makefile
-        libinteval/Makefile
-        dos9/Makefile
-        tea/Makefile
+        	libinteval/Makefile
+        	dos9/Makefile
+        	tea/Makefile
 		dump/Makefile
-		dos9ize/Makefile])
+		dos9ize/Makefile
+		scripts/Makefile])
 
 AC_OUTPUT

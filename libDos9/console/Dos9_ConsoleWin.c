@@ -68,6 +68,7 @@ void Dos9_ClearConsoleLine(void)
     COORD pt;
     DWORD written, x;
 
+
     GetConsoleScreenBufferInfo(hConsole, &info);
 
     pt = info.dwCursorPosition;
@@ -176,6 +177,9 @@ void Dos9_SetConsoleTitle(char* lpTitle)
 #endif
 
 #ifndef WIN32
+#include <termios.h>
+#include <unistd.h>
+
 
 LIBDOS9 int             Dos9_GetchWait(void)
 {

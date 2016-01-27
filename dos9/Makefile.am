@@ -17,7 +17,7 @@
 #
 
 AUTOMAKE_OPTIONS = foreign subdir-objects
-dos9_LDFLAGS = -static -no-undefined
+dos9_LDFLAGS = -no-undefined
 
 bin_PROGRAMS = dos9
 

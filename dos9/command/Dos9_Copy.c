@@ -159,7 +159,7 @@ int Dos9_CmdCopy(char* line)
 
         for (i=0;i < len - 1 ; i++)
             status = Dos9_CmdCopyRecursive(Dos9_EsToChar(file[i]),
-                        Dos9_EsToChar(file[len-1]), attr, flags);
+                        Dos9_EsToChar(file[len-1]), attr, &flags);
 
         goto end;
 

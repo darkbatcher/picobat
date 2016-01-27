@@ -1,4 +1,4 @@
-# Overall Dos9 suite Makefile, The Dos9 Project (c) Romain GARBI
+# Overall Dos9 suite Makefile, The Dos9 Project (c) Darkbatcher
 # 2010-2013
 #
 # This is free software: you can redistribute it and/or modify it under the
@@ -6,12 +6,22 @@
 # Foundation, either version 3 of the License, or (at your option) any later
 # version.
 #
+#
+# This files generates translations while compiling
+#
 
-# copy the scripts at the right place, nothing more to be done :
+PO_BUILD=$$(ls po/)
+SHARE_DIR=./share/locale
 
-cp-scripts: Dos9_Auto.bat cmd/hlp.bat
-	cp  Dos9_Auto.bat ../bin${arch}
-	cp  cmd/hlp.bat ../bin${arch}/cmd
+MSGFMT = @MSGFMT@
+XGETTEXT = @XGETTEXT@
+MSGMERGE = @MSGMERGE@
+prefix = @prefix@
+all: m-po
 
-	
-	
+dist:
+distdir:
+
+install:
+	cp Dos9_Auto.bat $(prefix)/
+	cp -R cmd $(prefix)/
