@@ -29,14 +29,16 @@
 #define TITLE_ON 0x08
 #define HEADERS_ON 0x10
 
+#if !defined(LITTLE_ENDIAN) && !defined(BIG_ENDIAN)
 #define LITTLE_ENDIAN 0
 #define BIG_ENDIAN 1
+#endif 
 
+#if defined(__BYTE_ORDER)
+#define ENDIANESS __BYTE_ORDER
+#else 
 #define ENDIANESS LITTLE_ENDIAN
-/* the default endianness mode */
-
-/* Ce progrmamme est un essais pour lire une un fichier binaire issu d'un
-   d'un capteur CCD */
+#endif
 
 char lpLicense[]="\n\n    Dos9 DUMP, a free file binary dumper, The Dos9 Project                 \n\
     Copyright (C) 2013 Darkbatcher (Romain Garbi)\n\
@@ -82,6 +84,8 @@ Ce programme est un logiciel Libre, pour plus d'information, tapez ``dump /l''\n
 \t     L : petit-boutant (Little Endian)\n\n\
 \t   - /L : Affiche un extrait de licence\n\n\
 \n\
+\tPar defaut, la presentation activee est equivalente a :\n\n\
+\tDUMP fichier /T:C /H\n\n\
 \tPar defaut, la presentation activee est equivalente a :\n\n\
 \tDUMP fichier /T:C /H\n\n\
 Pour plus d'information ou d'autres commandes, visitez le site internet du\n\
@@ -522,5 +526,4 @@ int main(int argc, char* argv[])
 	fclose(pData);
 
 	return EXIT_SUCCESS;
-
 }

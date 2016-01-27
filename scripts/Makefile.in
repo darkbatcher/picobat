@@ -17,8 +17,8 @@ MSGFMT = @MSGFMT@
 XGETTEXT = @XGETTEXT@
 MSGMERGE = @MSGMERGE@
 prefix = @prefix@
-all: m-po
 
+all:
 dist:
 distdir:
 
