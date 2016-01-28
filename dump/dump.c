@@ -23,10 +23,17 @@
 #include <ctype.h>
 #include <string.h>
 
+#ifdef WIN32
 #include <io.h>
+#endif
 #include <fcntl.h>
 
 #include "dump.h"
+
+#ifndef WIN32
+#define stricmp(a, b) strcasecmp(a, b)
+#define strnicmp(a , b, c) strncasecmp(a, b, c)
+#endif
 
 int main(int argc, char* argv[])
 {
@@ -142,6 +149,8 @@ int main(int argc, char* argv[])
     return ret;
 }
 
+char c_hfmt[10], s_hfmt[10], i_hfmt[10], l_hfmt[10], ll_hfmt[10], v_hfmt[10];
+
 int dump_file(int fd, struct dump_data_t* data, int mode, int nbytes)
 {
     int i = 0, period;
@@ -154,9 +163,11 @@ int dump_file(int fd, struct dump_data_t* data, int mode, int nbytes)
 
     period = nbytes / size ;
 
-    if (mode & ADDRESSES_ON)
-        printf("%p ", addr);
-
+    if (mode & ADDRESSES_ON) {
+        printf(v_hfmt, addr);
+        printf(" ");
+    }
+    
     while (dump_read_data(fd, data) == 0) {
 
         dump_get_string(line, sizeof(line), data, mode);
@@ -186,8 +197,10 @@ int dump_file(int fd, struct dump_data_t* data, int mode, int nbytes)
             printf("\n");
             i = 0;
 
-            if (mode & ADDRESSES_ON)
-            printf("%p ", addr);
+            if (mode & ADDRESSES_ON) {
+                printf(v_hfmt, addr);
+                printf(" ");
+            }
         }
     }
 
@@ -234,8 +247,6 @@ char* dump_get_chars(char* pch, struct dump_data_t* data, size_t size)
 
     }
 }
-
-char c_hfmt[10], s_hfmt[10], i_hfmt[10], l_hfmt[10], ll_hfmt[10], v_hfmt[10];
 
 void dump_get_string(char* str, size_t size, struct dump_data_t* data, int mode)
 {
