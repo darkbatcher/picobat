@@ -25,7 +25,7 @@ GNU `libmatheval' manual
 
  GNU `libmatheval' is small library of procedures for evaluating
 mathematical functions.  This manual documents how to use the library;
-this is manual edition 2014.1.0, last updated 1 June 2015,
+this is manual edition 2014.1.0, last updated 2 June 2015,
 corresponding to library version 2014.1.0. 
 
 * Menu:

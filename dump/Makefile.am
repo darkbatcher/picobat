@@ -18,3 +18,4 @@
 
 bin_PROGRAMS = dump
 dump_SOURCES = dump.c
+noinst_HEADERS = dump.h

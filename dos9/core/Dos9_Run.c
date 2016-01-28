@@ -908,16 +908,17 @@ void Dos9_SigHandlerBreak(int sig)
 }
 
 #elif defined WIN32
+#include "../command/Dos9_Ask.h"
 
 BOOL WINAPI Dos9_SigHandler(DWORD dwCtrlType)
 {
+    int choice;
+
 	switch(dwCtrlType) {
 		case CTRL_C_EVENT:
-		case CTRL_BREAK_EVENT:
+		case CTRL_BREAK_EVENT:;
 
-        printf("CTRL-C caught\n");
-		longjmp(jbBreak, 1);
-
+        printf("Ctrl-C caught");
 	}
 
 	return TRUE;

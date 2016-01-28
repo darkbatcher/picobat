@@ -16,7 +16,7 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-EXTRA_DIST = po man scripts COPYING README WHATSNEW
+EXTRA_DIST = po man scripts COPYING README WHATSNEW BUILD.readme
 ACLOCAL_AMFLAGS = -I m4
 AUTOMAKE_OPTIONS = foreign subdir-objects
 SUBDIRS = libinteval libmatheval libDos9 @libcu8@ dos9 tea dump po dos9ize \

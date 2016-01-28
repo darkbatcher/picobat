@@ -1277,6 +1277,14 @@ ${make local}
 	value of the offset, counted from the end of the variable. For instance, this is now
 	allowed :
 	
-${%var:~-2,-1}
+${%var:~-2,-1%}
 	
+{{Thursday, 28, Junuary}}
 	
+	- Added an option that allow using switch catened with commands, such
+	as
+
+${set/p var=question}
+
+	- Fixed and modified hugely the dump command so that it is way more
+	portable.

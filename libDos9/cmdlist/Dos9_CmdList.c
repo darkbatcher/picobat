@@ -224,6 +224,7 @@ LIBDOS9 COMMANDFLAG   Dos9_GetCommandProc(char* lpCommandLine, LPCOMMANDLIST lpc
                     case '\n':
                     case '\t':
                     case '\0':
+                    case '/':
                         *lpcpCommandProcedure=lpclCommandList->lpCommandProc;
                         return lpclCommandList->cfFlag;
 
