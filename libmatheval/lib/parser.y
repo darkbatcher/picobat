@@ -74,6 +74,7 @@ extern void input_reset (void);
 %token <record> FUNCTION
 %left '-' '+'
 %left '*' '/'
+%left '='
 %left NEG
 %left '^'
 %token END
@@ -111,6 +112,10 @@ expression
 | expression '/' expression {
         /* Create division binary operation node.  */
         $$ = node_create ('b', '/', $1, $3);
+}
+| expression '=' expression {
+        /* Create division binary operation node.  */
+        $$ = node_create ('b', '=', $1, $3);
 }
 | '-' expression %prec NEG {
         /* Create minus unary operation node.  */

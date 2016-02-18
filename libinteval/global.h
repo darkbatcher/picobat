@@ -21,15 +21,26 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
-#define	IFEXT_STYPE char*
-extern IFEXT_STYPE IfExt_lval;
+#define	YYSTYPE char*
 
 extern char* IntEval_String;
 extern int   IntEval_Result;
 extern int	 IntEval_Error;
-extern int(*IntEval_GetVar)(const char*);
+extern int (*IntEval_Get)(const char*);
+extern int (*IntEval_Set)(const char*, int);
 
 void IntEval_InputReset();
+
+void IntEval_FreeStrings(void);
+char* IntEval_MakeString(int nb);
+int   IntEval_GetValue(const char* str);
+
+struct string_ll_t {
+    char* str;
+    struct string_ll_t* next;
+};
+
+struct string_ll_t* IntEval_Strings;
 
 #define INTEVAL_NOERROR 0
 #define INTEVAL_ALLOCERROR 1

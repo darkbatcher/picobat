@@ -45,17 +45,19 @@ variable  [_a-zA-Z]+[_a-zA-Z0-9]*
 {blancs}  { /* On ignore */ }
 
 {variable} {
-		IntEval_lval=IntEval_GetVar(yytext);
+		IntEval_lval=yytext;
 		return(VARIABLE);
 	}
 
 {entier}    {
-      IntEval_lval=strtol(yytext, NULL, 0);
+      IntEval_lval=yytext;
       return(NOMBRE);
     }
 
 "+"   return(PLUS);
 "-"   return(MOINS);
+
+"="	  return(EGAL);
 
 "*"   return(FOIS);
 "/"   return(DIVISE);

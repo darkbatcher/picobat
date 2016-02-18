@@ -57,7 +57,8 @@
      PARENTHESE_GAUCHE = 274,
      PARENTHESE_DROITE = 275,
      FIN = 276,
-     NEG = 277
+     EGAL = 277,
+     NEG = 278
    };
 #endif
 /* Tokens.  */
@@ -80,7 +81,8 @@
 #define PARENTHESE_GAUCHE 274
 #define PARENTHESE_DROITE 275
 #define FIN 276
-#define NEG 277
+#define EGAL 277
+#define NEG 278
 
 
 

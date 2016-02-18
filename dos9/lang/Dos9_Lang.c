@@ -79,10 +79,12 @@ void Dos9_LoadStrings(void)
 	snprintf(lpSharePath, FILENAME_MAX, "%s/share/locale", lpPath);
 
 	bindtextdomain("Dos9-msg", lpSharePath);
-#if !(defined(WIN32) && defined(DOS9_USE_LIBCU8))
+#if defined(WIN32) && !(defined(DOS9_USE_LIBCU8))
     /* This is not useful at all, libcu8 is able to convert utf-8 by
        itself */
 	bind_textdomain_codeset("Dos9-msg", lpEncoding);
+#elif defined(DOS9_USE_LIBCU8)
+    bind_textdomain_codeset("Dos9-msg", "UTF8");
 #endif
 	textdomain("Dos9-msg");
 
@@ -95,7 +97,6 @@ void Dos9_LoadStrings(void)
 	lpDirNoFileFound=gettext("\tNo files found\n");
 	lpDirListTitle=gettext("\nLast change\t\tSize\tAttr.\tName\n");
 	lpDirFileDirNb=gettext("\t\t\t\t\t\t%d Files\n\t\t\t\t\t\t%d Folders\n");
-	// TRANSLATORS : Don't remove the %s because the program needs it
 
 	lpDelConfirm=gettext("Are you sure you want to delete file \"%s\" ?");
 	lpRmdirConfirm=gettext("Are you sure you want to remove \"%s\" directory ?");

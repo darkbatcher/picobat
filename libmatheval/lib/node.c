@@ -1,9 +1,9 @@
-/* 
+/*
  * Copyright (C) 1999, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2011,
  * 2012, 2013 Free Software Foundation, Inc.
- * 
+ *
  * This file is part of GNU libmatheval
- * 
+ *
  * GNU libmatheval is free software: you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -28,6 +28,9 @@
 #include <stdarg.h>
 #include "common.h"
 #include "node.h"
+
+extern double(*get_var)(const char*);
+extern double(*set_var)(const char*, double);
 
 Node           *
 node_create(char type, ...)
@@ -126,7 +129,7 @@ node_destroy(Node * node)
 Node           *
 node_copy(Node * node)
 {
-	/* According to node type, create (deep) copy of subtree rooted at 
+	/* According to node type, create (deep) copy of subtree rooted at
 	 * node. */
 	switch (node->type) {
 	case 'n':
@@ -274,7 +277,7 @@ node_simplify(Node * node)
 				return left;
 			} else
 				return node;
-		/* Eliminate 0 and 1 as both left and right exponentiation 
+		/* Eliminate 0 and 1 as both left and right exponentiation
 		 * operands. */
 		else if (node->data.bin_op.operation == '^')
 			if (node->data.bin_op.left->type == 'n'
@@ -321,7 +324,7 @@ node_evaluate(Node * node)
 
 	case 'v':
 		/* Variable values are used from symbol table. */
-		return node->data.variable->data.value;
+		return get_var(node->data.variable->name);
 
 	case 'f':
 		/* Functions are evaluated through symbol table. */
@@ -360,6 +363,12 @@ node_evaluate(Node * node)
 		case '^':
 			return pow(node_evaluate(node->data.bin_op.left),
 				   node_evaluate(node->data.bin_op.right));
+        case '=':
+            if (node->data.bin_op.left->type != 'v')
+                return node_evaluate(node->data.bin_op.right);
+
+            return set_var(node->data.bin_op.left->data.variable->name,
+                                node_evaluate(node->data.bin_op.right));
 		}
 	}
 
@@ -807,7 +816,7 @@ node_derivative(Node * node, char *name, SymbolTable * symbol_table)
 								    child)),
 						       node_create('n',
 								   2.0)));
-		/* Apply rule of hyperbolic cotangent function derivative. 
+		/* Apply rule of hyperbolic cotangent function derivative.
 		 */
 		else if (!strcmp(node->data.function.record->name, "coth"))
 			return node_create('u', '-',
@@ -1318,7 +1327,7 @@ node_derivative(Node * node, char *name, SymbolTable * symbol_table)
 								   2.0)));
 
 		case '^':
-			/* If right operand of exponentiation number apply 
+			/* If right operand of exponentiation number apply
 			 * (f^n)'=n*f^(n-1)*f' derivative rule. */
 			if (node->data.bin_op.right->type == 'n')
 				return node_create('b', '*',
@@ -1411,7 +1420,7 @@ node_get_length(Node * node)
 	int             count;	/* Count of bytes written to above file. */
 	int             length;	/* Length of above string. */
 
-	/* According to node type, calculate length of string representing 
+	/* According to node type, calculate length of string representing
 	 * subtree rooted at node. */
 	switch (node->type) {
 	case 'n':

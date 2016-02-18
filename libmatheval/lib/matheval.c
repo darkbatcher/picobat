@@ -43,6 +43,8 @@ Node           *root;		/* Root of tree representation of
 				 * function.  */
 SymbolTable    *symbol_table;	/* Evaluator symbol table.  */
 int             ok;		/* Flag determining if parsing went OK.  */
+double(*get_var)(const char*);
+double(*set_var)(const char*, double);
 
 /* Data structure representing evaluator.  */
 typedef struct {
@@ -117,52 +119,18 @@ evaluator_destroy(void *evaluator)
 	XFREE(evaluator);
 }
 
-double
-evaluator_evaluate(void *evaluator, int count, char **names,
-		   double *values)
+extern int evaluator_set_functions(double(*get)(const char*),
+                                                double(*set)(const char*, double))
 {
-	Record         *record;	/* Symbol table record corresponding to
-				 * given variable name.  */
-	int             i;	/* Loop counter.  */
+    get_var = get;
+    set_var = set;
 
-	/* Assign values to symbol table records corresponding to variable
-	 * names. */
-	for (i = 0; i < count; i++) {
-		record =
-		    symbol_table_lookup(((Evaluator *) evaluator)->
-					symbol_table, names[i]);
-		if (record && record->type == 'v')
-			record->data.value = values[i];
-	}
-
-	/* Evaluate function value using tree represention of function. */
-	return node_evaluate(((Evaluator *) evaluator)->root);
+    return 0;
 }
 
 double
-evaluator_evaluate2(void *evaluator, double(*function)(const char*))
+evaluator_evaluate(void *evaluator)
 {
-	Record         *record;	/* Symbol table record corresponding to
-				 * given variable name.  */
-	int             i,	/* Loop counter.  */
-                    count; /* number of symbols in names */
-	char**          names; /* symbols name */
-
-    /* Get expression variables */
-	evaluator_get_variables(evaluator, &names, &count);
-
-	/* Assign values to symbol table records corresponding to variable
-	 * names. */
-	for (i = 0; i < count; i++) {
-		record =
-		    symbol_table_lookup(((Evaluator *) evaluator)->
-					symbol_table, names[i]);
-	/* if the symbol is a variable just call the callback function */
-
-		if (record && record->type == 'v')
-			record->data.value = function(names[i]);
-	}
-
 	/* Return requsted information. */
 	return node_evaluate(((Evaluator *) evaluator)->root);
 }
@@ -242,71 +210,4 @@ evaluator_derivative(void *evaluator, char *name)
 	derivative->names = NULL;
 
 	return derivative;
-}
-
-double
-evaluator_evaluate_x(void *evaluator, double x)
-{
-	char           *names[] = {
-		"x"
-	};			/* Array of variable names.  */
-	double          values[1];	/* Array of variable values.  */
-
-	/* Evaluate function for given values of variable "x". */
-	values[0] = x;
-	return evaluator_evaluate(evaluator,
-				  sizeof(names) / sizeof(names[0]), names,
-				  values);
-}
-
-double
-evaluator_evaluate_x_y(void *evaluator, double x, double y)
-{
-	char           *names[] = {
-		"x", "y"
-	};			/* Array of variable names.  */
-	double          values[2];	/* Array of variable values.  */
-
-	/* Evaluate function for given values of variable "x" and "y". */
-	values[0] = x, values[1] = y;
-	return evaluator_evaluate(evaluator,
-				  sizeof(names) / sizeof(names[0]), names,
-				  values);
-}
-
-double
-evaluator_evaluate_x_y_z(void *evaluator, double x, double y, double z)
-{
-	char           *names[] = {
-		"x", "y", "z"
-	};			/* Array of variable names.  */
-	double          values[3];	/* Array of variable values.  */
-
-	/* Evaluate function for given values of variable "x", "y" and
-	 * "z". */
-	values[0] = x, values[1] = y, values[2] = z;
-	return evaluator_evaluate(evaluator,
-				  sizeof(names) / sizeof(names[0]), names,
-				  values);
-}
-
-void           *
-evaluator_derivative_x(void *evaluator)
-{
-	/* Differentiate function using derivation variable "x". */
-	return evaluator_derivative(evaluator, "x");
-}
-
-void           *
-evaluator_derivative_y(void *evaluator)
-{
-	/* Differentiate function using derivation variable "y". */
-	return evaluator_derivative(evaluator, "y");
-}
-
-void           *
-evaluator_derivative_z(void *evaluator)
-{
-	/* Differentiate function using derivation variable "z". */
-	return evaluator_derivative(evaluator, "z");
 }

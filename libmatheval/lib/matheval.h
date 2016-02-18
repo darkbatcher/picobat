@@ -1,9 +1,9 @@
-/* 
+/*
  * Copyright (C) 1999, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2011,
  * 2012, 2013 Free Software Foundation, Inc.
- * 
+ *
  * This file is part of GNU libmatheval
- * 
+ *
  * GNU libmatheval is free software: you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -40,19 +40,18 @@ extern          "C" {
 	 * and fourth argument. Number of variables i.e. length of these
 	 * two arrays is given by second argument.  Function returns
 	 * evaluated function value.  In case that function contains
-	 * variables with names not given through third function argument, 
+	 * variables with names not given through third function argument,
 	 * value of this variable is undeterminated. */
-	extern double   evaluator_evaluate(void *evaluator, int count,
-					   char **names, double *values);
-					   
-	extern double   evaluator_evaluate2(void *evaluator, 
-						double(*function)(const char*));
+
+    extern int      evaluator_set_functions(double(*get)(const char*),
+                                                double(*set)(const char*, double));
+	extern double   evaluator_evaluate(void *evaluator);
 
 	/* Return textual representation of function given by evaluator.
-	 * Textual representation is built after evaluator simplification, 
+	 * Textual representation is built after evaluator simplification,
 	 * so it may differ from original string supplied when creating
 	 * evaluator.  String representing function is allocated,
-	 * remembered and later destroyed by evaluator object, thus caller 
+	 * remembered and later destroyed by evaluator object, thus caller
 	 * must not free returned pointer.  Returned information is valid
 	 * until evaluator object destroyed. */
 	extern char    *evaluator_get_string(void *evaluator);
@@ -65,7 +64,7 @@ extern          "C" {
 	 * is stored into location pointed by third argument.  Array is
 	 * allocated, remembered and later destroyed by evaluator object,
 	 * thus caller must not free any of string nor array itself.
-	 * Returned information is valid until evaluator object destroyed. 
+	 * Returned information is valid until evaluator object destroyed.
 	 */
 	extern void     evaluator_get_variables(void *evaluator,
 						char ***names, int *count);
@@ -75,7 +74,7 @@ extern          "C" {
 	 * given as second argument. */
 	extern void    *evaluator_derivative(void *evaluator, char *name);
 
-	/* Helper functions to simplify evaluation when variable names are 
+	/* Helper functions to simplify evaluation when variable names are
 	 * "x", "x" and "y" or "x" and "y" and "z" respectively. */
 	extern double   evaluator_evaluate_x(void *evaluator, double x);
 	extern double   evaluator_evaluate_x_y(void *evaluator, double x,

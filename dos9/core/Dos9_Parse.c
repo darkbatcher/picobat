@@ -83,7 +83,7 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 		if ((lpNextToken >= lpNextBlock)
 		    && (lpNextBlock!=NULL)) {
 
-			lpSearchBegin=Dos9_GetBlockLineEnd(lpNextBlock);
+			lpSearchBegin=Dos9_GetNextBlockEnd(lpNextBlock);
 
 			if (lpSearchBegin==NULL) {
 

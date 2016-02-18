@@ -26,9 +26,18 @@
 #include "global.h"
 
 int IntEval_Error=INTEVAL_NOERROR;
-int(*IntEval_GetVar)(const char*);
+int(*IntEval_Get)(const char*);
+int(*IntEval_Set)(const char*, int);
 
-int IntEval_Eval(const char* lpLine, int(*fn)(const char*))
+int IntEval_Set_Fn(int(*get)(const char*),
+                        int(*set)(const char*, int))
+{
+    IntEval_Get = get;
+    IntEval_Set = set;
+    return 0;
+}
+
+int IntEval_Eval(const char* lpLine)
 {
     char* lpInteval;
 
@@ -45,11 +54,56 @@ int IntEval_Eval(const char* lpLine, int(*fn)(const char*))
 	IntEval_InputReset();
 	IntEval_Error=INTEVAL_NOERROR;
 	IntEval_Result=0;
-	IntEval_GetVar=fn;
+	IntEval_Strings = NULL;
 
     IntEval_parse();
+
+    IntEval_FreeStrings();
 
 	free(lpInteval);
 
     return IntEval_Result;
+}
+
+char* IntEval_MakeString(int nb)
+{
+    char buf[FILENAME_MAX];
+    struct string_ll_t* item;
+
+    if (!(item = malloc (sizeof (struct string_ll_t))))
+        return "0";
+
+    snprintf(buf, sizeof(buf), "%d", nb);
+
+    if (!(item->str = strdup(buf))) {
+        free(item);
+        return "0";
+    }
+
+    item->next = IntEval_Strings;
+    IntEval_Strings = item;
+    return item->str;
+}
+
+void IntEval_FreeStrings(void)
+{
+    struct string_ll_t* item;
+
+    while (IntEval_Strings != NULL) {
+        item = IntEval_Strings->next;
+        free(IntEval_Strings);
+        IntEval_Strings = item;
+    }
+}
+
+int   IntEval_GetValue(const char* str)
+{
+    int ret;
+    char *pch;
+
+    ret = strtol(str, &pch, 0);
+    if (pch && *pch != '\0')
+        ret = IntEval_Get(str);
+
+    return ret;
 }

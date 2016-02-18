@@ -72,6 +72,17 @@ double _Dos9_SetGetVarFloat(const char* lpName)
 
 }
 
+double _Dos9_SetSetVarFloat(const char* name, double f)
+{
+	char value[FILENAME_MAX];
+
+	sprintf(value, "%.16g", f);
+
+	Dos9_SetEnv(lpeEnv, name, value);
+
+    return f;
+}
+
 int _Dos9_SetGetVarInt(const char* lpName)
 {
 	char* lpContent;
@@ -88,6 +99,16 @@ int _Dos9_SetGetVarInt(const char* lpName)
 
 	}
 
+}
+
+int _Dos9_SetSetVarInt(const char* lpName, int v)
+{
+	char lpContent[FILENAME_MAX];
+
+    snprintf(lpContent, sizeof(lpContent), "%d", v);
+	Dos9_SetEnv(lpeEnv, lpName, lpContent);
+
+    return v;
 }
 
 
@@ -120,8 +141,8 @@ int _Dos9_SetGetVarInt(const char* lpName)
 	Basically, `set "var1=1","var2=2"' may assign various variables, while
 	using a space may not.
 
-	Things are even worser in case of inline assigments using set /a.
-	Problems are introduced by the lack of standard precendence rules for
+	Things are even worser in case of inline assignments using set /a.
+	Problems are introduced by the lack of standard precedence rules for
 	assignments. As an example, `set /a var=1+(var3=2)' evaluates to 3
 	whereas `set /a var=1+var3=2' evaluates to 2 (That does not make sense
 	anyway, can't figure how to get 2 out of this expression). Thus, these
@@ -429,7 +450,8 @@ int Dos9_CmdSetEvalFloat(ESTR* lpExpression)
 
 	}
 
-	dResult=evaluator_evaluate2(evaluator, _Dos9_SetGetVarFloat);
+    evaluator_set_functions(_Dos9_SetGetVarFloat, _Dos9_SetSetVarFloat);
+	dResult=evaluator_evaluate(evaluator);
 
 	evaluator_destroy(evaluator);
 
@@ -525,7 +547,8 @@ int Dos9_CmdSetEvalInt(ESTR* lpExpression)
 
 	}
 
-	iResult=IntEval_Eval(lpEqual+1, _Dos9_SetGetVarInt);
+    IntEval_Set_Fn(_Dos9_SetGetVarInt, _Dos9_SetSetVarInt);
+	iResult=IntEval_Eval(lpEqual+1);
 
 	if (IntEval_Error != INTEVAL_NOERROR) {
 

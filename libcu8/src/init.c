@@ -144,12 +144,11 @@ int libcu8_get_argv(const char*** pargv)
 
     __wgetmainargs(&argc, &wargv, &wenv, 0, &stinfo);
 
-    //fprintf(stderr, "Getting memory for argv\n");
+    // fprintf(stderr, "Getting memory for argv\n");
 
     if (!(argv = malloc((argc + 1) * sizeof(char*)))) {
 
-
-        //fprintf(stderr, "Failed to get memory for argv\n");
+        // fprintf(stderr, "Failed to get memory for argv\n");
         errno = ENOMEM;
         return -1;
 
@@ -164,14 +163,14 @@ int libcu8_get_argv(const char*** pargv)
         if (!(argv[i] = libcu8_xconvert(LIBCU8_FROM_U16, (char*)wargv[i],
                                 (wcslen(wargv[i])+1)*sizeof(wchar_t), &converted))) {
 
-            //fprintf(stderr, "Failed to convert %d th argumenent\n", i);
+        //    fprintf(stderr, "Failed to convert %d th argumenent\n", i);
             return -1;
 
         }
 
     }
 
-    //fprintf(stderr, "End lol");
+    // fprintf(stderr, "End lol");
 
     *pargv = (const char**)argv;
 

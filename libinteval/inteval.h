@@ -24,10 +24,11 @@
 #define INTEVAL_ALLOCERROR 1
 #define INTEVAL_SYNTAXERROR 2
 
-int IntEval_Eval(const char* lpLine, int(*fn)(const char*));
+int IntEval_Eval(const char* lpLine);
+int IntEval_Set_Fn(int(*get)(const char*),
+                        int(*set)(const char*, int));
 
 extern int IntEval_Error;
-extern int(*Inteval_GetVar)(const char*);
 
 #endif // INTEVAL_H
 

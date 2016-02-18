@@ -242,7 +242,7 @@ __LIBCU8__IMP __cdecl char* libcu8_convert(int mode, const char* src,
     char chunk_buf[CHUNK_SIZE],
          *chunk = chunk_buf,
          *ret = NULL,
-         *tmp;
+         *tmp = NULL;
     size_t chunk_size = CHUNK_SIZE,
             retsize = 0,
             retpos = 0,

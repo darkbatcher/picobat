@@ -52,6 +52,8 @@ void Dos9_LoadInternalHelp(void)
     /* This is not useful at all, libcu8 is able to convert utf-8 by
        itself */
 	bind_textdomain_codeset("Dos9-hlp", lpEncoding);
+#elif defined(DOS9_USE_LIBCU8)
+    bind_textdomain_codeset("Dos9-msg", "UTF8");
 #endif
 	textdomain("Dos9-hlp");
 

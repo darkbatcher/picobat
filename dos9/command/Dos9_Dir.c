@@ -183,7 +183,8 @@ int Dos9_CmdDir(char* lpLine)
 	iDirNb=0;
 	iFileNb=0;
 
-	if (!bSimple) puts(lpDirListTitle);
+	if (!bSimple)
+        puts(lpDirListTitle);
 
 	/* Get a list of file and directories matching to the
 	   current filename and options set */

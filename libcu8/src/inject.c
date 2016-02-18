@@ -46,27 +46,42 @@ static HANDLE self = INVALID_HANDLE_VALUE;
    addressing can be use  */
 static void** fn_tbl = NULL;
 
+#define BASE_MASK 0xffffffffff000000
+
 /* Reserve memory for the array of pointers */
 int libcu8_reserve_fn_table(int nb, void* base_fn)
 {
     /* compute a base address for fn_tbl, close enough to be in
-       2GB range arround the original function position  */
-    void *base = (void*)((INT64)_read & 0xffffffffff000000);
+       2GB range around the original function position  */
+    void *base = (void*)((INT64)_read & BASE_MASK),
+         *addr;
     int size;
     SYSTEM_INFO sysinfo;
 
     /* get basic informations about the OS */
     GetSystemInfo(&sysinfo);
 
+    /* Compute the number of pages to reserve */
     size = ((nb * sizeof(void*) + sysinfo.dwPageSize) / sysinfo.dwPageSize)
                 * sysinfo.dwPageSize;
 
-    if (!(fn_tbl = VirtualAlloc(base, size, MEM_RESERVE | MEM_COMMIT,
-                                                       PAGE_EXECUTE_READWRITE))) {
+    addr = ((char*)base +  (~BASE_MASK / sysinfo.dwPageSize)
+                            * sysinfo.dwPageSize );
 
-        return -1;
+    while (addr >= base) {
+
+        //printf("Trying to reserve address %p ...\n", addr);
+
+        if ((fn_tbl = VirtualAlloc(addr, size, MEM_RESERVE | MEM_COMMIT,
+                                                       PAGE_EXECUTE_READWRITE)))
+            break;
+
+        addr = ((char*)addr - sysinfo.dwPageSize);
 
     }
+
+    if (fn_tbl == NULL)
+        return -1;
 
     //printf("fn_tbl = %p\n", fn_tbl);
 
@@ -102,7 +117,7 @@ int __cdecl libcu8_replace_fn(void* oldfn, void* newfn, int n)
 
        Note there is another constraint, the sequence will be inserted within
        msvcrt function, so it needs to be really short, otherwise it won't
-       fit and subsquent replacement may overwrite parts of it.
+       fit and subsequent replacement may overwrite parts of it.
 
        These codes have the advantage to be simple and not to affect most of the
        calling conventions on windows, such as __cdecl, __stdcall, __fastcall

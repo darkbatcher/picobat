@@ -61,8 +61,10 @@ int Dos9_GetFilePath(char* lpFullPath, const char* lpPartial, size_t iBufSize)
 
 		DOS9_DBG("[Dos9_GetFilePath()]*** Path is absolute");
 
-		if (!Dos9_FileExists(lpPartial))
-			return -1;
+		if (!Dos9_FileExists(lpPartial)) {
+            bFirstLoop = FALSE;
+			goto next;
+		}
 
 		strncpy(lpFullPath, lpPartial, iBufSize);
 		lpFullPath[iBufSize-1] = '\0';
@@ -71,6 +73,7 @@ int Dos9_GetFilePath(char* lpFullPath, const char* lpPartial, size_t iBufSize)
 	}
 	DOS9_DBG("[Dos9_GetFilePath()]*** Start research of file : \"%s\"\n\n", lpPartial);
 
+next:
 	do {
 
 		if (bFirstLoop) {
