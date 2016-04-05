@@ -341,9 +341,6 @@ loop:
 
     }
 
-
-
-
 	switch (lppsStream->cNodeType) {
 
 	case PARSED_STREAM_NODE_PIPE:
@@ -867,6 +864,8 @@ int Dos9_RunExternalBatch(char* lpFileName, char* lpFullLine, char** lpArguments
         Dos9_SetLocalVar(lpvLocalVars, '*', lpFullLine);
 
         Dos9_SetLocalVar(lpvLocalVars, '0', lpFileName);
+
+        bIsScript = 1; /* this is obviously a script */
 
         strncpy(ifIn.lpFileName, lpFileName, sizeof(ifIn.lpFileName));
         ifIn.lpFileName[sizeof(ifIn.lpFileName)-1] = '\0';

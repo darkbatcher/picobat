@@ -118,5 +118,12 @@ int Dos9_SetCurrentDir(const char* lpPath)
     return status;
 }
 
+char* Dos9_GetFirstExistingFile(char** files)
+{
+	int i = 0;
 
+	while (files[i] && !Dos9_FileExists(files[i]))
+		i++;
 
+	return files[i];
+}

@@ -17,16 +17,20 @@ MSGFMT = @MSGFMT@
 XGETTEXT = @XGETTEXT@
 MSGMERGE = @MSGMERGE@
 prefix = @prefix@
+datarootdir = @datarootdir@
+datadir= @datadir@
 all: m-po
 
 dist:
 distdir:
 
-local:
-	cp -R ./share ../bin/
+install-exec:
+install-exec-recursive:
+install-data: install
+install-data-recursive:
 
 install:
-	cp -R ./share/locale $(prefix)/share/locale
+	cp -R ./share/locale $(datadir)/locale
 
 m-po: po-tree
 	mkdir -p $(SHARE_DIR)

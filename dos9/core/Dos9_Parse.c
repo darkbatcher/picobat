@@ -58,7 +58,6 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 	      *lpNextBlock;
 
 	char lpCorrect[]="1";
-
 	char cChar;
 
 	ESTR *lpesFinal=Dos9_EsInit(),
@@ -84,8 +83,8 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 		    && (lpNextBlock!=NULL)) {
 
 			lpSearchBegin=Dos9_GetNextBlockEnd(lpNextBlock);
-
-			if (lpSearchBegin==NULL) {
+            			
+            if (lpSearchBegin==NULL) {
 
 				Dos9_FreeLine(lppssStart);
 
@@ -95,8 +94,8 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 				goto error;
 
 			}
-
-			lpNextBlock=Dos9_GetNextBlockBegin(lpSearchBegin);
+            
+			lpNextBlock=Dos9_GetNextBlockBeginEx(lpSearchBegin, 1);
 
 			continue;
 
@@ -148,6 +147,7 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 		case '>' :
 			/* this is ouput */
 
+            fprintf(stderr, "found > \"%s\".\n", lpNextToken); 
 			if (lppssStart->lpOutputFile) {
 
 				Dos9_FreeLine(lppssStart);
@@ -208,6 +208,7 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 			break;
 
 		case '<' :
+            fprintf(stderr, "found > \"%s\".\n", lpNextToken); 
 			/* this is input */
 
 			if (lppssStart->lpInputFile) {
@@ -310,7 +311,7 @@ PARSED_STREAM*       Dos9_ParseOperators(ESTR* lpesLine)
 
 			}
 
-			lpNextBlock=Dos9_GetNextBlockBegin(lpSearchBegin);
+			lpNextBlock=Dos9_GetNextBlockBeginEx(lpSearchBegin, 1);
 
 			continue;
 		}

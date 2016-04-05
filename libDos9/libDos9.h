@@ -28,7 +28,17 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#define LIBDOS9
+#ifdef  DLL_EXPORT
+#define __LIBDOS9__DLL
+#endif /* DLL_EXPORT */
+
+#ifndef LIBDOS9
+#ifdef __LIBDOS9__DLL
+#define LIBDOS9 __declspec(dllexport)
+#else
+#define LIBDOS9 extern
+#endif /* __LIBDOS9__DLL */
+#endif /* LIBDOS9  */
 
 #if defined WIN32
 
@@ -114,7 +124,8 @@ typedef pid_t           PROCESS;
 
 #endif
 
-LIBDOS9 int      Dos9_BeginThread(THREAD* lpThId, void(*pFunc)(void*), int iMemAmount, void* arg);
+LIBDOS9 int      Dos9_BeginThread(THREAD* lpThId, void(*pFunc)(void*), 
+					int iMemAmount, void* arg);
 LIBDOS9 void     Dos9_EndThread(void* iReturn);
 LIBDOS9 void     Dos9_AbortThread(THREAD* lpThId);
 LIBDOS9 int      Dos9_WaitForThread(THREAD* thId, void** pRet);
@@ -156,7 +167,7 @@ typedef struct ESTR {
 
 #define Dos9_SetNewLineMode(type) _Dos9_NewLine=type
 
-LIBDOS9 extern int      _Dos9_NewLine;
+extern int      _Dos9_NewLine;
 LIBDOS9 ESTR*           Dos9_EsInit(void);
 LIBDOS9 char*           Dos9_strdup(const char* src);
 LIBDOS9 int             Dos9_EsGet(ESTR* ptrESTR, FILE* ptrFile);
@@ -371,6 +382,7 @@ LIBDOS9 const char* Dos9_ConsoleCP2Encoding(int cp);
 
 extern  char _Dos9_Currdir[FILENAME_MAX];
 LIBDOS9 int Dos9_FileExists(const char* lpPath);
+LIBDOS9 char* Dos9_GetFirstExistingFile(char** files);
 LIBDOS9 int Dos9_DirExists(const char* lpPath);
 LIBDOS9 int Dos9_UpdateCurrentDir(void);
 LIBDOS9 int Dos9_SetCurrentDir(const char* lpPath);

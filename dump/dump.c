@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+#include <unistd.h>
 
 #ifdef WIN32
 #include <io.h>
@@ -366,7 +367,7 @@ int dump_get_endianess(void)
 
 void dump_help(void)
 {
-    char* help_fr="Dump.exe [version 1.0] - copyright (c) 2013 Darkbatcher (Romain Garbi)\n\
+    char* help_fr="Dump.exe [version 1.0] - copyright (c) 2013-2016 Romain Garbi\n\
 Cette commande fait partie du set de commandes Dos9\n\
 Ce programme est un logiciel Libre, pour plus d'information, tapez ``dump /l''\n\
 \n\
@@ -408,7 +409,7 @@ Page d'aide de DUMP : <http://www.dos9.org/man/dump>\n\n";
 void dump_license(void)
 {
 	char license[]="\n\n    Dos9 DUMP, a free file binary dumper, The Dos9 Project                 \n\
-    Copyright (C) 2013 Darkbatcher (Romain Garbi)\n\
+    Copyright (C) 2013-2016 Romain Garbi\n\
 \n\
 This program is free software: you can redistribute it and/or modify\n\
 it under the terms of the GNU General Public License as published by\n\

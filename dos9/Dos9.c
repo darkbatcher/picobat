@@ -56,70 +56,25 @@
 #include "../config.h"
 
 
-void Dos9_AssignCommandLine(char** argv)
-{
-    ESTR *lpEsStr=Dos9_EsInit(),
-          *lpEsParam=Dos9_EsInit();
-
-    char*  delims=" ,;=\t&|";
-
-    while (*argv) {
-
-        Dos9_EsCpy(lpEsParam, *argv);
-        Dos9_EsReplace(lpEsParam, "\"", "^\""); /* escape parenthesis */
-
-        if (strpbrk(*argv, delims)) {
-
-            Dos9_EsCat(lpEsStr, "\"");
-            Dos9_EsCatE(lpEsStr, lpEsParam);
-            Dos9_EsCat(lpEsStr, "\" ");
-
-        } else {
-
-            Dos9_EsCatE(lpEsStr, lpEsParam);
-            Dos9_EsCat(lpEsStr, " ");
-
-        }
-
-        argv ++;
-
-    }
-
-    Dos9_SetLocalVar(lpvLocalVars, '*', Dos9_EsToChar(lpEsStr));
-
-    Dos9_EsFree(lpEsStr);
-    Dos9_EsFree(lpEsParam);
-}
-
-
-
 int main(int argc, char *argv[])
 {
-	/*  a function which initializes Dos9's core,
-	    parses the command line argumments,
-	    And display starting message
-	*/
+    /*  a function which initializes Dos9's core,
+        parses the command line argumments,
+        And display starting message
+    */
 
-	char *lpFileName="",
-	      lpFileAbs[FILENAME_MAX]="",
-	      lpTmp[FILENAME_MAX],
-	      lpExePath[FILENAME_MAX],
-	      lpTitle[FILENAME_MAX]="Dos9 [" DOS9_VERSION "] - ",
-		 *lpCmdCSwitch=NULL;
+    char *lpFileName="",
+          lpFileAbs[FILENAME_MAX]="",
+         *lpCmdCSwitch=NULL;
 
 
-	int i,
-	    j,
-	    c='0',
-	    bQuiet=FALSE,
-	    bGetSwitch=TRUE,
-	    bExitAfterCmd=TRUE;
+    int bQuiet=FALSE,
+        bExitAfterCmd=TRUE;
 
-	ESTR* lpesCmd;
+    ESTR* lpesCmd;
 
 #if defined(WIN32) && defined(DOS9_USE_LIBCU8)
-	DOS9_DBG("Initializing libcu8\n");
-
+    /* Initialize libcu8 */
     if (libcu8_init(&argv) == -1) {
 
         fprintf(stderr, "Unable to load libcu8...\n");
@@ -128,300 +83,76 @@ int main(int argc, char *argv[])
     }
 #endif
 
-    DOS9_DBG("Initializing Dos9's custom environ\n");
-    lpeEnv = Dos9_InitEnv(environ);
-
-	DOS9_DBG("Initializing signal handler...\n");
-
-	DOS9_DBG("Initializing libDos9 ...\n");
-	if (Dos9_LibInit() == -1) {
-
-		puts("Error : Unable to load LibDos9. Exiting ...");
-		exit(-1);
-	}
-
-	DOS9_DBG("Setting UNIX newlines ...\n");
-	Dos9_SetNewLineMode(DOS9_NEWLINE_UNIX);
-
-	DOS9_DBG("Allocating local variable block ... \n");
-	lpvLocalVars=Dos9_GetLocalBlock();
-
-	DOS9_DBG("Initializing console ...\n");
-	Dos9_InitConsole();
-
-	DOS9_DBG("Setting locale ...\n");
-#ifdef WIN32
-
-	SetThreadLocale(LOCALE_USER_DEFAULT);
-
-#elif !defined(WIN32)
-
-	setlocale(LC_ALL, "");
-
-#endif // WINDOWS
-
-	DOS9_DBG("Loading GETTEXT messages... \n");
-	Dos9_LoadStrings();
-	Dos9_LoadErrors();
-	Dos9_LoadInternalHelp();
-
-	DOS9_DBG("Loading current directory...\n");
-	Dos9_UpdateCurrentDir();
-
-	/* **********************************
-	   *   getting Dos9's parameters    *
-	   ********************************** */
-
-	if (!argv[0])
-		Dos9_ShowErrorMessage(DOS9_BAD_COMMAND_LINE,
-		                      "Dos9",
-		                      -1
-		                     );
-
-    DOS9_DBG("Getting current executable name ...\n");
-	Dos9_GetExePath(lpExePath, FILENAME_MAX);
-
-	DOS9_DBG("\tGot \"%s\" as name ...\n", lpExePath);
-	lpInitVar[4]="DOS9_PATH";
-	lpInitVar[5]=lpExePath;
-
-	DOS9_DBG("Initializing variables ...\n");
-	Dos9_InitVar(lpInitVar);
-	Dos9_SetEnv(lpeEnv, "ERRORLEVEL","0");
-
-	DOS9_DBG("Mapping commands ... \n");
-	lpclCommands=Dos9_MapCommandInfo(lpCmdInfo, sizeof(lpCmdInfo)/sizeof(COMMANDINFO));
-
-	DOS9_DBG("Initializing streams ... \n");
-	lppsStreamStack=Dos9_InitStreamStack();
-
-	pErrorHandler=Dos9_Exit;
-
-    DOS9_DBG("Getting command line arguments ... \n");
-	/* get command line arguments */
-	for (i=1; argv[i]; i++) {
-
-		DOS9_DBG("* Got \"%s\" as argument...\n", argv[i]);
-
-		if (*argv[i]=='/' && bGetSwitch) {
-			argv[i]++;
-			switch(toupper(*argv[i])) {
-
-				case 'A':
-				if (*(argv[i]+1) == ':')
-					argv[i]++;
-
-				while (*(argv[i]++)) {
-					switch (toupper(*argv[i])) {
-
-						case 'V':
-							/* enables delayed expansion */
-							bDelayedExpansion=TRUE;
-							break;
-
-						case 'F':
-							/* enables floats */
-							bUseFloats=TRUE;
-							break;
-
-						case 'E':
-							bEchoOn=FALSE;
-							break;
-
-						case 'C':
-							/* enable cmd-compatible mode */
-							#if !defined(DOS9_STATIC_CMDLYCORRECT)
-							bCmdlyCorrect=TRUE;
-							#else
-							Dos9_ShowErrorMessage(DOS9_UNABLE_SET_OPTION,
-													"CMDLYCORRECT",
-													FALSE);
-							#endif
-							break;
-
-						case 'Q':
-							bQuiet=TRUE; // run silently
-							break;
-
-                    }
-
-                }
-				break;
-
-				case 'I':
-					if (!argv[++i]) {
-
-						Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "Dos9", -1);
-
-					}
-
-					iInputD=atoi(argv[i]); // select input descriptor
-					Dos9_OpenOutputD(lppsStreamStack, iInputD, DOS9_STDIN);
-					break;
-
-				case 'O':
-					if (!argv[++i]) {
-
-						Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "Dos9", -1);
-
-					}
-
-					iOutputD=atoi(argv[i]); // select input descriptor
-					Dos9_OpenOutputD(lppsStreamStack, iOutputD, DOS9_STDOUT);
-					break;
-
-				case 'K':
-					bExitAfterCmd = FALSE;
-				case 'C':
-					if (lpCmdCSwitch != NULL || argv[++i] == NULL)
-						Dos9_ShowErrorMessage(DOS9_BAD_COMMAND_LINE, NULL, -1);
-
-					lpCmdCSwitch = argv[i];
-					break;
-
-				case '?':
-					puts("DOS9 [" DOS9_VERSION "] (" DOS9_HOST ") - " DOS9_BUILDDATE "\n"
-					     "Copyright (c) 2010-" DOS9_BUILDYEAR " " DOS9_AUTHORS "\n\n"
-					     "This is free software, you can modify and/or redistribute it under "
-					     "the terms of the GNU Genaral Public License v3 (or any later version).\n");
-
-					puts(lpHlpMain);
-
-					puts("Feel free to report bugs and submit suggestions at : <" DOS9_BUGREPORT ">\n"
-						 "For more informations see : <" DOS9_URL ">");
-					return 0;
-
-				case '/' :
-					/* there is no more switch on the command line.
-					   '' */
-					bGetSwitch=FALSE;
-					break;
-
-				default:
-					Dos9_ShowErrorMessage(DOS9_BAD_COMMAND_LINE, NULL, -1);
-
-			}
-
-		} else {
-
-			if (*lpFileName!='\0') {
-
-				/* set parameters for the file currently runned */
-				for (j=i ,  c='1'; argv[j] && c<='9'; i++, c++ , j++ ) {
-
-					Dos9_SetLocalVar(lpvLocalVars, c, argv[j]);
-
-				}
-
-				break;
-			}
-
-			lpFileName=argv[i];
-			Dos9_SetLocalVar(lpvLocalVars, '0', lpFileName);
-			c='1';
-
-			Dos9_AssignCommandLine(argv + i);
-
-			bGetSwitch = FALSE;
-		}
-
-	}
-
-	/* empty remaining special vars */
-	for (; c<='9'; c++)
-		Dos9_SetLocalVar(lpvLocalVars, c , "");
-
-	srand(time(NULL));
-
-	colColor=DOS9_COLOR_DEFAULT;
-	/* messages affichés */
-
-
-	DOS9_DBG("Setting introduction and DOS9_IS_SCRIPT ...\n");
-
-	if (*lpFileName=='\0') {
-
-		if (!bQuiet)
-			Dos9_PrintIntroduction();
-
-		strcat(lpTitle, "Command prompt");
-		Dos9_SetEnv(lpeEnv, "DOS9_IS_SCRIPT", "false");
-		bIsScript = 0;
-
-	} else {
-
-		strncat(lpTitle, lpFileName, sizeof(lpTitle)-sizeof("Dos9 [" DOS9_VERSION "] - "));
-		Dos9_SetEnv(lpeEnv, "DOS9_IS_SCRIPT", "true");
-        bIsScript = 1;
-
-		DOS9_DBG("[dos9] Runing \"%s\"\n", lpFileName);
-
-	}
-
-	if (!bQuiet) {
-
-		Dos9_SetConsoleTextColor(DOS9_COLOR_DEFAULT);
-		Dos9_SetConsoleTitle(lpTitle);
-
-	}
-
-	/* running auto batch initialisation */
-
-	strcat(lpExePath, "/Dos9_Auto.bat");
-
-	strcpy(ifIn.lpFileName, lpExePath);
-	ifIn.iPos=0;
-	ifIn.bEof=FALSE;
-
-	DOS9_DBG("Running file \"%s\"\n", ifIn.lpFileName);
-
-	Dos9_RunBatch(&ifIn);
-
-	DOS9_DBG("\tRan\n");
-
-	if (lpCmdCSwitch != NULL) {
-
-		lpesCmd=Dos9_EsInit();
-
-		Dos9_EsCpy(lpesCmd, lpCmdCSwitch);
-        DOS9_DBG("Running \"%s\"\n", lpesCmd->str);
-
-		Dos9_RunLine(lpesCmd);
-
-        DOS9_DBG("\tRan\n");
-
-		if (bExitAfterCmd == TRUE)
-			goto skip;
-	}
-
-	if (*lpFileName!='\0') {
-
-		/* generates real path if the path is uncomplete */
-
-        DOS9_DBG("Looking for \"%s\" absolute path\n.", lpFileName);
-
-		if (Dos9_GetFilePath(lpFileAbs, lpFileName, sizeof(lpFileAbs))==-1)
-			Dos9_ShowErrorMessage(DOS9_FILE_ERROR, lpFileName, -1);
-
-	}
-
-	/* run the batch */
-	strcpy(ifIn.lpFileName, lpFileAbs);
-	ifIn.iPos=0;
-	ifIn.bEof=FALSE;
-
-	DOS9_DBG("Running file \"%s\" ...\n", ifIn.lpFileName);
-
-	Dos9_RunBatch(&ifIn);
-
-	DOS9_DBG("\t Ran\nExiting...\n");
+    /* Initialize libDos9 */
+    Dos9_InitLibDos9();
+    
+    /* Set the error handler called on errors that require the process to exit */
+    pErrorHandler=Dos9_Exit;
+
+    /* Process the command line, and set the appropriate special variables for
+     * special parameters. (note %0 is set when the absolute path of the script
+     * is computed) */
+    lpCmdCSwitch = Dos9_GetParameters(argv, &lpFileName, &bExitAfterCmd, &bQuiet);
+    
+    /* Initialize stdlib random */
+    srand(time(NULL));
+
+    /* Set the default terminal color */
+    colColor=DOS9_COLOR_DEFAULT;
+    
+    /* Set the console title depending on the type of actions performed (ie.
+     * command prompt or batch interpretor) and set the DOS9_IS_SCRIPT var
+     * appropriately */
+    Dos9_InitConsoleTitles(lpFileName, bQuiet);
+
+    /* Generates the absolute path of the script and sets the special variable
+     * %0 accordingly */
+    if (*lpFileName!='\0') {
+
+        /* generates real path if the path is uncomplete */
+        if (Dos9_GetFilePath(lpFileAbs, lpFileName, sizeof(lpFileAbs))==-1)
+            Dos9_ShowErrorMessage(DOS9_FILE_ERROR, lpFileName, -1);
+
+        Dos9_SetLocalVar(lpvLocalVars, '0', lpFileAbs);
+
+    } else {
+
+        Dos9_SetLocalVar(lpvLocalVars, '0', "");
+
+    }
+    
+    /* Map the commandinfo */
+    lpclCommands = Dos9_MapCommandInfo(lpCmdInfo,
+                                sizeof(lpCmdInfo)/sizeof(COMMANDINFO));
+
+    /* running auto batch initialisation */
+    Dos9_RunAutoBat();
+
+    if (lpCmdCSwitch != NULL) {
+
+        lpesCmd=Dos9_EsInit();
+
+        Dos9_EsCpy(lpesCmd, lpCmdCSwitch);
+        Dos9_RunLine(lpesCmd);
+
+        if (bExitAfterCmd == TRUE)
+            goto skip;
+    }
+
+    /* Set parameters for the file */
+    strcpy(ifIn.lpFileName, lpFileAbs);
+    ifIn.iPos=0;
+    ifIn.bEof=FALSE;
+
+    /* Run either the command prompt or the batch script */
+    Dos9_RunBatch(&ifIn);
 
 skip:
 
-	Dos9_Exit();
+    Dos9_Exit();
 
-	Dos9_LibClose();
+    Dos9_LibClose();
 
-	return 0;
+    return 0;
 
 }

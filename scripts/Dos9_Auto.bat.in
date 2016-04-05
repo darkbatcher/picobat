@@ -13,30 +13,18 @@ IF %DOS9_OS%==WINDOWS (
 
 	:: set special dos9 directories for commands
 	SET PATH=!DOS9_PATH!/cmd;!DOS9_PATH!;!PATH!
-	
-	:: set home path for support of the gnu nano editor
-	:: broken since nano is no more includedd and it can
-	:: causes incompatibility with other *nix packages for
-	:: windows (typically, Cygwin or MinGW)
-	:: SET HOME=%DOS9_PATH%/nano
-	
-	:: Set default language in windows
-	:: Usually, this line is not needed and language
-	:: is automatically detected.
-	:: SET LANGUAGE=fr_FR
 
 ) else (
 
 	:: well this is an unix system. Use the unix conventions
 	:: to expand the path and provide a little compatibility 
 	:: over windows.
-
-	SET PATH=!PATH!:!DOS9_PATH!/cmd:!PATH!
+	SET PATH=!PATH!:!DOS9_PATH!/cmd:!DOS9_PATH!
 	
 	:: set windows compatible variable
 	SET SYSTEMROOT=/bin
-	SET PROGRAMFILES=/usr/bin
-	SET SYSTEMDRIVE=/
+	SET PROGRAMFILES=@bindir@
+	SET SYSTEMDRIVE=@prefix@
 	SET "USERPROFILE=%HOME%" 
 
 )

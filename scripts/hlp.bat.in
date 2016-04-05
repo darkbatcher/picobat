@@ -17,9 +17,11 @@ SETLOCAL EnableDelayedExpansion
 ::   You should have received a copy of the GNU General Public License
 ::   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+set hlp_base_dir=@datadir@/dos9/hlp
+
 :: Cd to the appropriate directory
-if not exist !DOS9_PATH!/share/hlp MKDIR !DOS9_PATH!/share/hlp
-cd %DOS9_PATH%/share/hlp
+if not exist !hlp_base_dir! MKDIR !hlp_base_dir!
+cd !hlp_base_dir!
 
 if not exist hlp.conf.bat (
 	echo No hlp.conf.bat

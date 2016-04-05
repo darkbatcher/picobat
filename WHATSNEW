@@ -1413,7 +1413,7 @@ WEDNESDAY 13TH, JUNUARY, 2016
 
         - Added new CHCP command to handle efficiently the new libcu8 library.
 
-MONDAY, 25, JUNUARY
+MONDAY, 25TH, JUNUARY
 
         - Changed version of Dos9 to emphasize the important changes of Dos9 
           since new year 2016.
@@ -1430,5 +1430,29 @@ MONDAY, 25, JUNUARY
           negative offsets refers to the absolute value of the offset, counted 
           from the end of the variable. For instance, this is now allowed :
 
-             %var:~-2,-1
+             %var:~-2,-1%
+
+THURSDAY, 28TH, JUNUARY
+
+        - Added an option that allow using switch catened with commands, such 
+          as
+
+             set/p var=question
+
+        - Fixed and modified hugely the dump command so that it is way more 
+          portable.
+
+SUNDAY, 7TH, FEBRUARY
+
+        - Fixed some bugs with the FOR command.
+
+        - Fixed some bugs in redirections.
+
+        - Fixed littles bugs in libcu8.
+
+THURSDAY 18TH, FEBRUARY
+
+        - Added the '=' operator for the SET command. The operator do behave a 
+          little bit differently from cmd.exe's SET, but it is convinient too. 
+          For the moment, libmatheval only supports explicit number anyway. 
 

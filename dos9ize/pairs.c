@@ -56,7 +56,6 @@ int pair_next(pair* p)
 
             p->j = 0;
 
-
             if (p->cmd->switches[++ (p->i)] == '\0')
                     return 0;
 
@@ -66,6 +65,7 @@ int pair_next(pair* p)
 
     return 1;
 }
+
 void pair_regexp(pair* p, ESTR* regexp)
 {
     char switches[3]="/x";
@@ -83,6 +83,9 @@ void pair_regexp(pair* p, ESTR* regexp)
     Dos9_EsCat(regexp, "*");
 }
 
+/* Get the expression to replace and to be replaced in order to correct the use
+ * of switches
+ */
 void pair_replace_exps(pair* p, ESTR* toreplace, ESTR* replaceby)
 {
     char switches[3]="/x";
@@ -101,7 +104,7 @@ void pair_replace_exps(pair* p, ESTR* toreplace, ESTR* replaceby)
     }
 
     Dos9_EsCat(replaceby, " ");
-    switches[1] = p->cmd->switches[p->j];
+    switches[1] = p->cmd->switches[p->i];
     Dos9_EsCat(replaceby, switches);
     Dos9_EsCat(toreplace, switches);
 }

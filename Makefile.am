@@ -24,15 +24,26 @@ scripts
 SHAREDEXT = @SHAREDEXT@
 distbdir =$(distdir)-bin
 rm_distbdir =rm -R $(distbdir)
+datarootdir = @datarootdir@
+datadir = @datadir@
+bindir = @bindir@
+install: install-exec install-data install-extra
 
+install-extra: textfiles
+	mkdir -p $(datadir)/dos9
+	mkdir -p $(datadir)/dos9/hlp
+	cp -Rf man $(datadir)/dos9/hlp
+	cp README WHATSNEW $(datadir)/dos9/
+
+.PHONY: install-extra textfiles 
 
 textfiles : 
 	for i in README WHATSNEW; do \
 		echo "- Building $$i"; \
-		./tea/tea$(EXEEXT) //e:utf-8 //o:text-plain $$i.tea $$i ; \
+		./tea/tea$(EXEEXT) /e:utf-8 /o:text-plain $$i.tea $$i ; \
 	done;
 
-dos9-install-clean :
+dos9-install-portable:
 	-for i in libDos9 libmatheval libinteval libcu8; do \
 		[ -f $(prefix)/$$i.a ] && rm -f $(prefix)/$$i.a ;\
 		[ -f $(prefix)/$$i.la ] && rm -f $(prefix)/$$i.la ;\

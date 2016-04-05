@@ -34,7 +34,7 @@
 #include <iconv.h>
 
 #ifdef  DLL_EXPORT
-#define __LIBCU8_DLL
+#define __LIBCU8__DLL
 #endif /* DLL_EXPORT */
 
 /* short circuit libcu8.h inclusion by file */

@@ -1,3 +1,20 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 {{La ligne de commande}}
 
 	La ligne de commande de commande est le concept central de la programmation
@@ -37,7 +54,7 @@ COMMANDE foo^ bar}
 			@-- Et ces trois manières sont bien évidemment équivalentes, ont peut les permuter sans
 			aucune incompatibilité.
 
-			-- {[argument optionel]} : Il s'agit d'un argument que le peut spécifier optionnellement,
+			-- {[argument optionel]} : Il s'agit d'un argument que l'on peut spécifier optionnellement,
 			c'est-à-dire que la commande va tout de même s'exécuter, cet argument modifie juste le
 			comportement de la commande. La même syntaxe peut être utilisée pour dénoter deux arguments
 			qui sont optionnels ensemble, et qu'on doit spécifier les deux ensemble si on les spécifie,
@@ -59,8 +76,8 @@ COMMANDE foo^ bar}
 			${COMMANDE {choix1|choix2}}
 
 			@-- Nous n'utilisons pas cette syntaxe, car les commandes bien conçues n'imposent normalement pas
-			à l'utilisateur un choix au sens strict, ces choix ne doivent servir que pour rendre modifier
-			le comportement de la commande. L'exemple type de cette usage sont les commutateurs. les commutateurs
+			à l'utilisateur un choix au sens strict, ces choix ne doivent servir que pour rendre possible la modification
+			comportement de la commande. L'exemple type de cette usage sont les commutateurs. les commutateurs
 			sont des arguments qui sont précédées d'un "{/}" pour signaler qu'ils activent ou désativent certaines
 			fonctionnalitées de la commande. Les commutateurs doivent {toujours} être optionnels.
 
@@ -92,7 +109,7 @@ ECHO une autre ligne
 )}
 
 		@- Pour obtenir d'avantage d'information sur la manière dont les {condop|Opérateurs conditionels} et les {red|redirections} agissent à
-		l'intéreur d'un block, vous pouvez consultez les pages qui leur sont dédiées.
+		l'intéreur d'un bloc, vous pouvez consultez les pages qui leur sont dédiées.
 
 {{À voir aussi}}
 

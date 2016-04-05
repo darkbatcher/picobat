@@ -1,0 +1,61 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+{{Le parsage}}
+
+	Le parsage des lignes de commandes est effectué par {dos9|Dos9} dans un ordre.
+	La compréhension du déroulement de ces étapes et de leur principe est très
+	pratique dans le cas de la programmation batch.
+
+{{Les étapes du parsage}} 
+
+	Lors du parsage, Dos9 effectue les opérations de parsage dans l'ordre suivant :
+
+	- {Lecture d'une ligne} : Lors de cette étape, {dos9|Dos9} lit une {cmdline|ligne de commande}, soit à partir
+	de commandes entrées au clavier, où soit au travers d'un fichier (si c'est le cas, le fichier
+	est d'abord ouvert, la ligne est lue, puis le fichier est ensuite fermé). Il se peut que la ligne de
+	commande soit en fait un bloc de commande.
+
+	- {Expansion conventionnelle} : Lors de cette étape Dos9 développe les variables selon 
+	{exp|l'expansion conventionnelle}. Les variables entourées par des {%} sont alors
+	développées.
+
+	- {Détection des} {red|redirections} : Lors de cette étape, Dos9 détecte les redirections
+	et les applique.
+
+	- {Détecton des} {condop|opérateurs conditionnels} : Lors de cette étape, Dos9 détecte les
+	opérateurs conditionnels.
+
+	- {Détection des arguments} : Lors de cette étape, Dos9 détecte les arguments de la
+	{cmdline|ligne de commande}.
+
+	- {Expansion retardée} : Lors de cette étape, Dos9 procède à l'{exp|expansion retardée} des
+	variable. Les variables entourées par des {!} seront dévellopées.
+
+	- {Expansion des} {xvar|variables spéciales} : Lors de cette étape, les variables
+	spéciales sont dévellopées.
+
+{{Remarques}}
+	
+	Dans le cas des commandes utilisant un bloc de commandes comme argument (comme {../if|if}
+	ou {../for|for}), cette démarche est appliqué récursivement sur chacun des blocs.
+	
+{{À voir aussi}}
+
+	{cmdline|La ligne de commande}, {condop|Les opérateurs conditionnels}
+
+
