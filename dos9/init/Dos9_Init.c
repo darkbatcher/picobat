@@ -314,8 +314,6 @@ void Dos9_InitConsoleTitles(char *lpFileName, int bQuiet)
 
     }
 
-    printf("Initialization bIsScript = %d (filename = %s)", bIsScript, lpFileName);
-
     if (!bQuiet) {
 
         Dos9_SetConsoleTextColor(DOS9_COLOR_DEFAULT);

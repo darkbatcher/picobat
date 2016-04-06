@@ -13,9 +13,11 @@ prefix = @prefix@
 datarootdir = @datarootdir@
 datadir = @datadir@
 bindir = @bindir@
+sysconfdir = @sysconfdir@
 script_subst = sed -e 's,[@]datadir[@],$(datadir),g' \
             -e 's,[@]prefix[@],$(prefix),g' \
-            -e 's,[@]bindir[@],$(bindir),g'
+            -e 's,[@]bindir[@],$(bindir),g' \
+			-e 's,[@]sysconfdir[@],$(sysconfdir),g'
 all:
 dist:
 distdir:
@@ -34,8 +36,8 @@ install: Dos9_Auto.bat hlp.bat
 	mkdir -p $(bindir)/cmd
 	cp hlp.bat $(bindir)/cmd
 
-hlp.bat:
+hlp.bat: hlp.bat.in
 	$(script_subst) < hlp.bat.in > hlp.bat
 
-Dos9_Auto.bat:
+Dos9_Auto.bat: Dos9_Auto.bat.in
 	$(script_subst) < Dos9_Auto.bat.in > Dos9_Auto.bat

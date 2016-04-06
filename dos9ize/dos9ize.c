@@ -113,6 +113,7 @@ int main(int argc, char* argv[])
 	read_file(input, content);
 	fclose(input);
 
+    /* First, force the use of spaces between switches */
     while (commands[i].cmd != NULL) {
 
         pair_start(&p, commands+i);
@@ -120,7 +121,7 @@ int main(int argc, char* argv[])
         do {
 
             pair_replace_exps(&p, toreplace, replaceby);
-			Dos9_EsReplace(content, toreplace->str, replaceby->str);
+			Dos9_EsReplaceI(content, toreplace->str, replaceby->str);
 
         } while (pair_next(&p));
 
@@ -128,6 +129,8 @@ int main(int argc, char* argv[])
 
     }
 	
+    /* Next replace exessive numbers of escaping character (^) */
+
 	fprintf(output, "%s", content->str);
 	fclose(output);
 

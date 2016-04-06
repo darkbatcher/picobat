@@ -147,7 +147,6 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 		case '>' :
 			/* this is ouput */
 
-            fprintf(stderr, "found > \"%s\".\n", lpNextToken); 
 			if (lppssStart->lpOutputFile) {
 
 				Dos9_FreeLine(lppssStart);
@@ -208,8 +207,6 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 			break;
 
 		case '<' :
-            fprintf(stderr, "found > \"%s\".\n", lpNextToken); 
-			/* this is input */
 
 			if (lppssStart->lpInputFile) {
 

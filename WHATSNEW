@@ -1454,5 +1454,18 @@ THURSDAY 18TH, FEBRUARY
 
         - Added the '=' operator for the SET command. The operator do behave a 
           little bit differently from cmd.exe's SET, but it is convinient too. 
-          For the moment, libmatheval only supports explicit number anyway. 
+          For the moment, libmatheval only supports explicit number anyway.
+
+MONDAY 16TH, APRIL
+
+        - Modified the initialization procedure of Dos9. Dos9 can now handle 
+          two different startup files:
+
+             - $HOME/.dos9/Dos9_Auto.bat : user-specific startup file
+
+             - $DOS9_PATH/Dos9_Auto.bat : system-wide startup file
+
+        - Fixed some bugs with SET and redirections.
+
+        - still develloping dos9ize 
 

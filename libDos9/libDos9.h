@@ -180,6 +180,8 @@ LIBDOS9 int             Dos9_EsCpyE(ESTR* ptrSource, const ESTR* ptrDest);
 LIBDOS9 int             Dos9_EsCatE(ESTR* ptrDest, const ESTR* ptrSource);
 LIBDOS9 int             Dos9_EsReplace(ESTR* ptrESTR, const char* ptrPattern, const char* ptrReplace);
 LIBDOS9 int             Dos9_EsReplaceN(ESTR* ptrESTR, const char* ptrPattern, const char* ptrReplace, int iN);
+LIBDOS9 int Dos9_EsReplaceI(ESTR* ptrESTR, const char* ptrPattern, const char* ptrReplace);
+
 
 typedef int COMMANDFLAG;
 

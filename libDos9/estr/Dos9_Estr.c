@@ -339,3 +339,53 @@ LIBDOS9 int Dos9_EsReplace(ESTR* ptrESTR, const char* ptrPattern, const char* pt
 
     return 0;
 }
+
+char * stristr(const char* str, const char *pattern)
+{
+    char c,
+         *pattern_start=pattern;
+    size_t size;
+
+    if (*pattern == '\0')
+        return str;
+    
+    c = tolower(*pattern++);
+    size = strlen(pattern);
+
+    do {
+        
+        while (*str && c != tolower(*str++));    
+      
+        if (*str == '\0')
+            return NULL;
+
+    } while (strnicmp(str, pattern, size));
+
+    return str;
+
+}
+
+LIBDOS9 int Dos9_EsReplaceI(ESTR* ptrESTR, const char* ptrPattern, const char* ptrReplace)
+{
+    char* lpBuffer=Dos9_EsToChar(ptrESTR), *lpToken;
+    int iLength=strlen(ptrPattern);
+    ESTR *lpReturn=Dos9_EsInit();
+
+    while ((lpToken=stristr(lpBuffer, ptrPattern))) {
+
+        *lpToken='\0';
+
+        Dos9_EsCat(lpReturn, lpBuffer);
+        Dos9_EsCat(lpReturn, ptrReplace);
+
+        lpBuffer=lpToken+iLength;
+
+    }
+
+    Dos9_EsCat(lpReturn, lpBuffer);
+    Dos9_EsCpyE(ptrESTR, lpReturn);
+    Dos9_EsFree(lpReturn);
+
+    return 0;
+}
+

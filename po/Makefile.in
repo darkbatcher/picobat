@@ -1,5 +1,5 @@
 # Overall Dos9 suite Makefile, The Dos9 Project (c) Darkbatcher
-# 2010-2013
+# 2010-2016
 #
 # This is free software: you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software 
@@ -30,7 +30,7 @@ install-data: install
 install-data-recursive:
 
 install:
-	cp -R ./share/locale $(datadir)/locale
+	cp -R ./share/locale $(datadir)
 
 m-po: po-tree
 	mkdir -p $(SHARE_DIR)
