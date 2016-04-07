@@ -60,6 +60,7 @@
 
 #endif
 
+#include "../libDos9.h"
 #include "../libDos9-int.h"
 
 #endif

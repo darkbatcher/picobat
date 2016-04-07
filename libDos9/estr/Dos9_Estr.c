@@ -348,14 +348,14 @@ char * stristr(const char* str, const char *pattern)
 
     if (*pattern == '\0')
         return str;
-    
+
     c = tolower(*pattern++);
     size = strlen(pattern);
 
     do {
-        
-        while (*str && c != tolower(*str++));    
-      
+
+        while (*str && c != tolower(*str++));
+
         if (*str == '\0')
             return NULL;
 

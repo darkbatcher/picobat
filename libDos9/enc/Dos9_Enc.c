@@ -17,6 +17,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#include "libDos9.h"
 #include "../libDos9-int.h"
 
 int _Dos9_TextMode=DOS9_BYTE_ENCODING;

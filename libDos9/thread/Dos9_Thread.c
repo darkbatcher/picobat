@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include <errno.h>
 
+#include "../libDos9.h"
 #include "../libDos9-int.h"
 
 

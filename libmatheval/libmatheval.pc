@@ -17,9 +17,9 @@
 # along with GNU libmatheval.  If not, see
 # <http://www.gnu.org/licenses/>.
 
-prefix=/home/darkounet/Bureau/dos9-code/bin
+prefix=/desktop/dos9-code/bin
 exec_prefix=${prefix}
-libdir=/home/darkounet/Bureau/dos9-code/bin
+libdir=/desktop/dos9-code/bin
 includedir=${prefix}/include
 
 Name: libmatheval

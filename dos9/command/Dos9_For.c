@@ -1221,15 +1221,17 @@ int Dos9_ForInputProcess_win(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn,
 	char lpInArg[16],
 	     lpOutArg[16],
 	     lpAttrArg[16]="/A:QE",
-	     lpFileName[FILENAME_MAX];
+	     lpFileName[FILENAME_MAX],
+	     lpQuoteFileName[FILENAME_MAX+2];
 	FILE* pFile;
 
 	int i=0,
 		j=5;
 
     Dos9_GetExeFilename(lpFileName, FILENAME_MAX);
+    snprintf(lpQuoteFileName, sizeof(lpQuoteFileName), "\"%s\"", lpFileName);
 
-	lpArgs[i++]=lpFileName;
+	lpArgs[i++]=lpQuoteFileName;
 	lpArgs[i++]=lpAttrArg;
 
 	if (bDelayedExpansion)
@@ -1259,7 +1261,7 @@ int Dos9_ForInputProcess_win(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn,
 	libcu8_fd_set_inheritance(iPipeFdIn[1], 0);
 	libcu8_fd_set_inheritance(iPipeFdOut[0], 0);
 
-	spawnv(_P_NOWAIT, lpArgs[0], (char * const*)lpArgs);
+	spawnv(_P_NOWAIT, lpFileName, (char * const*)lpArgs);
 
 	if (errno == ENOENT) {
 

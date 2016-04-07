@@ -40,7 +40,10 @@ install-extra: textfiles
 textfiles : 
 	for i in README WHATSNEW; do \
 		echo "- Building $$i"; \
-		./tea/tea$(EXEEXT) /e:utf-8 /o:text-plain $$i.tea $$i ; \
+		case `uname -a` in \
+			*MINGW*Msys*) ./tea/tea$(EXEEXT) //e:utf-8 //o:text-plain $$i.tea $$i ;; \
+			*) ./tea/tea$(EXEEXT) /e:utf-8 /o:text-plain $$i.tea $$i ;;\
+		esac;\
 	done;
 
 dos9-install-portable:
@@ -55,8 +58,9 @@ dos9-install-portable:
 	-[ -f $(prefix)/dos9ize ] && mv $(prefix)/dos9ize $(prefix)/cmd/
 	cp README $(prefix)/
 	cp WHATSNEW $(prefix)/
-	mkdir -p $(prefix)/share/hlp
-	cp -R man/ $(prefix)/share/hlp/man/
+	cp COPYING $(prefix)/
+	mkdir -p $(prefix)/share/dos9/hlp
+	cp -R man/ $(prefix)/share/dos9/hlp/man/
 
 dist-bin : dist-bin-dir	
 	tardir=$(distbdir) && $(am__tar) | GZIP=$(GZIP_ENV) gzip -c> $(distbdir).tar.gz

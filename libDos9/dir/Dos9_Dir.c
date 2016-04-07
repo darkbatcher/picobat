@@ -20,6 +20,7 @@
 
 
 #include <ctype.h>
+#include "../libDos9.h"
 #include "../libDos9-int.h"
 
 LIBDOS9 char* Dos9_SeekPattern(const char* match, const char* pattern, size_t len)

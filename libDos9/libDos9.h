@@ -35,8 +35,10 @@
 #ifndef LIBDOS9
 #ifdef __LIBDOS9__DLL
 #define LIBDOS9 __declspec(dllexport)
+#define EXTERN extern
 #else
 #define LIBDOS9 extern
+#define EXTERN
 #endif /* __LIBDOS9__DLL */
 #endif /* LIBDOS9  */
 
@@ -74,6 +76,7 @@
     #define write(a,b,c) _write(a,b,c)
     #define read(a,b,c) _read(a,b,c)
     #define access(a,b) _access(a,b)
+
     #define _Dos9_Pipe(descriptors, size, mode) _pipe(descriptors, size, mode)
 #else
 
@@ -124,7 +127,7 @@ typedef pid_t           PROCESS;
 
 #endif
 
-LIBDOS9 int      Dos9_BeginThread(THREAD* lpThId, void(*pFunc)(void*), 
+LIBDOS9 int      Dos9_BeginThread(THREAD* lpThId, void(*pFunc)(void*),
 					int iMemAmount, void* arg);
 LIBDOS9 void     Dos9_EndThread(void* iReturn);
 LIBDOS9 void     Dos9_AbortThread(THREAD* lpThId);
@@ -148,7 +151,7 @@ typedef struct STACK {
 } STACK,*LPSTACK;
 
 LIBDOS9     LPSTACK Dos9_PushStack(LPSTACK lpcsStack, void* ptrContent);
-LIBDOS9     LPSTACK Dos9_PopStack(LPSTACK lpcsStack, void(*pFunc)(void));
+LIBDOS9     LPSTACK Dos9_PopStack(LPSTACK lpcsStack, void(*pFunc)(void*));
 LIBDOS9     int Dos9_GetStack(LPSTACK lpcsStack, void** ptrContent);
 LIBDOS9     int Dos9_ClearStack(LPSTACK lpcsStack, void(*pFunc)(void*));
 
@@ -167,7 +170,7 @@ typedef struct ESTR {
 
 #define Dos9_SetNewLineMode(type) _Dos9_NewLine=type
 
-extern int      _Dos9_NewLine;
+EXTERN LIBDOS9 int      _Dos9_NewLine;
 LIBDOS9 ESTR*           Dos9_EsInit(void);
 LIBDOS9 char*           Dos9_strdup(const char* src);
 LIBDOS9 int             Dos9_EsGet(ESTR* ptrESTR, FILE* ptrFile);
@@ -333,7 +336,7 @@ LIBDOS9 int         Dos9_RegExpMatch(const char* lpRegExp, const char* lpMatch);
 LIBDOS9 int         Dos9_RegExpCaseMatch(const char* lpRegExp, const char* lpMatch);
 LIBDOS9 LPFILELIST  Dos9_GetMatchFileList(char* lpPathMatch, int iFlag);
 LIBDOS9 int         Dos9_GetMatchFileCallback(char* lpPathMatch, int iFlag, void(*pCallBack)(FILELIST*));
-LIBDOS9 THREAD      Dos9_FreeFileList(LPFILELIST lpflFileList);
+LIBDOS9 int         Dos9_FreeFileList(LPFILELIST lpflFileList);
 LIBDOS9 int         Dos9_FormatFileSize (char* lpBuf, int iLenght, unsigned int iSize);
 LIBDOS9 int         Dos9_GetStaticPart(const char* lpPathMatch, char* lpStaticPart, size_t size);
 LIBDOS9 size_t      Dos9_GetStaticLength(const char* str);
@@ -371,7 +374,7 @@ LIBDOS9 int Dos9_CheckFileAttributes(short wAttr, const FILELIST* lpflList);
 LIBDOS9 int Dos9_AttributesSplitFileList(short wAttr, FILELIST* pIn,
                             FILELIST** pSelected, FILELIST** pRemaining);
 
-extern int _Dos9_TextMode;
+EXTERN LIBDOS9 int _Dos9_TextMode;
 #define DOS9_BYTE_ENCODING 0
 #define DOS9_UTF8_ENCODING 1
 #define Dos9_SetEncoding(encoding) _Dos9_TextMode=encoding
@@ -382,7 +385,7 @@ LIBDOS9 const char* Dos9_ConsoleCP2Encoding(int cp);
 
 #define Dos9_GetCurrentDir() _Dos9_Currdir
 
-extern  char _Dos9_Currdir[FILENAME_MAX];
+EXTERN LIBDOS9 char _Dos9_Currdir[FILENAME_MAX];
 LIBDOS9 int Dos9_FileExists(const char* lpPath);
 LIBDOS9 char* Dos9_GetFirstExistingFile(char** files);
 LIBDOS9 int Dos9_DirExists(const char* lpPath);

@@ -131,7 +131,6 @@ int Dos9_CmdDir(char* lpLine)
 	while ((lpNext=Dos9_GetNextParameterEs(lpNext, lpParam))) {
 
 		lpToken=Dos9_EsToChar(lpParam);
-
 		if (!strcmp(lpToken, "/?")) {
 
 			Dos9_ShowInternalHelp(DOS9_HELP_DIR);

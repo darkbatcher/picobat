@@ -91,8 +91,6 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
 		if (Dos9_GetLine(lpLine, pIn))
 			continue;
 
-        DOS9_DBG(" Got \"%s\"\n", lpLine->str);
-
 		lpCh=Dos9_EsToChar(lpLine);
 
 		while (*lpCh==' '
@@ -139,6 +137,7 @@ int Dos9_ExecOperators(PARSED_STREAM** lpppsStream)
 	ESTR* lpCommand;
 
 	char lpProgName[FILENAME_MAX],
+         lpQuoteProgName[FILENAME_MAX+2],
 		 lpAttrArgs[16]="/A:QE",
 		 input[16],
 		 output[16];
@@ -169,8 +168,10 @@ loop:
 
 		/* prepare the command-line arguments befaure launching the program */
 		Dos9_GetExeFilename(lpProgName, sizeof(lpProgName));
+        snprintf(lpQuoteProgName, sizeof(lpQuoteProgName),
+                                            "\"%s\"", lpProgName);
 
-		lpArgs[(i=0)] = lpProgName;
+		lpArgs[(i=0)] = lpQuoteProgName;
 		lpArgs[++i] = lpAttrArgs;
 
 		if (bDelayedExpansion)
@@ -210,7 +211,7 @@ loop:
 		lpArgs[++i] = NULL;
 
 		/* Launches a sub Dos9 command prompt */
-		_spawnv(_P_NOWAIT, lpArgs[0], (char * const*)lpArgs);
+		_spawnv(_P_NOWAIT, lpProgName, (char * const*)lpArgs);
 
 		if (errno == ENOENT) {
 
@@ -807,8 +808,10 @@ int Dos9_RunExternalBatch(char* lpFileName, char* lpFullLine, char** lpArguments
 {
 
         int i=FILENAME_MAX-1;
+        int ret;
 
         char lpTmp[FILENAME_MAX],
+             lpFile[FILENAME_MAX+2],
              lpExePath[FILENAME_MAX],
              *lpArgs[FILENAME_MAX+2];
 
@@ -820,13 +823,14 @@ int Dos9_RunExternalBatch(char* lpFileName, char* lpFullLine, char** lpArguments
 		Dos9_GetExePath(lpExePath, sizeof(lpExePath));
 
 		snprintf(lpTmp, sizeof(lpTmp) ,"%s/dos9.exe", lpExePath);
+        snprintf(lpFile, sizeof(lpFile), "\"%s\"", lpFileName);
 
 		lpArgs[0]=lpTmp;
-		lpArgs[2]=lpFileName;
+		lpArgs[2]=lpFile;
 		lpArgs[1]="//"; /* use this switch to prevent
                                 other switches from being executed */
 
-		return Dos9_RunExternalFile(lpTmp, lpArgs);
+		ret = Dos9_RunExternalFile(lpTmp, lpArgs);
 }
 
 #elif !defined(WIN32)
