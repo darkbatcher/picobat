@@ -1,0 +1,214 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-05-07 23:54+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../dos9/lang/Dos9_ShowHelp.c:36
+msgid ""
+"Create an alias on a command.\n"
+"Usage: ALIAS [/f] alias=command\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_ShowHelp.c:40
+msgid ""
+"Change current working directory.\n"
+"Usage: CD  [[/d] path]\n"
+"       CHDIR [[/d] path]\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_ShowHelp.c:45
+msgid ""
+"Clear console's screen\n"
+"Usage: CLS\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_ShowHelp.c:49
+msgid ""
+"Change console's color to the given code.\n"
+"Usage: COLOR [code]\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_ShowHelp.c:53
+msgid ""
+"Copy file(s) to another location.\n"
+"Usage: COPY [/R] [/-Y | /Y] [/A[:]attributes] source destination\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_ShowHelp.c:57
+msgid ""
+"Call a script or a label from the current context.\n"
+"Usage: CALL [/e] [file] [:label] [parameters ...]\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_ShowHelp.c:62
+msgid ""
+"Delete file(s).\n"
+"Usage: DEL [/P] [/F] [/S] [/Q] [/A[:]attributes] name\n"
+"       ERASE [/P] [/F] [/S] [/Q] [/A[:]attributes] name\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_ShowHelp.c:67
+msgid ""
+"List files in a directory and in subdirectories.\n"
+"Usage: DIR [/A[:]attributes] [/S] [/B] [path]\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_ShowHelp.c:71
+msgid ""
+"Print a message, or enable/disable commande echoing.\n"
+"Usage: ECHO [OFF|ON]\n"
+"       ECHO text\n"
+"       ECHO.text\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_ShowHelp.c:77
+#, c-format
+msgid ""
+"Perform commands against items (files, strings, command output).\n"
+"Usage: FOR %%A IN (string) DO (\n"
+"          :: some commands\n"
+"       )\n"
+"\n"
+"       FOR /F [options] %%A IN (object) DO (\n"
+"          :: some commands\n"
+"       )\n"
+"\n"
+"       FOR /L %%A IN (start,increment,end) DO (\n"
+"          :: some commands\n"
+"       )\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_ShowHelp.c:89
+msgid ""
+"Go to a label in a command script.\n"
+"Usage: GOTO [:]label [file]\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_ShowHelp.c:93
+msgid ""
+"Perform commands on some conditions.\n"
+"Usage: IF [/i] [NOT] string1==string2 (\n"
+"          :: code to be ran\n"
+"       )\n"
+"\n"
+"       IF [/i] string1 cmp string2\n"
+"          :: code to be ran\n"
+"       )\n"
+"\n"
+"       IF [NOT] [DEFINED | EXIST | ERRORLEVEL] object (\n"
+"          :: code to be ran\n"
+"       )\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_ShowHelp.c:105
+msgid ""
+"Create the given directory.\n"
+"Usage: MD directory\n"
+"       MKDIR directory\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_ShowHelp.c:111
+msgid ""
+"Wait for a keystroke from the user.\n"
+"Usage: PAUSE\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_ShowHelp.c:116
+msgid ""
+"Removes a directory.\n"
+"Usage: RMDIR [/S] [/Q] directory\n"
+"       RD [/S] [/Q] directory\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_ShowHelp.c:121
+msgid ""
+"Renames a file.\n"
+"Usage: REN file name.ext\n"
+"       RENAME file name.ext\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_ShowHelp.c:126
+msgid ""
+"Introduce a comment.\n"
+"Usage: REM comment\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_ShowHelp.c:131
+msgid ""
+"Set an environment variable.\n"
+"Usage: SET variable=content\n"
+"       SET /a[[:][i|f]] variable=expression\n"
+"       SET /p variable=question\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_ShowHelp.c:137
+msgid ""
+"Set options of the Dos9 command prompt.\n"
+"Usage: SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] "
+"[ENABLEFLOATS | DISABLEFLOATS] [CMDLYCORRECT | CMDLYINCORRECT]\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_ShowHelp.c:141
+msgid ""
+"Set console's title.\n"
+"Usage: TITLE title\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_ShowHelp.c:145
+msgid ""
+"Print a file.\n"
+"Usage: TYPE [file ...]\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_ShowHelp.c:149
+msgid ""
+"Exit from the command prompt.\n"
+"Usage: EXIT [/b code]\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_ShowHelp.c:153
+msgid ""
+"Change positions of command-line parameters.\n"
+"Usage: SHIFT [/start_number | /s[:]start_number] [/d[:]displacement]\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_ShowHelp.c:157
+msgid ""
+"Search occurence of string in a set of files.\n"
+"Usage: FIND [/N] [/C] [/V] [/I] [/E] string [file ...]\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_ShowHelp.c:161
+msgid ""
+"Display content of files.\n"
+"Usage: MORE [/E] [/P] [/S] [/C] [/T[:]n] [+n] [file ...]\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_ShowHelp.c:165
+msgid ""
+"[Obsolete] Sets or Clears Extended CTRL+C checking on DOS system. (Do "
+"nothing)\n"
+"Usage: BREAK [ON | OFF]\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_ShowHelp.c:169
+msgid ""
+"This help is voluntary limited help to fit in the binary. If you need to\n"
+"see the full documentation, please type:\n"
+"\n"
+"\tHELP command"
+msgstr ""
