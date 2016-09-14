@@ -1,0 +1,115 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2013  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+{{Commande GOTO}}
+
+	   Effectue un saut dans un script de commande. Cette commande est une
+	des premières ayant permise les {spec/cond|traitements conditionnels},
+	cependant il ne faut pas en abuser.
+
+	   Il est parfois préférable d'utiliser {if|Les IF multilignes},
+	particulièrement dans le cas d'une suite d'instructions relativement
+	courtes.
+
+{{Synopsis}}
+
+${GOTO [:]étiquette [fichier] [/Q]}
+
+	Effectue un saut.
+
+        - {étiquette} : étiquette à laquelle l'exécution se poursuivra.
+
+        - {fichier} : fichier de commande dans lequel on doit trouver
+          {étiquette}, nécessite le mode spécial Dos9 (voir
+          {spec/new|Nouvelles fonctions de Dos9}).
+
+		- {/Q} : Ignore silencieusement les étiquettes invalides, et continue
+		à la ligne suivant l'instruction {GOTO} en mettant néamoins {errorlevel|%ERRORLEVEL%} à {0}
+		si le saut a effectivement lieu et à {-1} si l'étiquette n'est pas trouvée.
+		Ce commutateur permet d'effecter
+		des structures conditionnelles comme la structure {switch/case} de nombreux
+		langages de programmation.
+
+	Si une commande {GOTO} est appelée depuis l'intérieur d'un bloc de commande, soit
+	de niveau supérieur, soit depuis une commande ({for|FOR} ou {if|IF}), alors l'éxécution
+	du bloc est intérompue et l'exécution reprend après l'étiquette spécifiée. Dans le cas d'une boucle
+	{for|FOR}, l'exécution de la boucle est interrompue.
+
+{{Construction d'une structure switch/case}}
+
+	La commande {GOTO} permet de construire des structures conditionnelles semblables
+	aux structures {switch/case} de nombreux langages. Cette possibilité
+	repose sur le fait que l'argument {étiquette} est sensible à l'{spec/exp|l'expansion},
+	comme tous les élements du langage batch. On peut donc, en utilisant le commutateur
+	{/Q} construire un batch effectuant un {switch/case}, comme montré dans l'exemple
+	suivant:
+
+${@ECHO OFF
+
+:menu
+ECHO MENU
+ECHO 	1. Choix 1
+ECHO 	2. Choix 2
+ECHO 	3. Choix 3
+ECHO.
+SET /P choix=Faites votre choix:
+
+:: début du switch/case
+GOTO /Q :case_%choix%
+
+:: si la saisie est mauvaise, on signale l'erreur
+:: et on revient au menu
+ECHO Merci d'entrer un choix valide.
+ECHO.
+GOTO :menu
+
+:case_1
+:: On a choisi le choix 1
+ECHO Vous avez choisi le choix 1
+GOTO :switch_end
+
+:case_2
+:: On a choisi le choix 2
+ECHO Vous avez choisi le choix 2
+GOTO :switch_end
+
+:case_3
+:: On a choisi le choix 3
+ECHO Vous avez choisi le choix 3
+
+:switch_end
+::Suite du batch
+}
+
+{{Notes}}
+
+	Pour des raisons de compatibilité, la commande {GOTO} supporte la syntaxe
+	consistant à accoler l'étiquette au nom de la commande.
+
+{{Compatibilité}}
+
+	   Cette commande est compatible avec {cmd.exe}, mis à part le
+	paramètre {fichier} qui n'est pas supporté par {cmd.exe}.
+
+	   Le paramètre {fichier} est supporté par {dos9|Dos9} depuis la
+	version {0.7}.
+
+{{A voir aussi}}
+
+	{if|Commande IF}, {for|Boucle FOR}, {spec/cond|Exécution conditionnelle}
+	{commands|Liste des commandes}

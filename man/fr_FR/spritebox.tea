@@ -1,0 +1,44 @@
+{{Commande SpriteBox}}
+
+	{SpriteBox} est une commande à utiliser en combinaison avec la commande {batbox|BatBox}. En effet,
+	Elle permet la génération de lignes de commandes {batbox|BatBox} à partir du document textes présentant
+	un graphisme en {ASCII-Art}.
+
+{{Synopsis}}
+
+${	SPRITEBOX [/O] [/E[:]encodage] fichier}
+
+	Produit une ligne de commande {batbox|BatBox} à partir d'un fichier texte contenant un {ASCII-Art}.
+
+	- {fichier} : Le nom de fichier contenant l'{ASCII-Art} à convertir en ligne de commande {batbox|BatBox}.
+
+	- {/E[:]encodage} : Sélectionne l'encodage du fichier source, ainsi que le l'encodage final de la ligne
+	de commande {batbox|Batbox}. Les encodages supportés sont :
+
+		-- {UTF-8} : l'encodage est l'encodage {UTF-8} qui utilise les caractères du jeu universel {UNICODE}.
+
+		-- {BYTE} : N'importe quel autre encodage basé sur un octet. (exemple: ASCII, ANSI, CP850...).
+
+	- {/O} : le fond du sprite sera opaque, c'est à dire que les espaces dans l'{ASCII-Art} ne seront pas ignorés.
+	Par défaut, les espaces sont ignorés, et le fond du sprite est donc transparent.
+
+	La ligne de commande est ensuite affichée sur la {sortie standard} (par défaut la console, mais peut être
+	redirigée).
+
+{{Compatibilité}}
+
+	{SpriteBox} est compatible avec toutes les versions de batbox depuis la {version 1.1}. Il est facilement
+	portable sur d'autres plate-formes.
+
+{{Licence}}
+
+	{SpriteBox} est un logiciel libre distribué sous la {Licence Publique Générale GNU
+	(GNU GPL) version 3}.
+
+	Cette documentation est elle-même distribuée sous la {Licence Publique Générale GNU
+	(GNU GPL) version 3}
+
+{{Auteur}}
+
+	{SpriteBox} a été écrit par {Darkbatcher}. Merci à {Logan} d'avoir relu cette
+	documentation.

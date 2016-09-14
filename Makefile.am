@@ -1,0 +1,60 @@
+#
+#   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
+#   Copyright (C) 2010-2014 Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+EXTRA_DIST = po man scripts COPYING README WHATSNEW
+ACLOCAL_AMFLAGS = -I m4
+AUTOMAKE_OPTIONS = foreign subdir-objects
+SUBDIRS = libinteval libmatheval libDos9 @libcu8@ dos9 tea dump po dos9ize \
+scripts
+SHAREDEXT = @SHAREDEXT@
+distbdir =$(distdir)-bin
+rm_distbdir =rm -R $(distbdir)
+
+
+textfiles : 
+	for i in README WHATSNEW; do \
+		echo "- Building $$i"; \
+		./tea/tea$(EXEEXT) //e:utf-8 //o:text-plain $$i.tea $$i ; \
+	done;
+
+dos9-install-clean :
+	-for i in libDos9 libmatheval libinteval libcu8; do \
+		[ -f $(prefix)/$$i.a ] && rm -f $(prefix)/$$i.a ;\
+		[ -f $(prefix)/$$i.la ] && rm -f $(prefix)/$$i.la ;\
+	done;
+	-[ -d $(prefix)/include ] && rm -R $(prefix)/include
+	-[ -d $(prefix)/pkgconfig ] && rm -R $(prefix)/pkgconfig
+	-[ -f $(prefix)/tea ] && mv $(prefix)/tea $(prefix)/cmd/
+	-[ -f $(prefix)/dump ] && mv $(prefix)/dump $(prefix)/cmd/
+	-[ -f $(prefix)/dos9ize ] && mv $(prefix)/dos9ize $(prefix)/cmd/
+	cp README $(prefix)/
+	cp WHATSNEW $(prefix)/
+	mkdir -p $(prefix)/share/hlp
+	cp -R man/ $(prefix)/share/hlp/man/
+
+dist-bin : dist-bin-dir	
+	tardir=$(distbdir) && $(am__tar) | GZIP=$(GZIP_ENV) gzip -c> $(distbdir).tar.gz
+	$(rm_distbdir)
+
+dist-bin-zip: dist-bin-dir
+	-rm -f $(distbdir).zip
+	zip -rq9 $(distbdir).zip $(distbdir)
+	$(rm_distbdir)
+
+po-merge:
+	cd po && make po-merge

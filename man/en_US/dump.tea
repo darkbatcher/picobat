@@ -1,0 +1,76 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+{{DUMP command}}
+
+	The {DUMP} command allows binary files to be dumped. It allows printing
+	binary in various data types and in various numeric bases. It can be
+	an interesting tool for generating embed file generators in batch.
+
+{{Synopsis}}
+
+${DUMP file [output] [/P] [/H] [/T[:]type] [/B] [/E[:]endianness] /L}
+
+	Dump a binary file.
+
+		- {file} : A path to the file to be dumped.
+
+		- {output} : A path to the output file. If no output file is given,
+		then the result is to be printed in the screen.
+
+		- {/P} : Enable page-by-page view.
+
+		- {/H} : Enable hexadecimal mode. This switch only works for types
+		{I}, {S}, and {C}.
+
+		- {/T[:]type} : Specify the data type to be printed. It must be
+		choosed from the following list:
+
+			-- {C} : Byte
+
+			-- {S} : Word (2 bytes}
+
+			-- {I} : Double-word {4 bytes}
+
+			-- {F} : Simple precision float
+
+			-- {D} : Double precision float
+
+		- {/B} : Disable title, array head, adresses and char dump. Usefull for
+		creating embed file generators in a batch file.
+
+		- {/E[:]endianess} : Correct endianess issue. The {endianess} must be
+		one of the following value:
+
+			-- {B} : Big endian
+
+			-- {L} : Little endian.
+
+		- {/L} : Show an extract from {DUMP} license.
+
+	By default, the printed text is configured like :
+
+${DUMP file /T:C /H}
+
+{{License}}
+
+	{DUMP} is free software distributed under the {GNU General Public License}.
+
+{{Authors}}
+
+	{DUMP} has been written in 2013 by {DarkBatcher} for the {Dos9 Project}.

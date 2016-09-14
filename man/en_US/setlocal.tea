@@ -1,0 +1,47 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+{{SETLOCAL command}}
+
+	The {SETLOCAL} command allows changing {dos9|Dos9} interpretors
+	settings at runtime.
+
+{{Synopsis}}
+
+${	SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] [ENABLEFLOATS | DISABLEFLOATS] [CMDLYCORRECT | CMDLYINCORRECT]}
+
+	Enable or disable following modes :
+
+	- {ENABLEDELAYEDEXPANSION}, {DISABLEDELAYEDEXPANSION} :
+	Enable or disable {spec/exp|delayed expansion}.
+
+	- {ENABLEFLOATS}, {DISABLEFLOATS} : Enable or disable
+	{spec/floats|floating numbers}.
+
+	- {CMDLYCORRECT}, {CMDLYINCORRECT} : Enable or disable more
+	compatibility with {cmd.exe}.
+
+{{Compatibility}}
+
+	Fully compatible with {cmd.exe}. {ENABLEEXTENSION} and
+	{DISABLEEXTENSIONS} are ignored by {dos9|Dos9}, every extensions are
+	enabled.
+
+{{See also}}
+
+	{set|Commande SET}, {commands|Liste des commandes}

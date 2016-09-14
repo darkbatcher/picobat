@@ -1,0 +1,66 @@
+{{BatBox (/c)}}
+
+	Changes console's color locally (instead of {../color|COLOR} that sets
+	console color globaly}. IE. the color is aplied only to the text that will
+	be printed after the command execution.
+
+{{Synopsis}}
+
+${	BATBOX /c code_colour}
+
+	Changes console's color locally.
+
+	- {code_colour} : A code that specify the colors to be set. Usualy,
+	this code is specified on {hexadecimal}. Is this case, {code_colour}'s
+	form is {0xYX}, where :
+
+		-- {X} is the background colour.
+
+		-- {Y} is the foreground colour (text colour).
+
+	{X} and {Y} must be values among these values :
+
+			- 0 : Black
+
+			- 1 : Dark blue
+
+			- 2 : Green
+
+			- 3 : Grey-Blue
+
+			- 4 : Marroon
+
+            - 5 : Dark red
+
+			- 6 : Kaki
+
+			- 7 : Bright grey
+
+			- 8 : Grey
+
+			- 9 : Bright blue
+
+			- A : Bright green
+
+			- B : Cyan
+
+			- C : Red
+
+			- D : Pink
+
+			- E : Yellow
+
+			- F : White
+
+{{Notes}}
+
+	When specified in {hexadecimal}, colour codes are identical to colour
+	codes of the command {../color|COLOR}, except that it requires to be preceded
+	by {0x}
+
+	If you specify same colours for both background and foreground, then the text output
+	will be hidden as text and background color are the same.
+
+{{See also}}
+
+	{disp|Batbox (/d)},{goto|BatBox (/g)}, {key|BatBox (/k)}, {../batbox|BatBox}

@@ -1,0 +1,67 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+{{Commande CALL}}
+
+	La commande {CALL} permet d'exécuter une étiquette ou un fichier de commande
+	à l'intérieur du contexte courrant de l'invité de commande (c'est-à-dire avec
+	la possibilité de modifier les {spec/var|variables d'environement}
+	du script appelant).
+
+{{Synopsis}}
+
+${CALL [/e] [ficher] [:label] [paramètres ...]}
+
+	Appelle le fichier {fichier} ou l'étiquette {:label} depuis le contexte courrant
+	de {Dos9}.
+
+		- {fichier} : Le chemin du fichier de commande a exécuter. Si un nom d'étiquette
+		{:label} et l'option {/e} ont été spécifiés, alors {Dos9} recherchera dans
+		l'étiquette {:label} dans {fichier}.
+
+		- {:label} : Une étiquette spécifie où le fichier de commande doit être démaré. Si
+		ni {fichier} ni {/e} n'est spécifié, alors la commande cherchera dans le fichier
+		courant.
+
+		- {/e} : Spécifie que les deux paramètres {fichier} et {:label} sont spécifiés.
+		Ce commutateur permet de lever les ambiguitées entre la nature des paramètres. Par défaut,
+		{Dos9} tiendra seulement en compte le premier des paramètres. Ce commutateur doit
+		impérativement être spécifié en première ou en seconde position, sinon il sera inopérant et considéré
+		comme un des {paramètres}.
+
+		- {paramètres ...} : Spécifie les paramètres à passer au script appellé. Ces paramètres
+		seront passés par les paramètres {%1} - {%9}. Le nombre de paramètres est donc limité à 9,
+		ce qui est largement suffisant en pratique.
+
+	Le script spécifié sera alors, exécuté dans le contexte de commande courrant, c'est-à-dire qu'il
+	pourra modifier les {spec/var|variables d'environement} du script appelant, mais ne poura pas modifier les
+	{xvar|variables spéciales} de celui-ci.
+
+	La possibilité spécifier simultanément un fichier et une étiquette est une possibilité introduite
+	par {Dos9}. Pour optenir un comportement compatible avec celui de {cmd.exe}, vous pouvez spécifier
+	l'option {CMDLYCORRECT} de la commande {setlocal|SETLOCAL}.
+
+{{Compatibilité}}
+
+	Compatible avec {cmd.exe}, à l'exception de l'utilisation des commutateur {/e} et {//}, qui ne sont pas
+	disponibles dans {cmd.exe}.
+
+	Disponible depuis la version {2014.0.9}.
+
+{{À voir aussi}}
+
+	{for|Commande FOR}, {if|Commande IF}, {goto|Commande GOTO}

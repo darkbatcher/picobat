@@ -1,0 +1,100 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+{{List of Dos9 internal and external commands}}
+
+	This is a list containing all the name of {dos9|Dos9} internal and external
+	commands. The command tagged with {[int]} are internal, and those tagged with
+	{[ext]} are external.
+
+	An internal command is a command which is directly intergrated on {dos9|Dos9}, so
+	that it does not need any additional binaries to work. These commands are the faster
+	and the most compatible.
+
+	An external command is a command which needs an additionnal binaries. These commands
+	provide more flexibility to batch programs.
+
+{{User-interface command}}
+
+#	- {agraf|AGraf}  {[ext]} : Enable to make {GUI} rather than using the traditionnnal
+#	console interface. This command is no more develloped and is only provided for
+#	legacy support under windows.
+
+#	- {batbox|BatBox} {[ext]} : Allow to use console in a {graphical} way and extend basic
+#	user interraction through mouse, keys etc.
+
+#	- {bg|BG}     {[ext]} : Allow to use console in a {graphical} way. Slightly equivalent
+#	to {batbox|BatBox}.
+
+	- {color|COLOR}  {[int]} : Change the console screen color.
+
+	- {cls|CLS}    {[int]} : Clear the console screen.
+
+	- {echo|ECHO}   {[int]} : Display text in the console.
+
+	- {pause|PAUSE}  {[int]} : Make a pause in a batch script
+
+
+
+	- {title|TITLE}  {[int]} : Change console title.
+
+	- {break|BREAK} {[int]} : Enable/disable CTRL-C handling.
+
+{{Scripting command}}
+
+	- {alias|ALIAS} {[int]} : Define an alias.
+
+	- {shift|SHIFT} {[int]} : Change position of command-line arguments
+	in batch files.
+
+	- {for|FOR}      {[int]} : Loop in a script.
+
+	- {goto|GOTO}     {[int]} : Jump to a label in a script.
+
+	- {call|CALL} {[int]} : Call a external script or a routine, within
+	the current command context.
+
+	- {set|SET}    {[int]} : Modify an environment variable. Either
+	through a string litteral, a mathematical expression or an user input.
+
+	- {setlocal|SETLOCAL} {[int]} : Changes {dos9|Dos9} mode.
+
+	- {exit|EXIT} {[int]} : Exit {dos9|Dos9}.
+
+{{File commands}}
+
+	- {cd|CD, CHDIR}  {[int]} : Change current directory.
+
+	- {dir|DIR}        {[int]} : Browse subdirectories.
+
+	- {del|DEL, ERASE} {[int]} : Delete files.
+
+	- {md|MD, MKDIR}  {[int]} : Create directory.
+
+	- {rd|RD, RMDIR}  {[int]} : Delete directory.
+
+	- {type|TYPE} {[int]} : Type files.
+
+	- {more|MORE} {[int]} : Display files screen by screen.
+
+	- {move|MOVE}       {[int]} : Move files.
+
+	- {copy|COPY}	{[int]} : Copy files.
+
+	- {ren|RENAME, REN} {[int]} : Rename files.
+
+	- {find|FIND} {[int]} : Find strings in files.

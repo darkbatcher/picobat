@@ -1,0 +1,108 @@
+﻿#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+{{Commande HLP}}
+
+	La commande {HLP} est une commande permettant de visioner l'aide des
+	commandes. Il s'agit d'un script de commande agissant comme front-end
+	de la commande {tea|TEA}.
+
+{{Synopsis}}
+
+${hlp.bat [nom | /b [langue [encodage]] | /c | /d]}
+
+	Affiche une page manuel formattée.
+
+	- {nom} : Le nom de la page de manuel à afficher.
+
+	- {/b} : Construit la documentation pour le langage et un encodage
+	spécifié. Ce commutateur est utilisé pour produire les fichiers à partir
+	des documents {tea|TEA} qui sont fournis avec {Dos9}. Les paramètres
+	sont:
+
+		-- {langue} : Le langage dans lequel la documentation doit être
+		générée. Les langages disponibles peuvent être obtenus par
+		l'intermédiaire du commutateur {/l}.
+
+		-- {encodage} : Spécifie un encodage dans lequel il faut convertir les
+		fichiers générés. Ce paramètre requiert la commande {iconv|GNU iconv}.
+		L'encodage utilisé par défaut est l'encodage {utf-8}. Ce paramètre est
+		utile si votre console (ou votre émulateur de terminal) ne supporte
+		pas l'encodage {utf-8}. En particulier pour une console {windows}
+		française, l'encodage supporté par défaut est {CP850}.
+
+	- {/l} : Liste tous les langages disponibles sur la machine courrante. Les
+	langues disponibles sont exprimées sous la forme de locales {POSIX},
+	c'est-à-dire des codes sous la forme {langue_PAYS} où {langue} et {pays}
+	sont des abréviations des noms de la langue et du pays.
+
+
+	- {/d} : Télécharge la documentation à partir du dépot
+	{http://www.dos9.org}. Ce commutateur requiert que la commande {wget} soit
+	disponible sur le système courrant.
+
+	- {/c} : Configure les paramètres de la commande {hlp.bat}. Demande successivement
+	à l'utilisateur la langue, le format (html/texte/ansi) et l'encodage qu'il veut
+	utiliser. Cette option est une façon simple de configurer le fichier
+	{%DOS9_PATH%/share/hlp/hlp.conf.bat}.
+
+{{Fichiers de Configuration}}
+
+${%DOS9_PATH%/share/hlp/hlp.conf.bat}
+
+	Script batch qui définit la configuration de hlp via des variables. Ce fichier peut
+	être généré via le commutateur {/c}. Ce fichier est lu à chaque exécution de {hlp.bat}.
+	Les variables de configurations sont qui doivent y être définies sont:
+
+		- {%mode%} : Le format de l'aide que {hlp.bat} doit utiliser. Il existe
+		trois formats supportés :
+
+			-- {html} : {hlp.bat} affichera des pages html. Ce mode nécessite un navigateur
+			internet et le support d'une interfaçe de type {start} par dos9.
+
+			-- {ansi} : {hlp.bat} affichera des fichiers textes dans la console. Ces fichiers
+			sont formatés pour afficher de la couleur sur les terminals compatibles ANSI.
+
+			-- {txt} : {hlp.bat} affichera des fichiers textes pur dans la console.
+
+		- {%locale%} : Le langage a utiliser sous la forme d'une locale {POSIX} (ie {langue_PAYS}).
+		Ce nom de locale doit correspondre à une locale installée dans {%DOS9_PATH%/share/hlp/man}.
+
+		- {%view_cmd%} : La commande à utiliser pour voir les pages de manuels. Cette commande peut
+		être interne ou externe. Par défaut on utilise la définition suivante :
+
+		${set view_cmd=!%mode%_prg!}
+
+		@- Et l'on définit les variables {%txt_prg%}, {%html_prg%} et {%ansi_prg%} qui contiennent
+		les commandes à exécuter pour chaque format.
+
+${%DOS9_PATH%/share/hlp/hlpdb}
+
+	Un fichier texte qui liste toutes les pages de manuels et leur titres, qui est utilisé lors de
+	la recherche des pages. Il est généré automatiquement par la commande {hlp.bat /b}.
+
+{{Compatibilité}}
+
+	{HLP} n'est pas compatible avec {cmd.exe}
+
+	Disponible depuis la version {2014.0.9d}.
+
+{{À voir aussi}}
+
+	{help|Commande HELP}, {tea|Commande TEA}
+

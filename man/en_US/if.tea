@@ -1,0 +1,248 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2013  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+{{IF command}}
+
+	The {IF} command allows {spec/cond|conditional processing} of  commands.
+
+	This command is very important for creating advanced batch scripts as it
+	allows script to make conditionnal execution.
+
+	You might also prefer multilines {IF} to {IF}-{goto|GOTO} combination,
+	which are a little bit disordered.
+
+{{Synopsis - First syntax}}
+
+	The very first one just compares two strings, and execute the specified
+	commands if they're both equal. It supports also some basic modifiers.
+	The syntax is :
+
+${	IF [/i] [NOT] string1==string2 (
+	:: code to be ran
+	...
+	)}
+
+	Check whether {string1} and {string2} are the same strings and run
+	the code to be run if it is true. The behaviour can be modified by
+	the following switches and modifiers :
+
+		- {/i}  : Comparison is case-insensitive. (ie. ``Dos9'' will be equal to ``DOS9'').
+
+		- {NOT} : Negation. The code is ran if {string1} and {string2} are different.
+
+{{Synopsis - Second syntax}}
+
+	The second syntax is used to compare either strings and numbers.
+	It allows scripts to perform
+	more advanced test such as testing if one number is greater than another one.
+	This syntax should also be prefered since it is more robust, and if well used,
+	this syntax is much more resistant to {spec/exp|expansion} bugs. As explained
+	later.
+
+${	IF [/i] string1 cmp string2 (
+	:: code to be ran
+	...
+	)}
+
+	Test comparison specified by {cmp} to strings {string1} and {string2} and run
+	the code to be executed if the specified comparison is true.
+
+	   Values of {cmp} are :
+
+		- {EQU} : (EQUal). String {string1} is equal to {string2}.
+
+		- {NEQ} : (Not EQual). String {string1} differs from {string2}.
+
+		- {LEQ} : (Less or EQual). String {string1} is lesser or equal to {string2}.
+
+		- {LSS} : (LeSS). String {string1} is strictly lesser to {string2}.
+
+		- {GTR} : (GreaTeR). String {string1} is strictly greater to {string2}.
+
+		- {GEQ} : (Greater or EQual). String {string1} is greater or equal to {string2}.
+
+		- {FEQ} : (Float EQual) (Dos9 extension). String {string1} is equal to {string2},
+		with a relative precision of {10^-13}. This comparison is used to compare floating
+		number, wich cannot be compared by {EQU}, as explained in {setaf|SET(/A) Command (floats)} manual.
+
+	Comparisons {LSS}, {GTR}, {LEQ}, {FEQ} and {GEQ}  requires both {string1} and
+	{string2} to be numbers (intergers or floating numbers), otherwise, comparisons results are undefined.
+
+	The {/i} switch makes comparison case insensitive. Note that this switch only affects
+	{EQU} and {NEQ} comparisons.
+
+{{Synopsis - Third syntax}}
+
+	The last syntax allows to perform test on a object. Obviously, the specified command
+	are ran if the test performed returned true.
+
+${	IF [NOT] [DEFINED | EXIST | ERRORLEVEL] object (
+	:: code to be ran
+	...
+	)}
+
+	Checks whether the condition stated about {object} is true, and then executes
+	the code to be executed if the condition is true. The conditions can be :
+
+		- {DEFINED} : The condition is true if the variable named by {object} is
+		defined.
+
+		- {EXIST} : The condition is true if a file named by {object} exists. The string {object}
+		can contain {spec/regexp|regulars expressions}.
+
+		- {ERRORLEVEL} : {Deprecated} The condition is true if the environment variable {errorlevel|%ERRORLEVEL%}
+		is greater or equal to {object}, were {object} is a number . Its use is deprecated, you should use the
+		following syntax instead :
+
+${	IF %ERRORLEVEL%==value}
+
+	If you specify operator {NOT}, then the code to be executed is ran if
+	the condition is false.
+
+{{Synopsis - ELSE subcommand}}
+
+	After any kind of previously described {IF}, an {ELSE} keyword may be inserted
+	so that	code specified after the {ELSE} will be ran if the {IF} comparison fails.
+
+${	IF /i %var1%==%var2% (
+:: code to be executed if %var1% is equal to %var2%
+) ELSE (
+:: code to be executed if %var1% differs form %var2%
+)}
+
+	Both {ELSE} keyword preceeding and following codes must be enclosed in brackets,
+	so that it defines two different {spec/block|code blocks}. Otherwise, the interpretor
+	should interpret it like a single line.
+
+	Both of these codes will work as {expected}:
+
+${IF /i %var1%==%var2% (
+	ECHO %var1% is equal to %var2%
+) ELSE (
+	ECHO %var1% differs from %var2%
+)
+
+IF /i %var1%==%var2% (ECHO %var1% is equal to %var2%) ELSE (ECHO %var1% differs from %var2%)
+
+:: both will output:
+::  - ``ECHO %var1% is equal to %var2%''
+:: 	  when %var1% is equal to %var2%
+::	- ``ECHO %var1% differs from %var2%''
+::    when %var1% differs for %var2%
+}
+
+	Whereas the following code will fail :
+
+${
+IF /i %var1%==%var2% ECHO %var1% is equal to %var2% ELSE ECHO %var1% differs from %var2%
+:: will output
+:: ``ECHO %var1% is equal to %var2% ELSE ECHO %var1% differs from %var2%''
+:: only when %var1% is equal to %var2%
+}
+
+{{Dealing with spaces}}
+
+	Almost anyone have already seen the following message output from the prompt :
+
+${Error : ``some'' was unexpected.}
+
+	This error, has two origins. On the one hand, it could be sometimes just caused
+	by a syntax error (ie. prompt is failing to run command because it syntax is incorect).
+	This account for a great part of the causes of this error. On the other hand, the hand
+	that we're interested in, it could be simply caused by a space character that wasn't
+	expected. It happens really easy when using {spec/exp|var expansion} with variable that
+	contain spaces or tabs. Let's take an example :
+
+${IF %my_var%==test (
+	ECHO The test is true
+)
+}
+
+	As long as {my_var} does not contains any space, or whatever possibly interpreted
+	(such as & and |), this exemple works pretty well. But, if {my_var} do contains such characters,
+	it goes wrong. This effect is caused because {my_var} is expanded before even the line
+	interpretation, thus, any characters from {my_var} will be interpreted. There's several trick
+	to fix that bug.
+
+		- {my_var} can be enclosed in double quotes, avoiding blank characters problem. However, the
+		characters like & and | contained in {my_var} will still be interpreted, and {my_var} could
+		not contain double-quotes anymore.
+
+		- {my_var} can be enclosed in single quotes, avoiding blank characters problem. This causes
+		the same issues as previous, replacing "double quotes" by "single quotes".
+
+		- The last, and best solution is to expand {my_var} using {spec/exp|delayed expansion} rather
+		than {spec/exp|conventional expansion}. Indeed, using that trick, {my_var} will only be expanded
+		after the line parsing, and thus no character can cause issue.
+
+	Therefore, if you really need avoiding these errors (for scripts that modify windows registry),
+	for exemple, you should use the most robust solution, ie:
+
+${SETLOCAL EnableDelayedExpansion
+
+IF !my_var!==test (
+	ECHO The test is true
+)
+}
+
+{{The == bug}}
+
+	The fact that the second syntax is much more resistant to {spec/exp|expansion} bugs as been
+	stated previously. Indeed, if a script complies to all hints to avoid bugs that have been given
+	previously, it's still not guaranted to resist to all bugs. Indeed, the first syntax is subject
+	to the ``== bug''. The following code is subject to this bug
+
+${SETLOCAL EnableDelayedExpansion
+
+IF !my_var!==test (
+	ECHO The test is true
+)
+}
+
+	As stated in the previous part, this is perfectly unvunerable to bugs due to spaces, whatever...
+	Nevertheless, a bug is encountered if {my_var} contains ``==''. In this case, the behaviour of
+	comparison is modified as it uses first ``=='' encountered. In most cases, this is issue is not
+	even a problem, because script rarely make a comparison with ``=='' in both members. But it can
+	cause the comparison to be inconsitent in some cases.
+
+	To conclude, if such a scenario is likely to happen when executing script, prefer the following
+	syntax:
+
+${SETLOCAL EnableDelayedExpansion
+
+IF !my_var! EQU test (
+	ECHO The test is true
+)
+}
+
+
+{{Compatibility}}
+
+	Mostly compatible with {cmd.exe}. Indeed, the use of {IF ERRORLEVEL}
+	is not guaranted to be compatible with {cmd.exe}, as the behaviour of
+	{cmd.exe} is weird (it tests  if {ERRORLEVEL} is greater than the specified
+	number) and causes numbers of mistakes.
+
+	Supported since version {0.4}.
+
+	{FEQ} comparison is supported since version {0.7.0.1}
+
+{{See also}}
+
+	{for|FOR command}, {goto|GOTO command}, {call|CALL command},
+	{commands|Command list}

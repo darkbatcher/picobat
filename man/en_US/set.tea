@@ -1,0 +1,56 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2013  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+{{SET command}}
+
+	The {SET} command can display, set, or remove environment variables that
+	can be later retrieved through {spec/exp|variable expansion}.
+
+{{Synopsis}}
+
+	${SET variable=content}
+
+	Assign {content} to variable {variable}. If {content} is not specified, the
+	the variable {variable} is removed from the environment.
+
+	${SET /a[[:][i|f]] variable=expression}
+
+	Computes the value of the arithmetical expression {expression} and assign its
+	value to variable {variable}. This command behaviour depends on mode set
+	through  {setlocal|SETLOCAL} command (parameter {ENABLEFLOATS}).
+
+	Options can be given in addition to {/a}. These options are:
+
+		- {i} : Force use of {interger} mode, regardless of mode set through
+		{setlocal|SETLOCAL}.
+
+		- {f} : Force use of {float} mode.
+
+	To get extended help about {arithmetical expressions}, please see the
+	following manual pages: {setai|SET (/a)(integers} and {setaf|SET (/a)(floats)}.
+
+	${SET /p variable=question}
+
+	Prompt {qestion}, wait for an input from user and assign it to the
+	variable {variable}.
+
+{{See also}}
+
+	{commands|Command list}, {echo|ECHO command},
+	{pause|PAUSE command}, {setai|SET command (/a)(integers},
+	{setaf|SET command (/a)(floats)}.

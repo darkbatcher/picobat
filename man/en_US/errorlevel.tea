@@ -1,0 +1,38 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+{{%ERRORLEVEL% variable}}
+
+	{%ERRORLEVEL%} is an environment variable definie automatically by {dos9|Dos9}
+	at end of command runing. It enables checking if the previous command failed.
+	With most commands, if {%ERRORLEVEL%} is equal to 0, then no error as occured.
+
+{{Synopsis}}
+
+${	%ERRORLEVEL%}
+
+	The value of {%ERRORLEVEL%} makes no sense because any command is able to set its
+	own {%ERRORLEVEL%} return values. Thus you should just consider if %ERRORLEVEL% is
+	null to determine if errors have occured.
+
+	In a general way, signification of error codes in {%ERRORLEVEL%} is not
+	important as long as most commands print an error message on failure.
+
+{{See also}}
+
+	{spec/var|Variables}, {home|home}

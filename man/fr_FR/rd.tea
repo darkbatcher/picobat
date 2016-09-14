@@ -1,0 +1,55 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+{{Commandes RD, RMDIR}}
+
+	Permet de supprimer un répertoire.
+
+{{Synopsis}}
+
+${RMDIR [/S] [/Q] dossier
+RD [/S] [/Q] dossier}
+
+
+	Supprime un répertoire.
+
+		- {dossier} : Chemin du répertoire à supprimer.
+
+		- {/Q} : Active le mode silencieux. Ne demandande pas de
+		  confimartion pour supprimer l'arboressence avec {/S}. N'a
+		  aucun effet si le commutateur {/S} n'est pas activé.
+
+		- {/S} : Supprime tous les dossiers et les sous dossiers
+		  contenus dans le dossier {dossier}.
+
+{{Notes}}
+
+	   Par défaut, les commandes {RD} et {RMDIR} ne suppriment pas les
+	dossiers non-vides. Pour forcer la suppression du dossier, il faut
+	utiliser le commutateur {/S}
+
+{{Compatibilité}}
+
+	Disponible depuis la version {0.4}.
+
+	Parfaitement compatible avec {cmd.exe}.
+
+{{A voir aussi}}
+
+	{md|Commandes MD, MKDIR}, {del|Commanndes DEL, ERASE},
+	{move|Commande MOVE}

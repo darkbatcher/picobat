@@ -1,0 +1,54 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+{{Commande ECHO}}
+
+	La commande {ECHO} a de multiples usages :
+
+		- Activer ou desactiver l'affichage du chemin courrant
+
+		- Afficher du texte dans la console
+
+{{Synopsis}}
+
+${	ECHO [OFF|ON]
+	ECHO texte
+	ECHO.texte}
+
+	Active ou desactive l'affichage du chemin courrant ({DOS9 C:\...>})
+
+		- {ON} : Active l'affichage
+
+		- {OFF} : Desactive l'affichage
+
+	Affiche du texte dans la console
+
+		- {texte} : texte a afficher dans la console. Si vous utilisez
+		  {ECHO.} le texte {texte} peut être vide. Depuis la version {2014.0.8}, il est
+		  possible d'utiliser d'autre caractères que {.} pour forcer l'affichage. Les
+		  caractères autorisés sont donc {!"#$%&'()*+,-./[\\]^_	\{\|\}~},  l'usage d'une
+		  grande partie de ces caractères est déconseillée a cause de problèmes de
+		  syntaxe évidents.
+
+{{Compatibilite}}
+
+	Cette commande est {parfaitement compatible} avec {cmd.exe}
+
+{{A voir aussi}}
+
+	{pause|Commande PAUSE}, {set|Commande SET}, {title|Commande TITLE}, {cls|Commande CLS}, {commands|Liste des commandes}

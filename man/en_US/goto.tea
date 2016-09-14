@@ -1,0 +1,109 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2013  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+{{GOTO command}}
+
+	Jump to a label in a batch script. This command is among the first
+	commands learned while learning batch script, and it is usefull since
+	it allow {conditional execution}.
+
+	It might be preferable to use {if|multiline if}, especially in the case
+	of a quite short piece of instructions.
+
+{{Synopsis}}
+
+${	GOTO [:]label [file] [/Q}}
+
+	Jump to a label.
+
+        - {label} : the label where {dos9|Dos9} will jump. A {label} is a word, or even
+	    a couple of words, which are used to identify the different pieces of codes, and
+	    this couple of words must be preceded by a column {:}. It is not necessary for
+	    labels to start at colum 1.
+
+        - {file} : The file in which {dos9|Dos9} will seek the specified {label}. This
+		option requires the {spec/ext|dos9 extensions} to be enabled.
+
+		- {/Q} : Silently ignore warning if the given {label} is not found on the given
+		{file} and continue script execution at next line. However, it sets {errorlevel|%ERRORLEVEL%},
+		to {0} if jump is actually perform or {-1} if it does not. This switch enables
+		creating a kind of {switch/case} statement.
+
+	If the {GOTO} command is called within a command bloc (such as within a {for|FOR
+	loop} or within a {if|IF}), then block execution is aborted and execution
+	restart at given label.
+
+{{Constructing a switch/case statement}}
+
+	The {GOTO} command allows constructing conditionnal statements such as
+	{switch/case}. This functionnality relies on the fact that {[:]lable}
+	is subject to {spec/exp|expansion}, as any other batch-language element.
+	Thus, using the {/Q} switch, a batch using somewhat of a {switch/case}
+	statement can be achieved.
+
+${@ECHO OFF
+
+:menu
+ECHO MENU
+ECHO 	1. Choice 1
+ECHO 	2. Choice 2
+ECHO 	3. Choice 3
+ECHO.
+SET /P choice=Make your choice:
+
+:: start of switch/case
+GOTO /Q :case_%choice%
+
+:: if we got bad input, echo an error
+:: and go back to menu
+ECHO %choice% is not a valid choice
+ECHO.
+GOTO :menu
+
+:case_1
+:: Choosed 1
+ECHO You choosed 1
+GOTO :switch_end
+
+:case_2
+:: Choosed 2
+ECHO You choosed 2
+GOTO :switch_end
+
+:case_3
+:: Choosed 3
+ECHO You choosed 3
+
+:switch_end
+::End of the batch
+}
+
+{{Notes}}
+
+	For compatibility purpose, the {GOTO} supports syntax that consist in not
+	separating {label} from the command name.
+
+{{Compatibility}}
+
+	This command is compatible with {cmd.exe}, excepted the {file} parameter
+	which is only supported by {Dos9}, since version {0.7}
+
+{{See also}}
+
+	{if|IF command}, {for|FOR loop}, {spec/cond|Conditional running}
+	{commands|Command list}

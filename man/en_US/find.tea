@@ -1,0 +1,81 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+{{FIND command}}
+
+	Search for a string or an expression in one or several files.
+
+{{Synopsis}}
+
+	${FIND [/c] [/n] [/i] [/v] [/e] string [files ...]}
+
+	Search for a string or an expression, in one or several files or in
+	the standard input ({stdin}).
+
+	- {string} : The text string or the expression to be searched in {files}
+	or in the standard input. Unlike {Windows} native implementation of
+	{FIND}, {dos9|Dos9} does not require the use of quotes to delimit
+	{string}.
+
+	- {files ...} : A list of files (that may include {spec/regexp|regular
+	expression}) in which the {FIND} is to search {string}. Folders that
+	match regular expressions are ignored. If {files} is empty, then
+	{FIND} uses standard input as a file input.
+
+	- {/e} : Assume that {string} is a {spec/regexp|regular expression}.
+	Note that {FIND} searched lines that match the full regular expression.
+
+	- {/c} : Count the number of line matching {string} and only print this
+	number.
+
+	- {/n} : Print line numbers of matching lines.
+
+	- {/i} : Use case insensitive search.
+
+	- {/v} : Reversed search; search lines that does not contain {string}
+	or does not match the regular expression.
+
+	Obviously, the {/c} and {/n} switches can not be mixed. If {FIND}
+	encounters {/c} and {/n} switches together, does will take account
+	of the last specified switches.
+
+	The {FIND} command has no line length limit, unlike {Windows}
+	implementation which supports a maximum length of about 1024
+	characters.
+
+	The {FIND} command is not designed to handle binary files. However
+	{FIND} is perfectly able to search in a binary file as long as it
+	does not contain any {NULL} character.
+
+	In order to specify a {string} to search that contain quotes, use the
+	escape character {^} before the quotes to escape.
+
+	Although {Windows}' {FIND} is an external command, {Dos9}'s {FIND} is
+	an internal command. Under {WINDOWS} you can use the native command
+	from {Windows} using the {alias|ALIAS} command.
+
+{{Compatibility}}
+
+	Compatible with {cmd.exe}.
+
+	Available since version {2014.0.9b}.
+
+{{See also}}
+
+	{commands|Command list}, {type|TYPE command}, {more|MORE command}
+
+

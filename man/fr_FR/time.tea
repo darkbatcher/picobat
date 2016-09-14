@@ -1,0 +1,60 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+{{Variables %TIME% et %DATE% et Commande TIME}}
+
+	   Les variables {%TIME%} et {%DATE%} contienent respectivement l'heure
+	et la date courrante.
+
+{{Synopsis}}
+
+${%TIME%}
+
+	   Se dévellope en heure courrante, au format {HH:MM:SS,00}. Les
+	millisecondes sont fixées à 0 pour des raisons de compatibilité
+	avec {cmd.exe}. Si un des nombre de l'heure n'est constitué que d'un
+	seul chiffre, alors un zéro est apposé devant.
+
+${TIME}
+
+	Équivalent à la commande :
+
+	@-
+	${ECHO %TIME%}
+
+${%DATE%}
+
+	   Se dévellope en date courrante, au format {JJ/MM/AAAA}. Si l'un des
+	nombres n'est constitué que d'un seul caractère, le reste sera
+	comblé avec des 0.
+
+{{Note}}
+
+	Les variables {%TIME%} et {%DATE%} sont des variables dynamiques, qui sont
+	générées lors de l'éxécution du programme. Il n'est donc pas possible de
+	les modifier via la commande {set|SET}.
+
+{{Compatiblité}}
+
+	Compatible avec {cmd.exe}.
+
+	Disponible depuis la version {0.7}
+
+{{A voir aussi}}
+
+	{spec/var|Les variables d'environement}, {spec/index|Index des spécifications}

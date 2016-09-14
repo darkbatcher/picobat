@@ -1,0 +1,54 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+{{CD, CHDIR commands and %CD% Variable}}
+
+	   The {CD} command changes or shows the current directory of {dos9|Dos9}
+       command prompt.
+
+       The {%CD%} variable expands to the current directory of {dos9|Dos9}
+	   command prompt.
+
+{{Synopsis}}
+
+${	CD  [[/d] path]
+	CHDIR [[/d] path]}
+
+	Change or show command prompt's current directory.
+
+		- {/d} : Deprecated switch, used for compatibility
+		with {cmd.exe}.
+
+		- {path} : The path of the new current directory.
+
+	If you specify neither {/d} nor {path}, then, the {CD} command will
+	output the current directory.
+
+${	%CD%}
+
+	Expands to {dos9|Dos9}'s current directory.
+
+{{Compatibility}}
+
+	Fully compatible with {cmd.exe}.
+
+	Avaliable since version {0.4}
+
+{{See also}}
+
+	{spec/var|Variable}, {spec/index|Specifications' Index},
+	{commands|Command list}

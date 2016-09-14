@@ -1,0 +1,51 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+{{RD and RMDIR commands}}
+
+	Removes a directory.
+
+{{Synopsis}}
+
+${RMDIR [/S] [/Q] directory
+RD [/S] [/Q] directory}
+
+	Removes a directory.
+
+	- {directory} : The folder to be suppressed.
+
+	- {/Q} : Enable silenced mode; do not prompt the user for
+	confirmation.
+
+	- {/S} : Deletes files and subfolders contained by {directory}.
+	Use this switch to delete an entire tree.
+
+{{Notes}}
+
+	By default, {RD} and {RMDIR} do not delete non empty folder. To force
+	folder deletion, use the {/S} switch.
+
+{{Compatibility}}
+
+	Available since {0.4} revision.
+
+	Fully compatible with {cmd.exe}.
+
+{{See also}}
+
+	{md|MD and MKDIR commands}, {del|DEL and ERASE commands},
+	{move|MOVE command}

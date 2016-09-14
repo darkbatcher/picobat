@@ -1,0 +1,29 @@
+{{Variables %TIME% et %DATE%}}
+
+	   Les variables {%TIME%} et {%DATE%} contienent respectivement l'heure
+	et la date courrante.
+
+{{Synopsis}}
+
+${	%TIME%}
+
+	   Se dévellope en heure courrante, au format {HH:MM:SS,00}. Les
+	millisecondes sont fixées à 0 pour des raisons de compatibilité
+	avec {cmd.exe}. Si un des nombre de l'heure n'es constitué que d'un
+	seul chiffre, alors un zéro est apposé devant.
+
+${	%DATE%}
+
+	   Se dévellope en date courrante, au format {JJ/MM/AAAA}. Si l'un des
+	nombres n'est constitué que d'un seul caractère, le reste sera
+	comblé avec des 0.
+
+{{Compatiblité}}
+
+	Compatible avec {cmd.exe}.
+
+	Disponible depuis la version {0.7}
+
+{{A voir aussi}}
+
+	{spec/var|Les variables d'environement}, {spec/index|Index des spécifications}

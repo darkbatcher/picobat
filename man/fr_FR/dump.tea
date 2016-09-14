@@ -1,0 +1,84 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+{{Commande DUMP}}
+
+	{Dump} est une commande permettant d'afficher sous forme de texte le
+	contenu d'un fichier binaire. Il permet d'afficher les données binaires
+	selon différents types de données, et en différentes bases numérales. Il
+	peut être un outil précieux pour la génération de fichiers pouvant être
+	embarqués dans un fichier texte.
+
+{{Synopsis}}
+
+${DUMP fichier [sortie] [/P] [/H] [/T[:]type] [/B] [/E[:]endianess] [/L]}
+
+	Affiche le contenu d'un fichier sous forme binaire.
+
+	   - {fichier} : Le chemin du fichier dont le contenu doit etre affiché.
+
+	   - {sortie} : Le chemin du fichier de sortie. Si aucun fichier n'est
+	     specifié, alors la sortie est l'écran de la console.
+
+	   - {/P} : Active le mode page par page. Attend une action de
+	     l'utilisateur avant d'afficher la page suivante.
+
+	   - {/H} : Active le mode héxadecimal. Ne marche que pour les types
+	     entiers ({I}, {S}, {C}).
+
+	   - {/T[:]type} : Choisit le type de données a afficher, parmi les
+	      suivants :
+
+	      -- {C} : octet
+
+		  -- {S} : mot (2 octets)
+
+	      -- {I} : double-mot (4 octets)
+
+		  -- {F} : nombre flotant simple precision
+
+	      -- {D} : nombre flotant  double precision
+
+	   - {/B} : Désactive le titre, les en-têtes de tableau, les addresses et
+	     le char dump. Utile pour créer des fichier pour en générer des
+	     copies portables via un script.
+
+	   - {/E[:]endianess} : Corrige les problèmes d'endianess, marche pour les
+	     types d'endianness suivants :
+
+	     -- {B} : grand-boutien (Big-Endian)
+
+	     -- {L} : petit-boutien (Little-Endian)
+
+	   - {/L} : Affiche un extrait de licence de {Dump}.
+
+
+	Par defaut, la presentation activee est equivalente à :
+
+${DUMP fichier /T:C /H}
+
+{{Licence}}
+
+	{Dump} est un logiciel libre distribué sous la {Licence Publique Générale GNU
+	(GNU GPL)}.
+
+{{Auteurs}}
+
+	{Dump} a été écrit en 2013 par {DarkBatcher} pour le {Projet Dos9}.
+
+

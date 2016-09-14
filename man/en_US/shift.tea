@@ -1,0 +1,54 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2015  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+{{Commande SHIFT}}
+
+	La commande {SHIFT} permet de changer la position des paramètres d'un script de commandes.
+	Cette commande est très utile pour produire des commandes en batch à plusieurs paramètres.
+
+{{Synopsis}}
+
+	${SHIFT [/début | /s[:]début] [/d[:]déplacement]}
+
+	Déplace la position des paramètres dans les variables {%0} à {%9}.
+
+		- {/début} ou {/s[:]début} : Spécifie la variable à laquelle va commencer le déplacement.
+		{début} doit être un chiffre (et donc être compris entre {0} et {9}). La première syntaxe
+		est compatible avec {cmd.exe}, alors que la seconde est une extension de {dos9|Dos9}. La
+		libertée est laissée au programmeur d'utiliser l'une ou l'autre des syntaxe, même si la
+		seconde est nettement plus lisible et plus en accord avec la syntaxe générale des paramètres
+		de batch. Par défaut, le déplacement commence à la variable {%0}.
+
+		- {/d[:]déplacement} : Spécifie la longueur du déplacement. Il est nécessaire que {déplacement}
+		soit aussi un chiffre. Ce paramètre est une extension de {dos9|Dos9}. Par défaut la longueur du
+		déplacement est de {1}.
+
+	Le déplacement se fait du plus grand chiffre vers le plus petit. Les paramètres qui se retrouveraient dans
+	une variable plus petite que {%0} à la suite d'un déplacement est supprimée. Il n'y a pas d'éléments
+	ajoutés lors d'un déplacement, donc les variables qui on été "vidées" par le déplacement le restent.
+
+{{Compatibilité}}
+
+	Principalement compatible avec {cmd.exe}, À l'exception du déplacement vers {%0}. En effet, lors du remplissage
+	de {%0} procède à un test visant à savoir si le nouveau contenu de {%0} est un chemin valide de fichier ou de
+	répertoire, et si ce n'est pas le cas, le remplace le contenu de {%0} par le chemin courrant. Ce comportement
+	n'est pas implémenté dans {dos9|Dos9} car il n'a que peu d'intérêt et est même troublant pour un utilisateur non
+	averti (qui peut très bien le prendre pour un bogue).
+
+{{À voir aussi}}
+
+	{commands|Liste des commandes}, {dos9|Dos9}

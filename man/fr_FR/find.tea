@@ -1,0 +1,100 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+{{Commande FIND}}
+
+	Cherche les occurences d'une chaine dans un ou plusieurs fichiers.
+
+{{Synopsis}}
+
+	${FIND [/c] [/n] [/i] [/v] [/e] chaine [fichier ...]}
+
+	Cherche les occurences d'une chaine de caractères dans un ou plusieurs
+	fichiers, ou dans l'entrée standard ({stdin}).
+
+		- {chaine} : La chaine de caractère à rechercher dans les
+	fichiers ou l'entrée standard. Contrairement à l'implémentation native
+	de {FIND} de {Windows} (et donc celle utilisée par {cmd.exe}), il
+	n'est pas nécessaire de mettre des guillemets autour de {chaine} pour
+	que la ligne de commande soit valide.
+
+		- {fichier ...} : Une liste de fichiers (pouvant contenir des
+	{spec/regexp|caractères génériques}) dans lequels la commande {FIND}
+	doit rechercher les occurences de {chaine}. Les dossiers qui pourraient
+	correspondre aux critères imposés par la liste ne sont pas pris en
+	compte. Si aucun {fichier ...} n'est passé par la ligne de commande,
+	alors {FIND} utilise l'entrée standard comme fichier d'entrée. Si
+	{fichier ...} a été spécifié mais qu'aucun fichier ne correspond à la
+	liste, la commande s'interrompt et affiche un message d'erreur.
+
+		- {/e} : Signale que {chaîne} doît être traitée comme une
+	{spec/regexp|expression régulière}. La recherche cherche alors les
+	lignes qui correspondent entièrement à l'expression régulière contenue
+	dans {chaîne}.
+
+		- {/c} : Affiche seulement le nombre de lignes de {fichiers ...}
+	qui contiennent au moins une occurence de {chaine}.
+
+		- {/n} : Affiche le numéro des lignes qui contiennent au moins
+	une occurence de {chaine} conjointement avec les lignes en question.
+
+		- {/i} : Effectue une recherche de {chaine} ne prenant pas la
+	casse en compte.
+
+		- {/v} : Inverse la recherche, les lignes séléctionnées seront
+	donc les lignes qui ne contiennent pas d'occurence de {chaine}.
+
+	Il est évident que l'on ne peut pas mixer les options {/c} et {/n}, si
+	la commande {FIND} rencontre à la fois {/c} et {/n} sur la même ligne
+	de commande, alors, le comportement adopté par {FIND} sera celui
+	spécifié par la dernière occurence de {/c} ou {/n}.
+
+	La commande {FIND} n'impose aucune limite pour ce qui est de la
+	longueur des lignes des fichiers, qui est illimitée. A l'inverse la
+	version de {Windows} impose que soient plus courte qu'une certaine
+	longeur (1074 ou 1024 selon les sources). Il est donc possible de
+	faire des recherches sur des très grands fichiers (comme des arbres
+	xml, par exemple).
+
+	La commande {FIND} peut chercher des occurences dans un fichier binaire,
+	mais ce n'est cependant pas recommandé. Il peut en effet avoir des
+	problèmes d'affichage ou de caracères d'échappement inattendus ou
+	cassés.
+
+	Pour spécifier une {chaine} contenant des guillemets, il est nécessaire
+	d'utiliser le caractère '^' devant les guillemets à échaper, comme
+	pour toutes les commandes du projet {Dos9}. Cependant, la version de
+	{cmd.exe} de {FIND} n'utilise pas le '^' mais utilise le dédoublement
+	du guillemet pour l'échaper. Cette aproche ne marche avec la version de
+	{Dos9} que pour les guillemets extérieurs (par exemple ""chaine"").
+
+	La commande {FIND} est une commande interne de {Dos9}, alors que la
+	commande {FIND} de {cmd.exe} est une commande externe. Il est donc
+	possible, sous Windows, d'utiliser le {FIND} de {cmd.exe} via la
+	commande {alias|ALIAS}.
+
+{{Compatibilité}}
+
+	Compatible avec {cmd.exe}. À l'exception du cas des guillemets de
+	{chaine}.
+
+	Disponible depuis la version {2014.0.9b}.
+
+{{A voir aussi}}
+
+

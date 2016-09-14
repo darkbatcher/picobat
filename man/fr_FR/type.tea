@@ -1,0 +1,69 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+{{Commande TYPE}}
+
+	Affiche le contenu d'un fichier texte.
+
+{{Synopsis}}
+
+${TYPE [fichier ...]}
+
+	Affiche un ou plusieurs fichiers.
+
+		- {fichier ...} : Chemin du ou des fichiers à afficher. Ces
+		chemins peuvent contenir des
+		{spec/regexp|caractères génériques}. Si un nom de fichier
+		ne correspond pas à un fichier sur le disque, la commande
+		n'affiche rien et retourne une erreur. Si le chemin correspond
+		à des dossiers, alors ces dossiers ne seront pas affichés.
+
+	Contrairement, à l'implémentation de {cmd.exe}, l'affichage des noms de
+ 	fichiers n'a lieu que si plusieurs fichiers sont à afficher (cmd.exe
+	affiche aussi les noms de fichiers si il n'y a qu'un seul fichier mais
+	que le chemin donné contient des caractères génériques.
+
+	L'affichage de fichiers binaires a un résultat inderterminé. Pour
+	visualiser le contenu de tels fichiers, il est préférable d'utiliser
+	la commande {dump|DUMP} (non compatible avec {cmd.exe}). Sous
+	Windows, afficher un fichier binaire via {TYPE} n'est pas vraiment
+	problématique, il risque juste d'afficher des caractères non pris en
+	charge par la console. À l'inverse, sous les sytèmes de type UNIX, il
+	est possible que certaines séquences binaires contenues dans le fichier
+	soient interprétés en tant que codes d'échapement ANSI (en fonction
+	de l'émulateur de console), ou casser les codes ANSI utilisés par
+	{dos9|Dos9}, causant ainsi des comportements innatendus, qui
+	n'affectent cependant que l'affichage.
+
+	Sous les systèmes de type UNIX, il n'est pas possible d'afficher le
+	contenu d'un dossier (les dossiers sont des fichiers sous les systèmes
+	UNIX), via la commande {TYPE}, car la commande filtre les noms de
+	dossiers.
+
+{{Compatibilité}}
+
+	Disponible depuis la version {0.4}.
+
+	Partiellement compatible avec {cmd.exe}. La commande {TYPE} est
+	parfaitement compatible avec {cmd.exe} (execpté pour l'affichage des
+	noms de fichiers).
+
+{{A voir aussi}}
+
+	{more|Commande MORE}, {iconv|Commande ICONV}
+

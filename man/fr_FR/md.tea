@@ -1,0 +1,52 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+{{Commandes MD et MKDIR}}
+
+	Les commandes {MD} et {MKDIR} permettent de créer un dossier.
+
+{{Synopsis}}
+
+${MD dossier
+MKDIR dossier}
+
+	Crée un dossier.
+
+		- {dossier} :  chemin du dossier à créer. Si {dossier} est une
+		est un chemin comprenant plusieurs dossier n'existant pas, alors
+		tous les dossiers n'existant pas sont crées. Par exemple, si ni
+		{a} ni {b} ni {c} n'existent, alors:
+
+${MD a/b/c}
+		@- est équivalent à :
+
+${MD a
+MD a/b
+MD a/b/c}
+
+{{Compatibilité}}
+
+	Disponible depuis la version {0.4}.
+
+	Complètement compatible avec {cmd.exe} depuis la version {215.1b}.
+
+
+{{A voir aussi}}
+
+	{rd|Commandes RD et RMDIR}, {del|Commandes DEL et ERASE},
+	{move|Commande MOVE}, {copy|Commande COPY}

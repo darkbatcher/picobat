@@ -1,0 +1,55 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+{{DIR command}}
+
+		The {DIR} command lists the content of a folder, and select
+	files froms attributes, or name using {spec/regexp|regular expression}.
+
+{{Synopsis}}
+
+${	DIR [/A[:]attributes] [/S] [/B] [path]}
+
+	Search and list files and folders.
+
+		- {path} : Path of the files or folders to seek. This can contain
+		  {spec/regexp|regular expressions}. If no file is specified, then
+		  {dos9|Dos9} will show current folder's content.
+
+		- {/A[:]attributes} : Specifies a list of attributes that determines
+		  files and folders that will be listed. For more informations, see
+		  {spec/attr|/A[:]attribute switch}.
+
+
+		- {/B} : Simplified output. Output only files and folders name, without
+		  printing date, size, nor attributes. This switch eases the processing
+		  by a {for|FOR} loop.
+
+		- {/S} : Sets recursive search. See {spec/regexp|regular expressions}
+		for more informations.
+
+{{Compatibility}}
+
+	Supported since {0.4} version.
+
+		Mostly compatible with {cmd.exe}. Nevertheless, many switchs used
+	to change output style are not supported.
+
+{{See Also}}
+
+	{copy|Commande COPY}, {ren|Commandes REN et RENAME}, {move|Commande Move},
+	{del|Commandes DEL et ERASE}

@@ -1,0 +1,42 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+{{Commande REM}}
+
+	La commande {REM} permet d'introduire un commentaire ou une annotation
+	dans un script batch.
+
+{{Synopsis}}
+
+	${REM commentaire}
+
+	Introduit un commentaire ou une annotation.
+
+		- {commentaire} : Le commentaire ou l'annotation. Ce paramètre ne
+		peut pas contenir de caractères interprétés par {dos9|Dos9}, comme le
+		pipe {|} ou l'esperluette {&}.
+
+{{Notes}}
+
+	Cette commande est relativement inopérante, tant dans un script {batch} qu'a
+	l'invité de commande. Il est préférables d'utiliser le nouveau style de commentaires,
+	décrit à la page {spec/comments|commentaires}.
+
+{{A voir aussi}}
+
+	{commands|Liste des commandes}, {echo|Commande ECHO}
