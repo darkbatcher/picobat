@@ -12,3 +12,4 @@ Makefile
 *.Plo
 config.log
 *~
+./Makefile
