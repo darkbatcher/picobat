@@ -13499,7 +13499,7 @@ $as_echo "$as_me: checking for guile $v" >&6;}
   ($PKG_CONFIG --exists --print-errors "guile-$v") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
+  test $ac_status = 1; }; then # This check break crosscompilling
   GUILE_EFFECTIVE_VERSION=$v
 fi
     fi
