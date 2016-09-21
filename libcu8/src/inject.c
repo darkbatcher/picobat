@@ -138,6 +138,8 @@ int __cdecl libcu8_replace_fn(void* oldfn, void* newfn, int n)
     if ((tbl_fn = libcu8_get_fn_pointer(newfn)) == NULL)
         return 1;
 
+     // printf("[libcu8] Replacing 0x%p by 0x%p\n", oldfn, newfn);
+
 #if defined(__x86_64__)
     rel = (void*)tbl_fn - oldfn; /* compute relative adress */
     rel -= sizeof(code);
@@ -145,30 +147,30 @@ int __cdecl libcu8_replace_fn(void* oldfn, void* newfn, int n)
     rel = tbl_fn; /* compute absolute address */
 #endif
 
-    //printf("newfn = %p, diff = %p - %p :  %X\n", newfn, tbl_fn, oldfn, rel);
-    //printf("_read = %p", _read);
-    //printf(" *tbl_fn  = %p\n",  *tbl_fn);
+    // printf("newfn = %p, diff = %p - %p :  %X\n", newfn, tbl_fn, oldfn, rel);
+    // printf("_read = %p", _read);
+    // printf(" *tbl_fn  = %p\n",  *tbl_fn);
 
     /* copy the actual function pointer in the inject code */
     memcpy ( code + 2, &rel, sizeof(code)-2);
 
-    //int i;
-    //printf("{");
-    //for (i=0; i < sizeof(code); i++)
+    // int i;
+    // printf("{");
+    // for (i=0; i < sizeof(code); i++)
     //    printf("0x%X, ", code[i]);
-    //printf("}\n");
+    // printf("}\n");
 
     /* put the inject code at the address of the function to
        replace */
     ret = WriteProcessMemory(self, oldfn, code,
                                     sizeof(code), &written);
 
-    //printf("Return %d\n", ret);
+    // printf("Return %d\n", ret);
 
     if (!ret || written != sizeof(code))
         return 2;
 
-    //CloseHandle(self);
+    CloseHandle(self);
 
     return 0;
 }

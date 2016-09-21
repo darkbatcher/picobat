@@ -89,7 +89,6 @@ int Dos9_CmdType(char* lpLine)
 
     while ((lpLine = Dos9_GetNextParameterEs(lpLine, lpEsParam))) {
 
-
         if (!strcmp(Dos9_EsToChar(lpEsParam), "/?")) {
 
             Dos9_ShowInternalHelp(DOS9_HELP_TYPE);

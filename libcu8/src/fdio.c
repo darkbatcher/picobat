@@ -40,6 +40,37 @@
 #include "internals.h"
 #include "libcu8.h"
 
+__LIBCU8__IMP __cdecl FILE* libcu8_fopen(const char* __restrict__ name, const char* __restrict__ mode)
+{
+    wchar_t *wfile, *wmode;
+    size_t conv;
+    FILE* ret;
+
+    if (!(wfile = (wchar_t*)libcu8_xconvert(LIBCU8_TO_U16, name,
+                                                strlen(name)+1, &conv))) {
+
+        errno = ENOMEM;
+        return NULL;
+
+    }
+
+    if (!(wmode = (wchar_t*)libcu8_xconvert(LIBCU8_TO_U16, mode,
+                                                strlen(mode)+1, &conv))) {
+
+        errno = ENOMEM;
+        free(wfile);
+        return NULL;
+
+    }
+
+    ret = _wfopen(wfile, wmode);
+
+    free(wfile);
+    free(wmode);
+
+    return ret;
+}
+
 __LIBCU8__IMP __cdecl int libcu8_open(char* name, int oflags, int pmode)
 {
     wchar_t *wcs;
@@ -51,6 +82,32 @@ __LIBCU8__IMP __cdecl int libcu8_open(char* name, int oflags, int pmode)
         return -1;
 
     fd = _wopen(wcs, oflags, pmode);
+
+    free(wcs);
+
+    if (fd != -1) {
+
+        /* empty buffering structure */
+        libcu8_fd_buffers[fd].rcount = 0;
+        libcu8_fd_buffers[fd].len = 0;
+
+    }
+
+    return fd;
+}
+
+
+__LIBCU8__IMP __cdecl int libcu8_sopen(char* name, int oflags, int shflags, int pmode)
+{
+    wchar_t *wcs;
+    int fd;
+    size_t len;
+
+    if (!(wcs = (wchar_t*)libcu8_xconvert(LIBCU8_TO_U16, name, strlen(name)+1,
+                                          &len)))
+        return -1;
+
+    fd = _wsopen(wcs, oflags, shflags, pmode);
 
     free(wcs);
 

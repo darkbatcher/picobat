@@ -22,6 +22,7 @@
 #include <ctype.h>
 #include "../libDos9.h"
 #include "../libDos9-int.h"
+#include "../../config.h"
 
 LIBDOS9 char* Dos9_SeekPattern(const char* match, const char* pattern, size_t len)
 {
@@ -891,7 +892,7 @@ LPFILELIST _Dos9_WaitForFileList(LPFILEPARAMETER lpParam)
 
 					stat(lpFileName, &(lpflCurrent->stFileStats));
 
-#if defined WIN32
+#if defined(WIN32)
 					lpflCurrent->stFileStats.st_mode=Dos9_GetFileAttributes(lpFileName);
 #endif
 
@@ -969,3 +970,30 @@ int _Dos9_FreeFileList(LPFILELIST lpflFileList)
 
 	return 0;
 }
+
+#if defined(WIN32) && defined(DOS9_USE_LIBCU8)
+#include <libcu8.h>
+
+int Dos9_GetFileAttributes(const char* file)
+{
+    wchar_t *wfile;
+    int ret;
+    size_t conv;
+
+    if (!(wfile= libcu8_xconvert(LIBCU8_TO_U16, file,
+                                        strlen(file)+1, &conv)))
+        return -1;
+
+    ret = GetFileAttributesW(wfile);
+
+    free(wfile);
+
+    return ret;
+}
+
+#elif defined(WIN32) && !defined(DOS9_USE_LIBCU8)
+int Dos9_GetFileAttributes(const char* file)
+{
+    return GetFileAttributes(file);
+}
+#endif // defined

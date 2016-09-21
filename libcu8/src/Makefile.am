@@ -29,7 +29,7 @@ EXTRA_DIST = stat_gen.c find_gen.c
 
 lib_LTLIBRARIES = libcu8.la
 libcu8_la_SOURCES = init.c inject.c encoding.c read.c write.c fdio.c spawn.c \
-stat.c dup.c find.c
+stat.c dup.c find.c dir.c
 libcu8_la_LDFLAGS = -version-info $(VERSION) -no-undefined
 libcu8_la_LIBADD = @LIBS@
 libcu8_la_CFLAGS = -I../include

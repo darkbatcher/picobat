@@ -75,7 +75,10 @@ __LIBCU8__IMP __cdecl int libcu8_read(int fd, void* buf, unsigned int cnt);
 __LIBCU8__IMP __cdecl int libcu8_write_nolock(int fd, void* buf,
                                                 unsigned int cnt);
 __LIBCU8__IMP __cdecl int libcu8_write(int fd, void* buf, unsigned int cnt);
+__LIBCU8__IMP __cdecl FILE* libcu8_fopen(const char* __restrict__ name, const char* __restrict__ mode);
 __LIBCU8__IMP __cdecl int libcu8_open(char* name, int oflags, int pmode);
+__LIBCU8__IMP __cdecl int libcu8_sopen(char* name, int oflags,
+                                            int shflags, int pmode);
 __LIBCU8__IMP __cdecl int libcu8_creat(char* name, int pmode);
 __LIBCU8__IMP __cdecl int libcu8_lseek(int fd, long offset, int origin);
 __LIBCU8__IMP __cdecl int libcu8_commit(int fd);
@@ -143,6 +146,10 @@ __LIBCU8__IMP __cdecl int libcu8_findnext32i64(intptr_t handle,
                                                 struct _finddata32i64_t* info);
 #endif // __x86_64__
 
+__LIBCU8__IMP __cdecl int libcu8_getcwd(char* dir, size_t size);
+__LIBCU8__IMP __cdecl int libcu8_chdir(const char* dir);
+__LIBCU8__IMP __cdecl int libcu8_rmdir(const char* dir);
+__LIBCU8__IMP __cdecl int libcu8_mkdir(const char* dir);
 __LIBCU8__IMP __cdecl int libcu8_fd_set_inheritance(int fd, int mode);
 
 /* enable c++ compatibility */
