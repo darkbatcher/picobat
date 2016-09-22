@@ -1,5 +1,5 @@
 # Overall Dos9 suite Makefile, The Dos9 Project (c) Darkbatcher
-# 2010-2013
+# 2010-2016
 #
 # This is free software: you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software 
@@ -17,16 +17,20 @@ MSGFMT = /usr/bin/msgfmt
 XGETTEXT = /usr/bin/xgettext
 MSGMERGE = /usr/bin/msgmerge
 prefix = /run/media/tsnake41/912ab85f-5006-4763-9f8c-07a84e5651a9/dos9-compile-scripts/linux-x86_64
+datarootdir = ${prefix}/share
+datadir= ${datarootdir}
 all: m-po
 
 dist:
 distdir:
 
-local:
-	cp -R ./share ../bin/
+install-exec:
+install-exec-recursive:
+install-data: install
+install-data-recursive:
 
 install:
-	cp -R ./share/locale $(prefix)/share/locale
+	cp -R ./share/locale $(datadir)
 
 m-po: po-tree
 	mkdir -p $(SHARE_DIR)

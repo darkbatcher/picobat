@@ -70,7 +70,9 @@ COMMANDINFO lpCmdInfo[]= {
 	{"SHIFT", Dos9_CmdShift, STRLEN("SHIFT")},
 	{"FIND", Dos9_CmdFind, STRLEN("FIND")},
 	{"BREAK", Dos9_CmdBreak, STRLEN("BREAK")},
-	{"CHCP", Dos9_CmdChcp, STRLEN("CHCP")}
+	{"CHCP", Dos9_CmdChcp, STRLEN("CHCP")},
+	{"PUSHD", Dos9_CmdPushd, STRLEN("PUSHD")},
+	{"POPD", Dos9_CmdPopd, STRLEN("POPD")}
 };
 
 #endif
