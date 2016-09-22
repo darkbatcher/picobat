@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
 
     /* Initialize libDos9 */
     Dos9_InitLibDos9();
-    
+
     /* Set the error handler called on errors that require the process to exit */
     pErrorHandler=Dos9_Exit;
 
@@ -93,13 +93,13 @@ int main(int argc, char *argv[])
      * special parameters. (note %0 is set when the absolute path of the script
      * is computed) */
     lpCmdCSwitch = Dos9_GetParameters(argv, &lpFileName, &bExitAfterCmd, &bQuiet);
-    
+
     /* Initialize stdlib random */
     srand(time(NULL));
 
     /* Set the default terminal color */
     colColor=DOS9_COLOR_DEFAULT;
-    
+
     /* Set the console title depending on the type of actions performed (ie.
      * command prompt or batch interpretor) and set the DOS9_IS_SCRIPT var
      * appropriately */
@@ -120,7 +120,7 @@ int main(int argc, char *argv[])
         Dos9_SetLocalVar(lpvLocalVars, '0', "");
 
     }
-    
+
     /* Map the commandinfo */
     lpclCommands = Dos9_MapCommandInfo(lpCmdInfo,
                                 sizeof(lpCmdInfo)/sizeof(COMMANDINFO));

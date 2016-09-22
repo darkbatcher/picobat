@@ -16,23 +16,37 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-EXTRA_DIST = po man scripts COPYING README WHATSNEW
+EXTRA_DIST = po man scripts COPYING README WHATSNEW BUILD.readme
 ACLOCAL_AMFLAGS = -I m4
 AUTOMAKE_OPTIONS = foreign subdir-objects
-SUBDIRS = libinteval libmatheval libDos9 @libcu8@ dos9 tea dump po dos9ize \
+SUBDIRS = libinteval libmatheval @libcu8@ libDos9 dos9 tea dump po dos9ize \
 scripts
 SHAREDEXT = @SHAREDEXT@
 distbdir =$(distdir)-bin
 rm_distbdir =rm -R $(distbdir)
+datarootdir = @datarootdir@
+datadir = @datadir@
+bindir = @bindir@
+install: install-exec install-data install-extra
 
+install-extra: textfiles
+	mkdir -p $(datadir)/dos9
+	mkdir -p $(datadir)/dos9/hlp
+	cp -Rf man $(datadir)/dos9/hlp
+	cp README WHATSNEW $(datadir)/dos9/
+
+.PHONY: install-extra textfiles 
 
 textfiles : 
 	for i in README WHATSNEW; do \
 		echo "- Building $$i"; \
-		./tea/tea$(EXEEXT) //e:utf-8 //o:text-plain $$i.tea $$i ; \
+		case `uname -a` in \
+			*MINGW*Msys*) ./tea/tea$(EXEEXT) //e:utf-8 //o:text-plain $$i.tea $$i ;; \
+			*) ./tea/tea$(EXEEXT) /e:utf-8 /o:text-plain $$i.tea $$i ;;\
+		esac;\
 	done;
 
-dos9-install-clean :
+dos9-install-portable:
 	-for i in libDos9 libmatheval libinteval libcu8; do \
 		[ -f $(prefix)/$$i.a ] && rm -f $(prefix)/$$i.a ;\
 		[ -f $(prefix)/$$i.la ] && rm -f $(prefix)/$$i.la ;\
@@ -44,8 +58,9 @@ dos9-install-clean :
 	-[ -f $(prefix)/dos9ize ] && mv $(prefix)/dos9ize $(prefix)/cmd/
 	cp README $(prefix)/
 	cp WHATSNEW $(prefix)/
-	mkdir -p $(prefix)/share/hlp
-	cp -R man/ $(prefix)/share/hlp/man/
+	cp COPYING $(prefix)/
+	mkdir -p $(prefix)/share/dos9/hlp
+	cp -R man/ $(prefix)/share/dos9/hlp/man/
 
 dist-bin : dist-bin-dir	
 	tardir=$(distbdir) && $(am__tar) | GZIP=$(GZIP_ENV) gzip -c> $(distbdir).tar.gz

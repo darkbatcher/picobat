@@ -103,11 +103,10 @@ int Dos9_CmdCopy(char* line)
 
         str = Dos9_EsToChar(param);
 
-        if (!strnicmp("/Y", str, 2)
-            || !strnicmp("/-Y", str, 3)) {
+        if (!stricmp("/Y", str)
+            || !stricmp("/-Y", str)) {
 
             flags |= (*(str+1)=='-') ? DOS9_COPY_SILENCE : 0;
-			continue;
 
         } if (!strnicmp("/A", str, 2)) {
 
@@ -117,12 +116,10 @@ int Dos9_CmdCopy(char* line)
                 str ++;
 
             attr = Dos9_MakeFileAttributes(str);
-			continue;
 
         } else if (!stricmp("/R", str)) {
 
             flags |= DOS9_COPY_RECURSIVE;
-			continue;
 
         } else if (!strcmp(str, "/?")) {
 
@@ -202,12 +199,11 @@ int Dos9_CmdCopy(char* line)
         end = end->lpflNext;
     }
 
-    /* Get matching attributes if attributes are defined */
-	if (!attr)
-	    Dos9_AttributesSplitFileList(attr | DOS9_ATTR_NO_DIR,
-	                                    files,
-	                                    &files,
-	                                    &next);
+    /* Get matching attributes */
+    Dos9_AttributesSplitFileList(attr | DOS9_ATTR_NO_DIR,
+                                    files,
+                                    &files,
+                                    &next);
 
     end = files;
 

@@ -25,7 +25,7 @@
 #ifdef PACKAGE_VERSION
 #define DOS9_VERSION PACKAGE_VERSION
 #else
-#define DOS9_VERSION "2016.1.1a"
+#define DOS9_VERSION "2014.0.9b"
 #endif
 
 #ifdef PACKAGE_BUGREPORT
@@ -46,7 +46,7 @@
 #define DOS9_HOST "Unknown"
 #endif
 
-#define DOS9_AUTHORS "Romain Garbi, Teddy Astie"
+#define DOS9_AUTHORS "Romain Garbi"
 #define DOS9_BUILDDATE __DATE__
 #define DOS9_BUILDYEAR "2016"
 #define DOS9_BUILDCOMMENTS "Beta release"

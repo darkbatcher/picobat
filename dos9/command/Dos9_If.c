@@ -39,7 +39,7 @@ int Dos9_CmdIf(char* lpParam)
 
 	ESTR *lpComparison, *lpOtherPart;
 	LPFILELIST lpflFileList;
-	/* syntaxes possible
+	/* syntaxe possible
 	        IF [/i] [NOT] test==valeur (...)
 	        IF [/i] test2 CMP test2 (...)
 	        IF [NOT] EXIST fichier (...)

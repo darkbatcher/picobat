@@ -1,33 +1,32 @@
-This is libmatheval.info, produced by makeinfo version 6.1 from
+This is libmatheval.info, produced by makeinfo version 4.13 from
 libmatheval.texi.
 
-INFO-DIR-SECTION GNU libraries
+
+
+   INFO-DIR-SECTION GNU libraries
 START-INFO-DIR-ENTRY
 * libmatheval: (libmatheval).   library for evaluating symbolic expressions
 END-INFO-DIR-ENTRY
-
-This file documents GNU 'libmatheval' library.
-
-   Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2011, 2012,
-2013 Free Software Foundation, Inc.
-
-   Permission is granted to copy, distribute and/or modify this document
-under the terms of the GNU Free Documentation License, Version 1.1 or
-any later version published by the Free Software Foundation; with the
-Invariant Sections being "Rationale and history", with no Front-Cover
-Texts, and with no Back-Cover Texts.  A copy of the license is included
-in the section entitled "Copying".
+ This file documents GNU `libmatheval' library.  Copyright (C)
+2002, 2003, 2004, 2005, 2006, 2007, 2008, 2011, 2012, 2013 Free
+Software Foundation, Inc.  Permission is granted to copy,
+distribute and/or modify this document under the terms of the GNU
+Free Documentation License, Version 1.1 or any later version
+published by the Free Software Foundation; with the Invariant
+Sections being "Rationale and history", with no Front-Cover Texts,
+and with no Back-Cover Texts.  A copy of the license is included in
+the section entitled "Copying".  
 
 
 File: libmatheval.info,  Node: Top,  Next: License,  Prev: (dir),  Up: (dir)
 
-GNU 'libmatheval' manual
+GNU `libmatheval' manual
 ************************
 
-GNU 'libmatheval' is small library of procedures for evaluating
+ GNU `libmatheval' is small library of procedures for evaluating
 mathematical functions.  This manual documents how to use the library;
-this is manual edition 2014.1.0, last updated 23 July 2016,
-corresponding to library version 2014.1.0.
+this is manual edition 2014.1.0, last updated 2 June 2015,
+corresponding to library version 2014.1.0. 
 
 * Menu:
 
@@ -40,6 +39,7 @@ corresponding to library version 2014.1.0.
 * Rationale and history:: Background of project.
 * Copying::               GNU Free Documentation License.
 * Index::                 Index of concepts and symbol names.
+   
 
 
 File: libmatheval.info,  Node: License,  Next: Introduction,  Prev: Top,  Up: Top
@@ -47,18 +47,16 @@ File: libmatheval.info,  Node: License,  Next: Introduction,  Prev: Top,  Up: To
 License
 *******
 
-GNU libmatheval is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by the
-Free Software Foundation, either version 3 of the License, or (at your
-option) any later version.
-
-   GNU libmatheval is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
-Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-along with GNU libmatheval.  If not, see <http://www.gnu.org/licenses/>.
+ GNU libmatheval is free software: you can redistribute it and/or
+modify it under the terms of the GNU General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.  GNU libmatheval
+is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.  You should have received a copy of the GNU
+General Public License along with GNU libmatheval.  If not, see
+<http://www.gnu.org/licenses/>. 
 
 
 File: libmatheval.info,  Node: Introduction,  Next: Reference,  Prev: License,  Up: Top
@@ -66,134 +64,111 @@ File: libmatheval.info,  Node: Introduction,  Next: Reference,  Prev: License,  
 1 Introduction
 **************
 
-GNU 'libmatheval' is library comprising several procedures that makes
-possible to create in-memory tree representation of mathematical
+ GNU `libmatheval' is library comprising several procedures that
+makes possible to create in-memory tree representation of mathematical
 functions over single or multiple variables and later use this
 representation to evaluate function for specified variable values, to
 create corresponding tree for function derivative over specified
-variable or to get back textual representation of in-memory tree.
-
-   This section discuss use of programming interface exposed by library
-from C programs.  Readers interested in Fortran interface should switch
-immediately to *note Fortran interface:: section.
-
-   In order to use GNU 'libmatheval' library from C code, it is
-necessary first to include header file 'matheval.h' from all files
-calling GNU 'libmatheval' procedures and then refer to 'libmatheval'
-library among other linker option.  Thus, command to compile C program
-using library and stored in file 'example.c' using GNU C compiler would
-look like (supposing that library is installed using default prefix
-'/usr/local/lib'):
-
+variable or to get back textual representation of in-memory tree. 
+This section discuss use of programming interface exposed by library
+from C programs. Readers interested in Fortran interface should switch
+immediately to *note Fortran interface:: section.  In order to use
+GNU `libmatheval' library from C code, it is necessary first to
+include header file `matheval.h' from all files calling GNU
+`libmatheval' procedures and then refer to `libmatheval' library
+among other linker option.  Thus, command to compile C program using
+library and stored in file `example.c' using GNU C compiler would
+look like (supposing that library is installed using default prefix
+`/usr/local/lib'): 
      gcc example.c -I/usr/local/include -L/usr/local/lib -lmatheval -o example
-
-   Alternatively, 'pkg-config' metadata file for 'libmatheval' is
-installed along with the library too, thus on system with 'pkg-config'
-installed following command could be used instead:
-
+    Alternatively, `pkg-config' metadata file for `libmatheval' is
+installed along with the library too, thus on system with
+`pkg-config' installed following command could be used instead: 
      gcc example.c $(pkg-config --cflags --libs) -o example
-
-   First step in actually utilizing library after including appropriate
-header file would be to declare variable of 'void *' type to point to
-evaluator object that will represent given mathematical function:
-
+    First step in actually utilizing library after including
+appropriate header file would be to declare variable of `void *' type
+to point to evaluator object that will represent given mathematical
+function: 
      void *f;
-
-   Then, given that textual representation of function is stored into
-string 'buffer', evaluator object corresponding to given mathematical
-function could be created using 'evaluator_create' procedure (see *note
-evaluator_create::) as follows (see documentation for this procedure
-also for description of notation that should be used to describe
-mathematical functions):
-
+    Then, given that textual representation of function is stored
+into string `buffer', evaluator object corresponding to given
+mathematical function could be created using `evaluator_create'
+procedure (see *note evaluator_create::) as follows (see documentation
+for this procedure also for description of notation that should be
+used to describe mathematical functions): 
      f = evaluator_create (buffer);
      assert (f);
-
-   Return value should be always checked, because above procedure will
-return null pointer if there exist syntax errors in notation.  After
-that, one could utilize 'evaluator_get_variables' (see *note
-evaluator_get_variables::) procedure to obtain a list of variable names
-appearing in function:
-
+    Return value should be always checked, because above procedure
+will return null pointer if there exist syntax errors in notation.
+After that, one could utilize `evaluator_get_variables' (see *note
+evaluator_get_variables::) procedure to obtain a list of variable
+names appearing in function: 
      {
        char **names;
        int count;
        int i;
-
+     
        evaluator_get_variables (f, &names, &count);
        for (i = 0; i < count; i++)
          printf ("%s ", names[i]);
        printf ("\n");
      }
-
-   Procedure 'evaluator_evaluate' (see *note evaluator_evaluate::) could
-be used to evaluate function for specific variable values.  Say that
-above function is over variable "x" only, then following code will
-evaluate and print function value for x = 0.1:
-
+    Procedure `evaluator_evaluate' (see *note evaluator_evaluate::)
+could be used to evaluate function for specific variable values.  Say
+that above function is over variable "x" only, then following code
+will evaluate and print function value for x = 0.1: 
      {
        char *names[] = { "x" };
        double values[] = { 0.1 };
-
-       printf ("f(0.1) = %g\n", evaluator_evaluate (f, 1, names,
+     
+       printf ("f(0.1) = %g\n", evaluator_evaluate (f, 1, names, 
                                                     values));
      }
-
-   Or alternatively, since function is over variable with standard name
-"x", convenience procedure 'evaluator_evaluate_x' (*note
-evaluator_evaluate_x::) could be used to accomplish same by following:
-
+    Or alternatively, since function is over variable with standard
+name "x", convenience procedure `evaluator_evaluate_x' (*note
+evaluator_evaluate_x::) could be used to accomplish same by
+following: 
      printf ("f(0.1) = %g\n", evaluator_evaluate_x (f, 0.1));
-
-   Evaluator object for function derivative over some variable could be
-created from evaluator object for given function.  In order to
-accomplish this, a declaration for derivative evaluator object should be
-added to variable declarations section:
-
+    Evaluator object for function derivative over some variable could
+be created from evaluator object for given function.  In order to
+accomplish this, a declaration for derivative evaluator object should
+be added to variable declarations section: 
      void *f_prim;
-
-   After that (supposing that "x" is used as derivation variable),
+    After that (supposing that "x" is used as derivation variable),
 derivative evaluator object could be created using
-'evaluator_derivative' procedure (see *note evaluator_derivative::):
+`evaluator_derivative' procedure (see *note evaluator_derivative::):
 
      f_prim = evaluator_derivative (f, "x");
-
-   or alternatively using 'evaluator_derivative_x' convenience procedure
-(see *note evaluator_derivative_x::):
-
+    or alternatively using `evaluator_derivative_x' convenience
+procedure (see *note evaluator_derivative_x::): 
      f_prim = evaluator_derivative_x (f);
-
-   Derivative evaluator object could be used to evaluate derivative
+    Derivative evaluator object could be used to evaluate derivative
 values or say textual representation of derivative could be written to
-standard output through utilizing 'evaluator_get_string' procedure (see
-*note evaluator_get_string::) to get string representing given
-evaluator.  Following code would accomplish this:
-
+standard output through utilizing `evaluator_get_string' procedure
+(see *note evaluator_get_string::) to get string representing given
+evaluator.  Following code would accomplish this: 
      printf ("  f'(x) = %s\n", evaluator_get_string (f_prim));
-
-   All evaluator objects must be destroyed after finished with using
-them and 'evaluator_destroy' procedure (see *note evaluator_destroy::)
-is intended for this:
-
+    All evaluator objects must be destroyed after finished with using
+them and `evaluator_destroy' procedure (see *note
+evaluator_destroy::) is intended for this: 
      evaluator_destroy (f);
      evaluator_destroy (f_prim);
-
-   Here follows complete program connecting above fragments.  Program
-read from standard input string representing function over variable "x",
-create evaluators for function and its first derivative, print textual
-representation of function derivative to standard output, then read
-value of variable "x" and finally print to standard output values of
-function and its first derivative for given value of variable "x".
-
+    Here follows complete program connecting above fragments.
+Program read from standard input string representing function over
+variable "x", create evaluators for function and its first
+derivative, print textual representation of function derivative to
+standard output, then read value of variable "x" and finally print to
+standard output values of function and its first derivative for given
+value of variable "x". 
      #include <stdio.h>
      #include <stdlib.h>
      #include <string.h>
      #include <assert.h>
      #include <matheval.h>
-
+     
      /* Size of input buffer.  */
      #define BUFFER_SIZE 256
-
+     
      /* Program is demonstrating use of GNU libmatheval library of procedures
         for evaluating mathematical functions.  */
      int
@@ -206,7 +181,7 @@ function and its first derivative for given value of variable "x".
        int count;			/* Number of function variables. */
        double x;			/* Variable x value.  */
        int i;			/* Loop counter. */
-
+     
        /* Read function.  Function has to be over variable x, or result may
           be undetermined.  Size of textual represenatation of function is
           bounded here to 256 characters, in real conditions one should
@@ -217,43 +192,42 @@ function and its first derivative for given value of variable "x".
        length = strlen (buffer);
        if (length > 0 && buffer[length - 1] == '\n')
          buffer[length - 1] = '\0';
-
+     
        /* Create evaluator for function.  */
        f = evaluator_create (buffer);
        assert (f);
-
+     
        /* Print variable names appearing in function. */
        evaluator_get_variables (f, &names, &count);
        printf ("  ");
        for (i = 0; i < count; i++)
          printf ("%s ", names[i]);
        printf ("\n");
-
+     
        /* Create evaluator for function derivative and print textual
           representation of derivative.  */
        f_prim = evaluator_derivative_x (f);
        printf ("  f'(x) = %s\n", evaluator_get_string (f_prim));
-
+     
        /* Read variable x value.  */
        printf ("x = ");
        scanf ("%lf", &x);
-
+     
        /* Calculate and print values of function and its derivative for given
           value of x.  */
        printf ("  f(%g) = %g\n", x, evaluator_evaluate_x (f, x));
        printf ("  f'(%g) = %g\n", x, evaluator_evaluate_x (f_prim, x));
-
+     
        /* Destroy evaluators.  */
        evaluator_destroy (f);
        evaluator_destroy (f_prim);
-
+     
        exit (EXIT_SUCCESS);
      }
-
-   Above example exercise most of library main procedures (see *note
+    Above example exercise most of library main procedures (see *note
 Main entry points::), as well as some of convenience procedures (see
-*note Convenience procedures::).  For full documentation, see *note
-Reference::.
+*note Convenience procedures::).  For full documentation, see *note
+Reference::. 
 
 
 File: libmatheval.info,  Node: Reference,  Next: Fortran interface,  Prev: Introduction,  Up: Top
@@ -261,14 +235,15 @@ File: libmatheval.info,  Node: Reference,  Next: Fortran interface,  Prev: Intro
 2 Reference
 ***********
 
-This section documents procedures constituting GNU 'libmatheval'
-library.  The convention is that all procedures have 'evaluator_'
-prefix.
+ This section documents procedures constituting GNU `libmatheval'
+library.  The convention is that all procedures have `evaluator_'
+prefix. 
 
 * Menu:
 
 * Main entry points::      Library main procedures
 * Convenience procedures:: Library convenience procedures
+   
 
 
 File: libmatheval.info,  Node: Main entry points,  Next: Convenience procedures,  Prev: Reference,  Up: Reference
@@ -276,263 +251,284 @@ File: libmatheval.info,  Node: Main entry points,  Next: Convenience procedures,
 2.1 Main entry points
 =====================
 
+
+
 * Menu:
 
-* evaluator_create::        'evaluator_create' procedure
-* evaluator_destroy::       'evaluator_destroy' procedure
-* evaluator_evaluate::      'evaluator_evaluate' procedure
-* evaluator_get_string::    'evaluator_get_string' procedure
-* evaluator_get_variables:: 'evaluator_get_variables' procedure
-* evaluator_derivative::    'evaluator_derivative' procedure
+* evaluator_create::        `evaluator_create' procedure
+* evaluator_destroy::       `evaluator_destroy' procedure
+* evaluator_evaluate::      `evaluator_evaluate' procedure
+* evaluator_get_string::    `evaluator_get_string' procedure
+* evaluator_get_variables:: `evaluator_get_variables' procedure
+* evaluator_derivative::    `evaluator_derivative' procedure
+   
 
 
 File: libmatheval.info,  Node: evaluator_create,  Next: evaluator_destroy,  Prev: Main entry points,  Up: Main entry points
 
-2.1.1 'evaluator_create'
+2.1.1 `evaluator_create'
 ------------------------
+
+
 
 Synopsis
 ........
 
-     #include <matheval.h>
 
+     #include <matheval.h>
+     
      void *evaluator_create (char *string);
+   
 
 Description
 ...........
 
-Create evaluator object from 'string' containing mathematical
+ Create evaluator object from `string' containing mathematical
 representation of function.  Evaluator object could be used later to
-evaluate function for specific variable values or to calculate function
-derivative over some variable.
-
-   String representation of function is allowed to consist of decimal
-numbers, constants, variables, elementary functions, unary and binary
-operations.
-
-   Supported constants are (names that should be used are given in
-parenthesis): e ('e'), log2(e) ('log2e'), log10(e) ('log10e'), ln(2)
-('ln2'), ln(10) ('ln10'), pi ('pi'), pi / 2 ('pi_2'), pi / 4 ('pi_4'), 1
-/ pi ('1_pi'), 2 / pi ('2_pi'), 2 / sqrt(pi) ('2_sqrtpi'), sqrt(2)
-('sqrt') and sqrt(1 / 2) ('sqrt1_2').
-
-   Variable name is any combination of alphanumericals and '_'
+evaluate function for specific variable values or to calculate
+function derivative over some variable.  String representation of
+function is allowed to consist of decimal numbers, constants,
+variables, elementary functions, unary and binary operations. 
+Supported constants are (names that should be used are given in
+parenthesis): e (`e'), log2(e) (`log2e'), log10(e) (`log10e'), ln(2)
+(`ln2'), ln(10) (`ln10'), pi (`pi'), pi / 2 (`pi_2'), pi / 4
+(`pi_4'), 1 / pi (`1_pi'), 2 / pi (`2_pi'), 2 / sqrt(pi)
+(`2_sqrtpi'), sqrt(2) (`sqrt') and sqrt(1 / 2) (`sqrt1_2'). 
+Variable name is any combination of alphanumericals and `_'
 characters beginning with a non-digit that is not elementary function
-name.
-
-   Supported elementary functions are (names that should be used are
-given in parenthesis): exponential ('exp'), logarithmic ('log'), square
-root ('sqrt'), sine ('sin'), cosine ('cos'), tangent ('tan'), cotangent
-('cot'), secant ('sec'), cosecant ('csc'), inverse sine ('asin'),
-inverse cosine ('acos'), inverse tangent ('atan'), inverse cotangent
-('acot'), inverse secant ('asec'), inverse cosecant ('acsc'), hyperbolic
-sine ('sinh'), cosine ('cosh'), hyperbolic tangent ('tanh'), hyperbolic
-cotangent ('coth'), hyperbolic secant ('sech'), hyperbolic cosecant
-('csch'), hyperbolic inverse sine ('asinh'), hyperbolic inverse cosine
-('acosh'), hyperbolic inverse tangent ('atanh'), hyperbolic inverse
-cotangent ('acoth'), hyperbolic inverse secant ('asech'), hyperbolic
-inverse cosecant ('acsch'), absolute value ('abs'), Heaviside step
-function ('step') with value 1 defined for x = 0, Dirac delta function
-with infinity ('delta') and not-a-number ('nandelta') values defined for
-x = 0, and error function ('erf').
-
-   Supported unary operation is unary minus (''-'').
-
-   Supported binary operations are addition (''+''), subtraction
-(''+''), multiplication (''*''), division multiplication (''/'') and
-exponentiation (''^'').
-
-   Usual mathematical rules regarding operation precedence apply.
-Parenthesis (''('' and '')'') could be used to change priority order.
-
-   Blanks and tab characters are allowed in string representing
-function; newline characters must not appear in this string.
+name.  Supported elementary functions are (names that should be
+used are given in parenthesis): exponential (`exp'), logarithmic
+(`log'), square root (`sqrt'), sine (`sin'), cosine (`cos'),
+tangent (`tan'), cotangent (`cot'), secant (`sec'), cosecant (`csc'),
+inverse sine (`asin'), inverse cosine (`acos'), inverse tangent
+(`atan'), inverse cotangent (`acot'), inverse secant (`asec'),
+inverse cosecant (`acsc'), hyperbolic sine (`sinh'), cosine
+(`cosh'), hyperbolic tangent (`tanh'), hyperbolic cotangent
+(`coth'), hyperbolic secant (`sech'), hyperbolic cosecant (`csch'),
+hyperbolic inverse sine (`asinh'), hyperbolic inverse cosine
+(`acosh'), hyperbolic inverse tangent (`atanh'), hyperbolic inverse
+cotangent (`acoth'), hyperbolic inverse secant (`asech'), hyperbolic
+inverse cosecant (`acsch'), absolute value (`abs'), Heaviside step
+function (`step') with value 1 defined for x = 0, Dirac delta
+function with infinity (`delta') and not-a-number (`nandelta') values
+defined for x = 0, and error function (`erf').  Supported unary
+operation is unary minus (`'-'').  Supported binary operations are
+addition (`'+''), subtraction (`'+''), multiplication (`'*''),
+division multiplication (`'/'') and exponentiation (`'^''). 
+Usual mathematical rules regarding operation precedence apply.
+Parenthesis (`'('' and `')'') could be used to change priority
+order.  Blanks and tab characters are allowed in string
+representing function; newline characters must not appear in this
+string. 
 
 Return value
 ............
 
-Pointer to evaluator object if operation successful, null pointer
+ Pointer to evaluator object if operation successful, null pointer
 otherwise.  Evaluator object is opaque, one should only use return
-pointer to pass it to other functions from library.
+pointer to pass it to other functions from library. 
 
 See also
 ........
 
-*note evaluator_destroy::, *note evaluator_evaluate::, *note
-evaluator_get_string::, *note evaluator_get_variables::, *note
-evaluator_derivative::
+ *note evaluator_destroy::, *note evaluator_evaluate::, *note
+evaluator_get_string::, *note evaluator_get_variables::, *note
+evaluator_derivative:: 
 
 
 File: libmatheval.info,  Node: evaluator_destroy,  Next: evaluator_evaluate,  Prev: evaluator_create,  Up: Main entry points
 
-2.1.2 'evaluator_destroy'
+2.1.2 `evaluator_destroy'
 -------------------------
+
+
 
 Synopsis
 ........
 
-     #include <matheval.h>
 
+     #include <matheval.h>
+     
      void evaluator_destroy (void *evaluator);
+   
 
 Description
 ...........
 
-Destroy evaluator object pointer by 'evaluator' pointer.  After
-returning from this call 'evaluator' pointer must not be dereferenced
-because evaluator object gets invalidated.
+ Destroy evaluator object pointer by `evaluator' pointer.  After
+returning from this call `evaluator' pointer must not be dereferenced
+because evaluator object gets invalidated. 
 
 Return value
 ............
 
-None.
+ None. 
 
 See also
 ........
 
-*note evaluator_create::
+ *note evaluator_create:: 
 
 
 File: libmatheval.info,  Node: evaluator_evaluate,  Next: evaluator_get_string,  Prev: evaluator_destroy,  Up: Main entry points
 
-2.1.3 'evaluator_evaluate'
+2.1.3 `evaluator_evaluate'
 --------------------------
+
+
 
 Synopsis
 ........
 
-     #include <matheval.h>
 
+     #include <matheval.h>
+     
      double evaluator_evaluate (void *evaluator, int count, char **names,
      				    double *values);
+   
 
 Description
 ...........
 
-Calculate value of function represented by evaluator object for given
-variable values.  Evaluator object is pointed by 'evaluator' pointer.
-Variable names and corresponding values are given by 'names' and
-'values' array respectively.  Length of arrays is given by 'count'
-argument.
+ Calculate value of function represented by evaluator object for
+given variable values.  Evaluator object is pointed by `evaluator'
+pointer.  Variable names and corresponding values are given by
+`names' and `values' array respectively.  Length of arrays is given
+by `count' argument. 
 
 Return value
 ............
 
-Function value for given variable values.  If some variable that appears
-in function is not mentioned in arguments, result is indeterminate.  If
-all variables that appear in function are given, presence of variable or
-variables that doesn't appear in function in arguments has no effect,
-i.e.  result is still exact.
+ Function value for given variable values.  If some variable that
+appears in function is not mentioned in arguments, result is
+indeterminate.  If all variables that appear in function are given,
+presence of variable or variables that doesn't appear in function in
+arguments has no effect, i.e. result is still exact. 
 
 See also
 ........
 
-*note evaluator_create::, *note evaluator_destroy::, *note
-evaluator_evaluate_x::, *note evaluator_evaluate_x_y::, *note
-evaluator_evaluate_x_y_z::
+ *note evaluator_create::, *note evaluator_destroy::, *note
+evaluator_evaluate_x::, *note evaluator_evaluate_x_y::, *note
+evaluator_evaluate_x_y_z:: 
 
 
 File: libmatheval.info,  Node: evaluator_get_string,  Next: evaluator_get_variables,  Prev: evaluator_evaluate,  Up: Main entry points
 
-2.1.4 'evaluator_get_string'
+2.1.4 `evaluator_get_string'
 ----------------------------
+
+
 
 Synopsis
 ........
 
-     #include <matheval.h>
 
+     #include <matheval.h>
+     
      char *evaluator_get_string (void *evaluator);
+   
 
 Description
 ...........
 
-Return textual representation (i.e.  mathematical function) of evaluator
-object pointed by 'evaluator'.  For notation used, see *note
-evaluator_create:: documentation.
+ Return textual representation (i.e. mathematical function) of
+evaluator object pointed by `evaluator'.  For notation used, see
+*note evaluator_create:: documentation. 
 
 Return value
 ............
 
-String with textual representation of evaluator object.  This string is
-stored in evaluator object and caller must not free pointer returned by
-this function.  Returned string is valid until evaluator object
-destroyed.
+ String with textual representation of evaluator object.  This
+string is stored in evaluator object and caller must not free
+pointer returned by this function.  Returned string is valid until
+evaluator object destroyed. 
 
 See also
 ........
 
-*note evaluator_create::, *note evaluator_destroy::, *note
-evaluator_get_variables::
+ *note evaluator_create::, *note evaluator_destroy::, *note
+evaluator_get_variables:: 
 
 
 File: libmatheval.info,  Node: evaluator_get_variables,  Next: evaluator_derivative,  Prev: evaluator_get_string,  Up: Main entry points
 
-2.1.5 'evaluator_get_variables'
+2.1.5 `evaluator_get_variables'
 -------------------------------
+
+
 
 Synopsis
 ........
 
-     #include <matheval.h>
 
+     #include <matheval.h>
+     
      void evaluator_get_variables (void *evaluator, char ***names, int *count);
+   
 
 Description
 ...........
 
-Return array of strings with names of variables appearing in function
-represented by evaluator.  Address of array first element is stored by
-function in location pointed by second argument and number of array
-elements is stored in location pointed by third argument.  Array with
-function variable names is stored in evaluator object and caller must
-not free any of strings returned by this function nor array itself.
-Returned values are valid until evaluator object destroyed.
+ Return array of strings with names of variables appearing in
+function represented by evaluator.  Address of array first element is
+stored by function in location pointed by second argument and number
+of array elements is stored in location pointed by third argument.
+Array with function variable names is stored in evaluator object and
+caller must not free any of strings returned by this function nor
+array itself. Returned values are valid until evaluator object
+destroyed. 
 
 Return value
 ............
 
-None.
+ None. 
 
 See also
 ........
 
-*note evaluator_create::, *note evaluator_destroy::, *note
-evaluator_get_string::
+ *note evaluator_create::, *note evaluator_destroy::, *note
+evaluator_get_string:: 
 
 
 File: libmatheval.info,  Node: evaluator_derivative,  Prev: evaluator_get_variables,  Up: Main entry points
 
-2.1.6 'evaluator_derivative'
+2.1.6 `evaluator_derivative'
 ----------------------------
+
+
 
 Synopsis
 ........
 
-     #include <matheval.h>
 
+     #include <matheval.h>
+     
      void *evaluator_derivative (void *evaluator, char *name);
+   
 
 Description
 ...........
 
-Create evaluator for derivative of function represented by given
-evaluator object.  Evaluator object is pointed to by 'evaluator' pointer
-and derivation variable is determined by 'name' argument.  Calculated
-derivative is in mathematical sense correct no matters of fact that
-derivation variable appears or not in function represented by evaluator.
+ Create evaluator for derivative of function represented by given
+evaluator object.  Evaluator object is pointed to by `evaluator'
+pointer and derivation variable is determined by `name' argument.
+Calculated derivative is in mathematical sense correct no matters of
+fact that derivation variable appears or not in function represented
+by evaluator. 
 
 Return value
 ............
 
-Pointer to evaluator object representing derivative of given function.
+ Pointer to evaluator object representing derivative of given
+function. 
 
 See also
 ........
 
-*note evaluator_create::, *note evaluator_destroy::, *note
-evaluator_derivative_x::, *note evaluator_derivative_y::, *note
-evaluator_derivative_z::
+ *note evaluator_create::, *note evaluator_destroy::, *note
+evaluator_derivative_x::, *note evaluator_derivative_y::, *note
+evaluator_derivative_z:: 
 
 
 File: libmatheval.info,  Node: Convenience procedures,  Prev: Main entry points,  Up: Reference
@@ -540,231 +536,250 @@ File: libmatheval.info,  Node: Convenience procedures,  Prev: Main entry points,
 2.2 Convenience procedures
 ==========================
 
+
+
 * Menu:
 
-* evaluator_evaluate_x::     'evaluator_evaluate_x' procedure
-* evaluator_evaluate_x_y::   'evaluator_evaluate_x_y' procedure
-* evaluator_evaluate_x_y_z:: 'evaluator_evaluate_x_y_z' procedure
-* evaluator_derivative_x::   'evaluator_derivative_x' procedure
-* evaluator_derivative_y::   'evaluator_derivative_y' procedure
-* evaluator_derivative_z::   'evaluator_derivative_z' procedure
+* evaluator_evaluate_x::     `evaluator_evaluate_x' procedure
+* evaluator_evaluate_x_y::   `evaluator_evaluate_x_y' procedure
+* evaluator_evaluate_x_y_z:: `evaluator_evaluate_x_y_z' procedure
+* evaluator_derivative_x::   `evaluator_derivative_x' procedure
+* evaluator_derivative_y::   `evaluator_derivative_y' procedure
+* evaluator_derivative_z::   `evaluator_derivative_z' procedure
+   
 
 
 File: libmatheval.info,  Node: evaluator_evaluate_x,  Next: evaluator_evaluate_x_y,  Prev: Convenience procedures,  Up: Convenience procedures
 
-2.2.1 'evaluator_evaluate_x'
+2.2.1 `evaluator_evaluate_x'
 ----------------------------
+
+
 
 Synopsis
 ........
 
-     #include <matheval.h>
 
+     #include <matheval.h>
+     
      double evaluator_evaluate_x (void *evaluator, double x);
+   
 
 Description
 ...........
 
-Convenience function to evaluate function for given variable "x" value.
-Function is equivalent to following:
-
+ Convenience function to evaluate function for given variable "x"
+value.  Function is equivalent to following: 
      char *names[] = { "x" };
      double values[] = { x };
-
+     
      evaluator_evaluate (evaluator, sizeof (names) / sizeof(names[0]),
      			     names, values);
-
-   See *note evaluator_evaluate:: for further information.
+    See *note evaluator_evaluate:: for further information. 
 
 Return value
 ............
 
-Value of function for given value of variable "x".
+ Value of function for given value of variable "x". 
 
 See also
 ........
 
-*note evaluator_create::, *note evaluator_destroy::, *note
-evaluator_evaluate::
+ *note evaluator_create::, *note evaluator_destroy::, *note
+evaluator_evaluate:: 
 
 
 File: libmatheval.info,  Node: evaluator_evaluate_x_y,  Next: evaluator_evaluate_x_y_z,  Prev: evaluator_evaluate_x,  Up: Convenience procedures
 
-2.2.2 'evaluator_evaluate_x_y'
+2.2.2 `evaluator_evaluate_x_y'
 ------------------------------
+
+
 
 Synopsis
 ........
 
-     #include <matheval.h>
 
+     #include <matheval.h>
+     
      double evaluator_evaluate_x_y (void *evaluator, double x, double y);
+   
 
 Description
 ...........
 
-Convenience function to evaluate function for given variables "x" and
-"y" values.  Function is equivalent to following:
-
+ Convenience function to evaluate function for given variables "x"
+and "y" values.  Function is equivalent to following: 
      char *names[] = { "x", "y" };
      double values[] = { x, y };
-
+     
      evaluator_evaluate (evaluator, sizeof (names) / sizeof(names[0]),
      			     names, values);
-
-   See *note evaluator_evaluate:: for further information.
+    See *note evaluator_evaluate:: for further information. 
 
 Return value
 ............
 
-Value of function for given values of variables "x" and "y".
+ Value of function for given values of variables "x" and "y". 
 
 See also
 ........
 
-*note evaluator_create::, *note evaluator_destroy::, *note
-evaluator_evaluate::
+ *note evaluator_create::, *note evaluator_destroy::, *note
+evaluator_evaluate:: 
 
 
 File: libmatheval.info,  Node: evaluator_evaluate_x_y_z,  Next: evaluator_derivative_x,  Prev: evaluator_evaluate_x_y,  Up: Convenience procedures
 
-2.2.3 'evaluator_evaluate_x_y_z'
+2.2.3 `evaluator_evaluate_x_y_z'
 --------------------------------
+
+
 
 Synopsis
 ........
 
-     #include <matheval.h>
 
+     #include <matheval.h>
+     
      double evaluator_evaluate_x_y_z (void *evaluator, double x, double y,
      					  double z);
+   
 
 Description
 ...........
 
-Convenience function to evaluate function for given variables "x", "y"
-and "z" values.  Function is equivalent to following:
-
+ Convenience function to evaluate function for given variables "x",
+"y" and "z" values.  Function is equivalent to following: 
      char *names[] = { "x", "y", "z" };
      double values[] = { x, y, z };
-
+     
      evaluator_evaluate (evaluator, sizeof (names) / sizeof(names[0]),
      			     names, values);
-
-   See *note evaluator_evaluate:: for further information.
+    See *note evaluator_evaluate:: for further information. 
 
 Return value
 ............
 
-Value of function for given values of variables "x", "y" and "z".
+ Value of function for given values of variables "x", "y" and "z".
+
 
 See also
 ........
 
-*note evaluator_create::, *note evaluator_destroy::, *note
-evaluator_evaluate::
+ *note evaluator_create::, *note evaluator_destroy::, *note
+evaluator_evaluate:: 
 
 
 File: libmatheval.info,  Node: evaluator_derivative_x,  Next: evaluator_derivative_y,  Prev: evaluator_evaluate_x_y_z,  Up: Convenience procedures
 
-2.2.4 'evaluator_derivative_x'
+2.2.4 `evaluator_derivative_x'
 ------------------------------
+
+
 
 Synopsis
 ........
 
-     #include <matheval.h>
 
+     #include <matheval.h>
+     
      void *evaluator_derivative_x (void *evaluator);
+   
 
 Description
 ...........
 
-Convenience function to differentiate function using "x" as derivation
-variable.  Function is equivalent to:
-
+ Convenience function to differentiate function using "x" as
+derivation variable.  Function is equivalent to: 
      evaluator_derivative (evaluator, "x");
-
-   See *note evaluator_derivative:: for further information.
+    See *note evaluator_derivative:: for further information. 
 
 Return value
 ............
 
-Evaluator object representing derivative of function over variable "x".
+ Evaluator object representing derivative of function over variable
+"x". 
 
 See also
 ........
 
-*note evaluator_create::, *note evaluator_destroy::, *note
-evaluator_derivative::
+ *note evaluator_create::, *note evaluator_destroy::, *note
+evaluator_derivative:: 
 
 
 File: libmatheval.info,  Node: evaluator_derivative_y,  Next: evaluator_derivative_z,  Prev: evaluator_derivative_x,  Up: Convenience procedures
 
-2.2.5 'evaluator_derivative_y'
+2.2.5 `evaluator_derivative_y'
 ------------------------------
+
+
 
 Synopsis
 ........
 
-     #include <matheval.h>
 
+     #include <matheval.h>
+     
      void *evaluator_derivative_y (void *evaluator);
+   
 
 Description
 ...........
 
-Convenience function to differentiate function using "y" as derivation
-variable.  Function is equivalent to:
-
+ Convenience function to differentiate function using "y" as
+derivation variable.  Function is equivalent to: 
      evaluator_derivative (evaluator, "y");
-
-   See *note evaluator_derivative:: for further information.
+    See *note evaluator_derivative:: for further information. 
 
 Return value
 ............
 
-Evaluator object representing derivative of function over variable "y".
+ Evaluator object representing derivative of function over variable
+"y". 
 
 See also
 ........
 
-*note evaluator_create::, *note evaluator_destroy::, *note
-evaluator_derivative::
+ *note evaluator_create::, *note evaluator_destroy::, *note
+evaluator_derivative:: 
 
 
 File: libmatheval.info,  Node: evaluator_derivative_z,  Prev: evaluator_derivative_y,  Up: Convenience procedures
 
-2.2.6 'evaluator_derivative_z'
+2.2.6 `evaluator_derivative_z'
 ------------------------------
+
+
 
 Synopsis
 ........
 
-     #include <matheval.h>
 
+     #include <matheval.h>
+     
      void *evaluator_derivative_z (void *evaluator);
+   
 
 Description
 ...........
 
-Convenience function to differentiate function using "z" as derivation
-variable.  Function is equivalent to:
-
+ Convenience function to differentiate function using "z" as
+derivation variable.  Function is equivalent to: 
      evaluator_derivative (evaluator, "z");
-
-   See *note evaluator_derivative:: for further information.
+    See *note evaluator_derivative:: for further information. 
 
 Return value
 ............
 
-Evaluator object representing derivative of function over variable "z".
+ Evaluator object representing derivative of function over variable
+"z". 
 
 See also
 ........
 
-*note evaluator_create::, *note evaluator_destroy::, *note
-evaluator_derivative::
+ *note evaluator_create::, *note evaluator_destroy::, *note
+evaluator_derivative:: 
 
 
 File: libmatheval.info,  Node: Fortran interface,  Next: Hacking,  Prev: Reference,  Up: Top
@@ -772,22 +787,21 @@ File: libmatheval.info,  Node: Fortran interface,  Next: Hacking,  Prev: Referen
 3 Fortran interface
 *******************
 
-Fortran interface to GNU 'libmatheval' library is very similar to C
-interface; still, complete documentation from *note Reference:: is
-reproduced here using Fortran terms in order to have Fortran programmer
-not to mess with C terms that he may not understand.  Besides
-documentation for all library exported procedures, an example Fortran
-program of structure similar to sequence of code fragments presented for
-C programmers in *note Introduction:: section as well as notes on how to
-link library with Fortran programs are presented here.
-
-   Since passing arguments between C and Fortran is not (yet)
+ Fortran interface to GNU `libmatheval' library is very similar to
+C interface; still, complete documentation from *note Reference:: is
+reproduced here using Fortran terms in order to have Fortran
+programmer not to mess with C terms that he may not understand.
+Besides documentation for all library exported procedures, an example
+Fortran program of structure similar to sequence of code fragments
+presented for C programmers in *note Introduction:: section as well as
+notes on how to link library with Fortran programs are presented here.
+ Since passing arguments between C and Fortran is not (yet)
 standardized, Fortran interface of library applies only to GNU Fortran
 77 compiler; but note that same interface is working fine for GNU
 Fortran 95 compiler.  Requests to adapt interface to other Fortran
 compilers are welcome (see section *note Bugs:: for contact
 information), under condition that access to corresponding compiler is
-provided.
+provided. 
 
 * Menu:
 
@@ -795,6 +809,7 @@ provided.
 * Fortran convenience procedures:: Library convenience procedures
 * Fortran sample program::         Demonstrating use of interface.
 * Fortran build process::          Notes on compilation and linking.
+   
 
 
 File: libmatheval.info,  Node: Fortran main entry points,  Next: Fortran convenience procedures,  Prev: Fortran interface,  Up: Fortran interface
@@ -802,321 +817,353 @@ File: libmatheval.info,  Node: Fortran main entry points,  Next: Fortran conveni
 3.1 Fortran main entry points
 =============================
 
+
+
 * Menu:
 
-* Fortran evaluator_create::               'evaluator_create' procedure
-* Fortran evaluator_destroy::              'evaluator_destroy' procedure
-* Fortran evaluator_evaluate::             'evaluator_evaluate()' procedure
-* Fortran evaluator_get_string_length::    'evaluator_get_string_length' procedure
-* Fortran evaluator_get_string_chars::     'evaluator_get_string_chars' procedure
-* Fortran evaluator_get_variables_length:: 'evaluator_get_variables_length' procedure
-* Fortran evaluator_get_variables_chars::  'evaluator_get_variables_chars' procedure
-* Fortran evaluator_derivative::           'evaluator_derivative' procedure
+* Fortran evaluator_create::               `evaluator_create' procedure
+* Fortran evaluator_destroy::              `evaluator_destroy' procedure
+* Fortran evaluator_evaluate::             `evaluator_evaluate()' procedure
+* Fortran evaluator_get_string_length::    `evaluator_get_string_length' procedure
+* Fortran evaluator_get_string_chars::     `evaluator_get_string_chars' procedure
+* Fortran evaluator_get_variables_length:: `evaluator_get_variables_length' procedure
+* Fortran evaluator_get_variables_chars::  `evaluator_get_variables_chars' procedure
+* Fortran evaluator_derivative::           `evaluator_derivative' procedure
+   
 
 
 File: libmatheval.info,  Node: Fortran evaluator_create,  Next: Fortran evaluator_destroy,  Prev: Fortran main entry points,  Up: Fortran main entry points
 
-3.1.1 'evaluator_create'
+3.1.1 `evaluator_create'
 ------------------------
+
+
 
 Synopsis
 ........
 
+
      integer*8 function evaluator_create (string) character(len=*) ::
      string end function evaluator_create
+   
 
 Description
 ...........
 
-Create evaluator object from 'string' containing mathematical
+ Create evaluator object from `string' containing mathematical
 representation of function.  Evaluator object could be used later to
-evaluate function for specific variable values or to calculate function
-derivative over some variable.
-
-   String representation of function is allowed to consist of decimal
-numbers, constants, variables, elementary functions, unary and binary
-operations.
-
-   Supported constants are (names that should be used are given in
-parenthesis): e ('e'), log2(e) ('log2e'), log10(e) ('log10e'), ln(2)
-('ln2'), ln(10) ('ln10'), pi ('pi'), pi / 2 ('pi_2'), pi / 4 ('pi_4'), 1
-/ pi ('1_pi'), 2 / pi ('2_pi'), 2 / sqrt(pi) ('2_sqrtpi'), sqrt(2)
-('sqrt') and sqrt(1 / 2) ('sqrt1_2').
-
-   Variable name is any combination of alphanumericals and '_'
+evaluate function for specific variable values or to calculate
+function derivative over some variable.  String representation of
+function is allowed to consist of decimal numbers, constants,
+variables, elementary functions, unary and binary operations. 
+Supported constants are (names that should be used are given in
+parenthesis): e (`e'), log2(e) (`log2e'), log10(e) (`log10e'), ln(2)
+(`ln2'), ln(10) (`ln10'), pi (`pi'), pi / 2 (`pi_2'), pi / 4
+(`pi_4'), 1 / pi (`1_pi'), 2 / pi (`2_pi'), 2 / sqrt(pi)
+(`2_sqrtpi'), sqrt(2) (`sqrt') and sqrt(1 / 2) (`sqrt1_2'). 
+Variable name is any combination of alphanumericals and `_'
 characters beginning with a non-digit that is not elementary function
-name.
-
-   Supported elementary functions are (names that should be used are
-given in parenthesis): exponential ('exp'), logarithmic ('log'), square
-root ('sqrt'), sine ('sin'), cosine ('cos'), tangent ('tan'), cotangent
-('cot'), secant ('sec'), cosecant ('csc'), inverse sine ('asin'),
-inverse cosine ('acos'), inverse tangent ('atan'), inverse cotangent
-('acot'), inverse secant ('asec'), inverse cosecant ('acsc'), hyperbolic
-sine ('sinh'), cosine ('cosh'), hyperbolic tangent ('tanh'), hyperbolic
-cotangent ('coth'), hyperbolic secant ('sech'), hyperbolic cosecant
-('csch'), hyperbolic inverse sine ('asinh'), hyperbolic inverse cosine
-('acosh'), hyperbolic inverse tangent ('atanh'), hyperbolic inverse
-cotangent ('acoth'), hyperbolic inverse secant ('asech'), hyperbolic
-inverse cosecant ('acsch'), absolute value ('abs'), Heaviside step
-function ('step') with value 1 defined for x = 0, Dirac delta function
-with infinity ('delta') and not-a-number ('nandelta') values defined for
-x = 0, and error function ('erf')
-
-   Supported unary operation is unary minus (''-'').
-
-   Supported binary operations are addition (''+''), subtraction
-(''+''), multiplication (''*''), division multiplication (''/'') and
-exponentiation (''^'').
-
-   Usual mathematical rules regarding operation precedence apply.
-Parenthesis (''('' and '')'') could be used to change priority order.
-
-   Blanks and tab characters are allowed in string representing
-function; newline characters must not appear in this string.
+name.  Supported elementary functions are (names that should be
+used are given in parenthesis): exponential (`exp'), logarithmic
+(`log'), square root (`sqrt'), sine (`sin'), cosine (`cos'),
+tangent (`tan'), cotangent (`cot'), secant (`sec'), cosecant (`csc'),
+inverse sine (`asin'), inverse cosine (`acos'), inverse tangent
+(`atan'), inverse cotangent (`acot'), inverse secant (`asec'),
+inverse cosecant (`acsc'), hyperbolic sine (`sinh'), cosine
+(`cosh'), hyperbolic tangent (`tanh'), hyperbolic cotangent
+(`coth'), hyperbolic secant (`sech'), hyperbolic cosecant (`csch'),
+hyperbolic inverse sine (`asinh'), hyperbolic inverse cosine
+(`acosh'), hyperbolic inverse tangent (`atanh'), hyperbolic inverse
+cotangent (`acoth'), hyperbolic inverse secant (`asech'), hyperbolic
+inverse cosecant (`acsch'), absolute value (`abs'), Heaviside step
+function (`step') with value 1 defined for x = 0, Dirac delta
+function with infinity (`delta') and not-a-number (`nandelta') values
+defined for x = 0, and error function (`erf')  Supported unary
+operation is unary minus (`'-'').  Supported binary operations are
+addition (`'+''), subtraction (`'+''), multiplication (`'*''),
+division multiplication (`'/'') and exponentiation (`'^''). 
+Usual mathematical rules regarding operation precedence apply.
+Parenthesis (`'('' and `')'') could be used to change priority
+order.  Blanks and tab characters are allowed in string
+representing function; newline characters must not appear in this
+string. 
 
 Return value
 ............
 
-Positive 64-bit integer representing evaluator object unique handle if
-operation successful, 0 otherwise.  Return value should be used only to
-pass it to other functions from library.
+ Positive 64-bit integer representing evaluator object unique handle
+if operation successful, 0 otherwise.  Return value should be used
+only to pass it to other functions from library. 
 
 See also
 ........
 
-*note Fortran evaluator_destroy::, *note Fortran evaluator_evaluate::,
-*note Fortran evaluator_get_string_length::, *note Fortran
-evaluator_get_string_chars::, *note Fortran
+ *note Fortran evaluator_destroy::, *note Fortran
+evaluator_evaluate::, *note Fortran evaluator_get_string_length::,
+*note Fortran evaluator_get_string_chars::, *note Fortran
 evaluator_get_variables_length::, *note Fortran
 evaluator_get_variables_chars::, *note Fortran evaluator_derivative::
+
 
 
 File: libmatheval.info,  Node: Fortran evaluator_destroy,  Next: Fortran evaluator_evaluate,  Prev: Fortran evaluator_create,  Up: Fortran main entry points
 
-3.1.2 'evaluator_destroy'
+3.1.2 `evaluator_destroy'
 -------------------------
+
+
 
 Synopsis
 ........
 
+
      subroutine evaluator_destroy (evaluator) integer*8 :: evaluator end
      subroutine evaluator_destroy
+   
 
 Description
 ...........
 
-Destroy evaluator object denoted by 'evaluator' handle.  After returning
-from this call evaluator object gets invalidated, so value of
-'evaluator' handle should not be used any more.
+ Destroy evaluator object denoted by `evaluator' handle.  After
+returning from this call evaluator object gets invalidated, so value
+of `evaluator' handle should not be used any more. 
 
 Return value
 ............
 
-None.
+ None. 
 
 See also
 ........
 
-*note Fortran evaluator_create::
+ *note Fortran evaluator_create:: 
 
 
 File: libmatheval.info,  Node: Fortran evaluator_evaluate,  Next: Fortran evaluator_get_string_length,  Prev: Fortran evaluator_destroy,  Up: Fortran main entry points
 
-3.1.3 'evaluator_evaluate'
+3.1.3 `evaluator_evaluate'
 --------------------------
+
+
 
 Synopsis
 ........
+
 
      double precision function evaluator_evaluate (evaluator, count, names,
      values) integer*8 :: evaluator integer :: count character(len=*) ::
      names double precision :: values dimension values(*) end function
      evaluator_evaluate
+   
 
 Description
 ...........
 
-Calculate value of function represented by evaluator object for given
-variable values.  Evaluator object is identified by 'evaluator' handle.
-Variable names are given by 'names' string and corresponding values are
-given by 'values' array respectively.  Number of variables is given by
-'count' argument.  Variable names in 'names' string should be delimited
-by one or more blank characters.
+ Calculate value of function represented by evaluator object for
+given variable values.  Evaluator object is identified by
+`evaluator' handle.  Variable names are given by `names' string and
+corresponding values are given by `values' array respectively. Number
+of variables is given by `count' argument.  Variable names in `names'
+string should be delimited by one or more blank characters. 
 
 Return value
 ............
 
-Function value for given variable values.  If some variable that appears
-in function is not mentioned in arguments, result is indeterminate.  If
-all variables that appear in function are given, presence of variable or
-variables that doesn't appear in function in arguments has no effect,
-i.e.  result is still exact.
+ Function value for given variable values.  If some variable that
+appears in function is not mentioned in arguments, result is
+indeterminate.  If all variables that appear in function are given,
+presence of variable or variables that doesn't appear in function in
+arguments has no effect, i.e. result is still exact. 
 
 See also
 ........
 
-*note Fortran evaluator_create::, *note Fortran evaluator_destroy::,
-*note Fortran evaluator_evaluate_x::, *note Fortran
-evaluator_evaluate_x_y::, *note Fortran evaluator_evaluate_x_y_z::
+ *note Fortran evaluator_create::, *note Fortran
+evaluator_destroy::, *note Fortran evaluator_evaluate_x::, *note
+Fortran evaluator_evaluate_x_y::, *note Fortran
+evaluator_evaluate_x_y_z:: 
 
 
 File: libmatheval.info,  Node: Fortran evaluator_get_string_length,  Next: Fortran evaluator_get_string_chars,  Prev: Fortran evaluator_evaluate,  Up: Fortran main entry points
 
-3.1.4 'evaluator_get_string_length'
+3.1.4 `evaluator_get_string_length'
 -----------------------------------
+
+
 
 Synopsis
 ........
 
+
      integer function evaluator_get_string_length (evaluator) integer*8 ::
      evaluator end function evaluator_get_string_length
+   
 
 Description
 ...........
 
-Return length of textual representation (i.e.  mathematical function) of
-evaluator object pointed by 'evaluator'.
+ Return length of textual representation (i.e. mathematical
+function) of evaluator object pointed by `evaluator'. 
 
 Return value
 ............
 
-Evaluator textual representation string length.
+ Evaluator textual representation string length. 
 
 See also
 ........
 
-*note Fortran evaluator_create::, *note Fortran evaluator_destroy::,
-*note Fortran evaluator_get_string_chars::
+ *note Fortran evaluator_create::, *note Fortran evaluator_destroy::,
+*note Fortran evaluator_get_string_chars:: 
 
 
 File: libmatheval.info,  Node: Fortran evaluator_get_string_chars,  Next: Fortran evaluator_get_variables_length,  Prev: Fortran evaluator_get_string_length,  Up: Fortran main entry points
 
-3.1.5 'evaluator_get_string_chars'
+3.1.5 `evaluator_get_string_chars'
 ----------------------------------
+
+
 
 Synopsis
 ........
+
 
      subroutine evaluator_get_string_chars (evaluator) integer*8 ::
      evaluator character(len=*) :: string end subroutine
      evaluator_get_string_chars
+   
 
 Description
 ...........
 
-Write textual representation (i.e.  mathematical function) of evaluator
-object pointed by 'evaluator' to string specified.  For notation used,
-see *note Fortran evaluator_create:: documentation.  In order to declare
-string of appropriate length to be passed to this function, *note
-Fortran evaluator_get_string_length:: function should be utilized.
+ Write textual representation (i.e. mathematical function) of
+evaluator object pointed by `evaluator' to string specified.  For
+notation used, see *note Fortran evaluator_create:: documentation.
+In order to declare string of appropriate length to be passed to this
+function, *note Fortran evaluator_get_string_length:: function should
+be utilized. 
 
 Return value
 ............
 
-None.
+ None. 
 
 See also
 ........
 
-*note Fortran evaluator_create::, *note Fortran evaluator_destroy::,
-*note Fortran evaluator_get_string_length::
+ *note Fortran evaluator_create::, *note Fortran evaluator_destroy::,
+*note Fortran evaluator_get_string_length:: 
 
 
 File: libmatheval.info,  Node: Fortran evaluator_get_variables_length,  Next: Fortran evaluator_get_variables_chars,  Prev: Fortran evaluator_get_string_chars,  Up: Fortran main entry points
 
-3.1.6 'evaluator_get_variables_length'
+3.1.6 `evaluator_get_variables_length'
 --------------------------------------
+
+
 
 Synopsis
 ........
 
+
      integer function evaluator_get_variables_length (evaluator) integer*8
      :: evaluator end function evaluator_get_variables_length
+   
 
 Description
 ...........
 
-Return length of string with names of all variables (separated by a
-blank character) appearing in evaluator object pointed by 'evaluator'.
+ Return length of string with names of all variables (separated by a
+blank character) appearing in evaluator object pointed by
+`evaluator'. 
 
 Return value
 ............
 
-Variable names string length.
+ Variable names string length. 
 
 See also
 ........
 
-*note Fortran evaluator_create::, *note Fortran evaluator_destroy::,
-*note Fortran evaluator_get_variables_chars::
+ *note Fortran evaluator_create::, *note Fortran evaluator_destroy::,
+*note Fortran evaluator_get_variables_chars:: 
 
 
 File: libmatheval.info,  Node: Fortran evaluator_get_variables_chars,  Next: Fortran evaluator_derivative,  Prev: Fortran evaluator_get_variables_length,  Up: Fortran main entry points
 
-3.1.7 'evaluator_get_variables_chars'
+3.1.7 `evaluator_get_variables_chars'
 -------------------------------------
+
+
 
 Synopsis
 ........
+
 
      subroutine evaluator_get_variables_chars (evaluator) integer*8 ::
      evaluator character(len=*) :: string end subroutine
      evaluator_get_variables_chars
+   
 
 Description
 ...........
 
-Write names of all variables appearing in evaluator object pointed by
-'evaluator' into given string (separated by a blank character).  In
-order to declare string of appropriate length to be passed to this
-function, *note Fortran evaluator_get_variables_length:: function should
-be utilized.
+ Write names of all variables appearing in evaluator object pointed
+by `evaluator' into given string (separated by a blank character).
+In order to declare string of appropriate length to be passed to this
+function, *note Fortran evaluator_get_variables_length:: function
+should be utilized. 
 
 Return value
 ............
 
-None.
+ None. 
 
 See also
 ........
 
-*note Fortran evaluator_create::, *note Fortran evaluator_destroy::,
-*note Fortran evaluator_get_variables_length::
+ *note Fortran evaluator_create::, *note Fortran evaluator_destroy::,
+*note Fortran evaluator_get_variables_length:: 
 
 
 File: libmatheval.info,  Node: Fortran evaluator_derivative,  Prev: Fortran evaluator_get_variables_chars,  Up: Fortran main entry points
 
-3.1.8 'evaluator_derivative'
+3.1.8 `evaluator_derivative'
 ----------------------------
+
+
 
 Synopsis
 ........
 
+
      integer*8 function evaluator_derivative (evaluator, name) integer*8 ::
      evaluator character(len=*) ::  name end function evaluator_derivative
+   
 
 Description
 ...........
 
-Create evaluator for derivative of function represented by given
-evaluator object.  Evaluator object is identified by 'evaluator' handle
-and derivation variable is determined by 'name' argument.  Calculated
-derivative is in mathematical sense correct no matters of fact that
-derivation variable appears or not in function represented by evaluator.
+ Create evaluator for derivative of function represented by given
+evaluator object.  Evaluator object is identified by `evaluator'
+handle and derivation variable is determined by `name' argument.
+Calculated derivative is in mathematical sense correct no matters of
+fact that derivation variable appears or not in function represented
+by evaluator. 
 
 Return value
 ............
 
-64-bit integer uniquely identifying evaluator object representing
-derivative of given function.
+ 64-bit integer uniquely identifying evaluator object representing
+derivative of given function. 
 
 See also
 ........
 
-*note Fortran evaluator_create::, *note Fortran evaluator_destroy::,
-*note Fortran evaluator_derivative_x::, *note Fortran
-evaluator_derivative_y::, *note Fortran evaluator_derivative_z::
+ *note Fortran evaluator_create::, *note Fortran
+evaluator_destroy::, *note Fortran evaluator_derivative_x::, *note
+Fortran evaluator_derivative_y::, *note Fortran
+evaluator_derivative_z:: 
 
 
 File: libmatheval.info,  Node: Fortran convenience procedures,  Next: Fortran sample program,  Prev: Fortran main entry points,  Up: Fortran interface
@@ -1124,215 +1171,240 @@ File: libmatheval.info,  Node: Fortran convenience procedures,  Next: Fortran sa
 3.2 Fortran convenience procedures
 ==================================
 
+
+
 * Menu:
 
-* Fortran evaluator_evaluate_x::     'evaluator_evaluate_x' procedure
-* Fortran evaluator_evaluate_x_y::   'evaluator_evaluate_x_y' procedure
-* Fortran evaluator_evaluate_x_y_z:: 'evaluator_evaluate_x_y_z' procedure
-* Fortran evaluator_derivative_x::   'evaluator_derivative_x' procedure
-* Fortran evaluator_derivative_y::   'evaluator_derivative_y' procedure
-* Fortran evaluator_derivative_z::   'evaluator_derivative_z' procedure
+* Fortran evaluator_evaluate_x::     `evaluator_evaluate_x' procedure
+* Fortran evaluator_evaluate_x_y::   `evaluator_evaluate_x_y' procedure
+* Fortran evaluator_evaluate_x_y_z:: `evaluator_evaluate_x_y_z' procedure
+* Fortran evaluator_derivative_x::   `evaluator_derivative_x' procedure
+* Fortran evaluator_derivative_y::   `evaluator_derivative_y' procedure
+* Fortran evaluator_derivative_z::   `evaluator_derivative_z' procedure
+   
 
 
 File: libmatheval.info,  Node: Fortran evaluator_evaluate_x,  Next: Fortran evaluator_evaluate_x_y,  Prev: Fortran convenience procedures,  Up: Fortran convenience procedures
 
-3.2.1 'evaluator_evaluate_x'
+3.2.1 `evaluator_evaluate_x'
 ----------------------------
+
+
 
 Synopsis
 ........
+
 
      double precision function evaluator_evaluate_x (evaluator, x)
      integer*8 :: evaluator double precision ::  x end function
      evaluator_evaluate_x
+   
 
 Description
 ...........
 
-Convenience function to evaluate function for given variable "x" value.
-Function is equivalent to following:
-
+ Convenience function to evaluate function for given variable "x"
+value.  Function is equivalent to following: 
      evaluator_evaluate (evaluator, 1, 'x', (/ x /))
+    See *note Fortran evaluator_evaluate:: for further information.
 
-   See *note Fortran evaluator_evaluate:: for further information.
 
 Return value
 ............
 
-Value of function for given value of variable "x".
+ Value of function for given value of variable "x". 
 
 See also
 ........
 
-*note Fortran evaluator_create::, *note Fortran evaluator_destroy::,
-*note Fortran evaluator_evaluate::
+ *note Fortran evaluator_create::, *note Fortran
+evaluator_destroy::, *note Fortran evaluator_evaluate:: 
 
 
 File: libmatheval.info,  Node: Fortran evaluator_evaluate_x_y,  Next: Fortran evaluator_evaluate_x_y_z,  Prev: Fortran evaluator_evaluate_x,  Up: Fortran convenience procedures
 
-3.2.2 'evaluator_evaluate_x_y'
+3.2.2 `evaluator_evaluate_x_y'
 ------------------------------
+
+
 
 Synopsis
 ........
+
 
      double precision function evaluator_evaluate_x_y (evaluator, x, y)
      integer*8 :: evaluator double precision ::  x, y end function
      evaluator_evaluate_x_y
+   
 
 Description
 ...........
 
-Convenience function to evaluate function for given variables "x" and
-"y" values.  Function is equivalent to following:
-
+ Convenience function to evaluate function for given variables "x"
+and "y" values.  Function is equivalent to following: 
      evaluator_evaluate (evaluator, 2, 'x y', (/ x, y /))
+    See *note Fortran evaluator_evaluate:: for further information.
 
-   See *note Fortran evaluator_evaluate:: for further information.
 
 Return value
 ............
 
-Value of function for given values of variables "x" and "y".
+ Value of function for given values of variables "x" and "y". 
 
 See also
 ........
 
-*note Fortran evaluator_create::, *note Fortran evaluator_destroy::,
-*note Fortran evaluator_evaluate::
+ *note Fortran evaluator_create::, *note Fortran
+evaluator_destroy::, *note Fortran evaluator_evaluate:: 
 
 
 File: libmatheval.info,  Node: Fortran evaluator_evaluate_x_y_z,  Next: Fortran evaluator_derivative_x,  Prev: Fortran evaluator_evaluate_x_y,  Up: Fortran convenience procedures
 
-3.2.3 'evaluator_evaluate_x_y_z'
+3.2.3 `evaluator_evaluate_x_y_z'
 --------------------------------
+
+
 
 Synopsis
 ........
+
 
      double precision function evaluator_evaluate_x_y_z (evaluator, x, y,
      z) integer*8 :: evaluator double precision :: x, y, z end function
      evaluator_evaluate_x_y_z
+   
 
 Description
 ...........
 
-Convenience function to evaluate function for given variables "x", "y"
-and "z" values.  Function is equivalent to following:
-
+ Convenience function to evaluate function for given variables "x",
+"y" and "z" values.  Function is equivalent to following: 
      evaluator_evaluate (evaluator, 2, 'x y z', (/ x, y, z /))
+    See *note Fortran evaluator_evaluate:: for further information.
 
-   See *note Fortran evaluator_evaluate:: for further information.
 
 Return value
 ............
 
-Value of function for given values of variables "x", "y" and "z".
+ Value of function for given values of variables "x", "y" and "z".
+
 
 See also
 ........
 
-*note Fortran evaluator_create::, *note Fortran evaluator_destroy::,
-*note Fortran evaluator_evaluate::
+ *note Fortran evaluator_create::, *note Fortran
+evaluator_destroy::, *note Fortran evaluator_evaluate:: 
 
 
 File: libmatheval.info,  Node: Fortran evaluator_derivative_x,  Next: Fortran evaluator_derivative_y,  Prev: Fortran evaluator_evaluate_x_y_z,  Up: Fortran convenience procedures
 
-3.2.4 'evaluator_derivative_x'
+3.2.4 `evaluator_derivative_x'
 ------------------------------
+
+
 
 Synopsis
 ........
 
+
      integer*8 function evaluator_derivative_x (evaluator) integer*8 ::
      evaluator end function evaluator_derivative_x
+   
 
 Description
 ...........
 
-Convenience function to differentiate function using "x" as derivation
-variable.  Function is equivalent to:
-
+ Convenience function to differentiate function using "x" as
+derivation variable.  Function is equivalent to: 
      evaluator_derivative (evaluator, 'x');
-
-   See *note Fortran evaluator_derivative:: for further information.
+    See *note Fortran evaluator_derivative:: for further
+information. 
 
 Return value
 ............
 
-Evaluator object representing derivative of function over variable "x".
+ Evaluator object representing derivative of function over variable
+"x". 
 
 See also
 ........
 
-*note Fortran evaluator_create::, *note Fortran evaluator_destroy::,
-*note Fortran evaluator_derivative::
+ *note Fortran evaluator_create::, *note Fortran
+evaluator_destroy::, *note Fortran evaluator_derivative:: 
 
 
 File: libmatheval.info,  Node: Fortran evaluator_derivative_y,  Next: Fortran evaluator_derivative_z,  Prev: Fortran evaluator_derivative_x,  Up: Fortran convenience procedures
 
-3.2.5 'evaluator_derivative_y'
+3.2.5 `evaluator_derivative_y'
 ------------------------------
+
+
 
 Synopsis
 ........
 
+
      integer*8 function evaluator_derivative_y (evaluator) integer*8 ::
      evaluator end function evaluator_derivative_y
+   
 
 Description
 ...........
 
-Convenience function to differentiate function using "y" as derivation
-variable.  Function is equivalent to:
-
+ Convenience function to differentiate function using "y" as
+derivation variable.  Function is equivalent to: 
      evaluator_derivative (evaluator, 'y');
-
-   See *note Fortran evaluator_derivative:: for further information.
+    See *note Fortran evaluator_derivative:: for further
+information. 
 
 Return value
 ............
 
-Evaluator object representing derivative of function over variable "y".
+ Evaluator object representing derivative of function over variable
+"y". 
 
 See also
 ........
 
-*note Fortran evaluator_create::, *note Fortran evaluator_destroy::,
-*note Fortran evaluator_derivative::
+ *note Fortran evaluator_create::, *note Fortran
+evaluator_destroy::, *note Fortran evaluator_derivative:: 
 
 
 File: libmatheval.info,  Node: Fortran evaluator_derivative_z,  Prev: Fortran evaluator_derivative_y,  Up: Fortran convenience procedures
 
-3.2.6 'evaluator_derivative_z'
+3.2.6 `evaluator_derivative_z'
 ------------------------------
+
+
 
 Synopsis
 ........
 
+
      integer*8 function evaluator_derivative_z (evaluator) integer*8 ::
      evaluator end function evaluator_derivative_z
+   
 
 Description
 ...........
 
-Convenience function to differentiate function using "z" as derivation
-variable.  Function is equivalent to:
-
+ Convenience function to differentiate function using "z" as
+derivation variable.  Function is equivalent to: 
      evaluator_derivative (evaluator, 'z');
-
-   See *note Fortran evaluator_derivative:: for further information.
+    See *note Fortran evaluator_derivative:: for further
+information. 
 
 Return value
 ............
 
-Evaluator object representing derivative of function over variable "z".
+ Evaluator object representing derivative of function over variable
+"z". 
 
 See also
 ........
 
-*note Fortran evaluator_create::, *note Fortran evaluator_destroy::,
-*note Fortran evaluator_derivative::
+ *note Fortran evaluator_create::, *note Fortran
+evaluator_destroy::, *note Fortran evaluator_derivative:: 
 
 
 File: libmatheval.info,  Node: Fortran sample program,  Next: Fortran build process,  Prev: Fortran convenience procedures,  Up: Fortran interface
@@ -1340,63 +1412,64 @@ File: libmatheval.info,  Node: Fortran sample program,  Next: Fortran build proc
 3.3 Fortran sample program
 ==========================
 
-Here follows sample program demonstrating use of library Fortran
+ Here follows sample program demonstrating use of library Fortran
 interface.  Hopefully, comments throughout code will be enough for
 Fortran programmer to get acquainted with library usage.  Basic
-functioning of program is equivalent to code presented for C programmer
-in *note Introduction:: sequence, except that textual representation of
-function derivative is not printed to standard output and this is
-avoided simply because of Fortran 77 ugly string handling.  Following
-code is written in Fortran 77 with GNU Fortran 77 compiler extensions
-(most notable of these certainly is free form of source code).
-
+functioning of program is equivalent to code presented for C
+programmer in *note Introduction:: sequence, except that textual
+representation of function derivative is not printed to standard
+output and this is avoided simply because of Fortran 77 ugly string
+handling.  Following code is written in Fortran 77 with GNU Fortran 77
+compiler extensions (most notable of these certainly is free form of
+source code). 
      ! Program is demonstrating use of GNU libmatheval library of procedures
      ! for evaluating mathematical functions.
      program evaluator
        implicit none
-
+     
        ! Declarations of GNU libmatheval procedures used.
        integer*8 evaluator_create
        integer*8 evaluator_derivative_x
        double precision evaluator_evaluate_x
        external evaluator_destroy
-
+     
        ! Size of input buffer.
        integer :: BUFFER_SIZE
        parameter(BUFFER_SIZE = 256)
-
+     
        character(len = BUFFER_SIZE) :: buffer ! Input buffer.
        integer*8 :: f, f_prim ! Evaluators for function and function derivative.
        double precision :: x ! Variable x value.
-
+     
        ! Read function.  Function has to be over variable x, or result may
        ! be undetermined.  Size of textual represenatation will be truncated
-       ! here to BUFFER_SIZE characters, in real conditions one should
+       ! here to BUFFER_SIZE characters, in real conditions one should 
        ! probably come with something smarter to avoid this limit.
        write (*, '(A)') 'f(x) = '
        read (*, '(A)') buffer
-
+     
        ! Create evaluator for function.
        f = evaluator_create (buffer);
        if (f == 0) stop
-
+     
        ! Create evaluator for function derivative.
        f_prim = evaluator_derivative_x (f);
        if (f_prim == 0) stop
-
+     
        ! Read variable x value.
        write (*, '(A)') 'x = '
        read (*, *) x
-
+     
        ! Calculate and print values of function and its derivative for given
        ! value of x.
        write (*,*) '  f (', x, ') = ', evaluator_evaluate_x (f, x)
        write (*,*) '  f'' (', x, ') = ', evaluator_evaluate_x (f_prim, x)
-
+     
        ! Destroy evaluators.
        call evaluator_destroy (f)
        call evaluator_destroy (f_prim)
      end program evaluator
+   
 
 
 File: libmatheval.info,  Node: Fortran build process,  Prev: Fortran sample program,  Up: Fortran interface
@@ -1404,16 +1477,16 @@ File: libmatheval.info,  Node: Fortran build process,  Prev: Fortran sample prog
 3.4 Fortran build process
 =========================
 
-In order to be able to reference GNU 'libmatheval' procedures from
-Fortran code, declarations of procedures that will be used should be
-repeated, like demonstrated by *note Fortran sample program:: (once when
-interface upgraded to Fortran 90, modules and 'use' statement will be
-employed here).  Command for compilation Fortran program using library
-and stored in file 'example.f' using GNU Fortran 77 compiler would look
-like (again supposing that library is installed using default prefix
-'/usr/local/lib'):
-
+ In order to be able to reference GNU `libmatheval' procedures from
+Fortran code, declarations of procedures that will be used should be
+repeated, like demonstrated by *note Fortran sample program:: (once
+when interface upgraded to Fortran 90, modules and `use' statement
+will be employed here).  Command for compilation Fortran program
+using library and stored in file `example.f' using GNU Fortran 77
+compiler would look like (again supposing that library is installed
+using default prefix `/usr/local/lib'): 
      f77 example.f -ff90 -ffree-form -L/usr/local/lib -lmatheval -o example
+   
 
 
 File: libmatheval.info,  Node: Hacking,  Next: Bugs,  Prev: Fortran interface,  Up: Top
@@ -1421,11 +1494,14 @@ File: libmatheval.info,  Node: Hacking,  Next: Bugs,  Prev: Fortran interface,  
 4 Hacking
 *********
 
+
+
 * Menu:
 
 * Design notes::          Overall project design.
 * Project structure::     Source files locations.
 * Intended improvements:: List of items that I'm willing to work on.
+   
 
 
 File: libmatheval.info,  Node: Design notes,  Next: Project structure,  Prev: Hacking,  Up: Hacking
@@ -1433,74 +1509,66 @@ File: libmatheval.info,  Node: Design notes,  Next: Project structure,  Prev: Ha
 4.1 Design notes
 ================
 
-As usual with a free software project, ultimate reference for anyone
-willing to hack on it is its source code.  Every effort is put to have
-source code properly commented; having in mind that GNU 'libmatheval' is
-rather simple project, it is reasonable to expect that this would be
-enough for anyone interested in project internals to get acquainted with
-it.  Still, this section will briefly explain project design.  See *note
-Project structure:: section for description of where each functionality
-is located in source code.
-
-   Mathematical functions are represented as trees in computer memory.
+ As usual with a free software project, ultimate reference for
+anyone willing to hack on it is its source code.  Every effort is put
+to have source code properly commented; having in mind that GNU
+`libmatheval' is rather simple project, it is reasonable to expect
+that this would be enough for anyone interested in project internals
+to get acquainted with it.  Still, this section will briefly explain
+project design. See *note Project structure:: section for description
+of where each functionality is located in source code. 
+Mathematical functions are represented as trees in computer memory.
 There are five different nodes in such a tree: number, constants,
 variables, functions, unary operations and binary operations.  Single
-data structure is employed for tree nodes, while union is used over what
-is different among them.  Numbers have unique value, unary and binary
-operations have unique pointer(s) to their operand(s) node(s).  To
-represent constants, variables and functions, a symbol table is
+data structure is employed for tree nodes, while union is used over
+what is different among them.  Numbers have unique value, unary and
+binary operations have unique pointer(s) to their operand(s) node(s).
+To represent constants, variables and functions, a symbol table is
 employed; thus constants, variables and functions have unique pointers
 to corresponding symbol table records (functions also have unique
 pointer to their argument node).  All operations related to functions
-(e.g.  evaluation or derivative calculation) are implemented as
+(e.g. evaluation or derivative calculation) are implemented as
 recursive operations on tree nodes.  There exist a node operation that
 is not visible as external procedure and this is node simplification;
 this operation is very important regarding overall efficiency of other
-operations and is employed each time when new tree created.
-
-   Symbol table is implemented as hash table, where each bucket has
-linked list of records stored in it.  Records store information of
-symbol name and type (variable or function), as well as some unique
-information related to evaluation: variable records store temporary
-variable value and function records store pointer to procedure used to
+operations and is employed each time when new tree created.  Symbol
+table is implemented as hash table, where each bucket has linked list
+of records stored in it.  Records store information of symbol name
+and type (variable or function), as well as some unique information
+related to evaluation: variable records store temporary variable
+value and function records store pointer to procedure used to
 actually calculate function value during evaluation.  Hashing function
-described in 'A.V. Aho, R. Sethi, J.D. Ullman, "Compilers - Principle,
-Techniques, and Tools", Addison-Wesley, 1986, pp 435-437' is used.
-Symbol tables are reference counted objects, i.e.  could be shared.
-
-   Evaluator objects actually consists of function tree and reference to
-symbol table.  Most of operations on evaluator objects are simply
-delegated to function tree root node.
-
-   For parsing strings representing mathematical functions, Lex and Yacc
-are employed.  Scanner is creating symbol table records for variables,
-while for constants and functions it is only looking up existing symbol
-table records (before starting scanning, symbol table should be
+described in `A.V. Aho, R. Sethi, J.D. Ullman, "Compilers -
+Principle, Techniques, and Tools", Addison-Wesley, 1986, pp 435-437'
+is used.  Symbol tables are reference counted objects, i.e. could be
+shared.  Evaluator objects actually consists of function tree and
+reference to symbol table.  Most of operations on evaluator objects
+are simply delegated to function tree root node.  For parsing
+strings representing mathematical functions, Lex and Yacc are
+employed.  Scanner is creating symbol table records for variables,
+while for constants and functions it is only looking up existing
+symbol table records (before starting scanning, symbol table should be
 populated with records for constants and functions recognized by
 scanner).  Parser is responsible for building function tree
-representation.
-
-   Couple error reporting procedures, as well as replacements for
-standard memory allocation routines are also present.  These are rather
-standard for all GNU projects, so deserve no further discussion.
-Further present in project are couple procedures for mathematical
-functions not implemented by C standard library, like cotangent, inverse
-cotangent and some hyperbolic and inverse hyperbolic functions.
-
-   Also present in project are stubs for Fortran code calling library.
-These stubs uses knowledge of GNU Fortran 77 compiler calling
-conventions, take parameters from Fortran 77 calls, eventually mangle
-them to satisfy primary C library interface and call library procedures
-to actually do the work, finally eventually mangling return values to
-satisfy Fortran 77 calling conventions again.
-
-   Most important thing to know before criticizing library design is
-that it is intentionally left as simple as it could be.  Decision is now
-that eventual library usage should direct its improvements.  Some
-obvious and intended improvements if enough interest for library arise
-are enumerated in *note Intended improvements:: section.  If having
-further suggestions, pleas see *note Bugs:: sections for contact
-information.
+representation.  Couple error reporting procedures, as well as
+replacements for standard memory allocation routines are also
+present.  These are rather standard for all GNU projects, so deserve
+no further discussion.  Further present in project are couple
+procedures for mathematical functions not implemented by C standard
+library, like cotangent, inverse cotangent and some hyperbolic and
+inverse hyperbolic functions.  Also present in project are stubs
+for Fortran code calling library. These stubs uses knowledge of GNU
+Fortran 77 compiler calling conventions, take parameters from Fortran
+77 calls, eventually mangle them to satisfy primary C library
+interface and call library procedures to actually do the work,
+finally eventually mangling return values to satisfy Fortran 77
+calling conventions again.  Most important thing to know before
+criticizing library design is that it is intentionally left as simple
+as it could be.  Decision is now that eventual library usage should
+direct its improvements.  Some obvious and intended improvements if
+enough interest for library arise are enumerated in *note Intended
+improvements:: section.  If having further suggestions, pleas see
+*note Bugs:: sections for contact information. 
 
 
 File: libmatheval.info,  Node: Project structure,  Next: Intended improvements,  Prev: Design notes,  Up: Hacking
@@ -1508,39 +1576,37 @@ File: libmatheval.info,  Node: Project structure,  Next: Intended improvements, 
 4.2 Project structure
 =====================
 
-Interesting source files are mostly concentrated in 'lib' subdirectory
-of distribution.  Basic arrangement is rather standard for GNU projects,
-thus scanner is in 'scanner.l' file, parser in 'parser.y', error
-handling routines are in 'error.c' and 'error.h' files, replacements for
-standard memory allocation routines are in 'xmalloc.c' and 'xmalloc.h',
-additional mathematical functions are in 'xmath.c' and 'xmath.c'.
-Project specific files are: 'node.h' and 'node.c' files for tree
-representing mathematical function data structures and procedures,
-'symbol_table.c' and 'symbol_table.h' for symbol table data structures
-and procedures and finally 'evaluator.c' and 'matheval.h' for evaluator
-object data structures and procedures (evaluator object data structure
-is moved to '.c' file because 'matheval.h' is public header file and
-this data structure should be opaque).  Fortran interface is implemented
-in 'f77_interface.c' file.
-
-   File 'libmatheval.texi' under 'doc' subdirectory of distribution
-contains Texinfo source of project documentation (i.e.  what you are
-reading now).
-
-   Subdirectory 'tests' contains library test suite.  Kind of mixed
-design is employed here - GNU autotest is used for test framework in
-order to achieve more portability, while number of small Guile scripts
-are performing tests.  File 'matheval.c' in 'tests' subdirectory
-contains program extending Guile interpreter with GNU 'libmatheval'
-procedures.  Files with '.at' extension in same subdirectory in turn
-consist of fragments of Guile code that this extended Guile interpreter
-executes in order to conduct tests.  File 'matheval.sh' is shell wrapper
-for program contained in 'matheval.c' file; this wrapper is used by
-autotest during testing instead of original program.  Most interesting
-aspect of code from 'tests' subdirectory is certainly Guile interface
-for library that is implemented in 'matheval.c' file; anyone intending
-to write more tests must before approaching this task become familiar
-with this interface.
+ Interesting source files are mostly concentrated in `lib'
+subdirectory of distribution.  Basic arrangement is rather standard
+for GNU projects, thus scanner is in `scanner.l' file, parser in
+`parser.y', error handling routines are in `error.c' and `error.h'
+files, replacements for standard memory allocation routines are in
+`xmalloc.c' and `xmalloc.h', additional mathematical functions are in
+`xmath.c' and `xmath.c'. Project specific files are: `node.h' and
+`node.c' files for tree representing mathematical function data
+structures and procedures, `symbol_table.c' and `symbol_table.h' for
+symbol table data structures and procedures and finally `evaluator.c'
+and `matheval.h' for evaluator object data structures and procedures
+(evaluator object data structure is moved to `.c' file because
+`matheval.h' is public header file and this data structure should be
+opaque).  Fortran interface is implemented in `f77_interface.c'
+file.  File `libmatheval.texi' under `doc' subdirectory of
+distribution contains Texinfo source of project documentation (i.e.
+what you are reading now).  Subdirectory `tests' contains library
+test suite.  Kind of mixed design is employed here - GNU autotest is
+used for test framework in order to achieve more portability, while
+number of small Guile scripts are performing tests.  File
+`matheval.c' in `tests' subdirectory contains program extending Guile
+interpreter with GNU `libmatheval' procedures.  Files with `.at'
+extension in same subdirectory in turn consist of fragments of Guile
+code that this extended Guile interpreter executes in order to
+conduct tests.  File `matheval.sh' is shell wrapper for program
+contained in `matheval.c' file; this wrapper is used by autotest
+during testing instead of original program.  Most interesting aspect
+of code from `tests' subdirectory is certainly Guile interface for
+library that is implemented in `matheval.c' file; anyone intending to
+write more tests must before approaching this task become familiar
+with this interface. 
 
 
 File: libmatheval.info,  Node: Intended improvements,  Prev: Project structure,  Up: Hacking
@@ -1548,57 +1614,57 @@ File: libmatheval.info,  Node: Intended improvements,  Prev: Project structure, 
 4.3 Intended improvements
 =========================
 
-As stated in *note Design notes:: section, GNU 'libmatheval' is designed
-with intention to be simple and understandable and to eventually have
-its usage to govern improvements.  Thus, further work will be primarily
-directed by user requests and of course, as usual with free software
-projects, with amount of spare time of primary developer (see *note
-Bugs:: for contact information).  However, there exist several obvious
-improvements that I'm willing to work on immediately if any interest of
-library arise and these are (in random order) listed below:
-
+ As stated in *note Design notes:: section, GNU `libmatheval' is
+designed with intention to be simple and understandable and to
+eventually have its usage to govern improvements.  Thus, further work
+will be primarily directed by user requests and of course, as usual
+with free software projects, with amount of spare time of primary
+developer (see *note Bugs:: for contact information).  However, there
+exist several obvious improvements that I'm willing to work on
+immediately if any interest of library arise and these are (in random
+order) listed below: 
    * Extend scanner to recognize more mathematical functions, to
-     recognize alternative names for existing functions (e.g.  to
-     recognize both 'tg' and 'tan' as names for tangent function) and to
-     recognize more constants.
+     recognize alternative names for existing functions (e.g. to
+     recognize both `tg' and `tan' as names for tangent function) and
+     to recognize more constants. 
 
-   * Implement variable hash table length for symbol table.  As for now,
-     hash table length is fixed to 211 that is reasonable for most
-     cases, but it would certainly be more robust to have hash table to
-     be constructed of length proportional say to length of string
-     representing function.
+   * Implement variable hash table length for symbol table.  As for
+     now, hash table length is fixed to 211 that is reasonable for
+     most cases, but it would certainly be more robust to have hash
+     table to be constructed of length proportional say to length of
+     string representing function. 
 
    * Add more simplifications to function tree representation.  Only
-     basic simplifications, mostly related to numbers subtrees
-     consolidation and binary operations neutral elements are employed
-     now.  More ambitious optimization, using commutative, associative
-     and distributive rules for binary operations would be desirable.
+     basic simplifications, mostly related to numbers subtrees
+     consolidation and binary operations neutral elements are
+     employed now.  More ambitious optimization, using commutative,
+     associative and distributive rules for binary operations would
+     be desirable. 
 
    * Improve output when evaluator object is printed.  Presently,
      parenthesis are always used around operations, while using them
-     when necessary to establish proper evaluation priority order only
-     would give prettier output
+     when necessary to establish proper evaluation priority order
+     only would give prettier output 
 
    * Add more tests.  Basic functionality of library is exercised
-     through existing test suite, but present number of tests is
-     certainly far from enough.
+     through existing test suite, but present number of tests is
+     certainly far from enough. 
 
-   * Extend and improve error handling.  There are couple 'assert's left
-     in code that may be replaced with some other mechanism, also
-     probably error handling of more error conditions should be added to
-     library.
+   * Extend and improve error handling.  There are couple `assert's
+     left in code that may be replaced with some other mechanism, also
+     probably error handling of more error conditions should be added
+     to library. 
 
-   * Add command line interface to library, i.e.  write a program that
-     will make possible to evaluate expression for given variable values
-     where both specified in command line, as program arguments (for
-     expressions without variables this program could be useful as a
-     calculator).
-
-   There exists also an improvement that is obvious and necessary but
-because I'm not native speaker I'm unfortunately not able to accomplish
-it anything more than I already tried:
-
-   * Clean up English used in documentation.
+   * Add command line interface to library, i.e. write a program that
+     will make possible to evaluate expression for given variable
+     values where both specified in command line, as program
+     arguments (for expressions without variables this program could
+     be useful as a calculator).
+    There exists also an improvement that is obvious and necessary
+but because I'm not native speaker I'm unfortunately not able to
+accomplish it anything more than I already tried: 
+   * Clean up English used in documentation. 
+   
 
 
 File: libmatheval.info,  Node: Bugs,  Next: Rationale and history,  Prev: Hacking,  Up: Top
@@ -1606,18 +1672,15 @@ File: libmatheval.info,  Node: Bugs,  Next: Rationale and history,  Prev: Hackin
 5 Bugs
 ******
 
-If you encounter something that you think is a bug, please report it
-immediately.  Try to include a clear description of the undesired
-behavior.  A test case that exhibits the bug or maybe even patch fixing
-it, would too be of course very useful.
-
-   Suggestions on improving library would be also more than welcome.
-Please see *note Hacking::, for further information.
-
-   Please direct bug reports and eventual patches to
-<bug-libmatheval@gnu.org> mailing list.  For suggestions regarding
-improvements and other 'libmatheval' related conversation use author
-e-mail address <asamardzic@gnu.org>.
+ If you encounter something that you think is a bug, please report
+it immediately.  Try to include a clear description of the undesired
+behavior.  A test case that exhibits the bug or maybe even patch
+fixing it, would too be of course very useful.  Suggestions on
+improving library would be also more than welcome.  Please see *note
+Hacking::, for further information.  Please direct bug reports and
+eventual patches to <bug-libmatheval@gnu.org> mailing list.  For
+suggestions regarding improvements and other `libmatheval' related
+conversation use author e-mail address <asamardzic@gnu.org>. 
 
 
 File: libmatheval.info,  Node: Rationale and history,  Next: Copying,  Prev: Bugs,  Up: Top
@@ -1625,44 +1688,41 @@ File: libmatheval.info,  Node: Rationale and history,  Next: Copying,  Prev: Bug
 6 Rationale and history
 ***********************
 
-The library is developed as a back-end for "Numerical Analysis" course
-taught during 1999/2000, 2000/2001 and 2001/2002 school years at
-Department of Mathematics, University of Belgrade.  Most numerical
-libraries (library accompanying "Numerical Recipes" book most notably
-example) are asking programmer to write corresponding C code when it
-comes to evaluate mathematical functions.  It seemed to me that it would
-be more appropriate (well, at least for above mentioned course) to have
-library that will make possible to specify functions as strings and then
-have them evaluated for given variable values, so I wrote first version
-of library during November 1999.  Fortran interface is added to the
-library later; during January 2001 interface for Pacific Sierra VAST
-Fortran 90 translator was implemented and during September 2001 it was
-replaced by interface for Intel Fortran 90 compiler (1).  This library
-eventually went into rather stable state and was tested by number of
-other programs implementing various numerical methods and developed for
-the same course.
-
-   After completing engagement with this course, I thought it may be
+ The library is developed as a back-end for "Numerical Analysis"
+course taught during 1999/2000, 2000/2001 and 2001/2002 school years
+at Department of Mathematics, University of Belgrade.  Most numerical
+libraries (library accompanying "Numerical Recipes" book most notably
+example) are asking programmer to write corresponding C code when it
+comes to evaluate mathematical functions.  It seemed to me that it
+would be more appropriate (well, at least for above mentioned course)
+to have library that will make possible to specify functions as
+strings and then have them evaluated for given variable values, so I
+wrote first version of library during November 1999.  Fortran
+interface is added to the library later; during January 2001 interface
+for Pacific Sierra VAST Fortran 90 translator was implemented and
+during September 2001 it was replaced by interface for Intel Fortran
+90 compiler (1).  This library eventually went into rather stable
+state and was tested by number of other programs implementing various
+numerical methods and developed for the same course.  After
+completing engagement with this course, I thought it may be
 interesting for someone else to use this code and decided to make it
 publicly available.  So, having some spare time during June 2002, I
-re-wrote whole library in preparation for public release, now employing
-simpler overall design and also using GNU auto-tools and what else was
-necessary according to GNU guidelines.  The benefit is that final
-product looks much better now (well, at least to me and at least at the
-very moment of this writing), the drawback is that code is not
-thoroughly tested again.  But certainly author would be more than happy
-to further improve and maintain it.  Please see *note Bugs::, for
-contact information.
-
-   The library source code was hosted on Savannah
-(<http://savannah.gnu.org/>) since Septembar 2002.  In September 2003,
-library officially became part of GNU project.
+re-wrote whole library in preparation for public release, now
+employing simpler overall design and also using GNU auto-tools and
+what else was necessary according to GNU guidelines.  The benefit is
+that final product looks much better now (well, at least to me and at
+least at the very moment of this writing), the drawback is that code
+is not thoroughly tested again.  But certainly author would be more
+than happy to further improve and maintain it.  Please see *note
+Bugs::, for contact information.  The library source code was
+hosted on Savannah (`http://savannah.gnu.org/') since Septembar 2002.
+In September 2003, library officially became part of GNU project. 
 
    ---------- Footnotes ----------
 
-   (1) That was in turn replaced by interface for GNU Fortran 77
-compiler in order to meet requirement that no GNU project should require
-use of non-free software
+   (1) That was in turn replaced by interface for GNU Fortran 77
+compiler in order to meet requirement that no GNU project should
+require use of non-free software
 
 
 File: libmatheval.info,  Node: Copying,  Next: Index,  Prev: Rationale and history,  Up: Top
@@ -1670,10 +1730,10 @@ File: libmatheval.info,  Node: Copying,  Next: Index,  Prev: Rationale and histo
 7 GNU Free Documentation License
 ********************************
 
-                        Version 1.1, March 2000
+                         Version 1.1, March 2000
      Copyright (C) 2000 Free Software Foundation, Inc.
      51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
-
+     
      Everyone is permitted to copy and distribute verbatim copies
      of this license document, but changing it is not allowed.
 
@@ -2048,12 +2108,15 @@ LIST"; likewise for Back-Cover Texts.
 recommend releasing these examples in parallel under your choice of
 free software license, such as the GNU General Public License, to
 permit their use in free software.
+ 
 
 
 File: libmatheval.info,  Node: Index,  Prev: Copying,  Up: Top
 
 Index
 *****
+
+
 
  [index ]
 * Menu:
@@ -2083,54 +2146,56 @@ Index
 * reference:                             Reference.             (line 6)
 * usage:                                 Introduction.          (line 6)
 
+     
+
 
 
 Tag Table:
-Node: Top778
-Node: License1658
-Node: Introduction2387
-Node: Reference9943
-Node: Main entry points10328
-Node: evaluator_create10860
-Node: evaluator_destroy13870
-Node: evaluator_evaluate14428
-Node: evaluator_get_string15588
-Node: evaluator_get_variables16430
-Node: evaluator_derivative17402
-Node: Convenience procedures18325
-Node: evaluator_evaluate_x18873
-Node: evaluator_evaluate_x_y19724
-Node: evaluator_evaluate_x_y_z20622
-Node: evaluator_derivative_x21568
-Node: evaluator_derivative_y22326
-Node: evaluator_derivative_z23082
-Node: Fortran interface23807
-Node: Fortran main entry points25164
-Node: Fortran evaluator_create26017
-Node: Fortran evaluator_destroy29242
-Node: Fortran evaluator_evaluate29878
-Node: Fortran evaluator_get_string_length31337
-Node: Fortran evaluator_get_string_chars32089
-Node: Fortran evaluator_get_variables_length33071
-Node: Fortran evaluator_get_variables_chars33859
-Node: Fortran evaluator_derivative34794
-Node: Fortran convenience procedures35871
-Node: Fortran evaluator_evaluate_x36538
-Node: Fortran evaluator_evaluate_x_y37412
-Node: Fortran evaluator_evaluate_x_y_z38328
-Node: Fortran evaluator_derivative_x39274
-Node: Fortran evaluator_derivative_y40138
-Node: Fortran evaluator_derivative_z41000
-Node: Fortran sample program41823
-Node: Fortran build process44347
-Node: Hacking45099
-Node: Design notes45390
-Node: Project structure49526
-Node: Intended improvements51703
-Node: Bugs54456
-Node: Rationale and history55164
-Ref: Rationale and history-Footnote-157293
-Node: Copying57457
-Node: Index77334
+Node: Top797
+Node: License1698
+Node: Introduction2438
+Node: Reference10241
+Node: Main entry points10640
+Node: evaluator_create11186
+Node: evaluator_destroy14259
+Node: evaluator_evaluate14852
+Node: evaluator_get_string16056
+Node: evaluator_get_variables16935
+Node: evaluator_derivative17945
+Node: Convenience procedures18907
+Node: evaluator_evaluate_x19469
+Node: evaluator_evaluate_x_y20369
+Node: evaluator_evaluate_x_y_z21315
+Node: evaluator_derivative_x22311
+Node: evaluator_derivative_y23109
+Node: evaluator_derivative_z23905
+Node: Fortran interface24670
+Node: Fortran main entry points26052
+Node: Fortran evaluator_create26921
+Node: Fortran evaluator_destroy30202
+Node: Fortran evaluator_evaluate30867
+Node: Fortran evaluator_get_string_length32365
+Node: Fortran evaluator_get_string_chars33144
+Node: Fortran evaluator_get_variables_length34156
+Node: Fortran evaluator_get_variables_chars34973
+Node: Fortran evaluator_derivative35939
+Node: Fortran convenience procedures37049
+Node: Fortran evaluator_evaluate_x37730
+Node: Fortran evaluator_evaluate_x_y38639
+Node: Fortran evaluator_evaluate_x_y_z39589
+Node: Fortran evaluator_derivative_x40570
+Node: Fortran evaluator_derivative_y41468
+Node: Fortran evaluator_derivative_z42364
+Node: Fortran sample program43221
+Node: Fortran build process45856
+Node: Hacking46625
+Node: Design notes46927
+Node: Project structure51114
+Node: Intended improvements53324
+Node: Bugs56146
+Node: Rationale and history56866
+Ref: Rationale and history-Footnote-159025
+Node: Copying59191
+Node: Index79457
 
 End Tag Table

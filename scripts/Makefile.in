@@ -1,5 +1,5 @@
 # Overall Dos9 suite Makefile, The Dos9 Project (c) Darkbatcher
-# 2010-2013
+# 2010-2016
 #
 # This is free software: you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software 
@@ -9,19 +9,35 @@
 #
 # This files generates translations while compiling
 #
-
-PO_BUILD=$$(ls po/)
-SHARE_DIR=./share/locale
-
-MSGFMT = @MSGFMT@
-XGETTEXT = @XGETTEXT@
-MSGMERGE = @MSGMERGE@
 prefix = @prefix@
-
+datarootdir = @datarootdir@
+datadir = @datadir@
+bindir = @bindir@
+sysconfdir = @sysconfdir@
+script_subst = sed -e 's,[@]datadir[@],$(datadir),g' \
+            -e 's,[@]prefix[@],$(prefix),g' \
+            -e 's,[@]bindir[@],$(bindir),g' \
+			-e 's,[@]sysconfdir[@],$(sysconfdir),g'
 all:
 dist:
 distdir:
 
-install:
-	cp Dos9_Auto.bat $(prefix)/
-	cp -R cmd $(prefix)/
+clean:
+	rm -f Dos9_Auto.bat
+	rm -f hlp.bat
+
+install-exec:
+install-exec-recursive:
+install-data: install
+install-data-recursive:
+
+install: Dos9_Auto.bat hlp.bat
+	cp Dos9_Auto.bat $(bindir)
+	mkdir -p $(bindir)/cmd
+	cp hlp.bat $(bindir)/cmd/
+
+hlp.bat: hlp.bat.in
+	$(script_subst) < hlp.bat.in > hlp.bat
+
+Dos9_Auto.bat: Dos9_Auto.bat.in
+	$(script_subst) < Dos9_Auto.bat.in > Dos9_Auto.bat

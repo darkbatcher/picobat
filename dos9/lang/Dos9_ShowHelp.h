@@ -49,10 +49,7 @@
 #define DOS9_HELP_BREAK     27
 #define DOS9_HELP_CHCP      28
 
-#define DOS9_HELP_PUSHD     29
-#define DOS9_HELP_POPD      30
-
-#define DOS9_HELP_ARRAY_SIZE 31
+#define DOS9_HELP_ARRAY_SIZE 29
 
 /* this is to instanciate a little embedded command
    help, to provide simple syntax help if no other

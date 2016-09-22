@@ -200,7 +200,6 @@ error:
 	return -1;
 }
 
-int Dos9_CmdRmdirFile(char* dir, int param, int* choice);
 int Dos9_CmdRmdirFile(char* dir, int param, int* choice)
 {
     int res = *choice;

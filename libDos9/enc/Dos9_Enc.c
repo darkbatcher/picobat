@@ -20,7 +20,7 @@
 #include "libDos9.h"
 #include "../libDos9-int.h"
 
-int _Dos9_TextMode=DOS9_BYTE_ENCODING;
+int _Dos9_TextMode=DOS9_UTF8_ENCODING;
 
 #define UNICODE_BYTE 0x80
 #define UNICODE_FOLOWING_BYTE_MASK 0xC0

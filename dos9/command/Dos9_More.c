@@ -332,7 +332,6 @@ int more_fputc_u8_wrapper (int c, FILE* p)
 }
 #endif
 
-int Dos9_MoreWriteLine(int* begin, int flags, int tabsize, FILE* file);
 int Dos9_MoreWriteLine(int* begin, int flags, int tabsize, FILE* file)
 {
     int c,
@@ -479,7 +478,6 @@ int Dos9_GetMoreNb(void)
 }
 
 
-int Dos9_MorePrompt(int* toprint, int* skip, int* ok);
 int Dos9_MorePrompt(int* toprint, int* skip, int* ok)
 {
 	int i;

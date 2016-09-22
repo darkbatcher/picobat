@@ -17,9 +17,11 @@ SETLOCAL EnableDelayedExpansion
 ::   You should have received a copy of the GNU General Public License
 ::   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+set hlp_base_dir=%DOS9_SHARE%/dos9/hlp
+
 :: Cd to the appropriate directory
-if not exist !DOS9_PATH!/share/hlp MKDIR !DOS9_PATH!/share/hlp
-cd %DOS9_PATH%/share/hlp
+if not exist !hlp_base_dir! MKDIR !hlp_base_dir!
+cd !hlp_base_dir!
 
 if not exist hlp.conf.bat (
 	echo No hlp.conf.bat
@@ -34,7 +36,7 @@ if /i "%~1" equ "/c" goto :config
 if /i "%~1" neq "/?" goto :show
 :: if nothing has been selected, goto show
 
-ECHO Hlp - Manual page viewier Copyright ^(C^) 2013-2015 Romain Garbi ^(Darkbatcher^)
+ECHO Hlp - Manual page viewier Copyright ^(C^) 2013-2016 Romain Garbi ^(Darkbatcher^)
 ECHO This program comes with ABSOLUTELY NO WARRANTY; This is free software,
 ECHO and you are welcome to redistribute it under the terms of the GNU CPL.
 ECHO.

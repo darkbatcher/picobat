@@ -82,7 +82,7 @@ AC_ARG_ENABLE([libcu8],
 		[AC_HELP_STRING([--enable-libcu8],
                  [Use libcu8 to add utf8 support using msvcrt using windows])],
 		[],
-		[enable_libcu8=no]
+		[enable_libcu8=yes]
 	)
 
 AS_IF([test "x$enable_console" = xno], 

@@ -39,9 +39,6 @@
 #ifdef WIN32
     #define S_IREAD _S_IREAD
     #define O_IWRITE _S_IWRITE
-    #define Dos9_GetFileAttributes(lpcstr) GetFileAttributes(lpcstr)
-#else
-    #define Dos9_GetFileAttributes(lpcstr)
 #endif
 
 
@@ -56,6 +53,9 @@ typedef struct {
 	void(*pCallBack)(FILELIST*);
 } FILEPARAMETER,*LPFILEPARAMETER;
 
+#ifdef WIN32
+int                 Dos9_GetFileAttributes(const char* file);
+#endif
 
 int                     _Dos9_FillCommandList(LPCOMMANDLIST lpclList, LPCOMMANDINFO lpciCommandInfo);
 int                     _Dos9_PutSeed(LPCOMMANDINFO lpciCommandInfo, int iSegBottom, int iSegTop, LPCOMMANDLIST* lpclList);

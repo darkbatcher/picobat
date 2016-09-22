@@ -194,14 +194,6 @@ void Dos9_LoadInternalHelp(void)
         =gettext("Set Console codepage or encoding.\n"
                  "Usage: CHCP [ codepage | encoding]\n");
 
-	 lpInternalHelp[DOS9_HELP_PUSHD]
- 		=gettext("Changes the system's current directory and store the previous folder/path for use by the POPD command.\n"
-		    	 "Usage: PUSHD [path]\n");
-
-	lpInternalHelp[DOS9_HELP_POPD]
-		=gettext("Change directory back to the path/folder most recently stored by the PUSHD command.\n"
-	        	 "Usage: POPD\n");
-
 	lpExternalMsg
 	    =gettext("This help is voluntary limited help to fit in the binary. If you need to\n"
 	             "see the full documentation, please type:\n"

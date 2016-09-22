@@ -54,7 +54,4 @@
 #include "Dos9_Break.h"
 #include "Dos9_Chcp.h"
 
-#include "Dos9_Pushd.h"
-#include "Dos9_Popd.h"
-
 #endif // DOS9_CMD_ECHO_H

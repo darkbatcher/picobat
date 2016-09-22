@@ -1,0 +1,31 @@
+BUILDING Dos9 :
+===============
+
+Dos9 uses the autotool build system, so that building and compiling Dos9
+distribution is quite straightforward. In order to buid Dos9, you need the
+following prequisites :
+
+    - Build essentials (basically, autotools, make and the GCC suite).
+    - GNU gettext library and utilities
+    - GNU libiconv
+
+These software are quite standard under *Nixes, but are also quite easy to get
+under windows (MinGW or MinGW-w64). Dos9 is quite architecture independent,
+and as been tested on x86 and x86_64 and under some exotic platforms like
+armv7.
+
+Buiding and installing Dos9 is quite easy under linux, using the following
+command:
+
+    ./configure
+    make
+    make install
+
+It is a little bit more complicated under Windows, especially if you want to
+access it out of MinGW. 
+
+    ./configure --prefix=/c/Program\ Files/Dos9 --bindir=/c/Program\ Files/Dos9 --libdir=/c/Program\ Files/Dos9
+    make
+    make install
+    make dos9-install-portable
+

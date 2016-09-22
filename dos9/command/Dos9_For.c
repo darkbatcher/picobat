@@ -574,16 +574,21 @@ int Dos9_ForMakeInfo(char* lpOptions, FORINFO* lpfiInfo)
 			goto error;
 		}
 
-		/* switching to choice the appropriate parameter */
+		/* switching to choose the appropriate parameter */
 
 		if (!(stricmp(Dos9_EsToChar(lpParam), "delims"))) {
 
 			Dos9_ForAdjustParameter(lpOptions, lpParam);
-
 			strncpy(lpfiInfo->lpDelims, lpToken, sizeof(lpfiInfo->lpDelims));
-
 			lpfiInfo->lpDelims[sizeof(lpfiInfo->lpDelims)-1] = '\0';
-			/* see C89 or later standard */
+
+            /* The default end-of-line character is ';', thus if you specify ';' as
+               a delimiter, It is wise to remove it end-of-line character if those have
+               not been redefined yet. However, we do no check for every character, if
+               the user wants to specify explicitly, it is at his own reponsability ... */
+			if (strchr(lpfiInfo->lpDelims, ' ') != NULL
+                && !strcmp(lpfiInfo->lpEol, ";"))
+                strcpy(lpfiInfo->lpEol, "");
 
 
 		} else if (!(stricmp(Dos9_EsToChar(lpParam), "skip"))) {
@@ -594,19 +599,13 @@ int Dos9_ForMakeInfo(char* lpOptions, FORINFO* lpfiInfo)
 
 			Dos9_ForAdjustParameter(lpOptions, lpParam);
 			strncpy(lpfiInfo->lpEol, lpToken, sizeof(lpfiInfo->lpEol));
-
 			lpfiInfo->lpEol[sizeof(lpfiInfo->lpEol)-1] = '\0';
-			/* see C89 or later standard */
 
 		} else if (!(stricmp(Dos9_EsToChar(lpParam), "tokens"))) {
 
-			/* make the options */
-			if (Dos9_ForMakeTokens(lpToken, lpfiInfo)==-1) {
-
+			/* Compute tokens */
+			if (Dos9_ForMakeTokens(lpToken, lpfiInfo)==-1)
 				goto error;
-
-			}
-
 
 
 		} else {
@@ -1543,7 +1542,7 @@ int  Dos9_CmdForDeprecatedWrapper(ESTR* lpMask, ESTR* lpDir, char* lpAttribute, 
                 token is taken account */
 		"", /* no end-of-line delimiters */
 		0, /* no skipped line */
-		cVarName, /* this is to be fullfiled later (the
+		cVarName, /* this is to be fulfiled later (the
                 name letter of loop special var) */
 		FALSE,
 		1, /* the number of tokens we were given */
