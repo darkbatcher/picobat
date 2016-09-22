@@ -17,14 +17,14 @@
 # along with GNU libmatheval.  If not, see
 # <http://www.gnu.org/licenses/>.
 
-prefix=/desktop/dos9-code/bin
+prefix=/run/media/tsnake41/912ab85f-5006-4763-9f8c-07a84e5651a9/dos9-ts/bin
 exec_prefix=${prefix}
-libdir=/desktop/dos9-code/bin
+libdir=/run/media/tsnake41/912ab85f-5006-4763-9f8c-07a84e5651a9/dos9-ts/bin
 includedir=${prefix}/include
 
 Name: libmatheval
 Description: Library of functions for evaluating mathematical expressions
 Version: 1.1.11
 Libs: -L${libdir} -lmatheval
-Libs.private:  -lm
+Libs.private: -lfl -lm
 Cflags: -I${includedir}

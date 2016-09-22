@@ -16,7 +16,7 @@ SHARE_DIR=./share/locale
 MSGFMT = /usr/bin/msgfmt
 XGETTEXT = /usr/bin/xgettext
 MSGMERGE = /usr/bin/msgmerge
-prefix = /run/media/tsnake41/912ab85f-5006-4763-9f8c-07a84e5651a9/dos9-compile-scripts/linux-x86_64
+prefix = /run/media/tsnake41/912ab85f-5006-4763-9f8c-07a84e5651a9/dos9-ts/bin
 datarootdir = ${prefix}/share
 datadir= ${datarootdir}
 all: m-po
