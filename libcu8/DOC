@@ -31,7 +31,7 @@ Initialisation function
      Return value
 
           Upon succesfull return, the return value is 0. If an error occured,
-          the return value is 0.
+          the return value is non 0.
           
 File encoding management functions
 

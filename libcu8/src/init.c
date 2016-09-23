@@ -37,7 +37,7 @@
 #include <windows.h>
 #include <process.h>
 #include <sys/stat.h>
-
+#include <direct.h>
 
 #include <iconv.h>
 
@@ -83,14 +83,14 @@ __LIBCU8__IMP __cdecl int libcu8_init(const char*** pargv)
     /* replace functions from msvcrt by functions from libcu8 */
     if (libcu8_replace_fn(_read, libcu8_read , 52) != 0
         || libcu8_replace_fn(_write, libcu8_write , 52) != 0
-        || libcu8_replace_fn(_open, libcu8_open , 52) != 0
+        || libcu8_replace_fn(_sopen, libcu8_sopen , 52) != 0
         || libcu8_replace_fn(_creat, libcu8_creat , 52) != 0
         || libcu8_replace_fn(_lseek, libcu8_lseek , 52) != 0
         || libcu8_replace_fn(_commit, libcu8_commit , 52) != 0
         || libcu8_replace_fn(_dup, libcu8_dup , 52) != 0
         || libcu8_replace_fn(_dup2, libcu8_dup2 , 52) != 0
         || libcu8_replace_fn(_spawnl, libcu8_spawnl , 52) != 0
-        || libcu8_replace_fn(_spawnlp, libcu8_spawnlp , 52) != 0
+        || libcu8_replace_fn(_spawnlp, libcu8_spawnlp , 52) != 0 /* 10th */
         || libcu8_replace_fn(_spawnlpe, libcu8_spawnlpe , 52) != 0
         || libcu8_replace_fn(_spawnle, libcu8_spawnle , 52) != 0
         || libcu8_replace_fn(_spawnv, libcu8_spawnv , 52) != 0
@@ -102,7 +102,7 @@ __LIBCU8__IMP __cdecl int libcu8_init(const char*** pargv)
         || libcu8_replace_fn(_stat32i64, libcu8_stat32i64, 52) != 0
 #endif
         || libcu8_replace_fn(_stat64i32, libcu8_stat64i32, 52) != 0
-        || libcu8_replace_fn(_stat64, libcu8_stat64, 52) != 0
+        || libcu8_replace_fn(_stat64, libcu8_stat64, 52) != 0 /* 20th */
 #ifndef __x86_64__
         || libcu8_replace_fn(_findfirst32, libcu8_findfirst32, 52) != 0
         || libcu8_replace_fn(_findnext32, libcu8_findnext32, 52) != 0
@@ -113,6 +113,12 @@ __LIBCU8__IMP __cdecl int libcu8_init(const char*** pargv)
         || libcu8_replace_fn(_findnext64, libcu8_findnext64, 52) != 0
         || libcu8_replace_fn(_findfirst64i32, libcu8_findfirst64i32, 52) != 0
         || libcu8_replace_fn(_findnext64i32, libcu8_findnext64i32, 52) != 0
+        || libcu8_replace_fn(_chdir, libcu8_chdir, 52) !=0
+        || libcu8_replace_fn(_rmdir, libcu8_rmdir, 52) !=0 /* 30th */
+        || libcu8_replace_fn(_mkdir, libcu8_mkdir, 52) !=0
+        || libcu8_replace_fn(_getcwd, libcu8_getcwd, 52) != 0
+        || libcu8_replace_fn(_open, libcu8_open, 52) != 0
+        || libcu8_replace_fn(fopen, libcu8_fopen, 52) != 0
         ) {
 
         free(libcu8_fd_buffers);
