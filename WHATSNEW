@@ -1467,5 +1467,7 @@ MONDAY 16TH, APRIL
 
         - Fixed some bugs with SET and redirections.
 
-        - still develloping dos9ize 
+        - still develloping dos9ize
+
+        - Fixed errors with folders containing spaces for Dos9. 
 
