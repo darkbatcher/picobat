@@ -19,7 +19,7 @@
 EXTRA_DIST = po man scripts COPYING README WHATSNEW BUILD.readme
 ACLOCAL_AMFLAGS = -I m4
 AUTOMAKE_OPTIONS = foreign subdir-objects
-SUBDIRS = libinteval libmatheval @libcu8@ libDos9 dos9 tea dump po dos9ize \
+SUBDIRS = libinteval libmatheval libDos9 dos9 tea dump po dos9ize \
 scripts
 SHAREDEXT = @SHAREDEXT@
 distbdir =$(distdir)-bin

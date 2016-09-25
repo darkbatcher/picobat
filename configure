@@ -15218,7 +15218,8 @@ fi
 if test "${enable_libcu8+set}" = set; then :
   enableval=$enable_libcu8;
 else
-  enable_libcu8=yes
+  # Disable by default libcu8
+  enable_libcu8=no
 
 fi
 
