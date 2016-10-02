@@ -2,6 +2,7 @@
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
  *   Copyright (C) 2010-2016 Romain GARBI
+ *   Copyright (C) 2016 	 Teddy ASTIE
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -33,7 +34,7 @@
 
 int Dos9_CmdIf(char* lpParam)
 {
-	char lpArgument[FILENAME_MAX], *lpNext, *lpToken, *lpEnd;
+	char lpArgument[FILENAME_MAX], *lpNext, *lpToken, *lpToken2, *lpEnd;
 	int iFlag=0,
 	    iResult;
 
@@ -196,6 +197,16 @@ int Dos9_CmdIf(char* lpParam)
 				/* if scipt uses old c-style comparison */
 				*lpToken='\0';
 				lpToken+=2;
+
+				lpToken2 = Dos9_EsToChar(lpComparison);
+
+				/* Double quote hack */
+				char *q = (lpToken2 + strlen(lpToken2) - 1);
+
+				if (*q == '"') {
+					*q = '\0';
+					lpToken++;
+				}
 
 				if (iFlag & DOS9_IF_CASE_UNSENSITIVE) iResult=!stricmp(Dos9_EsToChar(lpComparison), lpToken);
 				else iResult=!strcmp(Dos9_EsToChar(lpComparison), lpToken);
