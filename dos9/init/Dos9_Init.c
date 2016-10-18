@@ -191,6 +191,8 @@ void Dos9_InitHelp(void)
     puts("Feel free to report bugs and submit suggestions at : <" DOS9_BUGREPORT ">\n"
          "For more informations see : <" DOS9_URL ">");
 
+    exit(0);
+
 }
 
 char* Dos9_GetParameters(char** argv, char** lpFileName, int* bExitAfterCmd, int*
