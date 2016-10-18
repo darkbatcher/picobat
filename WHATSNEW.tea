@@ -1318,8 +1318,28 @@ ${set/p var=question}
 
     - Fixed errors with folders containing spaces for Dos9. 
 	
-{{Friday 15th, July 2015}}
+{{Friday 15th, July}}
 
 	- Fixed a little bug with the for command. When the field "delims=;" is specified
 	with {FOR} without "eol=" being specified, then the character ";" is not used
 	as the default end-of-line character.
+	
+{{Friday 18th, October 2016}}
+
+	- Removed the complex initialisation model set up the {16/04/2016} in favour of
+	a single (somewhat read-only) {Dos9_Auto.bat} initialization script that calls
+	automatically local and global custom initialization scripts.
+	
+	- Worked a lot to improove the binary tree, in order to conform to unix
+	installation standard and windows, by the way. This is near to being ready.
+	
+	- Modified the {TYPE} command, adding the following features :
+	
+		-- The file names are now echoed throught the standard error output. This
+		new behaviour allows sorting out easily file names and file contents. By the
+		way this is also more conformant to {cmd.exe}.
+		
+		-- If no filename is specified, the {TYPE} command gets it input from the
+		standard input, acting quite the same as more.
+		
+	-- Few documentation updates.

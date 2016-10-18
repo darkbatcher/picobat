@@ -1,12 +1,18 @@
 @(
-:: Dos9 initialization script
+:: Dos9 global initialization script
 :: copyright (c) 2010-2016 Romain GARBI
 ::
 :: This is free software. You can redistribute it and/or modify under the terms
 :: of the GNU General Public Licence V3
-
+::
 :: Note : This code is usually wrapped in a @() block to make it quiet and
 :: quick Nevertheless, you can still make it verbose using the ECHO command
+::
+:: This file is not intended for direct modification. Do not modify it unless 
+:: you *really* pay attention to and know *exactly* what you are doing. Files
+:: intended for customisation should be :
+::		- /etc/Dos9_Auto.bat or $HOME/.dos9/Dos9_Auto.bat
+::		- %APPDATA%/Dos9_Auto.bat   
 SETLOCAL EnableDelayedExpansion
 
 IF %DOS9_OS%==WINDOWS (
@@ -32,6 +38,9 @@ IF %DOS9_OS%==WINDOWS (
 :: Define additionnal paths for the sub-programs
 SET DOS9_SHARE=@datadir@
 SET DOS9_ETC=@sysconfdir@
+
+IF exist !DOS9_ETC!/Dos9_Auto.bat CALL !DOS9_ETC!/Dos9_Auto.bat
+IF exist !USERPROFILE!/.dos9/Dos9_Auto.bat CALL !USERPROFILE!/.dos9/Dos9_Auto.bat
 
 :: At this state, dos9 will reset neither options or variables that have
 :: been set, so that, it might be something good to reset them by yourself.

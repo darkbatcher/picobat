@@ -17,7 +17,8 @@ SETLOCAL EnableDelayedExpansion
 ::   You should have received a copy of the GNU General Public License
 ::   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-set hlp_base_dir=%DOS9_SHARE%/dos9/hlp
+set hlp_data_dir=%DOS9_SHARE%/dos9/hlp
+set hlp_base_dir=%USERPROFILE%/.dos9/hlp
 
 :: Cd to the appropriate directory
 if not exist !hlp_base_dir! MKDIR !hlp_base_dir!
@@ -97,10 +98,9 @@ ECHO  2] Creating subdirectories.
 
 :: create static directory
 for %%A in (
-doc
-doc/ansi
-doc/html
-doc/txt
+ansi
+html
+txt
 ) do (
 
 	IF not exist %%A (
@@ -111,55 +111,56 @@ doc/txt
 
 :: browse the directory and make subirectories that
 :: are not existing.
-FOR /F "tokens=*" %%A in ('dir /b /s /a:d man/%lang_build%') do (
+FOR /F "tokens=*" %%A in ('cd %hlp_data_dir%/%lang_build%
+dir /b /s /a:d') do (
 	
-	SET path_build=%%~dpnA
+	ECHO Replicating %%A
 	
-	SET path_ansi_build=!path_build:man/%lang_build%=doc/ansi!
-	SET path_html_build=!path_build:man/%lang_build%=doc/html!
-	SET path_txt_build=!path_build:man/%lang_build%=doc/txt!
+	SET path_ansi=ansi/%%A
+	SET path_html=html/%%A
+	SET path_txt=txt/%%A
 	
-	IF not exist !path_ansi_build! mkdir !path_ansi_build!
-	IF not exist !path_html_build! mkdir !path_html_build!
-	IF not exist !path_txt_build! mkdir !path_txt_build!
+	IF not exist !path_ansi! mkdir !path_ansi!
+	IF not exist !path_html! mkdir !path_html!
+	IF not exist !path_txt! mkdir !path_txt!
 	
 )
 
 ECHO.
 ECHO. 3] Produce the output :
 :: browse the directory and use tea to produce the output.
-FOR /F "tokens=*" %%A in ('dir /b /s /a:-d man/%lang_build%') do (
+FOR /F "tokens=*" %%A in ('cd %hlp_data_dir%/%lang_build%
+dir /b /s /a:-d') do (
+
 	
-	SET path_build=%%~dpnA
+	ECHO    [*] Building "%%~pnA" :
 	
-	ECHO    [*] Building from "%%A" "!path_build!" :
+	SET ansi_build=ansi/%%~pnA.ansi
+	SET html_build=html/%%~pnA.html
+	SET txt_build=txt/%%~pnA.txt
 	
-	SET path_ansi_build=!path_build:man/%lang_build%=doc/ansi!.ansi
-	SET path_html_build=!path_build:man/%lang_build%=doc/html!.html
-	SET path_txt_build=!path_build:man/%lang_build%=doc/txt!.txt
+	ECHO      - file : !txt_build! 
+	tea %hlp_data_dir%/%lang_build%/%%A !txt_build!.tmp /E:UTF-8 /O:TEXT-PLAIN
 	
-	ECHO      - file : !path_txt_build! 
-	tea %%A !path_txt_build!.tmp /E:UTF-8 /O:TEXT-PLAIN
+	ECHO      - file : !ansi_build!
+	tea %hlp_data_dir%/%lang_build%/%%A !ansi_build!.tmp /E:UTF-8 /O:TEXT-ANSI 
 	
-	ECHO      - file : !path_ansi_build!
-	tea %%A !path_ansi_build!.tmp /E:UTF-8 /O:TEXT-ANSI 
-	
-	ECHO      - file : !path_html_build!
-    	tea %%A !path_html_build! /E:UTF-8 /O:html /T "The Dos9 Project :: "
+	ECHO      - file : !html_build!
+    tea %hlp_data_dir%/%lang_build%/%%A !html_build! /E:UTF-8 /O:html /T "The Dos9 Project :: "
 	
 	ECHO      - converting output from UTF-8 to %charset_build%	
 	:: just convert .ansi file, it is not needed for html document
 	:: which were generated using tea, that means to change encoding
 	:: and tag <meta charset="utf-8" />
-	iconv -f UTF-8 -t %charset_build% !path_ansi_build!.tmp > !path_ansi_build!
-	iconv -f UTF-8 -t %charset_build% !path_txt_build!.tmp > !path_txt_build!
+	iconv -f UTF-8 -t %charset_build% !ansi_build!.tmp > !ansi_build!
+	iconv -f UTF-8 -t %charset_build% !txt_build!.tmp > !txt_build!
 
 )
 
 :: Now, create the hlpdb file
 ECHO.
 ECHO.4] Create title search system
-FOR /F "tokens=*" %%A in ('dir /b /s /a:-D doc/txt/*.txt') do (
+FOR /F "tokens=*" %%A in ('dir /b /s /a:-D txt/*.txt') do (
 	SET /p title= < "%%A" > NUL
 	ECHO !title!%%A
 ) > hlpdb
@@ -180,7 +181,7 @@ if not exist hlpdb (
 
 if "%~1" equ "" (
 	
-	if exist doc/txt/commands.txt (
+	if exist txt/commands.txt (
 		
 		%view_cmd% doc/%mode%/commands.%mode%
 		exit /b 0
@@ -276,9 +277,9 @@ ECHO.
 ECHO    The locale option determines the language you want to use for manual pages.
 ECHO The following list of locales is available : 
 ECHO.
-cd man
+cd %hlp_data_dir%
 dir /b /A:D
-cd ..
+cd %hlp_base_dir%
 ECHO.
 :locale_retry
 set /p conf_locale=Please choose a locale : 
@@ -289,7 +290,7 @@ if not defined conf_locale (
 	set conf_locale=en_US
    )
 )
-if not exist man/!conf_locale! goto :locale_retry
+if not exist %hlp_data_dir%/!conf_locale! goto :locale_retry
 
 ECHO. 3] Chose charset :
 ECHO.

@@ -58,6 +58,7 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
        Note that by using break, the user admits some part of memory leakage...
        */
     if (setjmp(jbBreak));
+
 	#ifndef WIN32
     	action.sa_handler=Dos9_SigHandlerBreak;
     	action.sa_flags=SA_NODEFER;
@@ -290,7 +291,7 @@ loop:
         && lppsStream->lppsNode->cNodeType == PARSED_STREAM_NODE_PIPE) {
 
         /* We're under Unix-like OS, fork, fork, fork, fork,
-           so fucking convienient isn't it ? */
+           so fucking convenient isn't it ? */
         if (pipe(pipedes) == -1)
             Dos9_ShowErrorMessage(DOS9_CREATE_PIPE | DOS9_PRINT_C_ERROR,
                                     __FILE__ "/Dos9_ExecOperators()",
@@ -700,7 +701,7 @@ error:
 
 int Dos9_RunExternalFile(char* lpFileName, char** lpArguments)
 {
-	int res;
+	int res,i = 0;
 	char str[FILENAME_MAX+2],
 		 *tmp;
 	errno=0;
@@ -920,8 +921,8 @@ BOOL WINAPI Dos9_SigHandler(DWORD dwCtrlType)
 	switch(dwCtrlType) {
 		case CTRL_C_EVENT:
 		case CTRL_BREAK_EVENT:;
+            Printf("Not implemeted yet ...");
 
-        printf("Ctrl-C caught");
 	}
 
 	return TRUE;

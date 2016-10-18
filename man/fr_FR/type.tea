@@ -32,11 +32,17 @@ ${TYPE [fichier ...]}
 		ne correspond pas à un fichier sur le disque, la commande
 		n'affiche rien et retourne une erreur. Si le chemin correspond
 		à des dossiers, alors ces dossiers ne seront pas affichés.
+		
+		@- Si aucun fichier n'est spécifié, la commande {TYPE} ne retourne
+		pas d'erreur (contrairement à cmd.exe) et lit le fichier sur
+		l'entrée standard.
 
 	Contrairement, à l'implémentation de {cmd.exe}, l'affichage des noms de
  	fichiers n'a lieu que si plusieurs fichiers sont à afficher (cmd.exe
 	affiche aussi les noms de fichiers si il n'y a qu'un seul fichier mais
-	que le chemin donné contient des caractères génériques.
+	que le chemin donné contient des caractères génériques). Les noms de
+	fichiers sont affichés sur la sortie d'erreur, ce qui permet de les
+	séparer du contenu des fichiers grâce à des redirections.
 
 	L'affichage de fichiers binaires a un résultat inderterminé. Pour
 	visualiser le contenu de tels fichiers, il est préférable d'utiliser

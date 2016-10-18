@@ -198,7 +198,7 @@ char* Dos9_GetParameters(char** argv, char** lpFileName, int* bExitAfterCmd, int
 {
     int i, c, j, bGetSwitch = 1;
     char* lpCmdCSwitch = NULL;
-    
+
     if (!argv[0])
         Dos9_ShowErrorMessage(DOS9_BAD_COMMAND_LINE, "Dos9", -1);
 
@@ -209,7 +209,7 @@ char* Dos9_GetParameters(char** argv, char** lpFileName, int* bExitAfterCmd, int
         DOS9_DBG("* Got \"%s\" as argument...\n", argv[i]);
 
         if (*argv[i]=='/' && bGetSwitch) {
-            
+
             argv[i]++;
 
             switch(toupper(*argv[i])) {
@@ -228,7 +228,7 @@ char* Dos9_GetParameters(char** argv, char** lpFileName, int* bExitAfterCmd, int
                     break;
 
                 case 'O':
-                    if (!argv[++i]) 
+                    if (!argv[++i])
                         Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "Dos9", -1);
 
                     iOutputD=atoi(argv[i]); // select input descriptor
@@ -322,46 +322,20 @@ void Dos9_InitConsoleTitles(char *lpFileName, int bQuiet)
     }
 }
 
-void Dos9_GetAutoBatPaths(char* local, char* system, size_t size)
-{
-#ifdef WIN32
-    /* On Windows systems, the paths for Dos9_Auto.bat are either :
-     *      a) local : $USERPROFILE/.dos9/Dos9_Auto.bat
-     *      b) global : $DOS9_PATH/Dos9_Auto.bat 
-     * Of course, local file has precedence over global file */
-    
-    snprintf(local, size, "%s/.dos9/Dos9_Auto.bat", getenv("USERPROFILE"));
-    snprintf(system, size,"%s/Dos9_Auto.bat", Dos9_GetEnv(lpeEnv, "DOS9_PATH"));
-
-#else
-    /* On *Nixes systems, the paths for Dos9_Auto.bat are either :
-     *      a) local : $HOME/.dos9/Dos9_Auto.bat
-     *      b) global : $DOS9_PATH/Dos9_Auto.bat 
-     * Of course, local file has precedence over global file */
-    
-    snprintf(local, size, "%s/.dos9/Dos9_Auto.bat", getenv("HOME"));
-    snprintf(system, size,"%s/Dos9_Auto.bat", Dos9_GetEnv(lpeEnv, "DOS9_PATH"));
-
-#endif
-}
-
 void Dos9_RunAutoBat(void)
 {
-    char system[FILENAME_MAX],
-         local[FILENAME_MAX],
-         *files[] = {local, system, NULL},
-         *autofile;
-    
-    Dos9_GetAutoBatPaths(local, system, sizeof(local));
-    
+    char system[FILENAME_MAX];
+
+    snprintf(system, sizeof(system),"%s/Dos9_Auto.bat", Dos9_GetEnv(lpeEnv, "DOS9_PATH"));
+
     /* If neither files exist, just don't run any auto configuration file */
-    if ((autofile = Dos9_GetFirstExistingFile(files)) == NULL) 
+    if (!Dos9_FileExists(system))
         return;
 
-    strcpy(ifIn.lpFileName, autofile);
+    strcpy(ifIn.lpFileName, system);
     ifIn.iPos = 0;
     ifIn.bEof = 0;
 
     /* Run the auto configuration file */
-    Dos9_RunBatch(&ifIn);   
+    Dos9_RunBatch(&ifIn);
 }

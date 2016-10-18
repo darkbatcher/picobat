@@ -49,9 +49,13 @@
 
 */
 
-/* FIXME : Make TYPE understand joker lines. ie type *.txt
-   should print all text files in the current directory
- */
+void Dos9_TypeFileF(FILE* pFile)
+{
+    char buf[1024];
+
+    while (fgets(buf, sizeof(buf), pFile))
+        printf("%s", buf);
+}
 
 void Dos9_TypeFile(char* lpFileName)
 {
@@ -123,6 +127,11 @@ int Dos9_CmdType(char* lpLine)
 
     }
 
+    if (pTmp == NULL) {
+        /* If the command has no parameter */
+        Dos9_TypeFileF(stdin);
+    }
+
     /* split directories from input */
     Dos9_AttributesSplitFileList(DOS9_ATTR_NO_DIR,
                                     pBegin,
@@ -162,7 +171,7 @@ int Dos9_CmdType(char* lpLine)
 
         while (pTmp) {
 
-            printf("---------- %s\n", pTmp->lpFileName);
+            fprintf(stderr, "---------- %s\n", pTmp->lpFileName);
             Dos9_TypeFile(pTmp->lpFileName);
 
             pTmp = pTmp->lpflNext;
