@@ -43,3 +43,4 @@ libmatheval/lib/Makefile.in
 libmatheval/libmatheval.pc
 libmatheval/tests/Makefile.in
 tea/Makefile.in
+po/pot
