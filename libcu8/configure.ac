@@ -31,8 +31,8 @@ AC_INIT([libcu8],
 	[http://www.dos9.org/])
 
 AC_PREREQ([2.59])
-AC_CONFIG_AUX_DIR([config])
-AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_AUX_DIR([../config])
+AC_CONFIG_MACRO_DIR([../m4])
 
 AC_CANONICAL_HOST
 AC_CANONICAL_BUILD

@@ -120,8 +120,12 @@ if test "x$enable_libcu8" != xno; then
 	   AC_DEFINE([DOS9_USE_LIBCU8], [1], [Define to 1 if you want to enable libcu8])
 	   AC_SUBST([libcu8], [libcu8])
 	   AC_SUBST([libcu8_lib], [$\(top_srcdir\)/libcu8/src/libcu8.la])
-	   AC_SUBST([libcu8_inc], [$\(top_srcdir\)/libcu8/include])
+	   AC_SUBST([libcu8_inc], [-I$\(top_srcdir\)/libcu8/include])
 	   AC_CONFIG_SUBDIRS([libcu8])
+else
+       AC_SUBST([libcu8_lib],[ ])
+	   AC_SUBST([libcu8_inc],[ ])
+	   AC_SUBST([libcu8],[ ])
 fi
 
 AC_CONFIG_SUBDIRS([libmatheval])

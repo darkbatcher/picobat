@@ -67,4 +67,4 @@ $(top_builddir)/libmatheval/lib/libmatheval.la $(top_builddir)/libDos9/libDos9.l
 @libcu8_lib@
 
 AM_CFLAGS = -I$(top_srcdir)/libinteval -I$(top_srcdir)/libmatheval/lib \
--I$(top_srcdir)/libDos9 -I@libcu8_inc@ @CFLAGS@
+-I$(top_srcdir)/libDos9 @libcu8_inc@ @CFLAGS@
