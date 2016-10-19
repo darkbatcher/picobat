@@ -242,7 +242,7 @@ msgid ""
 "version of Dos9.\n"
 msgstr ""
 "Erreur : Impossible d'activer l'option \"%s\" qui est compilée à "
-"l'intérieurde Dos9.\n"
+"l'intérieur de Dos9.\n"
 
 #: ../dos9/errors/Dos9_Errors.c:204
 #, c-format

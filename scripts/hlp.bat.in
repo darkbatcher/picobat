@@ -37,7 +37,7 @@ if /i "%~1" equ "/c" goto :config
 if /i "%~1" neq "/?" goto :show
 :: if nothing has been selected, goto show
 
-ECHO Hlp - Manual page viewier Copyright ^(C^) 2013-2016 Romain Garbi ^(Darkbatcher^)
+ECHO Hlp 1.0 - Manual page viewier Copyright ^(C^) 2013-2016 Romain Garbi ^(Darkbatcher^)
 ECHO This program comes with ABSOLUTELY NO WARRANTY; This is free software,
 ECHO and you are welcome to redistribute it under the terms of the GNU CPL.
 ECHO.
@@ -58,12 +58,12 @@ ECHO.
 ECHO     - /c : configures option for the manual page maker.
 ECHO.
 ECHO     - /d : download the manual package from the repository at
-ECHO       ^<http://www.dos9.org^>.     
+ECHO       ^<http://www.dos9.org^>. [not functional yet]    
 
 GOTO:EOF
 
 :build
-ECHO Hlp - Manual page viewier Copyright ^(C^) 2013-2015 Romain Garbi ^(Darkbatcher^)
+ECHO Hlp 1.0 - Manual page viewier Copyright ^(C^) 2013-2016 Romain Garbi ^(Darkbatcher^)
 ECHO This program comes with ABSOLUTELY NO WARRANTY; This is free software,
 ECHO and you are welcome to redistribute it under the terms of the GNU CPL.
 ECHO.

@@ -1,0 +1,59 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2016  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+{{Initialisation de Dos9 (Dos9_Auto.bat)}}
+
+	L'initialisation de {dos9|Dos9} a lieux par l'intermédiaire d'un fichier
+	de commande le nom de {Dos9_Auto.bat}. Celui ci se charge d'initialiser
+	certaines variables et d'appeler les scripts définis utilisateurs.
+
+{{Synopsis}}
+
+${%DOS9_PATH%/Dos9_Auto.bat}
+
+	Ce fichier n'est pas destiné à être modifié directement, il se charge
+	d'appeler des scripts définis par l'utilisateur. Il peut néanmoins être
+	utile de le modifier pour certaines configurations très spécifiques, dans
+	ce cas, veillez à ne pas ne pas faire n'importe quoi avec les variables
+	définies dans ce fichier, puisqu'elles affectent le fonctionnement de
+	nombreux scripts.
+
+	En général, le fichier {Dos9_Auto.bat} se charge de l'initialisation
+	{dos9|des variables spécifiques à dos9}, en tout cas, celles qui ne
+	sont pas dynamiques.
+	
+	Enfin, {Dos9_Auto.bat} se charge aussi d'appeler deux scripts
+	d'initialisation définis pas l'utilisateur. ces deux scripts sont:
+	
+	- {%USERPROFILE%/.dos9/Dos9_Auto.bat} : Fichier propre à l'utilisateur.
+	
+	- {%DOS9_ETC%/Dos9_Auto.bat} : Fichier propre au système.
+
+	Il est possible d'utiliser absolument n'importe quelle commande de
+	{Dos9} dans chancun de ces trois fichiers.
+	
+{{Compatibilité}}
+
+	Non-compatible avec {cmd.exe}, le mécanisme d'initialisation est totalement
+	différent.
+
+	Disponible depuis la version {0.7}.
+
+{{A voir aussi}}
+
+	{spec/var|Les variables d'environement}, {spec/index|Index des spécifications}

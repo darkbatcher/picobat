@@ -295,6 +295,8 @@ msgid ""
 "Set Console codepage or encoding.\n"
 "Usage: CHCP [ codepage | encoding]\n"
 msgstr ""
+"Modifie l'encodage ou la page de code de la console de la console\n"
+"Usage: CHCP [ page_code | encodage]\n"
 
 #: ../dos9/lang/Dos9_ShowHelp.c:198
 msgid ""
