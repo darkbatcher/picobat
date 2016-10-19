@@ -745,6 +745,317 @@
 </li><li><p> Added a functionnal <strong>/Q</strong> switch to the <strong>RMDIR</strong> command. However, it is supposed to deal with the <strong>/S</strong> switch, which is not functional yet.</p>
 
 </li></ul>
+<<<<<<< HEAD
+=======
+<h2>Thursday 19th, June</h2>
+
+<ul><li>
+<p> I eventually decided to use the GNU toolchain to compile <strong>Dos9</strong>. I previously expressed lots of criticism toward use of autotools, but libtool (which is par of the GNU toolchain) is unfortunately the only program that allows devellopers to deal with libraries (staticly or dynamically linked) in a platform independent way. This is the best solution I have, but if a newer build systems that enables to make such things emerged, I'd be glad to move to it.</p>
+
+</li><li><p> Changed some source file name because <strong>automake</strong> was complaining about overlapping objects file names. Some of the name are more logical, but, some are not really.</p>
+
+</li></ul>
+<h2>Tuesday 24th, June</h2>
+
+<ul><li>
+<p> Corrected a bug that prevented local variable (eg. like <strong>%1</strong>) to be used as argument with the <strong>call</strong> command, thanks to Jo15 from <a href="http://batch.xoo.it">batch.xoo.it</a> who reported the error.</p>
+
+</li><li><p> Added <strong>local</strong> target to <strong>Makefile</strong> that generates a local installation of <strong>Dos9</strong> inside the folder <strong>./bin</strong>. It is as simple as typing</p>
+
+<code>make local</code>
+
+</li><li><p> Added macros from the <strong>gnu gettext</strong> package. Also enabled the use of the --disable-nls switch for configure.</p>
+
+</li></ul>
+<h2>Friday 29th, August</h2>
+
+<p>This is the first time I write something in this file for a long time now. I've been hacking around Dos9 for a little time now (haaa, holidays). This is a list of improovements I made during from 24th June to today.</p>
+
+<ul><li>
+<p> Changed behaviour of parameter handling routines, valid delimiter are now ",; " and tab. The way doubles quotes are handled changed either. An quoted expression may be constituted of an arbitrary long string that conforms to the following rules :</p>
+
+<ul><li>
+<p> Any delimiter is ignored if it is surrounded by double quotes.</p>
+
+</li><li><p> If double quote, is directly preceded or followed by an string characters that are not delimiter, this string is part of the parameter.</p>
+
+</li><li><p> And so on and so forth, until we reach unquoted delimiters on both sides of the parameter.</p>
+
+</li></ul>
+<p>Moreover, the quotes are removed if their position conform to the following rules :</p>
+
+<ul><li>
+<p> If a parameter begins with a double quote it will be removed.</p>
+
+</li><li><p> If a parameter ends with a double quote and begin with a double quote, both are remooved.</p>
+
+</li><li><p> Else, keep the line like this.</p>
+
+</li></ul>
+</li><li><p> Fixed some autotools options, that where never mentionned under mingw system.</p>
+
+</li><li><p> Fixed incompatibilities with the IF command. Now, the <strong>IF</strong> command returns errors on case of string used as operators for <strong>GEQ</strong>, <strong>GTR</strong> <strong>LSS</strong>, <strong>LEQ</strong> comparants. Moreover, the interpretor is able to handle both hexadecimal, decimal and octal bases. Finally, implemented comparants for floats (same as integer comparants but prefixed with f), as a <strong>Dos9</strong> extension.</p>
+
+</li><li><p> Fixed issues of compatibity for the SET command. It is mainly a matter of quotation marks handling, and typically, the issues for both SET /p and SET are fixed, while little issue (not for simple /a assignments of course) still exist for the SET /a command.</p>
+
+</li><li><p> Some fixes for the FOR command, now enabling the use of the three numeric bases for all the parameters and preventing overflows in FOR /l loops.</p>
+
+</li><li><p> Modified the FOR command in order to accept filename sets to be given as input for the FOR /F command. This puts more sense on the "usebackq" option.</p>
+
+</li><li><p> Added a custom environment within <strong>Dos9</strong> in order to instaure cross-platform syntax capabilities like use of "=" in variable names (which is impossible on many systems), to set "=x:" variables for CD command.</p>
+
+</li><li><p> Corrected a bug with SET command, wich displayed system environment while it was suposed to display <strong>Dos9</strong> custom environment.</p>
+
+</li><li><p> Corrected a bug that prevented the FOR command from getting command input under any *nix OS (don't know the actual reason for this, but I reimplemented the code using the *nix call fork(), which is, frankly, much more conviennient than tricky systems to comunicate between process under windows). The command redirection now works pretty well on any *nix system.</p>
+
+</li><li><p> Added a Windows specific new CD command, to be compatible with Windows <strong>cmd.exe</strong> features. The primitive version of CD is still shipped for *nix operating systems (concept of disk is a huge non-sense under Unix-like operating systems, because they represent filesystems like a binariy tree which root is "/", and on which filesystems and devices are mounted as directories).</p>
+
+</li><li><p> Fixed a bug, that always caused wrong pid to be awaited if the process was forked on time through FOR /F command (with a command input) under *nix operating systems, resulting in a mess between commands and commands outputs.</p>
+
+</li><li><p> Implemented new functions within libDos9 in order to quickly sort files matching to some attributes and file not matching in a single function call.</p>
+
+</li><li><p> Re-implemented the TYPE command to get a command compatible with <strong>cmd.exe</strong> equivalent. The result is very closely compatible execpt for on case of name printing.</p>
+
+</li><li><p> Implemented FIND command as an internal command. It matches closely cmd.exe behaviour, except for some inconsistencies I've tried to address (limited line length, etc).</p>
+
+</li><li><p> Implemented the %* variable, that have been lacking in the Dos9 implementation for a very long time (special var are implemented at least since 2013). However, there is still little concerns, for example, on Unix-like operating system it is impossible to retrieve the original command line (arguments are passed separated to the kernel). Thus, the <a href="dos9.html">Dos9</a> tries to construct the line back the best it can, by putting spaces between the arguments. This is only an issue at startup, though, with call, it may not be a problem.</p>
+
+</li><li><p> Changed the version number to <strong>2014.0.9b</strong>, I think the interpretor may be mature enough to think of a real release in a close time.</p>
+
+</li></ul>
+<h2>Wednesday 3rd, September</h2>
+
+<ul><li>
+<p> Implemented a new pipe system for Unix-like operating systems (that may have broken the good-old WINDOWS implementation, haven't checked yet). It uses full power of fork() system call and do not suffer from output truncation due to size of kernel's pipe buffer. Also, both command are now parralelized, gaining significant execution time in comparison to older system. This pipe system does not apply to WINDOWS operating system, which will benefit from a new pipe system in little delays.</p>
+
+</li><li><p> Removed padding of arguments with <strong>"</strong> for external commands, on Unix-like operating systems. Indeed, padding <strong>"</strong> around arguments often cause command to fail (precisely, make the command not work the way you are intending to).</p>
+
+</li><li><p> Fixed a little issue with the autotools suite. In some Unix-like systems, the host triplet was not reported to program. That does not matter a lot, anyway.</p>
+
+</li><li><p> Definitely set libDos9 as static by defaut. It is indeed much more convenient (no installation needeed on Unix-like operating systems). Some may object that it results in bigger executables. But most of time, size is not really relevant, and it save setting library search path anyway, thus enabling dos9 to be embedded in the a memory stick for example (And yeah, size ain't too relevant, because memory stick often have size of few GBs). Furthermore, static linking allows compiler to perform further optimisations, that can't be done with dynamic linking.</p>
+
+</li><li><p> Fixed some bugs with the SET command that did not use the custom environment every time, causing the command to fail.</p>
+
+</li><li><p> Adapted the hlp.bat script to make it work on Unix-like operating systems. The new scripts also uses the shift command intensively.</p>
+
+</li><li><p> Fixed some bugs in translations. Removed the en_US local which is almost stupid.</p>
+
+</li></ul>
+<h2>Wednesday 24th, September</h2>
+
+<ul><li>
+<p> Implemented the <strong>MORE</strong> command as an internal command (why create external executables when it is so simple to add little commands to the interpretor ?). It includes almost every <strong>cmd.exe</strong> features, except the formfeed expanding features (never seen it used though). However, if you build <strong>Dos9</strong> with the option <strong>--disable-console</strong>, you should still encounter minor bugs, due to the lack of console capabilities. Finally, I thought about replacing <strong>MORE</strong> with <strong>TYPE</strong> when building with <strong>--disable-console</strong>, but it would be obviously sad not to benefit from this far better and new command.</p>
+
+</li><li><p> Implemented a special stream translation system (for streams like <strong>NUL</strong>, <strong>CON</strong>, and so on and so forth), to get Unix name of their counterparts. I did not implemented the translation for all streams I know, though, but it won't be to annoying to be added.</p>
+
+</li><li><p> Corrected a few bugs for Unix-like systems.</p>
+
+</li></ul>
+<h2>Tuesday 2nd, December</h2>
+
+<ul><li>
+<p> Corrected a bug within the <strong>IF</strong> command that prevented <strong>ELSE IF</strong> combination to be executed correctly. This was actually caused by a failure to match parenthesis the right way. It was basically making only the first line of the if block to be executed. Now the bug is solved and the result is fully functionnal.</p>
+
+</li><li><p> Added two features within the <strong>MORE</strong> command that enable it to accept both UTF-8 encoded text and ansi escape codes to be mixed with text.</p>
+
+</li></ul>
+<h2>Thursday 6th, January 2015</h2>
+
+<ul><li>
+<p> Did some final arrengments that make <strong>Dos9</strong> ready to realease on the GNU/Linux platforms. There is some work left for make it run under Microsoft Windows platforms.</p>
+
+</li><li><p> Fixed a little bug of the <strong>More</strong> command under Microsoft windows. MS-Windows does not return line-feed characters using getch() function but returns untranslated carriot return (0x0D). This subtilities was not taken account by the <strong>More</strong> command, so that the enter was inactive.</p>
+
+</li><li><p> Changed the way <strong>Dos9</strong> command line works; Now it's possible to use widespread switches like '/C' or '/K'. The way to tell the interpreter which option should be enabled and which should not through the command line has also changed.</p>
+
+</li><li><p> Fixed minor issues due to the previous behaviour change of Dos9_GetExePath() that affected both <strong>FOR</strong> command and Dos9_RunExternalBatch() function.</p>
+
+</li><li><p> Fixed the broken pipe system introduced by the change of pipe system on GNU/Linux (and most of *nices). This is not fully tested though. But the new way of handling pipes permits infinite length for both input and output of commands. </p>
+
+</li></ul>
+<h2>Tuesday 13th, January 2015</h2>
+
+<ul><li>
+<p> Fixed an minor issue in the <strong>Dos9_SetEnv</strong> function that caused some rare bugs that made <strong>SET</strong> command to raise a segfault if it was invoked to remove a variable from the environment. It wasn't that frequent because usualy, variable removal didn't worked, due to another bug. This is now fixed.</p>
+
+</li><li><p> Added the <strong>START</strong> command on Windows, That works pretty well, even if some parameters seem to be ignored by windows, such as <strong>/Wait</strong>. The command have few option compared to cmd's version, but, it's a good start point anyway.</p>
+
+</li><li><p> Changed the version number to 214.1b, that mean, it's the beta of the first stable version which is expected to be released within a short time.</p>
+
+</li></ul>
+<h2>Tuesday 21rd, April</h2>
+
+<ul><li>
+<p> Fixed a minor issue in the error system for the <strong>IF</strong> command, the command used to exit the interpretor uppon minor error.</p>
+
+</li><li><p> Added number of new command to deal with files. Among this command, we have <strong>MOVE</strong>, <strong>COPY</strong>, <strong>DEL</strong>, <strong>MD</strong>, <strong>RD</strong> and some others.</p>
+
+</li><li><p> Changed the ESTR syntax. I think it is actually easier to access the string by using a -&gt; rather than an obscure macro. Moreover, it renders the code more simple, it add less symbols.</p>
+
+</li><li><p> Continued french translation.</p>
+
+</li><li><p> New and reviewed man pages. Some manual pages were clearly outdated as some had more than two years although the command changed. To clear this out, man page content as been revised to be more relevant.</p>
+
+</li><li><p> Added a brand new Dos9 extension to the <strong>IF</strong> command. I found pretty anoying that cmd (and thus Dos9) lacked support for multiple conditions for a single if (e.g. logical expressions). Obviously this could have been done previously by using the <strong>SET</strong> command to evaluate an expression but this was time- and code-wasting. The interpretor currently supports only <strong>or</strong> and <strong>and</strong> logical connectors. These are widely sufficient for most cases, except some rare cases that requires you to have <strong>xor</strong> either. This is not a big concern, it is just about writing a few more code.</p>
+
+<p>The syntax is pretty simple, but must include blanks around brackets:</p>
+
+<ul><li>
+<p> <strong>expression</strong> or <strong>expression</strong> : True if one of the two expressions (at least) is true.</p>
+
+</li><li><p> <strong>expression</strong> and <strong>expression</strong> : True if both expressions are true.</p>
+
+</li><li><p> [ expression ] : Denotes a higher precedence.</p>
+
+</li></ul>
+<p>As you can see, the syntax is clear but efficient. You can use test that are provided by the <strong>IF</strong> command : </p>
+
+<ul><li>
+<p> <strong>not</strong></p>
+
+</li><li><p> <strong>defined</strong>, <strong>errorlevel</strong>, <strong>exist</strong></p>
+
+</li><li><p> <strong>equ</strong>, <strong>neq</strong>, <strong>leq</strong>, <strong>geq</strong>, <strong>lss</strong>, <strong>gtr</strong> and derivatives</p>
+
+</li></ul>
+<p>Note that the <strong>IF</strong> command only interpret expressions as such if they are surrounded by brackets, like in this example :</p>
+
+<code>if [ a equ b ] echo no, seriously ?</code>
+
+</li></ul>
+<h2>Sunday 10th, May</h2>
+
+<ul><li>
+<p> Some fixes for windows, specially for the CTRL+C handling routines.</p>
+
+</li></ul>
+<h2>Friday 24th, April</h2>
+
+<ul><li>
+<p> Fixed a few remaining bugs in the implementation of if extended expression. As a example, in some case, an <strong>or</strong> used to be computed as an <strong>and</strong>. These issues are now fixed and the command great.</p>
+
+</li><li><p> Merged tests of the <strong>If</strong> command. In fact, some test were duplicated in different sources, but for maintenability reason, it try to give up with the copy and past approach.</p>
+
+</li><li><p> Corrected an issue of the <strong>TEA</strong> text processor. When poducing html output, <strong>TEA</strong> often failed to recognize path that refer to actual other <strong>TEA</strong> based pages and others files. One of the typical issue was that TEA sometimes appended ".html" to URIs (that already contained an ".html" anyway). Now, <strong>TEA</strong> also check for protocol prefixes in order to chose wether a ".html" suffix should be appended. Recognised protocols are :</p>
+
+<ul><li>
+<p> <strong>http://</strong></p>
+
+</li><li><p> <strong>https://</strong></p>
+
+</li><li><p> <strong>mail://</strong></p>
+
+</li></ul>
+</li></ul>
+<h2>Thursday 7th, May</h2>
+
+<ul><li>
+<p> Fixed lots of man pages for the Dos9 project. Also fixed some little bugs in the TEA text processor, dealing with some sort of <strong>\</strong> that where mishandled in previous patches.</p>
+
+</li><li><p> Changed regexp implementation after discovery of some bugs (eg "test" was not matching "*e*s*"). The new implementation is less faulty and clearer to use.</p>
+
+</li><li><p> Added a new <strong>/e</strong> switch to the <strong>FIND</strong> command (to produce somewhat similar to UNIX's well known <strong>grep -e</strong> command). It enables use of joker expressions on patterns. With this option <strong>FIND</strong> checks that the entire line matches the expression.</p>
+
+</li></ul>
+<h2>Thursday 2nd, June</h2>
+
+<ul><li>
+<p> Corrected some issues compatibility issue with the newest MinGW version that now defines <strong>_POSIX_C_SOURCE</strong>.</p>
+
+</li><li><p> Fixed a bug with the start command. Apparently, the ShellExecuteEx function does care wether or not the filenames passed to it contains forward slashes instead of backslashes.</p>
+
+</li><li><p> Added some little info message to the <strong>SET</strong> command in order to print the result of the expression when using <strong>/A</strong> slash.</p>
+
+</li></ul>
+<h2>Thursday 10th, June</h2>
+
+<ul><li>
+<p> Added a wrapper to the <strong>MORE</strong> command to make it display utf-8 text the way it is intended to. Indeed <strong>windows</strong> does not implement implement the fputc() function as specified by the standard and considers that it receive character instead of bytes.</p>
+
+</li><li><p> Fixed a bug of the <strong>MORE</strong> command that caused miscomputation of utf-8 characters number.</p>
+
+</li></ul>
+<h2>Wednesday 13th, Junuary, 2016</h2>
+
+<ul><li>
+<p> Added support of libcu8, a library designed to handle utf-8 efficiently with msvcrt in windows. This is part of a large ongoing effort that attempts to make Dos9 more internationalizable. To do so, We had to kind short-circuit msvcrt with brand this brand new library. Although still experimental, this works quite great.</p>
+
+</li><li><p> Added new CHCP command to handle efficiently the new libcu8 library.</p>
+
+</li></ul>
+<h2>Monday, 25th, Junuary</h2>
+
+<ul><li>
+<p> Changed version of Dos9 to emphasize the important changes of Dos9 since new year 2016.</p>
+
+</li><li><p> Added functions to restrict fd inheritance, to make sure the appropriate fds are closed on exec. It is basically usefull for FOR commands.</p>
+
+</li><li><p> Hugely modified the libcu8 to fit with libDos9. It is still an experimental, though, but it works way better now.</p>
+
+</li><li><p> Added some new behaviours in file expansion. Now, it is legal to specify negative offsets during variable expansion. Quickly, negative offsets refers to the absolute value of the offset, counted from the end of the variable. For instance, this is now allowed :</p>
+
+<code>%var:~-2,-1%</code>
+
+</li></ul>
+<h2>Thursday, 28th, Junuary</h2>
+
+<ul><li>
+<p> Added an option that allow using switch catened with commands, such as</p>
+
+<code>set/p var=question</code>
+
+</li><li><p> Fixed and modified hugely the dump command so that it is way more portable.</p>
+
+</li></ul>
+<h2>Sunday, 7th, February</h2>
+
+<ul><li>
+<p> Fixed some bugs with the FOR command.</p>
+
+</li><li><p> Fixed some bugs in redirections.</p>
+
+</li><li><p> Fixed littles bugs in libcu8.</p>
+
+</li></ul>
+<h2>Thursday 18th, February</h2>
+
+<ul><li>
+<p> Added the '=' operator for the SET command. The operator do behave a little bit differently from cmd.exe's SET, but it is convinient too. For the moment, libmatheval only supports explicit number anyway.</p>
+
+</li></ul>
+<h2>Monday 16th, April</h2>
+
+<ul><li>
+<p> Modified the initialization procedure of Dos9. Dos9 can now handle two different startup files:</p>
+
+<ul><li>
+<p> <strong>$HOME/.dos9/Dos9_Auto.bat</strong> : user-specific startup file</p>
+
+</li><li><p> <strong>$DOS9_PATH/Dos9_Auto.bat</strong> : system-wide startup file</p>
+
+</li></ul>
+</li><li><p> Fixed some bugs with <strong>SET</strong> and redirections.</p>
+
+</li><li><p> still develloping dos9ize</p>
+
+</li><li><p> Fixed errors with folders containing spaces for Dos9. </p>
+
+</li></ul>
+<h2>Friday 15th, July 2015</h2>
+
+<ul><li>
+<p> Fixed a little bug with the for command. When the field "delims=;" is specified with <strong>FOR</strong> without "eol=" being specified, then the character ";" is not used as the default end-of-line character.</p>
+
+</li></ul>
+<h2>Wednesday, 14th, September 2016</h2>
+
+<ul><li>
+<p> Added PUSHD and POPD commands</p>
+
+</li><li><p> Allow to list variable which match with a prefix </p>
+
+</li></ul>
+>>>>>>> dos9-ts-temp
 
 </body>
 </html>

@@ -53,9 +53,20 @@ dos9-install-portable:
 	done;
 	-[ -d $(prefix)/include ] && rm -R $(prefix)/include
 	-[ -d $(prefix)/pkgconfig ] && rm -R $(prefix)/pkgconfig
+<<<<<<< HEAD
 	cp README $(prefix)/
 	cp WHATSNEW $(prefix)/
 	cp COPYING $(prefix)/
+=======
+	-[ -f $(prefix)/tea ] && mv $(prefix)/tea $(prefix)/cmd/
+	-[ -f $(prefix)/dump ] && mv $(prefix)/dump $(prefix)/cmd/
+	-[ -f $(prefix)/dos9ize ] && mv $(prefix)/dos9ize $(prefix)/cmd/
+	cp README $(prefix)/
+	cp WHATSNEW $(prefix)/
+	cp COPYING $(prefix)/
+	mkdir -p $(prefix)/share/dos9/hlp
+	cp -R man/ $(prefix)/share/dos9/hlp/man/
+>>>>>>> dos9-ts-temp
 
 dist-bin : dist-bin-dir	
 	tardir=$(distbdir) && $(am__tar) | GZIP=$(GZIP_ENV) gzip -c> $(distbdir).tar.gz

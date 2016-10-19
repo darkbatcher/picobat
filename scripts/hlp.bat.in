@@ -37,6 +37,7 @@ if /i "%~1" equ "/c" goto :config
 if /i "%~1" neq "/?" goto :show
 :: if nothing has been selected, goto show
 
+
 ECHO Hlp 1.0 - Manual page viewier Copyright ^(C^) 2013-2016 Romain Garbi ^(Darkbatcher^)
 ECHO This program comes with ABSOLUTELY NO WARRANTY; This is free software,
 ECHO and you are welcome to redistribute it under the terms of the GNU CPL.
@@ -123,6 +124,7 @@ dir /b /s /a:d') do (
 	IF not exist !path_ansi! mkdir !path_ansi!
 	IF not exist !path_html! mkdir !path_html!
 	IF not exist !path_txt! mkdir !path_txt!
+
 	
 )
 
@@ -147,14 +149,13 @@ dir /b /s /a:-d') do (
 	
 	ECHO      - file : !html_build!
     tea %hlp_data_dir%/%lang_build%/%%A !html_build! /E:UTF-8 /O:html /T "The Dos9 Project :: "
-	
+
 	ECHO      - converting output from UTF-8 to %charset_build%	
 	:: just convert .ansi file, it is not needed for html document
 	:: which were generated using tea, that means to change encoding
 	:: and tag <meta charset="utf-8" />
-	iconv -f UTF-8 -t %charset_build% !ansi_build!.tmp > !ansi_build!
-	iconv -f UTF-8 -t %charset_build% !txt_build!.tmp > !txt_build!
-
+	::iconv -f UTF-8 -t %charset_build% !ansi_build!.tmp > !ansi_build!
+	::iconv -f UTF-8 -t %charset_build% !txt_build!.tmp > !txt_build!
 )
 
 :: Now, create the hlpdb file
@@ -281,6 +282,7 @@ cd %hlp_data_dir%
 dir /b /A:D
 cd %hlp_base_dir%
 ECHO.
+
 :locale_retry
 set /p conf_locale=Please choose a locale : 
 if not defined conf_locale (

@@ -179,7 +179,7 @@ int Dos9_CmdSet(char *lpLine)
 	    bFloats;
 
 	if ((lpNextToken=Dos9_GetNextParameter(lpLine+3, lpArgBuf,
-		sizeof(lpArgBuf)))) {
+		sizeof(lpArgBuf))) && strchr(lpLine+3, '=') != NULL) {
 
 		if (!stricmp(lpArg, "/?")) {
 
@@ -225,11 +225,31 @@ int Dos9_CmdSet(char *lpLine)
 
 	} else {
 
-		/* in default cases, print environment */
-		for (i=0; i < lpeEnv->index; i++)
-            printf("%s=%s\n", lpeEnv->envbuf[i]->name,
-                                    lpeEnv->envbuf[i]->content);
+		lpLine = Dos9_SkipBlanks(lpLine+3);
 
+		/* if a variable have been found,
+		   this variable varry usually
+		   when using a prefix
+		*/
+		char found = 0;
+
+		/* in default cases, print environment
+		   which match with the prefix (if defined)
+		*/
+		for (i=0; i < lpeEnv->index; i++)
+			if (strnicmp(lpeEnv->envbuf[i]->name, lpLine, strlen(lpLine)) == 0) {
+
+				found = TRUE;
+
+				/* variable valid */
+	            printf("%s=%s\n", lpeEnv->envbuf[i]->name,
+	                                    lpeEnv->envbuf[i]->content);
+			}
+
+		if (!found) {
+			Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpLine, FALSE);
+			goto error;
+		}
 	}
 
 	return 0;
@@ -661,4 +681,7 @@ int Dos9_CmdSetEvalInt(ESTR* lpExpression)
 error:
 	return -1;
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> dos9-ts-temp

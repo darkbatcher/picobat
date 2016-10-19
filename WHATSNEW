@@ -1469,10 +1469,17 @@ MONDAY 16TH, APRIL
 
         - still develloping dos9ize
 
-        - Fixed errors with folders containing spaces for Dos9. 
+        - Fixed errors with folders containing spaces for Dos9.
+
+WEDNESDAY, 14TH, SEPTEMBER 2016
+
+        - Added PUSHD and POPD commands
+
+        - Allow to list variable which match with a prefix 
 
 FRIDAY 15TH, JULY 2015
 
         - Fixed a little bug with the for command. When the field "delims=;" 
           is specified with FOR without "eol=" being specified, then the 
           character ";" is not used as the default end-of-line character. 
+

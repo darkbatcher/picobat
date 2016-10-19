@@ -170,8 +170,8 @@ int Dos9_CmdType(char* lpLine)
         pTmp = pBegin;
 
         while (pTmp) {
-
             fprintf(stderr, "---------- %s\n", pTmp->lpFileName);
+
             Dos9_TypeFile(pTmp->lpFileName);
 
             pTmp = pTmp->lpflNext;

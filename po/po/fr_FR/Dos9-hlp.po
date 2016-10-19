@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dos9 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-05 01:32+0200\n"
+"POT-Creation-Date: 2016-10-19 23:07+0200\n"
 "PO-Revision-Date: 2014-04-15 18:03+0100\n"
 "Last-Translator: DarkBatcher <darkbatcher@gmail.com>\n"
 "Language-Team: French <darkbatcher@dos9.org>\n"
@@ -299,6 +299,20 @@ msgstr ""
 "Usage: CHCP [ page_code | encodage]\n"
 
 #: ../dos9/lang/Dos9_ShowHelp.c:198
+msgid ""
+"Changes the system's current directory and store the previous folder/path "
+"for use by the POPD command.\n"
+"Usage: PUSHD [path]\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_ShowHelp.c:202
+msgid ""
+"Change directory back to the path/folder most recently stored by the PUSHD "
+"command.\n"
+"Usage: POPD\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_ShowHelp.c:206
 msgid ""
 "This help is voluntary limited help to fit in the binary. If you need to\n"
 "see the full documentation, please type:\n"

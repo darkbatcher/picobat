@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* A Bison parser, made by GNU Bison 2.4.2.  */
 
 /* Skeleton interface for Bison's Yacc-like parsers in C
@@ -5,16 +6,32 @@
       Copyright (C) 1984, 1989-1990, 2000-2006, 2009-2010 Free Software
    Foundation, Inc.
    
+=======
+/* A Bison parser, made by GNU Bison 3.0.4.  */
+
+/* Bison interface for Yacc-like parsers in C
+
+   Copyright (C) 1984, 1989-1990, 2000-2015 Free Software Foundation, Inc.
+
+>>>>>>> dos9-ts-temp
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation, either version 3 of the License, or
    (at your option) any later version.
+<<<<<<< HEAD
    
+=======
+
+>>>>>>> dos9-ts-temp
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
+<<<<<<< HEAD
    
+=======
+
+>>>>>>> dos9-ts-temp
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
@@ -27,6 +44,7 @@
    special exception, which will cause the skeleton and the resulting
    Bison output files to be licensed under the GNU General Public
    License without this special exception.
+<<<<<<< HEAD
    
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
@@ -60,6 +78,49 @@
      EGAL = 277,
      NEG = 278
    };
+=======
+
+   This special exception was added by the Free Software Foundation in
+   version 2.2 of Bison.  */
+
+#ifndef YY_INTEVAL_PARSER_H_INCLUDED
+# define YY_INTEVAL_PARSER_H_INCLUDED
+/* Debug traces.  */
+#ifndef YYDEBUG
+# define YYDEBUG 0
+#endif
+#if YYDEBUG
+extern int IntEval_debug;
+#endif
+
+/* Token type.  */
+#ifndef YYTOKENTYPE
+# define YYTOKENTYPE
+  enum yytokentype
+  {
+    NOMBRE = 258,
+    VARIABLE = 259,
+    PLUS = 260,
+    MOINS = 261,
+    FOIS = 262,
+    DIVISE = 263,
+    NON_LOG = 264,
+    NON_BAB = 265,
+    OU_LOG = 266,
+    ET_LOG = 267,
+    OU_BAB = 268,
+    ET_BAB = 269,
+    XOR_BAB = 270,
+    DEC_DROITE = 271,
+    DEC_GAUCHE = 272,
+    MODULO = 273,
+    PARENTHESE_GAUCHE = 274,
+    PARENTHESE_DROITE = 275,
+    FIN = 276,
+    EGAL = 277,
+    NEG = 278
+  };
+>>>>>>> dos9-ts-temp
 #endif
 /* Tokens.  */
 #define NOMBRE 258
@@ -84,6 +145,7 @@
 #define EGAL 277
 #define NEG 278
 
+<<<<<<< HEAD
 
 
 
@@ -97,3 +159,18 @@ typedef int YYSTYPE;
 extern YYSTYPE IntEval_lval;
 
 
+=======
+/* Value type.  */
+#if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
+typedef int YYSTYPE;
+# define YYSTYPE_IS_TRIVIAL 1
+# define YYSTYPE_IS_DECLARED 1
+#endif
+
+
+extern YYSTYPE IntEval_lval;
+
+int IntEval_parse (void);
+
+#endif /* !YY_INTEVAL_PARSER_H_INCLUDED  */
+>>>>>>> dos9-ts-temp

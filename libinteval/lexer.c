@@ -27,8 +27,13 @@
 
 #define FLEX_SCANNER
 #define YY_FLEX_MAJOR_VERSION 2
+<<<<<<< HEAD
 #define YY_FLEX_MINOR_VERSION 5
 #define YY_FLEX_SUBMINOR_VERSION 35
+=======
+#define YY_FLEX_MINOR_VERSION 6
+#define YY_FLEX_SUBMINOR_VERSION 1
+>>>>>>> dos9-ts-temp
 #if YY_FLEX_SUBMINOR_VERSION > 0
 #define FLEX_BETA
 #endif
@@ -107,6 +112,7 @@ typedef unsigned int flex_uint32_t;
 
 #endif /* ! FLEXINT_H */
 
+<<<<<<< HEAD
 #ifdef __cplusplus
 
 /* The "const" storage-class-modifier is valid. */
@@ -126,6 +132,15 @@ typedef unsigned int flex_uint32_t;
 #define yyconst const
 #else
 #define yyconst
+=======
+/* TODO: this is always defined, so inline it */
+#define yyconst const
+
+#if defined(__GNUC__) && __GNUC__ >= 3
+#define yynoreturn __attribute__((__noreturn__))
+#else
+#define yynoreturn
+>>>>>>> dos9-ts-temp
 #endif
 
 /* Returned upon end-of-file. */
@@ -181,6 +196,14 @@ typedef unsigned int flex_uint32_t;
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
 #endif
 
+<<<<<<< HEAD
+=======
+#ifndef YY_TYPEDEF_YY_SIZE_T
+#define YY_TYPEDEF_YY_SIZE_T
+typedef size_t yy_size_t;
+#endif
+
+>>>>>>> dos9-ts-temp
 extern int IntEval_leng;
 
 extern FILE *IntEval_in, *IntEval_out;
@@ -190,6 +213,10 @@ extern FILE *IntEval_in, *IntEval_out;
 #define EOB_ACT_LAST_MATCH 2
 
     #define YY_LESS_LINENO(n)
+<<<<<<< HEAD
+=======
+    #define YY_LINENO_REWIND_TO(ptr)
+>>>>>>> dos9-ts-temp
     
 /* Return all but the first "n" matched characters back to the input stream. */
 #define yyless(n) \
@@ -207,11 +234,14 @@ extern FILE *IntEval_in, *IntEval_out;
 
 #define unput(c) yyunput( c, (yytext_ptr)  )
 
+<<<<<<< HEAD
 #ifndef YY_TYPEDEF_YY_SIZE_T
 #define YY_TYPEDEF_YY_SIZE_T
 typedef size_t yy_size_t;
 #endif
 
+=======
+>>>>>>> dos9-ts-temp
 #ifndef YY_STRUCT_YY_BUFFER_STATE
 #define YY_STRUCT_YY_BUFFER_STATE
 struct yy_buffer_state
@@ -224,7 +254,11 @@ struct yy_buffer_state
 	/* Size of input buffer in bytes, not including room for EOB
 	 * characters.
 	 */
+<<<<<<< HEAD
 	yy_size_t yy_buf_size;
+=======
+	int yy_buf_size;
+>>>>>>> dos9-ts-temp
 
 	/* Number of characters read into yy_ch_buf, not including EOB
 	 * characters.
@@ -280,7 +314,11 @@ struct yy_buffer_state
 /* Stack of input buffers. */
 static size_t yy_buffer_stack_top = 0; /**< index of top of stack. */
 static size_t yy_buffer_stack_max = 0; /**< capacity of stack. */
+<<<<<<< HEAD
 static YY_BUFFER_STATE * yy_buffer_stack = 0; /**< Stack as an array. */
+=======
+static YY_BUFFER_STATE * yy_buffer_stack = NULL; /**< Stack as an array. */
+>>>>>>> dos9-ts-temp
 
 /* We provide macros for accessing buffer states in case in the
  * future we want to put the buffer states in a more general
@@ -303,7 +341,11 @@ static int yy_n_chars;		/* number of characters read into yy_ch_buf */
 int IntEval_leng;
 
 /* Points to current character in buffer. */
+<<<<<<< HEAD
 static char *yy_c_buf_p = (char *) 0;
+=======
+static char *yy_c_buf_p = NULL;
+>>>>>>> dos9-ts-temp
 static int yy_init = 0;		/* whether we need to initialize */
 static int yy_start = 0;	/* start state number */
 
@@ -360,12 +402,20 @@ void IntEval_free (void *  );
 
 /* Begin user sect3 */
 
+<<<<<<< HEAD
 #define IntEval_wrap(n) 1
+=======
+#define IntEval_wrap() (/*CONSTCOND*/1)
+>>>>>>> dos9-ts-temp
 #define YY_SKIP_YYWRAP
 
 typedef unsigned char YY_CHAR;
 
+<<<<<<< HEAD
 FILE *IntEval_in = (FILE *) 0, *IntEval_out = (FILE *) 0;
+=======
+FILE *IntEval_in = NULL, *IntEval_out = NULL;
+>>>>>>> dos9-ts-temp
 
 typedef int yy_state_type;
 
@@ -374,19 +424,33 @@ extern int IntEval_lineno;
 int IntEval_lineno = 1;
 
 extern char *IntEval_text;
+<<<<<<< HEAD
+=======
+#ifdef yytext_ptr
+#undef yytext_ptr
+#endif
+>>>>>>> dos9-ts-temp
 #define yytext_ptr IntEval_text
 
 static yy_state_type yy_get_previous_state (void );
 static yy_state_type yy_try_NUL_trans (yy_state_type current_state  );
 static int yy_get_next_buffer (void );
+<<<<<<< HEAD
 static void yy_fatal_error (yyconst char msg[]  );
+=======
+static void yynoreturn yy_fatal_error (yyconst char* msg  );
+>>>>>>> dos9-ts-temp
 
 /* Done after the current pattern has been matched and before the
  * corresponding action - sets up IntEval_text.
  */
 #define YY_DO_BEFORE_ACTION \
 	(yytext_ptr) = yy_bp; \
+<<<<<<< HEAD
 	IntEval_leng = (size_t) (yy_cp - yy_bp); \
+=======
+	IntEval_leng = (int) (yy_cp - yy_bp); \
+>>>>>>> dos9-ts-temp
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
@@ -408,7 +472,11 @@ static yyconst flex_int16_t yy_accept[39] =
        20,   19,    2,    2,    2,    2,   14,    0
     } ;
 
+<<<<<<< HEAD
 static yyconst flex_int32_t yy_ec[256] =
+=======
+static yyconst YY_CHAR yy_ec[256] =
+>>>>>>> dos9-ts-temp
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    2,    3,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -440,14 +508,22 @@ static yyconst flex_int32_t yy_ec[256] =
         1,    1,    1,    1,    1
     } ;
 
+<<<<<<< HEAD
 static yyconst flex_int32_t yy_meta[24] =
+=======
+static yyconst YY_CHAR yy_meta[24] =
+>>>>>>> dos9-ts-temp
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    2,    2,    1,    1,    1,    2,    2,    1,
         2,    1,    1
     } ;
 
+<<<<<<< HEAD
 static yyconst flex_int16_t yy_base[42] =
+=======
+static yyconst flex_uint16_t yy_base[42] =
+>>>>>>> dos9-ts-temp
     {   0,
         0,    0,   60,   61,   57,   61,   61,   61,   52,   61,
        61,   61,   61,   61,   61,   11,   13,   42,   61,   39,
@@ -465,7 +541,11 @@ static yyconst flex_int16_t yy_def[42] =
        38
     } ;
 
+<<<<<<< HEAD
 static yyconst flex_int16_t yy_nxt[85] =
+=======
+static yyconst flex_uint16_t yy_nxt[85] =
+>>>>>>> dos9-ts-temp
     {   0,
         4,    5,    6,    7,    8,    9,   10,   11,   12,   13,
        14,   15,   16,   17,   18,   19,   20,   21,   22,   23,
@@ -537,7 +617,11 @@ char *IntEval_text;
 
 static int IntEval_InputFromString(char* buffer, int max_size);
 
+<<<<<<< HEAD
 #line 541 "lexer.c"
+=======
+#line 533 "lexer.c"
+>>>>>>> dos9-ts-temp
 
 #define INITIAL 0
 
@@ -570,6 +654,7 @@ void IntEval_set_extra (YY_EXTRA_TYPE user_defined  );
 
 FILE *IntEval_get_in (void );
 
+<<<<<<< HEAD
 void IntEval_set_in  (FILE * in_str  );
 
 FILE *IntEval_get_out (void );
@@ -577,12 +662,25 @@ FILE *IntEval_get_out (void );
 void IntEval_set_out  (FILE * out_str  );
 
 int IntEval_get_leng (void );
+=======
+void IntEval_set_in  (FILE * _in_str  );
+
+FILE *IntEval_get_out (void );
+
+void IntEval_set_out  (FILE * _out_str  );
+
+			int IntEval_get_leng (void );
+>>>>>>> dos9-ts-temp
 
 char *IntEval_get_text (void );
 
 int IntEval_get_lineno (void );
 
+<<<<<<< HEAD
 void IntEval_set_lineno (int line_number  );
+=======
+void IntEval_set_lineno (int _line_number  );
+>>>>>>> dos9-ts-temp
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -596,8 +694,17 @@ extern int IntEval_wrap (void );
 #endif
 #endif
 
+<<<<<<< HEAD
     static void yyunput (int c,char *buf_ptr  );
     
+=======
+#ifndef YY_NO_UNPUT
+    
+    static void yyunput (int c,char *buf_ptr  );
+    
+#endif
+
+>>>>>>> dos9-ts-temp
 #ifndef yytext_ptr
 static void yy_flex_strncpy (char *,yyconst char *,int );
 #endif
@@ -631,7 +738,11 @@ static int input (void );
 /* This used to be an fputs(), but since the string might contain NUL's,
  * we now use fwrite().
  */
+<<<<<<< HEAD
 #define ECHO do { if (fwrite( IntEval_text, IntEval_leng, 1, IntEval_out )) {} } while (0)
+=======
+#define ECHO do { if (fwrite( IntEval_text, (size_t) IntEval_leng, 1, IntEval_out )) {} } while (0)
+>>>>>>> dos9-ts-temp
 #endif
 
 /* Gets input and stuffs it into "buf".  number of characters read, or YY_NULL,
@@ -655,7 +766,11 @@ static int input (void );
 	else \
 		{ \
 		errno=0; \
+<<<<<<< HEAD
 		while ( (result = fread(buf, 1, max_size, IntEval_in))==0 && ferror(IntEval_in)) \
+=======
+		while ( (result = (int) fread(buf, 1, max_size, IntEval_in))==0 && ferror(IntEval_in)) \
+>>>>>>> dos9-ts-temp
 			{ \
 			if( errno != EINTR) \
 				{ \
@@ -710,7 +825,11 @@ extern int IntEval_lex (void);
 
 /* Code executed at the end of each rule. */
 #ifndef YY_BREAK
+<<<<<<< HEAD
 #define YY_BREAK break;
+=======
+#define YY_BREAK /*LINTED*/break;
+>>>>>>> dos9-ts-temp
 #endif
 
 #define YY_RULE_SETUP \
@@ -720,6 +839,7 @@ extern int IntEval_lex (void);
  */
 YY_DECL
 {
+<<<<<<< HEAD
 	register yy_state_type yy_current_state;
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
@@ -729,6 +849,12 @@ YY_DECL
 
 #line 731 "lexer.c"
 
+=======
+	yy_state_type yy_current_state;
+	char *yy_cp, *yy_bp;
+	int yy_act;
+    
+>>>>>>> dos9-ts-temp
 	if ( !(yy_init) )
 		{
 		(yy_init) = 1;
@@ -755,7 +881,17 @@ YY_DECL
 		IntEval__load_buffer_state( );
 		}
 
+<<<<<<< HEAD
 	while ( 1 )		/* loops until end-of-file is reached */
+=======
+	{
+#line 43 "lexer.l"
+
+
+#line 754 "lexer.c"
+
+	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
+>>>>>>> dos9-ts-temp
 		{
 		yy_cp = (yy_c_buf_p);
 
@@ -771,7 +907,11 @@ YY_DECL
 yy_match:
 		do
 			{
+<<<<<<< HEAD
 			register YY_CHAR yy_c = yy_ec[YY_SC_TO_UI(*yy_cp)];
+=======
+			YY_CHAR yy_c = yy_ec[YY_SC_TO_UI(*yy_cp)] ;
+>>>>>>> dos9-ts-temp
 			if ( yy_accept[yy_current_state] )
 				{
 				(yy_last_accepting_state) = yy_current_state;
@@ -783,7 +923,11 @@ yy_match:
 				if ( yy_current_state >= 39 )
 					yy_c = yy_meta[(unsigned int) yy_c];
 				}
+<<<<<<< HEAD
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
+=======
+			yy_current_state = yy_nxt[yy_base[yy_current_state] + (flex_int16_t) yy_c];
+>>>>>>> dos9-ts-temp
 			++yy_cp;
 			}
 		while ( yy_base[yy_current_state] != 61 );
@@ -927,7 +1071,11 @@ YY_RULE_SETUP
 #line 84 "lexer.l"
 ECHO;
 	YY_BREAK
+<<<<<<< HEAD
 #line 931 "lexer.c"
+=======
+#line 928 "lexer.c"
+>>>>>>> dos9-ts-temp
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1058,6 +1206,10 @@ case YY_STATE_EOF(INITIAL):
 			"fatal flex scanner internal error--no action found" );
 	} /* end of action switch */
 		} /* end of scanning one token */
+<<<<<<< HEAD
+=======
+	} /* end of user's declarations */
+>>>>>>> dos9-ts-temp
 } /* end of IntEval_lex */
 
 /* yy_get_next_buffer - try to read in a new buffer
@@ -1069,9 +1221,15 @@ case YY_STATE_EOF(INITIAL):
  */
 static int yy_get_next_buffer (void)
 {
+<<<<<<< HEAD
     	register char *dest = YY_CURRENT_BUFFER_LVALUE->yy_ch_buf;
 	register char *source = (yytext_ptr);
 	register int number_to_move, i;
+=======
+    	char *dest = YY_CURRENT_BUFFER_LVALUE->yy_ch_buf;
+	char *source = (yytext_ptr);
+	yy_size_t number_to_move, i;
+>>>>>>> dos9-ts-temp
 	int ret_val;
 
 	if ( (yy_c_buf_p) > &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[(yy_n_chars) + 1] )
@@ -1100,7 +1258,11 @@ static int yy_get_next_buffer (void)
 	/* Try to read more data. */
 
 	/* First move last chars to start of buffer. */
+<<<<<<< HEAD
 	number_to_move = (int) ((yy_c_buf_p) - (yytext_ptr)) - 1;
+=======
+	number_to_move = (yy_size_t) ((yy_c_buf_p) - (yytext_ptr)) - 1;
+>>>>>>> dos9-ts-temp
 
 	for ( i = 0; i < number_to_move; ++i )
 		*(dest++) = *(source++);
@@ -1120,7 +1282,11 @@ static int yy_get_next_buffer (void)
 			{ /* Not enough room in the buffer - grow it. */
 
 			/* just a shorter name for the current buffer */
+<<<<<<< HEAD
 			YY_BUFFER_STATE b = YY_CURRENT_BUFFER;
+=======
+			YY_BUFFER_STATE b = YY_CURRENT_BUFFER_LVALUE;
+>>>>>>> dos9-ts-temp
 
 			int yy_c_buf_p_offset =
 				(int) ((yy_c_buf_p) - b->yy_ch_buf);
@@ -1140,7 +1306,11 @@ static int yy_get_next_buffer (void)
 				}
 			else
 				/* Can't grow it, we don't own it. */
+<<<<<<< HEAD
 				b->yy_ch_buf = 0;
+=======
+				b->yy_ch_buf = NULL;
+>>>>>>> dos9-ts-temp
 
 			if ( ! b->yy_ch_buf )
 				YY_FATAL_ERROR(
@@ -1158,7 +1328,11 @@ static int yy_get_next_buffer (void)
 
 		/* Read in more data. */
 		YY_INPUT( (&YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[number_to_move]),
+<<<<<<< HEAD
 			(yy_n_chars), (size_t) num_to_read );
+=======
+			(yy_n_chars), num_to_read );
+>>>>>>> dos9-ts-temp
 
 		YY_CURRENT_BUFFER_LVALUE->yy_n_chars = (yy_n_chars);
 		}
@@ -1182,9 +1356,15 @@ static int yy_get_next_buffer (void)
 	else
 		ret_val = EOB_ACT_CONTINUE_SCAN;
 
+<<<<<<< HEAD
 	if ((yy_size_t) ((yy_n_chars) + number_to_move) > YY_CURRENT_BUFFER_LVALUE->yy_buf_size) {
 		/* Extend the array by 50%, plus the number we really need. */
 		yy_size_t new_size = (yy_n_chars) + number_to_move + ((yy_n_chars) >> 1);
+=======
+	if ((int) ((yy_n_chars) + number_to_move) > YY_CURRENT_BUFFER_LVALUE->yy_buf_size) {
+		/* Extend the array by 50%, plus the number we really need. */
+		int new_size = (yy_n_chars) + number_to_move + ((yy_n_chars) >> 1);
+>>>>>>> dos9-ts-temp
 		YY_CURRENT_BUFFER_LVALUE->yy_ch_buf = (char *) IntEval_realloc((void *) YY_CURRENT_BUFFER_LVALUE->yy_ch_buf,new_size  );
 		if ( ! YY_CURRENT_BUFFER_LVALUE->yy_ch_buf )
 			YY_FATAL_ERROR( "out of dynamic memory in yy_get_next_buffer()" );
@@ -1203,14 +1383,23 @@ static int yy_get_next_buffer (void)
 
     static yy_state_type yy_get_previous_state (void)
 {
+<<<<<<< HEAD
 	register yy_state_type yy_current_state;
 	register char *yy_cp;
+=======
+	yy_state_type yy_current_state;
+	char *yy_cp;
+>>>>>>> dos9-ts-temp
     
 	yy_current_state = (yy_start);
 
 	for ( yy_cp = (yytext_ptr) + YY_MORE_ADJ; yy_cp < (yy_c_buf_p); ++yy_cp )
 		{
+<<<<<<< HEAD
 		register YY_CHAR yy_c = (*yy_cp ? yy_ec[YY_SC_TO_UI(*yy_cp)] : 1);
+=======
+		YY_CHAR yy_c = (*yy_cp ? yy_ec[YY_SC_TO_UI(*yy_cp)] : 1);
+>>>>>>> dos9-ts-temp
 		if ( yy_accept[yy_current_state] )
 			{
 			(yy_last_accepting_state) = yy_current_state;
@@ -1222,7 +1411,11 @@ static int yy_get_next_buffer (void)
 			if ( yy_current_state >= 39 )
 				yy_c = yy_meta[(unsigned int) yy_c];
 			}
+<<<<<<< HEAD
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
+=======
+		yy_current_state = yy_nxt[yy_base[yy_current_state] + (flex_int16_t) yy_c];
+>>>>>>> dos9-ts-temp
 		}
 
 	return yy_current_state;
@@ -1235,10 +1428,17 @@ static int yy_get_next_buffer (void)
  */
     static yy_state_type yy_try_NUL_trans  (yy_state_type yy_current_state )
 {
+<<<<<<< HEAD
 	register int yy_is_jam;
     	register char *yy_cp = (yy_c_buf_p);
 
 	register YY_CHAR yy_c = 1;
+=======
+	int yy_is_jam;
+    	char *yy_cp = (yy_c_buf_p);
+
+	YY_CHAR yy_c = 1;
+>>>>>>> dos9-ts-temp
 	if ( yy_accept[yy_current_state] )
 		{
 		(yy_last_accepting_state) = yy_current_state;
@@ -1250,6 +1450,7 @@ static int yy_get_next_buffer (void)
 		if ( yy_current_state >= 39 )
 			yy_c = yy_meta[(unsigned int) yy_c];
 		}
+<<<<<<< HEAD
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
 	yy_is_jam = (yy_current_state == 38);
 
@@ -1259,6 +1460,19 @@ static int yy_get_next_buffer (void)
     static void yyunput (int c, register char * yy_bp )
 {
 	register char *yy_cp;
+=======
+	yy_current_state = yy_nxt[yy_base[yy_current_state] + (flex_int16_t) yy_c];
+	yy_is_jam = (yy_current_state == 38);
+
+		return yy_is_jam ? 0 : yy_current_state;
+}
+
+#ifndef YY_NO_UNPUT
+
+    static void yyunput (int c, char * yy_bp )
+{
+	char *yy_cp;
+>>>>>>> dos9-ts-temp
     
     yy_cp = (yy_c_buf_p);
 
@@ -1268,10 +1482,17 @@ static int yy_get_next_buffer (void)
 	if ( yy_cp < YY_CURRENT_BUFFER_LVALUE->yy_ch_buf + 2 )
 		{ /* need to shift things up to make room */
 		/* +2 for EOB chars. */
+<<<<<<< HEAD
 		register int number_to_move = (yy_n_chars) + 2;
 		register char *dest = &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[
 					YY_CURRENT_BUFFER_LVALUE->yy_buf_size + 2];
 		register char *source =
+=======
+		int number_to_move = (yy_n_chars) + 2;
+		char *dest = &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[
+					YY_CURRENT_BUFFER_LVALUE->yy_buf_size + 2];
+		char *source =
+>>>>>>> dos9-ts-temp
 				&YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[number_to_move];
 
 		while ( source > YY_CURRENT_BUFFER_LVALUE->yy_ch_buf )
@@ -1280,7 +1501,11 @@ static int yy_get_next_buffer (void)
 		yy_cp += (int) (dest - source);
 		yy_bp += (int) (dest - source);
 		YY_CURRENT_BUFFER_LVALUE->yy_n_chars =
+<<<<<<< HEAD
 			(yy_n_chars) = YY_CURRENT_BUFFER_LVALUE->yy_buf_size;
+=======
+			(yy_n_chars) = (int) YY_CURRENT_BUFFER_LVALUE->yy_buf_size;
+>>>>>>> dos9-ts-temp
 
 		if ( yy_cp < YY_CURRENT_BUFFER_LVALUE->yy_ch_buf + 2 )
 			YY_FATAL_ERROR( "flex scanner push-back overflow" );
@@ -1293,6 +1518,11 @@ static int yy_get_next_buffer (void)
 	(yy_c_buf_p) = yy_cp;
 }
 
+<<<<<<< HEAD
+=======
+#endif
+
+>>>>>>> dos9-ts-temp
 #ifndef YY_NO_INPUT
 #ifdef __cplusplus
     static int yyinput (void)
@@ -1341,7 +1571,11 @@ static int yy_get_next_buffer (void)
 				case EOB_ACT_END_OF_FILE:
 					{
 					if ( IntEval_wrap( ) )
+<<<<<<< HEAD
 						return EOF;
+=======
+						return 0;
+>>>>>>> dos9-ts-temp
 
 					if ( ! (yy_did_buffer_switch_on_eof) )
 						YY_NEW_FILE;
@@ -1442,7 +1676,11 @@ static void IntEval__load_buffer_state  (void)
 	if ( ! b )
 		YY_FATAL_ERROR( "out of dynamic memory in IntEval__create_buffer()" );
 
+<<<<<<< HEAD
 	b->yy_buf_size = size;
+=======
+	b->yy_buf_size = (yy_size_t)size;
+>>>>>>> dos9-ts-temp
 
 	/* yy_ch_buf has to be 2 characters longer than the size given because
 	 * we need to put in 2 end-of-buffer characters.
@@ -1477,10 +1715,13 @@ static void IntEval__load_buffer_state  (void)
 	IntEval_free((void *) b  );
 }
 
+<<<<<<< HEAD
 #ifndef __cplusplus
 extern int isatty (int );
 #endif /* __cplusplus */
     
+=======
+>>>>>>> dos9-ts-temp
 /* Initializes or reinitializes a buffer.
  * This function is sometimes called more than once on the same buffer,
  * such as during a IntEval_restart() or at EOF.
@@ -1601,7 +1842,11 @@ static void IntEval_ensure_buffer_stack (void)
 		 * scanner will even need a stack. We use 2 instead of 1 to avoid an
 		 * immediate realloc on the next call.
          */
+<<<<<<< HEAD
 		num_to_alloc = 1;
+=======
+      num_to_alloc = 1; /* After all that talk, this was set to 1 anyways... */
+>>>>>>> dos9-ts-temp
 		(yy_buffer_stack) = (struct yy_buffer_state**)IntEval_alloc
 								(num_to_alloc * sizeof(struct yy_buffer_state*)
 								);
@@ -1618,7 +1863,11 @@ static void IntEval_ensure_buffer_stack (void)
 	if ((yy_buffer_stack_top) >= ((yy_buffer_stack_max)) - 1){
 
 		/* Increase the buffer to prepare for a possible push. */
+<<<<<<< HEAD
 		int grow_size = 8 /* arbitrary grow size */;
+=======
+		yy_size_t grow_size = 8 /* arbitrary grow size */;
+>>>>>>> dos9-ts-temp
 
 		num_to_alloc = (yy_buffer_stack_max) + grow_size;
 		(yy_buffer_stack) = (struct yy_buffer_state**)IntEval_realloc
@@ -1648,7 +1897,11 @@ YY_BUFFER_STATE IntEval__scan_buffer  (char * base, yy_size_t  size )
 	     base[size-2] != YY_END_OF_BUFFER_CHAR ||
 	     base[size-1] != YY_END_OF_BUFFER_CHAR )
 		/* They forgot to leave room for the EOB's. */
+<<<<<<< HEAD
 		return 0;
+=======
+		return NULL;
+>>>>>>> dos9-ts-temp
 
 	b = (YY_BUFFER_STATE) IntEval_alloc(sizeof( struct yy_buffer_state )  );
 	if ( ! b )
@@ -1657,7 +1910,11 @@ YY_BUFFER_STATE IntEval__scan_buffer  (char * base, yy_size_t  size )
 	b->yy_buf_size = size - 2;	/* "- 2" to take care of EOB's */
 	b->yy_buf_pos = b->yy_ch_buf = base;
 	b->yy_is_our_buffer = 0;
+<<<<<<< HEAD
 	b->yy_input_file = 0;
+=======
+	b->yy_input_file = NULL;
+>>>>>>> dos9-ts-temp
 	b->yy_n_chars = b->yy_buf_size;
 	b->yy_is_interactive = 0;
 	b->yy_at_bol = 1;
@@ -1680,7 +1937,11 @@ YY_BUFFER_STATE IntEval__scan_buffer  (char * base, yy_size_t  size )
 YY_BUFFER_STATE IntEval__scan_string (yyconst char * yystr )
 {
     
+<<<<<<< HEAD
 	return IntEval__scan_bytes(yystr,strlen(yystr) );
+=======
+	return IntEval__scan_bytes(yystr,(int) strlen(yystr) );
+>>>>>>> dos9-ts-temp
 }
 
 /** Setup the input buffer state to scan the given bytes. The next call to IntEval_lex() will
@@ -1695,10 +1956,17 @@ YY_BUFFER_STATE IntEval__scan_bytes  (yyconst char * yybytes, int  _yybytes_len 
 	YY_BUFFER_STATE b;
 	char *buf;
 	yy_size_t n;
+<<<<<<< HEAD
 	int i;
     
 	/* Get memory for full buffer, including space for trailing EOB's. */
 	n = _yybytes_len + 2;
+=======
+	yy_size_t i;
+    
+	/* Get memory for full buffer, including space for trailing EOB's. */
+	n = (yy_size_t) _yybytes_len + 2;
+>>>>>>> dos9-ts-temp
 	buf = (char *) IntEval_alloc(n  );
 	if ( ! buf )
 		YY_FATAL_ERROR( "out of dynamic memory in IntEval__scan_bytes()" );
@@ -1724,9 +1992,15 @@ YY_BUFFER_STATE IntEval__scan_bytes  (yyconst char * yybytes, int  _yybytes_len 
 #define YY_EXIT_FAILURE 2
 #endif
 
+<<<<<<< HEAD
 static void yy_fatal_error (yyconst char* msg )
 {
     	(void) fprintf( stderr, "%s\n", msg );
+=======
+static void yynoreturn yy_fatal_error (yyconst char* msg )
+{
+			(void) fprintf( stderr, "%s\n", msg );
+>>>>>>> dos9-ts-temp
 	exit( YY_EXIT_FAILURE );
 }
 
@@ -1792,6 +2066,7 @@ char *IntEval_get_text  (void)
 }
 
 /** Set the current line number.
+<<<<<<< HEAD
  * @param line_number
  * 
  */
@@ -1799,10 +2074,20 @@ void IntEval_set_lineno (int  line_number )
 {
     
     IntEval_lineno = line_number;
+=======
+ * @param _line_number line number
+ * 
+ */
+void IntEval_set_lineno (int  _line_number )
+{
+    
+    IntEval_lineno = _line_number;
+>>>>>>> dos9-ts-temp
 }
 
 /** Set the input stream. This does not discard the current
  * input buffer.
+<<<<<<< HEAD
  * @param in_str A readable stream.
  * 
  * @see IntEval__switch_to_buffer
@@ -1815,6 +2100,20 @@ void IntEval_set_in (FILE *  in_str )
 void IntEval_set_out (FILE *  out_str )
 {
         IntEval_out = out_str ;
+=======
+ * @param _in_str A readable stream.
+ * 
+ * @see IntEval__switch_to_buffer
+ */
+void IntEval_set_in (FILE *  _in_str )
+{
+        IntEval_in = _in_str ;
+}
+
+void IntEval_set_out (FILE *  _out_str )
+{
+        IntEval_out = _out_str ;
+>>>>>>> dos9-ts-temp
 }
 
 int IntEval_get_debug  (void)
@@ -1822,9 +2121,15 @@ int IntEval_get_debug  (void)
         return IntEval__flex_debug;
 }
 
+<<<<<<< HEAD
 void IntEval_set_debug (int  bdebug )
 {
         IntEval__flex_debug = bdebug ;
+=======
+void IntEval_set_debug (int  _bdebug )
+{
+        IntEval__flex_debug = _bdebug ;
+>>>>>>> dos9-ts-temp
 }
 
 static int yy_init_globals (void)
@@ -1833,10 +2138,17 @@ static int yy_init_globals (void)
      * This function is called from IntEval_lex_destroy(), so don't allocate here.
      */
 
+<<<<<<< HEAD
     (yy_buffer_stack) = 0;
     (yy_buffer_stack_top) = 0;
     (yy_buffer_stack_max) = 0;
     (yy_c_buf_p) = (char *) 0;
+=======
+    (yy_buffer_stack) = NULL;
+    (yy_buffer_stack_top) = 0;
+    (yy_buffer_stack_max) = 0;
+    (yy_c_buf_p) = NULL;
+>>>>>>> dos9-ts-temp
     (yy_init) = 0;
     (yy_start) = 0;
 
@@ -1845,8 +2157,13 @@ static int yy_init_globals (void)
     IntEval_in = stdin;
     IntEval_out = stdout;
 #else
+<<<<<<< HEAD
     IntEval_in = (FILE *) 0;
     IntEval_out = (FILE *) 0;
+=======
+    IntEval_in = NULL;
+    IntEval_out = NULL;
+>>>>>>> dos9-ts-temp
 #endif
 
     /* For future reference: Set errno on error, since we are called by
@@ -1884,7 +2201,12 @@ int IntEval_lex_destroy  (void)
 #ifndef yytext_ptr
 static void yy_flex_strncpy (char* s1, yyconst char * s2, int n )
 {
+<<<<<<< HEAD
 	register int i;
+=======
+		
+	int i;
+>>>>>>> dos9-ts-temp
 	for ( i = 0; i < n; ++i )
 		s1[i] = s2[i];
 }
@@ -1893,7 +2215,11 @@ static void yy_flex_strncpy (char* s1, yyconst char * s2, int n )
 #ifdef YY_NEED_STRLEN
 static int yy_flex_strlen (yyconst char * s )
 {
+<<<<<<< HEAD
 	register int n;
+=======
+	int n;
+>>>>>>> dos9-ts-temp
 	for ( n = 0; s[n]; ++n )
 		;
 
@@ -1903,11 +2229,19 @@ static int yy_flex_strlen (yyconst char * s )
 
 void *IntEval_alloc (yy_size_t  size )
 {
+<<<<<<< HEAD
 	return (void *) malloc( size );
+=======
+			return malloc(size);
+>>>>>>> dos9-ts-temp
 }
 
 void *IntEval_realloc  (void * ptr, yy_size_t  size )
 {
+<<<<<<< HEAD
+=======
+		
+>>>>>>> dos9-ts-temp
 	/* The cast to (char *) in the following accommodates both
 	 * implementations that use char* generic pointers, and those
 	 * that use void* generic pointers.  It works with the latter
@@ -1915,12 +2249,20 @@ void *IntEval_realloc  (void * ptr, yy_size_t  size )
 	 * any pointer type to void*, and deal with argument conversions
 	 * as though doing an assignment.
 	 */
+<<<<<<< HEAD
 	return (void *) realloc( (char *) ptr, size );
+=======
+	return realloc(ptr, size);
+>>>>>>> dos9-ts-temp
 }
 
 void IntEval_free (void * ptr )
 {
+<<<<<<< HEAD
 	free( (char *) ptr );	/* see IntEval_realloc() for (char *) cast */
+=======
+			free( (char *) ptr );	/* see IntEval_realloc() for (char *) cast */
+>>>>>>> dos9-ts-temp
 }
 
 #define YYTABLES_NAME "yytables"

@@ -191,8 +191,7 @@ void Dos9_InitHelp(void)
     puts("Feel free to report bugs and submit suggestions at : <" DOS9_BUGREPORT ">\n"
          "For more informations see : <" DOS9_URL ">");
 
-    exit(0);
-
+        exit(0);
 }
 
 char* Dos9_GetParameters(char** argv, char** lpFileName, int* bExitAfterCmd, int*
@@ -324,6 +323,7 @@ void Dos9_InitConsoleTitles(char *lpFileName, int bQuiet)
     }
 }
 
+
 void Dos9_RunAutoBat(void)
 {
     char system[FILENAME_MAX];
@@ -335,9 +335,11 @@ void Dos9_RunAutoBat(void)
         return;
 
     strcpy(ifIn.lpFileName, system);
+
     ifIn.iPos = 0;
     ifIn.bEof = 0;
 
     /* Run the auto configuration file */
     Dos9_RunBatch(&ifIn);
+
 }
