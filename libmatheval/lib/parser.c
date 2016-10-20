@@ -1,8 +1,8 @@
-/* A Bison parser, made by GNU Bison 3.0.2.  */
+/* A Bison parser, made by GNU Bison 3.0.4.  */
 
 /* Bison implementation for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2013 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2015 Free Software Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@
 #define YYBISON 1
 
 /* Bison version.  */
-#define YYBISON_VERSION "3.0.2"
+#define YYBISON_VERSION "3.0.4"
 
 /* Skeleton name.  */
 #define YYSKELETON_NAME "yacc.c"
@@ -167,7 +167,7 @@ extern int evaluator_debug;
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef union YYSTYPE YYSTYPE;
+
 union YYSTYPE
 {
 #line 67 "parser.y" /* yacc.c:355  */
@@ -177,6 +177,8 @@ union YYSTYPE
 
 #line 179 "parser.c" /* yacc.c:355  */
 };
+
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif
@@ -190,7 +192,7 @@ int evaluator_parse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 194 "parser.c" /* yacc.c:358  */
+#line 196 "parser.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -1279,7 +1281,7 @@ yyreduce:
     {
   root = (yyvsp[-1].node);
 }
-#line 1283 "parser.c" /* yacc.c:1646  */
+#line 1285 "parser.c" /* yacc.c:1646  */
     break;
 
   case 6:
@@ -1288,7 +1290,7 @@ yyreduce:
         /* Create addition binary operation node.  */
         (yyval.node) = node_create ('b', '+', (yyvsp[-2].node), (yyvsp[0].node));
 }
-#line 1292 "parser.c" /* yacc.c:1646  */
+#line 1294 "parser.c" /* yacc.c:1646  */
     break;
 
   case 7:
@@ -1297,7 +1299,7 @@ yyreduce:
         /* Create subtraction binary operation node.  */
         (yyval.node) = node_create ('b', '-', (yyvsp[-2].node), (yyvsp[0].node));
 }
-#line 1301 "parser.c" /* yacc.c:1646  */
+#line 1303 "parser.c" /* yacc.c:1646  */
     break;
 
   case 8:
@@ -1306,7 +1308,7 @@ yyreduce:
         /* Create multiplication binary operation node.  */
         (yyval.node) = node_create ('b', '*', (yyvsp[-2].node), (yyvsp[0].node));
 }
-#line 1310 "parser.c" /* yacc.c:1646  */
+#line 1312 "parser.c" /* yacc.c:1646  */
     break;
 
   case 9:
@@ -1315,7 +1317,7 @@ yyreduce:
         /* Create division binary operation node.  */
         (yyval.node) = node_create ('b', '/', (yyvsp[-2].node), (yyvsp[0].node));
 }
-#line 1319 "parser.c" /* yacc.c:1646  */
+#line 1321 "parser.c" /* yacc.c:1646  */
     break;
 
   case 10:
@@ -1324,7 +1326,7 @@ yyreduce:
         /* Create division binary operation node.  */
         (yyval.node) = node_create ('b', '=', (yyvsp[-2].node), (yyvsp[0].node));
 }
-#line 1328 "parser.c" /* yacc.c:1646  */
+#line 1330 "parser.c" /* yacc.c:1646  */
     break;
 
   case 11:
@@ -1333,7 +1335,7 @@ yyreduce:
         /* Create minus unary operation node.  */
         (yyval.node) = node_create ('u', '-', (yyvsp[0].node));
 }
-#line 1337 "parser.c" /* yacc.c:1646  */
+#line 1339 "parser.c" /* yacc.c:1646  */
     break;
 
   case 12:
@@ -1342,7 +1344,7 @@ yyreduce:
         /* Create exponentiation unary operation node.  */
         (yyval.node) = node_create ('b', '^', (yyvsp[-2].node), (yyvsp[0].node));
 }
-#line 1346 "parser.c" /* yacc.c:1646  */
+#line 1348 "parser.c" /* yacc.c:1646  */
     break;
 
   case 13:
@@ -1351,7 +1353,7 @@ yyreduce:
         /* Create function node.  */
         (yyval.node) = node_create ('f', (yyvsp[-3].record), (yyvsp[-1].node));
 }
-#line 1355 "parser.c" /* yacc.c:1646  */
+#line 1357 "parser.c" /* yacc.c:1646  */
     break;
 
   case 14:
@@ -1359,11 +1361,11 @@ yyreduce:
     {
         (yyval.node) = (yyvsp[-1].node);
 }
-#line 1363 "parser.c" /* yacc.c:1646  */
+#line 1365 "parser.c" /* yacc.c:1646  */
     break;
 
 
-#line 1367 "parser.c" /* yacc.c:1646  */
+#line 1369 "parser.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires

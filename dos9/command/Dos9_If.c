@@ -2,10 +2,7 @@
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
  *   Copyright (C) 2010-2016 Romain GARBI
-<<<<<<< HEAD
-=======
  *   Copyright (C) 2016 	 Teddy ASTIE
->>>>>>> dos9-ts-temp
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -37,11 +34,7 @@
 
 int Dos9_CmdIf(char* lpParam)
 {
-<<<<<<< HEAD
-	char lpArgument[FILENAME_MAX], *lpNext, *lpToken, *lpEnd;
-=======
 	char lpArgument[FILENAME_MAX], *lpNext, *lpToken, *lpToken2, *lpEnd;
->>>>>>> dos9-ts-temp
 	int iFlag=0,
 	    iResult;
 
@@ -207,13 +200,13 @@ int Dos9_CmdIf(char* lpParam)
 
 				lpToken2 = Dos9_EsToChar(lpComparison);
 
-				/* Double quote hack 
-					
+				/* Double quote hack
+
 				   This is basically a hack designed to keep compatibility with cmd.exe
 				   by supporting "foo"=="foo".
-				   
+
 				   Todo: clean this a little bit
-				   
+
 				*/
 				char *q = (lpToken2 + strlen(lpToken2) - 1);
 

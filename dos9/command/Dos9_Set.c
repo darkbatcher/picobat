@@ -681,7 +681,7 @@ int Dos9_CmdSetEvalInt(ESTR* lpExpression)
 error:
 	return -1;
 }
-<<<<<<< HEAD
 
-=======
->>>>>>> dos9-ts-temp
+
+
+

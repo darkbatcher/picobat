@@ -291,11 +291,8 @@ loop:
         && lppsStream->lppsNode->cNodeType == PARSED_STREAM_NODE_PIPE) {
 
         /* We're under Unix-like OS, fork, fork, fork, fork,
-<<<<<<< HEAD
            so fucking convenient isn't it ? */
-=======
-           so fucking convienient isn't it ? */
->>>>>>> dos9-ts-temp
+		   
         if (pipe(pipedes) == -1)
             Dos9_ShowErrorMessage(DOS9_CREATE_PIPE | DOS9_PRINT_C_ERROR,
                                     __FILE__ "/Dos9_ExecOperators()",
@@ -705,11 +702,7 @@ error:
 
 int Dos9_RunExternalFile(char* lpFileName, char** lpArguments)
 {
-<<<<<<< HEAD
 	int res,i = 0;
-=======
-	int res;
->>>>>>> dos9-ts-temp
 	char str[FILENAME_MAX+2],
 		 *tmp;
 	errno=0;
