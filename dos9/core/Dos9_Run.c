@@ -922,7 +922,7 @@ BOOL WINAPI Dos9_SigHandler(DWORD dwCtrlType)
 	switch(dwCtrlType) {
 		case CTRL_C_EVENT:
 		case CTRL_BREAK_EVENT:;
-            Printf("Not implemeted yet ...");
+            printf("Not implemeted yet ...");
 	}
 
 	return TRUE;

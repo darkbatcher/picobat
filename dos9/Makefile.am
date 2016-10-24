@@ -39,7 +39,7 @@ errors/Dos9_Errors.h lang/Dos9_ShowHelp.h lang/Dos9_Lang.h gettext.h \
 command/Dos9_Find.h command/Dos9_More.h core/Dos9_Env.h core/Dos9_OsStream.h \
 command/Dos9_Start.h command/Dos9_Break.h command/Dos9_IfExp.h \
 command/Dos9_Chcp.h init/Dos9_Init.h command/Dos9_Chcp.h \
-Dos9_Pushd.h command/Dos9_Popd.h init/Dos9_Init.h
+command/Dos9_Pushd.h command/Dos9_Popd.h init/Dos9_Init.h
 
 dos9_SOURCES = ./Dos9.c ./core/Dos9_Args.c ./core/Dos9_Expand.c \
 ./core/Dos9_Globals.c \
