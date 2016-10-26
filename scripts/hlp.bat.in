@@ -184,7 +184,7 @@ if "%~1" equ "" (
 	
 	if exist txt/commands.txt (
 		
-		%view_cmd% doc/%mode%/commands.%mode%
+		%view_cmd% %mode%/commands.%mode%
 		exit /b 0
 		
 	) else (
