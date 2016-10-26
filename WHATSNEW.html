@@ -1052,10 +1052,35 @@
 <ul><li>
 <p> Added PUSHD and POPD commands</p>
 
-</li><li><p> Allow to list variable which match with a prefix </p>
+</li><li><p> Allow to list variable which match with a prefix</p>
 
 </li></ul>
+<h2>Friday 18th, October 2016</h2>
 
+<ul><li>
+<p> Removed the complex initialisation model set up the <strong>16/04/2016</strong> in favour of a single (somewhat read-only) <strong>Dos9_Auto.bat</strong> initialization script that calls automatically local and global custom initialization scripts.</p>
+
+</li><li><p> Worked a lot to improove the binary tree, in order to conform to unix installation standard and windows, by the way. This is near to being ready.</p>
+
+</li><li><p> Modified the <strong>TYPE</strong> command, adding the following features :</p>
+
+<ul><li>
+<p> The file names are now echoed throught the standard error output. This new behaviour allows sorting out easily file names and file contents. By the way this is also more conformant to <strong>cmd.exe</strong>.</p>
+
+</li><li><p> If no filename is specified, the <strong>TYPE</strong> command gets it input from the standard input, acting quite the same as more.</p>
+
+</li><li><p> Few documentation updates.</p>
+
+</li></ul>
+</li></ul>
+<h2>Wednesday 26th, October 2016</h2>
+
+<ul><li>
+<p> Rewrite Pushd and Popd commands.</p>
+
+</li><li><p> Fix some commands help. </p>
+
+</li></ul>
 
 </body>
 </html>

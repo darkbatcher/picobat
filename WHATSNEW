@@ -1506,3 +1506,9 @@ FRIDAY 18TH, OCTOBER 2016
 
              - Few documentation updates.
 
+WEDNESDAY 26TH, OCTOBER 2016
+
+        - Rewrite Pushd and Popd commands.
+
+        - Fix some commands help. 
+

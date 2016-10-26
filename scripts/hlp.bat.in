@@ -41,7 +41,7 @@ if /i "%~1" neq "/?" goto :show
 
 ECHO Hlp 1.0 - Manual page viewier
 ECHO Copyright ^(C^) 2013-2016 Romain Garbi ^(Darkbatcher^)
-ECHO Copyright ^(C^) 2016 	   Teddy Astie (TSnake41)
+ECHO Copyright ^(C^) 2016      Teddy Astie ^(TSnake41^)
 ECHO This program comes with ABSOLUTELY NO WARRANTY; This is free software,
 ECHO and you are welcome to redistribute it under the terms of the GNU CPL.
 ECHO.
@@ -98,7 +98,10 @@ ECHO *** Building manual pages for %lang_build% with charset %charset_build% ***
 ECHO.
 ECHO  1] Remove content of the documentation folder.
 ECHO.
+for %%A in (ansi html txt) do RMDIR /Q /S %%A
+
 ECHO  2] Creating subdirectories.
+ECHO.
 
 :: create static directory
 for %%A in (
@@ -161,8 +164,9 @@ dir /b /s /a:-d') do (
 		iconv -f UTF-8 -t %charset_build% !ansi_build!.tmp > !ansi_build!
 		iconv -f UTF-8 -t %charset_build% !txt_build!.tmp > !txt_build!
 	) else (
-		move !ansi_build!.tmp !ansi_build! > NUL
-		move !txt_build!.tmp !txt_build! > NUL
+		:: move strangely fail some files, so I temporary use unix mv
+		mv !ansi_build!.tmp !ansi_build! > NUL
+		mv !txt_build!.tmp !txt_build! > NUL
 	)
 )
 
@@ -176,7 +180,7 @@ FOR /F "tokens=*" %%A in ('dir /b /s /a:-D txt/*.txt') do (
 
 ECHO.
 ECHO.5] Cleanning temporary files
-del /s /q ./*.tmp > NUL
+:: del /s /q ./*.tmp > NUL
 
 GOTO:EOF
 
@@ -253,7 +257,7 @@ if exist hlp.conf.bat call hlp.conf.bat
 
 ECHO Hlp - Manual page viewier
 ECHO Copyright ^(C^) 2013-2016 Romain Garbi ^(Darkbatcher^)
-ECHO Copyright ^(C^) 2016 	   Teddy Astie (TSnake41)
+ECHO Copyright ^(C^) 2016      Teddy Astie ^(TSnake41^)
 ECHO This program comes with ABSOLUTELY NO WARRANTY; This is free software,
 ECHO and you are welcome to redistribute it under the terms of the GNU CPL.
 ECHO.
