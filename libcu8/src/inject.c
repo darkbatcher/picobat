@@ -30,14 +30,14 @@
 */
 #include <stdio.h>
 #include <stdlib.h>
-#include <wchar.h>
-#include <io.h>
+/* #include <wchar.h> */
+/* #include <io.h> */
 #include <fcntl.h>
 #include <errno.h>
 #include <windows.h>
 
-#include "internals.h"
-#include "libcu8.h"
+// #include "internals.h"
+/* include "libcu8.h" */
 
 static HANDLE self = INVALID_HANDLE_VALUE;
 
@@ -121,7 +121,19 @@ int __cdecl libcu8_replace_fn(void* oldfn, void* newfn, int n)
 
        These codes have the advantage to be simple and not to affect most of the
        calling conventions on windows, such as __cdecl, __stdcall, __fastcall
-       or so. */
+       or so.
+
+        The code[] array contains opcode for the following assembler mnemonics
+
+                x86_64 mode            |               i386 mode
+                                       |
+            jmp [rel32]                |          jmp addr32
+
+
+        This mnemonics are fairly interesting because they result in *exactly*
+        the same binary code, simplifying the code greatly
+
+    */
     unsigned char code[]={0xff, 0x25, 0x00, 0x00, 0x00, 0x00};
     size_t written;
     int ret;
@@ -138,8 +150,6 @@ int __cdecl libcu8_replace_fn(void* oldfn, void* newfn, int n)
     if ((tbl_fn = libcu8_get_fn_pointer(newfn)) == NULL)
         return 1;
 
-     // printf("[libcu8] Replacing 0x%p by 0x%p\n", oldfn, newfn);
-
 #if defined(__x86_64__)
     rel = (void*)tbl_fn - oldfn; /* compute relative adress */
     rel -= sizeof(code);
@@ -147,25 +157,26 @@ int __cdecl libcu8_replace_fn(void* oldfn, void* newfn, int n)
     rel = tbl_fn; /* compute absolute address */
 #endif
 
-    // printf("newfn = %p, diff = %p - %p :  %X\n", newfn, tbl_fn, oldfn, rel);
-    // printf("_read = %p", _read);
-    // printf(" *tbl_fn  = %p\n",  *tbl_fn);
+    //printf("newfn = %p, diff = %p - %p :  %X\n", newfn, tbl_fn, oldfn, rel);
+    //printf("_read = %p", *_read);
+    //printf(" *tbl_fn  = %p\n",  *tbl_fn);
 
     /* copy the actual function pointer in the inject code */
     memcpy ( code + 2, &rel, sizeof(code)-2);
 
-    // int i;
-    // printf("{");
-    // for (i=0; i < sizeof(code); i++)
+    //int i;
+    //printf("{");
+    //for (i=0; i < sizeof(code); i++)
     //    printf("0x%X, ", code[i]);
-    // printf("}\n");
+    //printf("}\n");
 
     /* put the inject code at the address of the function to
        replace */
     ret = WriteProcessMemory(self, oldfn, code,
                                     sizeof(code), &written);
 
-    // printf("Return %d\n", ret);
+    //printf("Return %d\n", ret);
+    //_read(0,0,0);
 
     if (!ret || written != sizeof(code))
         return 2;

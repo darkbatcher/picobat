@@ -39,6 +39,7 @@
 
 /* short circuit libcu8.h inclusion by file */
 #include <libcu8.h>
+#include "config.h"
 
 /*
 *******************************************************************************
@@ -205,6 +206,83 @@ char* libcu8_lf_to_crlf(const char* buf, size_t len, size_t* cvt);
     Functions used to get utf8 argv.
 ****************************************************************************
  */
+
+struct fn_replace_t {
+    char* name;
+    void* fn;
+};
+
 int libcu8_get_argv(const char*** pargv);
+
+/*
+****************************************************************************
+    find.c functions
+
+    Functions used for find replacement
+****************************************************************************
+ */
+/* CRT functions replacement for find* familly */
+#ifdef HAVE__FINDFIRST
+__LIBCU8__IMP __cdecl intptr_t libcu8_findfirst(const char* file,
+                                                    struct _finddata_t* inf);
+__LIBCU8__IMP __cdecl int libcu8_findnext(intptr_t handle,
+                                                struct _finddata_t* info);
+#endif
+#ifdef HAVE__FINDFIRST64
+__LIBCU8__IMP __cdecl intptr_t libcu8_findfirst64(const char* file,
+                                                    struct __finddata64_t* inf);
+__LIBCU8__IMP __cdecl int libcu8_findnext64(intptr_t handle,
+                                                struct __finddata64_t* info);
+#endif
+#ifdef HAVE__FINDFIRST64I32
+__LIBCU8__IMP __cdecl intptr_t libcu8_findfirst64i32(const char* file,
+                                                struct _finddata64i32_t* inf);
+
+__LIBCU8__IMP __cdecl int libcu8_findnext64i32(intptr_t handle,
+                                                struct _finddata64i32_t* info);
+#endif
+#ifdef HAVE__FINDFIRST32
+__LIBCU8__IMP __cdecl intptr_t libcu8_findfirst32(const char* file,
+                                                    struct _finddata32_t* inf);
+__LIBCU8__IMP __cdecl int libcu8_findnext32(intptr_t handle,
+                                                struct _finddata32_t* info);
+#endif
+#ifdef HAVE__FINDFIRST32I64
+__LIBCU8__IMP __cdecl intptr_t libcu8_findfirst32i64(const char* file,
+                                                struct _finddata32i64_t* inf);
+
+__LIBCU8__IMP __cdecl int libcu8_findnext32i64(intptr_t handle,
+                                                struct _finddata32i64_t* info);
+#endif
+
+/*
+****************************************************************************
+    stat.c functions
+
+    Functions used for stat.c replacement
+****************************************************************************
+ */
+
+/* CRT functions for stat.h */
+#ifdef HAVE__STAT
+__LIBCU8__IMP __cdecl int libcu8_stat(const char* file,
+                                        struct _stat* buf);
+#endif
+#ifdef HAVE__STAT32
+__LIBCU8__IMP __cdecl int libcu8_stat32(const char* file,
+                                            struct _stat32* buf);
+#endif
+#ifdef HAVE__STAT32I64
+__LIBCU8__IMP __cdecl int libcu8_stat32i64(const char* file,
+                                            struct _stat32i64* buf);
+#endif
+#ifdef HAVE__STAT64
+__LIBCU8__IMP __cdecl int libcu8_stat64(const char* file,
+                                            struct __stat64* buf);
+#endif
+#ifdef HAVE__STAT64I32
+__LIBCU8__IMP __cdecl int libcu8_stat64i32(const char* file,
+                                            struct _stat64i32* buf);
+#endif
 
 #endif // INTERNALS_H

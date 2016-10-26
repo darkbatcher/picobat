@@ -28,6 +28,7 @@
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <wchar.h>
@@ -38,46 +39,85 @@
 #include <assert.h>
 #include <sys/stat.h>
 
+#include "config.h"
 #include "internals.h"
 #include "libcu8.h"
 
-#ifdef _findfirst
-#undef _findfirst
-#endif // _findfirst
-
-#ifdef _findnext
-#undef _findnext
-#endif // _findnext
-
-#ifdef _wfindfirst
-#undef _wfindfirst
-#endif // _findfirst
-
-#ifdef _wfindnext
-#undef _wfindnext
-#endif // _findnext
-
-
+#ifdef HAVE__FINDFIRST64
 /* Gen libcu8_findfirst64 and libcu8_findnext64 */
-#define __libcu8_find_suffix 64
+#define __libcu8_finddata_t  __finddata64_t
+#define __libcu8_wfinddata_t __wfinddata64_t
+#define __libcu8_wfindfirst  _wfindfirst64
+#define __libcu8_wfindnext   _wfindnext64
+#define __libcu8_findfirst   libcu8_findfirst64
+#define __libcu8_findnext    libcu8_findnext64
 #include "find_gen.c"
-#undef __libcu8_find_suffix
+#endif
 
+#ifdef HAVE__FINDFIRST64I32
 /* Gen libcu8_findfirst64i32 and libcu8_findnext64i32 */
-#define __libcu8_find_suffix 64i32
+#undef __libcu8_finddata_t
+#undef __libcu8_wfinddata_t
+#undef __libcu8_wfindfirst
+#undef __libcu8_wfindnext
+#undef __libcu8_findfirst
+#undef __libcu8_findnext
+#define __libcu8_finddata_t  _finddata64i32_t
+#define __libcu8_wfinddata_t _wfinddata64i32_t
+#define __libcu8_wfindfirst  _wfindfirst64i32
+#define __libcu8_wfindnext   _wfindnext64i32
+#define __libcu8_findfirst   libcu8_findfirst64i32
+#define __libcu8_findnext    libcu8_findnext64i32
 #include "find_gen.c"
 #undef __libcu8_find_suffix
+#endif
 
-#ifndef __x86_64__
-
+#ifdef HAVE__FINDFIRST32
 /* Gen libcu8_findfirst64 and libcu8_findnext64 */
-#define __libcu8_find_suffix 32
+#undef __libcu8_finddata_t
+#undef __libcu8_wfinddata_t
+#undef __libcu8_wfindfirst
+#undef __libcu8_wfindnext
+#undef __libcu8_findfirst
+#undef __libcu8_findnext
+#define __libcu8_finddata_t  _finddata32_t
+#define __libcu8_wfinddata_t _wfinddata32_t
+#define __libcu8_wfindfirst  _wfindfirst32
+#define __libcu8_wfindnext   _wfindnext32
+#define __libcu8_findfirst   libcu8_findfirst32
+#define __libcu8_findnext    libcu8_findnext32
 #include "find_gen.c"
-#undef __libcu8_find_suffix
+#endif
 
+#ifdef HAVE__FINDFIRST32I64
 /* Gen libcu8_findfirst32i64 and libcu8_findnext32i64 */
-#define __libcu8_find_suffix 32i64
+#undef __libcu8_finddata_t
+#undef __libcu8_wfinddata_t
+#undef __libcu8_wfindfirst
+#undef __libcu8_wfindnext
+#undef __libcu8_findfirst
+#undef __libcu8_findnext
+#define __libcu8_finddata_t  _finddata32i64_t
+#define __libcu8_wfinddata_t _wfinddata32i64_t
+#define __libcu8_wfindfirst  _wfindfirst32i64
+#define __libcu8_wfindnext   _wfindnext32i64
+#define __libcu8_findfirst   libcu8_findfirst32i64
+#define __libcu8_findnext    libcu8_findnext32i64
 #include "find_gen.c"
-#undef __libcu8_find_suffix
+#endif
 
-#endif // __x86_64__
+#ifdef HAVE__FINDFIRST
+#undef __libcu8_finddata_t
+#undef __libcu8_wfinddata_t
+#undef __libcu8_wfindfirst
+#undef __libcu8_wfindnext
+#undef __libcu8_findfirst
+#undef __libcu8_findnext
+#define __libcu8_finddata_t  _finddata_t
+#define __libcu8_wfinddata_t _wfinddata_t
+#define __libcu8_wfindfirst  _wfindfirst
+#define __libcu8_wfindnext   _wfindnext
+#define __libcu8_findfirst   libcu8_findfirst
+#define __libcu8_findnext    libcu8_findnext
+#include "find_gen.c"
+#endif

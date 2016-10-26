@@ -65,26 +65,35 @@
 #undef _wstat
 #endif
 
-#ifndef __x86_64__
-
 /* build libcu8_stat32 */
+#ifdef HAVE__STAT32
 #define __libcu8_stat_suffix() 32
 #include "stat_gen.c"
 #undef __libcu8_stat_suffix
+#endif
 
+#ifdef HAVE__STAT32I64
 /* build libcu8_stat32i64 */
 #define __libcu8_stat_suffix() 32i64
 #include "stat_gen.c"
 #undef __libcu8_stat_suffix
-
 #endif
 
+#ifdef HAVE__STAT64
 /* build libcu8_stat64 */
 #define __libcu8_stat_suffix() 64
 #include "stat_gen.c"
 #undef __libcu8_stat_suffix
+#endif
 
+#ifdef HAVE__STAT64I32
 /* build libcu8_stat64i32 */
 #define __libcu8_stat_suffix() 64i32
 #include "stat_gen.c"
 #undef __libcu8_stat_suffix
+#endif
+
+#ifdef HAVE__STAT
+/* build libcu8_stat */
+#include "stat_gen.c"
+#endif

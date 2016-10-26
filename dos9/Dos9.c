@@ -74,7 +74,6 @@ int main(int argc, char *argv[])
     ESTR* lpesCmd;
 
 #if defined(WIN32) && defined(DOS9_USE_LIBCU8)
-    /* Initialize libcu8 */
     if (libcu8_init(&argv) == -1) {
 
         fprintf(stderr, "Unable to load libcu8...\n");

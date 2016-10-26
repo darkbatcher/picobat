@@ -301,6 +301,11 @@ LPSTREAMSTACK Dos9_PopStreamStack(LPSTREAMSTACK lppsStack)
 	if (lpStream) {
 
 		if (lpStream->iPopLock==TRUE) {
+            #ifdef WIN32
+
+                Dos9_SetStdBuffering();
+
+            #endif
 			DEBUG("## ERROR [:] STREAM LEVEL LOCKED ##");
 			return lppsStack;
 		}

@@ -98,7 +98,7 @@ dnl check start equivalent existence
 	
 dnl Perform some checks in order to know with which library we should link.
 case $host_os in
-	*darwin*|*linux*|*BSD*)
+	*darwin*|*linux*|*bsd*)
 dnl link to pthread only on *nix target
 		AC_CHECK_LIB([pthread],[pthread_create],[],[])
 dnl look for xdg-open
@@ -113,6 +113,9 @@ dnl No libcu8 for *nixes
 	
 	*);;
 esac
+
+dnl define this for some weird unices
+AC_DEFINE_UNQUOTED([BINARY_PATH], ["$bindir"], Define to the binary directory)
 
 AC_CHECK_LIB([m],[cos],[],[AC_MSG_ERROR("No math C library")])
 

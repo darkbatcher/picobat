@@ -75,8 +75,6 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
 		if (*(pIn->lpFileName)=='\0'
 		    && bEchoOn ) {
 
-			/* this is a direct input */
-
 			Dos9_SetConsoleTextColor(DOS9_FOREGROUND_IGREEN | DOS9_GET_BACKGROUND(colColor));
 			printf("\nDOS9 ");
 

@@ -23,13 +23,13 @@
 # ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-ACLOCAL_AMFLAGS = -I m4
+ACLOCAL_AMFLAGS = -I ../../m4
 AUTOMAKE_OPTIONS = foreign subdir-objects
 EXTRA_DIST = stat_gen.c find_gen.c
 
 lib_LTLIBRARIES = libcu8.la
 libcu8_la_SOURCES = init.c inject.c encoding.c read.c write.c fdio.c spawn.c \
-stat.c dup.c find.c dir.c
+stat.c dup.c find.c dir.c dirent.c
 libcu8_la_LDFLAGS = -version-info $(VERSION) -no-undefined
 libcu8_la_LIBADD = @LIBS@
 libcu8_la_CFLAGS = -I../include

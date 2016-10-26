@@ -42,16 +42,80 @@
 #include <iconv.h>
 
 #include "internals.h"
+#include "config.h"
 #include <libcu8.h>
 
 
 #define REPLACE_FN( )
 
+struct fn_replace_t functions[] = {
+    {"_read", libcu8_read},
+    {"_write", libcu8_write},
+    {"_sopen", libcu8_sopen},
+    {"_sopen", libcu8_sopen},
+    {"_creat", libcu8_creat},
+    {"_lseek", libcu8_lseek},
+    {"_commit", libcu8_commit},
+    {"_dup", libcu8_dup},
+    {"_dup2", libcu8_dup2},
+    {"_spawn", libcu8_spawnl},
+    {"_spawnlp", libcu8_spawnlp}, /* 10th */
+    {"_spawnlpe", libcu8_spawnlpe},
+    {"_spawnle", libcu8_spawnle},
+    {"_spawnv", libcu8_spawnv},
+    {"_spawnve", libcu8_spawnve},
+    {"_spawnvp", libcu8_spawnvp},
+    {"_spawnvpe", libcu8_spawnvpe},
+#ifdef HAVE__STAT
+    {"_stat", libcu8_stat},
+#endif
+#ifdef HAVE__STAT32
+    {"_stat32", libcu8_stat32},
+#endif
+#ifdef HAVE__STAT32I64
+    {"_stat32i64", libcu8_stat32i64},
+#endif
+#ifdef HAVE__STAT64I32
+    {"_stat64i32", libcu8_stat64i32}, /* 20th */
+#endif
+#ifdef HAVE__STAT64
+    {"_stat64", libcu8_stat64},
+#endif
+#ifdef HAVE__FINDFIRST
+    {"_findfirst", libcu8_findfirst},
+    {"_findnext", libcu8_findnext},
+#endif
+#ifdef HAVE__FINDFIRST32
+    {"_findfirst32", libcu8_findfirst32},
+    {"_findnext32", libcu8_findnext32},
+#endif
+#ifdef HAVE__FINDFIRST32I64
+    {"_findfirst32i64", libcu8_findfirst32i64},
+    {"_findnext32i64", libcu8_findnext32i64},
+#endif
+#ifdef HAVE__FINDFIRST64
+    {"_findfirst64", libcu8_findfirst64},
+    {"_findnext64", libcu8_findnext64},
+#endif
+#ifdef HAVE__FINDFIRST64I32
+    {"_findfirst64i32", libcu8_findfirst64i32}, /* 30th */
+    {"_findnext64i32", libcu8_findnext64i32},
+#endif
+    {"_chdir", libcu8_chdir},
+    {"_rmdir", libcu8_rmdir},
+    {"_mkdir", libcu8_mkdir},
+    {"_getcwd", libcu8_getcwd},
+    {"_open", libcu8_open},
+    {"fopen", libcu8_fopen}
+};
+
 
 /* initialize the new functions */
 __LIBCU8__IMP __cdecl int libcu8_init(const char*** pargv)
 {
-    int i;
+    int i, n;
+    HANDLE msvcrt;
+    void* oldfn;
 
     /* Initialize the lock for fencoding */
     InitializeCriticalSection(&libcu8_fencoding_lock);
@@ -59,9 +123,6 @@ __LIBCU8__IMP __cdecl int libcu8_init(const char*** pargv)
     sprintf(libcu8_fencoding, "UTF-8");
 
     LeaveCriticalSection(&libcu8_fencoding_lock);
-
-
-    //fprintf(stderr, "Allocating buffers\n");
 
     /* Allocate memory for libcu8 internal buffers */
     if (!(libcu8_fd_buffers = malloc(FD_BUFFERS_SIZE
@@ -72,59 +133,39 @@ __LIBCU8__IMP __cdecl int libcu8_init(const char*** pargv)
     for (i=0;i < FD_BUFFERS_SIZE; i++)
         libcu8_reset_buffered(i); /* reset all the buffers */
 
-    //fprintf(stderr, "Getting argv\n");
     /* Get utf-8 encoded argv */
     if (pargv != NULL && libcu8_get_argv(pargv) == -1 )
         return -1;
 
-    //fprintf(stderr, "Replace with functions\n");
-    //printf("_read = %p, libcu8_read = %p, oldfn = %p\n", _read, libcu8_read);
 
-    /* replace functions from msvcrt by functions from libcu8 */
-    if (libcu8_replace_fn(_read, libcu8_read , 52) != 0
-        || libcu8_replace_fn(_write, libcu8_write , 52) != 0
-        || libcu8_replace_fn(_sopen, libcu8_sopen , 52) != 0
-        || libcu8_replace_fn(_creat, libcu8_creat , 52) != 0
-        || libcu8_replace_fn(_lseek, libcu8_lseek , 52) != 0
-        || libcu8_replace_fn(_commit, libcu8_commit , 52) != 0
-        || libcu8_replace_fn(_dup, libcu8_dup , 52) != 0
-        || libcu8_replace_fn(_dup2, libcu8_dup2 , 52) != 0
-        || libcu8_replace_fn(_spawnl, libcu8_spawnl , 52) != 0
-        || libcu8_replace_fn(_spawnlp, libcu8_spawnlp , 52) != 0 /* 10th */
-        || libcu8_replace_fn(_spawnlpe, libcu8_spawnlpe , 52) != 0
-        || libcu8_replace_fn(_spawnle, libcu8_spawnle , 52) != 0
-        || libcu8_replace_fn(_spawnv, libcu8_spawnv , 52) != 0
-        || libcu8_replace_fn(_spawnve, libcu8_spawnve , 52) != 0
-        || libcu8_replace_fn(_spawnvp, libcu8_spawnvp , 52) != 0
-        || libcu8_replace_fn(_spawnvpe, libcu8_spawnvpe , 52) != 0
-#ifndef __x86_64__
-        || libcu8_replace_fn(_stat32, libcu8_stat32, 52) != 0
-        || libcu8_replace_fn(_stat32i64, libcu8_stat32i64, 52) != 0
-#endif
-        || libcu8_replace_fn(_stat64i32, libcu8_stat64i32, 52) != 0
-        || libcu8_replace_fn(_stat64, libcu8_stat64, 52) != 0 /* 20th */
-#ifndef __x86_64__
-        || libcu8_replace_fn(_findfirst32, libcu8_findfirst32, 52) != 0
-        || libcu8_replace_fn(_findnext32, libcu8_findnext32, 52) != 0
-        || libcu8_replace_fn(_findfirst32i64, libcu8_findfirst32i64, 52) != 0
-        || libcu8_replace_fn(_findnext32i64, libcu8_findnext32i64, 52) != 0
-#endif
-        || libcu8_replace_fn(_findfirst64, libcu8_findfirst64, 52) != 0
-        || libcu8_replace_fn(_findnext64, libcu8_findnext64, 52) != 0
-        || libcu8_replace_fn(_findfirst64i32, libcu8_findfirst64i32, 52) != 0
-        || libcu8_replace_fn(_findnext64i32, libcu8_findnext64i32, 52) != 0
-        || libcu8_replace_fn(_chdir, libcu8_chdir, 52) !=0
-        || libcu8_replace_fn(_rmdir, libcu8_rmdir, 52) !=0 /* 30th */
-        || libcu8_replace_fn(_mkdir, libcu8_mkdir, 52) !=0
-        || libcu8_replace_fn(_getcwd, libcu8_getcwd, 52) != 0
-        || libcu8_replace_fn(_open, libcu8_open, 52) != 0
-        || libcu8_replace_fn(fopen, libcu8_fopen, 52) != 0
-        ) {
+    if ((msvcrt = LoadLibraryW(L"msvcrt.dll")) == NULL) {
 
         free(libcu8_fd_buffers);
         return -1;
 
     }
+
+    n = sizeof(functions)/sizeof(functions[0]);
+
+    /* replace functions from msvcrt by functions from libcu8 */
+    for (i = 0;i < n;i ++) {
+
+        /* get the source function address */
+        if ((oldfn = GetProcAddress(msvcrt, functions[i].name)) != NULL) {
+
+            /* replace the function by those shipped with libcu8 */
+            if (libcu8_replace_fn(oldfn, functions[i].fn, n))
+            {
+
+                free(libcu8_fd_buffers);
+                return -1;
+
+            }
+
+        }
+    }
+
+    CloseHandle(msvcrt);
 
     libcu8_save_changes();
 
@@ -164,7 +205,7 @@ int libcu8_get_argv(const char*** pargv)
 
     for (i=0; i < argc; i ++) {
 
-        //fwprintf(stderr, L"Converting %d th argumenent \"%s\"\n", i, wargv[i]);
+        //fwprintf(stderr, "Converting %d th argumenent \"%s\"\n", i, wargv[i]);
 
         if (!(argv[i] = libcu8_xconvert(LIBCU8_FROM_U16, (char*)wargv[i],
                                 (wcslen(wargv[i])+1)*sizeof(wchar_t), &converted))) {
@@ -176,7 +217,7 @@ int libcu8_get_argv(const char*** pargv)
 
     }
 
-    // fprintf(stderr, "End lol");
+    // fprintf(stderr, "End lo");
 
     *pargv = (const char**)argv;
 

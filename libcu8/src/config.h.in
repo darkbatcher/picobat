@@ -1,50 +1,16 @@
-/* config.h.in.  Generated from configure.ac by autoheader.  */
-
-/* Define to the binary directory */
-#undef BINARY_PATH
-
-/* Define to 1 or 0 if you want to have static cmdlycorrect */
-#undef DOS9_STATIC_CMDLYCORRECT
-
-/* Define to 1 if you want to enable libcu8 */
-#undef DOS9_USE_LIBCU8
-
-/* Define to 1 if translation of program messages to the user's native
-   language is requested. */
-#undef ENABLE_NLS
-
-/* Define to 1 if you have the Mac OS X function CFLocaleCopyCurrent in the
-   CoreFoundation framework. */
-#undef HAVE_CFLOCALECOPYCURRENT
-
-/* Define to 1 if you have the Mac OS X function CFPreferencesCopyAppValue in
-   the CoreFoundation framework. */
-#undef HAVE_CFPREFERENCESCOPYAPPVALUE
-
-/* Define if the GNU dcgettext() function is already present or preinstalled.
-   */
-#undef HAVE_DCGETTEXT
+/* src/config.h.in.  Generated from configure.ac by autoheader.  */
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #undef HAVE_DLFCN_H
 
-/* Define if the GNU gettext() function is already present or preinstalled. */
-#undef HAVE_GETTEXT
-
-/* Define if you have the iconv() function and it works. */
-#undef HAVE_ICONV
+/* Define to 1 if you have the <iconv.h> header file. */
+#undef HAVE_ICONV_H
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
-/* Define to 1 if you have the <libintl.h> header file. */
-#undef HAVE_LIBINTL_H
-
-/* Define to 1 if you have the `m' library (-lm). */
-#undef HAVE_LIBM
-
-/* Define to 1 if you have the `pthread' library (-lpthread). */
-#undef HAVE_LIBPTHREAD
+/* Define to 1 if you have the `iconv' library (-liconv). */
+#undef HAVE_LIBICONV
 
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
@@ -70,11 +36,35 @@
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
 
-/* Define to your host name */
-#undef HOST
+/* Define to 1 if you have the `_findfirst' function. */
+#undef HAVE__FINDFIRST
 
-/* Define to 1 if you want to enable console feature */
-#undef LIBDOS9_NO_CONSOLE
+/* Define to 1 if you have the `_findfirst32' function. */
+#undef HAVE__FINDFIRST32
+
+/* Define to 1 if you have the `_findfirst32i64' function. */
+#undef HAVE__FINDFIRST32I64
+
+/* Define to 1 if you have the `_findfirst64' function. */
+#undef HAVE__FINDFIRST64
+
+/* Define to 1 if you have the `_findfirst64i32' function. */
+#undef HAVE__FINDFIRST64I32
+
+/* Define to 1 if you have the `_stat' function. */
+#undef HAVE__STAT
+
+/* Define to 1 if you have the `_stat32' function. */
+#undef HAVE__STAT32
+
+/* Define to 1 if you have the `_stat32i64' function. */
+#undef HAVE__STAT32I64
+
+/* Define to 1 if you have the `_stat64' function. */
+#undef HAVE__STAT64
+
+/* Define to 1 if you have the `_stat64i32' function. */
+#undef HAVE__STAT64I32
 
 /* Define to the sub-directory in which libtool stores uninstalled libraries.
    */
@@ -106,10 +96,3 @@
 
 /* Version number of package */
 #undef VERSION
-
-/* Define to 1 if have xdg-open */
-#undef XDG_OPEN
-
-/* Define to 1 if `lex' declares `yytext' as a `char *' by default, not a
-   `char[]'. */
-#undef YYTEXT_POINTER

@@ -29,16 +29,6 @@
 
 */
 
-#define cat(a, ...)          __cat(a, __VA_ARGS__)
-#define __cat(a, ...)        a ## __VA_ARGS__
-#define suff(x)              cat(x, __libcu8_find_suffix)
-#define __libcu8_findfirst   suff(libcu8_findfirst)
-#define __libcu8_findnext    suff(libcu8_findnext)
-#define __libcu8_finddata_t  cat(_finddata, cat(__libcu8_find_suffix, _t ))
-#define __libcu8_wfinddata_t cat(_wfinddata, cat(__libcu8_find_suffix, _t ))
-#define __libcu8_wfindfirst  suff(_wfindfirst)
-#define __libcu8_wfindnext   suff(_wfindnext)
-
 __LIBCU8__IMP __cdecl intptr_t __libcu8_findfirst (const char* file,
                                 struct __libcu8_finddata_t* inf)
 {
@@ -48,6 +38,8 @@ __LIBCU8__IMP __cdecl intptr_t __libcu8_findfirst (const char* file,
     intptr_t handle;
     struct __libcu8_wfinddata_t info;
 
+    printf("libcu8: findfirst: looking for %s\n", file);
+
     if (!(wcs = (wchar_t*) libcu8_xconvert(LIBCU8_TO_U16, file,
                                                 strlen(file)+1, &cvt)))
         return -1;
@@ -55,8 +47,10 @@ __LIBCU8__IMP __cdecl intptr_t __libcu8_findfirst (const char* file,
     handle = __libcu8_wfindfirst(wcs, &info);
 
     if (handle != -1
-        && (name = (wchar_t*) libcu8_xconvert(LIBCU8_FROM_U16, info.name,
+        && (name = libcu8_xconvert(LIBCU8_FROM_U16, info.name,
                                 (wcslen(info.name)+1)*sizeof(wchar_t), &cvt))) {
+
+        printf("returning %s\n", name);
 
         if (cvt > FILENAME_MAX) {
 
@@ -90,8 +84,10 @@ __LIBCU8__IMP __cdecl int __libcu8_findnext (intptr_t handle,
 
     ret = __libcu8_wfindnext (handle, &info);
 
+    printf("Called findnext !\n");
+
     if (ret != -1
-        && (name = (wchar_t*) libcu8_xconvert(LIBCU8_FROM_U16, info.name,
+        && (name =  libcu8_xconvert(LIBCU8_FROM_U16, info.name,
                                 (wcslen(info.name)+1)*sizeof(wchar_t), &cvt))) {
 
         if (cvt > FILENAME_MAX) {
@@ -101,6 +97,8 @@ __LIBCU8__IMP __cdecl int __libcu8_findnext (intptr_t handle,
 
         } else
             strcpy(inf->name, name);
+
+        printf("returning %s\n", name);
 
         free(name);
 

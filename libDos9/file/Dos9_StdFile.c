@@ -24,6 +24,7 @@
 
 #include "../libDos9.h"
 #include "../libDos9-int.h"
+#include "../../config.h"
 
 #include "Dos9_File.h"
 
@@ -42,13 +43,11 @@ int Dos9_GetExeFilename(char* lpBuf, size_t iBufSize)
 
     #else
 
-        /* we shoud add custom codes for various operating systems.
-           Operating systems not currently supported by are FreeBSD,
-           MacOS X, and solaris.
+        /* if no OS-specific symlink is available, give up with
+           dynamic executable path finding and return a hard-coded
+           string  */
 
-           Anyway, for *Nix systems it isn't really requiered */
-
-
+        snprintf(lpBuf, iBufSize, BINARY_PATH "/dos9");
     #endif
 
     return 0;
@@ -68,13 +67,11 @@ int Dos9_GetExePath(char* lpBuf, size_t iBufSize)
             *lpDelim='\0';
 
     #else
+        /* if no OS-specific symlink is available, give up with
+           dynamic executable path finding and return a hard-coded
+           string  */
 
-        /* we shoud add custom codes for various operating systems.
-           Operating systems not currently supported by are FreeBSD,
-           MacOS X, and solaris.
-
-           Anyway, for *Nix systems it isn't really requiered */
-
+        snprintf(lpBuf, iBufSize, BINARY_PATH);
 
     #endif
 

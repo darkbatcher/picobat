@@ -31,6 +31,7 @@ AC_INIT([libcu8],
 	[http://www.dos9.org/])
 
 AC_PREREQ([2.59])
+AC_CONFIG_HEADER([src/config.h])
 AC_CONFIG_AUX_DIR([../config])
 AC_CONFIG_MACRO_DIR([../m4])
 
@@ -54,6 +55,9 @@ AC_CHECK_HEADERS([iconv.h])
 dnl check whether iconv is a separate lib
 AC_CHECK_LIB([iconv],[iconv],[],[])
 AC_CHECK_LIB([iconv],[libiconv],[],[])
+
+dnl check for find and stat functions
+AC_CHECK_FUNCS([_stat _stat32 _stat64 _stat32i64 _stat64i32 _findfirst _findfirst32 _findfirst64 _findfirst32i64 _findfirst64i32])
 
 AC_CONFIG_FILES([Makefile
 				src/Makefile

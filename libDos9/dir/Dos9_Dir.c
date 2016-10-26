@@ -24,6 +24,10 @@
 #include "../libDos9-int.h"
 #include "../../config.h"
 
+#ifdef DOS9_USE_LIBCU8
+#include <libcu8.h>
+#endif // DOS9_USE_LIBCU8
+
 LIBDOS9 char* Dos9_SeekPattern(const char* match, const char* pattern, size_t len)
 {
     const char* tok;
@@ -581,11 +585,15 @@ LPFILELIST _Dos9_SeekFiles(char* lpDir, char* lpRegExp, int iLvl, int iMaxLvl, i
 						    && iIsPseudoDir)
 							goto Dos9_DirRecursive;
 
-						if (write(iOutDescriptor, lpFilePath, FILENAME_MAX)==-1)
+						if (write(iOutDescriptor, lpFilePath, FILENAME_MAX)==-1) {
+                            closedir(pDir);
 							return NULL;
+						}
 
-						if (iSearchFlag & DOS9_SEARCH_GET_FIRST_MATCH)
+						if (iSearchFlag & DOS9_SEARCH_GET_FIRST_MATCH) {
+                            closedir(pDir);
 							return NULL;
+						}
 
 					}
 
@@ -611,13 +619,15 @@ Dos9_DirRecursive:
 							break;
 
 
-						if (write(iOutDescriptor, lpFilePath, FILENAME_MAX)==-1)
+						if (write(iOutDescriptor, lpFilePath, FILENAME_MAX)==-1) {
+                            closedir(pDir);
 							return NULL;
+						}
 
-						if (iSearchFlag & DOS9_SEARCH_GET_FIRST_MATCH)
+						if (iSearchFlag & DOS9_SEARCH_GET_FIRST_MATCH){
+                            closedir(pDir);
 							return NULL;
-
-
+						}
 
 					} else if (Dos9_DirExists(lpFilePath)) {
 

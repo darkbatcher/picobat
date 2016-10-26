@@ -36,6 +36,7 @@
 #include <errno.h>
 #include <windows.h>
 #include <assert.h>
+#include <stdarg.h>
 
 #include "internals.h"
 #include "libcu8.h"
@@ -71,6 +72,22 @@ __LIBCU8__IMP __cdecl int libcu8_write(int fd, void* buf, unsigned int cnt)
     return ret;
 }
 
+void libcu8_dbg_msg(const char* fmt, ...)
+{
+    va_list args;
+    HANDLE out;
+    char str[256];
+    int cnt;
+
+    va_start(args, fmt);
+    out = GetStdHandle(STD_ERROR_HANDLE);
+
+    _vsnprintf(str, sizeof(str), fmt, args);
+    WriteConsole(out, str, strlen(str), &cnt, NULL);
+
+    va_end(args);
+}
+
 __LIBCU8__IMP __cdecl int libcu8_write_nolock(int fd, void* buf,
                                                 unsigned int cnt)
 {
@@ -89,6 +106,7 @@ __LIBCU8__IMP __cdecl int libcu8_write_nolock(int fd, void* buf,
     if (buf == NULL || cnt == 0 || IS_ATEOF(mode)) {
 
         /* are we really supposed to do anything here */
+        //libcu8_dbg_msg("libcu8_write: [%d] writing nothing !\r\n", fd);
         return 0;
 
     }
@@ -96,6 +114,7 @@ __LIBCU8__IMP __cdecl int libcu8_write_nolock(int fd, void* buf,
     if (!IS_TEXTMODE(mode)) {
 
         /* The file uses binary, that is, no conversion needed */
+        //libcu8_dbg_msg("libcu8_write: [%d] writing to binary file !\r\n", fd);
         ret = WriteFile(osfhnd(fd), buf, cnt, &wrt, NULL);
         written = wrt;
 
@@ -105,12 +124,15 @@ __LIBCU8__IMP __cdecl int libcu8_write_nolock(int fd, void* buf,
         if (libcu8_is_tty(file)) {
 
             /* this is a real tty, convert to unicode before writing anything */
+            //libcu8_dbg_msg("libcu8_write: [%d] writing to console !\r\n", fd);
             ret = libcu8_write_console(fd, buf, cnt, &written);
 
         } else {
 
             if (!(text = libcu8_lf_to_crlf(buf, cnt, &cvt)))
                 return -1;
+
+            //libcu8_dbg_msg("libcu8_write: [%d] writing to text file !\r\n", fd);
 
             /* this is a regular file (aka. ansi, convert it back to ansi) */
             ret = libcu8_write_file(fd, text, cvt, &written);

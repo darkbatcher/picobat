@@ -55,7 +55,7 @@ __LIBCU8__IMP __cdecl int libcu8_read(int fd, void* buf, unsigned int cnt)
 
     }
 
-    //printf("read() !\n");
+    //printf("libcu8 read() !\n");
 
     //*((char*)NULL) = NULL;
 
@@ -115,6 +115,8 @@ __LIBCU8__IMP __cdecl int libcu8_read_nolock(int fd, void* b, unsigned int cnt_a
            ReadFile API, without any kind of translation or encoding
            conversion */
 
+        //fprintf(stderr, "libcu8: [%d] Reading binary file ! \n", file);
+
         ret = ReadFile(file, buf, cnt, &wrt, NULL);
         written = wrt;
 
@@ -125,6 +127,7 @@ __LIBCU8__IMP __cdecl int libcu8_read_nolock(int fd, void* b, unsigned int cnt_a
            is, can only return full wchar_t characters), We prefer using our
            own read console function */
 
+        //fprintf(stderr, "libcu8: [%d] reading tty ! \n", file);
         ret = libcu8_readconsole(fd, buf, cnt, &written);
 
     } else {
@@ -132,6 +135,7 @@ __LIBCU8__IMP __cdecl int libcu8_read_nolock(int fd, void* b, unsigned int cnt_a
         /* For other files (such as regular files, pipes or device) opened in text
            mode, just convert from ascii to utf8 characters. */
         //fprintf(stderr, "Calling readfile(%d, %p, %p , &written)\n", fd, buf, cnt);
+        //fprintf(stderr, "libcu8: [%d] reading text file ! \n", file);
         ret = libcu8_readfile(fd, buf, cnt, &written);
         //fprintf(stderr, "%d = readfile(%d, %p, %p , %d)\n", ret, fd, buf, cnt, written);
 
