@@ -3,6 +3,9 @@
 /* Define to the binary directory */
 #undef BINARY_PATH
 
+/* Define to the data directory */
+#undef DATA_PATH
+
 /* Define to 1 or 0 if you want to have static cmdlycorrect */
 #undef DOS9_STATIC_CMDLYCORRECT
 

@@ -116,6 +116,7 @@ esac
 
 dnl define this for some weird unices
 AC_DEFINE_UNQUOTED([BINARY_PATH], ["$bindir"], Define to the binary directory)
+AC_DEFINE_UNQUOTED([DATA_PATH], ["$datadir"], Define to the data directory)
 
 AC_CHECK_LIB([m],[cos],[],[AC_MSG_ERROR("No math C library")])
 

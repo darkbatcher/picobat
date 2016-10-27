@@ -1506,3 +1506,17 @@ FRIDAY 18TH, OCTOBER 2016
 
              - Few documentation updates.
 
+TUESDAY 26TH, OCTOBER
+
+        - Fixed configure.ac bug preventing autotools from properly detect BSD 
+          based OSes.
+
+        - Lots of fixes for the libcu8 library, which was not working properly 
+          on 32-bits platform. The lib now directly asks the location of 
+          function using the kernel instead on relying on pointers given by 
+          the libC.
+
+        - Some minor fixes for Dos9 in general.
+
+        - Fixed a little hlp bug 
+

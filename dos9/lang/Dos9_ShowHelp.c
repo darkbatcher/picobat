@@ -42,8 +42,19 @@ void Dos9_LoadInternalHelp(void)
 	char lpEncoding[15];
 	char lpSharePath[FILENAME_MAX];
 
-	Dos9_GetExePath(lpPath, FILENAME_MAX);
+#ifdef WIN32
+    /* On windows, the best is to suppose that *all* the read-only
+       files are in the same folder as the binary. */
+
+    Dos9_GetExePath(lpPath, FILENAME_MAX);
 	Dos9_GetConsoleEncoding(lpEncoding, sizeof(lpEncoding));
+
+    snprintf(lpSharePath, FILENAME_MAX, "%s/share/locale", lpPath);
+#else
+    /* Under *nixes, get the po files from the ordinary read-only
+       directory */
+    snprintf(lpSharePath, FILENAME_MAX, DATA_PATH"/locale")
+#endif // WIN32
 
 	snprintf(lpSharePath, FILENAME_MAX, "%s/share/locale", lpPath);
 
@@ -197,7 +208,7 @@ void Dos9_LoadInternalHelp(void)
 	lpInternalHelp[DOS9_HELP_PUSHD]
  		=gettext("Changes the system's current directory and store the previous folder/path for use by the POPD command.\n"
 		    	 "Usage: PUSHD [path]\n");
-		    	 
+
 	lpInternalHelp[DOS9_HELP_POPD]
 		=gettext("Change directory back to the path/folder most recently stored by the PUSHD command.\n"
 	        	 "Usage: POPD\n");

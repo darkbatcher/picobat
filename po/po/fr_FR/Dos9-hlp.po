@@ -304,6 +304,9 @@ msgid ""
 "for use by the POPD command.\n"
 "Usage: PUSHD [path]\n"
 msgstr ""
+"Change le chemin courrant de Dos9 et stocke le chemin courant précédent "
+"pour être réutilisé plus tard par la commande POPD.\n"
+"Usage: PUSHD [chemin]\n"
 
 #: ../dos9/lang/Dos9_ShowHelp.c:202
 msgid ""
@@ -311,6 +314,9 @@ msgid ""
 "command.\n"
 "Usage: POPD\n"
 msgstr ""
+"Change le répertoire courant vers le chemin sauvegardé par PUSHD le plus "
+"récent.\n"
+"Usage: POPD\n"
 
 #: ../dos9/lang/Dos9_ShowHelp.c:206
 msgid ""
