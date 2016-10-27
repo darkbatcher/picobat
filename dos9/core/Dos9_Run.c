@@ -289,7 +289,7 @@ loop:
         && lppsStream->lppsNode->cNodeType == PARSED_STREAM_NODE_PIPE) {
 
         /* We're under Unix-like OS, fork, fork, fork, fork,
-           so fucking convenient isn't it ? */
+		   
         if (pipe(pipedes) == -1)
             Dos9_ShowErrorMessage(DOS9_CREATE_PIPE | DOS9_PRINT_C_ERROR,
                                     __FILE__ "/Dos9_ExecOperators()",
@@ -704,7 +704,7 @@ int Dos9_RunExternalFile(char* lpFileName, char** lpArguments)
 		 *tmp;
 	errno=0;
 
-    Dos9_ApplyEnv(lpeEnv);
+	Dos9_ApplyEnv(lpeEnv);
 
 	snprintf(str, sizeof(str), "\"%s\"", lpArguments[0]);
 	tmp = lpArguments[0];

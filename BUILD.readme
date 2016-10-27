@@ -17,9 +17,8 @@ armv7.
 Buiding and installing Dos9 is quite easy under linux, using the following
 command:
 
-    ./configure
-    make
-    make install
+    ./build-prepare.sh
+    ./build-bin.sh
 
 It is a little bit more complicated under Windows, especially if you want to
 access it out of MinGW. 

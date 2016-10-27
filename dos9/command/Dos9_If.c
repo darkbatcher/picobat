@@ -200,13 +200,13 @@ int Dos9_CmdIf(char* lpParam)
 
 				lpToken2 = Dos9_EsToChar(lpComparison);
 
-				/* Double quote hack 
-					
+				/* Double quote hack
+
 				   This is basically a hack designed to keep compatibility with cmd.exe
 				   by supporting "foo"=="foo".
-				   
+
 				   Todo: clean this a little bit
-				   
+
 				*/
 				char *q = (lpToken2 + strlen(lpToken2) - 1);
 

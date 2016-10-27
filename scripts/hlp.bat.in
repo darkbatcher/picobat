@@ -3,6 +3,7 @@ SETLOCAL EnableDelayedExpansion
 
 ::   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
 ::   Copyright (C) 2010-2016 Romain GARBI
+:: 	 Copyright (C) 2016      Teddy Astie
 ::
 ::   This program is free software: you can redistribute it and/or modify
 ::   it under the terms of the GNU General Public License as published by
@@ -38,7 +39,9 @@ if /i "%~1" neq "/?" goto :show
 :: if nothing has been selected, goto show
 
 
-ECHO Hlp 1.0 - Manual page viewier Copyright ^(C^) 2013-2016 Romain Garbi ^(Darkbatcher^)
+ECHO Hlp 1.0 - Manual page viewier
+ECHO Copyright ^(C^) 2013-2016 Romain Garbi ^(Darkbatcher^)
+ECHO Copyright ^(C^) 2016      Teddy Astie ^(TSnake41^)
 ECHO This program comes with ABSOLUTELY NO WARRANTY; This is free software,
 ECHO and you are welcome to redistribute it under the terms of the GNU CPL.
 ECHO.
@@ -95,7 +98,10 @@ ECHO *** Building manual pages for %lang_build% with charset %charset_build% ***
 ECHO.
 ECHO  1] Remove content of the documentation folder.
 ECHO.
+for %%A in (ansi html txt) do RMDIR /Q /S %%A
+
 ECHO  2] Creating subdirectories.
+ECHO.
 
 :: create static directory
 for %%A in (
@@ -134,28 +140,34 @@ ECHO. 3] Produce the output :
 FOR /F "tokens=*" %%A in ('cd %hlp_data_dir%/%lang_build%
 dir /b /s /a:-d') do (
 
-	
+
 	ECHO    [*] Building "%%~pnA" :
-	
+
 	SET ansi_build=ansi/%%~pnA.ansi
 	SET html_build=html/%%~pnA.html
 	SET txt_build=txt/%%~pnA.txt
-	
-	ECHO      - file : !txt_build! 
+
+	ECHO      - file : !txt_build!
 	tea %hlp_data_dir%/%lang_build%/%%A !txt_build!.tmp /E:UTF-8 /O:TEXT-PLAIN
-	
+
 	ECHO      - file : !ansi_build!
-	tea %hlp_data_dir%/%lang_build%/%%A !ansi_build!.tmp /E:UTF-8 /O:TEXT-ANSI 
-	
+	tea %hlp_data_dir%/%lang_build%/%%A !ansi_build!.tmp /E:UTF-8 /O:TEXT-ANSI
+
 	ECHO      - file : !html_build!
     tea %hlp_data_dir%/%lang_build%/%%A !html_build! /E:UTF-8 /O:html /T "The Dos9 Project :: "
 
-	ECHO      - converting output from UTF-8 to %charset_build%	
+	ECHO      - converting output from UTF-8 to %charset_build%
 	:: just convert .ansi file, it is not needed for html document
 	:: which were generated using tea, that means to change encoding
 	:: and tag <meta charset="utf-8" />
-	::iconv -f UTF-8 -t %charset_build% !ansi_build!.tmp > !ansi_build!
-	::iconv -f UTF-8 -t %charset_build% !txt_build!.tmp > !txt_build!
+	if /i !charset_build! NEQ UTF-8 (
+		iconv -f UTF-8 -t %charset_build% !ansi_build!.tmp > !ansi_build!
+		iconv -f UTF-8 -t %charset_build% !txt_build!.tmp > !txt_build!
+	) else (
+		:: move strangely fail some files, so I temporary use unix mv
+		mv !ansi_build!.tmp !ansi_build! > NUL
+		mv !txt_build!.tmp !txt_build! > NUL
+	)
 )
 
 :: Now, create the hlpdb file
@@ -168,7 +180,7 @@ FOR /F "tokens=*" %%A in ('dir /b /s /a:-D txt/*.txt') do (
 
 ECHO.
 ECHO.5] Cleanning temporary files
-del /s /q doc/*.tmp
+:: del /s /q ./*.tmp > NUL
 
 GOTO:EOF
 
@@ -243,15 +255,17 @@ GOTO:EOF
 :config
 if exist hlp.conf.bat call hlp.conf.bat
 
-ECHO Hlp - Manual page viewier Copyright ^(C^) 2013-2015 Romain Garbi ^(Darkbatcher^)
+ECHO Hlp - Manual page viewier
+ECHO Copyright ^(C^) 2013-2016 Romain Garbi ^(Darkbatcher^)
+ECHO Copyright ^(C^) 2016      Teddy Astie ^(TSnake41^)
 ECHO This program comes with ABSOLUTELY NO WARRANTY; This is free software,
 ECHO and you are welcome to redistribute it under the terms of the GNU CPL.
 ECHO.
 ECHO Setting Hlp Options :
 ECHO.
-ECHO. 1] Setting mode : 
+ECHO. 1] Setting mode :
 ECHO.
-ECHO    The mode option determines the file type that will be displayed by Hlp. 
+ECHO    The mode option determines the file type that will be displayed by Hlp.
 ECHO There is three different values possible : ansi, txt and html.
 ECHO.
 ECHO  * html mode permits to browse allmost all document through the use of html

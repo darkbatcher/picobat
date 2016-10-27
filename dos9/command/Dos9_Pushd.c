@@ -3,6 +3,7 @@
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
  *   Copyright (C) 2010-2016 Romain GARBI
  *   Copyright (C) 2016      Astie Teddy
+ *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
  *   the Free Software Foundation, either version 3 of the License, or
@@ -22,117 +23,99 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <libDos9.h>
+
 #include "../core/Dos9_Core.h"
 
-#include "Dos9_Cd.h"
 #include "Dos9_Pushd.h"
 
 #include "../errors/Dos9_Errors.h"
 #include "../lang/Dos9_Lang.h"
 #include "../lang/Dos9_ShowHelp.h"
 
-
-/* Changes the system's current directory and store the previous folder/path for use by the POPD command.
+/* PUSHD changes the system's current directory and store the previous folder/path for use by the POPD command.
+   POPD changes the system's current directory with the previously stored folder/path using PUSHD command.
 
     PUSHD [path]
+    POPD
 
-    Changes the system's current directory and store the previous folder/path for use by the POPD command.
+    PUSHD changes the system's current directory and store the previous folder/path for use by the POPD command.
+    POPD changes the system's current directory with the previously stored folder/path using PUSHD command.
 
         - [path] : The path for the new current directory.
 
     The old current directory is stored in a stack.
 */
 
-/* TODO : Makes this more Windows compatible */
+/* TODO: Makes this more Windows compatible
+   On cmd.exe, pushd can mount UNC paths to X:/
+*/
 
-static char **stack;
-static int stack_pos;
+LPSTACK lpStack;
 
 int Dos9_CmdPushd (char *lpLine)
 {
+    ESTR *lpEstr=Dos9_EsInit();
+    ESTR *lpEscd=Dos9_EsInit();
+
     lpLine += 5;
+
+    if (!Dos9_GetNextParameterEs(lpLine, lpEstr)) {
+        puts(Dos9_GetCurrentDir());
+        goto free;
+    }
+
+    if (!strncmp(Dos9_EsToChar(lpEstr), "/?", 2)) {
+        Dos9_ShowInternalHelp(DOS9_HELP_PUSHD);
+        goto free;
+    }
+
+    Dos9_EsCat(lpEscd, Dos9_GetCurrentDir());
+
+    if (!Dos9_SetCurrentDir(Dos9_EsToChar(lpEstr)))
+        lpStack = Dos9_PushStack(lpStack, lpEscd);
+    else {
+        Dos9_ShowErrorMessage(DOS9_DIRECTORY_ERROR, Dos9_EsToChar(lpEstr), FALSE);
+        goto error;
+    }
+
+    return 0;
+
+    free:
+        Dos9_EsFree(lpEstr);
+        Dos9_EsFree(lpEscd);
+        return 0;
+
+    error:
+        Dos9_EsFree(lpEstr);
+        Dos9_EsFree(lpEscd);
+        return -1;
+}
+
+int Dos9_CmdPopd (char *lpLine)
+{
+    ESTR *lpEsDir;
+    char *lpDir;
+
+    lpLine += 4;
+
     lpLine = Dos9_SkipBlanks(lpLine);
 
-    char *lpEnd = lpLine + strlen(lpLine) - 1;
-
-    /* Remove ending blanks */
-    while (*lpEnd == ' ' || *lpEnd == '\t') {
-        *lpEnd = '\0';
-        lpEnd--;
-    }
-
     if (!strncmp(lpLine, "/?", 2)) {
-        Dos9_ShowInternalHelp(DOS9_HELP_PUSHD);
+        Dos9_ShowInternalHelp(DOS9_HELP_POPD);
         return 0;
     }
 
-    if (!strcmp(lpLine, "")) {
-        puts(Dos9_GetCurrentDir());
-        return 0;
-    }
-
-    char *currentDirectory = Dos9_GetCurrentDir();
-    char *stackDirectory = malloc(strlen(currentDirectory) * sizeof(char) + 1);
-    strcpy(stackDirectory, currentDirectory);
-    stackDirectory[strlen(currentDirectory)] = '\0';
-
-    if (Dos9_SetCurrentDir(lpLine)) {
-        Dos9_ShowErrorMessage(DOS9_DIRECTORY_ERROR, lpLine, FALSE);
+    if (Dos9_GetStack(lpStack, &lpEsDir))
         return -1;
-    } else {
-        Dos9_CmdPushd_PushDirectory(stackDirectory);
-        return 0;
+
+    lpStack = Dos9_PopStack(lpStack, NULL);
+
+    if (Dos9_SetCurrentDir(Dos9_EsToChar(lpEsDir))) {
+        Dos9_ShowErrorMessage(DOS9_DIRECTORY_ERROR, Dos9_EsToChar(lpEsDir), FALSE);
+        return -1;
     }
-}
 
-void Dos9_CmdPushd_PushDirectory(char *directory);
-void Dos9_CmdPushd_PushDirectory(char *directory)
-{
-    char *newDir = malloc(strlen(directory) * sizeof(char) + 1);
-    strcpy(newDir, directory);
-    newDir[strlen(directory)] = '\0';
-
-    // Initialize a stack
-    if (stack == NULL)
-        Dos9_CmdPushd_InitStack();
-
-    // Some issues using reallocation
-    // stack = realloc(stack, stack_pos * sizeof(void*) + 1);
-
-    if (stack == NULL)
-        Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION, "Dos9_Pushd", 1);
-
-    stack[stack_pos + 1] = newDir;
-    stack_pos++;
-}
-
-void Dos9_CmdPushd_PopDirectory()
-{
-    if (stack == NULL || stack_pos == 0)
-        return;
-
-    free(stack[stack_pos]);
-
-    // Some issues using reallocation
-    // stack = realloc(stack, sizeof(void*) * stack_pos);
-
-    if (stack == NULL)
-        Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION, 'Dos9_Pushd', 1);
-
-    stack_pos--;
-}
-
-char* Dos9_CmdPushd_GetDirectory()
-{
-    if (stack_pos == 0)
-        return "";
-
-    return stack[stack_pos];
-}
-
-void Dos9_CmdPushd_InitStack();
-void Dos9_CmdPushd_InitStack()
-{
-    stack = malloc(MAX_STACK_SIZE * sizeof(char*));
-    stack_pos = 0;
+    Dos9_EsFree(lpEsDir);
+    return 0;
 }

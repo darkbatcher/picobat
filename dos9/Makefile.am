@@ -60,7 +60,7 @@ dos9_SOURCES = ./Dos9.c ./core/Dos9_Args.c ./core/Dos9_Expand.c \
 ./command/Dos9_Type.c ./command/Dos9_Find.c ./core/Dos9_Env.c \
 ./command/Dos9_More.c ./core/Dos9_OsStream.c ./command/Dos9_Start.c \
 ./command/Dos9_Break.c ./command/Dos9_IfExp.c ./command/Dos9_Chcp.c \
-./command/Dos9_Pushd.c ./command/Dos9_Popd.c ./init/Dos9_Init.c
+./command/Dos9_Pushd.c ./init/Dos9_Init.c
 
 dos9_LDADD = $(top_builddir)/libinteval/libinteval.la \
 $(top_builddir)/libmatheval/lib/libmatheval.la $(top_builddir)/libDos9/libDos9.la \

@@ -681,4 +681,3 @@ int Dos9_CmdSetEvalInt(ESTR* lpExpression)
 error:
 	return -1;
 }
-

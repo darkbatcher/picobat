@@ -94,7 +94,7 @@ int Dos9_CmdMakeDirs(char* str)
 
     while (*str) {
 
-        if (IS_DIR_DELIM(*str)) {
+        if (IS_DIR_DELIM(*str) && str != dir) {
 
             /* Descent throught the tree to create *every* non-existing
                 dir in the path */

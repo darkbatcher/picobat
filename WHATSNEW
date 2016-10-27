@@ -1520,3 +1520,9 @@ TUESDAY 26TH, OCTOBER
 
         - Fixed a little hlp bug 
 
+WEDNESDAY 26TH, OCTOBER 2016
+
+        - Rewrite Pushd and Popd commands.
+
+        - Fix some commands help. 
+

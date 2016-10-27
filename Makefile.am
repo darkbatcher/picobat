@@ -36,9 +36,9 @@ install-extra: textfiles
 	cp -Rf man/* $(datadir)/dos9/hlp
 	cp README WHATSNEW $(datadir)/dos9/
 
-.PHONY: install-extra textfiles 
+.PHONY: install-extra textfiles
 
-textfiles : 
+textfiles :
 	for i in README WHATSNEW; do \
 		echo "- Building $$i"; \
 		case `uname -a` in \
@@ -58,7 +58,7 @@ dos9-install-portable:
 	cp WHATSNEW $(prefix)/
 	cp COPYING $(prefix)/
 
-dist-bin : dist-bin-dir	
+dist-bin : dist-bin-dir
 	tardir=$(distbdir) && $(am__tar) | GZIP=$(GZIP_ENV) gzip -c> $(distbdir).tar.gz
 	$(rm_distbdir)
 

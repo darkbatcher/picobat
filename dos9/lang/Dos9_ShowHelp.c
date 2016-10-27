@@ -206,11 +206,13 @@ void Dos9_LoadInternalHelp(void)
                  "Usage: CHCP [ codepage | encoding]\n");
 
 	lpInternalHelp[DOS9_HELP_PUSHD]
- 		=gettext("Changes the system's current directory and store the previous folder/path for use by the POPD command.\n"
+ 		=gettext("Changes the current directory and store the previous folder/path\n"
+		 		 "for use by the POPD command.\n"
 		    	 "Usage: PUSHD [path]\n");
 
 	lpInternalHelp[DOS9_HELP_POPD]
-		=gettext("Change directory back to the path/folder most recently stored by the PUSHD command.\n"
+		=gettext("Change the current directory by the most recently stored folder/path\n"
+				 "stored by the PUSHD command.\n"
 	        	 "Usage: POPD\n");
 
 	lpExternalMsg

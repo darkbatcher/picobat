@@ -45,7 +45,9 @@
 
 int Dos9_CmdPause(char* lpLine)
 {
-	if (!strcmp(lpLine+6, "/? ")) {
+	lpLine = Dos9_SkipBlanks(lpLine);
+
+	if (!strncmp(lpLine+6, "/?", 2)) {
 
 		Dos9_ShowInternalHelp(DOS9_HELP_PAUSE);
 		return 0;
@@ -56,4 +58,3 @@ int Dos9_CmdPause(char* lpLine)
 
 	return 0;
 }
-
