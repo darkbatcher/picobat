@@ -288,8 +288,8 @@ loop:
     if (lppsStream->lppsNode
         && lppsStream->lppsNode->cNodeType == PARSED_STREAM_NODE_PIPE) {
 
-        /* We're under Unix-like OS, fork, fork, fork, fork,
-		   
+        /* We're under Unix-like OS, fork, fork, fork, fork */
+
         if (pipe(pipedes) == -1)
             Dos9_ShowErrorMessage(DOS9_CREATE_PIPE | DOS9_PRINT_C_ERROR,
                                     __FILE__ "/Dos9_ExecOperators()",

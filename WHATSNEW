@@ -1526,3 +1526,11 @@ WEDNESDAY 26TH, OCTOBER 2016
 
         - Fix some commands help. 
 
+THURSDAY 27TH, OCTOBER
+
+        - Change location of gettext files under unices to match the usual
+          file layout.
+
+FRIDAY 28TH, OCTOBER
+
+        - Fix some compilation errors.
