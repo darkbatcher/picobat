@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dos9 0.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-05 01:34+0200\n"
+"POT-Creation-Date: 2016-10-30 22:55+0100\n"
 "PO-Revision-Date: 2014-03-12 16:18+0100\n"
 "Last-Translator: DarkBatcher <darkbatcher@gmail.com>\n"
 "Language-Team: French <darkbatcher@dos9.org>\n"
@@ -19,17 +19,17 @@ msgstr ""
 "X-Generator: Poedit 1.5.7\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-#: ../dos9/errors/Dos9_Errors.c:65
+#: ../dos9/errors/Dos9_Errors.c:74
 #, c-format
 msgid "Error : Unable to acces to file \"%s\".\n"
 msgstr "Erreur : Impossible d'accéder au fichier \"%s\".\n"
 
-#: ../dos9/errors/Dos9_Errors.c:69
+#: ../dos9/errors/Dos9_Errors.c:78
 #, c-format
 msgid "Error : Unable to find folder \"%s\".\n"
 msgstr "Erreur : Impossible de trouver le dossier \"%s\".\n"
 
-#: ../dos9/errors/Dos9_Errors.c:73
+#: ../dos9/errors/Dos9_Errors.c:82
 #, c-format
 msgid ""
 "Error : \"%s\" is not recognized as an internal or external command, an "
@@ -38,66 +38,66 @@ msgstr ""
 "Erreur : \"%s\" n'est pas reconnu en tant que commande interne ou externe, "
 "programme exécutable ou fichier batch.\n"
 
-#: ../dos9/errors/Dos9_Errors.c:78
+#: ../dos9/errors/Dos9_Errors.c:87
 #, c-format
 msgid "Error : \"%s\" was unexpected.\n"
 msgstr "Erreur : \"%s\" était inatendu.\n"
 
-#: ../dos9/errors/Dos9_Errors.c:82
+#: ../dos9/errors/Dos9_Errors.c:91
 #, c-format
 msgid "Error : Invalid command line for %s.\n"
 msgstr "Erreur : Ligne de commande invalide \"%s\".\n"
 
-#: ../dos9/errors/Dos9_Errors.c:85
+#: ../dos9/errors/Dos9_Errors.c:94
 #, c-format
 msgid "Error : Unable to find label \"%s\".\n"
 msgstr "Erreur : Impossible de trouver l'étiquette \"%s\".\n"
 
-#: ../dos9/errors/Dos9_Errors.c:89
+#: ../dos9/errors/Dos9_Errors.c:98
 msgid "Warning : Using a Dos9 extension but the CMDLYCORRECT option is set.\n"
 msgstr ""
 "Attention : il faut désactiver l'option CMDLYCORRECT pour utiliser les "
 "extensions de Dos9.\n"
 
-#: ../dos9/errors/Dos9_Errors.c:92
+#: ../dos9/errors/Dos9_Errors.c:101
 #, c-format
 msgid "Error : \"%s\" expected more arguments.\n"
 msgstr "Erreur : \"%s\" attendait plus d'arguments.\n"
 
-#: ../dos9/errors/Dos9_Errors.c:96
+#: ../dos9/errors/Dos9_Errors.c:105
 #, c-format
 msgid "Error : Uncompatible arguments %s.\n"
 msgstr "Erreur : Arguments incompatibles %s.\n"
 
-#: ../dos9/errors/Dos9_Errors.c:100
+#: ../dos9/errors/Dos9_Errors.c:109
 #, c-format
 msgid "Error : Unable to rename \"%s\".\n"
 msgstr "Erreur : Impossible de renommer \"%s\".\n"
 
-#: ../dos9/errors/Dos9_Errors.c:104
+#: ../dos9/errors/Dos9_Errors.c:113
 msgid "Error : Overflowed maximum value.\n"
 msgstr "Erreur : Dépassement de valeur maximale.\n"
 
-#: ../dos9/errors/Dos9_Errors.c:107
+#: ../dos9/errors/Dos9_Errors.c:116
 msgid "Error : Divide by 0.\n"
 msgstr "Erreur : Division par 0\n"
 
-#: ../dos9/errors/Dos9_Errors.c:110
+#: ../dos9/errors/Dos9_Errors.c:119
 #, c-format
 msgid "Error : Unable to create folder \"%s\".\n"
 msgstr "Erreur : Impossible de créer le dossier \"%s\".\n"
 
-#: ../dos9/errors/Dos9_Errors.c:114
+#: ../dos9/errors/Dos9_Errors.c:123
 #, c-format
 msgid "Error : Unable to delete folder \"%s\".\n"
 msgstr "Erreur : Impossible de suprimmer le dossier \"%s\"\n"
 
-#: ../dos9/errors/Dos9_Errors.c:118
+#: ../dos9/errors/Dos9_Errors.c:127
 #, c-format
 msgid "Error : Stream module : \"%s\".\n"
 msgstr "Erreur : Module de flux : \"%s\".\n"
 
-#: ../dos9/errors/Dos9_Errors.c:122
+#: ../dos9/errors/Dos9_Errors.c:131
 #, c-format
 msgid ""
 "Error : \"%c\" is an invalid character for special variables. Special "
@@ -108,7 +108,7 @@ msgstr ""
 "nom variables spécial doit être un caractère ASCII strict, à l'exception des "
 "caractères de contrôle et de l'espace (0x00-0x30).\n"
 
-#: ../dos9/errors/Dos9_Errors.c:129
+#: ../dos9/errors/Dos9_Errors.c:138
 #, c-format
 msgid ""
 "Error : \"%s\" is not a valid block (should at least be enclosed within "
@@ -117,12 +117,12 @@ msgstr ""
 "Errur : \"%s\" n'est pas un bloc valable (devrait être entouré de "
 "parenthèses).\n"
 
-#: ../dos9/errors/Dos9_Errors.c:133
+#: ../dos9/errors/Dos9_Errors.c:142
 #, c-format
 msgid "Error : \"%s\" is not a valid token specifier.\n"
 msgstr "Erreur :   \"%s\" n'est pas une description de token valide.\n"
 
-#: ../dos9/errors/Dos9_Errors.c:136
+#: ../dos9/errors/Dos9_Errors.c:145
 #, c-format
 msgid ""
 "Error : Attempted to specify more than TOKEN_NB_MAX (%d) different tokens\n"
@@ -132,22 +132,22 @@ msgstr ""
 "différent.\n"
 "."
 
-#: ../dos9/errors/Dos9_Errors.c:140
+#: ../dos9/errors/Dos9_Errors.c:149
 #, c-format
 msgid "Error : \"%s\" violates the ``Usebackq'' syntax.\n"
 msgstr "Erreur : \"%s\" viole la syntaxe ``Usebackq''.\n"
 
-#: ../dos9/errors/Dos9_Errors.c:143
+#: ../dos9/errors/Dos9_Errors.c:152
 #, c-format
 msgid "Error : Unable to allocate memory (in %s).\n"
 msgstr "Erreur : Impossible d'allouer de la mémoire (dans %s).\n"
 
-#: ../dos9/errors/Dos9_Errors.c:146
+#: ../dos9/errors/Dos9_Errors.c:155
 #, c-format
 msgid "Error : Can't create pipe (in %s).\n"
 msgstr "Erreur : Impossible de créer un pipe (dans %s).\n"
 
-#: ../dos9/errors/Dos9_Errors.c:149
+#: ../dos9/errors/Dos9_Errors.c:158
 #, c-format
 msgid ""
 "Error : unable to run a subprocess of Dos9 to process the given input (\"%s"
@@ -156,160 +156,160 @@ msgstr ""
 "Error : Impossible de lancer une seconde instance de Dos9 pour exécuter "
 "l'entée spécifiée (\"%s\").\n"
 
-#: ../dos9/errors/Dos9_Errors.c:153
+#: ../dos9/errors/Dos9_Errors.c:162
 #, c-format
 msgid ""
 "Error : Invalid token specifier. \"%s\" breaks input specifying rules.\n"
 msgstr "Erreur : \"%s\" brise les règles de spécification de tokens.\n"
 
-#: ../dos9/errors/Dos9_Errors.c:157
+#: ../dos9/errors/Dos9_Errors.c:166
 #, c-format
 msgid "Error : FOR loop is trying to reassign already used %%%%%c variable.\n"
 msgstr ""
 "Erreur : La boucle FOR a essayé de réassigner la variable %%%%%c qui est "
 "déjà utilisée.\n"
 
-#: ../dos9/errors/Dos9_Errors.c:161
+#: ../dos9/errors/Dos9_Errors.c:170
 #, c-format
 msgid "Error : \"%s\" is not a valid mathematical expression.\n"
 msgstr "Erreur : \"%s\" n'est pas une expression mathématique valide.\n"
 
-#: ../dos9/errors/Dos9_Errors.c:164
+#: ../dos9/errors/Dos9_Errors.c:173
 #, c-format
 msgid "Error : \"%s\" is not a valid top-level block.\n"
 msgstr "Erreur :   \"%s\" n'est pas un block de niveau supérieur valide.\n"
 
-#: ../dos9/errors/Dos9_Errors.c:167
+#: ../dos9/errors/Dos9_Errors.c:176
 #, c-format
 msgid "Error : Unable to duplicate file descriptor (%d).\n"
 msgstr "Erreur : Impossible de duppliquer le descripteur de fichier  (%d).\n"
 
-#: ../dos9/errors/Dos9_Errors.c:170
+#: ../dos9/errors/Dos9_Errors.c:179
 #, c-format
 msgid "Error : Unable to create pipe at function (%s).\n"
 msgstr "Erreur : Impossible de créer un pipe (dans %s).\n"
 
-#: ../dos9/errors/Dos9_Errors.c:173
+#: ../dos9/errors/Dos9_Errors.c:182
 #, c-format
 msgid "Error : Unable to set environment string (%s).\n"
 msgstr ""
 "Erreur : Impossible de modifier la variable d'environement (dans %s).\n"
 
-#: ../dos9/errors/Dos9_Errors.c:176
+#: ../dos9/errors/Dos9_Errors.c:185
 #, c-format
 msgid "Error : \"%s\" is an invalid stream redirection.\n"
 msgstr "Erreur :   \"%s\" n'est pas une redirection valide.\n"
 
-#: ../dos9/errors/Dos9_Errors.c:179
+#: ../dos9/errors/Dos9_Errors.c:188
 #, c-format
 msgid "Error : Redirection for \"%s\" was already specified.\n"
 msgstr "Erreur : Une redirection pour \"%s\" était déjà spécifiée.\n"
 
-#: ../dos9/errors/Dos9_Errors.c:182
+#: ../dos9/errors/Dos9_Errors.c:191
 #, c-format
 msgid "Error : Encountered malformed blocks (\"%s\").\n"
 msgstr "Erreur : Mauvais bloc (\"%s\").\n"
 
-#: ../dos9/errors/Dos9_Errors.c:185
+#: ../dos9/errors/Dos9_Errors.c:194
 msgid "Error : Blocks left unclosed at end-of-file.\n"
 msgstr "Erreur : Bloc non fermé à la fin du fichier.\n"
 
-#: ../dos9/errors/Dos9_Errors.c:188
+#: ../dos9/errors/Dos9_Errors.c:197
 #, c-format
 msgid "Error : Unable to add command \"%s\".\n"
 msgstr "Erreur : Impossible de renommer \"%s\".\n"
 
-#: ../dos9/errors/Dos9_Errors.c:191
+#: ../dos9/errors/Dos9_Errors.c:200
 #, c-format
 msgid "Error : Unable to remap commands (in function %s).\n"
 msgstr "Erreur : Impossible de remaper les commandes (dans %s).\n"
 
-#: ../dos9/errors/Dos9_Errors.c:194
+#: ../dos9/errors/Dos9_Errors.c:203
 #, c-format
 msgid "Error : Trying to redefine already used \"%s\" command.\n"
 msgstr ""
 "Erreur : Tentative de réassignement de la commande déjà utilisée \"%s\".\n"
 
-#: ../dos9/errors/Dos9_Errors.c:197
+#: ../dos9/errors/Dos9_Errors.c:206
 #, c-format
 msgid "Error : Unable to redefine \"%s\" command.\n"
 msgstr "Erreur : Impossible de redéfinir la commande \"%s\".\n"
 
-#: ../dos9/errors/Dos9_Errors.c:200
+#: ../dos9/errors/Dos9_Errors.c:209
 #, c-format
 msgid ""
 "Error : Unable to set option \"%s\", it is built statically inside your "
 "version of Dos9.\n"
 msgstr ""
-"Erreur : Impossible d'activer l'option \"%s\" qui est compilée à "
-"l'intérieur de Dos9.\n"
+"Erreur : Impossible d'activer l'option \"%s\" qui est compilée à l'intérieur "
+"de Dos9.\n"
 
-#: ../dos9/errors/Dos9_Errors.c:204
+#: ../dos9/errors/Dos9_Errors.c:213
 #, c-format
 msgid "Error : The \"%s\" comparison forbids use of strings.\n"
 msgstr "Erreur : Le comparant \"%s\" interdit l'usage de chaines.\n"
 
-#: ../dos9/errors/Dos9_Errors.c:207
+#: ../dos9/errors/Dos9_Errors.c:216
 #, c-format
 msgid "Error : Unable to fork the current process (in function %s).\n"
 msgstr "Erreur : Impossible de forker le processus courant (dans %s).\n"
 
-#: ../dos9/errors/Dos9_Errors.c:210
+#: ../dos9/errors/Dos9_Errors.c:219
 #, c-format
 msgid "Error : Pathspec \"%s\" does not match any file.\n"
 msgstr "Erreur : L'expression \"%s\" ne correspond à aucun fichier.\n"
 
-#: ../dos9/errors/Dos9_Errors.c:213
+#: ../dos9/errors/Dos9_Errors.c:222
 #, c-format
 msgid "Error : %s does not recieved any valid file to process.\n"
 msgstr "Erreur : %s n'a reçu aucun fichier valide à traiter.\n"
 
-#: ../dos9/errors/Dos9_Errors.c:216
+#: ../dos9/errors/Dos9_Errors.c:225
 #, c-format
 msgid "Error : \"%s\" is not a valid number.\n"
 msgstr "Erreur :   \"%s\" n'est pas un nombre valide.\n"
 
-#: ../dos9/errors/Dos9_Errors.c:219
+#: ../dos9/errors/Dos9_Errors.c:228
 #, c-format
 msgid "Error : Too many arguments for %s command\n"
 msgstr "Erreur : Trop d'arguments pour la commande %s.\n"
 
-#: ../dos9/errors/Dos9_Errors.c:222
+#: ../dos9/errors/Dos9_Errors.c:231
 #, c-format
 msgid "Error : \"%s\" is not a valid expression for IF command.\n"
 msgstr "Erreur : \"%s\" n'est pas une expression valide pour la commandeIF.\n"
 
-#: ../dos9/errors/Dos9_Errors.c:225
+#: ../dos9/errors/Dos9_Errors.c:234
 #, c-format
 msgid "Error : Unable to copy file \"%s\".\n"
 msgstr "Erreur : Impossible de copier le fichier\"%s\".\n"
 
-#: ../dos9/errors/Dos9_Errors.c:228
+#: ../dos9/errors/Dos9_Errors.c:237
 #, c-format
 msgid "Error : Unable to move file \"%s\".\n"
 msgstr "Erreur : Impossible de déplacer le fichier \"%s\".\n"
 
-#: ../dos9/errors/Dos9_Errors.c:231
+#: ../dos9/errors/Dos9_Errors.c:240
 #, c-format
 msgid "Error : Unable to create directory \"%s\".\n"
 msgstr "Erreur : Impossible de créer le dossier \"%s\".\n"
 
-#: ../dos9/errors/Dos9_Errors.c:234
+#: ../dos9/errors/Dos9_Errors.c:243
 #, c-format
 msgid "Error : Unable to delete file \"%s\".\n"
 msgstr "Erreur : Impossible de suprimmer le dossier \"%s\"\n"
 
-#: ../dos9/errors/Dos9_Errors.c:237
+#: ../dos9/errors/Dos9_Errors.c:246
 #, c-format
 msgid "Error : Unable to delete directory \"%s\".\n"
 msgstr "Erreur : Impossible de suprimmer le dossier \"%s\"\n"
 
-#: ../dos9/errors/Dos9_Errors.c:240
+#: ../dos9/errors/Dos9_Errors.c:249
 #, c-format
 msgid "Error : \"%s\" is not a valid codepage on your system.\n"
 msgstr "Erreur :   \"%s\" n'est pas une page valide sur votre systême.\n"
 
-#: ../dos9/errors/Dos9_Errors.c:243
+#: ../dos9/errors/Dos9_Errors.c:252
 #, c-format
 msgid ""
 "Error : \"%s\" is a relative path, RENAME (or REN) do not handles relative "
@@ -320,7 +320,7 @@ msgstr ""
 "supportent pas les chemins relatifs. Pour déplacer et renommer un fichier de "
 "façon simultanée, utilisez la commande MOVE.\n"
 
-#: ../dos9/errors/Dos9_Errors.c:248
+#: ../dos9/errors/Dos9_Errors.c:257
 msgid ""
 "\n"
 "Aborting current command, press any key to end Dos9.\n"

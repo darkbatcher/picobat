@@ -96,11 +96,11 @@
 
 	- {move|MOVE}       {[int]} : Déplace un ou plusieurs fichiers.
 
-	- {ren|REN, RENAME {[int]} : Renommme un fichier.
+	- {ren|REN, RENAME} {[int]} : Renommme un fichier.
 
 	- {del|DEL, ERASE} {[int]} : Supprime un ou plusieurs fichiers.
 
-	- {cd|CD, CHDIR}  {[int]} : Change le chemin courant.
+	- {cd|CD, CHDIR}   {[int]} : Change le chemin courant.
 
 	- {dir|DIR}        {[int]} : Affiche une liste de dossier et de sous
 	  dossiers.
@@ -108,6 +108,12 @@
 	- {md|MD, MKDIR}  {[int]} : Crée un dossier.
 
 	- {rd|RD, RMDIR}  {[int]} : Supprime un dossier.
+
+	- {pushd|PUSHD}    {[int]} : Change le chemin courant puis pousse
+	  le précédent sur la pile de dossier.
+
+	- {popd|POPD}     {[int]} : Tire un dossier sur la pile de dossier
+	  pour définir le chemin courant.
 
 	- {type|TYPE} {[int]} : Affiche le contenu d'un ou plusieurs
 	fichiers texte.

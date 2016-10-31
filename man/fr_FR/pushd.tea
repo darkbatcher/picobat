@@ -1,0 +1,49 @@
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#   Copyright (C) 2016       Teddy Astie (TSnake41)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+{{PUSHD command}}
+
+	  La commande {PUSHD} permet de d'afficher le répertoire présent en
+	   haut de {la pile de répertoire} et changer le dossier courant
+	   en poussant l'ancien dans {la pile de répertoire}.
+
+{{Synopsis}}
+
+${	PUSHD [chemin1] [chemin2] [chemin3] [cheminN]  }
+
+	Pour chaque chemin spécifié : change le {répertoire actuel} puis stocke
+	 l'ancien sur {la pile de répertoire}.
+
+	Si aucun chemin n'est spécifié, affiche le {répertoire} qui est présent en
+	 haut de {la pile de repertoire}.
+
+	En cas d'érreur, le {code de sortie} correspond au {chemin} qui a échoué.
+
+{{Compatibilité}}
+
+	Majoritairement compatible avec {cmd.exe}. Les chemins à espaces doivent
+    être délimités par des guillements afin de pouvoir utiliser de multiples
+	chemins sans confusion.
+
+	Les chemins multiples sont une extension de {Dos9}.
+
+{{A voir aussi}}
+
+	{cd|CD command}, {popd|POPD command},
+	{spec/dirstack|Directory stack},
+	{commands|Command list}

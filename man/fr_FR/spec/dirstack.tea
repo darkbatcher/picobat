@@ -1,0 +1,67 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#   Copyright (C) 2016       Teddy Astie (TSnake41)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+{{La pile de répertoire}}
+
+    {La pile de répertoire} permet de stocker et de réutiliser les répertoires
+    dans une pile, c'est par exemple pratique dans le cas où l'on veut se déplacer
+    dans un dossier puis de revenir à celui auquel on était avant. On peut
+    également s'en servir pour vérifier si un dossier ou un groupe de dossier
+    existe sans passer par {if exist}.
+
+{{Pousser/Tirer un répertoire sur la pile}}
+
+    Lorsque que l'on pousse un répertoire sur la pile, il se retrouve tout en
+    haut de la pile, le second se retrouvera bien évidemment tout en haut de
+    la pile et l'ancien repertoire se retrouvera tout en bas.
+
+    Lorsque que l'on tire un répertoire sur la pile, on récupère celui qui est
+    le plus haut sur la pile, c'est à dire le dernier qui a été inséré.
+
+    Exemple :
+${cd dir1/
+
+:: dir1/ est ajouté sur la pile, le dossier courant
+:: devient dir2/
+PUSHD dir2/
+
+:: dir1/dir2/ est ajouté sur la pile, le dossier
+:: courant devient dir1/
+PUSHD ..
+
+:: Actuellement, la pile contient :
+::  - dir1/dir2/
+::  - dir1/
+
+:: Le dossier courant devient dir1/dir2
+POPD
+
+:: Le dossier courant devient dir1/
+POPD
+
+:: La pile est vide}
+
+{{Compatibilité}}
+
+    Parfaitement compatible avec {cmd.exe}.
+
+{{A voir aussi}}
+
+    {../pushd|Commande PUSHD}, {../popd|Command POPD},
+	{index|Index des spécifications}

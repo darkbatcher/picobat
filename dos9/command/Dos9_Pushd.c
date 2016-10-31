@@ -33,35 +33,38 @@
 #include "../lang/Dos9_Lang.h"
 #include "../lang/Dos9_ShowHelp.h"
 
-/* PUSHD changes the system's current directory and store the previous folder/path for use by the POPD command.
-   POPD changes the system's current directory with the previously stored folder/path using PUSHD command.
+/*
+    PUSHD [path1] [path2] [pathN] ...
 
-    PUSHD [path]
+    For each path, change current directory and pushd to stack
+    the previous current directory.
+
     POPD
 
-    PUSHD changes the system's current directory and store the previous folder/path for use by the POPD command.
-    POPD changes the system's current directory with the previously stored folder/path using PUSHD command.
+    Pull a directory on the stack to change current directory.
 
-        - [path] : The path for the new current directory.
-
-    The old current directory is stored in a stack.
 */
 
 /* TODO: Makes this more Windows compatible
-   On cmd.exe, pushd can mount UNC paths to X:/
+   On cmd.exe, pushd can mount UNC paths.
 */
 
 LPSTACK lpStack;
 
 int Dos9_CmdPushd (char *lpLine)
 {
+    int count = 1;
     ESTR *lpEstr=Dos9_EsInit();
-    ESTR *lpEscd=Dos9_EsInit();
 
     lpLine += 5;
 
-    if (!Dos9_GetNextParameterEs(lpLine, lpEstr)) {
-        puts(Dos9_GetCurrentDir());
+    if (!(lpLine = Dos9_GetNextParameterEs(lpLine, lpEstr))) {
+
+        ESTR *lpEsDir;
+
+        if (!Dos9_GetStack(lpStack, &lpEsDir))
+            puts(Dos9_EsToChar(lpEsDir));
+
         goto free;
     }
 
@@ -70,26 +73,35 @@ int Dos9_CmdPushd (char *lpLine)
         goto free;
     }
 
-    Dos9_EsCat(lpEscd, Dos9_GetCurrentDir());
+    do {
 
-    if (!Dos9_SetCurrentDir(Dos9_EsToChar(lpEstr)))
-        lpStack = Dos9_PushStack(lpStack, lpEscd);
-    else {
-        Dos9_ShowErrorMessage(DOS9_DIRECTORY_ERROR, Dos9_EsToChar(lpEstr), FALSE);
-        goto error;
-    }
+        ESTR *lpEscd=Dos9_EsInit();
 
-    return 0;
+        Dos9_EsCat(lpEscd, Dos9_GetCurrentDir());
+
+        if (!Dos9_SetCurrentDir(Dos9_EsToChar(lpEstr)))
+            lpStack = Dos9_PushStack(lpStack, lpEscd);
+        else {
+            /* not a directory */
+            Dos9_ShowErrorMessage(DOS9_DIRECTORY_ERROR, Dos9_EsToChar(lpEstr), FALSE);
+            Dos9_EsFree(lpEscd);
+            goto error;
+        }
+
+        count++;
+
+    } while(lpLine = Dos9_GetNextParameterEs(lpLine, lpEstr));
 
     free:
         Dos9_EsFree(lpEstr);
-        Dos9_EsFree(lpEscd);
         return 0;
 
     error:
         Dos9_EsFree(lpEstr);
-        Dos9_EsFree(lpEscd);
-        return -1;
+
+        /* return the opposite of the count
+           successful directories as error code */
+        return count;
 }
 
 int Dos9_CmdPopd (char *lpLine)
