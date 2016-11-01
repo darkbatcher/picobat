@@ -53,7 +53,7 @@ void Dos9_LoadInternalHelp(void)
 #else
     /* Under *nixes, get the po files from the ordinary read-only
        directory */
-    snprintf(lpSharePath, FILENAME_MAX, DATA_PATH"/locale");
+    snprintf(lpSharePath, FILENAME_MAX, DATA_PATH "/locale");
 #endif // WIN32
 
 	snprintf(lpSharePath, FILENAME_MAX, "%s/share/locale", lpPath);

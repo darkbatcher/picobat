@@ -57,7 +57,7 @@ void Dos9_LoadErrors(void)
 #else
     /* Under *nixes, get the po files from the ordinary read-only
        directory */
-    snprintf(lpSharePath, FILENAME_MAX, DATA_PATH"/locale");
+    snprintf(lpSharePath, FILENAME_MAX, DATA_PATH "/locale");
 #endif // WIN32
 
 	bindtextdomain("Dos9-errors", lpSharePath);
