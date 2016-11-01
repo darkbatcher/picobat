@@ -41,59 +41,54 @@
 #include "internals.h"
 #include "libcu8.h"
 
-#ifdef _stat32
-#undef _stat32
-#endif // _stat32
-
-#ifdef _stat64
-#undef _stat64
-#endif // _stat64
-
-#ifdef _stat
-#undef _stat
-#endif
-
-#ifdef _wstat32
-#undef _wstat32
-#endif // _stat32
-
-#ifdef _wstat64
-#undef _wstat64
-#endif // _stat64
-
-#ifdef _wstat
-#undef _wstat
-#endif
-
 /* build libcu8_stat32 */
 #ifdef HAVE__STAT32
-#define __libcu8_stat_suffix() 32
+#define __libcu8_stat libcu8_stat32
+#define __libcu8_stat_t _stat32
+#define __libcu8_wstat _wstat32
 #include "stat_gen.c"
-#undef __libcu8_stat_suffix
+#undef __libcu8_stat
+#undef __libcu8_stat_t
+#undef __libcu8_wstat
 #endif
 
 #ifdef HAVE__STAT32I64
 /* build libcu8_stat32i64 */
-#define __libcu8_stat_suffix() 32i64
+#define __libcu8_stat libcu8_stat32i64
+#define __libcu8_stat_t _stat32i64
+#define __libcu8_wstat _wstat32i64
 #include "stat_gen.c"
-#undef __libcu8_stat_suffix
+#undef __libcu8_stat
+#undef __libcu8_stat_t
+#undef __libcu8_wstat
 #endif
 
 #ifdef HAVE__STAT64
 /* build libcu8_stat64 */
-#define __libcu8_stat_suffix() 64
+#define __libcu8_stat libcu8_stat64
+#define __libcu8_stat_t __stat64
+#define __libcu8_wstat _wstat64
 #include "stat_gen.c"
-#undef __libcu8_stat_suffix
+#undef __libcu8_stat
+#undef __libcu8_stat_t
+#undef __libcu8_wstat
 #endif
 
 #ifdef HAVE__STAT64I32
 /* build libcu8_stat64i32 */
-#define __libcu8_stat_suffix() 64i32
+#define __libcu8_stat libcu8_stat64i32
+#define __libcu8_stat_t _stat64i32
+#define __libcu8_wstat _wstat64i32
 #include "stat_gen.c"
-#undef __libcu8_stat_suffix
+#undef __libcu8_stat
+#undef __libcu8_stat_t
+#undef __libcu8_wstat
 #endif
 
 #ifdef HAVE__STAT
 /* build libcu8_stat */
+#define __libcu8_stat libcu8_stat
+#define __libcu8_stat_t _stat
+#define __libcu8_wstat _wstat
 #include "stat_gen.c"
 #endif

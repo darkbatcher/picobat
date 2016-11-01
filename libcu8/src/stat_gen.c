@@ -29,33 +29,6 @@
 
 */
 
-#undef __libcu8_stat
-#undef __libcu8_stat_t
-#undef __libcu8_wstat
-
-#ifdef __libcu8_stat_suffix
-/* Theses macros generate automatically functions and structures
-   names, given a suffix (__libcu9_stat_suffix()) */
-#define cat(a, ...)         __cat(a, __VA_ARGS__)
-#define __cat(a, ...)       a ## __VA_ARGS__
-#define suff(x)             cat(x, __libcu8_stat_suffix())
-#define __libcu8_stat       suff(libcu8_stat)
-#define __libcu8_stat_t     suff(_stat)
-#define __libcu8_wstat      suff(_wstat)
-
-/* Unfortunately, the _stat64 structures breaks the rule because
-   it is named __stat64 against. Fix this by redefining
-   __libcu8_stat_t. */
-#if (__libcu8_stat_suffix() == 64)
-#undef __libcu8_stat_t
-#define __libcu8_stat_t __stat64
-#endif
-#else
-#define __libcu8_stat libcu8_stat
-#define __libcu8_stat_t _stat
-#define __libcu8_wstat _wstat
-#endif // __libcu8_stat_t
-
 __LIBCU8__IMP __cdecl int __libcu8_stat (const char* file,
                                           struct __libcu8_stat_t * buf)
 {
