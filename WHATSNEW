@@ -1518,19 +1518,29 @@ TUESDAY 26TH, OCTOBER
 
         - Some minor fixes for Dos9 in general.
 
-        - Fixed a little hlp bug 
+        - Fixed a little hlp bug
 
 WEDNESDAY 26TH, OCTOBER 2016
 
         - Rewrite Pushd and Popd commands.
 
-        - Fix some commands help. 
+        - Fix some commands help.
 
 THURSDAY 27TH, OCTOBER
 
-        - Change location of gettext files under unices to match the usual
+        - Change location of gettext files under unices to match the usual 
           file layout.
 
 FRIDAY 28TH, OCTOBER
 
         - Fix some compilation errors.
+
+SUNDAY 30TH, OCTOBER
+
+        - Improve pushd command and add documentation.
+
+TUESDAY 1ST, NOVEMBER
+
+        - Fixed some compilation errors with some the stat and findnext 
+          functions. 
+

@@ -61,6 +61,7 @@ void Dos9_LoadErrors(void)
 #endif // WIN32
 
 	bindtextdomain("Dos9-errors", lpSharePath);
+
 #if defined(WIN32) && !defined(DOS9_USE_LIBCU8)
     /* This is not useful at all, libcu8 is able to convert utf-8 by
        itself */

@@ -114,19 +114,24 @@ dnl No libcu8 for *nixes
 	*);;
 esac
 
+dnl hack to expand cleanly the $datadir variable
+dos9data=`eval echo -e "$(eval echo -e "$datadir")"`
+
 dnl define this for some weird unices
 AC_DEFINE_UNQUOTED([BINARY_PATH], ["$bindir"], Define to the binary directory)
-AC_DEFINE_UNQUOTED([DATA_PATH], ["$datadir"], Define to the data directory)
+AC_DEFINE_UNQUOTED([DATA_PATH], ["$dos9data"], Define to the data directory)
 
 AC_CHECK_LIB([m],[cos],[],[AC_MSG_ERROR("No math C library")])
 
 if test "x$enable_libcu8" != xno; then
+	   echo Check wether libcu8 should be enabled ... yes 
 	   AC_DEFINE([DOS9_USE_LIBCU8], [1], [Define to 1 if you want to enable libcu8])
 	   AC_SUBST([libcu8], [libcu8])
 	   AC_SUBST([libcu8_lib], [$\(top_srcdir\)/libcu8/src/libcu8.la])
 	   AC_SUBST([libcu8_inc], [-I$\(top_srcdir\)/libcu8/include])
 	   AC_CONFIG_SUBDIRS([libcu8])
-else
+else 
+	   echo Check wether libcu8 should be enabled ... no
        AC_SUBST([libcu8_lib],[ ])
 	   AC_SUBST([libcu8_inc],[ ])
 	   AC_SUBST([libcu8],[ ])
