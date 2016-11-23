@@ -19,12 +19,12 @@ command:
 
     ./build-prepare.sh
     ./build-bin.sh
+    make install dos9-install-portable
 
 It is a little bit more complicated under Windows, especially if you want to
-access it out of MinGW. 
+access it out of MinGW.
 
     ./configure --prefix=/c/Program\ Files/Dos9 --bindir=/c/Program\ Files/Dos9 --libdir=/c/Program\ Files/Dos9
     make
     make install
     make dos9-install-portable
-
