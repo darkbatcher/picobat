@@ -1399,3 +1399,28 @@ ${set/p var=question}
     - Fixed compilation error in Dos9_Lang.c.
     
     - Add compilation command in BUILD.readme.
+
+{{Sunday 4th, December}}
+
+    - Fixed some major bugs submitted by Teddy Astie, for unices. Including :
+
+    -- Errors in parsing lines containing nested for loops when braces are not explicitely
+    specified. eg:
+
+${for /l %%A in (0 1 10) do for /l %%B in (0 1 10) do (
+   echo %%A %%B
+)}
+
+    -- Cleaned up zombies processes that were not wiped from kernels buffer since Dos9
+    never explicitely specified to throw the data out. Basically, this behaviour is
+    particularly shown when reapeating for loops. eg:
+
+${:loop
+for /f "delims=: tokens=1,2,3" %%A in ('echo this:is:a_test') do (
+    echo %%A %%B %%C
+)
+goto :loop}
+
+    - Changed Dos9 behaviour when getting a SIGINT on Linux. Depending on whether a user
+    input or a script is being executed, the intrepretor choose to cancel the command
+    or to exit.

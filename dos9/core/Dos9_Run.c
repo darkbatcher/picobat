@@ -906,7 +906,11 @@ int Dos9_RunExternalBatch(char* lpFileName, char* lpFullLine, char** lpArguments
 
 void Dos9_SigHandlerBreak(int sig)
 {
-    longjmp(jbBreak, 1);
+    if (bIsScript == 0) {
+        longjmp(jbBreak, 1);
+    } else {
+        exit(1);
+    }
 }
 
 #elif defined WIN32

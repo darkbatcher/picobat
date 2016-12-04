@@ -104,6 +104,8 @@ int libcu8_fd_set_inheritance(int fd, int mode)
     return 0;
 }
 #else
+#include <sys/types.h>
+#include <sys/wait.h>
 #include <fcntl.h>
 int libcu8_fd_set_inheritance(int fd, int mode)
 {
@@ -301,7 +303,7 @@ int Dos9_CmdFor(char* lpLine)
 
 	}
 
-	lpToken = Dos9_GetNextBlock(lpToken, &bkCode);
+	lpToken = Dos9_GetBlockLine(lpToken, &bkCode);
 
 	if (*lpToken) {
 
@@ -312,7 +314,7 @@ int Dos9_CmdFor(char* lpLine)
 
 		if (*lpToken) {
 
-			Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, Dos9_EsToChar(lpParam), FALSE);
+			Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpToken, FALSE);
 			goto error;
 
 		}
@@ -1312,7 +1314,12 @@ int Dos9_ForInputProcess_nix(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn,
 	BLOCKINFO bkBlock;
 	int iPid;
 
+	waitpid(-1, &iPid, WNOHANG);
+
 	iPid=fork();
+
+    libcu8_fd_set_inheritance(iPipeFdIn[1], 0);
+	libcu8_fd_set_inheritance(iPipeFdOut[0], 0);
 
 	if (iPid == 0 ) {
          /* if we are in the son, and, you know, unix is very convenient with us,
@@ -1353,6 +1360,7 @@ int Dos9_ForInputProcess_nix(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn,
 
 	}
 
+    close(iPipeFdIn[0]);
 	close(iPipeFdIn[1]);
 	close(iPipeFdOut[1]);
 
