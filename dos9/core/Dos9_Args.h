@@ -34,7 +34,7 @@ int   Dos9_GetParameterPointers(char** lpPBegin, char** lpPEnd,
 				 const char* lpDelims, const char* lpLine);
 
 #define Dos9_GetNextParameterEs(lpLine, lpReturn) \
-    Dos9_GetNextParameterEsD(lpLine, lpReturn, " \t\"\n")
+    Dos9_GetNextParameterEsD(lpLine, lpReturn, " ;,\t\"\n")
 
 char* Dos9_GetNextParameterEsD(char* lpLine, ESTR* lpReturn, const
 					char* lpDelims);
