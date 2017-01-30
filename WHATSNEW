@@ -1580,8 +1580,24 @@ SUNDAY 4TH, DECEMBER
                       echo %%A %%B %%C
                   )
                   goto :loop
+<<<<<<< HEAD
 
         - Changed Dos9 behaviour when getting a SIGINT on Linux. Depending on 
           whether a user input or a script is being executed, the intrepretor 
           choose to cancel the command or to exit. 
+=======
+
+        - Changed Dos9 behaviour when getting a SIGINT on Linux. Depending on 
+          whether a user input or a script is being executed, the intrepretor 
+          choose to cancel the command or to exit.
+
+MONDAY 5TH, DECEMBER
+
+        - Fixed a bug with FIND command, the case senstive and insensitive 
+          features were swapped 
+
+WEDNESDAY 7TH, DECEMBER
+
+    - Correct some words in French (fr_FR) manual.
+>>>>>>> 7efe24b1db13be6f495a378f1d9564aab979d6aa
 

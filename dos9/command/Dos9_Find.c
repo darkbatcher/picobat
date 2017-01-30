@@ -95,12 +95,12 @@ void Dos9_FileFind(char* str, char* name, int count, int flag, int reverse)
 
     switch (flag) {
 
-    case DOS9_FIND_CASE_UNSENSITIVE |
+    case DOS9_FIND_CASE_SENSITIVE |
         DOS9_FIND_TRADITIONAL:
         searchfn = strstr;
         break;
 
-    case DOS9_FIND_CASE_SENSITIVE |
+    case DOS9_FIND_CASE_UNSENSITIVE |
         DOS9_FIND_TRADITIONAL:
         searchfn = Dos9_strcasestr;
         break;
