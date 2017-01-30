@@ -101,6 +101,17 @@ int   IntEval_GetValue(const char* str)
     int ret;
     char *pch;
 
+    if ((pch = strchr(str, '+'))
+        || (pch = strchr(str, '-'))
+        || (pch = strchr(str, '*'))
+        || (pch = strchr(str, '/'))
+        || (pch = strchr(str, '|'))
+        || (pch = strchr(str, '^'))
+        || (pch = strchr(str, '>'))
+        || (pch = strchr(str, '<'))
+        || (pch = strchr(str, '&')))
+        *pch = '\0';
+
     ret = strtol(str, &pch, 0);
     if (pch && *pch != '\0')
         ret = IntEval_Get(str);

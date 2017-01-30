@@ -121,7 +121,7 @@ int Dos9_CmdGoto(char* lpLine)
 	}
 
 
-	/* let's set a this global variable to let the other functions
+	/* let's set this global variable to let the other functions
 	   know that they should reload an entire line */
 	bAbortCommand=TRUE;
 

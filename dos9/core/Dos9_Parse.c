@@ -83,7 +83,7 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 		    && (lpNextBlock!=NULL)) {
 
 			lpSearchBegin=Dos9_GetNextBlockEnd(lpNextBlock);
-            			
+
             if (lpSearchBegin==NULL) {
 
 				Dos9_FreeLine(lppssStart);
@@ -94,7 +94,7 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 				goto error;
 
 			}
-            
+
 			lpNextBlock=Dos9_GetNextBlockBeginEx(lpSearchBegin, 1);
 
 			continue;
@@ -168,7 +168,8 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 
 			}
 
-			if (!(lpCh=Dos9_GetNextParameterEs(lpNextToken, lpesParam))) {
+			if (!(lpCh=Dos9_GetNextParameterEsD(lpNextToken, lpesParam,
+                                                    DOS9_DELIMITERS "&|><"))) {
 
 				Dos9_FreeLine(lppssStart);
 
@@ -219,7 +220,8 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 
 			}
 
-			if (!(lpCh=Dos9_GetNextParameterEs(lpNextToken, lpesParam))) {
+			if (!(lpCh=Dos9_GetNextParameterEsD(lpNextToken, lpesParam,
+                                                 DOS9_DELIMITERS "&|><"))) {
 
 				Dos9_FreeParsedStreamStart(lppssStart);
 

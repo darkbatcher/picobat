@@ -104,6 +104,11 @@ int _Dos9_SetGetVarInt(const char* lpName)
 int _Dos9_SetSetVarInt(const char* lpName, int v)
 {
 	char lpContent[FILENAME_MAX];
+    char *tok;
+
+    /* BIG HACK */
+    if (tok = strchr(lpName, '='))
+        *tok = '\0';
 
     snprintf(lpContent, sizeof(lpContent), "%d", v);
 	Dos9_SetEnv(lpeEnv, lpName, lpContent);

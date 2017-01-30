@@ -44,36 +44,48 @@
 
 int Dos9_CmdExit(char* lpLine)
 {
-	char lpArg[]="-3000000000";
-	char* lpNextToken;
+    ESTR* param=Dos9_EsInit();
+    char* ntoken;
+    int ret=0;
 
-	if ((lpNextToken=Dos9_GetNextParameter(lpLine+4, lpArg, 11))) {
+	if ((ntoken=Dos9_GetNextParameterEs(lpLine+4, param))) {
 
-		if (!stricmp(lpArg, "/?")) {
+		if (!stricmp(param->str, "/?")) {
 
 			Dos9_ShowInternalHelp(DOS9_HELP_EXIT);
+			Dos9_EsFree(param);
 			return 0;
 
-		} else if (!stricmp(lpArg, "/b")) {
+		} else if (!stricmp(param->str, "/b")) {
 
-			if ((lpNextToken=Dos9_GetNextParameter(lpNextToken, lpArg, 11))) {
+            /* /b allow resuming to upper executiong level, with or without
+               specifying a return value in ERRORLEVEL */
 
-				exit(atoi(lpArg));
+            if (ntoken = Dos9_GetNextParameterEs(ntoken, param)) {
 
-			} else {
+                if (*ntoken) {
 
-				Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, "/b", FALSE);
-				return 1;
+                    Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, ntoken, 0);
+                    Dos9_EsFree(param);
+                    return -1;
 
-			}
+                }
+
+                Dos9_SetEnv(lpeEnv, "ERRORLEVEL", param->str);
+
+            }
+
+            Dos9_EsFree(param);
+            bAbortCommand = -1;
+            return 0;
 
 		} else {
 
-			Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpArg, FALSE);
-			return 1;
+			ret = atoi(ntoken);
 
 		}
 	}
-	exit(0);
+
+	exit(ret);
 	return 0;
 }

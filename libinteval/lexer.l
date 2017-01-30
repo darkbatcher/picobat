@@ -34,11 +34,9 @@ static int IntEval_InputFromString(char* buffer, int max_size);
 %option noyywrap
 
 blancs    [ \t]+
-
 chiffre   [0-9]
 entier    ((0x)?[0-9a-fA-F]+)|({chiffre}+)
-caractere [_a-zA-Z]
-variable  [_a-zA-Z]+[_a-zA-Z0-9]*
+variable  [_a-zA-Z][[_a-zA-Z0-9]*
 
 %%
 
@@ -49,10 +47,11 @@ variable  [_a-zA-Z]+[_a-zA-Z0-9]*
 		return(VARIABLE);
 	}
 
-{entier}    {
+{entier}   {
       IntEval_lval=yytext;
       return(NOMBRE);
     }
+
 
 "+"   return(PLUS);
 "-"   return(MOINS);
@@ -63,8 +62,8 @@ variable  [_a-zA-Z]+[_a-zA-Z0-9]*
 "/"   return(DIVISE);
 "%"   return(MODULO);
 
-"("   return(PARENTHESE_GAUCHE);
-")"   return(PARENTHESE_DROITE);
+"("   return (PARG);
+")"   return (PARD);
 
 "!"   return(NON_LOG);
 "\~"  return(NON_BAB);

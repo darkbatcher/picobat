@@ -54,7 +54,7 @@ int Dos9_JumpToLabel(char* lpLabelName, char* lpFileName)
 
 	while (!Dos9_EsGet(lpLine, pFile)) {
 
-		if (!strnicmp(Dos9_EsToChar(lpLine), lpLabelName, iSize)) {
+		if (!strnicmp(Dos9_SkipBlanks(lpLine->str), lpLabelName, iSize)) {
 
 			if (lpFileName) {
 

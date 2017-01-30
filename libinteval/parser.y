@@ -29,9 +29,9 @@
 %}
 
 %token  NOMBRE VARIABLE
-%token  PLUS  MOINS FOIS  DIVISE NON_LOG NON_BAB OU_LOG ET_LOG OU_BAB ET_BAB XOR_BAB  DEC_DROITE DEC_GAUCHE MODULO
-%token  PARENTHESE_GAUCHE PARENTHESE_DROITE
 %token  FIN
+%token  PLUS  MOINS FOIS  DIVISE NON_LOG NON_BAB OU_LOG ET_LOG OU_BAB ET_BAB XOR_BAB  DEC_DROITE DEC_GAUCHE
+%token PARD PARG
 
 %left OU_LOG OU_BAB
 %left XOR_BAB
@@ -58,25 +58,24 @@ Ligne:
 
 Expression:
     NOMBRE      { $$=IntEval_MakeString(IntEval_GetValue($1)); }
-  | VARIABLE    { $$=IntEval_MakeString(IntEval_GetValue($1)); }
-  | Expression PLUS Expression  { $$=IntEval_MakeString(IntEval_GetValue($1) + IntEval_GetValue($3)); }
-  | Expression MOINS Expression { $$=IntEval_MakeString(IntEval_GetValue($1) - IntEval_GetValue($3)); }
-  | Expression FOIS Expression  { $$=IntEval_MakeString(IntEval_GetValue($1) * IntEval_GetValue($3)); }
+  | Expression PLUS Expression   { $$=IntEval_MakeString(IntEval_GetValue($1) + IntEval_GetValue($3)); }
+  | Expression MOINS Expression  { $$=IntEval_MakeString(IntEval_GetValue($1) - IntEval_GetValue($3)); }
+  | Expression FOIS Expression   { $$=IntEval_MakeString(IntEval_GetValue($1) * IntEval_GetValue($3)); }
   | Expression DIVISE Expression { $$=IntEval_MakeString(IntEval_GetValue($1) / IntEval_GetValue($3)); }
   | Expression MODULO Expression { $$=IntEval_MakeString(IntEval_GetValue($1) % IntEval_GetValue($3)); }
-  | MOINS Expression %prec NEG  { $$=IntEval_MakeString(-IntEval_GetValue($2)); }
-  | PARENTHESE_GAUCHE Expression PARENTHESE_DROITE  { $$=IntEval_MakeString(IntEval_GetValue($2)); }
+  | MOINS Expression %prec NEG   { $$=IntEval_MakeString(-IntEval_GetValue($2)); }
+  | PARG Expression PARD  { $$=IntEval_MakeString(IntEval_GetValue($2)); }
   | NON_LOG Expression %prec NEG { $$=IntEval_MakeString(!IntEval_GetValue($2)); }
   | Expression OU_LOG Expression {$$=IntEval_MakeString(IntEval_GetValue($1) || IntEval_GetValue($3));}
   | Expression ET_LOG Expression {$$=IntEval_MakeString(IntEval_GetValue($1) && IntEval_GetValue($3));}
-  | Expression EGAL Expression {$$=IntEval_MakeString(IntEval_Set($1,IntEval_GetValue($3)));}
+  | VARIABLE EGAL Expression   {$$=IntEval_MakeString(IntEval_Set($1,IntEval_GetValue($3)));}
   | NON_BAB Expression %prec NEG { $$=IntEval_MakeString(~IntEval_GetValue($2));}
   | Expression OU_BAB Expression {$$=IntEval_MakeString(IntEval_GetValue($1) | IntEval_GetValue($3));}
   | Expression ET_BAB Expression {$$=IntEval_MakeString(IntEval_GetValue($1) & IntEval_GetValue($3));}
   | Expression XOR_BAB Expression {$$=IntEval_MakeString(IntEval_GetValue($1) ^ IntEval_GetValue($3));}
   | Expression DEC_GAUCHE Expression {$$=IntEval_MakeString(IntEval_GetValue($1) << IntEval_GetValue($3));}
   | Expression DEC_DROITE Expression {$$=IntEval_MakeString(IntEval_GetValue($1) >> IntEval_GetValue($3));}
-  ;
+  | VARIABLE    { $$=IntEval_MakeString(IntEval_GetValue($1)); }  ;
 
 %%
 
