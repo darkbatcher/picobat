@@ -164,9 +164,8 @@ dir /b /s /a:-d') do (
 		iconv -f UTF-8 -t %charset_build% !ansi_build!.tmp > !ansi_build!
 		iconv -f UTF-8 -t %charset_build% !txt_build!.tmp > !txt_build!
 	) else (
-		:: move strangely fail some files, so I temporary use unix mv
-		mv !ansi_build!.tmp !ansi_build! > NUL
-		mv !txt_build!.tmp !txt_build! > NUL
+		move !ansi_build!.tmp !ansi_build! > NUL
+		move !txt_build!.tmp !txt_build! > NUL
 	)
 )
 

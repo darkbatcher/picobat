@@ -84,9 +84,7 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
 
 		}
 
-        DOS9_DBG("[*] Reading line ...");
-
-		/* the line we read was a void line */
+		/* the line we red was a void line */
 		if (Dos9_GetLine(lpLine, pIn))
 			continue;
 

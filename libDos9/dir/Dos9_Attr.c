@@ -125,7 +125,7 @@ int Dos9_CheckFileAttributes(short wAttr, const FILELIST* lpflList)
     return iReturn;
 }
 
-/* A function that checks wether files in pIn are matching attributes and
+/* A function that checks whether files in pIn are matching attributes and
    produce two FILELIST* struct from the first that contains matching and
    unmatching files*/
 LIBDOS9 int Dos9_AttributesSplitFileList(short wAttr, FILELIST* pIn,

@@ -1580,12 +1580,6 @@ SUNDAY 4TH, DECEMBER
                       echo %%A %%B %%C
                   )
                   goto :loop
-<<<<<<< HEAD
-
-        - Changed Dos9 behaviour when getting a SIGINT on Linux. Depending on 
-          whether a user input or a script is being executed, the intrepretor 
-          choose to cancel the command or to exit. 
-=======
 
         - Changed Dos9 behaviour when getting a SIGINT on Linux. Depending on 
           whether a user input or a script is being executed, the intrepretor 
@@ -1594,10 +1588,17 @@ SUNDAY 4TH, DECEMBER
 MONDAY 5TH, DECEMBER
 
         - Fixed a bug with FIND command, the case senstive and insensitive 
-          features were swapped 
+          features were swapped
 
 WEDNESDAY 7TH, DECEMBER
 
-    - Correct some words in French (fr_FR) manual.
->>>>>>> 7efe24b1db13be6f495a378f1d9564aab979d6aa
+        - Correct some words in French (fr_FR) manual.
+
+MONDAY 30TH, JUNUARY 2017
+
+        - Fixed littles errors with SET and /a:i switches.
+
+        - Fixed delimeters errors for parsing input and conditional operators. 
+
+        - Fixed errors with gotos, basically omit spaces before labels.
 

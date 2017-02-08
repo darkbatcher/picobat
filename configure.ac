@@ -30,8 +30,6 @@ AC_CONFIG_HEADER([config.h])
 AC_CANONICAL_HOST
 AC_CANONICAL_BUILD
 AC_CANONICAL_TARGET
-dnl This is a trick in order to define the host variable
-dnl in a decent way
 AC_DEFINE_UNQUOTED([HOST], ["$host"], Define to your host name)
 
 AM_INIT_AUTOMAKE

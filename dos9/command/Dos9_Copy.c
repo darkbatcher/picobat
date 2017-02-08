@@ -93,11 +93,9 @@ int Dos9_CmdCopy(char* line)
         status=0;
 
     char *str;
-    short attr;
+    short attr=0;
 
     line +=4;
-
-    printf("Belief : MOVE = %d", DOS9_COPY_MOVE & flags);
 
     while (line = Dos9_GetNextParameterEs(line, param)) {
 
@@ -195,7 +193,6 @@ int Dos9_CmdCopy(char* line)
     end = files;
 
     while (end) {
-        printf("#Got : \"%s\"\n", end->lpFileName);
         end = end->lpflNext;
     }
 
@@ -208,7 +205,6 @@ int Dos9_CmdCopy(char* line)
     end = files;
 
     while (end) {
-        printf("Got : \"%s\"\n", end->lpFileName);
         end = end->lpflNext;
     }
 
@@ -278,8 +274,6 @@ int Dos9_CmdCopyFile(const char* file, const char* dest, int* flags)
         Dos9_EsCpy(dest_real, dest);
 
     }
-
-    printf("Copying \"%s\" to \"%s\"\n", file, dest_real->str);
 
     if (Dos9_FileExists(Dos9_EsToChar(dest_real))
         && !(*flags & DOS9_COPY_SILENCE)) {
@@ -414,8 +408,6 @@ end:
 
 int Dos9_MoveFile(const char* file, const char* dest)
 {
-
-    printf("Copy %s to %s\n", file, dest);
 
     if (rename(file, dest)) {
 

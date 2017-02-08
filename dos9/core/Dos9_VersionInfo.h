@@ -25,7 +25,7 @@
 #ifdef PACKAGE_VERSION
 #define DOS9_VERSION PACKAGE_VERSION
 #else
-#define DOS9_VERSION "2014.0.9b"
+#define DOS9_VERSION "217.1"
 #endif
 
 #ifdef PACKAGE_BUGREPORT
@@ -49,10 +49,10 @@
 
 #define DOS9_AUTHORS "Romain Garbi, Teddy Astie"
 #define DOS9_BUILDDATE __DATE__
-#define DOS9_BUILDYEAR "2016"
+#define DOS9_BUILDYEAR "2017"
 #define DOS9_BUILDCOMMENTS "Beta release"
 
-/* Choose between different know operating systems.
+/* Choose between different known operating systems.
    There is obviously more operating systems, but
    there are those that we support */
 #if defined(WIN32)

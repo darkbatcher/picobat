@@ -119,7 +119,6 @@ LIBDOS9 int Dos9_EsGet(ESTR* ptrESTR, FILE* ptrFile)
 
         lpResult=fgets(ptrCursor, iCurrentL+1, ptrFile);
 
-
         if(lpResult==NULL) {
 
             /* this means we will continue because there is no more
@@ -130,7 +129,7 @@ LIBDOS9 int Dos9_EsGet(ESTR* ptrESTR, FILE* ptrFile)
         } else {
 
             /* this could appear to be the number of byte read
-               however, it is just used to know wether the
+               however, it is just used to know whether the
                function have read some text there */
 
             iTotalBytesRead+=(size_t)lpResult;

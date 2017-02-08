@@ -381,7 +381,8 @@ int Dos9_PerformExtendedTest(const char* lpCmp, const char* lpParam1, const char
 
 next:
 
-    if (!stricmp(lpCmp, "EQU")) {
+    if (!stricmp(lpCmp, "EQU")
+        || !stricmp(lpCmp, "==")) {
 
         comp_type|=CMP_EQUAL;
 
