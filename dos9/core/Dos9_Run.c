@@ -536,10 +536,10 @@ int Dos9_RunBlock(BLOCKINFO* lpbkInfo)
 	ESTR *lpEsLine=Dos9_EsInit();
 
 	char *lpToken = lpbkInfo->lpBegin,
-	      *lpEnd = lpbkInfo->lpEnd,
-	       *lpBlockBegin,
-	       *lpBlockEnd,
-	       *lpNl;
+         *lpEnd = lpbkInfo->lpEnd,
+         *lpBlockBegin,
+         *lpBlockEnd,
+         *lpNl;
 
 	size_t iSize;
 
@@ -561,6 +561,8 @@ int Dos9_RunBlock(BLOCKINFO* lpbkInfo)
 		lpBlockBegin=Dos9_GetNextBlockBeginEx(lpToken, TRUE);
 
 		/* get the block that are contained in the line */
+        //printf("Block = %s\n", lpBlockBegin);
+
 
 		if (lpBlockBegin) {
 

@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2016 Romain GARBI
+ *   Copyright (C) 2010-2017 Romain GARBI
  *   Copyright (C) 2016 	 Teddy ASTIE
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -269,47 +269,76 @@ int Dos9_CmdIf(char* lpParam)
 
 	}
 
-	if ((lpNext=Dos9_GetNextBlock(lpParam, &bkInfo))) {
+    if (iResult) {
 
-		if (iResult) {
+        lpNext = Dos9_SkipBlanks(lpParam);
 
-			Dos9_RunBlock(&bkInfo);
+        if ( /* if the command does not start with a '(' get
+                the full line of blocks that follow the command */
+            ((*lpNext != '(')
+             && (lpNext=Dos9_GetBlockLine(lpNext, &bkInfo)))
+            ||
+             /* else if the line is actually a block, process it
+                as needed */
+            ((*lpNext == '(')
+             && (lpNext = Dos9_GetNextBlock(lpNext, &bkInfo)))
+           ) {
 
-		} else {
+            Dos9_RunBlock(&bkInfo);
+
+        } else {
+
+            Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
+            return -1;
+
+        }
+
+    } else {
+
+        if ((lpNext=Dos9_GetNextBlock(lpParam, &bkInfo))) {
 
             if (*lpNext==')')
                 ++ lpNext;
 
             lpNext=Dos9_SkipBlanks(lpNext);
 
-			if (!strnicmp(lpNext, "ELSE", 4)
+            if (!strnicmp(lpNext, "ELSE", 4)
                     && (Dos9_IsDelim(*(lpNext+4)) | *(lpNext+4)=='\0')) {
 
-				lpNext=Dos9_SkipBlanks(lpNext+4);
+                lpNext=Dos9_SkipBlanks(lpNext+4);
 
-                if (!strnicmp(lpNext, "if", 2) && Dos9_IsDelim(*(lpNext+2))) {
+                if ( /* if the command does not start with a '(' get
+                        the full line of blocks that follow the command */
+                    ((*lpNext != '(')
+                     && (lpNext=Dos9_GetBlockLine(lpNext, &bkInfo)))
+                    ||
+                     /* else if the line is actually a block, process it
+                        as needed */
+                    ((*lpNext == '(')
+                     && (lpNext = Dos9_GetNextBlock(lpNext, &bkInfo)))
+                   ) {
 
-                    /* this is a if, so take it seriously */
-                    Dos9_GetBlockLine(lpNext, &bkInfo);
                     Dos9_RunBlock(&bkInfo);
-
 
                 } else {
 
-                    Dos9_GetNextBlock(lpNext, &bkInfo);
-                    Dos9_RunBlock(&bkInfo);
+                    Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
+                    return -1;
+
 
                 }
 
-			}
-		}
+            }
 
-	} else {
+        } else {
 
-		Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
-		return -1;
+            Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
+            return -1;
 
-	}
+        }
+    }
+
+
 
 	return 0;
 }

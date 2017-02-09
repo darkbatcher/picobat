@@ -35,6 +35,9 @@ int Dos9_JumpToLabel(char* lpLabelName, char* lpFileName)
 		lpName=ifIn.lpFileName;
 	}
 
+    if (iSize == 1) {
+        return -1;
+    }
 
 	if (!(pFile=fopen(lpName, "r"))) {
 		Dos9_EsFree(lpLine);

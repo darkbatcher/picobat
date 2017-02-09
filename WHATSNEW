@@ -1602,3 +1602,7 @@ MONDAY 30TH, JUNUARY 2017
 
         - Fixed errors with gotos, basically omit spaces before labels.
 
+WEDNESDAY 8TH, JUNUARY 2017
+
+        - Fixed some bugs with the move command.
+
