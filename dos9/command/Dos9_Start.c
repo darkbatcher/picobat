@@ -247,7 +247,7 @@ int Dos9_StartFile(const char* file, const char* args, const char* dir,
 
     if (pid == 0) {
 
-        Dos9_OpenOutput(lppsStreamStack, "NULL", DOS9_STDOUT | DOS9_STDERR, 0);
+        Dos9_OpenOutput(lppsStreamStack, "NUL", DOS9_STDOUT | DOS9_STDERR, 0);
 
         /* we are in the son */
         if (dir && chdir(dir) == -1)
@@ -338,6 +338,8 @@ int Dos9_CmdStart(char* line)
 
 			dir = dirbuf;
 
+		} else if (!stricmp("/b", Dos9_EsToChar(param))) {
+		} else if (!stricmp("/normal", Dos9_EsToChar(param))) {
 		} else {
 
 			break;

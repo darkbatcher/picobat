@@ -237,13 +237,13 @@ void Tea_HtmlOutputHandler(TEAPAGE* lpTeaPage, FILE* pFile, int i, char** argv)
 
 			}
 
-			fputs("<code>", pFile);
+			fputs("<pre><code>", pFile);
 
 			Dos9_EsCpy(lpEsStr, lpTeaPage->lpBlockContent);
 			Dos9_EsReplace(lpEsStr, "\n", "<br />");
 			fputs(Dos9_EsToChar(lpEsStr), pFile);
 
-			fputs("</code>", pFile);
+			fputs("</code></pre>", pFile);
 
 			break;
 

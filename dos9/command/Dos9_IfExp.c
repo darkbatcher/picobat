@@ -42,7 +42,7 @@
 #define NEGATE(nb, state) (state) ? (!nb) : (nb)
 #define EQUCHR(str, chr) (*(str) == (chr) && *((str)+1) == '\0')
 #define NEXT_ELEMENT(line) \
-    if (!(line = line->next)) return 1;
+    if (!(line = line->next)) return -1;
 
 void  _Dump_Line_t(ifexp_line_t* line)
 {
@@ -160,7 +160,7 @@ int Dos9_IfExp_ExecuteTest(ifexp_line_t* test, int flags)
         neg = 1;
 
         if (!(test = test->next))
-            return 1; /* return an error */
+            return -1; /* return an error */
 
     }
 

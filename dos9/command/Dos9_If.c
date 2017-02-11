@@ -194,7 +194,7 @@ int Dos9_CmdIf(char* lpParam)
 		 } else if (lpNext) {
 
 			if ((lpToken=strstr(Dos9_EsToChar(lpComparison), "=="))) {
-				/* if scipt uses old c-style comparison */
+				/* if script uses old c-style comparison */
 				*lpToken='\0';
 				lpToken+=2;
 

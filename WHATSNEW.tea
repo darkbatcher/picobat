@@ -1442,15 +1442,30 @@ goto :loop}
 
     - Fixed errors with gotos, basically omit spaces before labels.
 
-{{Wednesday 8th, Junuary 2017}}
+{{Wednesday 8th, February 2017}}
 
 	- Fixed some bugs with the move command.
 	
-{{Thursday 9th, Junuary 2017}}
+{{Thursday 9th, February}}
 
 	- Fixed a major bug of the IF command. Before that, it had fuzzy behaviour with blocks
-	that were part of a later command.
+	that were part of a later command. Indeed, when combined with a command that required
+	a block but which was not enclosed in a block, the line was poorly handled, eg:
+	
+${if a==a if b==b (
+echo test
+)}
+	
+	@- This exemple (and its derivates) should now behave the way it is intended to, that
+	is, as if it was specified as :
+	
+${if a==a (if b==b (
+echo test
+))}
 
+{{Saturday 11th, February}}
 
-
+	- Fixed minor bugs with the {START} command.
+	
+	- Fixed many manual pages.
 

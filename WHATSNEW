@@ -1606,3 +1606,21 @@ WEDNESDAY 8TH, JUNUARY 2017
 
         - Fixed some bugs with the move command.
 
+THURSDAY 9TH, JUNUARY 2017
+
+        - Fixed a major bug of the IF command. Before that, it had fuzzy 
+          behaviour with blocks that were part of a later command. Indeed, 
+          when combined with a command that required a block but which was not 
+          enclosed in a block, the line was poorly handled, eg:
+
+             if a==a if b==b (
+             echo test
+             )
+
+          This exemple (and its derivates) should now behave the way it is 
+          intended to, that is, as if it was specified as :
+
+             if a==a (if b==b (
+             echo test
+             ))
+

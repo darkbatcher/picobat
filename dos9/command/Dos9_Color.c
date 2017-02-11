@@ -42,9 +42,14 @@
 #include "../core/Dos9_Debug.h"
 #include "../errors/Dos9_Errors.h"
 
+#define TO_CHAR(a) (0x00FF & (a))
+#define HWORD(a) ((0xF0 & (a)) >> 4)
+#define LWORD(a) (0xF & (a))
+
 int Dos9_CmdColor(char* lpLine)
 {
 	char lpArg[4];
+	int code;
 
 	if (Dos9_GetNextParameter(lpLine+5, lpArg, 4)) {
 
@@ -54,7 +59,16 @@ int Dos9_CmdColor(char* lpLine)
 
 		} else {
 
-			colColor=strtol(lpArg, NULL, 16);
+			code = strtol(lpArg, NULL, 16);
+
+			if ((TO_CHAR(code) != code)
+                || (HWORD(code) == LWORD(code))) {
+
+                Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpArg, 0);
+                return -1;
+
+            }
+
 			Dos9_SetConsoleColor(colColor);
 
 		}

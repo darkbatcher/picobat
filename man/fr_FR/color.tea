@@ -18,7 +18,7 @@
 
 {{Commande COLOR}}
 
-	La commande {COLOR} permet de changer la couleur du fond et la couleur du texte de la console entière. Cette commande ne fonctionnera pas sous {LINUX}.
+	La commande {COLOR} permet de changer la couleur du fond et la couleur du texte de la console entière.
 
 {{Synopsis}}
 
@@ -39,12 +39,17 @@ ${0 = Noir          8 = Gris
 7 = Gris clair    F = Blanc}
 
 	Si aucun {code} n'est spécifié, alors {dos9|Dos9} mettra le fond et le texte à leur couleurs par défaut.
+	
+	Si {code} spécifie une couleur pour le fond identique à la couleur du texte, alors la couleur de la
+	console n'est pas modifiée.
+	
+	Sous un système {Unix}, le contenu du terminal est effacé après le changement de couleur.
 
 {{Compatibilité}}
 
 	Totalement compatible avec {cmd.exe}.
 
-	Disponible uniquement sur {WINDOWS} depuis la version {0.7}.
+	Disponible depuis la version {0.7}.
 
 {{À voir aussi}}
 

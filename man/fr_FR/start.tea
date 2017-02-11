@@ -1,0 +1,38 @@
+{{Commande START}}
+
+	La fonction principale de la commande {START} est d'exécuter un programme
+	dans une autre console. {START} permet aussi d'ouvrir un fichier
+	avec le programme approprié, c'est donc une commande très pratique en
+	batch.
+
+{{Synopsis}}
+
+${START [/d dir] [/b] [/min] [/max] [/wait] commande parametres}
+
+	Lance {commande} dans une nouvelle fenêtre.
+	
+	- {commande} : Chemin de l'exécutable à lancer, ou du fichier à ouvrir.
+	
+	- {parametres} : Une liste de paramètres à passer à {commande}.
+	
+	- {/d dir} : Chemin du dossier dans lequel {commande} doit être exécutée.
+	
+	- {/max} : Maximise la nouvelle fenêtre.
+	
+	- {/min} : Minimise la nouvelle fenêtre.
+	
+	- {/wait} : Attend la fin de l'exécution de {commande}.
+	
+	- {/b} : Dissimule la nouvelle fenêtre.
+
+{{Notes}}
+
+{{Compatibilité}}
+
+Partiellement compatible avec {cmd.exe}.
+
+	Supporté depuis la version 2014.0.9b. Le support entre différents systèmes
+	d'exploitation peut différer grandement.
+
+{{À voir aussi}}
+{call|Commande Call}, {commands|Liste des commandes}
