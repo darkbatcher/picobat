@@ -1602,11 +1602,11 @@ MONDAY 30TH, JUNUARY 2017
 
         - Fixed errors with gotos, basically omit spaces before labels.
 
-WEDNESDAY 8TH, JUNUARY 2017
+WEDNESDAY 8TH, FEBRUARY 2017
 
         - Fixed some bugs with the move command.
 
-THURSDAY 9TH, JUNUARY 2017
+THURSDAY 9TH, FEBRUARY
 
         - Fixed a major bug of the IF command. Before that, it had fuzzy 
           behaviour with blocks that were part of a later command. Indeed, 
@@ -1623,4 +1623,12 @@ THURSDAY 9TH, JUNUARY 2017
              if a==a (if b==b (
              echo test
              ))
+
+SATURDAY 12TH, FEBRUARY
+
+        - Fixed minor bugs with the START command.
+
+        - Fixed many manual pages.
+
+        - Fixed if dos9 extention bug. 
 

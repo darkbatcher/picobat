@@ -2,6 +2,7 @@
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
  *   Copyright (C) 2010-2016 Romain GARBI
+ *   Copyright (C) 2017      Teddy ASTIE
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -182,14 +183,14 @@ int Dos9_IfExp_ExecuteTest(ifexp_line_t* test, int flags)
 
     } else {
 
+        array[0] = test->op->str;
+        NEXT_ELEMENT(test);
+
         array[1] = test->op->str;
         NEXT_ELEMENT(test);
 
-        array[2] = test->op->str;
-        NEXT_ELEMENT(test);
-
-        if ((result = Dos9_PerformExtendedTest(array[2],
-                                                array[1],
+        if ((result = Dos9_PerformExtendedTest(array[1],
+                                                array[0],
                                                 test->op->str,
                                                 flags)) == -1)
             return -1;

@@ -256,7 +256,7 @@ if exist hlp.conf.bat call hlp.conf.bat
 
 ECHO Hlp - Manual page viewier
 ECHO Copyright ^(C^) 2013-2016 Romain Garbi ^(Darkbatcher^)
-ECHO Copyright ^(C^) 2016      Teddy Astie ^(TSnake41^)
+ECHO Copyright ^(C^) 2016-2017 Teddy Astie ^(TSnake41^)
 ECHO This program comes with ABSOLUTELY NO WARRANTY; This is free software,
 ECHO and you are welcome to redistribute it under the terms of the GNU CPL.
 ECHO.
@@ -284,7 +284,7 @@ ECHO.
 set /p conf_mode=Please choose a mode (HTML/ansi/txt) : 
 if not defined conf_mode (
 	set conf_mode=html
-) else if [ x!conf_mode! neq xhtml and  x!conf_mode! neq xansi and x!conf_mode! neq xtxt ] goto :mode_retry
+) else if [ !conf_mode! neq html and !conf_mode! neq ansi and !conf_mode! neq txt ] goto :mode_retry
 ECHO.
 ECHO 2] Choosing locale :
 ECHO.
@@ -337,7 +337,7 @@ ECHO program, You will probably need to edit the configuration file hlp.conf.bat
 ECHO to set the correct path to program to be used when opening html files.
 :Ok_retry
 set /p Ok=Do you really want to continue and save configuration (y/N) : 
-if /i [ not defined Ok or x!Ok! equ N ] (
+if /i [ not defined Ok or !Ok! equ N ] (
 	GOTO :show_quit
 ) else if /i !Ok! neq Y (
 	GOTO :Ok_retry
@@ -359,7 +359,7 @@ ECHO set view_cmd=!!%%mode%%_prg!!) > hlp.conf.bat
 
 ECHO 5] Deleting outdated files :
 :: If we either change locale or encoding, we must regen files
-IF [ x%conf_locale% neq x!locale! or x%conf_charset% neq x!charset! ] (
+IF [ !conf_locale! neq !locale! or !conf_charset! neq !charset! ] (
 	if exist hlpdb del hlpdb
 )
 ECHO.
