@@ -98,8 +98,9 @@ ECHO *** Building manual pages for %lang_build% with charset %charset_build% ***
 ECHO.
 ECHO  1] Remove content of the documentation folder.
 ECHO.
-for %%A in (ansi html txt) do RMDIR /Q /S %%A
-
+for %%A in (ansi html txt) do (
+	if exist %%A RMDIR /Q /S %%A
+)
 ECHO  2] Creating subdirectories.
 ECHO.
 
