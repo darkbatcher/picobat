@@ -60,8 +60,8 @@ Getting started
              /* handle the error */
              }
 
-        - Last but not least, don't forget to be sure to use truetype fonts of 
-          rasters if you use the command prompt.
+        - Last but not least, don't forget to be sure to use truetype fonts  
+          instead of rasters ones if you use the command prompt.
 
      In fact, libcu8 can do a couple more things, but these are described in 
      DOC.

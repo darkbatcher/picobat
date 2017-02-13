@@ -37,6 +37,8 @@
 #include "../lang/Dos9_Lang.h"
 #include "../lang/Dos9_ShowHelp.h"
 
+//#define DOS9_DBG_MODE
+
 #include "../core/Dos9_Core.h"
 #include "../core/Dos9_Debug.h"
 
@@ -327,6 +329,8 @@ void Dos9_InitConsoleTitles(char *lpFileName, int bQuiet)
 void Dos9_RunAutoBat(void)
 {
     char system[FILENAME_MAX];
+
+    DOS9_DBG("Running Dos9_Auto.bat\n");
 
     snprintf(system, sizeof(system),"%s/Dos9_Auto.bat", Dos9_GetEnv(lpeEnv, "DOS9_PATH"));
 

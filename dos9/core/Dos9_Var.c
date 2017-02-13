@@ -406,9 +406,11 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 
 	}
 
+    /* Copy the content of the varialble */
 	Dos9_EsCpy(lpRecieve, lpvBlock[(int)cVarName]);
 	lpPos=Dos9_EsToChar(lpRecieve);
 
+    /* Remove any quote surrounding the argument*/
 	if (*lpPos=='"' || *lpPos=='\'') {
 
 		if ((lpNext=strrchr(lpPos, *lpPos)))
@@ -423,9 +425,9 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 
 		*lpPos='\0';
 
+		lpPos=Dos9_EsToChar(lpRecieve);
+
 	}
-
-
 
 	if (bSeekFile) {
 		stat(lpPos, &stFileInfo);

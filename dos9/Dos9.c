@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
 
     ESTR* lpesCmd;
 
-#if 0 && defined(WIN32) && defined(DOS9_USE_LIBCU8)
+#if defined(WIN32) && defined(DOS9_USE_LIBCU8)
 
     if (libcu8_init(&argv) == -1) {
 

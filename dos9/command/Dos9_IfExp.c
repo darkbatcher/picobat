@@ -68,12 +68,23 @@ char * Dos9_IfExp_Compute(const char* line, int* ret, int flags)
 
     line = Dos9_IfExp_ParseLine(line, &lineexp);
 
-    if (lineexp == NULL)
-        return NULL;
+    if (lineexp == NULL){
+
+        *ret = -1; /* report error */
+        return line;
+
+    }
 
     linetmp = lineexp;
 
     exp = Dos9_IfExp_Parse(lineexp);
+
+    if (exp == NULL) {
+
+        *ret = -1; /* report error */
+        return line;
+
+    }
 
     *ret = Dos9_IfExp_Evaluate(exp, flags);
 
@@ -212,11 +223,14 @@ ifexp_t* Dos9_IfExp_Parse(ifexp_line_t* line)
     ifexp_line_t * rhs;
     ifexp_t* exp;
 
-    if (!(exp = malloc(sizeof(ifexp_t))))
-        return NULL;
-
 
     Dos9_IfExp_SuppressBrackets(&line);
+
+    if (line == NULL)
+        return NULL;
+
+    if (!(exp = malloc(sizeof(ifexp_t))))
+        return NULL;
 
     if (Dos9_IfExp_Cut("AND", &line, &rhs)) {
 

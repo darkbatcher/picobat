@@ -73,7 +73,7 @@ void Dos9_SplitPath(char* lpPath,
 	} else {
 
 		if (lpDir)
-			*lpDir=='\0';
+			*lpDir='\0';
 
 	}
 

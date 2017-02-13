@@ -1,7 +1,7 @@
 /*
 
  libcu8 - A wrapper to fix msvcrt utf8 incompatibilities issues
- Copyright (c) 2014, 2015 Romain GARBI
+ Copyright (c) 2014, 2015, 2017 Romain GARBI
 
  All rights reserved.
  Redistribution and use in source and binary forms, with or without
@@ -119,6 +119,7 @@ __LIBCU8__IMP __cdecl int libcu8_init(const char*** pargv)
 
     /* Initialize the lock for fencoding */
     InitializeCriticalSection(&libcu8_fencoding_lock);
+    EnterCriticalSection(&libcu8_fencoding_lock);
 
     sprintf(libcu8_fencoding, "UTF-8");
 

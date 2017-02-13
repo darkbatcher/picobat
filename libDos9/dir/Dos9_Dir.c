@@ -558,7 +558,7 @@ LPFILELIST _Dos9_SeekFiles(char* lpDir, char* lpRegExp, int iLvl, int iMaxLvl, i
 			            if the search is recursive don't care wether the element
 			            matches the regular expression. Just check that the
 			            element is neither '.' nor '..', since it will probably
-			            circular filesystem search.
+			            create circular filesystem search.
 			        */
 			    )) {
 

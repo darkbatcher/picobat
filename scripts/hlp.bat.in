@@ -121,7 +121,7 @@ txt
 FOR /F "tokens=*" %%A in ('cd %hlp_data_dir%/%lang_build%
 dir /b /s /a:d') do (
 	
-	ECHO Replicating %%A
+	ECHO 	* Creating %%A
 	
 	SET path_ansi=ansi/%%A
 	SET path_html=html/%%A
@@ -148,13 +148,13 @@ dir /b /s /a:-d') do (
 	SET txt_build=txt/%%~pnA.txt
 
 	ECHO      - file : !txt_build!
-	tea %hlp_data_dir%/%lang_build%/%%A !txt_build!.tmp /E:UTF-8 /O:TEXT-PLAIN
+	tea "%hlp_data_dir%/%lang_build%/%%A" !txt_build!.tmp /E:UTF-8 /O:TEXT-PLAIN
 
 	ECHO      - file : !ansi_build!
-	tea %hlp_data_dir%/%lang_build%/%%A !ansi_build!.tmp /E:UTF-8 /O:TEXT-ANSI
+	tea "%hlp_data_dir%/%lang_build%/%%A" !ansi_build!.tmp /E:UTF-8 /O:TEXT-ANSI
 
 	ECHO      - file : !html_build!
-    tea %hlp_data_dir%/%lang_build%/%%A !html_build! /E:UTF-8 /O:html /T "The Dos9 Project :: "
+    tea "%hlp_data_dir%/%lang_build%/%%A" !html_build! /E:UTF-8 /O:html /T "The Dos9 Project :: "
 
 	ECHO      - converting output from UTF-8 to %charset_build%
 	:: just convert .ansi file, it is not needed for html document
@@ -305,7 +305,7 @@ if not defined conf_locale (
 	set conf_locale=en_US
    )
 )
-if not exist %hlp_data_dir%/!conf_locale! goto :locale_retry
+if not exist !hlp_data_dir!/!conf_locale! goto :locale_retry
 
 ECHO. 3] Chose charset :
 ECHO.

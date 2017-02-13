@@ -146,7 +146,7 @@ __LIBCU8__IMP __cdecl int libcu8_closedir(DIR* pdir)
     if (pdir->ent.d_name != NULL)
         free(pdir->ent.d_name);
 
-    CloseHandle(pdir->h);
+    FindClose(pdir->h);
 
     free(pdir);
 
