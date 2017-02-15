@@ -92,6 +92,8 @@ __LIBCU8__IMP __cdecl int libcu8_dup_nolock(int fd)
 
     }
 
+    libcu8_manage_std_files(newfd, duplicate);
+
     /* Do not duplicate NOINHERIT attribute */
     osfile(newfd) = osfile(fd) & ~NOINHERIT;
 
@@ -165,6 +167,8 @@ __LIBCU8__IMP __cdecl int libcu8_dup2_nolock(int fd1, int fd2)
 
     }
 
+    libcu8_manage_std_files(fd2, duplicate);
+
     /* Set the file handle */
     osfhnd(fd2) = duplicate;
 
@@ -175,5 +179,24 @@ __LIBCU8__IMP __cdecl int libcu8_dup2_nolock(int fd1, int fd2)
     libcu8_cp_buffering(fd2, fd1);
 
     return  fd2;
+}
+
+void __inline__ libcu8_manage_std_files(int file, void* handle)
+{
+    /* Try to keep crt infos up to date with actual console
+       configuration. It does not really matter, of course, is
+       no console is actually opened, just let windows return
+       errors. */
+    switch(file) {
+        case 0:
+            SetStdHandle(STD_INPUT_HANDLE, handle);
+            break;
+        case 1:
+            SetStdHandle(STD_OUTPUT_HANDLE, handle);
+            break;
+        case 2:
+            SetStdHandle(STD_ERROR_HANDLE, handle);
+            break;
+    }
 }
 

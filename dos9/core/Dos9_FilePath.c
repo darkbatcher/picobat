@@ -69,6 +69,10 @@ int Dos9_GetFilePath(char* lpFullPath, const char* lpPartial, size_t iBufSize)
 		strncpy(lpFullPath, lpPartial, iBufSize);
 		lpFullPath[iBufSize-1] = '\0';
 
+        Dos9_EsFree(lpEsTmp);
+        Dos9_EsFree(lpEsFinalPath);
+        Dos9_EsFree(lpEsPart);
+
 		return 0;
 	}
 	DOS9_DBG("[Dos9_GetFilePath()]*** Start research of file : \"%s\"\n\n", lpPartial);

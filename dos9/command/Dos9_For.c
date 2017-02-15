@@ -1524,6 +1524,8 @@ int Dos9_ForInputParseFileList(FILE_LIST_T* lpList, ESTR* lpInput)
 
 void Dos9_ForCloseInputInfo(INPUTINFO* lpipInfo)
 {
+    int i=0;
+
 
 	switch(lpipInfo->cType) {
 
@@ -1531,6 +1533,14 @@ void Dos9_ForCloseInputInfo(INPUTINFO* lpipInfo)
 		case INPUTINFO_TYPE_COMMAND:
 
 			fclose(lpipInfo->Info.InputFile.pFile);
+
+			while(lpipInfo->Info.InputFile.lpesFiles[i] != NULL) {
+
+                Dos9_EsFree(lpipInfo->Info.InputFile.lpesFiles[i]);
+                i++;
+
+			}
+
 			break;
 
 

@@ -166,7 +166,7 @@ __LIBCU8__IMP __cdecl int libcu8_init(const char*** pargv)
         }
     }
 
-    CloseHandle(msvcrt);
+    FreeLibrary(msvcrt);
 
     libcu8_save_changes();
 

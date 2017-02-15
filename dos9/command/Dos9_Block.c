@@ -81,6 +81,8 @@ int Dos9_CmdBlock(char* lpLine)
 
 	Dos9_RunBlock(&bkCode);
 
+	Dos9_EsFree(lpNextBlock);
+
 	return iErrorLevel;
 }
 

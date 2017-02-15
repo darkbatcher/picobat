@@ -285,4 +285,12 @@ __LIBCU8__IMP __cdecl int libcu8_stat64i32(const char* file,
                                             struct _stat64i32* buf);
 #endif
 
+/*
+****************************************************************************
+    dup.c functions
+
+****************************************************************************
+ */
+void __inline__ libcu8_manage_std_files(int file, void* handle);
+
 #endif // INTERNALS_H
