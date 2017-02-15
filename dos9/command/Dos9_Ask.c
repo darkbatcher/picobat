@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <stdarg.h>
+#include <string.h>
 
 #include <libDos9.h>
 

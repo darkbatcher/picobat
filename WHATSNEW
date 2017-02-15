@@ -1632,7 +1632,7 @@ SATURDAY 12TH, FEBRUARY
 
         - Fixed if dos9 extention bug.
 
-MONDAY 13TH, FEBRARY
+MONDAY 13TH, FEBRUARY
 
         - Fixed libcu8 so that it runs flawlessly under windows XP. The bug 
           consisted of a CRITICAL_SECTION that was wrongly initialized. A 
@@ -1648,4 +1648,20 @@ WEDNESDAY 15TH, FEBRUARY
           directory in a correct way.
 
         - Fixed libcu8_dup() functions to handle standard input the right way.
+
+FRIDAY 17TH, FEBRUARY
+
+        - Fixed libcu8 so that libcu8 ignores invalid utf-8 bytes sequences, 
+          instead of returning errors.
+
+        - Fixed the FOR function freeing function.
+
+        - Fixed some manual pages.
+
+THURSDAY 16TH, FEBRUARY
+
+        - Update hlp.bat and man.
+
+        - Fix a bug with some libc when display the current directory (with 
+          Echo on).
 

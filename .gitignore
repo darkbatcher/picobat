@@ -44,4 +44,14 @@ libmatheval/libmatheval.pc
 libmatheval/tests/Makefile.in
 tea/Makefile.in
 po/pot
-
+libinteval/lexer.c
+libinteval/parser.c
+libinteval/parser.h
+libmatheval/doc/libmatheval.info
+dos9/dos9
+dos9ize/dos9ize
+dump/dump
+scripts/Dos9_Auto.bat
+scripts/hlp.bat
+tea/tea
+.clang-complete

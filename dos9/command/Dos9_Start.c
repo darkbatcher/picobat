@@ -22,6 +22,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#if !defined(WIN32)
+#include <sys/wait.h>
+#endif
+
 #include <libDos9.h>
 
 #include "Dos9_Start.h"

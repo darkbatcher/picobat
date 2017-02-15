@@ -1,6 +1,6 @@
 #   Dos9 Manual pages, The Dos9 project
 #   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
-#   Copyright (C) 2016       Teddy Astie (TSnake41)
+#   Copyright (C) 2016-2017  Teddy Astie (TSnake41)
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -18,23 +18,23 @@
 
 {{POPD command}}
 
-{TODO: Translate to english}
-
-    La commande {POPD} permet de tirer un répertoire de {la pile de répertoire}
-     pour définir le dossier courant.
+    The {POPD} command permit to pull a directory from {the directory stack}
+     to define the current directory.
 
 {{Synopsis}}
 
     ${POPD}
 
-    Défini le {dossier courant} par le répertoire tiré de la pile.
+    Define the {current directory} directory pulled from the stack.
 
-{{Compatibilité}}
+    The command fail if no directories are present in the stack.
 
-    Parfaitement compatible avec {cmd.exe}.
+{{Compatibility}}
 
-{{A voir aussi}}
+    Fully compatible with {cmd.exe}.
 
-    {pushd|Commande PUSHD},
-    {spec/dirstack|La pile de répertoire},
-    {commands|Liste des commandes}
+{{See also}}
+
+    {pushd|PUSHD command},
+    {spec/dirstack|The directory stack},
+    {commands|Command list}

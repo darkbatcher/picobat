@@ -282,7 +282,7 @@ ECHO terminal. You may choose this options if you have neither any functional we
 ECHO browser nor any ANSI-compatible terminal.
 ECHO.
 :mode_retry
-set /p conf_mode=Please choose a mode (HTML/ansi/txt) : 
+set /p conf_mode=Please choose a mode (html/ansi/txt) :
 if not defined conf_mode (
 	set conf_mode=html
 ) else if [ !conf_mode! neq html and !conf_mode! neq ansi and !conf_mode! neq txt ] goto :mode_retry

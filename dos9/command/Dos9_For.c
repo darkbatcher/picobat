@@ -1505,8 +1505,6 @@ int Dos9_ForInputParseFileList(FILE_LIST_T* lpList, ESTR* lpInput)
 
         lpList->lpesFiles[i++]=lpesStr;
 
-        printf("File to read : \"%s\"\n", Dos9_EsToChar(lpesStr));
-
         lpesStr=Dos9_EsInit();
 
     }

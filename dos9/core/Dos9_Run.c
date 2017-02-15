@@ -81,6 +81,7 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
 			Dos9_SetConsoleTextColor(colColor);
 
 			printf("%s>", lpCurrentDir);
+            fflush(stdout);
 
 		}
 
@@ -104,6 +105,7 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
 			Dos9_SetConsoleTextColor(colColor);
 
 			printf("%s>%s", lpCurrentDir, Dos9_EsToChar(lpLine));
+            fflush(stdout);
 
 		}
 
@@ -739,7 +741,7 @@ int Dos9_RunExternalFile(char* lpFileName, char** lpArguments)
 {
 	pid_t iPid;
 
-	int iResult;
+	int iResult = 0;
 
     Dos9_ApplyEnv(lpeEnv);
 

@@ -33,6 +33,8 @@
 
 #include <libDos9.h>
 
+#include "init/Dos9_Init.h"
+
 #include "errors/Dos9_Errors.h"
 
 #include "lang/Dos9_Lang.h"
