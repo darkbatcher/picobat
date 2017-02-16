@@ -1643,4 +1643,6 @@ MONDAY 13TH, FEBRUARY
 THURSDAY 16TH, FEBRUARY
 
         - Update hlp.bat and man.
+        - Fix a bug with some libc when display the 
+          current directory (with Echo on).
 
