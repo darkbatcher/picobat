@@ -18,6 +18,8 @@
  *
  */
 
+#include <strings.h>
+
 #include <libDos9.h>
 
 #include "Dos9_Core.h"

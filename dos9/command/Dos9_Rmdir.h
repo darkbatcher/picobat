@@ -24,4 +24,6 @@
 int Dos9_CmdRmdir(char* lpLine);
 int Dos9_Rmdir(const char* dir);
 
+int Dos9_CmdRmdirFile(char* dir, int param, int* choice);
+
 #endif // DOS9_CMD_ECHO_H

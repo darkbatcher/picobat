@@ -741,7 +741,7 @@ int Dos9_RunExternalFile(char* lpFileName, char** lpArguments)
 {
 	pid_t iPid;
 
-	int iResult;
+	int iResult = 0;
 
     Dos9_ApplyEnv(lpeEnv);
 

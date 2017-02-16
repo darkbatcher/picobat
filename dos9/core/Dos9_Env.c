@@ -20,6 +20,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "../errors/Dos9_Errors.h"
 #include "Dos9_Env.h"

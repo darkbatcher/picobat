@@ -42,6 +42,7 @@
 
 #include "../errors/Dos9_Errors.h"
 
+#include "Dos9_Rmdir.h"
 #include "Dos9_Del.h"
 
 #include "Dos9_Ask.h"
