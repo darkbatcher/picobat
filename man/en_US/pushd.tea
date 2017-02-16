@@ -1,6 +1,5 @@
 #   Dos9 Manual pages, The Dos9 project
-#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
-#   Copyright (C) 2016       Teddy Astie (TSnake41)
+#   Copyright (C) 2016-2017  Teddy Astie (TSnake41)
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -18,33 +17,30 @@
 
 {{PUSHD command}}
 
-{TODO: Translate to english}
-
-	  La commande {PUSHD} permet de d'afficher le répertoire présent en
-	   haut de {la pile de répertoire} et changer le dossier courant
-	   en poussant l'ancien dans {la pile de répertoire}.
+	  The {PUSHD} command permit to display which directory is at the
+	   top of {the directory stack} and change current directory by
+	   pushing the previous into {the directory stack}.
 
 {{Synopsis}}
 
-${	PUSHD [chemin1] [chemin2] [chemin3] [cheminN]  }
+${	PUSHD [path1] [path2] [path3] [pathX]  }
 
-	Pour chaque chemin spécifié : change le {répertoire actuel} puis stocke
-	 l'ancien sur {la pile de répertoire}.
+	For each specified directories : change the {current directory} then
+	 pushd the previous to {the directory stack}.
 
-	Si aucun chemin n'est spécifié, affiche le {répertoire} qui est présent en
-	 haut de {la pile de repertoire}.
+	If no path is specified, show which {directory} is at the top of the
+     {the directory stack}.
 
-	En cas d'érreur, le {code de sortie} correspond au {chemin} qui a échoué.
+	In case of error, the {error code} match with the failed {path}.
 
-{{Compatibilité}}
+{{Compatibility}}
 
-	Majoritairement compatible avec {cmd.exe}. Les chemins à espaces doivent
-    être délimitées par des guillements afin de pouvoir utiliser de multiples
-	chemins sans confusion.
+	Mostly compatible with {cmd.exe}. The paths containing spaces must be
+    delimited by double quotes to use multiples directories without confusion.
 
-	Les chemins multiples sont une extention de {Dos9}.
+	Multiples directories are an {Dos9} extension.
 
-{{A voir aussi}}
+{{See also}}
 
 	{cd|CD command}, {popd|POPD command},
 	{spec/dirstack|Directory stack},
