@@ -165,6 +165,8 @@ __LIBCU8__IMP __cdecl intptr_t libcu8_spawnve(int mode, const char* file,
     for (i=0; i < j; i++)
         free(wargv[i]);
 
+    free(wargv);
+
     return ret;
 
 error :

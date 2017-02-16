@@ -309,6 +309,10 @@ LIBDOS9 int Dos9_FreeCommandList(LPCOMMANDLIST lpclList)
 {
     if (lpclList) {
 
+        /* printf("Freeing %p (\"%s\") : next (%p;%p)\n",
+                lpclList, lpclList->ptrCommandName, lpclList->lpclLeftRoot,
+                    lpclList->lpclRightRoot); */
+
         free(lpclList->ptrCommandName);
 
         /* if it is in fact an alias */

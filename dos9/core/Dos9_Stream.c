@@ -311,6 +311,7 @@ LPSTREAMSTACK Dos9_PopStreamStack(LPSTREAMSTACK lppsStack)
 		}
 
 		Dos9_FlushStd();
+
 		Dos9_CloseDescriptors(lpStream->iFreeDescriptors);
 		free(lpStream);
 

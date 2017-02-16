@@ -124,6 +124,8 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
 
 	DOS9_DBG("*** Input ends here  ***\n");
 
+	Dos9_EsFree(lpLine);
+
 	return 0;
 
 }
