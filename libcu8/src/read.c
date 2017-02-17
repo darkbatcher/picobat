@@ -232,7 +232,9 @@ int libcu8_readfile(int fd, char* buf, size_t size, size_t* written)
                 break;
 
             case -1:
-                goto err;
+                /* came accross an invalid character sequence, skip it*/
+                sansi = 0;
+                su8 = sizeof(utf8);
 
         }
 

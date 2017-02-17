@@ -1640,3 +1640,12 @@ MONDAY 13TH, FEBRARY
 
         - Fixed errors with the hlp script.
 
+WEDNESDAY 15TH, FEBRUARY
+
+        - Fixed a lot of memory leaks.
+
+        - Fixed libcu8_closedir() function. Indeed, the function did not close 
+          directory in a correct way.
+
+        - Fixed libcu8_dup() functions to handle standard input the right way.
+

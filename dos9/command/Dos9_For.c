@@ -1149,7 +1149,7 @@ int Dos9_ForMakeInputInfo(ESTR* lpInput, INPUTINFO* lpipInfo, FORINFO* lpfrInfo)
 			*/
 
 			lpipInfo->cType=INPUTINFO_TYPE_COMMAND;
-
+            lpipInfo->Info.InputFile.lpesFiles[0]=NULL;
 
 			if (_Dos9_Pipe(iPipeFdIn, 1024, O_TEXT) == -1) {
 				Dos9_ShowErrorMessage(DOS9_CREATE_PIPE | DOS9_PRINT_C_ERROR ,
@@ -1419,9 +1419,8 @@ loop_begin:
 		case INPUTINFO_TYPE_COMMAND:
 		case INPUTINFO_TYPE_STREAM:
 
-			if ((Dos9_EsGet(lpReturn,
-                            lpipInfo->Info.InputFile.pFile))) {
-
+retry:
+			if ((Dos9_EsGet(lpReturn, lpipInfo->Info.InputFile.pFile))) {
 
                 if (lpipInfo->Info.InputFile.lpesFiles[
                         ++ (lpipInfo->Info.InputFile.index)
@@ -1442,13 +1441,15 @@ loop_begin:
                     Dos9_ShowErrorMessage(DOS9_FILE_ERROR | DOS9_PRINT_C_ERROR,
                             lpipInfo->Info.InputFile.lpesFiles[
                             lpipInfo->Info.InputFile.index
-                            ],
+                            ]->str,
                             FALSE
                             );
 
                     break;
 
                 }
+
+                goto retry;
 
             }
 
@@ -1504,7 +1505,7 @@ int Dos9_ForInputParseFileList(FILE_LIST_T* lpList, ESTR* lpInput)
 
         lpList->lpesFiles[i++]=lpesStr;
 
-        //printf("File to read : \"%s\"\n", Dos9_EsToChar(lpesStr));
+        printf("File to read : \"%s\"\n", Dos9_EsToChar(lpesStr));
 
         lpesStr=Dos9_EsInit();
 
