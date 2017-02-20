@@ -26,7 +26,6 @@
 
 void Dos9_Exit(void)
 {
-    printf("Exiting Dos9\n");
 	Dos9_FreeCommandList(lpclCommands);
 	Dos9_FreeStreamStack(lppsStreamStack);
 	Dos9_FreeLocalBlock(lpvLocalVars);
@@ -38,8 +37,6 @@ void Dos9_Exit(void)
 	if (iOutputD)
 		close(iOutputD);
 
-
-    printf("Waiting for all threads\n");
 	Dos9_WaitForAllThreads();
 
 }

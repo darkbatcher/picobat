@@ -29,7 +29,6 @@
 
 #define _Dos9_EsTotalLen4(iSize) ((iSize/DEFAULT_ESTR+1)*DEFAULT_ESTR)
 
-
 int _Dos9_NewLine=DOS9_NEWLINE_LINUX;
 
 int _Dos9_Estr_Init(void)
@@ -89,10 +88,92 @@ ESTR* Dos9_EsInit(void)
     return ptrESTR;
 }
 
+#if 0
+struct mes {
+    int len;
+    struct mes* next;
+};
+
+static struct mes* Dos9_AddMesure(struct mes* m, int len)
+{
+    struct mes *ret=m,
+        *tmp;
+
+    if ((ret == NULL)
+        || (len < m->len)) {
+
+        if ((ret = malloc(sizeof(struct mes))) == NULL)
+            return m;
+
+        ret->len = len;
+        ret->next = m;
+
+        return ret;
+
+    }
+
+    while(m) {
+
+        if (len >= m->len) {
+
+            if ((tmp = malloc(sizeof(struct mes))) == NULL)
+                return ret;
+
+            tmp->len = len;
+            tmp->next = m->next;
+            m->next = tmp;
+            break;
+
+        }
+
+        m = m->next;
+
+    }
+
+    return ret;
+}
+
+static int Dos9_MedMesure(struct mes* m)
+{
+    int count=0,
+        i=0;
+    struct mes* orig = m;
+
+    while(m) {
+
+        count ++;
+        m = m->next;
+
+    }
+
+    if (count & 1)
+        count += 1; /* make count even */
+
+    count /= 2;
+    m = orig;
+
+    while (i ++ < count)
+        m = m->next;
+
+    return m->len;
+}
+#endif
+
+
 LIBDOS9 int Dos9_EsFree(ESTR* ptrESTR)
 {
-    /* free the string buffer */
+    #if 0
 
+    static struct mes *mesure = NULL;
+
+    if (ptrESTR == NULL)
+        return Dos9_MedMesure(mesure);
+
+    mesure = Dos9_AddMesure(mesure, strlen(ptrESTR->str));
+
+    #endif // 0
+
+    /* free the string buffer */
     free(ptrESTR->str);
 
     /* free the structure itself */
