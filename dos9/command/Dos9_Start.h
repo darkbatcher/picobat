@@ -23,6 +23,11 @@
 
 #include "../../config.h"
 
+#define START_MODE_MAX  3
+#define START_MODE_MIN  2
+#define START_MODE_NONE 5
+#define START_MODE_BACKGROUND 0x8
+
 int Dos9_CmdStart(char* line);
 
 #endif // DOS9_CMD_START

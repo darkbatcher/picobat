@@ -111,7 +111,7 @@ int Dos9_CmdGoto(char* lpLine)
 
 		} else if (Dos9_JumpToLabel(lpLabelName, lpFile)==-1) {
 
-			if (!bEchoError)
+			if (bEchoError)
 				Dos9_ShowErrorMessage(DOS9_LABEL_ERROR, lpLabelName, FALSE);
 
 			return -1;

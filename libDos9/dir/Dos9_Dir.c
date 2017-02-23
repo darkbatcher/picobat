@@ -1,7 +1,7 @@
 /*
  *
  *   libDos9 - The Dos9 project
- *   Copyright (C) 2010-2016 Romain GARBI
+ *   Copyright (C) 2010-2017 Romain GARBI
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -27,6 +27,398 @@
 #ifdef DOS9_USE_LIBCU8
 #include <libcu8.h>
 #endif // DOS9_USE_LIBCU8
+
+struct match_args_t {
+    int flags;
+    FILELIST* files;
+    void (*callback)(FILELIST*);
+};
+
+static int __inline__ Dos9_IsRegExpTrivial(char* exp)
+{
+    if (strpbrk(exp, "*?")) {
+        return 0;
+    } else {
+        return 1;
+    }
+}
+
+static FILELIST* Dos9_AddMatch(char* name, FILELIST* files, struct match_args_t* arg)
+{
+    FILELIST *file,
+             block;
+
+    if (arg->callback) {
+
+        snprintf(block.lpFileName, FILENAME_MAX, "%s", name);
+
+        if (!(arg->flags & DOS9_SEARCH_NO_STAT)) {
+            stat(name, &(block.stFileStats));
+
+#ifdef WIN32
+
+            /* Using windows, more detailled directory information
+               can be obtained */
+            block.stFileStats.st_mode=Dos9_GetFileAttributes(name);
+
+#endif // WIN32
+        }
+
+        arg->callback(&block);
+
+        return (((void*)files)+1);
+
+    }
+
+    if ((file = malloc(sizeof(FILELIST))) == NULL)
+        return NULL;
+
+    snprintf(file->lpFileName, FILENAME_MAX, "%s", name);
+
+    if (!(arg->flags & DOS9_SEARCH_NO_STAT)) {
+        stat(name, &(file->stFileStats));
+
+#ifdef WIN32
+
+        /* Using windows, more detailled directory information
+           can be obtained */
+        file->stFileStats.st_mode=Dos9_GetFileAttributes(name);
+
+#endif // WIN32
+    }
+
+    file->lpflNext = files;
+
+    /* Well, this turns out to produce heaps */
+    return file;
+}
+
+static FILELIST* Dos9_GetMatch(char* base, char* up, struct match_args_t* arg)
+{
+    FILELIST *ret = arg->files, *tmp;
+
+    ESTR* path = NULL;
+    char *item, *cleanup = NULL;
+
+    DIR* dir;
+    struct dirent* ent;
+
+    /* printf("Called Dos9_GetMatch(%s, %s, arg)\n", base, up); */
+
+
+    /* if something has already been found ... */
+    if ((ret != (FILELIST*)-1) && (ret != NULL)
+        && (arg->flags & DOS9_SEARCH_GET_FIRST_MATCH))
+        return ret;
+
+    if (base == NULL) {
+        /* This is somewhat the top-level instance of Dos9_GetMatch ...*/
+
+        if ((arg->flags &
+                (DOS9_SEARCH_DIR_MODE | DOS9_SEARCH_RECURSIVE))
+            && Dos9_DirExists(up)) {
+            /* This regular expression is trivial however either dir mode
+               or recursive modes have been specified. Thus we need to
+               search matching files _inside_ the directory */
+
+            return Dos9_GetMatch(up, "*", arg);
+
+        }
+
+        if (Dos9_DirExists(up) || Dos9_FileExists(up)) {
+            /* this regular expression is trivial (indeed 'up' is the only
+               matching file or directory */
+
+            if ((tmp = Dos9_AddMatch(up, ret, arg)) == NULL)
+                goto err;
+
+            return tmp;
+
+        } else if (Dos9_IsRegExpTrivial(up)) {
+            /* We did not find anything but it is trivial though so there
+               is no matching file */
+            return NULL;
+        }
+
+    }
+
+    /* we will need this */
+    path = Dos9_EsInit();
+
+    item = up;
+
+    /* search for the next item in the search in up */
+    if (up == NULL) {
+
+       item = "*";
+
+    } else if ((up = strpbrk(up, "\\/"))) {
+
+        cleanup = up;
+        *cleanup = '\0';
+        up ++;
+
+    }
+
+    /* Check if the item is trivial before really trying
+       to recurse in base folder ... */
+    if (base != NULL) {
+
+        Dos9_EsCpy(path, base);
+        Dos9_EsCat(path, "/");
+        Dos9_EsCat(path, item);
+
+    } else {
+
+        Dos9_EsCpy(path, item);
+
+    }
+
+
+
+    if (Dos9_FileExists(path->str)) {
+        /* if path corresponds to a file (ie. not a dir), there is two
+           possibilities (a) up is NULL and then the files matches sinces
+           we already reached top level, or (b) up is not NULL and then
+           the file cannot match and it wise to stop search in this
+           folder */
+        if (up == NULL) {
+
+            if ((tmp = Dos9_AddMatch(path->str, ret, arg)) == NULL)
+                goto err;
+
+            ret = tmp;
+            goto end;
+
+        } else {
+
+            /*abort search */
+            goto end;
+
+        }
+    }
+
+    if (Dos9_DirExists(path->str)) {
+        /* if path corresponds to a dir, always continue search. But path
+           is not necessarily to be added to results... ! */
+
+        if (up == NULL) {
+
+            /* add the file and browse if recursive. If the returns uses
+               callback, do not forget to add match first. */
+            if (arg->callback != NULL) {
+                if ((tmp = Dos9_AddMatch(path->str, ret, arg)) == NULL)
+                    goto err;
+
+                ret = tmp;
+            }
+
+            if (arg->flags & DOS9_SEARCH_RECURSIVE) {
+
+                arg->files = ret;
+                ret = Dos9_GetMatch(path->str, up, arg);
+
+            }
+
+            if (arg->callback == NULL) {
+                if ((tmp = Dos9_AddMatch(path->str, ret, arg)) == NULL)
+                    goto err;
+
+                ret = tmp;
+            }
+
+        } else {
+
+            /* always browse */
+            arg->files = ret;
+            ret = Dos9_GetMatch(path->str, up, arg);
+
+        }
+
+        goto end;
+
+    }
+
+    /* path->str is trivial but it is neither a dir or a file... We can
+       be sure we won't get any matching file */
+    if (Dos9_IsRegExpTrivial(path->str))
+        goto end;
+
+    /* printf("Opening dir=\"%s\" up=\"%s\" item=\"%s\"\n", base, up, item); */
+
+    /* Now we have checked every possible trivial dir, browse dir */
+    if ((dir = opendir((base != NULL) ? (base) : ("."))) == NULL)
+        goto end;
+
+    /* loop through the directory entities */
+    while (ent = readdir(dir)) {
+
+        /* printf("ent : %s\n", ent->d_name);
+        getch(); */
+
+        /* skip basic pseudo dirs */
+        if ((arg->flags & DOS9_SEARCH_NO_PSEUDO_DIR)
+            && (!strcmp(ent->d_name, ".") || !strcmp(ent->d_name, "..")))
+            continue;
+
+        /* if the file name definitely matches the expression */
+        if (Dos9_RegExpCaseMatch(item, ent->d_name)) {
+
+            /* Compute the path of the current matching entity */
+            if (base != NULL) {
+                Dos9_EsCpy(path, base);
+                Dos9_EsCat(path, "/");
+                Dos9_EsCat(path, ent->d_name);
+            } else {
+                Dos9_EsCpy(path, ent->d_name);
+            }
+
+            if (Dos9_FileExists(path->str)) {
+                /* The entity is a file, so only add if up is NULL */
+
+                if (up == NULL) {
+
+                    if ((tmp = Dos9_AddMatch(path->str, ret, arg)) == NULL)
+                        goto err;
+
+                    ret = tmp;
+
+                    if (arg->flags & DOS9_SEARCH_GET_FIRST_MATCH)
+                            goto end;
+
+                }
+
+            } else {
+                /* the entity is a directory, browse if (a) up is not NULL
+                or (b) the search is recursive and up is NULL. Only add if
+                up is NULL*/
+                if (up == NULL) {
+
+                    /* add the file and browse if recursive. If the returns uses
+                       callback, do not forget to add match first. */
+                    if ((arg->callback != NULL)) {
+                        if ((tmp = Dos9_AddMatch(path->str, ret, arg)) == NULL)
+                            goto err;
+
+                        ret = tmp;
+
+                        /* If the user only requested the first match */
+                        if (arg->flags & DOS9_SEARCH_GET_FIRST_MATCH)
+                            goto end;
+                    }
+
+                    if ((arg->flags & DOS9_SEARCH_RECURSIVE)
+                        && (strcmp(ent->d_name, ".") && strcmp(ent->d_name, ".."))) {
+
+                        arg->files = ret;
+                        ret = Dos9_GetMatch(path->str, up, arg);
+
+                        if ((ret == -1)
+                            || ((ret != (FILELIST*)-1) && (ret != NULL)
+                                && (arg->flags & DOS9_SEARCH_GET_FIRST_MATCH)))
+                            goto end;
+
+                    }
+
+                    if (arg->callback == NULL) {
+                        if ((tmp = Dos9_AddMatch(path->str, ret, arg)) == NULL)
+                            goto err;
+
+                        ret = tmp;
+
+                        /* If the user only requested the first match */
+                        if (arg->flags & DOS9_SEARCH_GET_FIRST_MATCH)
+                            goto end;
+                    }
+
+                } else {
+
+                    /* always browse */
+                    arg->files = ret;
+                    ret = Dos9_GetMatch(path->str, up, arg);
+
+                    /* exit on error or if the user only requested the first
+                       match */
+                    if ((ret == -1)
+                        || ((ret != (FILELIST*)-1) && (ret != NULL)
+                            && (arg->flags & DOS9_SEARCH_GET_FIRST_MATCH)))
+                        goto end;
+
+                }
+
+            }
+
+        }
+
+    }
+
+end:
+    if (dir)
+        closedir(dir);
+
+    if (cleanup)
+        *cleanup = '/';
+
+    Dos9_EsFree(path);
+    return ret;
+
+err:
+    if (dir)
+        closedir(dir);
+
+    if (ret)
+        Dos9_FreeFileList(ret);
+
+    if (path)
+        Dos9_EsFree(path);
+
+    return (void*)-1;
+}
+
+
+LIBDOS9 LPFILELIST  Dos9_GetMatchFileList(char* lpPathMatch, int iFlag)
+{
+    struct match_args_t args;
+    FILELIST* file;
+
+    args.callback = NULL;
+    args.flags = iFlag;
+    args.files =  NULL;
+
+    file = Dos9_GetMatch(NULL, lpPathMatch, &args);
+
+    if (file == (FILELIST*)-1) {
+
+        fprintf(stderr, "Fatal ERROR : file search\n");
+        exit(-1);
+
+    }
+
+    return file;
+}
+
+LIBDOS9 int Dos9_GetMatchFileCallback(char* lpPathMatch, int iFlag, void(*pCallBack)(FILELIST*))
+{
+    struct match_args_t args;
+    FILELIST* file;
+
+    args.callback = pCallBack;
+    args.flags = iFlag;
+    args.files =  NULL;
+
+    file = Dos9_GetMatch(NULL, lpPathMatch, &args);
+
+    if (file == (FILELIST*)-1) {
+
+        fprintf(stderr, "Fatal ERROR : file search\n");
+        exit(-1);
+
+    }
+
+    return (int)file;
+}
+
+
 
 LIBDOS9 char* Dos9_SeekPattern(const char* match, const char* pattern, size_t len)
 {
@@ -268,7 +660,6 @@ LIBDOS9 int Dos9_RegExpCaseMatch(const char* regexp, const char* match)
 
 }
 
-
 LIBDOS9 int Dos9_FormatFileSize(char* lpBuf, int iLength, unsigned int iFileSize)
 {
 	int i=0, iLastPart=0;
@@ -287,369 +678,6 @@ LIBDOS9 int Dos9_FormatFileSize(char* lpBuf, int iLength, unsigned int iFileSize
 		iLastPart=iLastPart/10;
 		return snprintf(lpBuf, iLength, "%d,%.2d %s", iFileSize, iLastPart , lpUnit[i%4]);
 	}
-}
-
-LIBDOS9 int         Dos9_GetMatchFileCallback(char* lpPathMatch, int iFlag, void(*pCallBack)(FILELIST*))
-{
-	int iDepth; /* to store depth of  regexp */
-	char lpStaticPart[FILENAME_MAX],
-	     lpMatchPart[FILENAME_MAX];
-
-	int iFileDescriptors[2];
-	void* ret;
-
-	THREAD hThread;
-
-	FILEPARAMETER fpParam= {TRUE, /* include informations on the
-                                    FILEPARAMETER Structures returned */
-	                        0,     /* defines the descriptor through which
-                                    the callback funtion will read */
-
-	                        pCallBack /* the callback routine in order to benefit from
-                                        from the use of two thread. (this is somewhat
-                                        like asynchronious version of the next function
-                                     */
-	                       };
-
-	if (iFlag & DOS9_SEARCH_NO_STAT) {
-		fpParam.bStat=FALSE;
-	}
-
-	_Dos9_SplitMatchPath(lpPathMatch, lpStaticPart, FILENAME_MAX, lpMatchPart, FILENAME_MAX);
-	/* Split the string in two blocks :
-	    - lpStaticPart : Part that does not include any
-	      regexp symbol.
-
-	    - lpMatchPart : Part that include regexp symbols
-
-	*/
-
-	iDepth=_Dos9_GetMatchDepth(lpMatchPart);
-
-	/* Set pipe arguments */
-	if (_Dos9_Pipe(iFileDescriptors, 1024, O_BINARY)==-1) return 0;
-	fpParam.iInput=iFileDescriptors[0];
-
-	/* start the thread that gather answers */
-	Dos9_BeginThread(&hThread,
-	                 (void(*)(void*))_Dos9_WaitForFileListCallBack,
-	                 0,
-	                 (void*)(&fpParam)
-	                );
-
-	if (!*lpStaticPart && *lpMatchPart) {
-
-		/* add the current directory to the default
-		   static path
-		*/
-
-		*lpStaticPart='.';
-		lpStaticPart[1]='\0';
-
-	}
-
-	if (*lpStaticPart && !*lpMatchPart) {
-
-		if (Dos9_DirExists(lpStaticPart)
-                && (iFlag & (DOS9_SEARCH_DIR_MODE | DOS9_SEARCH_RECURSIVE))) {
-
-			/* if the regexp is trivial but corresponds to a directory and
-			   if the dir-compliant mode has been set, then the regexp will
-			   browse the directory */
-
-            if (iFlag & DOS9_SEARCH_RECURSIVE)
-                write(iFileDescriptors[1], lpStaticPart, FILENAME_MAX);
-
-
-			*lpMatchPart='*';
-			lpMatchPart[1]='\0';
-
-		} else if (Dos9_DirExists(lpStaticPart) || Dos9_FileExists(lpStaticPart)) {
-
-			/* if the regexp is trivial (ie. no regexp characters)
-			   then perform direct test and add it if go to end */
-
-			write(iFileDescriptors[1], lpStaticPart, FILENAME_MAX);
-			goto Dos9_GetMatchFileList_End;
-
-		}
-
-	}
-
-
-	/* Start regexp-based file research */
-	_Dos9_SeekFiles(lpStaticPart,
-	                lpMatchPart,
-	                1,
-	                iDepth,
-	                iFileDescriptors[1],
-	                iFlag);
-
-Dos9_GetMatchFileList_End:
-
-
-	if (write(iFileDescriptors[1], "\1", 1)==-1)
-		return 0;
-
-	Dos9_WaitForThread(&hThread, &ret);
-
-	close(iFileDescriptors[0]);
-	close(iFileDescriptors[1]);
-
-	return (int)ret;
-
-}
-
-LIBDOS9 LPFILELIST  Dos9_GetMatchFileList(char* lpPathMatch, int iFlag)
-{
-	int iDepth; /* to store depth of  regexp */
-	char lpStaticPart[FILENAME_MAX],
-	     lpMatchPart[FILENAME_MAX];
-	int iFileDescriptors[2];
-	THREAD hThread;
-	LPFILELIST lpReturn = NULL;
-
-	FILEPARAMETER fpParam= {TRUE, /* include informations on the
-                                    FILEPARAMETER Structures returned */
-	                        0,    /* defines the descriptor through which
-                                    the callback function will read */
-	                        NULL  /* no callback */
-	                       };
-
-    if (strlen(lpPathMatch) > FILENAME_MAX-1)
-        return NULL;
-
-	if (iFlag & DOS9_SEARCH_NO_STAT) {
-		fpParam.bStat=FALSE;
-	}
-
-	_Dos9_SplitMatchPath(lpPathMatch, lpStaticPart, FILENAME_MAX, lpMatchPart, FILENAME_MAX);
-	/* Split the string in two blocks :
-	    - lpStaticPart : Part that does not include any
-	      regexp symbol.
-
-	    - lpMatchPart : Part that include regexp symbols
-
-	*/
-
-	iDepth=_Dos9_GetMatchDepth(lpMatchPart);
-
-	/* Set pipe arguments */
-	if (_Dos9_Pipe(iFileDescriptors, 1024, O_BINARY)==-1) return NULL;
-	fpParam.iInput=iFileDescriptors[0];
-
-
-	/* start the thread that gather answers */
-	Dos9_BeginThread(&hThread,
-	                 (void(*)(void*))_Dos9_WaitForFileList,
-	                 0,
-	                 (void*)(&fpParam)
-	                );
-
-	if (!*lpStaticPart && *lpMatchPart) {
-
-		/* add the current directory to the default
-		   static path
-		*/
-
-		*lpStaticPart='.';
-		lpStaticPart[1]='\0';
-
-	}
-
-	if (*lpStaticPart && !*lpMatchPart) {
-
-        if (Dos9_DirExists(lpStaticPart)
-                && (iFlag & (DOS9_SEARCH_DIR_MODE | DOS9_SEARCH_RECURSIVE))) {
-
-			/* if the regexp is trivial but corresponds to a directory and
-			   if the dir-compliant mode has been set, then the regexp will
-			   browse the directory */
-
-            if (iFlag & DOS9_SEARCH_RECURSIVE)
-                write(iFileDescriptors[1], lpStaticPart, FILENAME_MAX);
-
-
-			*lpMatchPart='*';
-			lpMatchPart[1]='\0';
-
-		} else if (Dos9_DirExists(lpStaticPart) || Dos9_FileExists(lpStaticPart)) {
-
-			/* if the regexp is trivial (ie. no regexp characters)
-			   then perform direct test and add it if go to end */
-
-			write(iFileDescriptors[1], lpStaticPart, FILENAME_MAX);
-			goto Dos9_GetMatchFileList_End;
-
-		}
-
-	}
-
-	/* Start regexp-based file research */
-	_Dos9_SeekFiles(lpStaticPart,
-	                lpMatchPart,
-	                1,
-	                iDepth,
-	                iFileDescriptors[1],
-	                iFlag);
-
-Dos9_GetMatchFileList_End:
-
-	if (write(iFileDescriptors[1], "\1", 1)==-1) return NULL;
-
-	Dos9_WaitForThread(&hThread, &lpReturn);
-
-	close(iFileDescriptors[0]);
-	close(iFileDescriptors[1]);
-
-	return lpReturn;
-
-}
-
-LPFILELIST _Dos9_SeekFiles(char* lpDir, char* lpRegExp, int iLvl, int iMaxLvl, int iOutDescriptor, int iSearchFlag)
-{
-	DIR* pDir;
-	/* used to browse the directory */
-	struct dirent* lpDirElement;
-	/* used to browse the directory elements */
-	char lpRegExpLvl[FILENAME_MAX];
-	/* used to get the part of the path to deal with */
-	char lpFilePath[FILENAME_MAX];
-	/* used to make file path */
-	int iFlagRecursive=FALSE,
-	    iIsPseudoDir;
-
-	if (iSearchFlag & DOS9_SEARCH_RECURSIVE) {
-		iFlagRecursive=(iLvl == iMaxLvl);
-		/*  verfify wether the research on the path is ended (i.e. the top level at least been reached) */
-	}
-
-	_Dos9_GetMatchPart(lpRegExp, lpRegExpLvl, FILENAME_MAX, iLvl);
-	/* returns the part of path that must the file must match */
-
-	if ((!strcmp(lpRegExpLvl, ".")) && (iLvl == iMaxLvl)) {
-
-		*lpRegExpLvl='\0';
-		/*
-		    If the regexp is trivial (ie. '.') and at top level
-		    (including for recursive search), this is replaced
-		    by the equivalent symbol '' (all match accepted)
-
-		 */
-
-	}
-
-	if ((pDir=opendir(lpDir))) {
-
-		while ((lpDirElement=readdir(pDir))) {
-
-			if ((
-			        !iFlagRecursive
-			        && Dos9_RegExpCaseMatch(lpRegExpLvl, lpDirElement->d_name)
-
-			        /* if the search is non-recursive (or simply not recursive yet),
-			           and the file name matches up with the level of regexp */
-
-			    ) || (
-
-			        iFlagRecursive
-
-			        /*
-			            if the search is recursive don't care wether the element
-			            matches the regular expression. Just check that the
-			            element is neither '.' nor '..', since it will probably
-			            create circular filesystem search.
-			        */
-			    )) {
-
-				_Dos9_MakePath(lpDir, lpDirElement->d_name, lpFilePath, FILENAME_MAX);
-
-				iIsPseudoDir=!(strcmp(".", lpDirElement->d_name)
-				               && strcmp("..", lpDirElement->d_name));
-
-				switch(iFlagRecursive) {
-
-				case TRUE:
-					/* If the mode is reccursive:
-
-					    - try to add the element, if the element matches the
-					      regexp.
-
-					    - try to browse subdirectories.
-
-					 */
-
-					if (Dos9_RegExpCaseMatch(lpRegExpLvl, lpDirElement->d_name)) {
-
-						if ((iSearchFlag & DOS9_SEARCH_NO_PSEUDO_DIR)
-						    && iIsPseudoDir)
-							goto Dos9_DirRecursive;
-
-						if (write(iOutDescriptor, lpFilePath, FILENAME_MAX)==-1) {
-                            closedir(pDir);
-							return NULL;
-						}
-
-						if (iSearchFlag & DOS9_SEARCH_GET_FIRST_MATCH) {
-                            closedir(pDir);
-							return NULL;
-						}
-
-					}
-
-Dos9_DirRecursive:
-
-					if (!iIsPseudoDir && Dos9_DirExists(lpFilePath))
-						_Dos9_SeekFiles(lpFilePath,
-						                lpRegExp,
-						                iLvl,
-						                iMaxLvl,
-						                iOutDescriptor,
-						                iSearchFlag);
-
-					break;
-
-				case FALSE:
-					/* If the mode is not recussive */
-
-					if (iLvl == iMaxLvl) {
-
-						if ((iSearchFlag & DOS9_SEARCH_NO_PSEUDO_DIR)
-						    && iIsPseudoDir)
-							break;
-
-
-						if (write(iOutDescriptor, lpFilePath, FILENAME_MAX)==-1) {
-                            closedir(pDir);
-							return NULL;
-						}
-
-						if (iSearchFlag & DOS9_SEARCH_GET_FIRST_MATCH){
-                            closedir(pDir);
-							return NULL;
-						}
-
-					} else if (Dos9_DirExists(lpFilePath)) {
-
-						_Dos9_SeekFiles(lpFilePath, lpRegExp, iLvl+1, iMaxLvl, iOutDescriptor, iSearchFlag);
-
-					}
-
-				}
-			}
-		}
-
-		closedir(pDir);
-
-	}
-	return NULL;
-}
-
-LIBDOS9 int Dos9_GetStaticPart(const char* lpPathMatch, char* lpStaticPart, size_t size)
-{
-    char garbage;
-
-    return _Dos9_SplitMatchPath(lpPathMatch, lpStaticPart, size, &garbage, sizeof(garbage));
 }
 
 LIBDOS9 size_t Dos9_GetStaticLength(const char* str)
@@ -676,296 +704,6 @@ LIBDOS9 size_t Dos9_GetStaticLength(const char* str)
     return (size_t)(ptr-orig);
 }
 
-int _Dos9_SplitMatchPath(const char* lpPathMatch, char* lpStaticPart, size_t iStaticSize,  char* lpMatchPart, size_t iMatchSize)
-{
-	const char* lpLastToken=NULL; /* a pointer to the last static delimiter */
-	const char* lpCh=lpPathMatch; /* a pointer to browse string */
-	int iContinue=TRUE;
-	size_t iSize;
-
-	while (*lpCh && iContinue) {
-
-		/*
-		    detect the part that is static (that does not contains
-		    any matching characters
-		 */
-
-		switch(*lpCh) {
-
-		case '/':
-		case '\\':
-			lpLastToken=lpCh+1;
-			break;
-
-		case '?':
-		case '*':
-			iContinue=FALSE;
-			break;
-
-		}
-
-		lpCh++;
-
-	}
-
-	if (lpLastToken && !iContinue) {
-
-		/*
-		    if match part and static part are different
-		*/
-
-		iSize=lpLastToken-lpPathMatch;
-
-
-		if ((iSize==1)) {
-
-			/* the token is just '/' which means
-			   volume root */
-			iSize++;
-
-		} else if ((iSize==3) && (*(lpPathMatch+1)==':'))  {
-
-			/* the token is a windows drive letter */
-			iSize++;
-
-		}
-
-		if (iSize < iStaticSize)
-			iStaticSize=iSize;
-
-		strncpy(lpStaticPart, lpPathMatch, iStaticSize);
-		lpStaticPart[iStaticSize-1]='\0';
-
-		strncpy(lpMatchPart, lpLastToken, iMatchSize);
-		lpStaticPart[iMatchSize-1]='\0';
-
-	} else if (!iContinue) {
-
-		/* if there is no static part */
-
-		if (iStaticSize)
-			*lpStaticPart='\0';
-
-		strncpy(lpMatchPart, lpPathMatch, iMatchSize);
-		lpStaticPart[iMatchSize-1]='\0';
-
-	} else {
-
-		/* if there is no match part */
-
-		if (iMatchSize)
-			*lpMatchPart='\0';
-
-		strncpy(lpStaticPart, lpPathMatch, iStaticSize);
-		lpStaticPart[iStaticSize-1]='\0';
-
-	}
-
-	return 0;
-}
-
-int _Dos9_GetMatchPart(const char* lpRegExp, char* lpBuffer, size_t iLength, int iLvl)
-{
-	const char *lpCh=lpRegExp,
-	            *lpLastToken=lpRegExp;
-	int iCurrentLvl=1, /* the first level is the level 1 */
-	    iContinue=TRUE;
-
-	size_t iSize;
-
-	while (*lpCh && iContinue) {
-
-		if (*lpCh=='\\' || *lpCh=='/') {
-
-			if (iCurrentLvl==iLvl)
-				iContinue=FALSE;
-
-			iCurrentLvl++;
-			lpLastToken=lpCh+1;
-
-		}
-
-		lpCh++;
-
-	}
-
-	if (!*lpCh) {
-
-		/* if we are at string end */
-
-		if (iLvl!=iCurrentLvl) {
-
-			*lpBuffer='\0';
-
-		} else {
-
-			strncpy(lpBuffer, lpLastToken, iLength);
-			lpBuffer[iLength-1]='\0';
-
-		}
-
-		return 0;
-
-	}
-
-	iSize=lpCh-lpLastToken+1;
-
-	if (iSize < iLength)
-		iLength=iSize;
-
-	strncpy(lpBuffer, lpLastToken, iLength);
-	lpBuffer[iSize-1]='\0';
-
-	return 0;
-}
-
-int _Dos9_GetMatchDepth(char* lpRegExp)
-{
-	int iDepth;
-
-	for (iDepth=1; *lpRegExp; lpRegExp++) {
-
-		if (*lpRegExp=='\\' || *lpRegExp=='/') iDepth++;
-
-	}
-
-	return iDepth;
-
-}
-
-int _Dos9_MakePath(char* lpPathBase, char* lpPathEnd, char* lpBuffer, int iLength)
-{
-	int iLen=strlen(lpPathBase)+strlen(lpPathEnd);
-	int i=0;
-
-	if (lpPathBase[strlen(lpPathBase)-1] != '/' && lpPathBase[strlen(lpPathBase)-1] != '\\') {
-		iLen++;
-		i=1;
-	}
-
-	if (iLen>iLength) return -1;
-
-	if (!strcmp(lpPathBase, ".")) {
-		strcpy(lpBuffer,lpPathEnd);
-		return 0;
-	}
-
-	strcpy(lpBuffer, lpPathBase);
-	if (i) strcat(lpBuffer, "/");
-	strcat(lpBuffer, lpPathEnd);
-	return 0;
-}
-
-char* _Dos9_GetFileName(char* lpPath)
-{
-	char* lpLastPos=NULL;
-
-	for (; *lpPath; lpPath++) {
-		if (*lpPath=='/' || *lpPath=='\\') lpLastPos=lpPath+1;
-	}
-
-	return lpLastPos;
-}
-
-LIBDOS9 int Dos9_FreeFileList(LPFILELIST lpflFileList)
-{
-
-	_Dos9_FreeFileList(lpflFileList);
-
-	return 0;
-
-}
-
-LPFILELIST _Dos9_WaitForFileList(LPFILEPARAMETER lpParam)
-{
-	char lpFileName[FILENAME_MAX];
-	char cUseStat=lpParam->bStat;
-	int iInDescriptor=lpParam->iInput;
-	LPFILELIST lpflLast=NULL;
-	LPFILELIST lpflCurrent=NULL;
-
-	while (TRUE) {
-
-		/* get data from the descriptor (take a large amount
-		   of FILENAME_MAX bytes because of binary type of
-		   the descriptor). */
-		if (read(iInDescriptor, lpFileName, FILENAME_MAX)) {
-
-			if (*lpFileName=='\1')
-				break;
-
-			if ((lpflCurrent=malloc(sizeof(FILELIST)))) {
-				strcpy(lpflCurrent->lpFileName, lpFileName);
-				lpflCurrent->lpflNext=lpflLast;
-
-				if ((cUseStat)) {
-
-					stat(lpFileName, &(lpflCurrent->stFileStats));
-
-#if defined(WIN32)
-					lpflCurrent->stFileStats.st_mode=Dos9_GetFileAttributes(lpFileName);
-#endif
-
-				}
-
-				lpflLast=lpflCurrent;
-
-			}
-		}
-	}
-
-	Dos9_EndThread(lpflCurrent);
-	return lpflCurrent;
-}
-
-int                 _Dos9_WaitForFileListCallBack(LPFILEPARAMETER lpParam)
-{
-	char lpFileName[FILENAME_MAX];
-	char cUseStat=lpParam->bStat;
-	int iInDescriptor=lpParam->iInput;
-	size_t i=0;
-	void(*pCallback)(FILELIST*)=lpParam->pCallBack;
-
-	FILELIST flElement;
-
-	while (TRUE) {
-
-		/* get data from the descriptor (take a large amount
-		   of FILENAME_MAX bytes because of binary type of
-		   the descriptor). */
-		if (read(iInDescriptor, lpFileName, FILENAME_MAX)) {
-
-			if (*lpFileName=='\1')
-				break;
-
-			strcpy(flElement.lpFileName, lpFileName);
-
-			if (cUseStat) {
-
-				stat(lpFileName, &(flElement.stFileStats));
-
-#ifdef WIN32
-
-				/* Using windows, more detailled directory information
-				   can be obtained */
-				flElement.stFileStats.st_mode=Dos9_GetFileAttributes(lpFileName);
-
-#endif // WIN32
-
-			}
-
-			/* use the callback function */
-			pCallback(&flElement);
-
-			i++;
-		}
-
-	}
-
-	Dos9_EndThread((void*)i);
-	return i;
-}
-
 int _Dos9_FreeFileList(LPFILELIST lpflFileList)
 {
 	LPFILELIST lpflNext;
@@ -979,6 +717,16 @@ int _Dos9_FreeFileList(LPFILELIST lpflFileList)
 	}
 
 	return 0;
+}
+
+
+LIBDOS9 int Dos9_FreeFileList(LPFILELIST lpflFileList)
+{
+
+	_Dos9_FreeFileList(lpflFileList);
+
+	return 0;
+
 }
 
 #if defined(WIN32) && defined(DOS9_USE_LIBCU8)

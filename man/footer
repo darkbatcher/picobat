@@ -1,0 +1,19 @@
+<footer>
+<div>
+Pages de manuels Dos9, Le Projet dos9 - Copyright © 2010-2017 Romain GARBI et Contributeurs<br/>
+Design par IK_DC - Xenoxis
+<br/>
+Ceci est un logiciel libre : vous pouvez le redistribuer et/ou le modifier sous les termes de la Licence Publique Générale GNU telle que publiée par la Free Software Fundation, soit sous la version 3 ou, (selon votre volonté) n'importe quelle version postérieure</br>
+<br/>
+Merci de reporter les bogues et les erreurs à : &lt;darkbatcher at dos9 dot org&gt;
+</div>
+</footer>
+<!-- if the user is connectedt to internet, then, it can activate the
+	 syntax highlighting -->
+<script type="text/javascript" src="http://www.dos9.org/js/h.js" >
+</script>
+
+<script type='text/javascript'>
+var Coloration = new Highlighter('dos', 'code');
+Coloration.Highlight();
+</script>

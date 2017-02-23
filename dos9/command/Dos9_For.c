@@ -35,7 +35,9 @@
     The for command
 
     * For each item in a list.
-      Default token are ", " and carriot return.
+      Default token are ", " and carriage return.
+      if any item is a regexp, the corresponding token are
+      replace with the matching files.
 
         FOR %%A IN (ens) DO (
 
@@ -69,6 +71,10 @@
 
  */
 
+
+/* The following piece of code is designed to provide
+   fallbacks for libcu8_fd_set_inheritance if libcu8 is
+   not available */
 #if defined(WIN32) && defined(DOS9_USE_LIBCU8)
 #include <libcu8.h>
 #elif defined(WIN32)
@@ -124,16 +130,14 @@ int Dos9_CmdFor(char* lpLine)
 	BLOCKINFO bkCode;
 
 	FORINFO forInfo= {
-		" ", /* no tokens delimiters, since only one
-                token is taken account */
-		";", /* the default delimiter is ; */
+		" ", /* default token delimiter */
+		";", /* the default eol delimiter is ; */
 		0, /* no skipped line */
 		0, /* this is to be fullfiled later (the
                 name letter of loop special var) */
 		FALSE,
 		1, /* the number of tokens we were given */
-		{TOHIGH(1)|1} /* get all the token
-                                    back */
+		{TOHIGH(1)|1} /* get the first token back */
 
 	};
 
@@ -360,28 +364,86 @@ error:
 	return -1;
 }
 
-/* FIXME : This function should be enhanced by using the
-   Dos9_GetNextParamPointers function */
 int Dos9_CmdForSimple(ESTR* lpInput, BLOCKINFO* lpbkCommand, char cVarName, char* lpDelimiters)
 {
 
 	char *lpToken=Dos9_EsToChar(lpInput),
-         *lpBegin;
+         *lpBegin,
+         *tmp;
 
     ESTR* lpesStr=Dos9_EsInit();
+    FILELIST *files = NULL,
+             *item = NULL;
 
-	while (Dos9_GetParameterPointers(&lpBegin, &lpToken, lpDelimiters, lpToken)) {
+	while ((files != NULL)
+           || (lpToken != NULL && Dos9_GetParameterPointers(&lpBegin, &lpToken,
+                                                    lpDelimiters, lpToken))) {
 
-        if (lpToken == NULL) {
+        if (files != NULL) {
 
-            Dos9_EsCpy(lpesStr, lpBegin);
+            if (item == NULL) {
+
+                Dos9_FreeFileList(files);
+                files = NULL;
+                continue;
+
+            }
+
+            Dos9_EsCpy(lpesStr, item->lpFileName);
+            item = item->lpflNext;
 
         } else {
 
-            Dos9_EsCpyN(lpesStr,
-                        lpBegin,
-                        (size_t)(lpToken-lpBegin)
-                        );
+            if (lpToken == NULL) {
+
+                Dos9_EsCpy(lpesStr, lpBegin);
+
+            } else {
+
+                Dos9_EsCpyN(lpesStr,
+                            lpBegin,
+                            (size_t)(lpToken-lpBegin)
+                            );
+
+            }
+
+            if (strpbrk(lpesStr->str, "*?")) {
+
+                /* Remove extra parenthesis */
+                if (*lpBegin == '"') {
+                    lpBegin ++;
+
+                    if (lpToken == NULL) {
+
+                        Dos9_EsCpy(lpesStr, lpBegin);
+
+                    } else {
+
+                        Dos9_EsCpyN(lpesStr,
+                                    lpBegin,
+                                    (size_t)(lpToken-lpBegin)
+                                    );
+
+                    }
+
+                    if ((tmp = strrchr(lpesStr->str, '"'))
+                        && (*(tmp + 1) == '\0')) {
+                        *tmp = '\0';
+                    }
+
+                }
+
+                /* We came across a reg expression, just launch a search */
+                files = Dos9_GetMatchFileList(lpesStr->str,
+                                                DOS9_SEARCH_NO_PSEUDO_DIR
+                                                | DOS9_SEARCH_NO_STAT);
+
+                /* do not bother that much if the input expression does not
+                   match anything */
+                item = files;
+                continue;
+
+            }
 
         }
 
@@ -398,7 +460,7 @@ int Dos9_CmdForSimple(ESTR* lpInput, BLOCKINFO* lpbkCommand, char cVarName, char
 
 		/* if a goto as been executed while the for-loop
 		   was ran */
-		if (bAbortCommand==TRUE || lpToken==NULL)
+		if (bAbortCommand)
 			break;
 
 	}
@@ -467,7 +529,7 @@ int Dos9_CmdForL(ESTR* lpInput, BLOCKINFO* lpbkCommand, char cVarName)
 
 		/* if a goto as been executed while the for-loop
 		   was ran */
-		if (bAbortCommand==TRUE)
+		if (bAbortCommand)
 			break;
 
 	}
@@ -516,9 +578,9 @@ int Dos9_CmdForF(ESTR* lpInput, BLOCKINFO* lpbkInfo, FORINFO* lpfrInfo)
 
 
 		/* if a goto as been executed while the for-loop
-		   was ran */
+		   was ran or a goto:eof or something like exit /b */
 
-		if (bAbortCommand==TRUE)
+		if (bAbortCommand)
 			break;
 
 	}

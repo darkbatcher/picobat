@@ -36,13 +36,11 @@
 
 /*
 
-	start [/Wait] [/MIN] [/MAX] [/D dir] cmd param
+	start [/Wait] [/MIN] [/MAX] [/b] [/D dir] cmd param
 
  */
 
-#define START_MODE_MAX  3
-#define START_MODE_MIN  2
-#define START_MODE_NONE 5
+
 
 #if defined(WIN32)
 
@@ -63,10 +61,11 @@ int Dos9_StartFile(const char* file, const char* args, const char* dir,
 
 	memset(&info, 0, sizeof(info));
 	info.cbSize = sizeof(info);
-	info.fMask =  SEE_MASK_NOASYNC;
+	info.fMask =  SEE_MASK_NOASYNC |
+        ((mode & START_MODE_BACKGROUND) ? (SEE_MASK_NO_CONSOLE) : (0));
 	info.lpVerb = NULL;
 	info.lpDirectory = NULL;
-	info.nShow = mode;
+	info.nShow = mode & ~START_MODE_BACKGROUND;
 
     if (!(info.lpFile = libcu8_xconvert(LIBCU8_TO_U16, file,
                                         strlen(file) + 1, &cvt))
@@ -148,12 +147,11 @@ int Dos9_StartFile(const char* file, const char* args, const char* dir,
 
 	memset(&info, 0, sizeof(info));
 	info.cbSize = sizeof(info);
-	info.fMask =  SEE_MASK_NOASYNC;
+	info.fMask =  SEE_MASK_NOASYNC |
+        ((mode & START_MODE_BACKGROUND) ? (SEE_MASK_NO_CONSOLE) : (0));
 	info.lpVerb = NULL;
-	info.lpFile = buf;
-	info.lpParameters = args;
-	info.lpDirectory = dir;
-	info.nShow = mode;
+	info.lpDirectory = NULL;
+	info.nShow = mode & ~START_MODE_BACKGROUND;
 
     snprintf(buf, sizeof(buf), "%s", file);
 
@@ -302,7 +300,8 @@ void Dos9_UseBackSlash(char* line)
 
 int Dos9_CmdStart(char* line)
 {
-	ESTR* param = Dos9_EsInit();
+	ESTR *param = Dos9_EsInit(),
+         *tmp;
 
 	char wait = FALSE,
 		 mode = START_MODE_NONE;
@@ -321,11 +320,11 @@ int Dos9_CmdStart(char* line)
 
 		} else if (!stricmp("/min", Dos9_EsToChar(param))) {
 
-			mode = START_MODE_MIN;
+			mode = START_MODE_MIN | (mode & START_MODE_BACKGROUND);
 
 		} else if (!stricmp("/max", Dos9_EsToChar(param))) {
 
-			mode = START_MODE_MAX;
+			mode = START_MODE_MAX | (mode & START_MODE_BACKGROUND);
 
 		} else if (!stricmp("/d", Dos9_EsToChar(param))) {
 
@@ -343,7 +342,14 @@ int Dos9_CmdStart(char* line)
 			dir = dirbuf;
 
 		} else if (!stricmp("/b", Dos9_EsToChar(param))) {
+
+		    mode |= START_MODE_BACKGROUND;
+
 		} else if (!stricmp("/normal", Dos9_EsToChar(param))) {
+
+		    /* Not implemented yet (shall we do so ? seems that it
+               does not affect anything anyway ...) */
+
 		} else {
 
 			break;
@@ -362,14 +368,34 @@ int Dos9_CmdStart(char* line)
 	strncpy(file, Dos9_EsToChar(param), sizeof(file));
 	file[FILENAME_MAX-1]='\0';
 
-	Dos9_GetEndOfLine(line, param);
+    Dos9_GetEndOfLine(line, param);
+
+    if (*file == '\0') {
+
+        /* If the file specified was "", make the command line somehow
+           equivalent to :
+
+           start [switches] "%comspec%" /C "param"
+
+         */
+
+        Dos9_GetExeFilename(file, FILENAME_MAX);
+        tmp = Dos9_EsInit();
+
+        Dos9_EsCat(tmp, "/C \"");
+        Dos9_EsCat(tmp, param->str);
+        Dos9_EsCat(tmp, "\"");
+
+        Dos9_EsFree(param);
+        param = tmp;
+    }
 
 #ifdef WIN32
 	Dos9_UseBackSlash(line);
 #endif // WIN32
 
 	if (Dos9_StartFile(file,
-						Dos9_EsToChar(param),
+						param->str,
 						dir,
 						mode,
 						wait))

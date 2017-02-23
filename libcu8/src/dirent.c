@@ -186,5 +186,5 @@ __LIBCU8__IMP __cdecl struct dirent* libcu8_readdir(DIR* pdir)
 
     }
 
-    return &(pdir->ent.d_name);
+    return &(pdir->ent);
 }

@@ -155,7 +155,7 @@ dir /b /s /a:-d') do (
 	tea "%hlp_data_dir%/%lang_build%/%%A" !ansi_build!.tmp /E:UTF-8 /O:TEXT-ANSI
 
 	ECHO      - file : !html_build!
-    tea "%hlp_data_dir%/%lang_build%/%%A" !html_build! /E:UTF-8 /O:html /T "The Dos9 Project :: "
+    tea "%hlp_data_dir%/%lang_build%/%%A" !html_build! /E:UTF-8 /O:html /M "%hlp_data_dir%/meta" /H "%hlp_data_dir%/header" /F "%hlp_data_dir%/footer" /T "The Dos9 Project :: "
 
 	ECHO      - converting output from UTF-8 to %charset_build%
 	:: just convert .ansi file, it is not needed for html document

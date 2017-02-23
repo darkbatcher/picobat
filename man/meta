@@ -1,0 +1,151 @@
+<style>
+Body
+{
+    background-image:linear-gradient(to right, #c9c9c9 70%, grey 98%);
+    Font: 15px Arial;
+    margin-bottom: 10px;
+    margin-top: 20px;
+}
+
+
+nav
+{
+    position: fixed;
+    width: 200px;
+    min-width: 160px;
+    border: 2px grey solid;
+    border-radius: 12px 0px 12px 12px ;
+    top: 0;
+    right: 0;
+    margin-right: 20px;
+    margin-top: 20px;
+    z-index: 2;
+    box-shadow: 6px 4px 12px black;
+    background-color: #c9c9c9;
+    font-weight : bolder;
+	padding: 0px 10px;
+}
+
+nav a {
+    display: none;
+}
+
+nav:hover a {
+    display: block;
+}
+
+nav:hover p {
+    display: none;
+}
+
+h1
+{
+    text-decoration: underline;
+    Text-Align: Center;
+    box-shadow: 7px 7px 8px black;
+    max-width: 50%;
+    Border: 5px #595959 inset;
+    Background-color: white;
+    Font: 32px "Times New Roman";
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 10px;
+    font-weight: bolder;
+    padding: 6px;
+    margin-bottom: 40px;
+    margin-top: 20px;
+}
+
+h1, h2 
+{
+   width: intrinsic;           /* Safari/WebKit uses a non-standard name */
+   width: -moz-max-content;    /* Firefox/Gecko */
+   width: -webkit-max-content; /* Chrome */
+}
+
+h2
+{
+   Border: 3px #000066 solid;
+   Border-radius: 10px 0px 10px 0px;
+   Text-Align: Center;
+   background-color: grey;
+   color: white;
+   margin-bottom: 15px;
+   margin-top: 25px;
+   margin-left: 10px;
+   Font: 24px "Times New Roman";
+   box-shadow: 2px 2px 8px black;
+   padding: 5px;
+   min-width: 130px;
+   display: inline-block;
+}
+
+a:visited
+{
+	Color: #3333ff;
+}
+
+a:hover
+{
+	Color: red;
+}
+
+a
+{
+    Color: #3333ff;
+}
+
+p
+{
+    padding: 0px;
+    margin: 6px;
+	padding-right: 15%;
+    width: 80%;
+}
+
+code
+{
+    font-family: "Lucida Console";
+    color: #307030;
+	max-width: 80%;
+}
+
+pre
+{
+    white-space: pre-wrap;
+}
+
+.Anav
+{
+     margin-bottom: 10px;
+	 margin-top: 10px;
+     margin-right: auto;
+     margin-left: auto;
+     border: 1px grey solid;
+     border-radius: 13px 0px;
+     box-shadow: 4px 4px 9px grey;
+     padding: 4px;
+     padding-left: 7px;
+}
+
+
+.Anav:hover
+{
+    color:  #d9d9d9;
+    background-color: grey;
+}
+
+footer
+{
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 35px;
+	width: 45%;
+	text-align: Center;
+	min-width: 530px;
+	border: 6px grey solid;
+	border-radius: 0px 25px 25px 25px;
+    Font: 12px "Arial";
+	padding: 10px;
+}
+</style>

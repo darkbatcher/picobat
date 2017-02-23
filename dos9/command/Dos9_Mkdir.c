@@ -102,7 +102,6 @@ int Dos9_CmdMakeDirs(char* str)
             c = *str;
             *str = '\0';
 
-            printf("Trying to create : \"%s\"\n", dir);
             if (!Dos9_DirExists(dir)
                 && MKDIR_MACRO(dir, 0777)) {
 

@@ -1665,3 +1665,30 @@ THURSDAY 16TH, FEBRUARY
         - Fix a bug with some libc when display the current directory (with 
           Echo on).
 
+WEDNESDAY 22TH, FEBRUARY
+
+        - Added a new feature to the FOR command that allows using regular 
+          expressions with simple FOR loops. (eg. such syntaxs are now corect)
+
+             for %%a in (*.exe) do echo %%a
+
+        - Fixed an bug with the GOTO command that prevented error messages 
+          from being displayed.
+
+        - Fixed error of the FOR commands that wrongly omited goto effects or 
+          exit /b.
+
+        - Modified FOR manual page according to the new features.
+
+        - Added /b switch for the START command.
+
+        - Added new feature to START command so that it handles empty program 
+          name in a way simalar to what cmd does. (ie. running an instance of 
+          cmd /c).
+
+        - Added styles to manual pages thanks to stylessheets provided by 
+          Xenoxis.
+
+        - Changed libDos9 functions to search files with a totaly new 
+          implementation.
+

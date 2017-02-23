@@ -258,7 +258,7 @@ loop:
 
 	case PARSED_STREAM_NODE_PIPE:
 	case PARSED_STREAM_NODE_NONE :
-		/* this condition is alwais true */
+		/* this condition is always true */
 		return TRUE;
 
 	case PARSED_STREAM_NODE_NOT :

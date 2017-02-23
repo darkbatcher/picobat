@@ -58,13 +58,17 @@ ${FOR %%A IN (chaine) DO (
 	seront alors conservés en tant que partie des éléments découpés. Pour éviter
 	la présence des guillemets, utilisez seulement {%%~A} à la place de {%%A} (Pour plus
 	d'information, voir {spec/xvar|variables spéciales}).
+	
+	@- Si un élement contient une {spec/regexp|expression régulière}, alors celle-ci
+	est remplacée par chacun des fichiers qui correspondent à celle-ci. Si l'élement
+	contient des guillemets, ils seront supprimés.
 
-	Example :
+	Exemple :
 ${FOR %%A IN (des trucs "des trucs") DO (
 	ECHO L'élement courrant est %%A
 )}
 
-	Output:
+	Sortie:
 ${L'élement courrant est des
 L'élement courrant est trucs
 L'élement courrant est "des trucs"}

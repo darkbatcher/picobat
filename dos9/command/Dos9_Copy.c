@@ -74,7 +74,8 @@
     destination. No regular expression accepted.
 
     Note : COPY command only copy files, so that it will not create directories in
-    destination files. To duplicate a tree, rather use the XCOPY command.
+    destination files. To duplicate a tree, rather use the XCOPY command. Wich is
+    in fact provided by this command (using the MKDIR command).
 
 */
 
@@ -164,6 +165,8 @@ int Dos9_CmdCopy(char* line)
     }
 
     for (i=0;i < len - 1; i++) {
+
+        printf("looking for files matching %s\n", file[i]->str);
 
         next = Dos9_GetMatchFileList(Dos9_EsToChar(file[i]), DOS9_SEARCH_DEFAULT);
 
@@ -330,7 +333,6 @@ int Dos9_CmdCopyRecursive(const char* file, const char* dest, short attr, int* f
     size_t size;
 
     if (size = Dos9_GetStaticLength(file))
-        size ++;
 
     if (!(files = Dos9_GetMatchFileList(file, DOS9_SEARCH_DIR_MODE
                                              | DOS9_SEARCH_RECURSIVE
@@ -408,6 +410,8 @@ end:
 
 int Dos9_MoveFile(const char* file, const char* dest)
 {
+
+    printf("Moving %s to %s\n", file, dest);
 
     if (rename(file, dest)) {
 
