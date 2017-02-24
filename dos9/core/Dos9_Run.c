@@ -81,7 +81,6 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
 			Dos9_SetConsoleTextColor(colColor);
 
 			printf("%s>", lpCurrentDir);
-            fflush(stdout);
 
 		}
 
@@ -105,7 +104,6 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
 			Dos9_SetConsoleTextColor(colColor);
 
 			printf("%s>%s", lpCurrentDir, Dos9_EsToChar(lpLine));
-            fflush(stdout);
 
 		}
 
