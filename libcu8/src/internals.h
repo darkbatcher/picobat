@@ -48,6 +48,7 @@
 #include <windows.h>
 #include <assert.h>
 #include <sys/stat.h>
+#include <sys/types.h>
 #include "config.h"
 
 /*
@@ -240,17 +241,11 @@ __LIBCU8__IMP __cdecl int libcu8_findnext(intptr_t handle,
                                                 struct _finddata_t* info);
 #endif
 #ifdef HAVE__FINDFIRST64
-#ifdef __x86_64__
-__LIBCU8__IMP __cdecl intptr_t libcu8_findfirst64(const char* file,
-                                                    struct _finddata64_t* inf);
-__LIBCU8__IMP __cdecl int libcu8_findnext64(intptr_t handle,
-                                                struct _finddata64_t* info);
-#else
+
 __LIBCU8__IMP __cdecl intptr_t libcu8_findfirst64(const char* file,
                                                     struct __finddata64_t* inf);
 __LIBCU8__IMP __cdecl int libcu8_findnext64(intptr_t handle,
                                                 struct __finddata64_t* info);
-#endif
 #endif
 #ifdef HAVE__FINDFIRST64I32
 __LIBCU8__IMP __cdecl intptr_t libcu8_findfirst64i32(const char* file,

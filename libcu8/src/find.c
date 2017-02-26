@@ -46,7 +46,7 @@
 #ifdef HAVE__FINDFIRST64
 /* Gen libcu8_findfirst64 and libcu8_findnext64 */
 #ifdef __x86_64__
-#define __libcu8_finddata_t  _finddata64_t
+#define __libcu8_finddata_t  __finddata64_t
 #define __libcu8_wfinddata_t _wfinddata64_t
 #else
 #define __libcu8_finddata_t  __finddata64_t
