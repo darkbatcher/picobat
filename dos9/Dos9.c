@@ -85,6 +85,13 @@ int main(int argc, char *argv[])
     }
 #endif
 
+    #if !defined(WIN32)
+    /* Change buffuring method on *NIXes
+       to fix output buffuring issues.
+    */
+    setvbuf(stdout, NULL, _IONBF, 0);
+    #endif
+
     /* Initialize libDos9 */
     Dos9_InitLibDos9();
 

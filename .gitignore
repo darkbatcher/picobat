@@ -54,4 +54,4 @@ dump/dump
 scripts/Dos9_Auto.bat
 scripts/hlp.bat
 tea/tea
-.clang-complete
+.clang_complete
