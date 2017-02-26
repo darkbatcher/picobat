@@ -39,6 +39,15 @@
 
 /* short circuit libcu8.h inclusion by file */
 #include <libcu8.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <wchar.h>
+#include <io.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <windows.h>
+#include <assert.h>
+#include <sys/stat.h>
 #include "config.h"
 
 /*
