@@ -155,6 +155,9 @@ int Dos9_StartFile(const char* file, const char* args, const char* dir,
 
     snprintf(buf, sizeof(buf), "%s", file);
 
+    /* apply Dos9 internal environment variables */
+	Dos9_ApplyEnv(lpeEnv);
+
     /* shellexecute seem to have trouble to handle forward slashes */
     for (chr = buf;*chr;chr ++) {
         if (*chr == '/')
@@ -208,6 +211,9 @@ int Dos9_StartFile(const char* file, const char* args, const char* dir,
         arg[i] = NULL;
 
         Dos9_OpenOutput(lppsStreamStack, "NULL", DOS9_STDOUT | DOS9_STDERR, 0);
+
+        /* apply Dos9 internal environment variables */
+        Dos9_ApplyEnv(lpeEnv);
 
         if (execvp(XDG_OPEN, arg) == -1) {
             Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR | DOS9_PRINT_C_ERROR,
@@ -266,6 +272,9 @@ int Dos9_StartFile(const char* file, const char* args, const char* dir,
         }
 
         arg[i] = NULL;
+
+        /* apply Dos9 internal environment variables */
+        Dos9_ApplyEnv(lpeEnv);
 
         if (execvp(file, arg) == -1)
             Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR | DOS9_PRINT_C_ERROR,

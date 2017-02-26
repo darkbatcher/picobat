@@ -135,7 +135,7 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
 int Dos9_ExecOperators(PARSED_STREAM** lpppsStream)
 {
 	PARSED_STREAM* lppsStream = *lpppsStream;
-	ESTR* lpCommand;
+	ESTR* lpCommand, *lpExpanded;
 
 	char lpProgName[FILENAME_MAX],
          lpQuoteProgName[FILENAME_MAX+2],
@@ -162,10 +162,13 @@ loop:
 		   resulting in harder job */
 
 		/* Get pipe file descriptors */
-		if (pipe(pipedes, 1024, O_TEXT) == -1)
+		if (pipe(pipedes, 0, O_BINARY) == -1)
             Dos9_ShowErrorMessage(DOS9_CREATE_PIPE | DOS9_PRINT_C_ERROR,
                                     __FILE__ "/Dos9_ExecOperators()",
                                     -1);
+
+        setmode(pipedes[0], _O_BINARY);
+        setmode(pipedes[1], _O_BINARY);
 
 		/* prepare the command-line arguments befaure launching the program */
 		Dos9_GetExeFilename(lpProgName, sizeof(lpProgName));
@@ -202,8 +205,11 @@ loop:
 		lpArgs[++i] = "/C";
 
 		lpCommand = Dos9_EsInit();
+		lpExpanded = Dos9_EsInit();
+        Dos9_GetEndOfLine(lppsStream->lpCmdLine->str, lpExpanded);
+        fprintf(stderr, "running \"%s\"\n", lpExpanded->str);
 		Dos9_EsCpy(lpCommand, "\"");
-		Dos9_EsCatE(lpCommand, lppsStream->lpCmdLine);
+		Dos9_EsCatE(lpCommand, lpExpanded);
 		Dos9_EsCat(lpCommand, "\"");
 
 		lpArgs[++i] = Dos9_EsToChar(lpCommand);
@@ -211,7 +217,9 @@ loop:
 		/* The la parameter must be NULL */
 		lpArgs[++i] = NULL;
 
-		/* Launches a sub Dos9 command prompt */
+        Dos9_ApplyEnv(lpeEnv);
+
+        /* Launches a sub Dos9 command prompt */
 		_spawnv(_P_NOWAIT, lpProgName, (char * const*)lpArgs);
 
 		if (errno == ENOENT) {
@@ -219,6 +227,8 @@ loop:
 			Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR | DOS9_PRINT_C_ERROR,
 		        	              lpArgs[0],
 		    	    			  FALSE);
+            Dos9_EsFree(lpCommand);
+            Dos9_EsFree(lpExpanded);
 
 			return FALSE;
 
@@ -233,6 +243,7 @@ loop:
 		olddes = pipedes[0];
 
 		Dos9_EsFree(lpCommand);
+		Dos9_EsFree(lpExpanded);
 
     	if (lppsStream->lppsNode) {
 

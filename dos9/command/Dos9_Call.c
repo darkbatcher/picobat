@@ -271,8 +271,10 @@ int Dos9_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 
 	}
 
-	/* Set scripts arguments */
+    /* set the %* parameter */
+    Dos9_SetLocalVar(lpvTmpBlock, '*', Dos9_SkipBlanks(lpCmdLine));
 
+    /* Set scripts arguments */
 	while ((lpCmdLine=Dos9_GetNextParameterEs(lpCmdLine, lpEsParam))
 	       && (c <= '9')) {
 
@@ -285,8 +287,7 @@ int Dos9_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 	while (c <= '9')
         Dos9_SetLocalVar(lpvTmpBlock, c++, "");
 
-    /* set the %* parameter */
-    Dos9_SetLocalVar(lpvTmpBlock, '*', lpFull);
+
 
 	/* Backup the old variables data in order to be able to push old data
 	   again on local variables. */

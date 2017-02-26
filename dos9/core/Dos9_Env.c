@@ -369,8 +369,8 @@ void Dos9_EnvFree(ENVBUF* pEnv)
 
 void Dos9_ApplyEnv(ENVBUF* pEnv)
 {
-
     int i;
+    ESTR* exp = Dos9_EsInit();
 
     for (i=0; i < pEnv->index; i++) {
 
@@ -382,7 +382,15 @@ void Dos9_ApplyEnv(ENVBUF* pEnv)
         #elif defined(WIN32)
         SetEnvironmentVariable(pEnv->envbuf[i]->name,
                                             pEnv->envbuf[i]->content);
+
+        Dos9_EsCpy(exp, pEnv->envbuf[i]->name);
+        Dos9_EsCat(exp, "=");
+        Dos9_EsCat(exp, pEnv->envbuf[i]->content);
+        putenv(exp->str);
+
         #endif
 
     }
+
+    Dos9_EsFree(exp);
 }

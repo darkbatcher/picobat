@@ -110,7 +110,7 @@ __LIBCU8__IMP __cdecl int libcu8_read_nolock(int fd, void* b, unsigned int cnt_a
     if (cnt == 0)
         return nbread;
 
-    if (!IS_TEXTMODE(mode)) {
+    if (!IS_TEXTMODE(mode) /* || IS_PIPE(mode) */) {
         /* Whatever, if the file is using binary mode, just get input from the
            ReadFile API, without any kind of translation or encoding
            conversion */
@@ -119,6 +119,14 @@ __LIBCU8__IMP __cdecl int libcu8_read_nolock(int fd, void* b, unsigned int cnt_a
 
         ret = ReadFile(file, buf, cnt, &wrt, NULL);
         written = wrt;
+
+    } else if (IS_PIPE(mode)) {
+
+        /* Pipes are somewhat hard to deal with under windows, since
+           it messes everything if you do not read two bytes at a time
+           (who knows why ?). At first I thought it has something to deal with file
+           interlocking, but apparently, it is just some kind of weird bug.  */
+        ret = libcu8_readpipe(fd, buf, cnt, &written);
 
     } else if (libcu8_is_tty(file)) {
 
@@ -154,14 +162,13 @@ __LIBCU8__IMP __cdecl int libcu8_read_nolock(int fd, void* b, unsigned int cnt_a
     return nbread;
 }
 
+
 int libcu8_readfile(int fd, char* buf, size_t size, size_t* written)
 {
     const size_t orig = size;
     void* handle = osfhnd(fd);
     char utf8[4],
          ansi[FILENAME_MAX],
-         *pin,
-         *pout,
          last = pipech(fd);
     int  ret = 0;
     size_t su8=sizeof(utf8), sansi = 0 ;
@@ -337,6 +344,151 @@ int libcu8_try_convert(iconv_t context, char* in, size_t* insize,
 
 }
 
+/* This function is allmost the same as libcu8_readpipe, though it
+   designed to handle multiple byte reads, this, using pipes,
+   we cannot mess up the position pointer. */
+int libcu8_readpipe(int fd, char* buf, size_t size, size_t* written)
+{
+    const size_t orig = size;
+    void* handle = osfhnd(fd);
+    char utf8[8],
+         ansi[FILENAME_MAX];
+    int  ret = 0,
+         loop = 1,
+         i, j;
+    size_t su8=sizeof(utf8), sansi = 0 ;
+
+    pipech(fd) = 0; /* Clear remaining \r if set */
+
+    iconv_t context = libcu8_mode2context(LIBCU8_FROM_ANSI);
+
+    if (context == (iconv_t) -1)
+        return -1;
+
+    while (size && loop) {
+
+        /* Get (at most) 2 bytes from the pipe */
+        ret = libcu8_get_pipe_byte(handle, ansi, &sansi);
+
+        switch (ret) {
+
+            case -1:
+                /* error */
+                goto err;
+
+            case 0:
+                /* EOF */
+                goto next;
+            case 2:
+                loop = 0;
+
+        }
+
+        /* Try to convert the red bytes to something that is actually utf-8 */
+        ret = libcu8_try_convert(context, ansi, &sansi, utf8, &su8);
+
+        switch (ret) {
+
+            case 0:
+
+                /* fprintf(stderr, "Writing %d {%c, %c, %c, %c, %c, %c, %c, %c}\n", su8,
+                                    (su8 > 0) ? utf8[0] : '#',
+                                    (su8 > 1) ? utf8[1] : '#',
+                                    (su8 > 2) ? utf8[2] : '#',
+                                    (su8 > 3) ? utf8[3] : '#',
+                                    (su8 > 4) ? utf8[4] : '#',
+                                    (su8 > 5) ? utf8[5] : '#',
+                                    (su8 > 6) ? utf8[6] : '#',
+                                    (su8 > 7) ? utf8[7] : '#'
+                        ); */
+
+                /* strip any \r from the input we got */
+
+                i = (j = 0);
+
+                while (i < su8) {
+
+                    if (utf8[i] ==  '\r' ) {
+
+                        /* strip the \r from the input. In theory, we
+                           should be able to handle this the right way, with
+                           a somewhat really complex algorithm, but anyway,
+                           who really cares ? */
+
+                        j ++;
+                        su8 --;
+                        utf8[i] = utf8[ i + j];
+
+                        continue;
+
+                    }
+
+                    if (j != 0)
+                        utf8[i] = utf8[i + j];
+
+                    i++;
+
+                }
+
+                /* write the remaining data */
+                libcu8_write_buffered(fd, &buf, &size, utf8, su8);
+                su8 = sizeof(utf8);
+                break;
+
+            case -1:
+                /* came accross an invalid character sequence, skip it*/
+                sansi = 0;
+                su8 = sizeof(utf8);
+
+        }
+
+        /* fprintf(stderr, "%d, ", size); */
+
+    }
+
+next:
+
+    /* fprintf(stderr,"End\n"); */
+
+    iconv_close(context);
+
+    *written = orig - size;
+
+    return 1;
+
+err:
+    iconv_close(context);
+    return 0;
+}
+
+/* This is also almost the same as libcu8_get_file_byte, unfortunately
+   Readfile does not seam to work when reading a byte on a pipe, so
+   this version retrieves two bytes on the pipe */
+int libcu8_get_pipe_byte(void* handle, char* buf, size_t* sansi)
+{
+    DWORD wrt = 0;
+    int ret;
+
+    if (*sansi >= FILENAME_MAX - 2)
+        return -1; /* we ran out of space in the buffer, report error */
+
+    ret = ReadFile(handle, buf + *sansi, 2, &wrt, NULL);
+
+    if ((!ret) && GetLastError() != ERROR_BROKEN_PIPE)
+        return -1; /* report error */
+
+    if (wrt == 0)
+        return 0; /* we do not read anything */
+
+    *sansi += wrt;
+
+    if (wrt == 1)
+        return 2; /* return an intermediate state */
+
+    return 1;
+}
+
+
 #define DEL 0x08
 #define TAB 0x09
 #define TAB_LEN 8
@@ -474,7 +626,7 @@ retry:
 
     if (!IS_SURROGATE(*wcs)) {
         switch (*wcs) {
-            case 0x1A:
+            case 0x1A: /* CTRL-Z */
                 return 0;
             default:
                 return 1;
@@ -494,7 +646,7 @@ retry:
     } else {
 
         /* Well, ReadConsoleInput is apparently throwing junk
-           at us, but this is easily solvable */
+           at us, but this is easily solvable (try again) */
         *wcs = wc;
         goto retry;
 

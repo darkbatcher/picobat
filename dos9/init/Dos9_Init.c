@@ -279,7 +279,7 @@ char* Dos9_GetParameters(char** argv, char** lpFileName, int* bExitAfterCmd, int
             *lpFileName=argv[i];
             c='1';
 
-            Dos9_AssignCommandLine(argv + i);
+            Dos9_AssignCommandLine(argv + i + 1);
 
             bGetSwitch = FALSE;
         }

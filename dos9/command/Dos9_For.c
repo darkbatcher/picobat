@@ -1324,6 +1324,9 @@ int Dos9_ForInputProcess_win(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn,
 	libcu8_fd_set_inheritance(iPipeFdIn[1], 0);
 	libcu8_fd_set_inheritance(iPipeFdOut[0], 0);
 
+    /* apply Dos9 internal environment variables */
+	Dos9_ApplyEnv(lpeEnv);
+
 	spawnv(_P_NOWAIT, lpFileName, (char * const*)lpArgs);
 
 	if (errno == ENOENT) {

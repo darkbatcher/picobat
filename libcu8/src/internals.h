@@ -142,9 +142,9 @@ int libcu8_cat_chunk(char** buf, size_t* size, size_t* pos,
 /* A structure to buffer fd transmission. This is terribly harmful but
    we have to do this to ensure good text conversion. */
 struct fd_buffering_t {
-    char remain[4];
+    char remain[8]; /* this is for reading operations */
     size_t len;
-    char remainder[4];
+    char remainder[4]; /* this is for writing operations */
     size_t rcount;
 };
 
@@ -171,6 +171,8 @@ int libcu8_readconsole(int fd, char* buf, size_t size, size_t* written);
 int libcu8_get_file_byte(void* handle, char* buf, size_t* sansi);
 int libcu8_try_convert(iconv_t context, char* in, size_t* insize,
                                                 char* utf8, size_t* outsize);
+int libcu8_readpipe(int fd, char* buf, size_t size, size_t* written);
+int libcu8_get_pipe_byte(void* handle, char* buf, size_t* sansi);
 
 /* custom readfile-like function */
 int libcu8_readfile(int fd, char* buf, size_t size, size_t* written);
