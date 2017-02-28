@@ -181,8 +181,6 @@ int libcu8_readconsole(int fd, char* buf, size_t size, size_t* written);
 int libcu8_get_file_byte(void* handle, char* buf, size_t* sansi);
 int libcu8_try_convert(iconv_t context, char* in, size_t* insize,
                                                 char* utf8, size_t* outsize);
-int libcu8_readpipe(int fd, char* buf, size_t size, size_t* written);
-int libcu8_get_pipe_byte(void* handle, char* buf, size_t* sansi);
 
 /* custom readfile-like function */
 int libcu8_readfile(int fd, char* buf, size_t size, size_t* written);

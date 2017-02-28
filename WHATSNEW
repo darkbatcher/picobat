@@ -1692,3 +1692,19 @@ WEDNESDAY 22TH, FEBRUARY
         - Changed libDos9 functions to search files with a totaly new 
           implementation.
 
+SATURDAY 25, FEBRUARY
+
+        - Fixed some errors with libcu8 that was unable to behave properly 
+          using pipe as it sometimes blocked on input.
+
+        - Fixed wrong behaviour of the %* variable which contained all the 
+          command line, instead of containing only parameters.
+
+        - Fixed errors with propagation of environment variables during 
+          application launch affecting batch and external command lauch.
+
+TUESDAY 28, FEBRUARY
+
+        - Fixed libcu8 handling of pipe that did not allowed interraction with 
+          programs such as darkbox.
+

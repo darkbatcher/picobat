@@ -118,6 +118,22 @@ __LIBCU8__IMP __cdecl int libcu8_write_nolock(int fd, void* buf,
         ret = WriteFile(osfhnd(fd), buf, cnt, &wrt, NULL);
         written = wrt;
 
+    } else if (IS_PIPE(mode)) {
+
+        if (!(text = libcu8_lf_to_crlf(buf, cnt, &cvt)))
+            return -1;
+
+        //libcu8_dbg_msg("libcu8_write: [%d] writing to text file !\r\n", fd);
+
+        /* this is a regular file (aka. ansi, convert it back to ansi) */
+        ret = WriteFile(osfhnd(fd), text, cvt, &written, NULL);
+
+        /* In case of success, return count without counting added \r */
+        if (written)
+            written = cnt;
+
+        free(text);
+
     } else {
 
 

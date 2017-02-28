@@ -26,14 +26,9 @@
 
 void Dos9_Exit(void)
 {
-	printf("Exiting dos9...\n");
-	printf("\tFreeing commands... ");
 	Dos9_FreeCommandList(lpclCommands);
-	printf("OK\n\tFreeing stream stack ...");
 	Dos9_FreeStreamStack(lppsStreamStack);
-	printf("OK\n\tFreeing local variable block ...");
 	Dos9_FreeLocalBlock(lpvLocalVars);
-	printf("OK\n\tFreeing custom env ...");
 	Dos9_EnvFree(lpeEnv);
 
 	if (iInputD)
@@ -42,7 +37,5 @@ void Dos9_Exit(void)
 	if (iOutputD)
 		close(iOutputD);
 
-    printf("OK\n\tWaiting for remaining threads ...");
     Dos9_WaitForAllThreads();
-    printf("OK\nExiting NOW !\n");
 }

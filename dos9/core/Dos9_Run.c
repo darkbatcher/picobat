@@ -160,13 +160,10 @@ loop:
 		   resulting in harder job */
 
 		/* Get pipe file descriptors */
-		if (pipe(pipedes, 0, O_BINARY) == -1)
+		if (pipe(pipedes, 0, O_TEXT) == -1)
             Dos9_ShowErrorMessage(DOS9_CREATE_PIPE | DOS9_PRINT_C_ERROR,
                                     __FILE__ "/Dos9_ExecOperators()",
                                     -1);
-
-        setmode(pipedes[0], _O_BINARY);
-        setmode(pipedes[1], _O_BINARY);
 
 		/* prepare the command-line arguments befaure launching the program */
 		Dos9_GetExeFilename(lpProgName, sizeof(lpProgName));

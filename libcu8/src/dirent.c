@@ -80,13 +80,10 @@ __LIBCU8__IMP __cdecl DIR* libcu8_opendir(const char* dir)
     strcpy(exp, dir);
     strcat(exp, "/*");
 
-    // printf("libcu8_opendir(): exp = \"%s\" size = %d strlen = %d sizeof=%d\n", exp, size, strlen(exp), sizeof("/*"));
-
     if ((wdir = (wchar_t*) libcu8_xconvert(LIBCU8_TO_U16, exp,
                                     size, &conv)) == NULL) {
 
         /* No more memory to convert utf-8 to utf-16 */
-        // printf("libcu8_opendir(): failed to convert exp\n");
         errno = ENOMEM;
         free(exp);
         return NULL;
@@ -96,12 +93,9 @@ __LIBCU8__IMP __cdecl DIR* libcu8_opendir(const char* dir)
     /* we don't need the expression with joker anymore */
     free(exp);
 
-    // printf("libcu8_opendir(): calling FindFirstFileW\n");
-
     if ((handle = FindFirstFileW(wdir, &data)) == INVALID_HANDLE_VALUE) {
 
         /* Failed to get a file from windows */
-        // printf("libcu8_opendir(): failed to FindFirstFileW (%d)\n", GetLastError());
         errno = ENOENT;
         free(wdir);
         return NULL;
@@ -134,15 +128,11 @@ __LIBCU8__IMP __cdecl DIR* libcu8_opendir(const char* dir)
     pdir->ent.d_name = exp;
     pdir->ent.ret = 0;
 
-    //printf("libcu8_opendir(): returning pdir\n");
-
     return pdir;
 }
 
 __LIBCU8__IMP __cdecl int libcu8_closedir(DIR* pdir)
 {
-    //printf("Libcu8_closedir used !\n");
-
     if (pdir->ent.d_name != NULL)
         free(pdir->ent.d_name);
 
@@ -157,8 +147,6 @@ __LIBCU8__IMP __cdecl struct dirent* libcu8_readdir(DIR* pdir)
 {
     WIN32_FIND_DATAW data;
     size_t cnt;
-
-    //printf("Libcu8_readdir used !\n");
 
     if (pdir->ent.ret == 0) {
 
