@@ -57,6 +57,7 @@ dos9-install-portable:
 	cp README $(prefix)/
 	cp WHATSNEW $(prefix)/
 	cp COPYING $(prefix)/
+	cp THANKS $(prefix)/
 
 dist-bin : dist-bin-dir
 	tardir=$(distbdir) && $(am__tar) | GZIP=$(GZIP_ENV) gzip -c> $(distbdir).tar.gz

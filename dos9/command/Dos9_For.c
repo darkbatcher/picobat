@@ -1287,6 +1287,7 @@ int Dos9_ForInputProcess_win(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn,
 	     lpFileName[FILENAME_MAX],
 	     lpQuoteFileName[FILENAME_MAX+2];
 	FILE* pFile;
+	void* handle;
 
 	int i=0,
 		j=5;
@@ -1327,7 +1328,13 @@ int Dos9_ForInputProcess_win(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn,
     /* apply Dos9 internal environment variables */
 	Dos9_ApplyEnv(lpeEnv);
 
-	spawnv(_P_NOWAIT, lpFileName, (char * const*)lpArgs);
+    write(iPipeFdIn[1], lpInput->str, strlen(lpInput->str));
+    write(iPipeFdIn[1], "&exit\n", sizeof("&exit\n")-1);
+
+    close (iPipeFdIn[1]);
+
+	lpipInfo->Info.InputFile.handle =
+            spawnv(_P_NOWAIT, lpFileName, (char * const*)lpArgs);
 
 	if (errno == ENOENT) {
 
@@ -1335,14 +1342,10 @@ int Dos9_ForInputProcess_win(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn,
 		                      Dos9_EsToChar(lpInput),
 		                      FALSE);
 
-		return -1;
+
+		goto error;
 
 	}
-
-    _write(iPipeFdIn[1], lpInput->str, strlen(lpInput->str));
-    _write(iPipeFdIn[1], "&exit\n", sizeof("&exit\n")-1);
-
-    _close (iPipeFdIn[1]);
 
 	if (!(pFile=fdopen(iPipeFdOut[0], "r"))) {
 
@@ -1379,9 +1382,12 @@ int Dos9_ForInputProcess_nix(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn,
 	BLOCKINFO bkBlock;
 	int iPid;
 
+    /* empty returned child lists */
 	waitpid(-1, &iPid, WNOHANG);
 
 	iPid=fork();
+
+	lpipInfo->Info.InputFile.handle = iPid;
 
     libcu8_fd_set_inheritance(iPipeFdIn[1], 0);
 	libcu8_fd_set_inheritance(iPipeFdOut[0], 0);
@@ -1593,10 +1599,23 @@ void Dos9_ForCloseInputInfo(INPUTINFO* lpipInfo)
 
 	switch(lpipInfo->cType) {
 
-		case INPUTINFO_TYPE_STREAM:
-		case INPUTINFO_TYPE_COMMAND:
+        case INPUTINFO_TYPE_COMMAND:
 
-			fclose(lpipInfo->Info.InputFile.pFile);
+
+		    fclose(lpipInfo->Info.InputFile.pFile);
+
+#ifdef WIN32
+            WaitForSingleObject(lpipInfo->Info.InputFile.handle, INFINITE);
+            CloseHandle(lpipInfo->Info.InputFile.handle);
+#else
+            waitpid(lpipInfo->Info.InputFile.handle, &i, 0);
+#endif // WIN32
+
+		    break;
+
+		case INPUTINFO_TYPE_STREAM:
+
+            fclose(lpipInfo->Info.InputFile.pFile);
 
 			while(lpipInfo->Info.InputFile.lpesFiles[i] != NULL) {
 

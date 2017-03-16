@@ -122,13 +122,25 @@ __LIBCU8__IMP __cdecl int libcu8_read_nolock(int fd, void* b, unsigned int cnt_a
         ret = ReadFile(file, buf, cnt, &wrt, NULL);
         written = wrt;
 
-    } else if (IS_PIPE(mode)) {
+    } else if (libcu8_is_tty(file)) {
+
+        /* Since ReadConsoleA is broken for many encodings, and ReadConsoleW is
+           just pain in the ass (can't support byte-to-byte transmission, that
+           is, can only return full wchar_t characters), We prefer using our
+           own read console function */
+
+        /* fprintf(stderr, "libcu8: [%d] reading tty ! \n", file); */
+        ret = libcu8_readconsole(fd, buf, cnt, &written);
+
+    } else if (IS_PIPE(mode) || libcu8_dummy) {
 
         /* Pipes are somewhat hard to deal with under windows, since
            it messes everything if you do not read at least two bytes at a time
            (who knows why ?). At first I thought it has something to deal with file
            interlocking, but apparently, it is just some kind of weird bug.  */
         ret = ReadFile(file, buf, cnt, &wrt, NULL);
+
+        i = (j = 0);
 
         while (i + j < wrt) {
 
@@ -152,17 +164,7 @@ __LIBCU8__IMP __cdecl int libcu8_read_nolock(int fd, void* b, unsigned int cnt_a
 
         }
 
-        written = wrt;
-
-    } else if (libcu8_is_tty(file)) {
-
-        /* Since ReadConsoleA is broken for many encodings, and ReadConsoleW is
-           just pain in the ass (can't support byte-to-byte transmission, that
-           is, can only return full wchar_t characters), We prefer using our
-           own read console function */
-
-        /* fprintf(stderr, "libcu8: [%d] reading tty ! \n", file); */
-        ret = libcu8_readconsole(fd, buf, cnt, &written);
+        written = i;
 
     } else {
 

@@ -118,7 +118,13 @@ __LIBCU8__IMP __cdecl int libcu8_write_nolock(int fd, void* buf,
         ret = WriteFile(osfhnd(fd), buf, cnt, &wrt, NULL);
         written = wrt;
 
-    } else if (IS_PIPE(mode)) {
+    } else if (libcu8_is_tty(file)) {
+
+        /* this is a real tty, convert to unicode before writing anything */
+        //libcu8_dbg_msg("libcu8_write: [%d] writing to console !\r\n", fd);
+        ret = libcu8_write_console(fd, buf, cnt, &written);
+
+    } else if (IS_PIPE(mode) || libcu8_dummy) {
 
         if (!(text = libcu8_lf_to_crlf(buf, cnt, &cvt)))
             return -1;
@@ -136,31 +142,19 @@ __LIBCU8__IMP __cdecl int libcu8_write_nolock(int fd, void* buf,
 
     } else {
 
+        if (!(text = libcu8_lf_to_crlf(buf, cnt, &cvt)))
+            return -1;
 
-        if (libcu8_is_tty(file)) {
+        //libcu8_dbg_msg("libcu8_write: [%d] writing to text file !\r\n", fd);
 
-            /* this is a real tty, convert to unicode before writing anything */
-            //libcu8_dbg_msg("libcu8_write: [%d] writing to console !\r\n", fd);
-            ret = libcu8_write_console(fd, buf, cnt, &written);
+        /* this is a regular file (aka. ansi, convert it back to ansi) */
+        ret = libcu8_write_file(fd, text, cvt, &written);
 
-        } else {
+        /* In case of success, return count without counting added \r */
+        if (written)
+            written = cnt;
 
-            if (!(text = libcu8_lf_to_crlf(buf, cnt, &cvt)))
-                return -1;
-
-            //libcu8_dbg_msg("libcu8_write: [%d] writing to text file !\r\n", fd);
-
-            /* this is a regular file (aka. ansi, convert it back to ansi) */
-            ret = libcu8_write_file(fd, text, cvt, &written);
-
-            /* In case of success, return count without counting added \r */
-            if (written)
-                written = cnt;
-
-            free(text);
-
-        }
-
+        free(text);
 
     }
 

@@ -131,6 +131,7 @@ void __cdecl libcu8_save_changes(void);
 
 /* internal structure */
 extern char libcu8_fencoding[FILENAME_MAX]; /* the ansi encoding */
+extern int libcu8_dummy; /* true if ansi encoding set is utf-8 */
 extern CRITICAL_SECTION libcu8_fencoding_lock; /* a lock */
 
 /* encoding funcs */

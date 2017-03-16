@@ -44,6 +44,7 @@
 #define CLOSE_IF_OPEN(cd) ( cd == (iconv_t) -1 ) ? () : ( iconv_close(cd))
 
 char libcu8_fencoding[FILENAME_MAX]; /* the ansi encoding */
+int libcu8_dummy = 0; /* true if fencoding is "UTF-8" */
 CRITICAL_SECTION libcu8_fencoding_lock; /* a lock */
 
 /* Get encoding for files */
@@ -64,11 +65,15 @@ __LIBCU8__IMP __cdecl int libcu8_set_fencoding(const char* enc)
     EnterCriticalSection(&libcu8_fencoding_lock);
 
     /* Check that iconv actually support the encoding */
-    if ((test = iconv_open(enc, "UTF-8")) == (iconv_t)-1)
+    if ((test = iconv_open(enc, "UTF-8")) == (iconv_t)-1) {
+
+        LeaveCriticalSection(&libcu8_fencoding_lock);
         return -1;
 
+    }
     iconv_close(test);
 
+    libcu8_dummy = !strcmp(enc, "UTF-8");
     snprintf(libcu8_fencoding, sizeof(libcu8_fencoding), "%s", enc);
 
     LeaveCriticalSection(&libcu8_fencoding_lock);
@@ -155,6 +160,19 @@ __LIBCU8__IMP __cdecl char* libcu8_xconvert(int mode, const char* src,
             retsize = 0,
             retpos = 0,
             count = 0;
+
+    if (libcu8_dummy
+        && (mode == LIBCU8_TO_ANSI || mode == LIBCU8_FROM_ANSI)) {
+
+        /* use dummy version (ie. ANSI is _exactly_ UTF-8) */
+       if ((ret = malloc(size)) == NULL)
+            return NULL;
+
+       memcpy(ret, src, size);
+       *converted = size;
+
+       return ret;
+    }
 
     //fprintf(stderr, "Getting context\n");
     context = libcu8_mode2context(mode);
@@ -265,6 +283,19 @@ __LIBCU8__IMP __cdecl char* libcu8_convert(int mode, const char* src,
         *rcount = 0;
 
         src = tmp;
+    }
+
+    if (libcu8_dummy
+        && (mode == LIBCU8_TO_ANSI || mode == LIBCU8_FROM_ANSI)) {
+
+        /* use dummy version (ie. ANSI is _exactly_ UTF-8) */
+       if ((ret = malloc(size)) == NULL)
+            return NULL;
+
+       memcpy(ret, src, size);
+       *converted = size;
+
+       return ret;
     }
 
     context = libcu8_mode2context(mode);

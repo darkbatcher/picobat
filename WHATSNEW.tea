@@ -1530,7 +1530,7 @@ ${for %%a in (*.exe) do echo %%a}
 	- Changed libDos9 functions to search files with a totaly new
 	implementation.
 	
-{{Saturday 25, February}}
+{{Saturday 25th, February}}
 
 	- Fixed some errors with libcu8 that was unable to behave properly using
 	pipe as it sometimes blocked on input.
@@ -1541,7 +1541,26 @@ ${for %%a in (*.exe) do echo %%a}
 	- Fixed errors with propagation of environment variables during
 	application launch affecting batch and external command lauch.
 	
-{{Tuesday 28, February}}
+{{Tuesday 28th, February}}
 
 	- Fixed libcu8 handling of pipe that did not allowed interraction
 	with programs such as {darkbox}.
+	
+{{Thursday 16th, March}}
+
+	- Fixed some error of libcu8. Sped up the library by determining when
+	charset conversion is really necessary (ie. do not convert blindly
+	text from utf-8 to utf-8).
+	
+	- Fixed some unspecified behaviour with the FOR command. Indeed, when
+	given a command as input, the for command would not way for the
+	process to complete before continuing in case of encountering {GOTO}s
+	or {EXIT /b} command. This led to an unnecessary "zombie" process and
+	could easilly lead to unexpected behaviours since no synchronisation
+	interface was provided by Dos9.
+	
+	@- This issue has been fixed by forcing Dos9 to wait for the process
+	launched by {FOR} to exit before resuming execution. Note that it
+	doesn't change the overall {FOR} behaviour, that is, both processes
+	are ran assynchronously (ie. at the same time), which is different
+	from cmd behaviour.

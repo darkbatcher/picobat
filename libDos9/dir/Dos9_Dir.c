@@ -75,6 +75,9 @@ static FILELIST* Dos9_AddMatch(char* name, FILELIST* files, struct match_args_t*
 
     snprintf(file->lpFileName, FILENAME_MAX, "%s", name);
 
+
+    /* fixme : doing something less time-consuming is
+       probably possible */
     if (!(arg->flags & DOS9_SEARCH_NO_STAT)) {
         stat(name, &(file->stFileStats));
 
@@ -93,6 +96,10 @@ static FILELIST* Dos9_AddMatch(char* name, FILELIST* files, struct match_args_t*
     return file;
 }
 
+
+/* Fixme : This function is quite a lot unefficient under windows,
+   its perfomances can be enhanced by using native winapi functions for
+   file search */
 static FILELIST* Dos9_GetMatch(char* base, char* up, struct match_args_t* arg)
 {
     FILELIST *ret = arg->files, *tmp;
@@ -180,7 +187,7 @@ static FILELIST* Dos9_GetMatch(char* base, char* up, struct match_args_t* arg)
         /* if path corresponds to a file (ie. not a dir), there is two
            possibilities (a) up is NULL and then the files matches sinces
            we already reached top level, or (b) up is not NULL and then
-           the file cannot match and it wise to stop search in this
+           the file cannot match and it is wise to stop search in this
            folder */
         if (up == NULL) {
 
@@ -243,8 +250,6 @@ static FILELIST* Dos9_GetMatch(char* base, char* up, struct match_args_t* arg)
        be sure we won't get any matching file */
     if (Dos9_IsRegExpTrivial(path->str))
         goto end;
-
-    /* printf("Opening dir=\"%s\" up=\"%s\" item=\"%s\"\n", base, up, item); */
 
     /* Now we have checked every possible trivial dir, browse dir */
     if ((dir = opendir((base != NULL) ? (base) : ("."))) == NULL)

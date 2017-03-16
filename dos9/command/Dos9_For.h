@@ -85,6 +85,7 @@ typedef struct FILE_LIST_T {
     ESTR* lpesFiles[FILE_LIST_T_BUFSIZ+1];
     int   index;
     FILE* pFile;
+    void* handle; /* process handle of the ran command */
 } FILE_LIST_T;
 
 #define INPUTINFO_TYPE_STREAM 0
