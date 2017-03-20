@@ -42,8 +42,8 @@ textfiles :
 	for i in README WHATSNEW; do \
 		echo "- Building $$i"; \
 		case `uname -a` in \
-			*MINGW*Msys*) ./tea/tea$(EXEEXT) //e:utf-8 //o:text-plain $$i.tea $$i ;; \
-			*) ./tea/tea$(EXEEXT) /e:utf-8 /o:text-plain $$i.tea $$i ;;\
+			*MINGW*Msys*) $(bindir)/tea$(EXEEXT) //e:utf-8 //o:text-plain $$i.tea $$i ;; \
+			*) $(bindir)/tea$(EXEEXT) /e:utf-8 /o:text-plain $$i.tea $$i ;;\
 		esac;\
 	done;
 
