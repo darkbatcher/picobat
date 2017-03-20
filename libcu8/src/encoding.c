@@ -71,6 +71,7 @@ __LIBCU8__IMP __cdecl int libcu8_set_fencoding(const char* enc)
         return -1;
 
     }
+
     iconv_close(test);
 
     libcu8_dummy = !strcmp(enc, "UTF-8");

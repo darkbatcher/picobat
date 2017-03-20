@@ -202,7 +202,7 @@ loop:
 		lpCommand = Dos9_EsInit();
 		lpExpanded = Dos9_EsInit();
         Dos9_GetEndOfLine(lppsStream->lpCmdLine->str, lpExpanded);
-        fprintf(stderr, "running \"%s\"\n", lpExpanded->str);
+
 		Dos9_EsCpy(lpCommand, "\"");
 		Dos9_EsCatE(lpCommand, lpExpanded);
 		Dos9_EsCat(lpCommand, "\"");
