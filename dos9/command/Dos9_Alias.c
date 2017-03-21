@@ -100,7 +100,7 @@ int Dos9_CmdAlias(char* lpLine)
 		/* it is possible to reassign Dos9 internal commands. I decided
 		   to allow this because it may be a funny trick to hack arround for
 		   example, if some batch requires some uncompatible features it
-		   allows to redifine those commands in order to get compatibility */
+		   allows to redefine those commands in order to get compatibility */
 
 		if ((Dos9_ReplaceCommand(&ciCommand, lpclCommands))) {
 

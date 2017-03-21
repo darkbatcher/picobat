@@ -1,7 +1,7 @@
 /*
  *
  *   libDos9 - The Dos9 project
- *   Copyright (C) 2010-2016 Romain GARBI
+ *   Copyright (C) 2010-2017 Romain GARBI
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -326,6 +326,71 @@ LIBDOS9 int Dos9_FreeCommandList(LPCOMMANDLIST lpclList)
     }
 
     return 0;
+}
+
+LIBDOS9 LPCOMMANDLIST   Dos9_DuplicateCommandList(LPCOMMANDLIST lpclList)
+{
+    LPCOMMANDLIST lpclRet = NULL;
+
+    if (lpclList && (lpclRet = malloc(sizeof(COMMANDLIST)))) {
+
+        if (!(lpclRet->ptrCommandName =
+                    malloc(strlen(lpclList->ptrCommandName)+1)))
+            goto err;
+
+        strcpy(lpclRet->ptrCommandName, lpclList->ptrCommandName);
+
+        lpclRet->cfFlag = lpclList->cfFlag;
+
+        if (lpclRet->cfFlag & DOS9_ALIAS_FLAG) {
+
+            if (!(lpclRet->lpCommandProc = malloc(
+                            strlen(lpclList->lpCommandProc)+1)))
+                goto err;
+
+            strcpy(lpclRet->lpCommandProc, lpclList->lpCommandProc);
+
+        } else {
+
+            lpclRet->lpCommandProc = lpclList->lpCommandProc;
+
+        }
+
+        lpclRet->lpclRightRoot = NULL;
+        lpclRet->lpclLeftRoot = NULL;
+
+        if ((lpclList->lpclLeftRoot && !(lpclRet->lpclLeftRoot =
+                        Dos9_DuplicateCommandList(lpclList->lpclLeftRoot)))
+            || (lpclList->lpclRightRoot && !(lpclRet->lpclRightRoot =
+                        Dos9_DuplicateCommandList(lpclList->lpclRightRoot))))
+            goto err;
+
+    }
+
+    return lpclRet;
+
+err:
+    if (lpclRet) {
+
+        if (lpclRet->ptrCommandName) {
+
+            free(lpclRet->ptrCommandName);
+
+            if ((lpclRet->cfFlag & DOS9_ALIAS_FLAG)
+                    && lpclRet->lpCommandProc) {
+                free(lpclRet->lpCommandProc);
+
+                if (lpclRet->lpclLeftRoot)
+                    Dos9_FreeCommandList(lpclRet->lpclLeftRoot);
+
+            }
+        }
+
+        free(lpclRet);
+
+    }
+
+    return NULL;
 }
 
 LIBDOS9 LPCOMMANDLIST   Dos9_ReMapCommandInfo(LPCOMMANDLIST lpclCommandList)

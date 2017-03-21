@@ -506,7 +506,6 @@ RestartSearch:
 	switch((iFlag=Dos9_GetCommandProc(lpCmdLine, lpclCommands, (void**)&lpProc))) {
 
 	case -1:
-BackTrackExternalCommand:
 
 		iErrorLevel=Dos9_RunExternalCommand(lpCmdLine);
 		break;

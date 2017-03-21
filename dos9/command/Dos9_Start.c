@@ -150,10 +150,12 @@ int Dos9_StartFile(const char* file, const char* args, const char* dir,
 	info.fMask =  SEE_MASK_NOASYNC |
         ((mode & START_MODE_BACKGROUND) ? (SEE_MASK_NO_CONSOLE) : (0));
 	info.lpVerb = NULL;
-	info.lpDirectory = NULL;
+	info.lpDirectory = dir;
 	info.nShow = mode & ~START_MODE_BACKGROUND;
 
     snprintf(buf, sizeof(buf), "%s", file);
+
+
 
     /* apply Dos9 internal environment variables */
 	Dos9_ApplyEnv(lpeEnv);
@@ -164,7 +166,10 @@ int Dos9_StartFile(const char* file, const char* args, const char* dir,
             *chr = '\\';
     }
 
-	ShellExecuteEx(&info);
+    info.lpParameters = args;
+    info.lpFile = buf;
+
+	ShellExecuteExA(&info);
 
 	if (wait)
 		WaitForSingleObject(info.hProcess, INFINITE);
@@ -174,10 +179,23 @@ int Dos9_StartFile(const char* file, const char* args, const char* dir,
 	return 0;
 }
 #endif
+#else /* !defined(WIN32)  */
 
-#elif defined(XDG_OPEN) && !defined(WIN32)
+#if defined(XDG_OPEN)
+#define Dos9_StartFile(file, args, dir, mode, wait) \
+           if (mode & START_MODE_BACKGROUND) { \
+                Dos9_StartFile_S(file, args, dir, mode, wait); \
+           } else { \
+               Dos9_StartFile_X(file, args, dir, mode, wait); \
+           }
+#else
+#define Dos9_StartFile(file, args, dir, mode, wait) \
+           Dos9_StartFile_S(file, args, dir, mode, wait)
+#endif /* XDG_OPEN */
 
-int Dos9_StartFile(const char* file, const char* args, const char* dir,
+
+#if defined(XDG_OPEN)
+int Dos9_StartFile_X(const char* file, const char* args, const char* dir,
 					int mode, int wait)
 {
     pid_t pid;
@@ -239,10 +257,9 @@ int Dos9_StartFile(const char* file, const char* args, const char* dir,
     return 0;
 
 }
+#endif /* defined(XDG_OPEN) */
 
-#elif !defined(WIN32)
-
-int Dos9_StartFile(const char* file, const char* args, const char* dir,
+int Dos9_StartFile_S(const char* file, const char* args, const char* dir,
 					int mode, int wait)
 {
     pid_t pid;

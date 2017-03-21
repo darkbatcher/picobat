@@ -1,6 +1,6 @@
 #
 #   Dos9 Manual pages, The Dos9 project
-#   Copyright (C) 2012-2015  Romain Garbi (DarkBatcher)
+#   Copyright (C) 2012-2017  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 
 {{Synopsis}}
 
-	${ALIAS nom=commande}
+	${ALIAS [/F] nom=commande}
 
 	Définit un alias.
 
@@ -33,7 +33,9 @@
 	possible de spécifier des commutateurs et des paramètres, mais il
 	n'est pas possible de modifier directement la commande.
 
-	Il est possible de réassigner une commande interne. Cette fonctionalité
+	- {/F} : Force la réassignation d'une commande déjà définie.
+	
+	Il est possible de réassigner une commande interne avec {/F}. Cette fonctionalité
 	peut être intéressante pour émuler un comportement différent des
 	commandes internes de {dos9|Dos9}, en les modifiant.
 

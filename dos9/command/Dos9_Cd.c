@@ -255,7 +255,7 @@ int Dos9_CmdCd_win(char* lpLine)
 
     }
 
-    if ((passed == 0) || (passed == current) || (force == TRUE)) {
+    if ((passed == 0) || (toupper(passed) == toupper(current)) || (force == TRUE)) {
 
         /* change the current directory, yeah */
 
