@@ -1727,3 +1727,16 @@ THURSDAY 16TH, MARCH
           are ran assynchronously (ie. at the same time), which is different 
           from cmd behaviour.
 
+TUESDAY 21TH, MARCH
+
+        - Fixed some typos that caused some minor bugs depending on 
+          contfiguration.
+
+        - Fixed a minor bug of the DIR command that was not ignoring case when 
+          dealing with disk letters.
+
+        - Fixed a misimplementation of the START command when not using libcu8 
+          (nor Linux).
+
+        - Made the /b switch working with unices.
+

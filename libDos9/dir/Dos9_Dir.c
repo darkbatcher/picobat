@@ -128,6 +128,20 @@ static FILELIST* Dos9_GetMatch(char* base, char* up, struct match_args_t* arg)
                or recursive modes have been specified. Thus we need to
                search matching files _inside_ the directory */
 
+            /* First, check that the name does not end with a slash, if it
+               is the case, remove it */
+            if (((item = strrchr(up, '\\')) && (*(item+1) == '\0'))
+                || ((item = strrchr(up, '/')) && (*(item+1) == '\0')))
+                *item = '\0';
+
+            if (!(arg->flags & DOS9_SEARCH_DIR_MODE)) {
+                /* If dir mode is not specified, add that match too */
+                if ((tmp = Dos9_AddMatch(up, ret, arg)) == NULL)
+                    goto err;
+
+                arg->files = tmp;
+            }
+
             return Dos9_GetMatch(up, "*", arg);
 
         }

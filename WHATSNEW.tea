@@ -1577,3 +1577,9 @@ ${for %%a in (*.exe) do echo %%a}
 	using libcu8 (nor Linux).
 	
 	- Made the {/b} switch working with unices.
+
+{{Wednesday 29th, March}}
+
+	- Fixed some error in file search handling (the origin folder of a
+	static string was not added to matches, as if DOS9_DIR_MODE was
+	the default behaviour).
