@@ -205,15 +205,9 @@ int Dos9_StartFile(const char* file, const char* args, const char* dir,
 #else /* !defined(WIN32)  */
 
 #if defined(XDG_OPEN)
-#define Dos9_StartFile(file, args, dir, mode, wait) \
-           if (mode & START_MODE_BACKGROUND) { \
-                Dos9_StartFile_S(file, args, dir, mode, wait); \
-           } else { \
-               Dos9_StartFile_X(file, args, dir, mode, wait); \
-           }
+#define Dos9_StartFile ((mode & START_MODE_BACKGROUND) ? Dos9_StartFile_S : Dos9_StartFile_X)
 #else
-#define Dos9_StartFile(file, args, dir, mode, wait) \
-           Dos9_StartFile_S(file, args, dir, mode, wait)
+#define Dos9_StartFile Dos9_StartFile_S
 #endif /* XDG_OPEN */
 
 
