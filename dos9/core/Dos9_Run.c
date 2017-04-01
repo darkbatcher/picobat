@@ -438,6 +438,8 @@ int Dos9_RunLine(ESTR* lpLine)
 
 	Dos9_RmTrailingNl(Dos9_EsToChar(lpLine));
 
+	//fprintf(stderr, "line=%s\n", lpLine->str);
+
     DOS9_DBG("\t[*] Parsing line \"%s\"\n", lpLine->str);
 
 	lppssStreamStart=Dos9_ParseLine(lpLine);
@@ -566,46 +568,18 @@ int Dos9_RunBlock(BLOCKINFO* lpbkInfo)
 	        );
 
 	while (*lpToken && (lpToken < lpEnd)) {
-
-		lpBlockBegin=Dos9_GetNextBlockBeginEx(lpToken, TRUE);
-
 		/* get the block that are contained in the line */
         //printf("Block = %s\n", lpBlockBegin);
+        lpBlockEnd = Dos9_GetBlockLineEnd(lpToken);
 
-
-		if (lpBlockBegin) {
-
-			lpBlockEnd=Dos9_GetBlockLineEnd(lpBlockBegin);
-
-			assert(lpBlockEnd != NULL);
-
-			lpBlockBegin=lpBlockEnd;
-
-		} else {
-
-			lpBlockBegin=lpToken;
-
-		}
-
-		/* search the end of the line */
-		if (!(lpBlockEnd=Dos9_SearchChar(lpBlockBegin, '\n'))) {
-
-			lpBlockEnd=lpEnd;
-
-		}
-
-		lpBlockEnd++;
-
-		if (lpBlockEnd > lpEnd)
-			lpBlockEnd=lpEnd;
+        assert(lpBlockEnd);
 
 		iSize=lpBlockEnd-lpToken;
 
 		Dos9_EsCpyN(lpEsLine, lpToken, iSize);
 
-		//printf("Running=\"%s\"\n", Dos9_EsToChar(lpEsLine));
-
-		//getch();
+        if (*lpBlockEnd != '\0')
+            lpBlockEnd++;
 
 		lpToken=Dos9_SkipAllBlanks(lpToken);
 

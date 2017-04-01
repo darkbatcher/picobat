@@ -1,7 +1,7 @@
 /*
  *
  *   libDos9 - The Dos9 project
- *   Copyright (C) 2010-2016 Romain GARBI
+ *   Copyright (C) 2010-2017 Romain GARBI
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -387,4 +387,25 @@ LIBDOS9 char* Dos9_SearchToken_OutQuotes(const char* lpCh, const char* lpDelims)
 
     return (char*)lpNxt;
 
+}
+
+LIBDOS9 char* Dos9_SearchToken_Hybrid(const char* pch, const char* delims, const char* qdelims)
+{
+    char *qres, *res;
+
+    res = Dos9_SearchToken(pch, delims);
+    qres = Dos9_SearchToken_OutQuotes(pch, qdelims);
+
+    if ((res == NULL) && (qres == NULL))
+        return NULL;
+
+    if ((qres != NULL) && (res > qres)) {
+
+        return qres;
+
+    } else {
+
+        return res;
+
+    }
 }

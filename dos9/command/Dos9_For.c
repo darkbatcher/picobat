@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
+#include <assert.h>
 
 #include <libDos9.h>
 
@@ -307,7 +308,9 @@ int Dos9_CmdFor(char* lpLine)
 
 	}
 
+    lpToken = Dos9_SkipBlanks(lpToken);
 	lpToken = Dos9_GetBlockLine(lpToken, &bkCode);
+    assert(lpToken);
 
 	if (*lpToken) {
 
@@ -775,6 +778,8 @@ int  Dos9_ForMakeTokens(char* lpToken, FORINFO* lpfrInfo)
 
 					}
 
+					lpfrInfo->lpToken[++i]=0;
+
 				} else {
 
 					if (isCat) {
@@ -786,10 +791,7 @@ int  Dos9_ForMakeTokens(char* lpToken, FORINFO* lpfrInfo)
 
 				}
 
-
-				lpfrInfo->lpToken[++i]=0;
-
-				lpNextToken=NULL;
+                lpNextToken=NULL;
 				break;
 
 			case '*':
@@ -832,9 +834,13 @@ int  Dos9_ForMakeTokens(char* lpToken, FORINFO* lpfrInfo)
 
 				lpNextToken++;
 
-				if (!*lpNextToken) break;
+				if (!*lpNextToken) {
+                    lpNextToken=NULL;
+				    break;
+				}
 
-				if (*lpNextToken!=',') {
+
+                if (*lpNextToken!=',') {
 
 					Dos9_ShowErrorMessage(DOS9_FOR_BAD_TOKEN_SPECIFIER, lpNextToken, FALSE);
 					return -1;
@@ -927,12 +933,9 @@ void Dos9_ForSplitTokens(ESTR* lpContent, FORINFO* lpfrInfo)
 
 	   */
 
-	for (i=0; i<lpfrInfo->iTokenNb; i++) {
+	for (i=0; i < lpfrInfo->iTokenNb; i++) {
 
-
-		/* printf("Getting token n. %d \n", i); */
 		Dos9_ForGetToken(lpContent, lpfrInfo, i, lpVarContent);
-		/* printf("Returned : \"%s\"\n", Dos9_EsToChar(lpVarContent */
 		/* get the token descibed by the token info number i */
 
 		Dos9_SetLocalVar(lpvLocalVars, cVarName, Dos9_EsToChar(lpVarContent));

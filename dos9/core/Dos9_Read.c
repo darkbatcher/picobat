@@ -125,43 +125,10 @@ error:
 
 int Dos9_CheckBlocks(ESTR* lpesLine)
 {
-	char *lpBlock,
-	     *lpCh=Dos9_EsToChar(lpesLine);
+	if (Dos9_GetBlockLineEnd(lpesLine->str) == NULL)
+        return FALSE;
 
-	if (!*lpCh)
-		return TRUE;
-
-	DOS9_DBG("--------------------------------------------------------------\n");
-
-	if (!(lpBlock=Dos9_GetNextBlockBegin(lpCh))) {
-
-		/* There's no block, thus all is fine */
-
-		if (strchr(lpCh, '\n')
-		    && !Dos9_SearchChar(lpCh, '\n'))
-			return FALSE;
-
-		return TRUE;
-
-	}
-
-	/* lpBlockBegin we have is the highest level block
-	   that is avaliable, just perform some check for it */
-
-	if (!(lpCh=Dos9_GetBlockLineEnd(lpBlock))) {
-
-		/* the syntax is broken */
-
-		return FALSE;
-
-    }
-
-	if (strchr(lpCh, '\n')
-	    && !Dos9_SearchChar(lpCh, '\n'))
-		return FALSE;
-
-	return TRUE;
-
+    return TRUE;
 }
 
 void Dos9_RmTrailingNl(char* lpLine)

@@ -1740,3 +1740,26 @@ TUESDAY 21TH, MARCH
 
         - Made the /b switch working with unices.
 
+WEDNESDAY 29TH, MARCH
+
+        - Fixed some error in file search handling (the origin folder of a 
+          static string was not added to matches, as if DOS9_DIR_MODE was the 
+          default behaviour).
+
+THURSDAY 30TH MARCH
+
+        - Fixed a bug with FOR command that created more variable that it it 
+          was necessary when using a joker * as the final token specifier.
+
+        - Fixed bug with Dos9_ShowErrorMessage() function that called the dos9 
+          exit function twice, causing a SEGFAULT.
+
+        - Fixed the START command :
+
+             - Fixed problems with transmission of Dos9 attributes.
+
+             - Fixed handling of the title parameter.
+
+        - Fixed an implementation error which resulted in misinterpreted 
+          delayed expansion when variable name started with a number.
+

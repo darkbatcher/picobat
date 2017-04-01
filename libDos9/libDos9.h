@@ -408,5 +408,7 @@ LIBDOS9 char* Dos9_SearchToken(const char* lpCh, const char* lpDelims);
 LIBDOS9 char* Dos9_SearchLastToken(const char* lpCh, const char* lpDelims);
 LIBDOS9 char* Dos9_SearchChar_OutQuotes(const char* lpCh, int cChar);
 LIBDOS9 char* Dos9_SearchToken_OutQuotes(const char* lpCh, const char* lpDelims);
+LIBDOS9 char* Dos9_SearchToken_Hybrid(const char* pch, const char* delims,
+                                                            const char* qdelims);
 
 #endif // LIBDOS9_INCLUDED_H

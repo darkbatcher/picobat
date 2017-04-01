@@ -138,21 +138,8 @@ char* Dos9_GetBlockLine(char* pLine, BLOCKINFO* pBk)
 
     pEnd = Dos9_GetBlockLineEnd(pLine);
 
-    if (*pLine == ')')
-        pLine ++;
-
-    if (pEnd == NULL) {
-
-        pEnd = pLine;
-
-        while (*pEnd && *pEnd!='\n')
-            pEnd++;
-
-    } else {
-
-        pEnd++;
-
-    }
+    if (*pLine=='(')
+        pLine++;
 
     pBk->lpEnd = pEnd;
     pBk->lpBegin = pLine;

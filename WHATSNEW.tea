@@ -1583,3 +1583,22 @@ ${for %%a in (*.exe) do echo %%a}
 	- Fixed some error in file search handling (the origin folder of a
 	static string was not added to matches, as if DOS9_DIR_MODE was
 	the default behaviour).
+
+{{Thursday 30th March}}
+
+	- Fixed a bug with {FOR} command that created more variable that it
+	it was necessary when using a joker {*} as the final token specifier.
+	
+	- Fixed bug with {Dos9_ShowErrorMessage()} function that called the dos9
+	exit function twice, causing a SEGFAULT.
+	
+	- Fixed the {START} command :
+	
+		-- Fixed problems with transmission of {Dos9} attributes.
+		
+		-- Fixed handling of the title parameter.
+		
+	- Fixed an implementation error which resulted in misinterpreted delayed
+	expansion when variable name started with a number.
+	
+	- Fixed block parsing systems.

@@ -36,7 +36,30 @@
 
 /*
 
-	start [/Wait] [/MIN] [/MAX] [/b] [/D dir] cmd param
+	start [/Wait] [/MIN] [/MAX] [/b] [/D dir] title cmd param
+
+	Starts a command in a separate window. This is by far the
+	most incompatible command in the batch language. Indeed,
+	while it is quite straightforward under windows, this may
+    be a pity to implement under unices that possess a
+    variety of windows manager. To work around this issue, we are
+    currently using the xdg-open script if available.
+
+    - /Wait : Waits for the process
+
+    - /Min : Minimized window (only under windows)
+
+    - /Max : Maximized window (only under windows)
+
+    - /b : background mode
+
+    - /D dir : new window current directory
+
+    - title : new window title (unused by Dos9)
+
+    - cmd : the command
+
+    - param : the parameters
 
  */
 
@@ -320,8 +343,10 @@ int Dos9_StartFile_S(const char* file, const char* args, const char* dir,
 
 void Dos9_UseBackSlash(char* line)
 {
-	while (line = strchr(line, '/')) *(line ++) = '\\';
+    if (line == NULL)
+        return;
 
+	while (line = strchr(line, '/')) *(line ++) = '\\';
 }
 
 int Dos9_CmdStart(char* line)
@@ -335,6 +360,9 @@ int Dos9_CmdStart(char* line)
 	char dirbuf[FILENAME_MAX],
 		 file[FILENAME_MAX],
 		 *dir = NULL;
+
+    int nok = 0, command = 0;
+    void* trash;
 
 	line += 5;
 
@@ -378,25 +406,65 @@ int Dos9_CmdStart(char* line)
 
 		} else {
 
-			break;
+            /* Check that the file specified actually exists OR is an internal
+               command.
 
-		}
+               NOTE : The orignal CMD interpretor had a somehow confusing
+               behaviour about toward argument processing. Indeed depending
+               on switches given to the command, specifying _title_ parameter
+               (that is actually thrown to the bin by Dos9) was either optional
+               or mandatory. Dos9 suppress this behaviour by making it always
+               optional (anyway Dos9 takes no account of _title_) */
+
+			if (Dos9_GetCommandProc(param->str, lpclCommands, &trash) != -1) {
+                /* this is an internal command */
+
+                command = 1;
+                nok;
+
+                strncpy(file, param->str, sizeof(file));
+                file[FILENAME_MAX-1]='\0';
+                break;
+
+            } else if (Dos9_GetFilePath(file, param->str, sizeof(file))) {
+
+                /* this is an external command */
+                nok = 2;
+                break;
+
+            } else {
+
+                /* store the what we read on file anyway, since we may
+                   probably want to backtrack */
+                strncpy(file, param->str, sizeof(file));
+                file[FILENAME_MAX-1]='\0';
+
+                nok ++;
+
+
+            }
+
+            if (nok == 2)
+                break;
+
+        }
 
 	}
 
-	if (line == NULL) {
+	if (nok == 0) {
 
 		Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "START", NULL);
 		goto error;
 
 	}
 
-	strncpy(file, Dos9_EsToChar(param), sizeof(file));
-	file[FILENAME_MAX-1]='\0';
+    if (line != NULL) {
+        Dos9_GetEndOfLine(line, param);
+    } else {
+        Dos9_EsCpy(param, "");
+    }
 
-    Dos9_GetEndOfLine(line, param);
-
-    if (*file == '\0') {
+    if (command) {
 
         /* If the file specified was "", make the command line somehow
            equivalent to :
@@ -408,7 +476,17 @@ int Dos9_CmdStart(char* line)
         Dos9_GetExeFilename(file, FILENAME_MAX);
         tmp = Dos9_EsInit();
 
-        Dos9_EsCat(tmp, "/C \"");
+        /* add optionnal attributes */
+        Dos9_EsCpy(tmp, "/a:q");
+
+        if (bUseFloats)
+            Dos9_EsCat(tmp, "f");
+        if (bDelayedExpansion)
+            Dos9_EsCat(tmp, "e");
+        if (bCmdlyCorrect)
+            Dos9_EsCat(tmp, "c");
+
+        Dos9_EsCat(tmp, " /C \"");
         Dos9_EsCat(tmp, param->str);
         Dos9_EsCat(tmp, "\"");
 
@@ -430,7 +508,7 @@ int Dos9_CmdStart(char* line)
 	Dos9_EsFree(param);
 	return 0;
 
-	error:
+error:
 
 		Dos9_EsFree(param);
 		return -1;

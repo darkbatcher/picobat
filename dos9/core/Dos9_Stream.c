@@ -191,7 +191,13 @@ int Dos9_OpenOutput(LPSTREAMSTACK lpssStreamStack, char* lpName, int iDescriptor
 		}
 
 		return 0;
+
+	} else {
+
+        Dos9_ShowErrorMessage(DOS9_FILE_ERROR | DOS9_PRINT_C_ERROR, lpName, 1);
+
 	}
+
 	DEBUG("Error: Cant load file !");
 	return -1;
 }
