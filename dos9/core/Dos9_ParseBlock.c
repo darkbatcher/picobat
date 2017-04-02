@@ -57,10 +57,13 @@ char* Dos9_GetBlockLineEnd(char* pch)
 
     if (*pch == '(') {
 
-        //fprintf(stderr, "**** Detected top level block=%s\n", pch);
+        //(stderr, "**** Detected top level block=%s\n", pch);
         next = Dos9_GetNextBlockEnd(pch);
         //fprintf(stderr, "**** Detected top level end=%s\n", next);
         /* This is a top level block */
+        if (next && *next)
+            next ++;
+
         return next;
 
     } else if (strnicmp(pch, "if", 2)
@@ -120,11 +123,10 @@ char* Dos9_GetBlockLineEnd(char* pch)
                 /* look for the sub-block end */
 
                 /* the block is clearly malformed */
+                //printf("Sub-block reached at :%s\n", next);
                 if (((pch = Dos9_GetNextBlockEnd(next)) == NULL)
                     || (*pch != ')'))
                     return NULL;
-
-                //fprintf(stderr, "**** End of subblock detected at : %s\n", pch);
 
                 if (*pch)
                     pch ++;
@@ -175,6 +177,8 @@ char* Dos9_GetNextBlockEnd(char* pch)
     if (*pch =='\0')
         return NULL;
 
+    //printf("*** End block reached at : %s\n", pch);
+
     return pch;
 }
 
@@ -183,7 +187,7 @@ char* Dos9_GetNextBlockEnd(char* pch)
    return NULL if no block is encountered in the current block */
 char* Dos9_GetNextBlockBeginEx(char* pch, int bIsBlockCmd)
 {
-    pch = Dos9_SearchToken_Hybrid(pch, "()\n", "&|");
+    pch = Dos9_SearchToken_Hybrid(pch, "()", "");
 
     if ((pch != NULL) && (*pch == '('))
             return pch;

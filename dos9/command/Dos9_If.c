@@ -27,6 +27,7 @@
 #include <libDos9.h>
 
 #include "Dos9_If.h"
+#include "Dos9_IfExp.h"
 #include "../lang/Dos9_Lang.h"
 #include "../lang/Dos9_ShowHelp.h"
 #include "../errors/Dos9_Errors.h"
@@ -186,6 +187,7 @@ int Dos9_CmdIf(char* lpParam)
 
             if (iResult == -1) {
 
+                Dos9_EsFree(lpComparison);
                 Dos9_ShowErrorMessage(DOS9_INVALID_IF_EXPRESSION, lpParam, FALSE);
                 return -1;
 
@@ -215,8 +217,11 @@ int Dos9_CmdIf(char* lpParam)
 					lpToken++;
 				}
 
-				if (iFlag & DOS9_IF_CASE_UNSENSITIVE) iResult=!stricmp(Dos9_EsToChar(lpComparison), lpToken);
-				else iResult=!strcmp(Dos9_EsToChar(lpComparison), lpToken);
+				if (iFlag & DOS9_IF_CASE_UNSENSITIVE) {
+                    iResult=!stricmp(Dos9_EsToChar(lpComparison), lpToken);
+				} else {
+				    iResult=!strcmp(Dos9_EsToChar(lpComparison), lpToken);
+				}
 
 				if (iFlag & DOS9_IF_NEGATION) iResult=!iResult;
 
@@ -227,6 +232,7 @@ int Dos9_CmdIf(char* lpParam)
 				if (!(lpNext=Dos9_GetNextParameter(lpNext, lpArgument, 11))) {
 
 					Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
+					Dos9_EsFree(lpComparison);
 					return -1;
 
 				}
@@ -236,6 +242,8 @@ int Dos9_CmdIf(char* lpParam)
 				if (!(lpNext=Dos9_GetNextParameterEs(lpNext, lpOtherPart))) {
 
 					Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
+					Dos9_EsFree(lpOtherPart);
+					Dos9_EsFree(lpComparison);
 					return -1;
 
 				}
@@ -269,36 +277,30 @@ int Dos9_CmdIf(char* lpParam)
 
 	}
 
+    lpNext = Dos9_SkipBlanks(lpParam);
+
     if (iResult) {
 
-        lpNext = Dos9_SkipBlanks(lpParam);
-
-        if ( /* if the command does not start with a '(' get
+        if (*lpNext != '(') {
+            /* if the command does not start with a '(' get
                 the full line of blocks that follow the command */
-            ((*lpNext != '(')
-             && (lpNext=Dos9_GetBlockLine(lpNext, &bkInfo)))
-            ||
-             /* else if the line is actually a block, process it
-                as needed */
-            ((*lpNext == '(')
-             && (lpNext = Dos9_GetNextBlock(lpNext, &bkInfo)))
-           ) {
-
-            Dos9_RunBlock(&bkInfo);
-
+            lpNext=Dos9_GetBlockLine(lpNext, &bkInfo);
         } else {
-
-            Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
-            return -1;
-
+            /* else if the line is actually a block, process it
+                as needed */
+            lpNext = Dos9_GetNextBlock(lpNext, &bkInfo);
         }
+
+        Dos9_RunBlock(&bkInfo);
 
     } else {
 
-        if ((lpNext=Dos9_GetNextBlock(lpParam, &bkInfo))) {
+        if (*lpNext == '(') {
+
+            lpNext=Dos9_GetNextBlock(lpNext, &bkInfo);
 
             if (*lpNext==')')
-                ++ lpNext;
+                lpNext ++;
 
             lpNext=Dos9_SkipBlanks(lpNext);
 
@@ -307,38 +309,38 @@ int Dos9_CmdIf(char* lpParam)
 
                 lpNext=Dos9_SkipBlanks(lpNext+4);
 
-                if ( /* if the command does not start with a '(' get
+                if (*lpNext != '(') {
+                    /* if the command does not start with a '(' get
                         the full line of blocks that follow the command */
-                    ((*lpNext != '(')
-                     && (lpNext=Dos9_GetBlockLine(lpNext, &bkInfo)))
-                    ||
-                     /* else if the line is actually a block, process it
-                        as needed */
-                    ((*lpNext == '(')
-                     && (lpNext = Dos9_GetNextBlock(lpNext, &bkInfo)))
-                   ) {
-
-                    Dos9_RunBlock(&bkInfo);
-
+                    lpNext=Dos9_GetBlockLine(lpNext, &bkInfo);
                 } else {
+                    /* else if the line is actually a block, process it
+                        as needed */
+                    lpNext = Dos9_GetNextBlock(lpNext, &bkInfo);
+                }
 
-                    Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
+                Dos9_RunBlock(&bkInfo);
+
+                lpNext = Dos9_SkipBlanks(lpNext);
+
+                if (*lpNext && *lpNext != '\n') {
+
+                    /* there's something trailing that is not an else here*/
+                    Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpNext, FALSE);
                     return -1;
-
 
                 }
 
+            } else if (*lpNext) {
+
+                    /* there's something trailing that is not an else here*/
+                    Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpNext, FALSE);
+                    return -1;
+
             }
-
-        } else {
-
-            Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
-            return -1;
 
         }
     }
-
-
 
 	return 0;
 }

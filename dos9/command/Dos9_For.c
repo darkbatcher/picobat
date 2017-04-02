@@ -309,24 +309,25 @@ int Dos9_CmdFor(char* lpLine)
 	}
 
     lpToken = Dos9_SkipBlanks(lpToken);
-	lpToken = Dos9_GetBlockLine(lpToken, &bkCode);
-    assert(lpToken);
 
-	if (*lpToken) {
+    if (*lpToken != '(') {
+        lpToken = Dos9_GetBlockLine(lpToken, &bkCode);
+    } else {
+        lpToken = Dos9_GetNextBlock(lpToken, &bkCode);
+    }
 
-		lpToken++;
+	if (*lpToken == ')')
+        lpToken ++;
 
-		while (*lpToken==' ' || *lpToken=='\t')
-			lpToken++;
+    lpToken = Dos9_SkipBlanks(lpToken);
 
-		if (*lpToken) {
+    if (*lpToken && *lpToken != NULL) {
 
+            /* There is trailing characters after the block */
 			Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpToken, FALSE);
 			goto error;
 
-		}
-
-	}
+    }
 
 	switch(iForType) {
 
