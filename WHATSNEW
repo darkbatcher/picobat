@@ -1763,3 +1763,9 @@ THURSDAY 30TH MARCH
         - Fixed an implementation error which resulted in misinterpreted 
           delayed expansion when variable name started with a number.
 
+        - Fixed block parsing systems.
+
+SUNDAY 2ND APRIL
+
+        - Fixed a compilation error on *NIXes. 
+

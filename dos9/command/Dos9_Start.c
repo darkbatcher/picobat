@@ -245,7 +245,7 @@ int Dos9_StartFile_X(const char* file, const char* args, const char* dir,
 
         arg[i] = NULL;
 
-        Dos9_OpenOutput(lppsStreamStack, "NULL", DOS9_STDOUT | DOS9_STDERR, 0);
+        Dos9_OpenOutput(lppsStreamStack, "NUL", DOS9_STDOUT | DOS9_STDERR, 0);
 
         /* apply Dos9 internal environment variables */
         Dos9_ApplyEnv(lpeEnv);
@@ -420,7 +420,7 @@ int Dos9_CmdStart(char* line)
                 file[FILENAME_MAX-1]='\0';
                 break;
 
-            } else if (Dos9_GetFilePath(file, param->str, sizeof(file))) {
+            } else if (Dos9_GetFilePath(file, param->str, sizeof(file)) != -1) {
 
                 /* this is an external command */
                 nok = 2;
