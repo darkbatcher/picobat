@@ -45,7 +45,7 @@
 
    ** Only returns null if a block happens to be malformed **
  */
-char* Dos9_GetBlockLineEnd(char* pch)
+char* Dos9_GetBlockLineEndEx(char* pch, int par_end)
 {
     char* next;
 
@@ -73,7 +73,8 @@ char* Dos9_GetBlockLineEnd(char* pch)
            terminal character (here it is just \n to be able to
            check line integrity at reading) */
 
-        if ((next = Dos9_SearchToken_Hybrid(pch, ")\n", "&|")) == NULL) {
+        if ((next = Dos9_SearchToken_Hybrid(pch,
+                            par_end ? (")\n") : ("\n"), "&|")) == NULL) {
             /* apparently, neither of theses, so the lines terminates
                near here by a '\0'. Thus look for the end of the string */
 
@@ -105,7 +106,8 @@ char* Dos9_GetBlockLineEnd(char* pch)
 
          */
 
-        if ((next = Dos9_SearchToken_Hybrid(pch, "()\n", "&|")) == NULL) {
+        if ((next = Dos9_SearchToken_Hybrid(pch, par_end ? ("()\n") : ("(\n")
+                                                            , "&|")) == NULL) {
             /* apparently, neither of theses, so the lines terminates
                near here by a '\0'. Thus look for the end of the string */
 
@@ -164,7 +166,7 @@ char* Dos9_GetNextBlockEnd(char* pch)
 
     do {
 
-        if ((pch = Dos9_GetBlockLineEnd(pch)) == NULL)
+        if ((pch = Dos9_GetBlockLineEndEx(pch, 1)) == NULL)
             return NULL;
 
         if (*pch !='\0' && *pch != ')')
@@ -172,7 +174,7 @@ char* Dos9_GetNextBlockEnd(char* pch)
 
     } while (*pch && *pch != ')');
 
-    /* arguabmy, this should finish finish with a ')' so this is
+    /* arguably, this should finish finish with a ')' so this is
        obviously malformed*/
     if (*pch =='\0')
         return NULL;

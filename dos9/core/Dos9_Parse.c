@@ -83,7 +83,6 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 		    && (lpNextBlock!=NULL)) {
 
 			lpSearchBegin=Dos9_GetNextBlockEnd(lpNextBlock);
-
             if (lpSearchBegin==NULL) {
 
 				Dos9_FreeLine(lppssStart);
@@ -95,7 +94,7 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 
 			}
 
-			lpNextBlock=Dos9_GetNextBlockBeginEx(lpSearchBegin, 1);
+			lpNextBlock=Dos9_GetNextBlockBeginEx(lpSearchBegin+1, 1);
 
 			continue;
 
@@ -310,7 +309,7 @@ PARSED_STREAM*       Dos9_ParseOperators(ESTR* lpesLine)
 
 			}
 
-			lpNextBlock=Dos9_GetNextBlockBeginEx(lpSearchBegin, 1);
+			lpNextBlock=Dos9_GetNextBlockBeginEx(lpSearchBegin + 1, 1);
 
 			continue;
 		}

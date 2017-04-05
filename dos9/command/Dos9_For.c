@@ -371,7 +371,7 @@ error:
 int Dos9_CmdForSimple(ESTR* lpInput, BLOCKINFO* lpbkCommand, char cVarName, char* lpDelimiters)
 {
 
-	char *lpToken=Dos9_EsToChar(lpInput),
+	char *lpToken=lpInput->str,
          *lpBegin,
          *tmp;
 
@@ -1056,9 +1056,9 @@ void Dos9_ForVarUnassign(FORINFO* lpfrInfo)
 
 	for (i=0; i<iMax; i++) {
 
-		Dos9_SetLocalVar(lpvLocalVars, cVarName, NULL);
+		Dos9_SetLocalVar(lpvLocalVars, cVarName+i, NULL);
 
-		if (cVarName & 0x80)
+		if ((cVarName+i) & 0x80)
 			break;
 	}
 }

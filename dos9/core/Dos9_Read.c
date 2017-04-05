@@ -125,8 +125,17 @@ error:
 
 int Dos9_CheckBlocks(ESTR* lpesLine)
 {
-	if (Dos9_GetBlockLineEnd(lpesLine->str) == NULL)
-        return FALSE;
+    char *pch = lpesLine->str;
+
+    do {
+
+        if ((*pch == '|') || (*pch == '&'))
+            pch ++;
+
+        if ((pch = Dos9_GetBlockLineEndEx(pch, 0)) == NULL)
+            return FALSE;
+
+    } while ((*pch != '\n') && (*pch != '\0'));
 
     return TRUE;
 }

@@ -245,7 +245,7 @@ int Dos9_SetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char cVarName, char* cVarContent
 
 	/* Perform test on value cName, to test its
 	   specification conformance, i.e. the character must be
-	   a strict ASCII character, exculuding control characters
+	   a strict ASCII character, excluding control characters
 	   and space (code range from 0x00 to 0x20 included) */
 
 	if (Dos9_TestLocalVarName(cVarName))

@@ -321,6 +321,9 @@ int Dos9_CmdIf(char* lpParam)
 
                 Dos9_RunBlock(&bkInfo);
 
+                if (*lpNext==')')
+                    lpNext++;
+
                 lpNext = Dos9_SkipBlanks(lpNext);
 
                 if (*lpNext && *lpNext != '\n') {

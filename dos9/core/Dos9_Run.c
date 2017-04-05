@@ -567,12 +567,27 @@ int Dos9_RunBlock(BLOCKINFO* lpbkInfo)
 	         lpEnd
 	        );
 
-	while (*lpToken && (lpToken < lpEnd)) {
+	while ((*lpToken) && (lpToken < lpEnd)) {
 		/* get the block that are contained in the line */
         //printf("Block = %s\n", lpBlockBegin);
-        lpBlockEnd = Dos9_GetBlockLineEnd(lpToken);
 
-        assert(lpBlockEnd);
+        lpBlockEnd = lpToken;
+
+        do {
+
+            lpBlockEnd = Dos9_SkipBlanks(lpBlockEnd);
+
+            lpBlockEnd = Dos9_GetBlockLineEnd(lpBlockEnd);
+            assert(lpBlockEnd);
+
+            if (*lpBlockEnd == '&' || *lpBlockEnd == '|')
+                lpBlockEnd ++;
+            if (*lpBlockEnd == '&' || *lpBlockEnd == '|')
+                lpBlockEnd ++;
+
+        } while (*lpBlockEnd != '\0' && *lpBlockEnd != '\n'
+                    && *lpBlockEnd != ')');
+
 
 		iSize=lpBlockEnd-lpToken;
 

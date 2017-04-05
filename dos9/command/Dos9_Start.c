@@ -143,7 +143,7 @@ int Dos9_StartFile(const char* file, const char* args, const char* dir,
     }
 
 
-
+    Dos9_ApplyEnv(lpeEnv);
 	ShellExecuteExW(&info);
 
 	if (wait)

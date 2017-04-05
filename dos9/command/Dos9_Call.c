@@ -238,7 +238,7 @@ int Dos9_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 
 	memcpy(&ifOldFile, &ifIn, sizeof(INPUT_FILE));
 
-	/* Set the INPUT_INFO data */
+	/* Set the INPUT_INFO FILE */
 
 	if (!lpLabel) {
 
@@ -307,13 +307,13 @@ int Dos9_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 	iLockState=Dos9_GetStreamStackLockState(lppsStreamStack);
 	Dos9_SetStreamStackLockState(lppsStreamStack, TRUE);
 
+    /* Save echo state of the caller */
 
 	/* run the  command */
 
 	Dos9_RunBatch(&ifIn);
 
     bAbortCommand=FALSE;
-
 
 	/* restore the stream stack */
 
@@ -337,10 +337,6 @@ int Dos9_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 	return 0;
 
 error:
-
-	/* can't let the interpretor like that, restore old settings */
-	memcpy(&ifIn, &ifOldFile, sizeof(INPUT_FILE));
-	memcpy(lpvLocalVars, lpvOldBlock, LOCAL_VAR_BLOCK_SIZE*sizeof(LOCAL_VAR_BLOCK));
 	Dos9_EsFree(lpEsParam);
 
 	return -1;

@@ -434,7 +434,11 @@ int Dos9_CopyFile(const char* file, const char* dest)
 
     printf("Copy %s to %s\n", file, dest);
 
+#ifdef WIN32
+    old = open(file, O_RDONLY | O_BINARY ,0);
+#else
     old = open(file, O_RDONLY,0);
+#endif
 
     fstat(old, &info);
 
@@ -448,8 +452,11 @@ int Dos9_CopyFile(const char* file, const char* dest)
 
     }
 
-
+#ifdef WIN32
+    new = open(dest, O_WRONLY | O_CREAT | O_BINARY, info.st_mode);
+#else
     new = open(dest, O_WRONLY | O_CREAT, info.st_mode);
+#endif
 
     if (new == -1) {
 
