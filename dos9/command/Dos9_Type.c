@@ -52,17 +52,19 @@
 void Dos9_TypeFileF(FILE* pFile)
 {
     char buf[1024];
+    size_t size;
 
-    while (fgets(buf, sizeof(buf), pFile))
-        printf("%s", buf);
+    while (size = fread(buf, 1, sizeof(buf), pFile))
+        fwrite(buf, 1, size, stdout);
 }
 
 void Dos9_TypeFile(char* lpFileName)
 {
     FILE* pFile;
     char buf[1024];
+    size_t size;
 
-    if (!(pFile=fopen(lpFileName, "r"))) {
+    if (!(pFile=fopen(lpFileName, "rb"))) {
 
         Dos9_ShowErrorMessage(DOS9_FILE_ERROR | DOS9_PRINT_C_ERROR,
                                 lpFileName,
@@ -72,8 +74,8 @@ void Dos9_TypeFile(char* lpFileName)
         goto end;
     }
 
-    while (fgets(buf, sizeof(buf), pFile))
-        printf("%s", buf);
+    while (size = fread(buf, 1, sizeof(buf), pFile))
+        fwrite(buf, 1, size, stdout);
 
 end:
     fclose(pFile);

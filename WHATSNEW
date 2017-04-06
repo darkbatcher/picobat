@@ -1767,5 +1767,13 @@ THURSDAY 30TH MARCH
 
 SUNDAY 2ND APRIL
 
-        - Fixed a compilation error on *NIXes. 
+        - Fixed a compilation error on *NIXes.
+
+WEDNESDAY 5TH MARCH
+
+        - Fixed lots of bugs caused by the new parsing system.
+
+        - Fixed some errors of the for and call command.
+
+        - Fixed the TYPE to make it capable of handling binary files.
 
