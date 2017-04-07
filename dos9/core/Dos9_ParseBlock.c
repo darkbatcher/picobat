@@ -73,8 +73,8 @@ char* Dos9_GetBlockLineEndEx(char* pch, int par_end)
            terminal character (here it is just \n to be able to
            check line integrity at reading) */
 
-        if ((next = Dos9_SearchToken_Hybrid(pch,
-                            par_end ? (")\n") : ("\n"), "&|")) == NULL) {
+        if ((next = Dos9_SearchToken_Hybrid(pch, "\n",
+                                           par_end ? ")&|" : "&|")) == NULL) {
             /* apparently, neither of theses, so the lines terminates
                near here by a '\0'. Thus look for the end of the string */
 
@@ -106,8 +106,8 @@ char* Dos9_GetBlockLineEndEx(char* pch, int par_end)
 
          */
 
-        if ((next = Dos9_SearchToken_Hybrid(pch, par_end ? ("()\n") : ("(\n")
-                                                            , "&|")) == NULL) {
+        if ((next = Dos9_SearchToken_Hybrid(pch, "\n",
+                                                par_end ? "()&|" : "(&|")) == NULL) {
             /* apparently, neither of theses, so the lines terminates
                near here by a '\0'. Thus look for the end of the string */
 
@@ -189,7 +189,7 @@ char* Dos9_GetNextBlockEnd(char* pch)
    return NULL if no block is encountered in the current block */
 char* Dos9_GetNextBlockBeginEx(char* pch, int bIsBlockCmd)
 {
-    pch = Dos9_SearchToken_Hybrid(pch, "()", "");
+    pch = Dos9_SearchToken_Hybrid(pch, "", "()");
 
     if ((pch != NULL) && (*pch == '('))
             return pch;

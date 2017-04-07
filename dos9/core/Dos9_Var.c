@@ -396,6 +396,9 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 
 		}
 
+		if (i == 0)
+            cFlag[0] = DOS9_ALL_PATH;
+
 		if (cVarName==0)
 			return NULL;
 

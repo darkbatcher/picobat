@@ -399,7 +399,8 @@ LIBDOS9 char* Dos9_SearchToken_Hybrid(const char* pch, const char* delims, const
     if ((res == NULL) && (qres == NULL))
         return NULL;
 
-    if ((qres != NULL) && (res > qres)) {
+    if (((qres != NULL) && (res == NULL))
+         || (res > qres)) {
 
         return qres;
 

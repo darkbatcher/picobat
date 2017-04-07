@@ -169,12 +169,12 @@ int Dos9_OpenOutput(LPSTREAMSTACK lpssStreamStack, char* lpName, int iDescriptor
 
 	case DOS9_STDERR:
 	case DOS9_STDOUT:
-		iMode=O_WRONLY | O_CREAT | O_APPEND | (O_TRUNC & iMode);
+		iMode=O_WRONLY | O_CREAT | O_APPEND | (O_TRUNC & iMode) | O_BINARY;
 		/* setting the descriptor's right (apend, create, and rd-only) */
 		break;
 
 	case DOS9_STDIN:
-		iMode=O_RDONLY;
+		iMode=O_RDONLY | O_BINARY;
 	}
 
 	DEBUG("File is about to be loaded");
@@ -223,7 +223,7 @@ int Dos9_OpenPipe(LPSTREAMSTACK lpssStreamStack)
 	int iPipeDescriptors[2], iOldInputDescriptor;
 	LPSTREAMLVL lpLvl;
 
-	if (_Dos9_Pipe(iPipeDescriptors, 0x8000, O_TEXT) == -1)
+	if (_Dos9_Pipe(iPipeDescriptors, 0x8000, O_BINARY) == -1)
 		Dos9_ShowErrorMessage(DOS9_UNABLE_CREATE_PIPE | DOS9_PRINT_C_ERROR,
 		                      __FILE__ "/Dos9_OpenPipe()",
 		                      TRUE);
