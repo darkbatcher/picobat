@@ -142,15 +142,17 @@ int Dos9_CheckBlocks(ESTR* lpesLine)
 
 void Dos9_RmTrailingNl(char* lpLine)
 {
-	char cLastChar=0;
-
-	while (*lpLine) {
-
-		cLastChar=*(lpLine++);
-
-	}
-
-	if (cLastChar=='\n')
-		*(lpLine-1)='\0';
-
+    char* line;
+	if (
+#ifdef WIN32
+        ((line = strrchr(lpLine, '\r'))
+           && *(line+1) == '\n'
+           && *(line+2) == '\0'
+         ) ||
+#endif
+        ((line = strrchr(lpLine, '\n'))
+           && *(line+1) == '\0'
+         )
+       )
+         *line = '\0';
 }

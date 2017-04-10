@@ -85,12 +85,15 @@ int main(int argc, char *argv[])
     }
 #endif
 
-    #if !defined(WIN32)
+#if !defined(WIN32)
     /* Change buffuring method on *NIXes
        to fix output buffuring issues.
     */
     setvbuf(stdout, NULL, _IONBF, 0);
-    #endif
+#else
+    /* Retrieve the main thread id */
+    iMainThreadId = GetCurrentThreadId();
+#endif
 
     /* Initialize libDos9 */
     Dos9_InitLibDos9();
@@ -124,11 +127,11 @@ int main(int argc, char *argv[])
         if (Dos9_GetFilePath(lpFileAbs, lpFileName, sizeof(lpFileAbs))==-1)
             Dos9_ShowErrorMessage(DOS9_FILE_ERROR, lpFileName, -1);
 
-        Dos9_SetLocalVar(lpvLocalVars, '0', lpFileAbs);
+        Dos9_SetLocalVar(lpvArguments, '0', lpFileAbs);
 
     } else {
 
-        Dos9_SetLocalVar(lpvLocalVars, '0', "");
+        Dos9_SetLocalVar(lpvArguments, '0', "");
 
     }
 

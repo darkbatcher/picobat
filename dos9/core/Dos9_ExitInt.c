@@ -29,6 +29,7 @@ void Dos9_Exit(void)
 	Dos9_FreeCommandList(lpclCommands);
 	Dos9_FreeStreamStack(lppsStreamStack);
 	Dos9_FreeLocalBlock(lpvLocalVars);
+	Dos9_FreeLocalBlock(lpvArguments);
 	Dos9_EnvFree(lpeEnv);
 
 	if (iInputD)

@@ -181,10 +181,11 @@ int Dos9_CmdSet(char *lpLine)
 	char *lpNextToken;
 
 	int i,
+        nok,
 	    bFloats;
 
-	if ((lpNextToken=Dos9_GetNextParameter(lpLine+3, lpArgBuf,
-		sizeof(lpArgBuf))) && strchr(lpLine+3, '=') != NULL) {
+	if (lpNextToken=Dos9_GetNextParameter(lpLine+3, lpArgBuf,
+            sizeof(lpArgBuf)))  {
 
 		if (!stricmp(lpArg, "/?")) {
 
@@ -223,12 +224,13 @@ int Dos9_CmdSet(char *lpLine)
 
 			/* simple set */
 
-			if ((Dos9_CmdSetS(lpLine+3)))
-				goto error;
+			nok = Dos9_CmdSetS(lpLine+3);
 
 		}
 
-	} else {
+	}
+
+	if (nok == 1) {
 
 		lpLine = Dos9_SkipBlanks(lpLine+3);
 
@@ -241,15 +243,16 @@ int Dos9_CmdSet(char *lpLine)
 		/* in default cases, print environment
 		   which match with the prefix (if defined)
 		*/
-		for (i=0; i < lpeEnv->index; i++)
+		for (i=0; i < lpeEnv->index; i++) {
 			if (strnicmp(lpeEnv->envbuf[i]->name, lpLine, strlen(lpLine)) == 0) {
 
 				found = TRUE;
 
 				/* variable valid */
-	            printf("%s=%s\n", lpeEnv->envbuf[i]->name,
+	            printf("%s=%s" DOS9_NL, lpeEnv->envbuf[i]->name,
 	                                    lpeEnv->envbuf[i]->content);
 			}
+		}
 
 		if (!found) {
 			Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpLine, FALSE);
@@ -260,7 +263,7 @@ int Dos9_CmdSet(char *lpLine)
 	return 0;
 
 error:
-	return -1;
+    return -1;
 }
 
 /* simple set */
@@ -315,14 +318,12 @@ int Dos9_CmdSetS(char* lpLine)
 
 		if (!(lpCh=strchr(Dos9_EsToChar(lpEsVar), '='))) {
 
-			/* The whole line is not a valid token, return
-			   on error */
+			/* Well, apparently this line is not well constructed,
+			   however, we do not display error, and backtrack to
+			   the original function  */
 
-			Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT,
-					Dos9_EsToChar(lpEsVar),
-					FALSE);
-
-			goto error;
+			Dos9_EsFree(lpEsVar);
+			return 1;
 
 		}
 

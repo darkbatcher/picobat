@@ -1169,7 +1169,7 @@ int Dos9_ForMakeInputInfo(ESTR* lpInput, INPUTINFO* lpipInfo, FORINFO* lpfrInfo)
 			if (!(lpipInfo->Info.InputFile.pFile=
                     fopen(TRANS(
                         Dos9_EsToChar(lpipInfo->Info.InputFile.lpesFiles[0])
-                        ), "r"))) {
+                        ), "rb"))) {
 
 				Dos9_ShowErrorMessage(DOS9_FILE_ERROR | DOS9_PRINT_C_ERROR,
                                         lpToken,
@@ -1224,7 +1224,7 @@ int Dos9_ForMakeInputInfo(ESTR* lpInput, INPUTINFO* lpipInfo, FORINFO* lpfrInfo)
 				return -1;
 			}
 
-			if (_Dos9_Pipe(iPipeFdOut, 1024, O_TEXT) == -1) {
+			if (_Dos9_Pipe(iPipeFdOut, 1024, O_BINARY) == -1) {
 
 				Dos9_ShowErrorMessage(DOS9_CREATE_PIPE | DOS9_PRINT_C_ERROR ,
                                         __FILE__ "/Dos9_MakeInputInfo()",
@@ -1307,6 +1307,9 @@ int Dos9_ForInputProcess_win(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn,
 
 	if (bCmdlyCorrect)
 		lpAttrArg[j++]='C';
+
+    if (bUseFloats)
+        lpAttrArg[j++]='F';
 
 	lpAttrArg[j]='\0';
 
@@ -1429,7 +1432,7 @@ int Dos9_ForInputProcess_nix(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn,
 
 	}
 
-	if (!(pFile=fdopen(iPipeFdOut[0], "r"))) {
+	if (!(pFile=fdopen(iPipeFdOut[0], "rb"))) {
 
 		goto error;
 

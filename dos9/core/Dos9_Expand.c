@@ -81,7 +81,7 @@ void Dos9_ExpandVar(ESTR* ptrCommandLine, char cDelimiter, ESTR** buf)
 	      *ptrNextToken,
 	      *ptrEndToken;
 
-	char lpDelimiter[3]= {cDelimiter, 0, 0};
+    char lpDelimiter[] = {cDelimiter, 0};
 
 	/* initialisation du buffer de sortie */
 
@@ -97,24 +97,25 @@ void Dos9_ExpandVar(ESTR* ptrCommandLine, char cDelimiter, ESTR** buf)
 
 			/* on supprime le caractère qui peut éventuellement
 			   trainer dans ce buffer */
-			lpDelimiter[1]='\0';
 
 			Dos9_EsCat(lpExpanded, ptrToken);
 			Dos9_EsCat(lpExpanded, lpDelimiter);
 			ptrToken=ptrNextToken+1;
 			continue;
 
-		} else if (cDelimiter == '%' && (isdigit(*ptrNextToken)
+		} else if ((cDelimiter == '%' && (isdigit(*ptrNextToken)
                     || *ptrNextToken == '*'
-                    || *ptrNextToken=='~')) {
+                    || *ptrNextToken=='~'))
+                    && (ptrEndToken=Dos9_GetLocalVar(lpvArguments,
+                                                      ptrNextToken, lpVarContent))) {
 
-			/* if the variable is one of the parameter variables,
-			   then skip, for compatibility purpose
-			 */
-			lpDelimiter[1]=*ptrNextToken;
-			Dos9_EsCat(lpExpanded, ptrToken);
-			Dos9_EsCat(lpExpanded, lpDelimiter);
-			ptrToken=ptrNextToken+1;
+			/* We encountered a parameter variable that must be
+			   develloped right here because it owns priority over
+			   existing variables (eg, something like '2cent') whose
+			   name start with a number or an Asterix */
+            Dos9_EsCat(lpExpanded, ptrToken);
+			Dos9_EsCatE(lpExpanded, lpVarContent);
+			ptrToken=ptrEndToken;
 			continue;
 
 

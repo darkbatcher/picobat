@@ -32,9 +32,13 @@ int bIsScript;
 int bCmdlyCorrect=FALSE;
 #endif
 
+int iMainThreadId;
+
 int bAbortCommand=FALSE;
 LPCOMMANDLIST lpclCommands;
 LOCAL_VAR_BLOCK* lpvLocalVars;
+LOCAL_VAR_BLOCK* lpvArguments; /* use a distinct local block for
+                                  command arguments */
 LPSTREAMSTACK lppsStreamStack;
 COLOR colColor;
 

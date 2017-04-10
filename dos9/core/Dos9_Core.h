@@ -51,11 +51,14 @@
 #ifdef WIN32
 
 #include <conio.h>
+#define DOS9_NL "\r\n"
 
 #elif !defined(WIN32)
 
 #define stricmp strcasecmp
 #define strnicmp strncasecmp
+
+#define DOS9_NL "\n"
 
 #endif
 

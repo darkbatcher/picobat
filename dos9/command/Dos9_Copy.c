@@ -411,8 +411,6 @@ end:
 int Dos9_MoveFile(const char* file, const char* dest)
 {
 
-    printf("Moving %s to %s\n", file, dest);
-
     if (rename(file, dest)) {
 
         Dos9_ShowErrorMessage(DOS9_UNABLE_MOVE | DOS9_PRINT_C_ERROR,
@@ -431,8 +429,6 @@ int Dos9_CopyFile(const char* file, const char* dest)
     char buf[2048];
     size_t count, writen;
     struct stat info;
-
-    printf("Copy %s to %s\n", file, dest);
 
 #ifdef WIN32
     old = open(file, O_RDONLY | O_BINARY ,0);

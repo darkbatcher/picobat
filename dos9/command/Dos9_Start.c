@@ -476,6 +476,8 @@ int Dos9_CmdStart(char* line)
         if (bUseFloats)
             Dos9_EsCat(tmp, "f");
         if (bDelayedExpansion)
+            Dos9_EsCat(tmp, "v");
+        if (!bEchoOn)
             Dos9_EsCat(tmp, "e");
         if (bCmdlyCorrect)
             Dos9_EsCat(tmp, "c");

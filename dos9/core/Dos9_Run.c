@@ -76,11 +76,11 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
 		    && bEchoOn ) {
 
 			Dos9_SetConsoleTextColor(DOS9_FOREGROUND_IGREEN | DOS9_GET_BACKGROUND(colColor));
-			printf("\nDOS9 ");
+			printf(DOS9_NL "DOS9 ");
 
 			Dos9_SetConsoleTextColor(colColor);
 
-			printf("%s>", lpCurrentDir);
+			printf("%s>" , lpCurrentDir);
 
 		}
 
@@ -100,7 +100,7 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
 		    && *lpCh!='@') {
 
 			Dos9_SetConsoleTextColor(DOS9_FOREGROUND_IGREEN | DOS9_GET_BACKGROUND(colColor));
-			printf("\nDOS9 ");
+			printf(DOS9_NL "DOS9 ");
 			Dos9_SetConsoleTextColor(colColor);
 
 			printf("%s>%s", lpCurrentDir, Dos9_EsToChar(lpLine));
@@ -160,7 +160,7 @@ loop:
 		   resulting in harder job */
 
 		/* Get pipe file descriptors */
-		if (pipe(pipedes, 0, O_TEXT) == -1)
+		if (pipe(pipedes, 0, O_BINARY) == -1)
             Dos9_ShowErrorMessage(DOS9_CREATE_PIPE | DOS9_PRINT_C_ERROR,
                                     __FILE__ "/Dos9_ExecOperators()",
                                     -1);
@@ -172,6 +172,9 @@ loop:
 
 		lpArgs[(i=0)] = lpQuoteProgName;
 		lpArgs[++i] = lpAttrArgs;
+
+        if (bUseFloats)
+            lpAttrArgs[j++] = 'F';
 
 		if (bDelayedExpansion)
 			lpAttrArgs[j++] = 'V';
@@ -482,8 +485,8 @@ int Dos9_RunCommand(ESTR* lpCommand)
 	char lpErrorlevel[sizeof("-3000000000")],
          lpTmpLine[]="CD X:";
 	static int lastErrorLevel=0;
-	char *lpCmdLine;
-	int iFlag;
+	char *lpCmdLine, *tmp;
+	int iFlag, error = 0;
 
 RestartSearch:
 
@@ -509,13 +512,37 @@ RestartSearch:
 
 	case -1:
 
-		iErrorLevel=Dos9_RunExternalCommand(lpCmdLine);
+		iErrorLevel=Dos9_RunExternalCommand(lpCmdLine, &error);
+
+		/* There is definitely an error that prevent the file
+		   from being found. Thus, try another time, bug expanding
+		   the whole line for this moment. This behaviour appears to
+		   be a little bit fuzzy, but I suspect cmd of having quite
+		   the same behaviour... */
+		switch (error) {
+        case 1:
+            /* This is the first error, expand lpCommand */
+            Dos9_DelayedExpand(lpCommand, bDelayedExpansion);
+            goto RestartSearch;
+
+        case 2:
+            /* This is clearly an error; the line failed to be parsed though
+               it was given a second chance... */
+            if (tmp = strpbrk(lpCmdLine, " \t\n"))
+                *tmp = '\0'; /* do not fear to do trash with lpCmdLine, it
+                                won't be used after */
+            Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR, lpCmdLine, FALSE);
+
+        default:;
+            /* This is ok */
+		}
+
 		break;
 
 	default:
 
 		if (iFlag & DOS9_ALIAS_FLAG) {
-			/* this is an alias */
+			/* this is an alias, expand it */
 
 			Dos9_ExpandAlias(lpCommand,
 			                 lpCmdLine + (iFlag & ~DOS9_ALIAS_FLAG),
@@ -627,7 +654,7 @@ int Dos9_RunBlock(BLOCKINFO* lpbkInfo)
 	return 0;
 }
 
-int Dos9_RunExternalCommand(char* lpCommandLine)
+int Dos9_RunExternalCommand(char* lpCommandLine, int* error)
 {
 
 	char *lpArguments[FILENAME_MAX],
@@ -641,7 +668,6 @@ int Dos9_RunExternalCommand(char* lpCommandLine)
 	int i=0,
         status=0;
 
-
 	Dos9_GetParamArrayEs(lpCommandLine, lpEstr, FILENAME_MAX);
 
 	if (!lpEstr[0])
@@ -649,24 +675,19 @@ int Dos9_RunExternalCommand(char* lpCommandLine)
 
 	Dos9_EsReplace(lpEstr[0], "\"", "");
 
-	for (; lpEstr[i] && (i < FILENAME_MAX); i++) {
-
+	for (; lpEstr[i] && (i < FILENAME_MAX); i++)
 		lpArguments[i]=Dos9_EsToChar(lpEstr[i]);
 
-	}
+
 
 	lpArguments[i]=NULL;
-
 	/* check if the program exist */
 
 	if (Dos9_GetFilePath(lpFileName, lpArguments[0], sizeof(lpFileName))==-1) {
 
-		Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR,
-		                      lpArguments[0],
-		                      FALSE);
-
+        *error = *error+1;
         status=-1;
-		goto error;
+        goto error;
 
 	}
 
@@ -807,27 +828,42 @@ int Dos9_RunExternalBatch(char* lpFileName, char* lpFullLine, char** lpArguments
         int i=FILENAME_MAX-1;
         int ret;
 
-        char lpTmp[FILENAME_MAX],
-             lpFile[FILENAME_MAX+2],
+        char lpFile[FILENAME_MAX+3],
              lpExePath[FILENAME_MAX],
-             *lpArgs[FILENAME_MAX+2];
+             lpModes[FILENAME_MAX] = {'/', 'a', ':' ,'q'},
+             *lpArgs[FILENAME_MAX+3];
 
         /* these are batch */
 
 		for (i; (i > 0) && (i < FILENAME_MAX); i--)
-			lpArgs[i+2]=lpArguments[i];
+			lpArgs[i+3]=lpArguments[i];
 
-		Dos9_GetExePath(lpExePath, sizeof(lpExePath));
 
-		snprintf(lpTmp, sizeof(lpTmp) ,"%s/dos9.exe", lpExePath);
+		Dos9_GetExeFilename(lpExePath, sizeof(lpExePath));
+
         snprintf(lpFile, sizeof(lpFile), "\"%s\"", lpFileName);
 
-		lpArgs[0]=lpTmp;
-		lpArgs[2]=lpFile;
-		lpArgs[1]="//"; /* use this switch to prevent
+		lpArgs[0]=lpExePath;
+		lpArgs[3]=lpFile;
+		lpArgs[2]="//"; /* use this switch to prevent
                                 other switches from being executed */
 
-		ret = Dos9_RunExternalFile(lpTmp, lpArgs);
+        lpArgs[1]=lpModes;
+
+        i = 4;
+
+        if (bUseFloats)
+            *(lpModes + (i++)) = 'f';
+        if (bDelayedExpansion)
+            *(lpModes + (i++)) = 'v';
+        if (!bEchoOn)
+            *(lpModes + (i++)) = 'e';
+        if (bCmdlyCorrect)
+            *(lpModes + (i++)) = 'c';
+
+        *(lpModes + i) = '\0';
+
+		ret = Dos9_RunExternalFile(lpExePath, lpArgs);
 }
 
 #elif !defined(WIN32)
@@ -855,16 +891,16 @@ int Dos9_RunExternalBatch(char* lpFileName, char* lpFullLine, char** lpArguments
 
         for (i=1;lpArguments[i] && i <= 9; i++) {
 
-            Dos9_SetLocalVar(lpvLocalVars, '0'+i, lpArguments[i]);
+            Dos9_SetLocalVar(lpvArguments, '0'+i, lpArguments[i]);
 
         }
 
         for (;i <= 9;i++)
-            Dos9_SetLocalVar(lpvLocalVars, '0'+i , "");
+            Dos9_SetLocalVar(lpvArguments, '0'+i , "");
 
-        Dos9_SetLocalVar(lpvLocalVars, '*', lpFullLine);
+        Dos9_SetLocalVar(lpvArguments, '*', lpFullLine);
 
-        Dos9_SetLocalVar(lpvLocalVars, '0', lpFileName);
+        Dos9_SetLocalVar(lpvArguments, '0', lpFileName);
 
         bIsScript = 1; /* this is obviously a script */
 
@@ -916,12 +952,102 @@ void Dos9_SigHandlerBreak(int sig)
 
 BOOL WINAPI Dos9_SigHandler(DWORD dwCtrlType)
 {
-    int choice;
+    int choice, i;
+    HANDLE thread;
+    char lpExePath[FILENAME_MAX];
+    ESTR* args;
+
+    STARTUPINFO si;
+    PROCESS_INFORMATION pi;
+
+
 
 	switch(dwCtrlType) {
 		case CTRL_C_EVENT:
-		case CTRL_BREAK_EVENT:;
-            printf("Not implemeted yet ...");
+		case CTRL_BREAK_EVENT:
+            /* Request a handle to the main thread and try to freeze it */
+            thread = OpenThread(THREAD_ALL_ACCESS, FALSE, iMainThreadId);
+
+            if (thread == NULL) {
+                printf("Error !\n");
+                return TRUE;
+            }
+
+            /* suspend the main thread */
+            SuspendThread(thread);
+
+            if (bIsScript) {
+                /* we are running a script, so give two options : either
+                   continuing or killing Dos9 */
+
+                fputs(DOS9_NL, stderr);
+                choice = Dos9_AskConfirmation(DOS9_ASK_YN
+                                              | DOS9_ASK_DEFAULT_N
+                                              | DOS9_ASK_INVALID_REASK,
+                    "Voulez vous vraiment quitter le script de commande ?");
+
+                if (choice == DOS9_ASK_YES)
+                    exit(-1);
+                ResumeThread(thread);
+                CloseHandle(thread);
+
+            } else {
+                /* Kill the main thread right now */
+                TerminateThread(thread, -1);
+                CloseHandle(thread);
+
+                /* Odds are that some dos9 internal structures may
+                   have been corrupted by the somehow brutal kill of the
+                   main process. As the user *is* likely running interactive
+                   command, (he is indeed to trigger CTRL-C), do not bother
+                   that much and simply restart a new Dos9 command prompt. This
+                   implies a little performance penalty, but ... */
+
+                args = Dos9_EsInit();
+
+                Dos9_GetExeFilename(lpExePath, sizeof(lpExePath));
+                Dos9_EsCpy(args, lpExePath);
+                Dos9_EsCat(args, " /a:q");
+
+                if (!bEchoOn)
+                    Dos9_EsCat(args, "e");
+                if (bUseFloats)
+                    Dos9_EsCat(args, "f");
+                if (bDelayedExpansion)
+                    Dos9_EsCat(args, "v");
+                if (bCmdlyCorrect)
+                    Dos9_EsCat(args, "c");
+
+                ZeroMemory( &si, sizeof(si) );
+                si.cb = sizeof(si);
+                ZeroMemory( &pi, sizeof(pi) );
+
+                /* Use create process rather than spawn in order to break
+                   inheritance of probably broken stuff like fds */
+                if( !CreateProcess( lpExePath,
+                                    args->str,
+                                    NULL,
+                                    NULL,
+                                    FALSE,
+                                    0,
+                                    NULL,
+                                    NULL,
+                                    &si,
+                                    &pi )) {
+
+
+                    printf("Error");
+                    exit(-1);
+
+                }
+
+                CloseHandle(pi.hProcess);
+                CloseHandle(pi.hThread);
+
+                exit(0);
+
+            }
+
 	}
 
 	return TRUE;

@@ -17,7 +17,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
- 
+
 #ifndef DOS9_CORE_RUN_H
 #define DOS9_CORE_RUN_H
 
@@ -47,7 +47,7 @@ int Dos9_RunCommand(ESTR* lpCommand); // the fucbtions that run every command
 int Dos9_RunLine(ESTR* lpLine);
 int Dos9_RunBlock(BLOCKINFO* lpbkInfo); // the function that run blocks
 int Dos9_RunBatch(INPUT_FILE* pIn); // the function that runs the batch
-int Dos9_RunExternalCommand(char* lpCommandLine);
+int Dos9_RunExternalCommand(char* lpCommandLine, int* error);
 int Dos9_RunExternalFile(char* lpFileName, char** lpArguments);
 
 int Dos9_RunExternalBatch(char* lpFileName, char* lpFullLine, char** lpArguments);

@@ -62,8 +62,10 @@ int Dos9_CmdPushd (char *lpLine)
 
         ESTR *lpEsDir;
 
-        if (!Dos9_GetStack(lpStack, &lpEsDir))
-            puts(Dos9_EsToChar(lpEsDir));
+        if (!Dos9_GetStack(lpStack, &lpEsDir)) {
+            fputs(Dos9_EsToChar(lpEsDir), stdout);
+            fputs(DOS9_NL, stdout);
+        }
 
         goto free;
     }

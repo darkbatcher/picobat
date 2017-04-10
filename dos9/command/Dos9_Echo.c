@@ -68,7 +68,7 @@ int Dos9_CmdEcho(char* lpLine)
 	if (ispunct(*lpLine)) {
 
 		Dos9_GetEndOfLine(lpLine+1, lpEsParameter);
-		puts(Dos9_EsToChar(lpEsParameter));
+		fputs(Dos9_EsToChar(lpEsParameter), stdout);
 
 
 	} else if (tmp = Dos9_GetNextParameterEs(lpLine, lpEsParameter)) {
@@ -90,18 +90,19 @@ int Dos9_CmdEcho(char* lpLine)
 		} else {
 
 			Dos9_GetEndOfLine(lpLine+1, lpEsParameter);
-			puts(Dos9_EsToChar(lpEsParameter));
+			fputs(lpEsParameter->str, stdout);
 
 		}
 
 	} else {
 
 		/* si rien n'est entré on affiche l'état de la commannd echo */
-		if (bEchoOn) puts(lpMsgEchoOn);
-		else puts(lpMsgEchoOff);
+		if (bEchoOn) fputs(lpMsgEchoOn, stdout);
+		else fputs(lpMsgEchoOff, stdout);
 
 	}
 
+    fputs(DOS9_NL, stdout);
 
 	Dos9_EsFree(lpEsParameter);
 

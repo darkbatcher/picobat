@@ -77,7 +77,7 @@ void Dos9_PrintIntroduction(void)
 
 	Dos9_SetConsoleTextColor(DOS9_BACKGROUND_IBLUE | DOS9_FOREGROUND_IYELLOW);
 
-	printf("  ______   _______  _______   _____                                            \n\
+	fprintf(stderr, "  ______   _______  _______   _____                                            \n\
  (  __  \\ (  ___  )(  ____ \\ / ___ \\  %s\n\
  | (  \\  )| (   ) || (    \\/( (   ) ) Copyright (c) 2010-" DOS9_BUILDYEAR "                  \n\
  | |   ) || |   | || (_____ ( (___) |    %s\n\

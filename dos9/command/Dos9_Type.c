@@ -172,7 +172,7 @@ int Dos9_CmdType(char* lpLine)
         pTmp = pBegin;
 
         while (pTmp) {
-            fprintf(stderr, "---------- %s\n", pTmp->lpFileName);
+            fprintf(stderr, "---------- %s" DOS9_NL , pTmp->lpFileName);
 
             Dos9_TypeFile(pTmp->lpFileName);
 

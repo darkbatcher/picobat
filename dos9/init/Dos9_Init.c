@@ -71,7 +71,7 @@ void Dos9_AssignCommandLine(char** argv)
 
     }
 
-    Dos9_SetLocalVar(lpvLocalVars, '*', Dos9_EsToChar(lpEsStr));
+    Dos9_SetLocalVar(lpvArguments, '*', Dos9_EsToChar(lpEsStr));
 
     Dos9_EsFree(lpEsStr);
     Dos9_EsFree(lpEsParam);
@@ -98,6 +98,7 @@ void Dos9_InitLibDos9(void)
 
     DOS9_DBG("Allocating local variable block ... \n");
     lpvLocalVars=Dos9_GetLocalBlock();
+    lpvArguments=Dos9_GetLocalBlock();
 
     DOS9_DBG("Initializing console ...\n");
     Dos9_InitConsole();
@@ -163,10 +164,6 @@ int Dos9_InitSetModes(char* str)
                 /* enable cmd-compatible mode */
                 #if !defined(DOS9_STATIC_CMDLYCORRECT)
                 bCmdlyCorrect=TRUE;
-                #else
-                Dos9_ShowErrorMessage(DOS9_UNABLE_SET_OPTION,
-                            "CMDLYCORRECT",
-                            FALSE);
                 #endif
                 break;
 
@@ -183,6 +180,10 @@ int Dos9_InitSetModes(char* str)
 
 void Dos9_InitHelp(void)
 {
+    /* Here it not mandatory to use the DOS9_NL macro to produce OS-independent
+       line terminators, since the stdout file descriptor is bound to be text
+       oriented when this portion of code is to be executed */
+
     puts("DOS9 [" DOS9_VERSION "] (" DOS9_HOST ") - " DOS9_BUILDDATE "\n"
          "Copyright (c) 2010-" DOS9_BUILDYEAR " " DOS9_AUTHORS "\n\n"
          "This is free software, you can modify and/or redistribute it under "
@@ -266,10 +267,10 @@ char* Dos9_GetParameters(char** argv, char** lpFileName, int* bExitAfterCmd, int
 
             if (**lpFileName!='\0') {
 
-                /* set parameters for the file currently runned */
+                /* set parameters for the file currently ran */
                 for (j=i ,  c='1'; argv[j] && c<='9'; i++, c++ , j++ ) {
 
-                    Dos9_SetLocalVar(lpvLocalVars, c, argv[j]);
+                    Dos9_SetLocalVar(lpvArguments, c, argv[j]);
 
                 }
 
@@ -288,7 +289,7 @@ char* Dos9_GetParameters(char** argv, char** lpFileName, int* bExitAfterCmd, int
 
     /* empty remaining special vars */
     for (; c<='9'; c++)
-        Dos9_SetLocalVar(lpvLocalVars, c , "");
+        Dos9_SetLocalVar(lpvArguments, c , "");
 
     return lpCmdCSwitch;
 }
@@ -334,7 +335,6 @@ void Dos9_RunAutoBat(void)
 
     snprintf(system, sizeof(system),"%s/Dos9_Auto.bat", Dos9_GetEnv(lpeEnv, "DOS9_PATH"));
 
-    /* If neither files exist, just don't run any auto configuration file */
     if (!Dos9_FileExists(system))
         return;
 

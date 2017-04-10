@@ -29,7 +29,8 @@ extern const char* lpMsgPause;
 
 extern const char* lpDirNoFileFound;
 extern const char* lpDirListTitle;
-extern const char* lpDirFileDirNb;
+extern const char* lpDirFile;
+extern const char* lpDirDir;
 
 
 extern const char* lpHlpMain;

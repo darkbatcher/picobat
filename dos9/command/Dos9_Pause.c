@@ -53,7 +53,8 @@ int Dos9_CmdPause(char* lpLine)
 		return 0;
 	}
 
-	puts(lpMsgPause);
+	fputs(lpMsgPause, stdout);
+	fputs(DOS9_NL, stdout);
 	Dos9_GetchWait();
 
 	return 0;

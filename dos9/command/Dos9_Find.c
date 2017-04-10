@@ -128,9 +128,9 @@ void Dos9_FileFind(char* str, char* name, int count, int flag, int reverse)
         if (!reverse ^ !res) {
 
             if (count == 1)
-                printf("[%d]%s\n", line, Dos9_EsToChar(lpEsLine));
+                printf("[%d]%s" DOS9_NL, line, Dos9_EsToChar(lpEsLine));
             else if (count == 0)
-                printf("%s\n", Dos9_EsToChar(lpEsLine));
+                printf("%s" DOS9_NL, Dos9_EsToChar(lpEsLine));
 
             i++;
         }
@@ -139,7 +139,7 @@ void Dos9_FileFind(char* str, char* name, int count, int flag, int reverse)
     }
 
     if (count == 2)
-        printf("%d\n", i);
+        printf("%d" DOS9_NL, i);
 
 
 end:

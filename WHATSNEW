@@ -1769,11 +1769,25 @@ SUNDAY 2ND APRIL
 
         - Fixed a compilation error on *NIXes.
 
-WEDNESDAY 5TH MARCH
+WEDNESDAY 5TH, MARCH
 
         - Fixed lots of bugs caused by the new parsing system.
 
         - Fixed some errors of the for and call command.
 
         - Fixed the TYPE to make it capable of handling binary files.
+
+SUNDAY 9TH, MARCH
+
+        - Fixed the expansion system to behave closely like cmd does. (ie. 
+          made two distinct level of special var expansion, one for the 
+          program parameters and one for the other conventionnal special 
+          vars).
+
+        - Changed expansion of special var resulting from a FOR to be executed 
+          before block execution.
+
+        - Added a safe CTRL-c handler on windows.
+
+        - Merged po files for Dos9.
 

@@ -229,8 +229,8 @@ void Dos9_ShowInternalHelp(int cmdId)
 	if ((cmdId >= 0)
 	    && (cmdId < DOS9_HELP_ARRAY_SIZE)) {
 
-		puts(lpInternalHelp[cmdId]);
-		puts(lpExternalMsg);
+		fputs(lpInternalHelp[cmdId], stderr);
+		fputs(lpExternalMsg, stderr);
 
 	}
 

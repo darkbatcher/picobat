@@ -253,7 +253,7 @@ char* libcu8_lf_to_crlf(const char* buf, size_t len, size_t* cvt)
 
     *cvt = len;
 
-    /* compute the number of \n to be converted back to '\n' */
+    /* compute the number of \n to be converted back to '\r\n' */
     while (tmp < end) {
 
         if (*tmp == '\n')

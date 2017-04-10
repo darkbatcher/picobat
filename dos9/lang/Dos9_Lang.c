@@ -38,7 +38,8 @@ const char* lpHlpMain;
 
 const char* lpDirNoFileFound;
 const char* lpDirListTitle;
-const char* lpDirFileDirNb;
+const char* lpDirFile;
+const char* lpDirDir;
 
 const char* lpHlpDeprecated;
 
@@ -103,9 +104,10 @@ void Dos9_LoadStrings(void)
 	lpMsgPause=gettext("Press any key to continue...");
 
 	/* texte de la commande DIR */
-	lpDirNoFileFound=gettext("\tNo files found\n");
-	lpDirListTitle=gettext("\nLast change\t\tSize\tAttr.\tName\n");
-	lpDirFileDirNb=gettext("\t\t\t\t\t\t%d Files\n\t\t\t\t\t\t%d Folders\n");
+	lpDirNoFileFound=gettext("\tNo files found");
+	lpDirListTitle=gettext("Last change\t\tSize\tAttr.\tName");
+	lpDirFile=gettext("Files");
+	lpDirDir=gettext("Folders");
 
 	lpDelConfirm=gettext("Are you sure you want to delete file \"%s\" ?");
 	lpRmdirConfirm=gettext("Are you sure you want to remove \"%s\" directory ?");

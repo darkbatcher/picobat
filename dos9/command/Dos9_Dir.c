@@ -94,7 +94,7 @@ void Dos9_CmdDirShow(FILELIST* lpElement)
 
 			lTime=localtime(&Dos9_GetModifTime(lpElement));
 
-			printf("%02d/%02d/%02d %02d:%02d %s\t%s\t%s\n", lTime->tm_mday,
+			printf("%02d/%02d/%02d %02d:%02d %s\t%s\t%s" DOS9_NL, lTime->tm_mday,
                                                             lTime->tm_mon+1,
                                                             1900+lTime->tm_year,
                                                             lTime->tm_hour,
@@ -106,7 +106,7 @@ void Dos9_CmdDirShow(FILELIST* lpElement)
 
 		} else {
 
-			printf("%s\n", lpElement->lpFileName);
+			printf("%s" DOS9_NL, lpElement->lpFileName);
 
 		}
 	}
@@ -182,16 +182,24 @@ int Dos9_CmdDir(char* lpLine)
 	iDirNb=0;
 	iFileNb=0;
 
-	if (!bSimple)
-        puts(lpDirListTitle);
+	if (!bSimple) {
+        fputs(DOS9_NL, stdout);
+        fputs(lpDirListTitle, stdout);
+        fputs(DOS9_NL, stdout);
+	}
 
 	/* Get a list of file and directories matching to the
 	   current filename and options set */
 	if (!(Dos9_GetMatchFileCallback(lpFileName, iFlag, Dos9_CmdDirShow))
-	    && !bSimple)
-		puts(lpDirNoFileFound);
+	    && !bSimple) {
+		fputs(lpDirNoFileFound, stdout);
+        fputs(DOS9_NL, stdout);
+	}
 
-	if (!bSimple) printf(lpDirFileDirNb, iFileNb, iDirNb);
+	if (!bSimple) {
+        printf("\t\t\t\t%d%s" DOS9_NL "\t\t\t\t%d %s" DOS9_NL,
+                                iFileNb, lpDirFile, iDirNb, lpDirDir);
+	}
 
 	Dos9_EsFree(lpParam);
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dos9 0.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-30 22:55+0100\n"
+"POT-Creation-Date: 2017-04-10 15:42+0200\n"
 "PO-Revision-Date: 2013-12-14 20:24+0100\n"
 "Last-Translator: DarkBatcher <darkbatcher@gmail.com>\n"
 "Language-Team: French <darkbatcher@gmail.com>\n"
@@ -19,113 +19,109 @@ msgstr ""
 "X-Generator: Poedit 1.5.7\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-#: ../dos9/lang/Dos9_Lang.c:101
+#: ../dos9/lang/Dos9_Lang.c:102
 msgid "Echo command enabled"
 msgstr "Commande echo activée"
 
-#: ../dos9/lang/Dos9_Lang.c:102
+#: ../dos9/lang/Dos9_Lang.c:103
 msgid "Echo command disabled"
 msgstr "Commande echo désactivée"
 
-#: ../dos9/lang/Dos9_Lang.c:103
+#: ../dos9/lang/Dos9_Lang.c:104
 msgid "Press any key to continue..."
 msgstr "Appuyez sur une touche pour continuer..."
 
-#: ../dos9/lang/Dos9_Lang.c:106
-msgid "\tNo files found\n"
-msgstr "\tAucun fichier trouvé\n"
-
 #: ../dos9/lang/Dos9_Lang.c:107
-msgid ""
-"\n"
-"Last change\t\tSize\tAttr.\tName\n"
-msgstr ""
-"\n"
-"Dernière modif.\t\t Taille\t Attr.\tNom\n"
+msgid "\tNo files found"
+msgstr "\tAucun fichier trouvé"
 
 #: ../dos9/lang/Dos9_Lang.c:108
-#, c-format
-msgid ""
-"\t\t\t\t\t\t%d Files\n"
-"\t\t\t\t\t\t%d Folders\n"
+msgid "Last change\t\tSize\tAttr.\tName"
 msgstr ""
-"\t\t\t\t\t\t%d Fichiers\n"
-"\t\t\t\t\t\t%d Dossiers\n"
+"Dernière modif.\t\t Taille\t Attr.\tNom"
+
+#: ../dos9/lang/Dos9_Lang.c:109
+msgid "Files"
+msgstr "Fichiers"
 
 #: ../dos9/lang/Dos9_Lang.c:110
+msgid "Folders"
+msgstr "Dossiers"
+
+#: ../dos9/lang/Dos9_Lang.c:112
 #, c-format
 msgid "Are you sure you want to delete file \"%s\" ?"
 msgstr "Êtes-vous sûr  de vouloir supprimer le fichier \"%s\" ?"
 
-#: ../dos9/lang/Dos9_Lang.c:111
+#: ../dos9/lang/Dos9_Lang.c:113
 #, c-format
 msgid "Are you sure you want to remove \"%s\" directory ?"
 msgstr "Êtes-vous sûr  de vouloir supprimer le dossier \"%s\" ?"
 
-#: ../dos9/lang/Dos9_Lang.c:113
+#: ../dos9/lang/Dos9_Lang.c:115
 #, c-format
 msgid "File \"%s\" already exists, replace it by \"%s\" ?"
 msgstr "Le fichier \"%s\" existe déjà, voulez vous le remplacer par \"%s\" ?"
 
-#: ../dos9/lang/Dos9_Lang.c:115
+#: ../dos9/lang/Dos9_Lang.c:117
 msgid " (Yes/no) "
 msgstr " (Oui/non) "
 
-#: ../dos9/lang/Dos9_Lang.c:116
+#: ../dos9/lang/Dos9_Lang.c:118
 msgid " (yes/No) "
 msgstr " (oui/Non)"
 
-#: ../dos9/lang/Dos9_Lang.c:117
+#: ../dos9/lang/Dos9_Lang.c:119
 msgid " (yes/no) "
 msgstr " (oui/non) "
 
-#: ../dos9/lang/Dos9_Lang.c:119
+#: ../dos9/lang/Dos9_Lang.c:121
 msgid " (Yes/no/all) "
 msgstr " (Oui/non/tous) "
 
-#: ../dos9/lang/Dos9_Lang.c:120
+#: ../dos9/lang/Dos9_Lang.c:122
 msgid " (yes/No/all) "
 msgstr " (oui/Non/tous) "
 
-#: ../dos9/lang/Dos9_Lang.c:121
+#: ../dos9/lang/Dos9_Lang.c:123
 msgid " (yes/no/All) "
 msgstr " (oui/non/Tous) "
 
-#: ../dos9/lang/Dos9_Lang.c:122
+#: ../dos9/lang/Dos9_Lang.c:124
 msgid " (yes/no/all) "
 msgstr " (oui/non/tous) "
 
-#: ../dos9/lang/Dos9_Lang.c:124
+#: ../dos9/lang/Dos9_Lang.c:126
 msgid "YES"
 msgstr "OUI"
 
-#: ../dos9/lang/Dos9_Lang.c:125
+#: ../dos9/lang/Dos9_Lang.c:127
 msgid "Y"
 msgstr "O"
 
-#: ../dos9/lang/Dos9_Lang.c:127
+#: ../dos9/lang/Dos9_Lang.c:129
 msgid "NO"
 msgstr "NON"
 
-#: ../dos9/lang/Dos9_Lang.c:128
+#: ../dos9/lang/Dos9_Lang.c:130
 msgid "N"
 msgstr "N"
 
-#: ../dos9/lang/Dos9_Lang.c:130
+#: ../dos9/lang/Dos9_Lang.c:132
 msgid "ALL"
 msgstr "TOUS"
 
-#: ../dos9/lang/Dos9_Lang.c:131
+#: ../dos9/lang/Dos9_Lang.c:133
 msgid "A"
 msgstr "T"
 
-#: ../dos9/lang/Dos9_Lang.c:133
+#: ../dos9/lang/Dos9_Lang.c:135
 msgid "Please enter a correct choice (or type enter to choose default) !\n"
 msgstr ""
 "Merci d'entrer un choix correct (ou appuyez sur entrée pour le choix par "
 "défaut) ! \n"
 
-#: ../dos9/lang/Dos9_Lang.c:135
+#: ../dos9/lang/Dos9_Lang.c:137
 msgid ""
 "Usage:\tDOS9 [/A[:]attr] [/I in] [/O out] [file] [/K cmd|/C cmd]\n"
 "\n"
@@ -154,3 +150,4 @@ msgstr ""
 "\tfichier\tFichier batch à exécuter.\n"
 "\t/C cmd\tExécute une commande et se termine.\n"
 "\t/K cmd\tExécute une commande et reste actif.\n"
+

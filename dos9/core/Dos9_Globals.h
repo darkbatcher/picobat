@@ -40,10 +40,13 @@ extern int bCmdlyCorrect;
 #define bCmdlyCorrect DOS9_STATIC_CMDLYCORRECT
 #endif
 
+extern int iMainThreadId;
+
 extern int bEchoOn;
 extern int iErrorLevel;
 extern LPCOMMANDLIST lpclCommands;
 extern LOCAL_VAR_BLOCK* lpvLocalVars;
+extern LOCAL_VAR_BLOCK* lpvArguments;
 extern LPSTREAMSTACK lppsStreamStack;
 extern COLOR colColor;
 extern INPUT_FILE ifIn;

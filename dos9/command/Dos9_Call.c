@@ -226,8 +226,10 @@ error:
 int Dos9_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 {
 	INPUT_FILE ifOldFile;
-	LOCAL_VAR_BLOCK lpvOldBlock[LOCAL_VAR_BLOCK_SIZE];
+	LOCAL_VAR_BLOCK* lpvOldBlock;
 	LOCAL_VAR_BLOCK lpvTmpBlock[LOCAL_VAR_BLOCK_SIZE]={NULL};
+	LOCAL_VAR_BLOCK* lpvOldArgs;
+	LOCAL_VAR_BLOCK lpvTmpArgs[LOCAL_VAR_BLOCK_SIZE]={NULL};
 	char lpAbsPath[FILENAME_MAX];
 
 	ESTR *lpEsParam=Dos9_EsInit();
@@ -258,7 +260,7 @@ int Dos9_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 		         lpAbsPath
 		        );               /* sets input to given file */
 
-		Dos9_SetLocalVar(lpvTmpBlock, '0', lpFile);
+		Dos9_SetLocalVar(lpvTmpArgs, '0', lpFile);
 
 	} else if (Dos9_JumpToLabel(lpLabel, lpFile)== -1) {
 
@@ -267,40 +269,38 @@ int Dos9_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 
 	} else {
 
-		Dos9_SetLocalVar(lpvTmpBlock, '0', lpLabel);
+		Dos9_SetLocalVar(lpvTmpArgs, '0', lpLabel);
 
 	}
 
     /* set the %* parameter */
-    Dos9_SetLocalVar(lpvTmpBlock, '*', Dos9_SkipBlanks(lpCmdLine));
+    Dos9_SetLocalVar(lpvTmpArgs, '*', Dos9_SkipBlanks(lpCmdLine));
 
     /* Set scripts arguments */
 	while ((lpCmdLine=Dos9_GetNextParameterEs(lpCmdLine, lpEsParam))
 	       && (c <= '9')) {
 
-		Dos9_SetLocalVar(lpvTmpBlock, c, Dos9_EsToChar(lpEsParam));
+		Dos9_SetLocalVar(lpvTmpArgs, c, Dos9_EsToChar(lpEsParam));
 
 		c++;
 
 	}
 
 	while (c <= '9')
-        Dos9_SetLocalVar(lpvTmpBlock, c++, "");
+        Dos9_SetLocalVar(lpvTmpArgs, c++, "");
 
 
 
 	/* Backup the old variables data in order to be able to push old data
 	   again on local variables. */
 
-	memcpy(lpvOldBlock,
-	       lpvLocalVars,
-	       LOCAL_VAR_BLOCK_SIZE *sizeof(LOCAL_VAR_BLOCK));
+    lpvOldBlock = lpvLocalVars;
+    lpvOldArgs = lpvArguments;
 
 	/* Use the block created as the new variables block. */
 
-	memcpy(lpvLocalVars,
-	       lpvTmpBlock,
-	       LOCAL_VAR_BLOCK_SIZE *sizeof(LOCAL_VAR_BLOCK));
+    lpvLocalVars = lpvTmpBlock;
+    lpvArguments = lpvTmpArgs;
 
 	/* lock the stream stack */
 
@@ -324,14 +324,22 @@ int Dos9_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 
 	for (c=0; c < LOCAL_VAR_BLOCK_SIZE; c++) {
 
-        if (Dos9_IsLocalVarValid(c))
+        if (Dos9_IsLocalVarValid(c)) {
+            /* This is really important to prevent any kind of memory
+               leakage */
+
             Dos9_SetLocalVar(lpvLocalVars, c, NULL);
+            Dos9_SetLocalVar(lpvArguments, c, NULL);
+        }
 	}
 
 	/* restore old settings before resuming to the old section */
 
 	memcpy(&ifIn, &ifOldFile, sizeof(INPUT_FILE));
-	memcpy(lpvLocalVars, lpvOldBlock, LOCAL_VAR_BLOCK_SIZE*sizeof(LOCAL_VAR_BLOCK));
+
+	lpvLocalVars = lpvOldBlock;
+	lpvArguments = lpvOldArgs;
+
 	Dos9_EsFree(lpEsParam);
 
 	return 0;
@@ -356,6 +364,7 @@ int Dos9_CmdCallExternal(char* lpFile, char* lpCh)
 	Dos9_EsCat(lpEsLine, " ");
 	Dos9_EsCat(lpEsLine, lpCh);
 
+    /* Offer a free new expansion turn  */
 	Dos9_ReplaceVars(lpEsLine);
 
 	bkInfo.lpBegin=Dos9_EsToChar(lpEsLine);
