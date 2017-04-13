@@ -28,7 +28,7 @@
 
 #include <libDos9.h>
 
-#ifdef WIN32
+#if defined(WIN32) && defined(DOS9_USE_LIBCU8)
 #include <libcu8.h>
 #endif
 

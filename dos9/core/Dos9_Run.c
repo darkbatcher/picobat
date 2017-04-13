@@ -17,6 +17,10 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#ifndef WIN32
+#define _XOPEN_SOURCE
+#endif
+
 #include <string.h>
 #include <errno.h>
 #include <assert.h>
@@ -25,8 +29,8 @@
 #include <sys/types.h>
 
 #ifndef WIN32
-#include <unistd.h>
 #include <sys/wait.h>
+#include <unistd.h>
 #endif
 
 #include "Dos9_Core.h"
