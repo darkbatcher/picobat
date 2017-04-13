@@ -17,14 +17,15 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include <sys/types.h>
 #include <string.h>
 #include <errno.h>
 #include <assert.h>
 #include <setjmp.h>
 #include <signal.h>
+#include <sys/types.h>
 
 #ifndef WIN32
+#include <unistd.h>
 #include <sys/wait.h>
 #endif
 
@@ -312,7 +313,7 @@ loop:
                                     -1);
 
         Dos9_SetFdInheritance(pipedes[0], 0);
-        Dos9_SetFdInheritance(pidedes[1], 0);
+        Dos9_SetFdInheritance(pipedes[1], 0);
 
         pid = fork();
 

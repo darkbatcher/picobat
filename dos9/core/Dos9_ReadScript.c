@@ -22,8 +22,15 @@
 #include <string.h>
 #include <wchar.h>
 
+#ifndef WIN32
+#include <sys/stat.h>
+#endif
+
 #include <libDos9.h>
+
+#ifdef WIN32
 #include <libcu8.h>
+#endif
 
 #include "Dos9_Core.h"
 #include "../errors/Dos9_Errors.h"
@@ -111,6 +118,13 @@ __inline__ size_t Dos9_GetScriptSize(struct batch_script_t* script, int* restric
 #else
 __inline__ size_t Dos9_GetScriptSize(struct batch_script_t* script, int* restrict err)
 {
+    struct stat st;
+
+    if (stat(script->name, &st) == 0)
+        return st.st_size;
+
+    *err = 1;
+    return 0;
 }
 #endif
 
@@ -124,7 +138,10 @@ int Dos9_LoadBatchScript(struct batch_script_t* script)
     struct labels_t* newlbl, *last=NULL;
     int eof=0, nb=0, checkres=0;
     char *pch;
+
+    #ifdef WIN32
     HANDLE h;
+    #endif
 
     /* Initialize all fields that will be used for parsing */
     script->curr = NULL;
