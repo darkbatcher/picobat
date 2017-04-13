@@ -202,6 +202,8 @@ int Dos9_GetLine_Cmdly(ESTR* lpesLine, INPUT_FILE* pIn)
 
 	Dos9_EsFree(lpesTmp);
 
+	Dos9_RmTrailingNl(lpesLine->str);
+
 	return 0;
 
 error:

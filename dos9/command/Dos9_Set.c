@@ -192,7 +192,7 @@ int Dos9_CmdSet(char *lpLine)
 			Dos9_ShowInternalHelp(DOS9_HELP_SET);
 			goto error;
 
-		} else if (!strnicmp(lpArg,"/a", 2)) {
+		} else if (!strnicmp(lpArg, "/a", 2)) {
 
 			lpArg+=2;
 
