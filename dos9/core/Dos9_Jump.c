@@ -36,6 +36,14 @@ int Dos9_JumpToLabel(char* lpLabelName, char* lpFileName)
     size_t size = strlen(lpLabelName);
     int new;
 
+    /* If neither label nor filename are given or if interactive more */
+    if ((lpLabelName == NULL && lpFileName == NULL)
+        || (*(ifIn.lpFileName) == '\0' && lpFileName == NULL))
+        return -1;
+
+    if (bCmdlyCorrect)
+        return Dos9_JumpToLabel_Cmdly(lpLabelName, lpFileName);
+
 	if (lpFileName && stricmp(ifIn.batch.name, lpFileName)) {
 
         if (Dos9_OpenBatchScript(&script, lpFileName)) {
@@ -47,6 +55,10 @@ int Dos9_JumpToLabel(char* lpLabelName, char* lpFileName)
         lbl = script.lbls;
         new = 1;
 
+        if (lpLabelName == NULL)
+            return 0;
+
+
 	} else {
 
         lbl = ifIn.batch.lbls;
@@ -54,8 +66,7 @@ int Dos9_JumpToLabel(char* lpLabelName, char* lpFileName)
 
 	}
 
-    while (lbl && (strnicmp(lbl->label->str, lpLabelName, size)
-                        && !Dos9_IsDelim(*(lbl->label->str + size))))
+    while (lbl && (stricmp(lbl->label, lpLabelName)))
         lbl = lbl->next;
 
     if (lbl == NULL) {
@@ -71,6 +82,7 @@ int Dos9_JumpToLabel(char* lpLabelName, char* lpFileName)
         /* Set the new file as the new file */
         Dos9_FreeBatchScript(&(ifIn.batch));
         memcpy(&(ifIn.batch), &script, sizeof(struct batch_script_t));
+        memcpy(ifIn.lpFileName, ifIn.batch.name, sizeof(ifIn.lpFileName));
 
     }
 
@@ -78,4 +90,91 @@ int Dos9_JumpToLabel(char* lpLabelName, char* lpFileName)
     ifIn.batch.curr = lbl->following ? lbl->following->next : ifIn.batch.cmds;
 	return 0;
 }
+
+int Dos9_JumpToLabel_Cmdly(char* lpLabelName, char* lpFileName)
+{
+	size_t iSize=strlen(lpLabelName);
+	char* lpName=lpFileName;
+	FILE* pFile;
+	ESTR* lpLine=Dos9_EsInit();
+
+
+	if ((lpFileName==NULL)) {
+		lpName=ifIn.lpFileName;
+	}
+
+    if (iSize == 1) {
+        return -1;
+    }
+
+	if (!(pFile=fopen(lpName, "r"))) {
+		Dos9_EsFree(lpLine);
+
+		DEBUG("unable to open file : %s");
+		DEBUG(strerror(errno));
+
+		return -1;
+	}
+
+    /* Libcu8 kind of perturbate the C lib because libcu8 does not
+       perform byte to byte conversion, misleading file telling
+       positions ... */
+#if defined(WIN32) && defined(DOS9_USE_LIBCU8)
+        setvbuf(pFile, NULL, _IONBF, 0);
+#endif
+
+	while (!Dos9_EsGet(lpLine, pFile)) {
+
+		if (!strnicmp(Dos9_SkipBlanks(lpLine->str), lpLabelName, iSize)) {
+
+			if (lpFileName) {
+
+				/* at that time, we can assume that lpFileName is not
+				   the void string, because the void string is not usually
+				   a valid file name */
+				if (*lpFileName=='/'
+				    || !strncmp(":/", lpFileName+1, 2)
+				    || !strncmp(":\\", lpFileName+1, 2)) {
+
+					/* the path is absolute */
+					strncpy(ifIn.lpFileName, lpFileName, sizeof(ifIn.lpFileName));
+					ifIn.lpFileName[FILENAME_MAX-1]='\0';
+
+				} else {
+
+					/* the path is relative */
+					snprintf(ifIn.lpFileName,
+					         sizeof(ifIn.lpFileName),
+					         "%s/%s",
+					         Dos9_GetCurrentDir(),
+					         lpFileName
+					        );
+
+				}
+
+			}
+
+			ifIn.iPos=ftell(pFile);
+			ifIn.bEof=feof(pFile);
+
+
+			DEBUG("Freeing data");
+
+			fclose(pFile);
+			Dos9_EsFree(lpLine);
+
+			DEBUG("Jump created with success");
+
+			return 0;
+		}
+	}
+
+	fclose(pFile);
+	Dos9_EsFree(lpLine);
+
+	DEBUG("Unable to find label");
+
+	return -1;
+}
+
 

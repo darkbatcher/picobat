@@ -45,87 +45,74 @@
 
 int Dos9_CmdGoto(char* lpLine)
 {
-	char lpLabelName[FILENAME_MAX];
-	char lpFileName[FILENAME_MAX];
-	char* lpFile=NULL;
-	int bEchoError=TRUE;
+    char lpLabelName[FILENAME_MAX] = "";
+    char lpFileName[FILENAME_MAX] = "";
+    char *next, *pch;
+    ESTR* arg = Dos9_EsInit();
+    int quiet = 0;
 
-	lpLine+=4;
-	*lpLine=':';
+    lpLine+=4;
 
-	if (*(lpLine+1)==':')
-		lpLine++;
+    while (next = Dos9_GetNextParameterEs(lpLine, arg)) {
 
-	if ((lpLine=Dos9_GetNextParameter(lpLine, lpLabelName, FILENAME_MAX))) {
+        if (!strcmp(arg->str, "/?")) {
 
-		if (!strcmp(lpLabelName, ":/?")) {
+            Dos9_ShowInternalHelp(DOS9_HELP_GOTO);
+            goto err;
 
-			Dos9_ShowInternalHelp(DOS9_HELP_GOTO);
-			return 0;
+        } else if (!bCmdlyCorrect && !stricmp(arg->str, "/Q")) {
 
-		}
+            quiet = 1;
 
-		if ((lpLine=Dos9_GetNextParameter(lpLine ,lpFileName, FILENAME_MAX))) {
-
-			if (!stricmp(lpFileName, "/Q")) {
-
-				/* on a choisi de rendre l'erreux muette */
-				bEchoError=FALSE;
-
-				if (!(Dos9_GetNextParameter(lpLine, lpFileName, FILENAME_MAX)))
-					goto next;
-
-			}
-
-			if (bCmdlyCorrect) {
-
-				/* if the user has set the CMDLYCORRECT flag, the capabilities of
-				   calling another file's label is prohibited */
-
-				Dos9_ShowErrorMessage(DOS9_EXTENSION_DISABLED_ERROR, NULL, FALSE);
-
-				return -1;
-
-			} else {
-
-				lpFile=lpFileName;
-
-			}
-
-		}
-
-	next:
-
-		/* Now we have a valid label name, thus  we are about to find a label in the specified file */
-		/* if we do have a valid file name, the search will be made in specified file */
-		DOS9_DBG("Jump to Label \"%s\" in \"%s\"", lpLabelName, lpFile);
-
-		if (!stricmp(lpLabelName,  ":EOF")) {
-
-			/* do not even look for ``:EOF'', just
-			   abort the command */
-
-			bAbortCommand=-1;
-
-			return 0;
-
-		} else if (Dos9_JumpToLabel(lpLabelName, lpFile)==-1) {
-
-			if (bEchoError)
-				Dos9_ShowErrorMessage(DOS9_LABEL_ERROR, lpLabelName, FALSE);
-
-			return -1;
-
-		}
-
-	}
+        } else if (!bCmdlyCorrect && !strnicmp(arg->str, "/F", 2)) {
 
 
-	/* let's set this global variable to let the other functions
-	   know that they should reload an entire line */
-	bAbortCommand=TRUE;
+            pch = arg->str + 2;
 
+            if (*pch == ':')
+                pch ++;
 
-	return 0;
+            strncpy(lpFileName, pch, sizeof(lpFileName));
+            lpFileName[sizeof(lpFileName)-1] = '\0';
+
+        } else {
+
+            break;
+
+        }
+
+        lpLine = next;
+
+    }
+
+    lpLine = Dos9_SkipBlanks(lpLine);
+    Dos9_StripEndDelims(lpLine);
+
+    Dos9_GetEndOfLine(lpLine, arg);
+
+    switch (*lpLine) {
+
+    case ':':
+        snprintf(lpLabelName, sizeof(lpLabelName), "%s", arg->str);
+        break;
+
+    default:
+        snprintf(lpLabelName, sizeof(lpLabelName), ":%s", arg->str);
+
+    }
+
+    if ((Dos9_JumpToLabel(lpLabelName, *lpFileName ? lpFileName : NULL) == -1)
+        && !quiet) {
+
+        Dos9_ShowErrorMessage(DOS9_LABEL_ERROR, lpLabelName, 0);
+        goto err;
+
+    }
+
+    Dos9_EsFree(arg);
+    return 0;
+
+err:
+    Dos9_EsFree(arg);
+    return -1;
 }
-

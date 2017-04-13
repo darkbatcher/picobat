@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dos9 0.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-11 15:19+0200\n"
+"POT-Creation-Date: 2017-04-13 17:50+0200\n"
 "PO-Revision-Date: 2014-03-12 16:18+0100\n"
 "Last-Translator: DarkBatcher <darkbatcher@gmail.com>\n"
 "Language-Team: French <darkbatcher@dos9.org>\n"
@@ -322,10 +322,16 @@ msgstr ""
 
 #: ../dos9/errors/Dos9_Errors.c:258
 msgid "Error : Unable to access Dos9 main thread to perform break.\n"
-msgstr "Erreur : Impossible d'accéder au thread principal de Dos9 pour"
-"exécuter break.\n"
+msgstr ""
+"Erreur : Impossible d'accéder au thread principal de Dos9 pourexécuter "
+"break.\n"
 
 #: ../dos9/errors/Dos9_Errors.c:261
+#, c-format
+msgid "Error : Invalid label encountered within a block (at line %d).\n"
+msgstr ""
+
+#: ../dos9/errors/Dos9_Errors.c:264
 msgid ""
 "\n"
 "Aborting current command, press any key to end Dos9.\n"

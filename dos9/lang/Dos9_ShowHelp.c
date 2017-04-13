@@ -39,7 +39,7 @@ static const char* lpExternalMsg;
 void Dos9_LoadInternalHelp(void)
 {
 	char lpPath[FILENAME_MAX];
-	char lpEncoding[15];
+	char lpEncoding[15]="ASCII";
 	char lpSharePath[FILENAME_MAX];
 
 #ifdef WIN32
@@ -56,15 +56,13 @@ void Dos9_LoadInternalHelp(void)
     snprintf(lpSharePath, FILENAME_MAX, DATA_PATH "/locale");
 #endif // WIN32
 
-	snprintf(lpSharePath, FILENAME_MAX, "%s/share/locale", lpPath);
-
 	bindtextdomain("Dos9-hlp", lpSharePath);
-#if !(defined(WIN32) && defined(DOS9_USE_LIBCU8))
+#if defined(WIN32) && !defined(DOS9_USE_LIBCU8)
     /* This is not useful at all, libcu8 is able to convert utf-8 by
        itself */
 	bind_textdomain_codeset("Dos9-hlp", lpEncoding);
 #elif defined(DOS9_USE_LIBCU8)
-    bind_textdomain_codeset("Dos9-msg", "UTF8");
+    bind_textdomain_codeset("Dos9-hlp", "UTF8");
 #endif
 	textdomain("Dos9-hlp");
 
@@ -123,7 +121,7 @@ void Dos9_LoadInternalHelp(void)
 
 	lpInternalHelp[DOS9_HELP_GOTO]
 	    =gettext("Go to a label in a command script.\n"
-	             "Usage: GOTO [:]label [file]\n");
+	             "Usage: GOTO [/Q] [/F[:]file] [:]label\n");
 
 	lpInternalHelp[DOS9_HELP_IF]
 	    =gettext("Perform commands on some conditions.\n"

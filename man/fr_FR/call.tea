@@ -35,7 +35,9 @@ ${CALL [/e] [ficher] [:label] [paramètres ...]}
 
 		- {:label} : Une étiquette spécifie où le fichier de commande doit être démaré. Si
 		ni {fichier} ni {/e} n'est spécifié, alors la commande cherchera dans le fichier
-		courant.
+		courant. L'utilisation des deux points est obligatoire, et si l'étiquette contient
+		un espace ou un délimiteur, il faut la placer entre guillements, contrairement à
+		la commande {goto|GOTO}.
 
 		- {/e} : Spécifie que les deux paramètres {fichier} et {:label} sont spécifiés.
 		Ce commutateur permet de lever les ambiguitées entre la nature des paramètres. Par défaut,

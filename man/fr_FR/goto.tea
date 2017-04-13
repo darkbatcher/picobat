@@ -28,13 +28,13 @@
 
 {{Synopsis}}
 
-${GOTO [:]étiquette [fichier] [/Q]}
+${GOTO [/f[:]fichier] [/Q] [:]étiquette }
 
 	Effectue un saut.
 
         - {étiquette} : étiquette à laquelle l'exécution se poursuivra.
 
-        - {fichier} : fichier de commande dans lequel on doit trouver
+        - {/f[:]fichier} : fichier de commande dans lequel on doit trouver
           {étiquette}, nécessite le mode spécial Dos9 (voir
           {spec/new|Nouvelles fonctions de Dos9}).
 
@@ -49,6 +49,13 @@ ${GOTO [:]étiquette [fichier] [/Q]}
 	de niveau supérieur, soit depuis une commande ({for|FOR} ou {if|IF}), alors l'éxécution
 	du bloc est intérompue et l'exécution reprend après l'étiquette spécifiée. Dans le cas d'une boucle
 	{for|FOR}, l'exécution de la boucle est interrompue.
+	
+	La commande {GOTO} supporte l'utilisation d'{étiquettes} comportant des espaces 
+	sans l'utilisation de guillemets ni de caractères d'échappement, il est primordial
+	de placer les éventuels paramètres {/F} et {/Q} en amont du label.
+	
+	Si l'option {CmdlyCorrect} est activé, les paramètres {/F} et {/Q} seront
+	considérés comme faisant partie de l'étiquette.
 
 {{Construction d'une structure switch/case}}
 

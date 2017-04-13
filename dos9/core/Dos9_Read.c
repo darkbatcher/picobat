@@ -37,7 +37,6 @@ int Dos9_GetLine(ESTR* lpesLine, INPUT_FILE* pIn)
 
     if (*(pIn->batch.name) == '\0') {
 
-        printf("Loading batch script (first time)...\n");
         /* Load the file if it is not loaded yet */
         if (Dos9_OpenBatchScript(&(pIn->batch), pIn->lpFileName)) {
 
@@ -52,8 +51,6 @@ int Dos9_GetLine(ESTR* lpesLine, INPUT_FILE* pIn)
     } else if (strcmp(pIn->lpFileName, pIn->batch.name)) {
 
         /* The file has changed */
-        printf("Reloading batch script (change in file) [%s|%s]...\n", pIn->lpFileName,  pIn->batch.name);
-
         Dos9_FreeBatchScript(&(pIn->batch));
 
         if (Dos9_OpenBatchScript(&(pIn->batch), pIn->lpFileName)) {
@@ -67,8 +64,6 @@ int Dos9_GetLine(ESTR* lpesLine, INPUT_FILE* pIn)
         }
 
     } else if (Dos9_CheckBatchScriptChanges(&(pIn->batch))) {
-
-        printf("Reloading batch script (change in size)...\n");
 
         /* Reload it if it has been modified */
         if (Dos9_ReloadBatchScript(&(pIn->batch))) {
@@ -94,7 +89,7 @@ int Dos9_GetLine(ESTR* lpesLine, INPUT_FILE* pIn)
     }
 
     /* Get the next line */
-    Dos9_EsCpyE(lpesLine, pIn->batch.curr->line);
+    Dos9_EsCpy(lpesLine, pIn->batch.curr->line);
 
     pIn->batch.curr = pIn->batch.curr-> next;
 

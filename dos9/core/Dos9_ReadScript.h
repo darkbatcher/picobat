@@ -45,12 +45,12 @@
  */
 
 struct cmdlines_t {
-    ESTR* line; /* the line to be parsed */
+    char* line; /* the line to be parsed */
     struct cmdlines_t* next; /* pointer to next line */
 };
 
 struct labels_t {
-    ESTR* label; /* name of the label */
+    char* label; /* name of the label */
     struct cmdlines_t* following; /* line preceding the label */
     struct labels_t* next; /* next label */
 };

@@ -410,3 +410,21 @@ LIBDOS9 char* Dos9_SearchToken_Hybrid(const char* pch, const char* delims, const
 
     }
 }
+
+LIBDOS9 void Dos9_StripEndDelims(char* str)
+{
+    char* last = NULL;
+
+    while (*str) {
+
+        if (!Dos9_IsDelim(*str))
+            last = NULL;
+        else if (last == NULL)
+            last = str;
+
+        str++;
+    }
+
+    if (last)
+        *last = '\0';
+}

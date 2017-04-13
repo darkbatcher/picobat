@@ -28,6 +28,8 @@
 
 #include <libDos9.h>
 
+#include "../../config.h"
+
 #if defined(WIN32) && defined(DOS9_USE_LIBCU8)
 #include <libcu8.h>
 #endif
@@ -62,7 +64,7 @@ void Dos9_DumpBatchScript(struct batch_script_t* script)
     while (lbl) {
 
         fprintf(stderr, "<tr><td><div id=\"%p\">%p</div></td><td><pre>%s</pre></td><td><a href=\"#%p\">%p</a></td><td><a href=\"#%p\">%p</a></td></tr>\n",
-                        lbl, lbl, lbl->label->str, lbl->following,lbl->following, lbl->next, lbl->next);
+                        lbl, lbl, lbl->label, lbl->following,lbl->following, lbl->next, lbl->next);
 
         lbl = lbl->next;
 
@@ -74,7 +76,7 @@ void Dos9_DumpBatchScript(struct batch_script_t* script)
     while (cmd) {
 
         fprintf(stderr, "<tr><td><a href=\"#%p\">%p</a></td><td><pre>%s</pre></td><td><a href=\"#%p\">%p</a></td></tr>\n",
-                        cmd, cmd, cmd->line->str, cmd->next, cmd->next);
+                        cmd, cmd, cmd->line, cmd->next, cmd->next);
         cmd = cmd->next;
 
     }
@@ -128,6 +130,18 @@ __inline__ size_t Dos9_GetScriptSize(struct batch_script_t* script, int* restric
 }
 #endif
 
+__inline__ char* xstrdup(const char* str)
+{
+    char* new;
+
+    if ((new = strdup(str)) == NULL)
+        Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION | DOS9_PRINT_C_ERROR,
+                                    __FILE__ "/xstrdup",
+                                        -1);
+
+    return new;
+}
+
 /* reload a batch script */
 int Dos9_LoadBatchScript(struct batch_script_t* script)
 {
@@ -163,14 +177,13 @@ int Dos9_LoadBatchScript(struct batch_script_t* script)
     while (!eof && !(eof=Dos9_EsGet(line, file))) {
 
         pch = Dos9_SkipBlanks(line->str);
+        Dos9_StripEndDelims(pch);
 
         nb ++; /* increment line number */
 
         if (*pch == ':') {
 
-            pch ++;
-
-            if (*pch == ':')
+            if (*(pch+1) == ':')
                 continue; /* This line is a comment get rid of it*/
 
             /* This line is a label */
@@ -222,9 +235,7 @@ int Dos9_LoadBatchScript(struct batch_script_t* script)
                 newlbl->following = script->curr;
 
                 Dos9_RmTrailingNl(line->str);
-                newlbl->label = line;
-
-                line = Dos9_EsInit();
+                newlbl->label = xstrdup(pch);
 
                 continue;
             }
@@ -244,7 +255,7 @@ int Dos9_LoadBatchScript(struct batch_script_t* script)
             Dos9_EsCat(line, "\n");
 
         /* This is a command */
-        Dos9_EsCatE(cmd, line);
+        Dos9_EsCat(cmd, pch);
 
         if ((checkres = Dos9_CheckBlocks(cmd)) == TRUE) {
             /* We reached a line end since blocks appear to be complete.
@@ -257,7 +268,9 @@ int Dos9_LoadBatchScript(struct batch_script_t* script)
                                       | DOS9_PRINT_C_ERROR,
                                             __FILE__ "/Dos9_LoadBatchScript", -1);
 
-            newcmd->line = cmd;
+            Dos9_RmTrailingNl(cmd->str);
+
+            newcmd->line = xstrdup(cmd->str);
             newcmd->next = NULL;
 
             if (script->curr) /* add the new line to the linked list */
@@ -268,10 +281,7 @@ int Dos9_LoadBatchScript(struct batch_script_t* script)
             if (script->cmds == NULL) /* set the first command */
                 script->cmds = newcmd;
 
-            Dos9_RmTrailingNl(cmd->str);
-
-            cmd = Dos9_EsInit(); /* Allocate new space for cmd */
-
+            *(cmd->str) = '\0';
         }
 
     }
@@ -289,10 +299,10 @@ int Dos9_LoadBatchScript(struct batch_script_t* script)
                                   | DOS9_PRINT_C_ERROR,
                                         __FILE__ "/Dos9_LoadBatchScript", -1);
 
-        newcmd->line = cmd;
-        newcmd->next = NULL;
-
         Dos9_RmTrailingNl(cmd->str);
+
+        newcmd->line = xstrdup(cmd->str);
+        newcmd->next = NULL;
 
         if (script->curr) /* add the new line to the linked list */
             script->curr->next = newcmd;
@@ -302,14 +312,11 @@ int Dos9_LoadBatchScript(struct batch_script_t* script)
         if (script->cmds == NULL) /* set the first command */
             script->cmds = newcmd;
 
-    } else {
-
-        Dos9_EsFree(cmd);
-
     }
 
     script->curr = script->cmds;
 
+    Dos9_EsFree(cmd);
     Dos9_EsFree(line);
     fclose(file);
 
@@ -406,7 +413,7 @@ void Dos9_FreeLabels(struct labels_t* labels)
     while (labels) {
 
         tmp = labels->next;
-        Dos9_EsFree(labels->label);
+        free(labels->label);
         free(labels);
         labels = tmp;
 
@@ -420,7 +427,7 @@ void Dos9_FreeCmdlines(struct cmdlines_t* cmdlines)
     while (cmdlines) {
 
         tmp = cmdlines->next;
-        Dos9_EsFree(cmdlines->line);
+        free(cmdlines->line);
         free(cmdlines);
         cmdlines = tmp;
 
