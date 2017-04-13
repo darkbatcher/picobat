@@ -25,12 +25,87 @@
 
 #include "Dos9_Core.h"
 
-
-//#define DOS9_DBG_MODE
-
 #include "Dos9_Debug.h"
 
 int Dos9_GetLine(ESTR* lpesLine, INPUT_FILE* pIn)
+{
+
+    /* If either cmdly correct is defined or if we are running interactive
+       mode, use the cmdly correct function */
+    if (bCmdlyCorrect || (*(pIn->lpFileName) == '\0'))
+        return Dos9_GetLine_Cmdly(lpesLine, pIn);
+
+    if (*(pIn->batch.name) == '\0') {
+
+        printf("Loading batch script (first time)...\n");
+        /* Load the file if it is not loaded yet */
+        if (Dos9_OpenBatchScript(&(pIn->batch), pIn->lpFileName)) {
+
+            Dos9_ShowErrorMessage(DOS9_FILE_ERROR | DOS9_PRINT_C_ERROR,
+                                  pIn->lpFileName,
+                                  FALSE);
+            Dos9_FreeBatchScript(&(pIn->batch));
+            goto error;
+
+        }
+
+    } else if (strcmp(pIn->lpFileName, pIn->batch.name)) {
+
+        /* The file has changed */
+        printf("Reloading batch script (change in file) [%s|%s]...\n", pIn->lpFileName,  pIn->batch.name);
+
+        Dos9_FreeBatchScript(&(pIn->batch));
+
+        if (Dos9_OpenBatchScript(&(pIn->batch), pIn->lpFileName)) {
+
+            Dos9_ShowErrorMessage(DOS9_FILE_ERROR | DOS9_PRINT_C_ERROR,
+                                  pIn->lpFileName,
+                                  FALSE);
+            Dos9_FreeBatchScript(&(pIn->batch));
+            goto error;
+
+        }
+
+    } else if (Dos9_CheckBatchScriptChanges(&(pIn->batch))) {
+
+        printf("Reloading batch script (change in size)...\n");
+
+        /* Reload it if it has been modified */
+        if (Dos9_ReloadBatchScript(&(pIn->batch))) {
+
+            Dos9_ShowErrorMessage(DOS9_FILE_ERROR | DOS9_PRINT_C_ERROR,
+                                  pIn->lpFileName,
+                                  FALSE);
+            Dos9_FreeBatchScript(&(pIn->batch));
+            goto error;
+
+        }
+
+    }
+
+    /* We have an appropriate batch script structure */
+
+    if (pIn->batch.curr == NULL) {
+
+        /* Looks like we have reached eof */
+        pIn->bEof = TRUE;
+        return 1; /* signal empty line */
+
+    }
+
+    /* Get the next line */
+    Dos9_EsCpyE(lpesLine, pIn->batch.curr->line);
+
+    pIn->batch.curr = pIn->batch.curr-> next;
+
+    return 0;
+
+error:
+    pIn->bEof = TRUE;
+    return -1;
+}
+
+int Dos9_GetLine_Cmdly(ESTR* lpesLine, INPUT_FILE* pIn)
 {
 	FILE* pFile;
 	ESTR* lpesTmp=Dos9_EsInit();
@@ -68,8 +143,21 @@ int Dos9_GetLine(ESTR* lpesLine, INPUT_FILE* pIn)
 		lpCh=Dos9_SkipAllBlanks(Dos9_EsToChar(lpesTmp));
 
 		/* split comments label and void lines from input */
-		if (*lpCh!=':' && *lpCh!='\n')
-			Dos9_EsCatE(lpesLine, lpesTmp);
+		if (*lpCh==':' || *lpCh=='\0') {
+
+            if (pFile != stdin)
+                continue;
+
+            bCorrectBlocks=TRUE;
+            break;
+		}
+
+        /* the read line should *definitely* end with a '\n' (in
+           in fact it always do, except when reaching end of file) */
+        if (strchr(lpesTmp->str, '\n') == NULL)
+            Dos9_EsCat(lpesTmp, "\n");
+
+        Dos9_EsCatE(lpesLine, lpesTmp);
 
 		if (Dos9_CheckBlocks(lpesLine) == TRUE) {
 
@@ -123,6 +211,15 @@ error:
 
 }
 
+/* This does some subtle stuff to determine whether :
+
+    TRUE -> the block is complete
+    FALSE -> the block is uncomplete and and a block is
+             is left unclosed.
+    -1 -> the block line is nearly complete, but it lacks
+          a '\n' to be complete (we are at top level at
+          the end of lpesLine).
+ */
 int Dos9_CheckBlocks(ESTR* lpesLine)
 {
     char *pch = lpesLine->str;
@@ -137,7 +234,10 @@ int Dos9_CheckBlocks(ESTR* lpesLine)
 
     } while ((*pch != '\n') && (*pch != '\0'));
 
-    return TRUE;
+    if (*pch)
+        return TRUE;
+
+    return -1;
 }
 
 void Dos9_RmTrailingNl(char* lpLine)

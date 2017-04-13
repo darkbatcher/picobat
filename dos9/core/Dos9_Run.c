@@ -34,6 +34,7 @@
 #include "Dos9_Debug.h"
 
 #include "../errors/Dos9_Errors.h"
+#include "../lang/Dos9_Lang.h"
 
 
 int Dos9_RunBatch(INPUT_FILE* pIn)
@@ -103,7 +104,7 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
 			printf(DOS9_NL "DOS9 ");
 			Dos9_SetConsoleTextColor(colColor);
 
-			printf("%s>%s", lpCurrentDir, Dos9_EsToChar(lpLine));
+			printf("%s>%s" DOS9_NL, lpCurrentDir, Dos9_EsToChar(lpLine));
 
 		}
 
@@ -165,7 +166,9 @@ loop:
                                     __FILE__ "/Dos9_ExecOperators()",
                                     -1);
 
-		/* prepare the command-line arguments befaure launching the program */
+        Dos9_SetFdInheritance(pipedes[0], 0);
+
+		/* prepare the command-line arguments before launching the program */
 		Dos9_GetExeFilename(lpProgName, sizeof(lpProgName));
         snprintf(lpQuoteProgName, sizeof(lpQuoteProgName),
                                             "\"%s\"", lpProgName);
@@ -187,8 +190,9 @@ loop:
 		/* if the input descriptor is from a previous pipe */
 		if (olddes != 0) {
 
-			snprintf(input, sizeof(input), "%d", olddes);
+            Dos9_SetFdInheritance(pipedes[0], 1);
 
+			snprintf(input, sizeof(input), "%d", olddes);
 			lpArgs[++i] =  "/I";
 			lpArgs[++i] =  input;
 
@@ -216,6 +220,7 @@ loop:
 		lpArgs[++i] = NULL;
 
         Dos9_ApplyEnv(lpeEnv);
+        Dos9_SetStdInheritance(1);
 
         /* Launches a sub Dos9 command prompt */
 		_spawnv(_P_NOWAIT, lpProgName, (char * const*)lpArgs);
@@ -305,6 +310,9 @@ loop:
             Dos9_ShowErrorMessage(DOS9_CREATE_PIPE | DOS9_PRINT_C_ERROR,
                                     __FILE__ "/Dos9_ExecOperators()",
                                     -1);
+
+        Dos9_SetFdInheritance(pipedes[0], 0);
+        Dos9_SetFdInheritance(pidedes[1], 0);
 
         pid = fork();
 
@@ -439,7 +447,7 @@ int Dos9_RunLine(ESTR* lpLine)
 	STREAMSTACK* lpStack;
 #endif
 
-	Dos9_RmTrailingNl(Dos9_EsToChar(lpLine));
+	//Dos9_RmTrailingNl(Dos9_EsToChar(lpLine));
 
 	//fprintf(stderr, "line=%s\n", lpLine->str);
 
@@ -515,7 +523,7 @@ RestartSearch:
 		iErrorLevel=Dos9_RunExternalCommand(lpCmdLine, &error);
 
 		/* There is definitely an error that prevent the file
-		   from being found. Thus, try another time, bug expanding
+		   from being found. Thus, try another time, but expanding
 		   the whole line for this moment. This behaviour appears to
 		   be a little bit fuzzy, but I suspect cmd of having quite
 		   the same behaviour... */
@@ -724,6 +732,7 @@ int Dos9_RunExternalFile(char* lpFileName, char** lpArguments)
 	errno=0;
 
 	Dos9_ApplyEnv(lpeEnv);
+	Dos9_SetStdInheritance(1);
 
 	snprintf(str, sizeof(str), "\"%s\"", lpArguments[0]);
 	tmp = lpArguments[0];
@@ -758,12 +767,13 @@ int Dos9_RunExternalFile(char* lpFileName, char** lpArguments)
 
 	int iResult = 0;
 
-    Dos9_ApplyEnv(lpeEnv);
-
 	iPid=fork();
 
 	if (iPid == 0 ) {
 		/* if we are in the son */
+
+        Dos9_ApplyEnv(lpeEnv); /* set internal variable */
+        Dos9_SetStdInheritance(1); /* make std* inheritable */
 
 		if ( execv(lpFileName, lpArguments) == -1) {
 
@@ -968,10 +978,8 @@ BOOL WINAPI Dos9_SigHandler(DWORD dwCtrlType)
             /* Request a handle to the main thread and try to freeze it */
             thread = OpenThread(THREAD_ALL_ACCESS, FALSE, iMainThreadId);
 
-            if (thread == NULL) {
-                printf("Error !\n");
-                return TRUE;
-            }
+            if (thread == NULL)
+                Dos9_ShowErrorMessage(DOS9_BREAK_ERROR, NULL, -1);
 
             /* suspend the main thread */
             SuspendThread(thread);
@@ -984,10 +992,11 @@ BOOL WINAPI Dos9_SigHandler(DWORD dwCtrlType)
                 choice = Dos9_AskConfirmation(DOS9_ASK_YN
                                               | DOS9_ASK_DEFAULT_N
                                               | DOS9_ASK_INVALID_REASK,
-                    "Voulez vous vraiment quitter le script de commande ?");
+                    lpBreakConfirm);
 
                 if (choice == DOS9_ASK_YES)
                     exit(-1);
+
                 ResumeThread(thread);
                 CloseHandle(thread);
 
@@ -1022,6 +1031,11 @@ BOOL WINAPI Dos9_SigHandler(DWORD dwCtrlType)
                 si.cb = sizeof(si);
                 ZeroMemory( &pi, sizeof(pi) );
 
+                /* By default, any file opened by Dos9 is set not to be
+                   inherited by any subprocess. As this policy a bit
+                   strict, just make the standard streams inheritable */
+                Dos9_SetStdInheritance(1);
+
                 /* Use create process rather than spawn in order to break
                    inheritance of probably broken stuff like fds */
                 if( !CreateProcess( lpExePath,
@@ -1033,13 +1047,8 @@ BOOL WINAPI Dos9_SigHandler(DWORD dwCtrlType)
                                     NULL,
                                     NULL,
                                     &si,
-                                    &pi )) {
-
-
-                    printf("Error");
-                    exit(-1);
-
-                }
+                                    &pi ))
+                    Dos9_ShowErrorMessage(DOS9_BREAK_ERROR, NULL, -1);
 
                 CloseHandle(pi.hProcess);
                 CloseHandle(pi.hThread);

@@ -228,6 +228,7 @@ char* Dos9_GetParameters(char** argv, char** lpFileName, int* bExitAfterCmd, int
 
 
                     iInputD=atoi(argv[i]); // select input descriptor
+                    Dos9_SetFdInheritance(iInputD, 0);
                     Dos9_OpenOutputD(lppsStreamStack, iInputD, DOS9_STDIN);
                     break;
 
@@ -235,7 +236,8 @@ char* Dos9_GetParameters(char** argv, char** lpFileName, int* bExitAfterCmd, int
                     if (!argv[++i])
                         Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "Dos9", -1);
 
-                    iOutputD=atoi(argv[i]); // select input descriptor
+                    iOutputD=atoi(argv[i]); /* select input descriptor */
+                    Dos9_SetFdInheritance(iOutputD, 0);
                     Dos9_OpenOutputD(lppsStreamStack, iOutputD, DOS9_STDOUT);
                     break;
 
@@ -342,6 +344,7 @@ void Dos9_RunAutoBat(void)
 
     ifIn.iPos = 0;
     ifIn.bEof = 0;
+    *(ifIn.batch.name) = '\0';
 
     /* Run the auto configuration file */
     Dos9_RunBatch(&ifIn);

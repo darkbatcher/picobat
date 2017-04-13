@@ -72,54 +72,8 @@
 
  */
 
-
-/* The following piece of code is designed to provide
-   fallbacks for libcu8_fd_set_inheritance if libcu8 is
-   not available */
 #if defined(WIN32) && defined(DOS9_USE_LIBCU8)
 #include <libcu8.h>
-#elif defined(WIN32)
-struct ioinfo {
-    void* osfhnd;
-    unsigned char osfile;
-    unsigned char pipech;
-    int lockinitflag;
-    CRITICAL_SECTION lock;
-};
-
-extern _CRTIMP struct ioinfo* __pioinfo[];
-
-/* define some macros to deal with __pioinfo buffer (which stores
-   data file information */
-#define IOINFO_TABLE_SIZE (1 << 5)
-#define IOINFO_MAX_TABLE 64
-#define MAKE_FD(table,index)  ( (table) << 5 + (index))
-
-#define pioinfo(i)  (__pioinfo[((i) >> 5)] + \
-                                    ((i) & (IOINFO_TABLE_SIZE - 1)))
-#define osfile(i)   (pioinfo(i)->osfile)
-#define osfhnd(i)   (pioinfo(i)->osfhnd)
-#define NOINHERIT   0x10 /* not inheritable file */
-int libcu8_fd_set_inheritance(int fd, int mode)
-{
-    HANDLE handle = osfhnd(fd);
-
-    SetHandleInformation(handle, HANDLE_FLAG_INHERIT, mode);
-
-    osfile(fd) &= ~ NOINHERIT;
-
-    return 0;
-}
-#else
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <fcntl.h>
-int libcu8_fd_set_inheritance(int fd, int mode)
-{
-    fcntl(fd, F_SETFD, (mode == 0) ?
-          (fcntl(fd, F_GETFD) & ~FD_CLOEXEC) :
-                (fcntl(fd, F_GETFD) | FD_CLOEXEC));
-}
 #endif /* libcu8 */
 
 int Dos9_CmdFor(char* lpLine)
@@ -1329,11 +1283,12 @@ int Dos9_ForInputProcess_win(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn,
 
 	lpArgs[i]=NULL;
 
-	libcu8_fd_set_inheritance(iPipeFdIn[1], 0);
-	libcu8_fd_set_inheritance(iPipeFdOut[0], 0);
+	Dos9_SetFdInheritance(iPipeFdIn[1], 0);
+	Dos9_SetFdInheritance(iPipeFdOut[0], 0);
 
     /* apply Dos9 internal environment variables */
 	Dos9_ApplyEnv(lpeEnv);
+	Dos9_SetStdInheritance(1);
 
     write(iPipeFdIn[1], lpInput->str, strlen(lpInput->str));
     write(iPipeFdIn[1], "&exit\n", sizeof("&exit\n")-1);
@@ -1396,8 +1351,8 @@ int Dos9_ForInputProcess_nix(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn,
 
 	lpipInfo->Info.InputFile.handle = iPid;
 
-    libcu8_fd_set_inheritance(iPipeFdIn[1], 0);
-	libcu8_fd_set_inheritance(iPipeFdOut[0], 0);
+    Dos9_SetFdInheritance(iPipeFdIn[1], 0);
+	Dos9_SetFdInheritance(iPipeFdOut[0], 0);
 
 	if (iPid == 0 ) {
          /* if we are in the son, and, you know, unix is very convenient with us,

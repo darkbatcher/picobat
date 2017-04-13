@@ -23,89 +23,59 @@
 #include <errno.h>
 #include <string.h>
 
+/* Jump to a special position in file
+
+    returns -1 in case of error
+    return 0 if the jump is achieved
+
+ */
 int Dos9_JumpToLabel(char* lpLabelName, char* lpFileName)
 {
-	size_t iSize=strlen(lpLabelName);
-	char* lpName=lpFileName;
-	FILE* pFile;
-	ESTR* lpLine=Dos9_EsInit();
+    struct labels_t* lbl;
+    struct batch_script_t script;
+    size_t size = strlen(lpLabelName);
+    int new;
 
+	if (lpFileName && stricmp(ifIn.batch.name, lpFileName)) {
 
-	if ((lpFileName==NULL)) {
-		lpName=ifIn.lpFileName;
+        if (Dos9_OpenBatchScript(&script, lpFileName)) {
+
+            Dos9_FreeBatchScript(&script);
+            return -1;
+        }
+
+        lbl = script.lbls;
+        new = 1;
+
+	} else {
+
+        lbl = ifIn.batch.lbls;
+        new = 0;
+
 	}
 
-    if (iSize == 1) {
+    while (lbl && (strnicmp(lbl->label->str, lpLabelName, size)
+                        && !Dos9_IsDelim(*(lbl->label->str + size))))
+        lbl = lbl->next;
+
+    if (lbl == NULL) {
+
+        Dos9_FreeBatchScript(&script);
         return -1;
+
     }
 
-	if (!(pFile=fopen(lpName, "r"))) {
-		Dos9_EsFree(lpLine);
+    /* a label has been found */
+    if (new) {
 
-		DEBUG("unable to open file : %s");
-		DEBUG(strerror(errno));
+        /* Set the new file as the new file */
+        Dos9_FreeBatchScript(&(ifIn.batch));
+        memcpy(&(ifIn.batch), &script, sizeof(struct batch_script_t));
 
-		return -1;
-	}
+    }
 
-    /* Libcu8 kind of perturbate the C lib because libcu8 does not
-       perform byte to byte conversion, misleading file telling
-       positions ... */
-#if defined(WIN32) && defined(DOS9_USE_LIBCU8)
-        setvbuf(pFile, NULL, _IONBF, 0);
-#endif
-
-	while (!Dos9_EsGet(lpLine, pFile)) {
-
-		if (!strnicmp(Dos9_SkipBlanks(lpLine->str), lpLabelName, iSize)) {
-
-			if (lpFileName) {
-
-				/* at that time, we can assume that lpFileName is not
-				   the void string, because the void string is not usually
-				   a valid file name */
-				if (*lpFileName=='/'
-				    || !strncmp(":/", lpFileName+1, 2)
-				    || !strncmp(":\\", lpFileName+1, 2)) {
-
-					/* the path is absolute */
-					strncpy(ifIn.lpFileName, lpFileName, sizeof(ifIn.lpFileName));
-					ifIn.lpFileName[FILENAME_MAX-1]='\0';
-
-				} else {
-
-					/* the path is relative */
-					snprintf(ifIn.lpFileName,
-					         sizeof(ifIn.lpFileName),
-					         "%s/%s",
-					         Dos9_GetCurrentDir(),
-					         lpFileName
-					        );
-
-				}
-
-			}
-
-			ifIn.iPos=ftell(pFile);
-			ifIn.bEof=feof(pFile);
-
-
-			DEBUG("Freeing data");
-
-			fclose(pFile);
-			Dos9_EsFree(lpLine);
-
-			DEBUG("Jump created with success");
-
-			return 0;
-		}
-	}
-
-	fclose(pFile);
-	Dos9_EsFree(lpLine);
-
-	DEBUG("Unable to find label");
-
-	return -1;
+    /* Check if lbl follow a line or is the first line */
+    ifIn.batch.curr = lbl->following ? lbl->following->next : ifIn.batch.cmds;
+	return 0;
 }
 

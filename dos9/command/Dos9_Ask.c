@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2016 Romain GARBI
+ *   Copyright (C) 2010-2017 Romain GARBI
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -68,7 +68,7 @@ int Dos9_AskConfirmation(int iFlags, const char* lpMsg, ...)
 
 	} else {
 
-		/* if the user choosed to display only YES and NO */
+		/* if the user chose to display only YES and NO */
 
 		if (iFlags & DOS9_ASK_DEFAULT_A) {
 

@@ -174,7 +174,7 @@ int Dos9_CmdCall(char* lpLine)
 
 	} else if (lpLabel) {
 
-		/* both ``label'' was given. This is not problematic,
+		/* ``label'' was given. This is not problematic,
 		   since the function Dos9_CmdCallFile can cope with
 		   NULL as ``file'' */
 
@@ -239,6 +239,7 @@ int Dos9_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 	/* We backup the old file informations */
 
 	memcpy(&ifOldFile, &ifIn, sizeof(INPUT_FILE));
+	Dos9_CopyBatchScript(&(ifIn.batch), &(ifOldFile.batch));
 
 	/* Set the INPUT_INFO FILE */
 

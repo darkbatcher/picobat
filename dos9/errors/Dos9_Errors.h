@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2014 Romain GARBI
+ *   Copyright (C) 2010-2017 Romain GARBI
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -92,8 +92,9 @@ void Dos9_LoadErrors(void);
 #define DOS9_UNABLE_RMDIR                   50
 #define DOS9_MOVE_NOT_RENAME                51
 #define DOS9_INVALID_CODEPAGE               52
-
-#define DOS9_ERROR_MESSAGE_NUMBER           53
+#define DOS9_BREAK_ERROR                    53
+#define DOS9_INVALID_LABEL                  54
+#define DOS9_ERROR_MESSAGE_NUMBER           55
 
 #define DOS9_PRINT_C_ERROR 0x80
 

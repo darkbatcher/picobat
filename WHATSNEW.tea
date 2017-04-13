@@ -1629,4 +1629,19 @@ ${for %%a in (*.exe) do echo %%a}
 	
 	- Merged po files for Dos9.
 	
+{{Wednesday 12th, April}}
+
+	- Fixed incorrect block parsing that did not handled properly escaped
+	new line characters that resulted in executing commands as if there was
+	actually more commands than there are really.
 	
+	- Added some error messages and new languages message to be used for
+	CTRL-c handler.
+	
+	- Fixed many typos.
+	
+	- Fixed plenty of tiny bugs.
+	
+	- Added new system that loads the entire script file at once, instead of
+	the weird old mechanics that consisted in opening/reading/closing script
+	at every new line. This achieve a great performance gain.

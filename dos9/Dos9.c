@@ -57,6 +57,12 @@
 
 #include "../config.h"
 
+#ifdef WIN32
+BOOL WINAPI Dos9_BreakIgn(DWORD dwCtrlType)
+{
+    return TRUE;
+}
+#endif
 
 int main(int argc, char *argv[])
 {
@@ -75,6 +81,23 @@ int main(int argc, char *argv[])
 
     ESTR* lpesCmd;
 
+
+#if !defined(WIN32)
+    /* Change buffuring method on *NIXes
+       to fix output buffuring issues.
+    */
+    setvbuf(stdout, NULL, _IONBF, 0);
+#else
+
+    /* Ignore CRTL-C signals as long as the interpretor is not fully
+       loaded */
+    SetConsoleCtrlHandler(Dos9_BreakIgn, TRUE);
+
+    /* Retrieve the main thread id */
+    iMainThreadId = GetCurrentThreadId();
+
+#endif
+
 #if defined(WIN32) && defined(DOS9_USE_LIBCU8)
 
     if (libcu8_init(&argv) == -1) {
@@ -83,16 +106,6 @@ int main(int argc, char *argv[])
         return -1;
 
     }
-#endif
-
-#if !defined(WIN32)
-    /* Change buffuring method on *NIXes
-       to fix output buffuring issues.
-    */
-    setvbuf(stdout, NULL, _IONBF, 0);
-#else
-    /* Retrieve the main thread id */
-    iMainThreadId = GetCurrentThreadId();
 #endif
 
     /* Initialize libDos9 */
@@ -157,6 +170,8 @@ int main(int argc, char *argv[])
     strcpy(ifIn.lpFileName, lpFileAbs);
     ifIn.iPos=0;
     ifIn.bEof=FALSE;
+
+    *(ifIn.batch.name) = '\0';
 
     /* Run either the command prompt or the batch script */
     Dos9_RunBatch(&ifIn);

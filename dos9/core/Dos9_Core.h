@@ -43,6 +43,8 @@
 #include "Dos9_ParseBlock.h"
 #include "Dos9_ExpandAlias.h"
 #include "Dos9_OsStream.h"
+#include "Dos9_FdInheritance.h"
+#include "Dos9_ReadScript.h"
 
 #include "Dos9_Globals.h"
 

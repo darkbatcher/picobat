@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2016 Romain GARBI
+ *   Copyright (C) 2010-2017 Romain GARBI
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -15,26 +15,11 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
+#ifndef DOS9_FDINHERITANCE_H
+#define DOS9_FDINHERITANCE_H
 
-#ifndef DOS9_MODULE_READ_H
-#define DOS9_MODULE_READ_H
+void Dos9_SetFdInheritance(int fd, int mode);
+void Dos9_SetStdInheritance(int mode);
 
-#include <stdio.h>
-
-#include "Dos9_ReadScript.h"
-
-typedef struct INPUT_FILE {
-	char  lpFileName[FILENAME_MAX];
-	int   iPos;
-	int   bEof;
-	struct batch_script_t batch;
-} INPUT_FILE;
-
-int Dos9_GetLine(ESTR* lpesLine, INPUT_FILE* pIn);
-int Dos9_GetLine_Cmdly(ESTR* lpesLine, INPUT_FILE* pIn);
-int Dos9_CheckBlocks(ESTR* lpesLine);
-void Dos9_RmTrailingNl(char* lpLine);
-
-#endif
+#endif // DOS9_FDINHERITANCE_H

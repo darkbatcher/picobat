@@ -181,6 +181,8 @@ int Dos9_OpenOutput(LPSTREAMSTACK lpssStreamStack, char* lpName, int iDescriptor
 	if ((iStd[iDescriptor]=open(TRANS(lpName),
                                     iMode, S_IREAD | S_IWRITE))!= -1) {
 
+        Dos9_SetFdInheritance(iStd[iDescriptor], 0);
+
 		DEBUG("File loaded !");
 		Dos9_FlushDescriptor(iStd[iDescriptor], iDescriptor);
 		iFreeStd[iDescriptor]=iStd[iDescriptor];
@@ -227,6 +229,10 @@ int Dos9_OpenPipe(LPSTREAMSTACK lpssStreamStack)
 		Dos9_ShowErrorMessage(DOS9_UNABLE_CREATE_PIPE | DOS9_PRINT_C_ERROR,
 		                      __FILE__ "/Dos9_OpenPipe()",
 		                      TRUE);
+
+    /* set appropriate fd inheritance for both fds */
+    Dos9_SetFdInheritance(iPipeDescriptors[0], 0);
+    Dos9_SetFdInheritance(iPipeDescriptors[1], 0);
 
 	Dos9_GetStack(lppsStreamStack, (void**)&lpLvl);
 	if (!lpLvl->iPipeIndicator) {

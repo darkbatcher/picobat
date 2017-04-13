@@ -40,6 +40,8 @@ extern const char* lpDelConfirm;
 extern const char* lpRmdirConfirm;
 extern const char* lpCopyConfirm;
 
+extern const char* lpBreakConfirm;
+
 extern const char* lpAskYn;
 extern const char* lpAskyN;
 extern const char* lpAskyn;

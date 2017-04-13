@@ -254,6 +254,12 @@ void Dos9_LoadErrors(void)
                 "handles relative path. If you want to move the file and "
                 "rename it at the same time, you should use MOVE command.\n");
 
+    lpErrorMsg[DOS9_BREAK_ERROR] =
+        gettext("Error : Unable to access Dos9 main thread to perform break.\n");
+
+    lpErrorMsg[DOS9_INVALID_LABEL] =
+        gettext("Error : Invalid label encountered within a block (at line %d).\n");
+
 	lpQuitMessage=
 	    gettext("\nAborting current command, press any key to end Dos9.\n");
 

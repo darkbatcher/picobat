@@ -52,8 +52,10 @@ char* Dos9_GetBlockLineEndEx(char* pch, int par_end)
     /* check this actually a block (ie. that it actually starts
        with a parenthesis or FOR or IF */
 
-    /* Skip everything, including the optionnal @ character */
-    pch = Dos9_SkipAllBlanks(pch);
+    /* Skip everything, including the optionnal @ character but
+       not the '\n' */
+    while ((Dos9_IsDelim(*pch) || *pch=='@') && *pch != '\n')
+         pch++;
 
     if (*pch == '(') {
 

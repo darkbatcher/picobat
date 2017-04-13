@@ -144,6 +144,7 @@ int Dos9_StartFile(const char* file, const char* args, const char* dir,
 
 
     Dos9_ApplyEnv(lpeEnv);
+    Dos9_SetStdInheritance(1);
 	ShellExecuteExW(&info);
 
 	if (wait)
@@ -182,6 +183,7 @@ int Dos9_StartFile(const char* file, const char* args, const char* dir,
 
     /* apply Dos9 internal environment variables */
 	Dos9_ApplyEnv(lpeEnv);
+	Dos9_SetStdInheritance(1);
 
     /* shellexecute seem to have trouble to handle forward slashes */
     for (chr = buf;*chr;chr ++) {
@@ -249,6 +251,7 @@ int Dos9_StartFile_X(const char* file, const char* args, const char* dir,
 
         /* apply Dos9 internal environment variables */
         Dos9_ApplyEnv(lpeEnv);
+        Dos9_SetStdInheritance(1);
 
         if (execvp(XDG_OPEN, arg) == -1) {
             Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR | DOS9_PRINT_C_ERROR,
@@ -309,6 +312,7 @@ int Dos9_StartFile_S(const char* file, const char* args, const char* dir,
 
         /* apply Dos9 internal environment variables */
         Dos9_ApplyEnv(lpeEnv);
+        Dos9_SetStdInheritance(1);
 
         if (execvp(file, arg) == -1)
             Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR | DOS9_PRINT_C_ERROR,

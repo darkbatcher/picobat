@@ -47,6 +47,8 @@ const char* lpDelConfirm;
 const char* lpRmdirConfirm;
 const char* lpCopyConfirm;
 
+const char* lpBreakConfirm;
+
 const char* lpAskYn;
 const char* lpAskyN;
 const char* lpAskyn;
@@ -113,6 +115,8 @@ void Dos9_LoadStrings(void)
 	lpRmdirConfirm=gettext("Are you sure you want to remove \"%s\" directory ?");
 
 	lpCopyConfirm=gettext("File \"%s\" already exists, replace it by \"%s\" ?");
+
+	lpBreakConfirm=gettext("Do you really want to exit command script ?");
 
 	lpAskYn=gettext(" (Yes/no) ");
 	lpAskyN=gettext(" (yes/No) ");

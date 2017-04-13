@@ -1791,3 +1791,12 @@ SUNDAY 9TH, MARCH
 
         - Merged po files for Dos9.
 
+WEDNESDAY 12TH, APRIL
+
+        - Fixed incorrect block parsing that did not handled properly escaped 
+          new line characters that resulted in executing commands as if there 
+          was actually more commands than there are really.
+
+        - Added some error messages and new languages message to be used for 
+          CTRL-c handler.
+
