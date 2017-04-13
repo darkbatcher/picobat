@@ -63,7 +63,7 @@ void Dos9_SetFdInheritance(int fd, int mode)
 #include <fcntl.h>
 void Dos9_SetFdInheritance(int fd, int mode)
 {
-    fcntl(fd, F_SETFD, (mode == 0) ?
+    fcntl(fd, F_SETFD, mode ?
           (fcntl(fd, F_GETFD) & ~FD_CLOEXEC) :
                 (fcntl(fd, F_GETFD) | FD_CLOEXEC));
 }
