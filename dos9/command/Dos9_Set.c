@@ -181,7 +181,7 @@ int Dos9_CmdSet(char *lpLine)
 	char *lpNextToken;
 
 	int i,
-        nok,
+        nok = 0,
 	    bFloats;
 
 	if (lpNextToken=Dos9_GetNextParameter(lpLine+3, lpArgBuf,
