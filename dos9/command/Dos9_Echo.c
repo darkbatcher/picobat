@@ -46,8 +46,7 @@
 int Dos9_CmdEcho(char* lpLine)
 {
 
-	ESTR* lpEsParameter,
-			lpTmp;
+	ESTR* lpEsParameter;
 	char* tmp,
 		 	buf[1];
 

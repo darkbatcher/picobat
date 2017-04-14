@@ -53,6 +53,7 @@ int IntEval_Eval(const char* lpLine)
 
 	IntEval_InputReset();
 	IntEval_Error=INTEVAL_NOERROR;
+
 	IntEval_Result=0;
 	IntEval_Strings = NULL;
 
@@ -91,6 +92,7 @@ void IntEval_FreeStrings(void)
 
     while (IntEval_Strings != NULL) {
         item = IntEval_Strings->next;
+        free(IntEval_Strings->str);
         free(IntEval_Strings);
         IntEval_Strings = item;
     }

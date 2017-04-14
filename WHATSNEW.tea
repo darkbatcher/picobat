@@ -1662,3 +1662,7 @@ ${for %%a in (*.exe) do echo %%a}
     - Fixed some intrepretation error with the {SET /p} command.
 
     - Fixed conditionnal definition of _X_OPEN_SOURCE.
+	
+	- Fixed an enormous memory flaw that took place in the inteval libraries
+	and caused Dos9 memory consumption to increase dramatically when using
+	{SET /a} intensively

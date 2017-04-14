@@ -1820,3 +1820,9 @@ THURSDAY 13TH, APRIL
 
         - Fixed some manual pages.
 
+FRIDAY 14TH, APRIL
+
+        - Fixed some intrepretation error with the SET /p command.
+
+        - Fixed conditionnal definition of _X_OPEN_SOURCE. 
+
