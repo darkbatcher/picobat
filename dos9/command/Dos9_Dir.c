@@ -197,7 +197,7 @@ int Dos9_CmdDir(char* lpLine)
 	}
 
 	if (!bSimple) {
-        printf("\t\t\t\t%d%s" DOS9_NL "\t\t\t\t%d %s" DOS9_NL,
+        printf("\t\t\t\t%d %s" DOS9_NL "\t\t\t\t%d %s" DOS9_NL,
                                 iFileNb, lpDirFile, iDirNb, lpDirDir);
 	}
 

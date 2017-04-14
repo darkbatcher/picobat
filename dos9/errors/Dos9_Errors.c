@@ -29,6 +29,7 @@
 #endif
 
 #include <libDos9.h>
+#include <locale.h>
 #include "Dos9_Errors.h"
 #include "../core/Dos9_Core.h"
 
@@ -44,7 +45,7 @@ void Dos9_LoadErrors(void)
 {
 	char lpPath[FILENAME_MAX];
 	char lpSharePath[FILENAME_MAX];
-	char lpEncoding[15]="ASCII";
+	char lpEncoding[15]="";
 
 #ifdef WIN32
     /* On windows, the best is to suppose that *all* the read-only
@@ -65,14 +66,14 @@ void Dos9_LoadErrors(void)
 #if defined(WIN32) && !defined(DOS9_USE_LIBCU8)
     /* This is not useful at all, libcu8 is able to convert utf-8 by
        itself */
-	bind_textdomain_codeset("Dos9-errors", lpEncoding);
+	//bind_textdomain_codeset("Dos9-errors", lpEncoding);
 #elif defined(DOS9_USE_LIBCU8)
-    bind_textdomain_codeset("Dos9-errors", "UTF8");
+    //bind_textdomain_codeset("Dos9-errors", "UTF8");
 #endif
 	textdomain("Dos9-errors");
 
 	lpErrorMsg[DOS9_FILE_ERROR]=
-	    gettext("Error : Unable to acces to file \"%s\".\n");
+	    gettext("Error : Unable to access file \"%s\".\n");
 	// TRANSLATORS : Don't remove the %s because the program needs it
 
 	lpErrorMsg[DOS9_DIRECTORY_ERROR]=
@@ -144,7 +145,7 @@ void Dos9_LoadErrors(void)
 
 	lpErrorMsg[DOS9_FOR_TOKEN_OVERFLOW]=
 	    gettext("Error : Attempted to specify more than "
-	            "TOKEN_NB_MAX (%d) different tokens\n.");
+	            "TOKEN_NB_MAX (%d) different tokens.\n");
 
 	lpErrorMsg[DOS9_FOR_USEBACKQ_VIOLATION]=
 	    gettext("Error : \"%s\" violates the ``Usebackq'' syntax.\n");

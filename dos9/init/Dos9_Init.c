@@ -115,8 +115,8 @@ void Dos9_InitLibDos9(void)
     #endif // WINDOWS
 
     DOS9_DBG("Loading GETTEXT messages... \n");
-    Dos9_LoadStrings();
     Dos9_LoadErrors();
+    Dos9_LoadStrings();
     Dos9_LoadInternalHelp();
 
     DOS9_DBG("Loading current directory...\n");
