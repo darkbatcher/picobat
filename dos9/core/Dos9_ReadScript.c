@@ -177,7 +177,6 @@ int Dos9_LoadBatchScript(struct batch_script_t* script)
     while (!eof && !(eof=Dos9_EsGet(line, file))) {
 
         pch = Dos9_SkipBlanks(line->str);
-        Dos9_StripEndDelims(pch);
 
         nb ++; /* increment line number */
 
@@ -235,6 +234,9 @@ int Dos9_LoadBatchScript(struct batch_script_t* script)
                 newlbl->following = script->curr;
 
                 Dos9_RmTrailingNl(line->str);
+
+                /* Remove the useless delims set at the end of the label */
+                Dos9_StripEndDelims(pch);
                 newlbl->label = xstrdup(pch);
 
                 continue;

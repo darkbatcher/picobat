@@ -363,8 +363,6 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 	}
 
 
-
-
 	if ((*lpName & 0x80) || (*lpName <= 0x20)) {
 
 		/* the varname is not valid */
@@ -429,7 +427,6 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 		*lpPos='\0';
 
 		lpPos=Dos9_EsToChar(lpRecieve);
-
 	}
 
 	if (bSeekFile) {
@@ -456,7 +453,7 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 
 	}
 
-	if (cFlag[0]!=DOS9_ALL_PATH) {
+	if (cFlag[0]!=DOS9_ALL_PATH && i != 0) {
 
 		*Dos9_EsToChar(lpRecieve) = '\0';
 

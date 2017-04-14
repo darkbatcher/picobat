@@ -352,12 +352,25 @@ int Dos9_CmdSetP(char* lpLine)
 
 	while (*lpLine==' ' || *lpLine=='\t') lpLine++;
 
-	Dos9_GetEndOfLine(lpLine, lpEsVar);
+
+    /* If the expression starts with an ", use get parameter
+       to process the token in a clean way */
+	if (*lpLine == '"') {
+
+        Dos9_GetNextParameterEs(lpLine, lpEsVar);
+
+    } else {
+
+        Dos9_GetEndOfLine(lpLine, lpEsVar);
+
+    }
+
 
 	if ((lpEqual=strchr(Dos9_EsToChar(lpEsVar), '='))) {
 
 		*lpEqual='\0';
 		lpEqual++;
+
 
 		printf("%s", lpEqual);
 

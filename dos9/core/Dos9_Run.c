@@ -17,8 +17,8 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef WIN32
-#define _XOPEN_SOURCE
+#if !defined(WIN32) && !defined(_X_OPEN_SOURCE)
+#define _X_OPEN_SOURCE
 #endif
 
 #include <string.h>
