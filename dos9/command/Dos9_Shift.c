@@ -180,9 +180,9 @@ int Dos9_CmdShift(char* lpLine)
 	/* Displace command-line arguments */
 	while ((iBegin+iDisplacement) < 10) {
 
-		Dos9_SetLocalVar(lpvLocalVars,
+		Dos9_SetLocalVar(lpvArguments,
 		                 '0'+iBegin,
-		                 Dos9_GetLocalVarPointer(lpvLocalVars,
+		                 Dos9_GetLocalVarPointer(lpvArguments,
 		                         '0'+iBegin+iDisplacement
 		                                        )
 		                );
@@ -194,7 +194,7 @@ int Dos9_CmdShift(char* lpLine)
 	/* empty the remaining arguments */
 	while (iBegin < 10) {
 
-		Dos9_SetLocalVar(lpvLocalVars, '0'+iBegin, "");
+		Dos9_SetLocalVar(lpvArguments, '0'+iBegin, "");
 
 		iBegin++;
 

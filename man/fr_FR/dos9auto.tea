@@ -1,4 +1,4 @@
-#
+ï»¿#
 #   Dos9 Manual pages, The Dos9 project
 #   Copyright (C) 2012-2016  Romain Garbi (DarkBatcher)
 #
@@ -18,42 +18,42 @@
 
 {{Initialisation de Dos9 (Dos9_Auto.bat)}}
 
-	L'initialisation de {dos9|Dos9} a lieux par l'intermédiaire d'un fichier
+	L'initialisation de {dos9|Dos9} a lieux par l'intermÃ©diaire d'un fichier
 	de commande le nom de {Dos9_Auto.bat}. Celui ci se charge d'initialiser
-	certaines variables et d'appeler les scripts définis utilisateurs.
+	certaines variables et d'appeler les scripts dÃ©finis utilisateurs.
 
 {{Synopsis}}
 
 ${%DOS9_PATH%/Dos9_Auto.bat}
 
-	Ce fichier n'est pas destiné à être modifié directement, il se charge
-	d'appeler des scripts définis par l'utilisateur. Il peut néanmoins être
-	utile de le modifier pour certaines configurations très spécifiques, dans
-	ce cas, veillez à ne pas ne pas faire n'importe quoi avec les variables
-	définies dans ce fichier, puisqu'elles affectent le fonctionnement de
+	Ce fichier n'est pas destinÃ© Ã  Ãªtre modifiÃ© directement, il se charge
+	d'appeler des scripts dÃ©finis par l'utilisateur. Il peut nÃ©anmoins Ãªtre
+	utile de le modifier pour certaines configurations trÃ¨s spÃ©cifiques, dans
+	ce cas, veillez Ã  ne pas ne pas faire n'importe quoi avec les variables
+	dÃ©finies dans ce fichier, puisqu'elles affectent le fonctionnement de
 	nombreux scripts.
 
-	En général, le fichier {Dos9_Auto.bat} se charge de l'initialisation
-	{dos9|des variables spécifiques à dos9}, en tout cas, celles qui ne
+	En gÃ©nÃ©ral, le fichier {Dos9_Auto.bat} se charge de l'initialisation
+	{dos9|des variables spÃ©cifiques Ã  dos9}, en tout cas, celles qui ne
 	sont pas dynamiques.
 	
 	Enfin, {Dos9_Auto.bat} se charge aussi d'appeler deux scripts
-	d'initialisation définis pas l'utilisateur. ces deux scripts sont:
+	d'initialisation dÃ©finis pas l'utilisateur. ces deux scripts sont:
 	
-	- {%USERPROFILE%/.dos9/Dos9_Auto.bat} : Fichier propre à l'utilisateur.
+	- {%USERPROFILE%/.dos9/Dos9_Auto.bat} : Fichier propre Ã  l'utilisateur.
 	
-	- {%DOS9_ETC%/Dos9_Auto.bat} : Fichier propre au système.
+	- {%DOS9_ETC%/Dos9_Auto.bat} : Fichier propre au systÃ¨me.
 
 	Il est possible d'utiliser absolument n'importe quelle commande de
 	{Dos9} dans chancun de ces trois fichiers.
 	
-{{Compatibilité}}
+{{CompatibilitÃ©}}
 
-	Non-compatible avec {cmd.exe}, le mécanisme d'initialisation est totalement
-	différent.
+	Non-compatible avec {cmd.exe}, le mÃ©canisme d'initialisation est totalement
+	diffÃ©rent.
 
 	Disponible depuis la version {0.7}.
 
 {{A voir aussi}}
 
-	{spec/var|Les variables d'environement}, {spec/index|Index des spécifications}
+	{spec/var|Les variables d'environement}, {spec/index|Index des spÃ©cifications}
