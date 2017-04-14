@@ -1828,5 +1828,11 @@ FRIDAY 14TH, APRIL
 
         - Fixed an enormous memory flaw that took place in the inteval 
           libraries and caused Dos9 memory consumption to increase 
-          dramatically when using SET /a intensively 
+          dramatically when using SET /a intensively
+
+        - Fixed typos with i18n.
+
+        - Removed unnecessary config.h.in from repository.
+
+        - Fixed goto command ignoring bAbortCommad. 
 

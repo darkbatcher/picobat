@@ -45,7 +45,7 @@ void Dos9_LoadErrors(void)
 {
 	char lpPath[FILENAME_MAX];
 	char lpSharePath[FILENAME_MAX];
-	char lpEncoding[15]="";
+	char lpEncoding[15]="ASCII";
 
 #ifdef WIN32
     /* On windows, the best is to suppose that *all* the read-only

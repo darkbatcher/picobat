@@ -101,6 +101,13 @@ int Dos9_CmdGoto(char* lpLine)
 
     }
 
+    if (!stricmp(lpLabelName, ":EOF")) {
+
+        bAbortCommand = -1;
+        return 0;
+
+    }
+
     if ((Dos9_JumpToLabel(lpLabelName, *lpFileName ? lpFileName : NULL) == -1)
         && !quiet) {
 
@@ -108,6 +115,8 @@ int Dos9_CmdGoto(char* lpLine)
         goto err;
 
     }
+
+    bAbortCommand = 1;
 
     Dos9_EsFree(arg);
     return 0;
