@@ -34,9 +34,11 @@ static int IntEval_InputFromString(char* buffer, int max_size);
 %option noyywrap
 
 blancs    [ \t]+
+nodelim	  [^+\-*%/=()\~\^><|&\n]
+nodelimnb [^+\-*%/=()\~\^><|&\n0-9]
 chiffre   [0-9]
 entier    ((0x)?[0-9a-fA-F]+)|({chiffre}+)
-variable  [_a-zA-Z][[_a-zA-Z0-9]*
+variable  {nodelim}*{nodelimnb}{nodelim}*
 
 %%
 

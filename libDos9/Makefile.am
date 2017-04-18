@@ -25,6 +25,7 @@ noinst_HEADERS = libDos9-int.h ./file/Dos9_File.h
 
 libDos9_la_SOURCES = ./cmdlist/Dos9_CmdList.c ./console/Dos9_ConsoleANSI.c \
 ./console/Dos9_ConsoleWin.c ./dir/Dos9_Attr.c ./dir/Dos9_Dir.c \
+./dir/Dos9_UnicodeDir.c \
 ./enc/Dos9_Enc.c ./estr/Dos9_Estr.c stack/Dos9_Stack.c \
 ./thread/Dos9_Thread.c ./file/Dos9_StdFile.c \
 ./file/Dos9_Win32File.c ./init/Dos9_Init.c ./cmdlib/Dos9_String.c 

@@ -95,7 +95,7 @@ int Dos9_CmdType(char* lpLine)
     lpLine += 4;
 
     /* adjust buffering size to get maximum performances */
-    setvbuf(stdout, buf, _IOFB, sizeof(buf));
+    setvbuf(stdout, buf, _IOFBF, sizeof(buf));
 
     while ((lpLine = Dos9_GetNextParameterEs(lpLine, lpEsParam))) {
 
