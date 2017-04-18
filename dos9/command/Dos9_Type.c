@@ -90,8 +90,12 @@ int Dos9_CmdType(char* lpLine)
              *pEnd;
 
     int status=0;
+    char buf[8192];
 
     lpLine += 4;
+
+    /* adjust buffering size to get maximum performances */
+    setvbuf(stdout, buf, _IOFB, sizeof(buf));
 
     while ((lpLine = Dos9_GetNextParameterEs(lpLine, lpEsParam))) {
 
@@ -183,6 +187,9 @@ int Dos9_CmdType(char* lpLine)
     }
 
 end:
+
+    fflush(stdout);
+    setvbuf(stdout, NULL, _IONBF, 0);
 
     if (pBegin)
         Dos9_FreeFileList(pBegin);

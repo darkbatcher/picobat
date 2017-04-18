@@ -118,6 +118,8 @@ int Dos9_CmdDir(char* lpLine)
 	     *lpToken,
 	     lpFileName[FILENAME_MAX]= {0};
 
+    char buf[8192];
+
 	int iFlag=DOS9_SEARCH_DEFAULT | DOS9_SEARCH_DIR_MODE;
 
 	ESTR* lpParam=Dos9_EsInit();
@@ -127,6 +129,8 @@ int Dos9_CmdDir(char* lpLine)
 
 	wAttr=DOS9_CMD_ATTR_ALL;
 	bSimple=FALSE;
+
+	setvbuf(stdout, buf, _IOFBF, sizeof(buf));
 
 	while ((lpNext=Dos9_GetNextParameterEs(lpNext, lpParam))) {
 
@@ -202,6 +206,9 @@ int Dos9_CmdDir(char* lpLine)
 	}
 
 	Dos9_EsFree(lpParam);
+
+    fflush(stdout);
+	setvbuf(stdout, NULL, _IONBF, 0);
 
 	return 0;
 }

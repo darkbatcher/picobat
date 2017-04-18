@@ -24,9 +24,7 @@
 #include "../libDos9-int.h"
 #include "../../config.h"
 
-#ifdef DOS9_USE_LIBCU8
-#include <libcu8.h>
-#endif // DOS9_USE_LIBCU8
+#ifndef DOS9_USE_LIBCU8
 
 struct match_args_t {
     int flags;
@@ -358,7 +356,7 @@ static FILELIST* Dos9_GetMatch(char* base, char* up, struct match_args_t* arg)
 
                     /* exit on error or if the user only requested the first
                        match */
-                    if ((ret == -1)
+                    if ((ret == (FILELIST*)-1)
                         || ((ret != (FILELIST*)-1) && (ret != NULL)
                             && (arg->flags & DOS9_SEARCH_GET_FIRST_MATCH)))
                         goto end;
@@ -436,7 +434,7 @@ LIBDOS9 int Dos9_GetMatchFileCallback(char* lpPathMatch, int iFlag, void(*pCallB
 
     return (int)file;
 }
-
+#endif
 
 
 LIBDOS9 char* Dos9_SeekPattern(const char* match, const char* pattern, size_t len)
