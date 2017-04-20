@@ -1851,3 +1851,13 @@ TUESDAY 18TH, APRIL
         - Fixed issues of both libinteval and libmatheval in determining 
           delimiters.
 
+THURSDAY 20TH, APRIL
+
+        - Fixed errors in unicodes files search functions.
+
+        - Fixed FIND command for enhanced compatibility with cmd.exe.
+
+        - Fixed manual pages.
+
+        - Fixed some typos.
+

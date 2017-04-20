@@ -343,8 +343,10 @@ static FILELIST* Dos9_GetMatch(wchar_t* base, wchar_t* up, struct match_args_t* 
 
         /* skip basic pseudo dirs */
         if ((arg->flags & DOS9_SEARCH_NO_PSEUDO_DIR)
-            && (!wcscmp(ent.cFileName, L".") || !wcscmp(ent.cFileName, L"..")))
+            && (!wcscmp(ent.cFileName, L".") || !wcscmp(ent.cFileName, L".."))) {
+            loop = FindNextFileW(dir, &ent);
             continue;
+        }
 
         /* Compute the path of the current matching entity */
         if (base != NULL) {

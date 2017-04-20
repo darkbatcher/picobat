@@ -965,6 +965,11 @@ void Dos9_SigHandlerBreak(int sig)
 #elif defined WIN32
 #include "../command/Dos9_Ask.h"
 
+BOOL WINAPI Dos9_BreakIgn2(DWORD dwCtrlType)
+{
+    return TRUE;
+}
+
 BOOL WINAPI Dos9_SigHandler(DWORD dwCtrlType)
 {
     int choice, i;
@@ -980,6 +985,8 @@ BOOL WINAPI Dos9_SigHandler(DWORD dwCtrlType)
 	switch(dwCtrlType) {
 		case CTRL_C_EVENT:
 		case CTRL_BREAK_EVENT:
+		    SetConsoleCtrlHandler(Dos9_BreakIgn2, TRUE);
+
             /* Request a handle to the main thread and try to freeze it */
             thread = OpenThread(THREAD_ALL_ACCESS, FALSE, iMainThreadId);
 
