@@ -27,7 +27,7 @@
 #include "../libDos9-int.h"
 #include "../../config.h"
 
-#ifdef DOS9_USE_LIBCU8
+#if defined(DOS9_USE_LIBCU8)
 #include <windows.h>
 #include <libcu8.h>
 
@@ -44,7 +44,6 @@ static int __inline__ Dos9_FileExists_W(const wchar_t* ptrName)
     int iAttrib;
 
     iAttrib = GetFileAttributesW(ptrName);
-
 
     return (iAttrib != INVALID_FILE_ATTRIBUTES &&
             !(iAttrib & FILE_ATTRIBUTE_DIRECTORY));
@@ -149,11 +148,11 @@ static FILELIST* Dos9_AddMatch(wchar_t* wname, FILELIST* files, struct match_arg
     if (!(arg->flags & DOS9_SEARCH_NO_STAT)) {
         if (data == NULL) {
 
-            Dos9_GetStat(&(block.stFileStats), wname);
+            Dos9_GetStat(&(file->stFileStats), wname);
 
         } else {
 
-            Dos9_FillStat(&(block.stFileStats), data);
+            Dos9_FillStat(&(file->stFileStats), data);
 
         }
     }
@@ -186,8 +185,6 @@ static FILELIST* Dos9_GetMatch(wchar_t* base, wchar_t* up, struct match_args_t* 
     WIN32_FIND_DATAW ent;
 
     int loop;
-
-    /* printf("Called Dos9_GetMatch(%s, %s, arg)\n", base, up); */
 
     /* if something has already been found ... */
     if ((ret != (FILELIST*)-1) && (ret != NULL)
@@ -258,7 +255,7 @@ static FILELIST* Dos9_GetMatch(wchar_t* base, wchar_t* up, struct match_args_t* 
        to recurse in base folder ... */
     if (base != NULL) {
 
-        snwprintf(path, XSIZE(path), L"%s/%s", base, item);
+        snwprintf(path, XSIZE(path), L"%s\\%s", base, item);
 
     } else {
 
@@ -351,7 +348,7 @@ static FILELIST* Dos9_GetMatch(wchar_t* base, wchar_t* up, struct match_args_t* 
 
         /* Compute the path of the current matching entity */
         if (base != NULL) {
-            snwprintf(path, XSIZE(path), L"%s/%s", base, ent.cFileName);
+            snwprintf(path, XSIZE(path), L"%s\\%s", base, ent.cFileName);
         } else {
             snwprintf(path, XSIZE(path), L"%s", ent.cFileName);
         }
@@ -501,7 +498,7 @@ LIBDOS9 int Dos9_GetMatchFileCallback(char* lpPathMatch, int iFlag, void(*pCallB
     args.flags = iFlag;
     args.files =  NULL;
 
-    file = Dos9_GetMatch(NULL, lpPathMatch, &args);
+    file = Dos9_GetMatch(NULL, wpath, &args);
 
     if (file == (FILELIST*)-1) {
 

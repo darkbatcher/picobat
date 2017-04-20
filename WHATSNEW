@@ -1841,3 +1841,13 @@ FRIDAY 14TH, APRIL
 
         - Fixed Dos9_Auto.bat man page that was in ANSI instead of utf-8.
 
+TUESDAY 18TH, APRIL
+
+        - Added new file searching functions to speed up file search under 
+          windows.
+
+        - Fixed buffering modes of TYPE and DIR command to speed up functions.
+
+        - Fixed issues of both libinteval and libmatheval in determining 
+          delimiters.
+

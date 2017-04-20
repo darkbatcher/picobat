@@ -24,7 +24,7 @@
 #include "../libDos9-int.h"
 #include "../../config.h"
 
-#ifndef DOS9_USE_LIBCU8
+#if !defined(DOS9_USE_LIBCU8)
 
 struct match_args_t {
     int flags;

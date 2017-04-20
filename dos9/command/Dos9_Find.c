@@ -123,7 +123,7 @@ void Dos9_FileFind(char* str, char* name, int count, int flag, int reverse)
 
         Dos9_RmTrailingNl(lpEsLine->str);
 
-        res = searchfn(Dos9_EsToChar(lpEsLine), str);
+        res = *str ? searchfn(Dos9_EsToChar(lpEsLine), str) : 0;
 
         if (!reverse ^ !res) {
 

@@ -26,10 +26,23 @@
 	Lors du parsage, Dos9 effectue les opérations de parsage dans l'ordre suivant :
 
 	- {Lecture d'une ligne} : Lors de cette étape, {dos9|Dos9} lit une {cmdline|ligne de commande}, soit à partir
-	de commandes entrées au clavier, où soit au travers d'un fichier (si c'est le cas, le fichier
-	est d'abord ouvert, la ligne est lue, puis le fichier est ensuite fermé). Il se peut que la ligne de
-	commande soit en fait un bloc de commande.
+	de commandes entrées au clavier, où soit au travers d'un fichier. Il existe deux mode de lecture
+	de fichiers scripts, en fonction de l'état de l'option {CMDLYCORRECT}:
+	
+	-- Si {CMDLYCORRECT} est désactivé, le fichier est lu en une seule passe, en préparsant les lignes de
+	commandes. Ce comportement est spécifique à {Dos9}, il permet de gagner du temps d'exécution par rapport
+	à la méthode de lecture historique des fichiers batch. Avant d'exécuter une nouvelle ligne, {Dos9}
+	vérifie que le script n'a pas été modifié, sinon, il le recharge.
+	
+	-- Si {CMDLYCORRECT} est activé, {Dos9} utilise la même mécanique de lecture que {cmd.exe}. C'est-à-dire
+	qu'avant chaque nouvelle lecture de ligne dans un script, le script est ouvert, la ligne est lue,
+	et le script est refermé. Cette méthode est héritée des anciennes versions de ms-dos, dont la mémoire
+	était très limitée. Même si elle permet des gains en mémoire, elle implique une forte pénalité en
+	termes de performance. C'est pour cette raison qu'elle n'est pas utilisée par défaut par Dos9.
 
+	@- Le changement de mode de {CMDLYCORRECT} entraîne un redémarrage du script depuis le début. Il
+	n'est donc pas conseillé de modifier cette option en cours d'exécution
+	
 	- {Expansion conventionnelle} : Lors de cette étape Dos9 développe les variables selon 
 	{exp|l'expansion conventionnelle}. Les variables entourées par des {%} sont alors
 	développées.
@@ -42,12 +55,12 @@
 
 	- {Détection des arguments} : Lors de cette étape, Dos9 détecte les arguments de la
 	{cmdline|ligne de commande}.
+	
+	- {Expansion des} {xvar|variables spéciales} : Lors de cette étape, les variables
+	spéciales sont dévellopées.
 
 	- {Expansion retardée} : Lors de cette étape, Dos9 procède à l'{exp|expansion retardée} des
 	variable. Les variables entourées par des {!} seront dévellopées.
-
-	- {Expansion des} {xvar|variables spéciales} : Lors de cette étape, les variables
-	spéciales sont dévellopées.
 
 {{Remarques}}
 	

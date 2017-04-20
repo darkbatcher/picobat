@@ -31,7 +31,8 @@
 	fichiers ou l'entrée standard. Contrairement à l'implémentation native
 	de {FIND} de {Windows} (et donc celle utilisée par {cmd.exe}), il
 	n'est pas nécessaire de mettre des guillemets autour de {chaine} pour
-	que la ligne de commande soit valide.
+	que la ligne de commande soit valide. Si {chaine} est la chaine vide ({""}),
+	alors aucune ligne n'est affichée par la commande {FIND}.
 
 		- {fichier ...} : Une liste de fichiers (pouvant contenir des
 	{spec/regexp|caractères génériques}) dans lequels la commande {FIND}
@@ -87,6 +88,16 @@
 	commande {FIND} de {cmd.exe} est une commande externe. Il est donc
 	possible, sous Windows, d'utiliser le {FIND} de {cmd.exe} via la
 	commande {alias|ALIAS}.
+	
+{{Compter les lignes d'un fichier}}
+
+	Il est possible de compter les lignes contenues dans un fichier texte
+	avec la commande {FIND} pour cela, il suffit d'utiliser la commande
+	suivante
+	
+${FIND /c /v "" fichier}
+
+	Cette façon de compter les lignes est compatible avec {cmd.exe}.
 
 {{Compatibilité}}
 

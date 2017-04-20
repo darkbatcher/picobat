@@ -86,7 +86,7 @@ int Dos9_CmdType(char* lpLine)
 	ESTR* lpEsParam=Dos9_EsInit();
 
 	FILELIST *pBegin=NULL,
-             *pTmp,
+             *pTmp=NULL,
              *pEnd;
 
     int status=0;
@@ -122,7 +122,7 @@ int Dos9_CmdType(char* lpLine)
             }
 
             if (!pBegin)
-                pBegin = pEnd = pTmp;
+                pBegin = (pEnd = pTmp);
             else
                 pEnd->lpflNext = pTmp; /* catenate the lists */
 
