@@ -365,19 +365,18 @@ static FILELIST* Dos9_GetMatch(wchar_t* base, wchar_t* up, struct match_args_t* 
 
         if (Dos9_FileExists_W(path)
             && PathMatchSpecW(ent.cFileName, item)) {
-                /* The entity is a file, so only add if up is NULL */
+            /* The entity is a file, so only add if up is NULL */
 
-                if (up == NULL) {
+            if (up == NULL) {
 
-                    if ((tmp = Dos9_AddMatch(path, ret, arg, &ent)) == NULL)
-                        goto err;
+                if ((tmp = Dos9_AddMatch(path, ret, arg, &ent)) == NULL)
+                    goto err;
 
-                    ret = tmp;
+                ret = tmp;
 
-                    if (arg->flags & DOS9_SEARCH_GET_FIRST_MATCH)
-                            goto end;
+                if (arg->flags & DOS9_SEARCH_GET_FIRST_MATCH)
+                        goto end;
 
-                }
             }
         } else {
             /* the entity is a directory, browse if (a) up is not NULL
