@@ -181,7 +181,7 @@ int Dos9_CmdSet(char *lpLine)
 	char *lpNextToken;
 
 	int i,
-        nok = 0,
+        nok = 1,
 	    bFloats;
 
 	if (lpNextToken=Dos9_GetNextParameter(lpLine+3, lpArgBuf,
@@ -244,7 +244,8 @@ int Dos9_CmdSet(char *lpLine)
 		   which match with the prefix (if defined)
 		*/
 		for (i=0; i < lpeEnv->index; i++) {
-			if (strnicmp(lpeEnv->envbuf[i]->name, lpLine, strlen(lpLine)) == 0) {
+			if (*lpLine == '\0'
+                && strnicmp(lpeEnv->envbuf[i]->name, lpLine, strlen(lpLine)) == 0) {
 
 				found = TRUE;
 
@@ -294,17 +295,21 @@ int Dos9_CmdSetS(char* lpLine)
 
 			Dos9_GetEndOfLine(lpLine, lpEsVar);
 
-			lpLine=NULL;
+			lpLine = NULL;
 
-			if ((lpCh=strrchr(Dos9_EsToChar(lpEsVar), '"')))
+			if ((lpCh = strrchr(Dos9_EsToChar(lpEsVar), '"')))
 				*lpCh='\0';
 
-		} else if (*lpLine=='"') {
+            lpBegin = lpEsVar->str;
+
+		} else if (*lpLine == '"') {
 
 			/* use the new behaviour (get the next parameter
 			   and loop again */
-			lpLine=Dos9_GetNextParameterEsD(lpLine, lpEsVar,
+			lpLine = Dos9_GetNextParameterEsD(lpLine, lpEsVar,
 					"\t\" ");
+
+            lpBegin = lpEsVar->str;
 
 			DOS9_DBG("GOT Token => \"%s\"\n", Dos9_EsToChar(lpEsVar)
 					);
@@ -312,11 +317,26 @@ int Dos9_CmdSetS(char* lpLine)
 		} else {
 
 			Dos9_GetEndOfLine(lpLine, lpEsVar);
+
+
+            /* Strip any pair of '"' if encountered */
+			if (*(lpEsVar->str) == '"'
+                && (lpEnd = strrchr(lpEsVar->str + 1, '"'))) {
+
+                *lpEnd = '\0';
+                lpBegin = lpEsVar->str + 1;
+
+            } else {
+
+                lpBegin = lpEsVar->str;
+
+            }
+
 			lpLine=NULL;
 
 		}
 
-		if (!(lpCh=strchr(Dos9_EsToChar(lpEsVar), '='))) {
+		if (!(lpCh=strchr(lpBegin, '='))) {
 
 			/* Well, apparently this line is not well constructed,
 			   however, we do not display error, and backtrack to
@@ -330,7 +350,7 @@ int Dos9_CmdSetS(char* lpLine)
 		*lpCh='\0';
 		lpCh++;
 
-		Dos9_SetEnv(lpeEnv, Dos9_EsToChar(lpEsVar), lpCh);
+		Dos9_SetEnv(lpeEnv, lpBegin, lpCh);
 
 	}
 
