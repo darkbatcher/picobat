@@ -334,8 +334,8 @@ typedef struct FILELIST {
     struct FILELIST* lpflNext;
 } FILELIST,*LPFILELIST;
 
-LIBDOS9 int         Dos9_RegExpMatch(const char* lpRegExp, const char* lpMatch);
-LIBDOS9 int         Dos9_RegExpCaseMatch(const char* lpRegExp, const char* lpMatch);
+LIBDOS9 int         Dos9_RegExpMatch(const char* restrict lpRegExp, const char* restrict lpMatch);
+LIBDOS9 int         Dos9_RegExpCaseMatch(const char* restrict lpRegExp, const char* restrict lpMatch);
 LIBDOS9 LPFILELIST  Dos9_GetMatchFileList(char* lpPathMatch, int iFlag);
 LIBDOS9 int         Dos9_GetMatchFileCallback(char* lpPathMatch, int iFlag, void(*pCallBack)(FILELIST*));
 LIBDOS9 int         Dos9_FreeFileList(LPFILELIST lpflFileList);
@@ -405,12 +405,12 @@ LIBDOS9 char* Dos9_SearchChar(const char* lpCh, int cChar);
 LIBDOS9 char* Dos9_SearchLastChar(const char* lpCh, int cChar);
 LIBDOS9 void  Dos9_UnEscape(char* lpCh);
 LIBDOS9 char* Dos9_GetNextNonEscaped(const char* lpCh);
-LIBDOS9 char* Dos9_SearchToken(const char* lpCh, const char* lpDelims);
-LIBDOS9 char* Dos9_SearchLastToken(const char* lpCh, const char* lpDelims);
+LIBDOS9 char* Dos9_SearchToken(const char* restrict lpCh, const char* restrict lpDelims);
+LIBDOS9 char* Dos9_SearchLastToken(const char* restrict lpCh, const char* restrict lpDelims);
 LIBDOS9 char* Dos9_SearchChar_OutQuotes(const char* lpCh, int cChar);
-LIBDOS9 char* Dos9_SearchToken_OutQuotes(const char* lpCh, const char* lpDelims);
-LIBDOS9 char* Dos9_SearchToken_Hybrid(const char* pch, const char* delims,
-                                                            const char* qdelims);
+LIBDOS9 char* Dos9_SearchToken_OutQuotes(const char* restrict lpCh, const char* restrict lpDelims);
+LIBDOS9 char* Dos9_SearchToken_Hybrid(const char* restrict pch, const char* restrict delims,
+                                                            const char* restrict qdelims);
 LIBDOS9 void Dos9_StripEndDelims(char* str);
 
 #endif // LIBDOS9_INCLUDED_H

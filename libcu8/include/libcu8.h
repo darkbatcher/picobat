@@ -93,7 +93,6 @@ __LIBCU8__IMP __cdecl int libcu8_dup2_nolock(int fd1, int fd2);
 __LIBCU8__IMP __cdecl int libcu8_remove(const char* file);
 __LIBCU8__IMP __cdecl int libcu8_rename(const char* oldn, const char* newn);
 __LIBCU8__IMP __cdecl int libcu8_unlink(const char* file);
-
 __LIBCU8__IMP __cdecl int libcu8_chmod(const char* file, int mode);
 __LIBCU8__IMP __cdecl int libcu8_dup(int fd);
 __LIBCU8__IMP __cdecl int libcu8_dup_nolock(int fd);

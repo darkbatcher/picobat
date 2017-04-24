@@ -29,6 +29,7 @@
 
 #if defined(DOS9_USE_LIBCU8)
 #include <windows.h>
+#include <Shlwapi.h>
 #include <libcu8.h>
 
 #define XSIZE(a) sizeof(a)/sizeof(a [0])
@@ -333,6 +334,13 @@ static FILELIST* Dos9_GetMatch(wchar_t* base, wchar_t* up, struct match_args_t* 
     if (Dos9_IsRegExpTrivial(path))
         goto end;
 
+    if (base != NULL) {
+        snwprintf(path, XSIZE(path), L"%s\\*", base);
+    } else {
+        snwprintf(path, XSIZE(path), L"*");
+    }
+
+
     if ((dir = FindFirstFileW(path, &ent)) == INVALID_HANDLE_VALUE)
         goto end;
 
@@ -355,21 +363,22 @@ static FILELIST* Dos9_GetMatch(wchar_t* base, wchar_t* up, struct match_args_t* 
             snwprintf(path, XSIZE(path), L"%s", ent.cFileName);
         }
 
-        if (Dos9_FileExists_W(path)) {
-            /* The entity is a file, so only add if up is NULL */
+        if (Dos9_FileExists_W(path)
+            && PathMatchSpecW(ent.cFileName, item)) {
+                /* The entity is a file, so only add if up is NULL */
 
-            if (up == NULL) {
+                if (up == NULL) {
 
-                if ((tmp = Dos9_AddMatch(path, ret, arg, &ent)) == NULL)
-                    goto err;
+                    if ((tmp = Dos9_AddMatch(path, ret, arg, &ent)) == NULL)
+                        goto err;
 
-                ret = tmp;
+                    ret = tmp;
 
-                if (arg->flags & DOS9_SEARCH_GET_FIRST_MATCH)
-                        goto end;
+                    if (arg->flags & DOS9_SEARCH_GET_FIRST_MATCH)
+                            goto end;
 
+                }
             }
-
         } else {
             /* the entity is a directory, browse if (a) up is not NULL
             or (b) the search is recursive and up is NULL. Only add if
@@ -378,7 +387,8 @@ static FILELIST* Dos9_GetMatch(wchar_t* base, wchar_t* up, struct match_args_t* 
 
                 /* add the file and browse if recursive. If the returns uses
                    callback, do not forget to add match first. */
-                if ((arg->callback != NULL)) {
+                if ((arg->callback != NULL)
+                    && PathMatchSpecW(ent.cFileName, item)) {
                     if ((tmp = Dos9_AddMatch(path, ret, arg, &ent)) == NULL)
                         goto err;
 
@@ -393,7 +403,7 @@ static FILELIST* Dos9_GetMatch(wchar_t* base, wchar_t* up, struct match_args_t* 
                     && (wcscmp(ent.cFileName, L".") && wcscmp(ent.cFileName, L".."))) {
 
                     arg->files = ret;
-                    ret = Dos9_GetMatch(path, up, arg);
+                    ret = Dos9_GetMatch(path, item, arg);
 
                     if ((ret == (FILELIST*)-1)
                         || ((ret != (FILELIST*)-1) && (ret != NULL)
@@ -402,7 +412,8 @@ static FILELIST* Dos9_GetMatch(wchar_t* base, wchar_t* up, struct match_args_t* 
 
                 }
 
-                if (arg->callback == NULL) {
+                if ((arg->callback == NULL)
+                    && PathMatchSpecW(ent.cFileName, item)) {
                     if ((tmp = Dos9_AddMatch(path, ret, arg, &ent)) == NULL)
                         goto err;
 

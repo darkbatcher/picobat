@@ -31,6 +31,6 @@ libDos9_la_SOURCES = ./cmdlist/Dos9_CmdList.c ./console/Dos9_ConsoleANSI.c \
 ./file/Dos9_Win32File.c ./init/Dos9_Init.c ./cmdlib/Dos9_String.c 
 
 libDos9_la_LDFLAGS = -no-undefined
-libDos9_la_LIBADD = @libcu8_lib@ @LIBS@ 
+libDos9_la_LIBADD = @libcu8_lib@ @shellwapi@ @LIBS@ 
 
 AM_CFLAGS = @libcu8_inc@ @CFLAGS@

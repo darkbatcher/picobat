@@ -155,7 +155,7 @@ LIBDOS9 char* Dos9_GetNextNonEscaped(const char* lpCh)
     return (char*)lpCh;
 }
 
-LIBDOS9 char* Dos9_SearchToken(const char* lpCh, const char* lpDelims)
+LIBDOS9 char* Dos9_SearchToken(const char* restrict lpCh, const char* restrict lpDelims)
 {
 
     char* lpNxt;
@@ -176,7 +176,7 @@ LIBDOS9 char* Dos9_SearchToken(const char* lpCh, const char* lpDelims)
 
 }
 
-LIBDOS9 char* Dos9_SearchLastToken(const char* lpCh, const char* lpDelims)
+LIBDOS9 char* Dos9_SearchLastToken(const char* restrict lpCh, const char* restrict lpDelims)
 {
     const char *lpNxt,
          *lpLastOccurence=NULL;
@@ -303,7 +303,7 @@ LIBDOS9 char* Dos9_SearchChar_OutQuotes(const char* lpCh, int cChar)
 
 }
 
-LIBDOS9 char* Dos9_SearchToken_OutQuotes(const char* lpCh, const char* lpDelims)
+LIBDOS9 char* Dos9_SearchToken_OutQuotes(const char* restrict lpCh, const char* restrict lpDelims)
 {
 
     char *lpNxt,
@@ -389,7 +389,7 @@ LIBDOS9 char* Dos9_SearchToken_OutQuotes(const char* lpCh, const char* lpDelims)
 
 }
 
-LIBDOS9 char* Dos9_SearchToken_Hybrid(const char* pch, const char* delims, const char* qdelims)
+LIBDOS9 char* Dos9_SearchToken_Hybrid(const char* restrict pch, const char* restrict delims, const char* restrict qdelims)
 {
     char *qres, *res;
 

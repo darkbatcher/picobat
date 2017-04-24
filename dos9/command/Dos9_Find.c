@@ -181,6 +181,7 @@ int Dos9_CmdFind(char* lpLine)
         reverse=0,
         passed_names=0;
 
+    char buf[8192];
     char* str=NULL;
 
     lpLine += 4;
@@ -336,6 +337,8 @@ end:
 
     if (pBegin)
         Dos9_FreeFileList(pBegin);
+
+    setvbuf(stdout, NULL, _IONBF, 0);
 
     Dos9_EsFree(lpEsParam);
 

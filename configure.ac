@@ -106,10 +106,12 @@ dnl look for xdg-open
 			Define to 1 if have xdg-open)]
 		)
 dnl No libcu8 for *nixes
-		enable_libcu8=no
+		enable_libcu8=no;
+		AC_SUBST([shellwapi], [ ])
 	;;
 	
-	*);;
+	*) AC_SUBST([shellwapi], [-lshlwapi])
+	;;
 esac
 
 dnl hack to expand cleanly the $datadir variable
@@ -133,7 +135,6 @@ else
        AC_SUBST([libcu8_lib],[ ])
 	   AC_SUBST([libcu8_inc],[ ])
 	   AC_SUBST([libcu8],[ ])
-
 fi
 
 AC_CONFIG_SUBDIRS([libmatheval])

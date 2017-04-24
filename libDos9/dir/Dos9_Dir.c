@@ -328,7 +328,7 @@ static FILELIST* Dos9_GetMatch(char* base, char* up, struct match_args_t* arg)
                         && (strcmp(ent->d_name, ".") && strcmp(ent->d_name, ".."))) {
 
                         arg->files = ret;
-                        ret = Dos9_GetMatch(path->str, up, arg);
+                        ret = Dos9_GetMatch(path->str, item, arg);
 
                         if ((ret == -1)
                             || ((ret != (FILELIST*)-1) && (ret != NULL)
@@ -437,7 +437,7 @@ LIBDOS9 int Dos9_GetMatchFileCallback(char* lpPathMatch, int iFlag, void(*pCallB
 #endif
 
 
-LIBDOS9 char* Dos9_SeekPattern(const char* match, const char* pattern, size_t len)
+LIBDOS9 char* Dos9_SeekPattern(const char* restrict match, const char* restrict pattern, size_t len)
 {
     const char* tok;
     int   i = 0;
@@ -464,7 +464,7 @@ LIBDOS9 char* Dos9_SeekPattern(const char* match, const char* pattern, size_t le
     return NULL;
 }
 
-LIBDOS9 int Dos9_EndWithPattern(const char* match, const char* pattern, size_t len)
+LIBDOS9 int Dos9_EndWithPattern(const char* restrict match, const char* restrict pattern, size_t len)
 {
     size_t size = strlen(match);
 
@@ -481,7 +481,7 @@ LIBDOS9 int Dos9_EndWithPattern(const char* match, const char* pattern, size_t l
 
 }
 
-LIBDOS9 int Dos9_RegExpMatch(const char* regexp, const char* match)
+LIBDOS9 int Dos9_RegExpMatch(const char* restrict regexp, const char* restrict match)
 {
 	char* next;
     size_t size;
@@ -557,7 +557,7 @@ LIBDOS9 int Dos9_RegExpMatch(const char* regexp, const char* match)
 
 }
 
-LIBDOS9 char* Dos9_SeekCasePattern(const char* match, const char* pattern, size_t len)
+LIBDOS9 char* Dos9_SeekCasePattern(const char* restrict match, const char* restrict pattern, size_t len)
 {
     const char* tok;
     int   i = 0;
@@ -584,7 +584,7 @@ LIBDOS9 char* Dos9_SeekCasePattern(const char* match, const char* pattern, size_
     return NULL;
 }
 
-LIBDOS9 int Dos9_EndWithCasePattern(const char* match, const char* pattern, size_t len)
+LIBDOS9 int Dos9_EndWithCasePattern(const char* restrict match, const char* restrict pattern, size_t len)
 {
     size_t size = strlen(match);
 
@@ -601,7 +601,7 @@ LIBDOS9 int Dos9_EndWithCasePattern(const char* match, const char* pattern, size
 
 }
 
-LIBDOS9 int Dos9_RegExpCaseMatch(const char* regexp, const char* match)
+LIBDOS9 int Dos9_RegExpCaseMatch(const char* restrict regexp, const char* restrict match)
 {
 	char* next;
     size_t size;
