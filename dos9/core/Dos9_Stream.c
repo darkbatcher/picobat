@@ -446,7 +446,6 @@ void Dos9_FlushDescriptor(int iDescriptor, unsigned int iStd)
 
 void Dos9_FlushStd(void)
 {
-
 	fflush(stdin);
 	fflush(stdout);
 	fflush(stderr);
@@ -454,8 +453,10 @@ void Dos9_FlushStd(void)
 
 void Dos9_SetStdBuffering(void)
 {
-	setvbuf( stdout, NULL, _IONBF, 0 );
-	setvbuf( stderr, NULL, _IONBF, 0 );
+	if (isatty(DOS9_STDOUT))
+        setvbuf( stdout, NULL, _IONBF, 0 );
+	if (isatty(DOS9_STDERR))
+        setvbuf( stderr, NULL, _IONBF, 0 );
 }
 
 LPSTREAMLVL Dos9_AllocStreamLvl(void)

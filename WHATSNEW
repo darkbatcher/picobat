@@ -1865,5 +1865,7 @@ MONDAY 24TH, APRIL
 
         - Fixed errors in unicode file searching function and functions.
 
-        - Fixed find to make it faster using file buffering potential
+        - Fixed find to make it faster using file buffering potential.
+
+        - Fixed the set command.
 
