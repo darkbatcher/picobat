@@ -31,8 +31,8 @@
 #define DUMP_BIG_ENDIAN 1
 
 union dump_data_u {
-    char c;
-    short s;
+    unsigned char c;
+    unsigned short s;
     int i;
     long l;
     long long ll;

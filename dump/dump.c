@@ -46,9 +46,13 @@ int main(int argc, char* argv[])
         nfiles = 0,
         nbytes = 16;
 
+    char  buf[8192];
+
     char* file[FILENAME_MAX];
 
     struct dump_data_t data;
+
+    setvbuf(stdout, buf, _IOFBF, sizeof(buf));
 
     data.type = DATA_CHAR;
     data.rev = 0;
@@ -58,6 +62,7 @@ int main(int argc, char* argv[])
 
     endianess = dump_get_endianess();
     dump_make_hfmts();
+
 
     while (argv[i]) {
 
@@ -71,7 +76,7 @@ int main(int argc, char* argv[])
             mode |= HEX_ON;
         else if (!stricmp(argv[i], "/-H"))
             mode &= ~ HEX_ON;
-        else if (!strncmp(argv[i], "/T", 2)) {
+        else if (!strnicmp(argv[i], "/T", 2)) {
 
             argv[i] += 2;
             if (*argv[i] == ':')
@@ -131,6 +136,8 @@ int main(int argc, char* argv[])
         #define O_BINARY 0
         #endif // WIN32
 
+        memset(&data, 0, sizeof(data));
+
         if ((fd = open(file[i], O_BINARY | O_RDONLY)) == -1)
             ERROR(1, "dump : unable to open file \"%s\".\n", file[i]);
 
@@ -168,7 +175,7 @@ int dump_file(int fd, struct dump_data_t* data, int mode, int nbytes)
         printf(v_hfmt, addr);
         printf(" ");
     }
-    
+
     while (dump_read_data(fd, data) == 0) {
 
         dump_get_string(line, sizeof(line), data, mode);

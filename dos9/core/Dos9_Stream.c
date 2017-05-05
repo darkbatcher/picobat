@@ -453,9 +453,9 @@ void Dos9_FlushStd(void)
 
 void Dos9_SetStdBuffering(void)
 {
-	if (isatty(DOS9_STDOUT))
+	//if (isatty(DOS9_STDOUT))
         setvbuf( stdout, NULL, _IONBF, 0 );
-	if (isatty(DOS9_STDERR))
+	//if (isatty(DOS9_STDERR))
         setvbuf( stderr, NULL, _IONBF, 0 );
 }
 

@@ -743,6 +743,8 @@ int Dos9_RunExternalFile(char* lpFileName, char** lpArguments)
 	tmp = lpArguments[0];
 	lpArguments[0] = str;
 
+
+
 	/* in windows the result is directly returned */
 	res=spawnv(_P_WAIT, lpFileName, (char * const*)lpArguments);
 

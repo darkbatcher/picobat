@@ -24,10 +24,12 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <assert.h>
 
 #include "libDos9.h"
 
 #include "Dos9_Core.h"
+#include "../../config.h"
 
 #include "../errors/Dos9_Errors.h"
 
@@ -57,6 +59,35 @@ int Dos9_TestLocalVarName(char cVar)
 
 	return 0;
 }
+
+#ifdef DOS9_USE_LIBCU8
+/* count the number of u8 chars in the string, this is
+   useful to prevent cutting var inside a u8 char */
+size_t __inline__ Dos9_CountU8Chars(const char* ch)
+{
+    size_t ret=0;
+
+    while(*ch) {
+        ret += ((*ch & 0xC0) != 0x80) ? 1 : 0;
+        ch++;
+    }
+
+    return ret;
+}
+
+ __inline__ char* Dos9_SkipU8Chars(char* ch, size_t cnt)
+{
+    while (cnt) {
+        cnt --;
+        ch ++;
+
+        while ((*ch & 0xC0) == 0x80)
+            ch++;
+    }
+
+    return ch;
+}
+#endif // DOS9_USE_LIBCU8
 
 int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
 {
@@ -154,7 +185,12 @@ int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
 
 	}
 
-	iTotalLen=strlen(lpVarContent);
+#ifdef DOS9_USE_LIBCU8
+    /* prevent strings from being cut in the middle of an u8 character */
+    iTotalLen = Dos9_CountU8Chars(lpVarContent);
+#else
+    iTotalLen=strlen(lpVarContent);
+#endif // DOS9_USE_LIBCU8
 
 	if (iVarState==2) {
 
@@ -186,10 +222,15 @@ int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
 			if ((iBegin+iLen)<= iTotalLen) {
 				/* if the strings is right */
 
-				lpZeroPos=lpVarContent+iBegin+iLen;
+#ifdef DOS9_USE_LIBCU8
+                lpZeroPos = Dos9_SkipU8Chars(lpVarContent, iBegin+iLen);
+                lpVarContent = Dos9_SkipU8Chars(lpVarContent, iBegin);
+#else
+                lpZeroPos=lpVarContent+iBegin+iLen;
+                lpVarContent+=iBegin;
+#endif /* DOS9_USE_LIBCU8 */
 				cCharSave=*lpZeroPos;
 				*lpZeroPos='\0';
-				lpVarContent+=iBegin;
 
 			}
 
@@ -203,10 +244,16 @@ int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
 				   the string)
 				*/
 
-				lpZeroPos=lpVarContent+iTotalLen+iLen;
+#ifdef DOS9_USE_LIBCU8
+                lpZeroPos=Dos9_SkipU8Chars(lpVarContent, iTotalLen+iLen);
+                lpVarContent =Dos9_SkipU8Chars(lpVarContent, iBegin);
+#else
+				lpZeroPos = lpVarContent+iTotalLen+iLen;
+				lpVarContent+=iBegin;
+#endif /* DOS9_USE_LIBCU8 */
 				cCharSave=*lpZeroPos;
 				*lpZeroPos='\0';
-				lpVarContent+=iBegin;
+
 
 			}
 
@@ -284,7 +331,6 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 	int i=0;
 
     *Dos9_EsToChar(lpRecieve) = '\0';
-
 
 	if (*lpName!='~') {
 

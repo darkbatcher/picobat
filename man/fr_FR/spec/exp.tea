@@ -90,6 +90,10 @@ ${hello world !}
 			  est négatif, alors la chaine qui sera remplacée
 			  s'arrêtera {nb2} caractères avant la fin de
 			  {nom_variable}
+			  
+		@- Notez que si la version de Dos9 que vous utilisez supporte l'utf8,
+		le découpage des variable ne se fait que sur des caractères entiers. Si
+		ce n'est pas le cas, aucune garantie n'est apportée.
 
 		@- Par exemple:
 
@@ -105,7 +109,7 @@ llo wo}
 
 
 		- Le remplacement d'une sous chaîne en utilisant l'option
-		${	nom_variable:chaine1=chaine2}
+		${nom_variable:chaine1=chaine2}
 
 			-- {chaine1} : chaine à remplacer dans la variable
 			  {nom_variable}
@@ -121,6 +125,22 @@ ECHO %foo:est=pingouin%}
 		@- Affichera la sortie suivante :
 
 ${Ceci pingouin un tpingouin}
+
+		- Le remplacement de la variable par une chaîne par défaut si
+		celle-ci n'est pas définie via l'option :
+		
+${nom_variable:chaine_défaut}
+
+			-- {chaine_défaut} : La chaîne à utiliser par défaut.
+			
+		@- Par exemple :
+		
+${SET var=
+ECHO %var:rien%}
+
+		@- Affichera 
+		
+${rien}
 
 {{L'expansion retardée}}
 

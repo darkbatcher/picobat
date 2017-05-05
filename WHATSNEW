@@ -1869,3 +1869,14 @@ MONDAY 24TH, APRIL
 
         - Fixed the set command.
 
+FRIDAY 5TH, MAY
+
+        - Added support for concatenation using '+' with the the COPY command.
+
+        - Added better support of variable trucating using numbers when Dos9 
+          is explicitely compiled to deal with utf-8.
+
+        - Fixed error messages and help messages.
+
+        - Fixed manual pages.
+

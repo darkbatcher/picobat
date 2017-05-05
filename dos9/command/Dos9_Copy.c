@@ -45,7 +45,7 @@
 #include "Dos9_Copy.h"
 
 /* COPY [/R] [/-Y | /Y] [/A[:]attributes] source [...] destination
-   MOVE [/R] [/-Y | /Y] [/A[:]attributes] source [...] destination
+   MOVE [/R] [/-Y | /Y] [/A[:]attributes] source [+] [...] destination
 
     - [/-Y | /Y] : Prompt the user.
 
@@ -65,17 +65,18 @@
     in 'path/to/folder' to make the relative path on destination folder.
 
     - source ...: A list of files that will be copied to destination. Source can
-    obviously include regular expressions.
+    obviously include regular expressions. If the command invoked is COPY and
+    if any '+' is specified between any of the filenames, the command will
+    consider that destination is the path of a file in which every file
+    matching any of the source expressions will be concatenated, starting from
+    the first source expression.
+
 
     - destination : The location where the files will be copied. If
     source is a single file, then destination is considered to be the destination
     filename unless (a) destination refers to a folder (b) destination is
     terminated by either '/' or '\\' or (c) multiples files must be copied to
     destination. No regular expression accepted.
-
-    Note : COPY command only copy files, so that it will not create directories in
-    destination files. To duplicate a tree, rather use the XCOPY command. Wich is
-    in fact provided by this command (using the MKDIR command).
 
 */
 
@@ -90,7 +91,7 @@ int Dos9_CmdCopy(char* line)
 
     int i=0,
         len=0,
-        flags=((*line | 'c'-'C' )== 'c' ) ? 0 : DOS9_COPY_MOVE,
+        flags=(*line == 'c' || *line == 'C') ? 0 : DOS9_COPY_MOVE,
         status=0;
 
     char *str;
@@ -122,10 +123,28 @@ int Dos9_CmdCopy(char* line)
 
         } else if (!strcmp(str, "/?")) {
 
-            Dos9_ShowInternalHelp(DOS9_HELP_COPY);
+            if (flags & DOS9_COPY_MOVE)
+                Dos9_ShowInternalHelp(DOS9_HELP_MOVE);
+            else
+                Dos9_ShowInternalHelp(DOS9_HELP_COPY);
+
             goto end;
 
         } else {
+
+            if (!strcmp(str, "+")) {
+
+                if (flags & DOS9_COPY_MOVE) {
+
+                    Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, str, FALSE);
+                    status = -1;
+                    goto end;
+
+                }
+
+                flags |= DOS9_COPY_CAT;
+                continue;
+            }
 
             if (len >= FILENAME_MAX) {
 
@@ -154,6 +173,16 @@ int Dos9_CmdCopy(char* line)
         goto end;
     }
 
+    if ((flags & DOS9_COPY_RECURSIVE)
+        && (flags & DOS9_COPY_CAT)) {
+
+        Dos9_ShowErrorMessage(DOS9_INCOMPATIBLE_ARGS, "/R, + (COPY)", FALSE);
+
+        status = -1;
+        goto end;
+
+    }
+
     if (flags & DOS9_COPY_RECURSIVE) {
 
         for (i=0;i < len - 1 ; i++)
@@ -165,8 +194,6 @@ int Dos9_CmdCopy(char* line)
     }
 
     for (i=0;i < len - 1; i++) {
-
-        printf("looking for files matching %s\n", file[i]->str);
 
         next = Dos9_GetMatchFileList(Dos9_EsToChar(file[i]), DOS9_SEARCH_DEFAULT);
 
@@ -261,13 +288,14 @@ int Dos9_CmdCopyFile(const char* file, const char* dest, int* flags)
 
     ESTR* dest_real = Dos9_EsInit();
 
-    if ((*flags & DOS9_COPY_MULTIPLE)
+    if (((*flags & DOS9_COPY_MULTIPLE)
+            && !(*flags & DOS9_COPY_CAT))
         || Dos9_DirExists(dest)
         || Dos9__EndWithDirectoryMark(dest)) {
 
         Dos9_SplitPath(file, NULL, NULL, name, ext);
 
-        strncat(name, ext, FILENAME_MAX);
+        strncat(name, ext, FILENAME_MAX - strlen(name));
         name[FILENAME_MAX-1] = '\0';
 
         Dos9_MakePath(dest_real, 2, dest, name);
@@ -308,9 +336,14 @@ int Dos9_CmdCopyFile(const char* file, const char* dest, int* flags)
 
             Dos9_MoveFile(file, dest_real->str);
 
+        } else if (*flags & DOS9_COPY_CAT) {
+
+            Dos9_CatFile(file, dest_real->str, flags);
+
         } else {
 
             Dos9_CopyFile(file, dest_real->str);
+
         }
 
     }
@@ -330,9 +363,7 @@ int Dos9_CmdCopyRecursive(const char* file, const char* dest, short attr, int* f
     ESTR* real_dest = Dos9_EsInit();
 
     int  status = 0;
-    size_t size;
-
-    if (size = Dos9_GetStaticLength(file))
+    size_t size  = Dos9_GetStaticLength(file);
 
     if (!(files = Dos9_GetMatchFileList(file, DOS9_SEARCH_DIR_MODE
                                              | DOS9_SEARCH_RECURSIVE
@@ -449,9 +480,9 @@ int Dos9_CopyFile(const char* file, const char* dest)
     }
 
 #ifdef WIN32
-    new = open(dest, O_WRONLY | O_CREAT | O_BINARY, info.st_mode);
+    new = open(dest, O_WRONLY | O_CREAT  | O_TRUNC | O_BINARY, info.st_mode);
 #else
-    new = open(dest, O_WRONLY | O_CREAT, info.st_mode);
+    new = open(dest, O_WRONLY | O_CREAT | O_TRUNC, info.st_mode);
 #endif
 
     if (new == -1) {
@@ -467,8 +498,6 @@ int Dos9_CopyFile(const char* file, const char* dest)
     }
 
     while ((count = read(old, buf, sizeof(buf))) != 0) {
-
-        printf("Read = %d", count);
 
         if (count == -1) {
 
@@ -515,3 +544,108 @@ int Dos9_CopyFile(const char* file, const char* dest)
     return 0;
 
 }
+
+int Dos9_CatFile(const char* file, const char* dest, int* flags)
+{
+    int old, new, attr;
+    char buf[2048];
+    size_t count, writen;
+    struct stat info;
+
+#ifdef WIN32
+    old = open(file, O_RDONLY | O_BINARY ,0);
+#else
+    old = open(file, O_RDONLY,0);
+#endif
+
+    fstat(old, &info);
+
+    if (old == -1) {
+
+        Dos9_ShowErrorMessage(DOS9_UNABLE_COPY
+                                | DOS9_PRINT_C_ERROR, file, 0);
+
+
+        return -1;
+
+    }
+
+#ifdef WIN32
+    attr = O_WRONLY | O_BINARY | O_CREAT ;
+#else
+    attr = O_WRONLY | O_CREAT ;
+#endif
+
+    if (*flags & DOS9_COPY_CAT_2ND) {
+
+        attr |= O_APPEND;
+
+    } else {
+
+        *flags |= DOS9_COPY_CAT_2ND;
+        attr |= O_TRUNC;
+
+    }
+
+    new = open(dest, attr, info.st_mode);
+
+    if (new == -1) {
+
+        close(old);
+
+        Dos9_ShowErrorMessage(DOS9_UNABLE_COPY
+                                | DOS9_PRINT_C_ERROR, file, 0);
+
+
+        return -1;
+
+    }
+
+    while ((count = read(old, buf, sizeof(buf))) != 0) {
+
+        if (count == -1) {
+
+
+            close(old);
+            close(new);
+
+            Dos9_ShowErrorMessage(DOS9_UNABLE_COPY
+                                    | DOS9_PRINT_C_ERROR, file, 0);
+
+            return -1;
+
+        }
+
+        writen = 0;
+
+        while ((writen += write(new, buf + writen, count - writen)) != count) {
+
+            if (writen == -1) {
+
+                close(old);
+                close(new);
+
+                Dos9_ShowErrorMessage(DOS9_UNABLE_COPY
+                                        | DOS9_PRINT_C_ERROR, file, 0);
+
+                return -1;
+
+            }
+
+        }
+
+    }
+
+    #ifdef WIN32
+        _commit(new);
+    #else
+        fsync(new);
+    #endif // WIN32
+
+    close(old);
+    close(new);
+
+    return 0;
+
+}
+

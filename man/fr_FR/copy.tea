@@ -23,7 +23,7 @@
 
 {{Synopsis}}
 
-${	COPY [/-Y | /Y] [/R] [/A[:]attributs] source [...] destination}
+${	COPY [/-Y | /Y] [/R] [/A[:]attributs] source [+] [...] destination}
 
 	   Copie un ou plusieurs fichiers d'un dossier à un autre. Pour copier
 	une arboressence complète, utilisez la commande {xcopy|XCOPY}.
@@ -33,10 +33,16 @@ ${	COPY [/-Y | /Y] [/R] [/A[:]attributs] source [...] destination}
 		- {/Y} : supprimme la demande de confirmation
 
 		- {source} : Le chemin du ou des fichiers à copier. Ce chemin
-		  peut comporter des {spec/regexp|caractères génériques}.
+		  peut comporter des {spec/regexp|caractères génériques}. Il est
+		  possible de spécifer le caractère {+} entre deux chemins. Si
+		  ce choix est fait, alors {destination} sera considéré comme un
+		  nom de fichier et l'ensemble des fichiers correspondants à {source}
+		  seront concaténés dans {destination} dans l'ordre d'apparation 
+		  dans la ligne de commande (si une expression régulière est spécifiées
+		  l'ordre de concaténation n'est pas garanti).
 
 		- {destination} : Le chemin de destination des fichiers copiés.
-		  Il ne peut pas contenir de {spec/regexp|caractères génériques}.
+		Il ne peut pas contenir de {spec/regexp|caractères génériques}.
 		{destination} est considéré comme le nom du fichier de
 		destination.
 
@@ -60,7 +66,7 @@ ${	COPY [/-Y | /Y] [/R] [/A[:]attributs] source [...] destination}
 		partie statique de l'expression sera retranchée des {chemins}
 		de fichiers trouvés afin de produire des chemins relatifs par
 		rapport à {destination} (qui est alors obligatoirement
-		considérée comme un dossier.
+		considérée comme un dossier).
 
 		@- par exemple, si {source} est {chemin/vers/dossier/*.*}
 		alors le fichier {chemin/vers/dossier/mon/fichier} sera copié
@@ -69,7 +75,7 @@ ${	COPY [/-Y | /Y] [/R] [/A[:]attributs] source [...] destination}
 		- {/A[:]attributs} : Ne copie que les fichiers ayant les
 		  attributs correspondants, pour consulter la liste des
 		  attributs disponibles, voir la page : {spec/attr|Les attributs de fichier}
-
+		  
 {{Compatibilité}}
 
 	Disponible depuis la version {0.4}.

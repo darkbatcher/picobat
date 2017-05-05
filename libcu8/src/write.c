@@ -55,11 +55,8 @@ __LIBCU8__IMP __cdecl int libcu8_write(int fd, void* buf, unsigned int cnt)
 
     }
 
-    if (osfile(fd) & APPEND) {
-
+    if (osfile(fd) & APPEND)
         lseek(fd, 0, FILE_END);
-
-    }
 
     info = pioinfo(fd);
 

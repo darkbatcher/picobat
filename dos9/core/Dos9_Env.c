@@ -106,6 +106,8 @@ error:
         || !(pRet->content = strdup(content)))
         goto error;
 
+    pRet->modif = 1;
+
     return pRet;
 }
 
@@ -263,8 +265,9 @@ void Dos9_SetEnv(ENVBUF* pEnv, const char* name, const char* content)
 
         free((*pRes)->content);
 
-        if (!((*pRes)->content=strdup(content))) {
+        (*pRes)->modif = 1;
 
+        if (!((*pRes)->content=strdup(content))) {
 error:
             Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION | DOS9_PRINT_C_ERROR,
                                     __FILE__ "/Dos9_SetEnv()",
@@ -289,6 +292,7 @@ error:
             goto error;
 
         (*pRes)->name = namecpy;
+        (*pRes)->modif = 1;
 
     } else {
 
@@ -310,7 +314,7 @@ error:
             goto error;
 
         pEnv->envbuf[pEnv->index]->name = namecpy;
-
+        pEnv->envbuf[pEnv->index]->modif = 1;
         ++ pEnv->index;
 
     }
@@ -374,8 +378,11 @@ void Dos9_ApplyEnv(ENVBUF* pEnv)
 
     for (i=0; i < pEnv->index; i++) {
 
-        if (pEnv->envbuf[i]->name == NULL)
+        if (!pEnv->envbuf[i]->modif
+            || pEnv->envbuf[i]->name == NULL)
             continue;
+
+        pEnv->envbuf[i]->modif = 0;
 
         #if !defined(WIN32)
         setenv(pEnv->envbuf[i]->name, pEnv->envbuf[i]->content, 1);

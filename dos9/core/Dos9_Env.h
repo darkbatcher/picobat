@@ -27,6 +27,7 @@ typedef struct ENVVAR {
                    it is not portable on most platforms through standard
                    libC calls */
     char* content; /* a pointer to the content of the variable */
+    int modif; /* set to 1 if the variable as been modified */
 } ENVVAR;
 
 /* definition of stucture that represent an environment buffer */

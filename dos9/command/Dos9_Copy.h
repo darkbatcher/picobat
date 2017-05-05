@@ -27,9 +27,12 @@ int Dos9_CmdCopyRecursive(const char* file, const char* dest, short attr, int* f
 
 int Dos9_CopyFile(const char* file, const char* dest);
 int Dos9_MoveFile(const char* file, const char* dest);
+int Dos9_CatFile(const char* file, const char* dest, int* flags);
 #define DOS9_COPY_SILENCE   0x01
 #define DOS9_COPY_MULTIPLE  0x02
 #define DOS9_COPY_MOVE      0x04
 #define DOS9_COPY_RECURSIVE 0x08
+#define DOS9_COPY_CAT       0x10
+#define DOS9_COPY_CAT_2ND   0x20
 
 #endif // DOS9_CMD_ECHO_H
