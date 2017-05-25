@@ -147,7 +147,7 @@ int Dos9_SetFileMode(const char* file, int attr)
 
     free(wfile);
 #elif defined(WIN32)
-    SetFileAttributes(file, attr);$
+    SetFileAttributes(file, attr);
 #else
     chmod(file, attr);
 #endif /* DOS9_USE_LIBCU8 */
