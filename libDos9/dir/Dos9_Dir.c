@@ -91,7 +91,7 @@ static FILELIST* Dos9_AddMatch(char* name, FILELIST* files, struct match_args_t*
     if (files)
         files->lpflPrevious = file;
 
-    file->lpflPrevious = file;
+    file->lpflPrevious = files;
     file->lpflNext = NULL;
 
     /* Well, this turns out to produce heaps */
