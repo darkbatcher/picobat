@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2014 Romain GARBI
+ *   Copyright (C) 2010-2017 Romain GARBI
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -17,12 +17,21 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#ifndef DOS9_WC_H
+#define DOS9_WC_H
 
-void Dos9_AssignCommandLine(int c, char** argv);
-void Dos9_InitLibDos9();
-char* Dos9_GetParameters(char** argv, char** lpFileName, int* bExitAfterCmd, int*
-                            bQuiet);
-void Dos9_InitConsoleTitles(char *lpFileName, int bQuiet);
-void Dos9_RunAutoBat(void);
+struct wc_count_t {
+    size_t lines;
+    size_t words;
+    size_t bytes;
+    size_t chars;
+};
 
+int Dos9_CmdWc(const char* line);
 
+#define DOS9_WC_LINES 1
+#define DOS9_WC_CHARS 2
+#define DOS9_WC_BYTES 4
+#define DOS9_WC_WORDS 8
+
+#endif // DOS9_WC_H

@@ -105,6 +105,7 @@ void Dos9_ExpandVar(ESTR* ptrCommandLine, char cDelimiter, ESTR** buf)
 
 		} else if ((cDelimiter == '%' && (isdigit(*ptrNextToken)
                     || *ptrNextToken == '*'
+                    || *ptrNextToken == '+'
                     || *ptrNextToken=='~'))
                     && (ptrEndToken=Dos9_GetLocalVar(lpvArguments,
                                                       ptrNextToken, lpVarContent))) {

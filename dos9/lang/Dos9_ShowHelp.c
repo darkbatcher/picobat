@@ -215,11 +215,19 @@ void Dos9_LoadInternalHelp(void)
 		=gettext("Pull a directory on the stack to change current directory.\n"
 	        	 "Usage: POPD\n");
 
+    lpInternalHelp[DOS9_HELP_WC]
+        =gettext("Display counts of a file or of stdin.\n"
+                 "Usage: WC [/L] [/C] [/M] [/W] [files ...]\n");
+
+    lpInternalHelp[DOS9_HELP_XARGS]
+        =gettext("Run a command with arguments from standard input file.\n"
+                 "Usage: XARGS [command ...]\n");
+
 	lpExternalMsg
-	    =gettext("This help is voluntary limited help to fit in the binary. If you need to\n"
+	    =gettext("\nThis help is voluntary limited to fit in the binary. If you need to\n"
 	             "see the full documentation, please type:\n"
 	             "\n"
-	             "\tHELP command");
+	             "\tHELP command\n");
 
 }
 

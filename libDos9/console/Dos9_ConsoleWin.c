@@ -59,6 +59,13 @@ void Dos9_ClearConsoleLine(void)
 {
 }
 
+void Dos9_GetMousePos(char* move, CONSOLECOORD* coords, int* type)
+{
+    type = 0;
+    coords->X = 0;
+    coords->Y = 0;
+}
+
 #elif defined(WIN32)
 
 void Dos9_ClearConsoleLine(void)
@@ -174,59 +181,186 @@ void Dos9_SetConsoleTitle(char* lpTitle)
     SetConsoleTitle(lpTitle);
 }
 
+/*
+
+ The following functions are derived from the core library of darkbox
+ from Teddy Astie.
+
+ Darkbox - A Fast and Portable Console IO Server
+ Copyright (c) 2016 Teddy ASTIE (TSnake41)
+
+ All rights reserved.
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions are met:
+
+ * Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+ * Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+ * Neither the name of the name of Teddy Astie (TSnake41) nor the
+   names of its contributors may be used to endorse or promote products
+   derived from this software without specific prior written permission.
+
+ THIS SOFTWARE IS PROVIDED BY TEDDY ASTIE AND CONTRIBUTORS ``AS IS'' AND ANY
+ EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ DISCLAIMED. IN NO EVENT SHALL TEDDY ASTIE AND CONTRIBUTORS BE LIABLE FOR ANY
+ DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES
+ LOSS OF USE, DATA, OR PROFITS OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+*/
+static char tomouse_b(DWORD m_bs, DWORD m_ef)
+{
+	if (m_bs & FROM_LEFT_1ST_BUTTON_PRESSED) /* left clic */
+		return (m_ef & DOUBLE_CLICK) ? D_LEFT_BUTTON : LEFT_BUTTON;
+
+	else if (m_bs & RIGHTMOST_BUTTON_PRESSED) /* right clic */
+		return (m_ef & DOUBLE_CLICK) ? D_RIGHT_BUTTON : RIGHT_BUTTON;
+
+	else if (m_bs & FROM_LEFT_2ND_BUTTON_PRESSED) /* middle clic */
+		return MIDDLE_BUTTON;
+
+	else if (m_ef & MOUSE_WHEELED) /* mouse scrolling */
+		return HIWORD(m_bs) > 0 ? SCROLL_UP : SCROLL_DOWN;
+
+	else /* mouse moved */
+		return NOTHING;
+}
+
+LIBDOS9 void Dos9_GetMousePos(char on_move, CONSOLECOORD* coords, int *b)
+{
+	HANDLE hin = GetStdHandle(STD_INPUT_HANDLE);
+    SetConsoleMode(hin, ENABLE_PROCESSED_INPUT | ENABLE_MOUSE_INPUT);
+
+	DWORD e;
+	INPUT_RECORD ir;
+
+	*b = NOTHING;
+
+	do {
+
+		do
+			ReadConsoleInput(hin, &ir, 1, &e);
+		while (ir.EventType != MOUSE_EVENT);
+
+		COORD mouse_pos = ir.Event.MouseEvent.dwMousePosition;
+		coords->X = mouse_pos.X;
+		coords->Y = mouse_pos.Y;
+
+		*b = tomouse_b(ir.Event.MouseEvent.dwButtonState, ir.Event.MouseEvent.dwEventFlags);
+
+	} while (!on_move && *b == NOTHING);
+}
+
 #endif
 
 #ifndef WIN32
 #include <termios.h>
 #include <unistd.h>
 
+/*
+ Dos9_Getch : Derived from darkbox getch by Teddy ASTIE
 
-LIBDOS9 int             Dos9_GetchWait(void)
+ Darkbox - A Fast and Portable Console IO Server
+ Copyright (c) 2016 Teddy ASTIE (TSnake41)
+
+*/
+
+LIBDOS9 int Dos9_Getch(void)
 {
-	char c;
-	struct termios infos;
-	int ret, save, min, fd;
+    struct termios oldattr, newattr;
+    int ch;
+    tcgetattr( STDIN_FILENO, &oldattr );
+    newattr = oldattr;
+    newattr.c_lflag &= ~( ICANON | ECHO );
+    tcsetattr( STDIN_FILENO, TCSANOW, &newattr );
+    ch = getchar();
+    tcsetattr( STDIN_FILENO, TCSANOW, &oldattr );
 
-    fflush(stdout);
+    /* Handle special chracters */
+    if (ch == '\033' && Dos9_Getch() == '[')
+        switch (Dos9_Getch()) {
+            case 'A': /* up arrow */
+                return 72;
+                break;
+            case 'B': /* down arrow */
+                return 80;
+                break;
+            case 'C': /* right arrow */
+                return 77;
+                break;
+            case 'D': /* left arrow */
+                return 75;
+                break;
+            case 'F': /* end */
+                return 79;
+                break;
+            case 'H': /* begin */
+                return 71;
+                break;
 
-	if ((fd=open("/dev/tty", O_RDONLY)) == -1)
-		return 0;
+            case '2': /* insert */
+                Dos9_Getch(); /* ignore the next character */
+                return 82;
+                break;
+            case '3': /* delete */
+                Dos9_Getch();
+                return 83;
+                break;
+            case '5': /* page up */
+                Dos9_Getch();
+                return 73;
+                break;
+            case '6': /* page down */
+                Dos9_Getch();
+                return 81;
+                break;
 
-	if (tcgetattr(fd, &infos))
-		return 0;
+            default:
+                return -1; /* unmanaged/unknown key */
+                break;
+        }
 
-	save = infos.c_lflag;
-	min  = infos.c_cc[VMIN];
+    else return ch;
+}
 
-	infos.c_cc[VMIN] = 1;
-	infos.c_lflag &= ~ECHO & ~ICANON;
+/* Morgan McGuire, morgan@cs.brown.edu */
+int kbhit(void)
+{
+    static const int STDIN = 0;
+    static char initialized = 0;
 
-	if (tcsetattr(fd, TCSANOW, &infos))
-		return 0;
+    if (! initialized) {
+        // Use termios to turn off line buffering
+        struct termios term;
+        tcgetattr(STDIN, &term);
+        term.c_lflag &= ~ICANON;
+        tcsetattr(STDIN, TCSANOW, &term);
+        setbuf(stdin, NULL);
+        initialized = 1;
+    }
 
-	ret = read(fd, &c, sizeof(c));
-
-	infos.c_lflag = save;
-	infos.c_cc[VMIN] = min;
-
-	if (tcsetattr(fd, TCSANOW, &infos))
-		return 0;
-
-	close(fd);
-	return (ret == 0) ? (0) : (c);
+    int bytesWaiting;
+    ioctl(STDIN, FIONREAD, &bytesWaiting);
+    return bytesWaiting;
 
 }
 
 #elif defined(WIN32)
 
-int Dos9_GetchWait(void)
+int Dos9_Getch(void)
 {
-    int c;
+    return getch();
+}
 
-    while (!(c=getch()));
-
-    return c;
-
+int Dos9_Kbhit(void)
+{
+    return kbhit();
 }
 
 #endif

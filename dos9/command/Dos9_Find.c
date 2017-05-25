@@ -146,6 +146,8 @@ end:
     Dos9_EsFree(lpEsLine);
     if (name)
         fclose(pFile); /* do no close stdin, please */
+    else if (isatty(DOS9_STDIN))
+        clearerr(stdin);
 
     return;
 

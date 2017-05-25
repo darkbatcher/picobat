@@ -47,18 +47,21 @@
 
 #include "Dos9_Ask.h"
 
-
 int Dos9_CmdDel(char* lpLine)
 {
 	char *lpToken;
-	ESTR *lpEstr=Dos9_EsInit(),
-         *name[FILENAME_MAX];
+	ESTR *lpEstr=Dos9_EsInit();
+
+    char **name,
+         **tmp;
+
+    size_t namesize = 64;
 
 	char  param=0;
 
-	short attr=DOS9_CMD_ATTR_DIR | DOS9_CMD_ATTR_DIR_N;
+	short attr=DOS9_CMD_ATTR_ALL;
 
-	int flag=DOS9_SEARCH_DEFAULT | DOS9_SEARCH_NO_PSEUDO_DIR,
+	int flag=DOS9_SEARCH_NO_PSEUDO_DIR,
 	    choice = DOS9_ASK_ALL,
 	    status = 0,
 	    n=0,
@@ -69,9 +72,19 @@ int Dos9_CmdDel(char* lpLine)
              *list=NULL;
 
     if (!strnicmp(lpLine, "DEL", 3)) {
-        lpLine += 3;
+        lpLine += 3; /* This is DEL */
     } else {
-        lpLine += 5;
+        lpLine += 5; /* This is erase */
+    }
+
+    /* start by trying to malloc memory for names */
+    if ((name = malloc(namesize * sizeof(ESTR*))) == NULL) {
+
+        Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION,
+                                        __FILE__ "/Dos9_CmdDel()", 0);
+        status = -1;
+        goto end;
+
     }
 
 	while ((lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
@@ -92,6 +105,7 @@ int Dos9_CmdDel(char* lpLine)
 
 			/*  recursive */
 			flag|=DOS9_SEARCH_RECURSIVE;
+			param|=DOS9_ASK_CONFIRMATION;
 
 		} else if (!stricmp(lpToken, "/Q")) {
 
@@ -110,18 +124,39 @@ int Dos9_CmdDel(char* lpLine)
 		} else if (!strcmp("/?", lpToken)) {
 
 			Dos9_ShowInternalHelp(DOS9_HELP_DEL);
-
-			Dos9_EsFree(lpEstr);
-			return -1;
+			goto end;
 
 		} else {
 
-            if (n < FILENAME_MAX) {
+            if (n == namesize) {
+                /* we dont have enough space in the array, thus try to
+                   realloc */
 
-                name[n] = Dos9_EsInit();
-                Dos9_EsCpy(name[n++], lpToken);
+                namesize *= 2;
+
+                if ((tmp = realloc(name, namesize * sizeof(ESTR*))) == NULL) {
+
+                    Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION,
+                                        __FILE__ "/Dos9_CmdDel()", 0);
+                    status = -1;
+                    goto end;
+
+                }
+
+                name = tmp;
 
             }
+
+            if ((name[n] = strdup(lpToken)) == NULL) {
+
+                Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION,
+                                        __FILE__ "/Dos9_CmdDel()", 0);
+                status = -1;
+                goto end;
+
+            }
+
+            n++;
 
 		}
 
@@ -137,17 +172,17 @@ int Dos9_CmdDel(char* lpLine)
 
 	for  (i=0; i < n; i++) {
 
-        if (!(next = Dos9_GetMatchFileList(Dos9_EsToChar(name[i]), flag))) {
+        if (!(next = Dos9_GetMatchFileList(name[i], flag))) {
 
             Dos9_ShowErrorMessage(DOS9_NO_MATCH,
-                                    Dos9_EsToChar(name[i]),
+                                    name[i],
                                     FALSE);
             status = -1;
 
             goto end;
         }
 
-        if (strpbrk(Dos9_EsToChar(name[i]), "*?") != NULL)
+        if (strpbrk(name[i], "*?") != NULL)
             param |= DOS9_USE_JOKER;
 
         if (list == NULL) {
@@ -169,7 +204,7 @@ int Dos9_CmdDel(char* lpLine)
 
 
     if (attr == 0) {
-
+        /* Set the default attributes based for the search */
         if (!(param & DOS9_DELETE_READONLY))
             attr |= DOS9_CMD_ATTR_READONLY_N | DOS9_CMD_ATTR_READONLY;
 
@@ -191,6 +226,7 @@ int Dos9_CmdDel(char* lpLine)
                                  &list,
                                  &end
                                  );
+    Dos9_FreeFileList(end);
 
     Dos9_AttributesSplitFileList(DOS9_ATTR_NO_DIR,
                                  list,
@@ -198,37 +234,52 @@ int Dos9_CmdDel(char* lpLine)
                                  &next
                                  );
 
+    Dos9_FreeFileList(next);
 
-    Dos9_FreeFileList(end);
+    printf("Files found ...\n");
+    end = list;
+
+    while (end) {
+        printf("\t* \"%s\"\n", end->lpFileName);
+        end = end->lpflNext;
+    }
 
     end = list;
     while (end) {
 
-        status |= Dos9_CmdDelFile(end->lpFileName, param, &choice);
-        end = end->lpflNext;
+        if (!(param & DOS9_DELETE_READONLY)
+            && (Dos9_GetFileMode(end) & DOS9_FILE_READONLY)) {
 
-    }
+            /* Skip read-only files if the user did not specified 'force' */
+            end = end->lpflNext;
+            continue;
 
-    end = next;
-    while (end) {
+        }
 
-        status |= Dos9_CmdRmdirFile(end->lpFileName, param, &choice);
+        status |= Dos9_CmdDelFile(end->lpFileName, Dos9_GetFileMode(end),
+                                                                param, &choice);
         end = end->lpflNext;
 
     }
 
 end:
-    for (i=0; i < n; i++)
-        Dos9_EsFree(name[i]);
+
+    if (name) {
+
+        for (i=0; i < n; i++)
+            free(name[i]);
+
+        free(name);
+
+    }
 
     Dos9_FreeFileList(list);
-    Dos9_FreeFileList(next);
 
 	Dos9_EsFree(lpEstr);
 	return status;
 }
 
-int Dos9_CmdDelFile(char* file, int param, int* choice)
+int Dos9_CmdDelFile(char* file, int fmode, int param, int* choice)
 {
     int res = *choice;
 
@@ -245,6 +296,17 @@ int Dos9_CmdDelFile(char* file, int param, int* choice)
 
     }
 
+    if (fmode & DOS9_FILE_READONLY) {
+
+        /* if the file is read-only, windows will not let you delete it,
+           for this, adjusting permissions is somehow needed.
+
+           This does not apply to unix like files systems, that "manage"
+           deleting permission by parent directory permissions */
+        Dos9_SetFileMode(file, fmode & ~DOS9_FILE_READONLY);
+
+    }
+
     if ((res == DOS9_ASK_ALL) || (res == DOS9_ASK_YES)) {
 
         return Dos9_DelFile(file);
@@ -252,7 +314,6 @@ int Dos9_CmdDelFile(char* file, int param, int* choice)
     }
 
     return 0;
-
 }
 
 int Dos9_DelFile(const char* file)
@@ -269,3 +330,5 @@ int Dos9_DelFile(const char* file)
 
     return 0;
 }
+
+

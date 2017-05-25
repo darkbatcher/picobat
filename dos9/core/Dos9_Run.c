@@ -139,7 +139,7 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
 int Dos9_ExecOperators(PARSED_STREAM** lpppsStream)
 {
 	PARSED_STREAM* lppsStream = *lpppsStream;
-	ESTR* lpCommand, *lpExpanded;
+	ESTR *lpExpanded;
 
 	char lpProgName[FILENAME_MAX],
          lpQuoteProgName[FILENAME_MAX+2],
@@ -211,17 +211,14 @@ loop:
 		/* Start the line */
 		lpArgs[++i] = "/C";
 
-		lpCommand = Dos9_EsInit();
 		lpExpanded = Dos9_EsInit();
         Dos9_GetEndOfLine(lppsStream->lpCmdLine->str, lpExpanded);
 
-		Dos9_EsCpy(lpCommand, "\"");
-		Dos9_EsCatE(lpCommand, lpExpanded);
-		Dos9_EsCat(lpCommand, "\"");
+        Dos9_SetEnv(lpeEnv, "__DOS9_COMMAND__", lpExpanded->str);
 
-		lpArgs[++i] = Dos9_EsToChar(lpCommand);
+		lpArgs[++i] = "@";
 
-		/* The la parameter must be NULL */
+		/* The last parameter must be NULL */
 		lpArgs[++i] = NULL;
 
         Dos9_ApplyEnv(lpeEnv);
@@ -235,7 +232,6 @@ loop:
 			Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR | DOS9_PRINT_C_ERROR,
 		        	              lpArgs[0],
 		    	    			  FALSE);
-            Dos9_EsFree(lpCommand);
             Dos9_EsFree(lpExpanded);
 
 			return FALSE;
@@ -250,7 +246,6 @@ loop:
 
 		olddes = pipedes[0];
 
-		Dos9_EsFree(lpCommand);
 		Dos9_EsFree(lpExpanded);
 
     	if (lppsStream->lppsNode) {

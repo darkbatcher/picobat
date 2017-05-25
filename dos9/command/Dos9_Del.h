@@ -27,7 +27,7 @@
 #define DOS9_USE_JOKER        0x08
 
 int Dos9_CmdDel(char* lpLine);
-int Dos9_CmdDelFile(char* file, int param, int* choice);
+int Dos9_CmdDelFile(char* file, int fmode, int param, int* choice);
 int Dos9_DelFile(const char* file);
 
 #endif // DOS9_CMD_ECHO_H

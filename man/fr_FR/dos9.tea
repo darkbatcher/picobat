@@ -1,6 +1,6 @@
 #
 #   Dos9 Manual pages, The Dos9 project
-#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#   Copyright (C) 2012-2017 Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -26,16 +26,23 @@
 
 {{Synopsis}}
 
-${	DOS9 [/A[:]attr] [/i entrée] [/o sortie] [fichier] [/c commande| /k commande]}
+${	DOS9 [/A[:]attr] [/i entrée] [/o sortie] [fichier ... | /c commande ...| /k commande ... ]}
 
 	Exécute un fichier de commande ou attend une entrée de commande de
 	l'utilisateur.
 
-		- {fichier} : Chemin du script de commande a exécuter.
+		- {fichier ...} : Chemin du script de commande a exécuter suivi des arguments à envoyer
+		au fichier.
 
-		- {/c commande} : Exécute la commande {commande} puis quitte l'interpréteur.
+		- {/c commande ...} : Exécute la commande {commande} avec les arguments données
+		puis quitte l'interpréteur. {Dos9} introduit une nouvelle sémantique, si la
+		commande est seulement le caractère {@}, alors {Dos9} prend la commande
+		dans la variable {%__DOS9_COMMAND__%}.
 
-		- {/k commande} : Exécute la commande {commande} puis reste actif.
+		- {/k commande ...} : Exécute la commande {commande}  avec les arguments données
+		puis reste actif. {Dos9} introduit une nouvelle sémantique, si la
+		commande est seulement le caractère {@}, alors {Dos9} prend la commande
+		dans la variable {%__DOS9_COMMAND__%}.
 
 		- {/A[:]attr} : Attributs déterminant le comportement de {dos9|Dos9}
 

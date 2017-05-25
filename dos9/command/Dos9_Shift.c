@@ -85,7 +85,7 @@ int Dos9_CmdShift(char* lpLine)
 
 					break;
 
-					/* following switchs are Dos9-specific */
+                /* following switchs are Dos9-specific */
 				case 's':
 					lpToken++;
 
@@ -191,6 +191,32 @@ int Dos9_CmdShift(char* lpLine)
 
 	}
 
+	/* try to get arguments from %+ */
+	if (iBegin < 10) {
+
+        /* Fast access */
+        lpToken = lpvArguments[(int)'+'];
+
+        /* if there is some remaining arguments */
+        if (*lpToken != '\0') {
+
+            /* fill arguments with arguments remaining in "%+" */
+            while (iBegin < 10
+                   && (lpToken = Dos9_GetNextParameterEs(lpToken, lpEsArg))) {
+
+                Dos9_SetLocalVar(lpvArguments, '0'+iBegin, lpEsArg->str);
+
+                iBegin ++;
+            }
+
+            if (lpToken == NULL)
+                Dos9_SetLocalVar(lpvArguments, '+', "");
+            else
+                Dos9_SetLocalVar(lpvArguments, '+', lpToken);
+        }
+
+	}
+
 	/* empty the remaining arguments */
 	while (iBegin < 10) {
 
@@ -200,10 +226,7 @@ int Dos9_CmdShift(char* lpLine)
 
 	}
 
-
-
 	Dos9_EsFree(lpEsArg);
-
 	return 0;
 
 error:

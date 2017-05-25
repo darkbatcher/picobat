@@ -116,7 +116,7 @@ int Dos9_CmdCall(char* lpLine)
 
 					if (*(Dos9_EsToChar(lpEsLabel))) {
 
-						/* that parameter is already set, so that it migth
+						/* that parameter is already set, so that it might
 						   be the next first argument  */
 
 						break;
@@ -232,7 +232,9 @@ int Dos9_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 	LOCAL_VAR_BLOCK lpvTmpArgs[LOCAL_VAR_BLOCK_SIZE]={NULL};
 	char lpAbsPath[FILENAME_MAX];
 
-	ESTR *lpEsParam=Dos9_EsInit();
+	ESTR *lpEsParam=Dos9_EsInit(),
+         *lpEsCmd,
+         *lpEsTmp;
 	int   c='1',
 	      iLockState;
 
@@ -275,7 +277,8 @@ int Dos9_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 	}
 
     /* set the %* parameter */
-    Dos9_SetLocalVar(lpvTmpArgs, '*', Dos9_SkipBlanks(lpCmdLine));
+    Dos9_GetEndOfLine(lpCmdLine, lpEsParam);
+    Dos9_SetLocalVar(lpvTmpArgs, '*', lpEsParam->str);
 
     /* Set scripts arguments */
 	while ((lpCmdLine=Dos9_GetNextParameterEs(lpCmdLine, lpEsParam))
@@ -287,10 +290,36 @@ int Dos9_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 
 	}
 
-	while (c <= '9')
-        Dos9_SetLocalVar(lpvTmpArgs, c++, "");
+	if (c <= '9') {
 
+        /* empty remaining vars */
+        while (c <= '9')
+            Dos9_SetLocalVar(lpvTmpArgs, c++, "");
 
+        Dos9_SetLocalVar(lpvTmpArgs, '+', "");
+
+	} else {
+
+        lpEsCmd = Dos9_EsInit();
+
+	    while (lpCmdLine = Dos9_GetNextParameterEs(lpCmdLine, lpEsParam)) {
+            Dos9_EsReplace(lpEsParam, " ", "^ ");
+            Dos9_EsReplace(lpEsParam, ";", "^;");
+            Dos9_EsReplace(lpEsParam, ",", "^,");
+            Dos9_EsReplace(lpEsParam, "\t", "^\t");
+            Dos9_EsReplace(lpEsParam, "\"", "^\"");
+
+            Dos9_EsCatE(lpEsCmd, lpEsParam);
+            Dos9_EsCat(lpEsCmd, " ");
+
+	    }
+
+        /* set the %+ parameter */
+        Dos9_SetLocalVar(lpvTmpArgs, '+', lpEsCmd->str);
+
+        Dos9_EsFree(lpEsCmd);
+
+	}
 
 	/* Backup the old variables data in order to be able to push old data
 	   again on local variables. */

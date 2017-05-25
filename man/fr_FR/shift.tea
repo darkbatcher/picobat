@@ -40,11 +40,15 @@
 	Le déplacement se fait du plus grand chiffre vers le plus petit. Les paramètres qui se retrouveraient dans
 	une variable plus petite que {%0} à la suite d'un déplacement est supprimée. Il n'y a pas d'éléments
 	ajoutés lors d'un déplacement, donc les variables qui on été "vidées" par le déplacement le restent.
+	
+	Après avoir décalé les arguments, la commande {SHIFT} essaie de combler le plus de paramètres laissés
+	vides avec les restes d'arguments passés dans la variable {%+} (seulement depuis la version 217.). {SHIFT} n'affecte pas la
+	variable de paramètre {%*}.
 
 {{Compatibilité}}
 
 	Principalement compatible avec {cmd.exe}, À l'exception du déplacement vers {%0}. En effet, lors du remplissage
-	de {%0} procède à un test visant à savoir si le nouveau contenu de {%0} est un chemin valide de fichier ou de
+	de {%0} cmd.exe procède à un test visant à savoir si le nouveau contenu de {%0} est un chemin valide de fichier ou de
 	répertoire, et si ce n'est pas le cas, le remplace le contenu de {%0} par le chemin courrant. Ce comportement
 	n'est pas implémenté dans {dos9|Dos9} car il n'a que peu d'intérêt et est même troublant pour un utilisateur non
 	averti (qui peut très bien le prendre pour un bogue).

@@ -289,6 +289,7 @@ char* Dos9_GetLocalVarPointer(LOCAL_VAR_BLOCK* lpvBlock, char cVarName)
 
 int Dos9_SetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char cVarName, char* cVarContent)
 {
+    char* old;
 
 	/* Perform test on value cName, to test its
 	   specification conformance, i.e. the character must be
@@ -301,14 +302,18 @@ int Dos9_SetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char cVarName, char* cVarContent
 	/* Free the current content of the variable if it is
 	   already allocated */
 
-	if (lpvBlock[(int)cVarName])
-		free(lpvBlock[(int)cVarName]);
+	old = lpvBlock[(int)cVarName];
 
 	if (cVarContent) {
 		lpvBlock[(int)cVarName]=strdup(cVarContent);
 	} else {
 		lpvBlock[(int)cVarName]=NULL;
 	}
+
+    /* Makes this more resilient by allowing cVarContent to point to the actual
+       buffer that holds the variable already*/
+	if (old)
+        free(old);
 
 
 	return TRUE;

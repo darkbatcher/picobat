@@ -56,6 +56,9 @@ void Dos9_TypeFileF(FILE* pFile)
 
     while (size = fread(buf, 1, sizeof(buf), pFile))
         fwrite(buf, 1, size, stdout);
+
+    if (isatty(fileno(pFile)))
+        clearerr(pFile);
 }
 
 void Dos9_TypeFile(char* lpFileName)

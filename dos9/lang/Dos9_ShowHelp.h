@@ -50,8 +50,10 @@
 #define DOS9_HELP_CHCP      28
 #define DOS9_HELP_PUSHD     29
 #define DOS9_HELP_POPD      30
+#define DOS9_HELP_WC        31
+#define DOS9_HELP_XARGS     32
 
-#define DOS9_HELP_ARRAY_SIZE 31
+#define DOS9_HELP_ARRAY_SIZE 33
 
 
 /* this is to instanciate a little embedded command

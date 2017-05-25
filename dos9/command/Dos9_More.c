@@ -277,6 +277,8 @@ int Dos9_MoreFile(int flags, int tabsize, int begin, char* filename)
 end:
      if (file != stdin)
         fclose(file);
+     else if (isatty(DOS9_STDIN))
+        clearerr(stdin);
 
      return status;
 
@@ -470,7 +472,7 @@ int Dos9_GetMoreNb(void)
     int ret=0,
         c;
 
-    while ((c=Dos9_GetchWait()) >= '0' && c <= '9')
+    while ((c=Dos9_Getch()) >= '0' && c <= '9')
         ret = ret*10 + c - '0';
 
     return ret;
@@ -485,7 +487,7 @@ int Dos9_MorePrompt(int* toprint, int* skip, int* ok)
 
     while (1) {
 
-        switch(i=Dos9_GetchWait()) {
+        switch(i=Dos9_Getch()) {
 
             case 'q':
             case 'Q':
@@ -521,7 +523,7 @@ int Dos9_MorePrompt(int* toprint, int* skip, int* ok)
                 /* clean the line */
                 Dos9_ClearConsoleLine();
                 printf("-- ? : Help    Q : Quit   Sn : Skip n lines    Pn : Print n lines --");
-                Dos9_GetchWait();
+                Dos9_Getch();
                 Dos9_ClearConsoleLine();
                 printf("-- More --");
                 break;

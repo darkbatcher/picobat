@@ -39,8 +39,8 @@ core/Dos9_FdInheritance.h core/Dos9_ReadScript.h \
 errors/Dos9_Errors.h lang/Dos9_ShowHelp.h lang/Dos9_Lang.h gettext.h \
 command/Dos9_Find.h command/Dos9_More.h core/Dos9_Env.h core/Dos9_OsStream.h \
 command/Dos9_Start.h command/Dos9_Break.h command/Dos9_IfExp.h \
-./command/Dos9_Pushd.h command/Dos9_Chcp.h \
-init/Dos9_Init.h
+command/Dos9_Pushd.h command/Dos9_Chcp.h \
+init/Dos9_Init.h command/Dos9_Wc.h command/Dos9_Xargs.h
 
 dos9_SOURCES = ./Dos9.c ./core/Dos9_Args.c ./core/Dos9_Expand.c \
 ./core/Dos9_Globals.c ./core/Dos9_FdInheritance.c \
@@ -62,7 +62,8 @@ dos9_SOURCES = ./Dos9.c ./core/Dos9_Args.c ./core/Dos9_Expand.c \
 ./command/Dos9_Type.c ./command/Dos9_Find.c ./core/Dos9_Env.c \
 ./command/Dos9_More.c ./core/Dos9_OsStream.c ./command/Dos9_Start.c \
 ./command/Dos9_Break.c ./command/Dos9_IfExp.c ./command/Dos9_Chcp.c \
-./command/Dos9_Pushd.c ./init/Dos9_Init.c
+./command/Dos9_Pushd.c ./init/Dos9_Init.c command/Dos9_Wc.c \
+./command/Dos9_Xargs.c
 
 dos9_LDADD = $(top_builddir)/libinteval/libinteval.la \
 $(top_builddir)/libmatheval/lib/libmatheval.la $(top_builddir)/libDos9/libDos9.la \

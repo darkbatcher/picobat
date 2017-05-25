@@ -304,6 +304,27 @@ typedef int COLOR;
 
 #endif
 
+enum {
+	NOTHING = 0,
+    LEFT_BUTTON,
+    RIGHT_BUTTON,
+    D_LEFT_BUTTON,
+    D_RIGHT_BUTTON,
+    MIDDLE_BUTTON,
+    SCROLL_UP,
+    SCROLL_DOWN,
+    RELEASE
+
+	/* Planned :
+
+		Grabbing :
+		  - G_LEFT_BUTTON
+		  - G_RIGHT_BUTTON
+		  - G_MIDDLE_BUTTON
+
+	 */
+};
+
 LIBDOS9 void            Dos9_ClearConsoleScreen(void);
 LIBDOS9 void            Dos9_ClearConsoleLine(void);
 LIBDOS9 void            Dos9_SetConsoleColor(COLOR cColor);
@@ -312,7 +333,9 @@ LIBDOS9 void            Dos9_SetConsoleCursorPosition(CONSOLECOORD iCoord);
 LIBDOS9 CONSOLECOORD    Dos9_GetConsoleCursorPosition(void);
 LIBDOS9 void            Dos9_SetConsoleCursorState(int bVisible, int iSize);
 LIBDOS9 void            Dos9_SetConsoleTitle(char* lpTitle);
-LIBDOS9 int             Dos9_GetchWait(void);
+LIBDOS9 int             Dos9_Kbhit(void);
+LIBDOS9 int             Dos9_Getch(void);
+LIBDOS9 void            Dos9_GetMousePos(char on_move, CONSOLECOORD* coords, int* type);
 
 #define Dos9_GetAccessTime(lpList) lpList->stFileStats.st_atime
 #define Dos9_GetCreateTime(lpList) lpList->stFileStats.st_ctime
@@ -329,9 +352,10 @@ LIBDOS9 int             Dos9_GetchWait(void);
 #define DOS9_SEARCH_DIR_MODE 0x10
 
 typedef struct FILELIST {
-    char  lpFileName[FILENAME_MAX];
-    struct stat stFileStats;
-    struct FILELIST* lpflNext;
+    char  lpFileName[FILENAME_MAX]; /* filename */
+    struct stat stFileStats; /* file stats */
+    struct FILELIST* lpflNext; /* pointer to next match */
+    struct FILELIST* lpflPrevious; /* Use only internally, do not use this */
 } FILELIST,*LPFILELIST;
 
 LIBDOS9 int         Dos9_RegExpMatch(const char* restrict lpRegExp, const char* restrict lpMatch);
@@ -391,6 +415,7 @@ EXTERN LIBDOS9 char _Dos9_Currdir[FILENAME_MAX];
 LIBDOS9 int Dos9_FileExists(const char* lpPath);
 LIBDOS9 char* Dos9_GetFirstExistingFile(char** files);
 LIBDOS9 int Dos9_DirExists(const char* lpPath);
+LIBDOS9 int Dos9_SetFileMode(const char* file, int attr);
 LIBDOS9 int Dos9_UpdateCurrentDir(void);
 LIBDOS9 int Dos9_SetCurrentDir(const char* lpPath);
 LIBDOS9 int Dos9_GetExePath(char* lpBuf, size_t iBufSize);

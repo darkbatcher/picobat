@@ -72,7 +72,9 @@ COMMANDINFO lpCmdInfo[]= {
 	{"BREAK", Dos9_CmdBreak, STRLEN("BREAK")},
 	{"CHCP", Dos9_CmdChcp, STRLEN("CHCP")},
 	{"PUSHD", Dos9_CmdPushd, STRLEN("PUSHD")},
-	{"POPD", Dos9_CmdPopd, STRLEN("POPD")}
+	{"POPD", Dos9_CmdPopd, STRLEN("POPD")},
+	{"WC", Dos9_CmdWc, STRLEN("WC")},
+	{"XARGS", Dos9_CmdXargs, STRLEN("XARGS")}
 };
 
 #endif

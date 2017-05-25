@@ -1,0 +1,62 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2017  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+{{Commande WC}}
+
+	La commande {WC} permet d'afficher les comptes d'un fichier (taille,
+	nombre de ligne ou de mots).
+	
+{{Synopsis}}
+
+${WC [/L] [/C] [/M] [/W] [fichiers ...]}
+
+	Affiche les comptes des fichiers et le total associé si plusieurs fichiers sont
+	spécifiés.
+	
+	- {fichiers ...}: une liste de chemins menant aux fichiers dont les comptes doivent
+	être affichés. Ces chemins peuvent éventuellement être des 
+	{spec/regexp|expressions régulières}. Si aucun fichier n'est spécifié, alors {WC}
+	effectuera le compte sur l'entrée standard.
+	
+	- {/L}: compte les lignes dans les fichiers.
+	
+	- {/C}: compte les octets dans les fichiers.
+	
+	- {/M}: compte les caractères (en utilisant utf-8) dans les fichiers. Si Dos9 n'a
+	pas été compilé avec le support de l'utf-8, alors cette option a le même effet
+	que le commutateur {/C}.
+	
+	- {/W}: compte le nombre de mots dans les fichiers.
+	
+	Lors de l'affichage des résultats, la mise en forme de la sortie par la commande
+	est la suivante (les paramètres qui ont étés omis sont bien sûr ignorés):
+	
+${nombre_lignes nombre_mots nombre_octets nombre_caractères nom_fichier}
+
+	Si aucun commutateur n'est donné, alors la commande {WC} est équivalente à la
+	commande:
+	
+${WC /C fichiers ...}
+
+{{Compatibilité}}
+
+	Commande indisponible sur {cmd.exe}. Disponible depuis la version {217.1}.
+	
+{{À voir aussi}}
+
+	{commands|Liste des commandes}, {xargs|Commande XARGS}
+	

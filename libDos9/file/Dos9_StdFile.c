@@ -26,6 +26,10 @@
 #include "../libDos9-int.h"
 #include "../../config.h"
 
+#if defined(DOS9_USE_LIBCU8)
+#include <libcu8.h>
+#endif /* DOS9_USE_LIBCU8 */
+
 #include "Dos9_File.h"
 
 char _Dos9_Currdir[FILENAME_MAX]="";
@@ -124,4 +128,29 @@ char* Dos9_GetFirstExistingFile(char** files)
 		i++;
 
 	return files[i];
+}
+
+int Dos9_SetFileMode(const char* file, int attr)
+{
+#if defined(DOS9_USE_LIBCU8)
+    wchar_t* wfile;
+    size_t cvt;
+
+    if ((wfile = libcu8_xconvert(LIBCU8_TO_U16,
+                        file, strlen(file) + 1, &cvt)) == NULL) {
+
+        return -1;
+
+    }
+
+    SetFileAttributesW(wfile, attr);
+
+    free(wfile);
+#elif defined(WIN32)
+    SetFileAttributes(file, attr);$
+#else
+    chmod(file, attr);
+#endif /* DOS9_USE_LIBCU8 */
+
+    return 0;
 }

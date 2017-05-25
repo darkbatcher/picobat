@@ -42,10 +42,12 @@
 #include "../core/Dos9_Core.h"
 #include "../core/Dos9_Debug.h"
 
-void Dos9_AssignCommandLine(char** argv)
+void Dos9_AssignCommandLine(int c, char** argv)
 {
     ESTR *lpEsStr=Dos9_EsInit(),
           *lpEsParam=Dos9_EsInit();
+
+    int i;
 
     char*  delims=" ,;=\t&|";
 
@@ -71,7 +73,7 @@ void Dos9_AssignCommandLine(char** argv)
 
     }
 
-    Dos9_SetLocalVar(lpvArguments, '*', Dos9_EsToChar(lpEsStr));
+    Dos9_SetLocalVar(lpvArguments, c, Dos9_EsToChar(lpEsStr));
 
     Dos9_EsFree(lpEsStr);
     Dos9_EsFree(lpEsParam);
@@ -194,7 +196,7 @@ void Dos9_InitHelp(void)
     puts("Feel free to report bugs and submit suggestions at : <" DOS9_BUGREPORT ">\n"
          "For more informations see : <" DOS9_URL ">");
 
-        exit(0);
+    exit(0);
 }
 
 char* Dos9_GetParameters(char** argv, char** lpFileName, int* bExitAfterCmd, int*
@@ -202,6 +204,8 @@ char* Dos9_GetParameters(char** argv, char** lpFileName, int* bExitAfterCmd, int
 {
     int i, c, j, bGetSwitch = 1;
     char* lpCmdCSwitch = NULL;
+
+    ESTR* lpCmdC;
 
     if (!argv[0])
         Dos9_ShowErrorMessage(DOS9_BAD_COMMAND_LINE, "Dos9", -1);
@@ -247,7 +251,39 @@ char* Dos9_GetParameters(char** argv, char** lpFileName, int* bExitAfterCmd, int
                     if (lpCmdCSwitch != NULL || argv[++i] == NULL)
                         Dos9_ShowErrorMessage(DOS9_BAD_COMMAND_LINE, NULL, -1);
 
-                    lpCmdCSwitch = argv[i];
+                    /* introduce new semantics with /C or /K command, if only
+                       @ is passed as argument, then /C takes the command line
+                       from the variable %__DOS9_COMMAND__% */
+                    if (*(argv[i]) == '@' && *(argv[i]+1)=='\0') {
+
+                        lpCmdCSwitch = getenv("__DOS9_COMMAND__");
+
+                        lpCmdCSwitch = (lpCmdCSwitch != NULL)
+                                                    ? lpCmdCSwitch : "";
+
+                    } else {
+
+                        /* allow a tiny memory leak, since i cannot see how
+                           to handle it otherwise */
+                        lpCmdC = Dos9_EsInit();
+
+                        do {
+
+                            if (strpbrk(argv[i], " \t\n")) {
+                                Dos9_EsCat(lpCmdC, "\"");
+                                Dos9_EsCat(lpCmdC,  argv[i]);
+                                Dos9_EsCat(lpCmdC, "\"");
+                            } else {
+                                Dos9_EsCat(lpCmdC,  argv[i]);
+                            }
+
+                            Dos9_EsCat(lpCmdC, " ");
+
+                        } while ((argv[i+1] != NULL) && i++);
+
+                        lpCmdCSwitch = lpCmdC->str;
+                    }
+
                     break;
 
                 case '?':
@@ -267,7 +303,7 @@ char* Dos9_GetParameters(char** argv, char** lpFileName, int* bExitAfterCmd, int
 
         } else {
 
-            if (**lpFileName!='\0') {
+            if (**lpFileName != '\0') {
 
                 /* set parameters for the file currently ran */
                 for (j=i ,  c='1'; argv[j] && c<='9'; i++, c++ , j++ ) {
@@ -276,13 +312,17 @@ char* Dos9_GetParameters(char** argv, char** lpFileName, int* bExitAfterCmd, int
 
                 }
 
+                printf("argv[j] = %s\n", argv[j]);
+
+                Dos9_AssignCommandLine('+', argv + j);
+
                 break;
             }
 
             *lpFileName=argv[i];
             c='1';
 
-            Dos9_AssignCommandLine(argv + i + 1);
+            Dos9_AssignCommandLine('*', argv + i + 1);
 
             bGetSwitch = FALSE;
         }

@@ -158,11 +158,14 @@ static FILELIST* Dos9_AddMatch(wchar_t* wname, FILELIST* files, struct match_arg
         }
     }
 
-    file->lpflNext = files;
+    if (files)
+        files->lpflNext = file;
+
+    file->lpflNext = NULL;
+    file->lpflPrevious = files;
 
     free(name);
 
-    /* Well, this turns out to produce heaps */
     return file;
 
 err:
@@ -172,9 +175,6 @@ err:
     return NULL;
 }
 
-/* Fixme : This function is quite a lot unefficient under windows,
-   its perfomances can be enhanced by using native winapi functions for
-   file search */
 static FILELIST* Dos9_GetMatch(wchar_t* base, wchar_t* up, struct match_args_t* arg)
 {
     FILELIST *ret = arg->files, *tmp;
@@ -208,7 +208,8 @@ static FILELIST* Dos9_GetMatch(wchar_t* base, wchar_t* up, struct match_args_t* 
                 || ((item = wcsrchr(up, '/')) && (*(item+1) == L'\0')))
                 *item = L'\0';
 
-            if (!(arg->flags & DOS9_SEARCH_DIR_MODE)) {
+            if (!(arg->flags & DOS9_SEARCH_DIR_MODE)
+                && (arg->callback != NULL)) {
                 /* If dir mode is not specified, add that match too */
                 if ((tmp = Dos9_AddMatch(up, ret, arg, NULL)) == NULL)
                     goto err;
@@ -216,7 +217,17 @@ static FILELIST* Dos9_GetMatch(wchar_t* base, wchar_t* up, struct match_args_t* 
                 arg->files = tmp;
             }
 
-            return Dos9_GetMatch(up, L"*", arg);
+            ret = Dos9_GetMatch(up, L"*", arg);
+
+            if (!(arg->flags & DOS9_SEARCH_DIR_MODE)
+                && arg->callback == NULL) {
+                if ((tmp = Dos9_AddMatch(up, ret, arg, NULL)) == NULL)
+                    goto err;
+
+                ret = tmp;
+            }
+
+            goto end;
 
         }
 
@@ -268,7 +279,7 @@ static FILELIST* Dos9_GetMatch(wchar_t* base, wchar_t* up, struct match_args_t* 
 
     if (Dos9_FileExists_W(path)) {
         /* if path corresponds to a file (ie. not a dir), there is two
-           possibilities (a) up is NULL and then the files matches sinces
+           possibilities (a) up is NULL and then the files matches since
            we already reached top level, or (b) up is not NULL and then
            the file cannot match and it is wise to stop search in this
            folder */
@@ -490,6 +501,10 @@ LIBDOS9 LPFILELIST  Dos9_GetMatchFileList(char* lpPathMatch, int iFlag)
     }
 
     free(wpath);
+
+    if (file)
+        while (file->lpflPrevious)
+            file = file->lpflPrevious;
 
     return file;
 }

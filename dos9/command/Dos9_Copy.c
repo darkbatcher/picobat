@@ -86,18 +86,31 @@ int Dos9_CmdCopy(char* line)
              *next=NULL,
              *end;
 
-    ESTR *param=Dos9_EsInit(),
-         *file[FILENAME_MAX];
+    ESTR *param=Dos9_EsInit();
 
     int i=0,
         len=0,
         flags=(*line == 'c' || *line == 'C') ? 0 : DOS9_COPY_MOVE,
         status=0;
 
+    char **file,
+         **tmp;
+
+    size_t filesize = 64;
+
     char *str;
     short attr=0;
 
     line +=4;
+
+    if ((file = malloc(filesize * sizeof(char*))) == NULL) {
+
+        Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION,
+                                __FILE__ "/Dos9_CmdCopy()", 0);
+        status = -1;
+        goto end;
+
+    }
 
     while (line = Dos9_GetNextParameterEs(line, param)) {
 
@@ -146,19 +159,31 @@ int Dos9_CmdCopy(char* line)
                 continue;
             }
 
-            if (len >= FILENAME_MAX) {
+            if (len >= filesize) {
 
-                Dos9_ShowErrorMessage(DOS9_TOO_MANY_ARGS,
-                                      (flags & DOS9_COPY_MOVE) ? "MOVE": "COPY",
-                                      FALSE);
+                filesize *= 2;
 
+                if ((tmp = realloc(file, filesize * sizeof(char*))) == NULL) {
+
+                    Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION,
+                                            __FILE__ "/Dos9_CmdCopy()", 0);
+                    status = -1;
+                    goto end;
+
+                }
+
+                file = tmp;
+
+            }
+
+            if ((file[len] = strdup(str)) == NULL) {
+
+                Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION,
+                                        __FILE__ "/Dos9_CmdCopy()", 0);
                 status = -1;
                 goto end;
 
             }
-
-            file[len] = Dos9_EsInit();
-            Dos9_EsCpy(file[len], str);
 
             len ++;
 
@@ -186,8 +211,8 @@ int Dos9_CmdCopy(char* line)
     if (flags & DOS9_COPY_RECURSIVE) {
 
         for (i=0;i < len - 1 ; i++)
-            status = Dos9_CmdCopyRecursive(Dos9_EsToChar(file[i]),
-                        Dos9_EsToChar(file[len-1]), attr, &flags);
+            status = Dos9_CmdCopyRecursive(file[i],
+                        file[len-1], attr, &flags);
 
         goto end;
 
@@ -195,12 +220,12 @@ int Dos9_CmdCopy(char* line)
 
     for (i=0;i < len - 1; i++) {
 
-        next = Dos9_GetMatchFileList(Dos9_EsToChar(file[i]), DOS9_SEARCH_DEFAULT);
+        next = Dos9_GetMatchFileList(file[i], DOS9_SEARCH_DEFAULT);
 
         if (next == NULL) {
 
             Dos9_ShowErrorMessage(DOS9_NO_MATCH,
-                                    Dos9_EsToChar(file[i]), FALSE);
+                                    file[i], FALSE);
             status = -1;
 
             goto end;
@@ -247,7 +272,7 @@ int Dos9_CmdCopy(char* line)
 
     while (files) {
 
-        status |= Dos9_CmdCopyFile(files->lpFileName, Dos9_EsToChar(file[len-1]), &flags);
+        status |= Dos9_CmdCopyFile(files->lpFileName, file[len-1], &flags);
 
         files = files->lpflNext;
     }
@@ -257,8 +282,12 @@ end:
     Dos9_FreeFileList(next);
     Dos9_EsFree(param);
 
-    for (i=0;i < len; i++)
-        Dos9_EsFree(file[i]);
+    if (file) {
+        for (i=0;i < len; i++)
+            free(file[i]);
+
+        free(file);
+    }
 
     return status;
 }

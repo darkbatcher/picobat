@@ -59,8 +59,7 @@
 
 int Dos9_CmdRmdir(char* lpLine)
 {
-	ESTR *lpEstr=Dos9_EsInit(),
-          *name[FILENAME_MAX];
+	ESTR *lpEstr=Dos9_EsInit();
 
 	int	mode=DOS9_SEARCH_DEFAULT | DOS9_SEARCH_NO_PSEUDO_DIR,
 		param=DOS9_ASK_CONFIRMATION,
@@ -68,6 +67,11 @@ int Dos9_CmdRmdir(char* lpLine)
 		n=0,
 		status = 0,
 		i;
+
+    char **name,
+         **tmp;
+
+    size_t namesize = 64;
 
     FILELIST *next,
              *dir,
@@ -80,6 +84,16 @@ int Dos9_CmdRmdir(char* lpLine)
     } else {
 
         lpLine +=5;
+    }
+
+    if ((name = malloc(namesize * sizeof(char*))) == NULL) {
+
+        Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION,
+                                        __FILE__ "/Dos9_CmdRmdir()", 0);
+        status = -1;
+
+        goto end;
+
     }
 
 	while ((lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
@@ -103,13 +117,35 @@ int Dos9_CmdRmdir(char* lpLine)
 
 		} else {
 
+            if (n  == namesize) {
+                /* It is time to realloc name array, we ran out of space */
+                namesize *= 2;
 
-            if (n < FILENAME_MAX) {
+                if ((tmp = realloc(name, namesize * sizeof(char*))) == NULL) {
 
-                name[n] = Dos9_EsInit();
-                Dos9_EsCpyE(name[n++], lpEstr);
+                    Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION,
+                                                    __FILE__ "/Dos9_CmdRmdir()", 0);
+                    status = -1;
+
+                    goto end;
+
+                }
+
+                name = tmp;
 
             }
+
+            if ((name[n] = strdup(lpEstr->str)) == NULL) {
+
+                Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION,
+                                                __FILE__ "/Dos9_CmdRmdir()", 0);
+                status = -1;
+
+                goto end;
+
+            }
+
+            n ++;
 
 		}
 
@@ -118,24 +154,27 @@ int Dos9_CmdRmdir(char* lpLine)
     if (!(mode & DOS9_SEARCH_RECURSIVE) && n == 1) {
 
         /* This is simple case where we just need to remove the dir */
-        Dos9_CmdRmdirFile(Dos9_EsToChar(name[0]), param, &choice);
+        Dos9_CmdRmdirFile(name[0], param, &choice);
 
     } else if (n == 0) {
 
         Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "RD/RMDIR", FALSE);
-        goto error;
+        status = -1;
+
+        goto end;
 
     } else {
 
         for (i=0; i < n; i++) {
 
-            if (!(dir = Dos9_GetMatchFileList(Dos9_EsToChar(name[i]), mode))) {
+            if (!(dir = Dos9_GetMatchFileList(name[i], mode))) {
 
                 Dos9_ShowErrorMessage(DOS9_NO_MATCH,
-                                        Dos9_EsToChar(name[i]),
+                                        name[i],
                                         FALSE);
-                goto error;
+                status = -1;
 
+                goto end;
             }
 
             if (files == NULL) {
@@ -164,7 +203,9 @@ int Dos9_CmdRmdir(char* lpLine)
 
         while (next) {
 
-            status |= Dos9_CmdDelFile(next->lpFileName, param, &choice);
+
+            status |= Dos9_CmdDelFile(next->lpFileName, Dos9_GetFileMode(next),
+                                                                    param, &choice);
 
             next = next->lpflNext;
 
@@ -175,7 +216,6 @@ int Dos9_CmdRmdir(char* lpLine)
         while (next) {
 
             status |= Dos9_CmdRmdirFile(next->lpFileName, param, &choice);
-
             next = next->lpflNext;
 
         }
@@ -186,18 +226,18 @@ int Dos9_CmdRmdir(char* lpLine)
     }
 
 end:
-    for (i=0;i < n; i++)
-        Dos9_EsFree(name[i]);
+    if (name) {
+
+        for (i=0;i < n; i++)
+            name[i];
+
+        free(name);
+
+    }
 
 	Dos9_EsFree(lpEstr);
 	return status;
 
-error:
-    for (i=0;i < n; i++)
-        Dos9_EsFree(name[i]);
-
-	Dos9_EsFree(lpEstr);
-	return -1;
 }
 
 int Dos9_CmdRmdirFile(char* dir, int param, int* choice)

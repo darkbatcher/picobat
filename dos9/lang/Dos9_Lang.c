@@ -138,7 +138,7 @@ void Dos9_LoadStrings(void)
 
 	lpAskInvalid=gettext("Please enter a correct choice (or type enter to choose default) !\n");
 
-	lpHlpMain=gettext("Usage:\tDOS9 [/A[:]attr] [/I in] [/O out] [file] [/K cmd|/C cmd]\n\n\
+	lpHlpMain=gettext("Usage:\tDOS9 [/A[:]attr] [/I in] [/O out] [file ... | /K cmd ...|/C cmd ...]\n\n\
 \t/A:attr\tA list of attributes for Dos9\n\
 \t\tC\tEnable CMDLYCORRECT option to enable more compatibility\n\
 \t\t\twith cmd.exe.\n\

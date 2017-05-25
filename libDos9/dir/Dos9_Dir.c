@@ -88,7 +88,11 @@ static FILELIST* Dos9_AddMatch(char* name, FILELIST* files, struct match_args_t*
 #endif // WIN32
     }
 
-    file->lpflNext = files;
+    if (files)
+        files->lpflPrevious = file;
+
+    file->lpflPrevious = file;
+    file->lpflNext = NULL;
 
     /* Well, this turns out to produce heaps */
     return file;
@@ -128,19 +132,26 @@ static FILELIST* Dos9_GetMatch(char* base, char* up, struct match_args_t* arg)
 
             /* First, check that the name does not end with a slash, if it
                is the case, remove it */
-            if (((item = strrchr(up, '\\')) && (*(item+1) == '\0'))
-                || ((item = strrchr(up, '/')) && (*(item+1) == '\0')))
-                *item = '\0';
-
-            if (!(arg->flags & DOS9_SEARCH_DIR_MODE)) {
+            if (!(arg->flags & DOS9_SEARCH_DIR_MODE)
+                && (arg->callback != NULL)) {
                 /* If dir mode is not specified, add that match too */
-                if ((tmp = Dos9_AddMatch(up, ret, arg)) == NULL)
+                if ((tmp = Dos9_AddMatch(up, ret, arg, NULL)) == NULL)
                     goto err;
 
                 arg->files = tmp;
             }
 
-            return Dos9_GetMatch(up, "*", arg);
+            ret = Dos9_GetMatch(up, L"*", arg);
+
+            if (!(arg->flags & DOS9_SEARCH_DIR_MODE)
+                && arg->callback == NULL) {
+                if ((tmp = Dos9_AddMatch(up, ret, arg, NULL)) == NULL)
+                    goto err;
+
+                ret = tmp;
+            }
+
+            goto end;
 
         }
 
@@ -410,6 +421,11 @@ LIBDOS9 LPFILELIST  Dos9_GetMatchFileList(char* lpPathMatch, int iFlag)
         exit(-1);
 
     }
+
+    /* rewind through files */
+    if (file)
+        while (file->lpflPrevious)
+            file = file->lpflPrevious;
 
     return file;
 }

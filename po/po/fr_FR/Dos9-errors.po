@@ -295,7 +295,7 @@ msgstr "Erreur : Impossible de créer le dossier \"%s\".\n"
 #: ../dos9/errors/Dos9_Errors.c:245
 #, c-format
 msgid "Error : Unable to delete file \"%s\".\n"
-msgstr "Erreur : Impossible de suprimmer le dossier \"%s\"\n"
+msgstr "Erreur : Impossible de suprimmer le fichier \"%s\"\n"
 
 #: ../dos9/errors/Dos9_Errors.c:248
 #, c-format

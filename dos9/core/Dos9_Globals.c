@@ -37,8 +37,12 @@ int iMainThreadId;
 int bAbortCommand=FALSE;
 LPCOMMANDLIST lpclCommands;
 LOCAL_VAR_BLOCK* lpvLocalVars;
-LOCAL_VAR_BLOCK* lpvArguments; /* use a distinct local block for
-                                  command arguments */
+/* use a distinct local block for command arguments
+
+    %1-%9 : arguments
+    %* : full line
+    %+ : remaning args */
+LOCAL_VAR_BLOCK* lpvArguments;
 LPSTREAMSTACK lppsStreamStack;
 COLOR colColor;
 
