@@ -145,7 +145,7 @@ static FILELIST* Dos9_GetMatch(char* base, char* up, struct match_args_t* arg)
 
             if (!(arg->flags & DOS9_SEARCH_DIR_MODE)
                 && arg->callback == NULL) {
-                if ((tmp = Dos9_AddMatch(up, ret, arg, NULL)) == NULL)
+                if ((tmp = Dos9_AddMatch(up, ret, arg)) == NULL)
                     goto err;
 
                 ret = tmp;
