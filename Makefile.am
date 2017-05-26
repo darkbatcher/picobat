@@ -34,7 +34,9 @@ install-extra: textfiles
 	mkdir -p $(datadir)/dos9
 	mkdir -p $(datadir)/dos9/hlp
 	cp -Rf man/* $(datadir)/dos9/hlp
-	cp README WHATSNEW THANKS COPYING $(datadir)/dos9/
+	cp README WHATSNEW THANKS COPYING COPYING.darkbox $(datadir)/dos9/
+	cp libmatheval/COPYING  $(datadir)/dos9/COPYING.libmatheval
+	
 
 .PHONY: install-extra textfiles
 
