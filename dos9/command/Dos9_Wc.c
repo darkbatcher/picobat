@@ -25,7 +25,9 @@
 #include <string.h>
 #include <errno.h>
 
+#if defined(WIN32)
 #include <io.h>
+#endif
 
 #include <matheval.h>
 #include <inteval.h>
@@ -163,16 +165,16 @@ void Dos9_AddCounts(struct wc_count_t* res, const struct wc_count_t* val)
 void Dos9_PrintCounts(int mode, struct wc_count_t* cnt, const char* file)
 {
     if (mode & DOS9_WC_LINES)
-        printf("%d ", cnt->lines);
+        printf("%lu ", cnt->lines);
 
     if (mode & DOS9_WC_WORDS)
-        printf("%d ", cnt->words);
+        printf("%lu ", cnt->words);
 
     if (mode & DOS9_WC_BYTES)
-        printf("%d ", cnt->bytes);
+        printf("%lu ", cnt->bytes);
 
     if (mode & DOS9_WC_CHARS)
-        printf("%d ", cnt->chars);
+        printf("%lu ", cnt->chars);
 
     if (file)
         printf("%s", file);
@@ -291,7 +293,7 @@ int Dos9_CmdWc(const char* line)
 
             total.bytes += Dos9_GetFileSize(item);
 
-            printf("%d %s" DOS9_NL, Dos9_GetFileSize(item), item->lpFileName);
+            printf("%lu %s" DOS9_NL, Dos9_GetFileSize(item), item->lpFileName);
 
         } else if (Dos9_FileCounts(mode, item->lpFileName, &cnt)) {
             /* Reading the whole file is required */

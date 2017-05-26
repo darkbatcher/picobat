@@ -25,7 +25,9 @@
 #include <string.h>
 #include <errno.h>
 
+#if defined(WIN32)
 #include <io.h>
+#endif
 
 #include <matheval.h>
 #include <inteval.h>

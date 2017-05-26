@@ -260,8 +260,15 @@ LIBDOS9 void Dos9_GetMousePos(char on_move, CONSOLECOORD* coords, int *b)
 #endif
 
 #ifndef WIN32
-#include <termios.h>
+
+#if !defined(_XOPEN_SOURCE)
+#define _XOPEN_SOURCE 700
+#endif
+
+#include <stdio.h>
 #include <unistd.h>
+#include <sys/ioctl.h>
+#include <termios.h>
 
 /*
  Dos9_Getch : Derived from darkbox getch by Teddy ASTIE
@@ -275,78 +282,78 @@ LIBDOS9 int Dos9_Getch(void)
 {
     struct termios oldattr, newattr;
     int ch;
-    tcgetattr( STDIN_FILENO, &oldattr );
+    tcgetattr(fileno(stdin), &oldattr);
     newattr = oldattr;
     newattr.c_lflag &= ~( ICANON | ECHO );
-    tcsetattr( STDIN_FILENO, TCSANOW, &newattr );
+    tcsetattr(fileno(stdin), TCSANOW, &newattr);
     ch = getchar();
-    tcsetattr( STDIN_FILENO, TCSANOW, &oldattr );
+    tcsetattr(fileno(stdin), TCSANOW, &oldattr);
 
     /* Handle special chracters */
     if (ch == '\033' && Dos9_Getch() == '[')
-        switch (Dos9_Getch()) {
-            case 'A': /* up arrow */
-                return 72;
-                break;
-            case 'B': /* down arrow */
-                return 80;
-                break;
-            case 'C': /* right arrow */
-                return 77;
-                break;
-            case 'D': /* left arrow */
-                return 75;
-                break;
-            case 'F': /* end */
-                return 79;
-                break;
-            case 'H': /* begin */
-                return 71;
-                break;
+            switch (Dos9_Getch()) {
+                case 'A': /* up arrow */
+                    return 72;
+                    break;
+                case 'B': /* down arrow */
+                    return 80;
+                    break;
+                case 'C': /* right arrow */
+                    return 77;
+                    break;
+                case 'D': /* left arrow */
+                    return 75;
+                    break;
+                case 'F': /* end */
+                    return 79;
+                    break;
+                case 'H': /* begin */
+                    return 71;
+                    break;
 
-            case '2': /* insert */
-                Dos9_Getch(); /* ignore the next character */
-                return 82;
-                break;
-            case '3': /* delete */
-                Dos9_Getch();
-                return 83;
-                break;
-            case '5': /* page up */
-                Dos9_Getch();
-                return 73;
-                break;
-            case '6': /* page down */
-                Dos9_Getch();
-                return 81;
-                break;
+                case '2': /* insert */
+                    Dos9_Getch(); /* ignore the next character */
+                    return 82;
+                    break;
+                case '3': /* delete */
+                    Dos9_Getch();
+                    return 83;
+                    break;
+                case '5': /* page up */
+                    Dos9_Getch();
+                    return 73;
+                    break;
+                case '6': /* page down */
+                    Dos9_Getch();
+                    return 81;
+                    break;
 
-            default:
-                return -1; /* unmanaged/unknown key */
-                break;
-        }
+                default:
+                    return -1; /* unmanaged/unknown key */
+                    break;
+            }
 
     else return ch;
 }
 
+
 /* Morgan McGuire, morgan@cs.brown.edu */
 int kbhit(void)
 {
-    static const int STDIN = 0;
     static char initialized = 0;
 
     if (! initialized) {
         // Use termios to turn off line buffering
         struct termios term;
-        tcgetattr(STDIN, &term);
+        tcgetattr(fileno(stdin), &term);
         term.c_lflag &= ~ICANON;
-        tcsetattr(STDIN, TCSANOW, &term);
+        tcsetattr(fileno(stdin), TCSANOW, &term);
         setbuf(stdin, NULL);
         initialized = 1;
     }
 
     int bytesWaiting;
-    ioctl(STDIN, FIONREAD, &bytesWaiting);
+    ioctl(fileno(stdin), FIONREAD, &bytesWaiting);
     return bytesWaiting;
 
 }

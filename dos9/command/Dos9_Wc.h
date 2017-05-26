@@ -20,6 +20,8 @@
 #ifndef DOS9_WC_H
 #define DOS9_WC_H
 
+#include <stdlib.h>
+
 struct wc_count_t {
     size_t lines;
     size_t words;
