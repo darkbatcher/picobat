@@ -57,6 +57,8 @@ dos9-install-portable:
 	cp README $(prefix)/
 	cp WHATSNEW $(prefix)/
 	cp COPYING $(prefix)/
+	cp COPYING.darkbox $(prefix)/
+	cp libmatheval/COPYING $(prefix)/COPYING.libmatheval
 	cp THANKS $(prefix)/
 
 dist-bin : dist-bin-dir

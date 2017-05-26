@@ -1024,7 +1024,9 @@ BOOL WINAPI Dos9_SigHandler(DWORD dwCtrlType)
                 args = Dos9_EsInit();
 
                 Dos9_GetExeFilename(lpExePath, sizeof(lpExePath));
-                Dos9_EsCpy(args, lpExePath);
+                Dos9_EsCpy(args, "\"");
+                Dos9_EsCat(args, lpExePath);
+                Dos9_EsCat(args, "\"");
                 Dos9_EsCat(args, " /a:q");
 
                 if (!bEchoOn)

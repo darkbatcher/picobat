@@ -249,7 +249,7 @@ char* Dos9_GetParameters(char** argv, char** lpFileName, int* bExitAfterCmd, int
                     *bExitAfterCmd = FALSE;
                 case 'C':
                     if (lpCmdCSwitch != NULL || argv[++i] == NULL)
-                        Dos9_ShowErrorMessage(DOS9_BAD_COMMAND_LINE, NULL, -1);
+                        Dos9_ShowErrorMessage(DOS9_BAD_COMMAND_LINE, "", -1);
 
                     /* introduce new semantics with /C or /K command, if only
                        @ is passed as argument, then /C takes the command line

@@ -170,9 +170,9 @@ int Dos9_GetLine_Cmdly(ESTR* lpesLine, INPUT_FILE* pIn)
 
 	//getch();
 
-	if (*(pIn->lpFileName)!='\0') {
+    pIn->bEof=res;
 
-		pIn->bEof=res;
+	if (*(pIn->lpFileName)!='\0') {
 
 		if (!res)
 			pIn->iPos=ftell(pFile);
