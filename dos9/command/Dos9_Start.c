@@ -486,9 +486,8 @@ int Dos9_CmdStart(char* line)
         if (bCmdlyCorrect)
             Dos9_EsCat(tmp, "c");
 
-        Dos9_EsCat(tmp, " /C \"");
+        Dos9_EsCat(tmp, " /C ");
         Dos9_EsCat(tmp, param->str);
-        Dos9_EsCat(tmp, "\"");
 
         Dos9_EsFree(param);
         param = tmp;
