@@ -298,11 +298,11 @@ int Dos9_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 
         Dos9_SetLocalVar(lpvTmpArgs, '+', "");
 
-	} else {
+	} else if (lpCmdLine) {
 
         lpEsCmd = Dos9_EsInit();
 
-	    while (lpCmdLine = Dos9_GetNextParameterEs(lpCmdLine, lpEsParam)) {
+        while (lpCmdLine = Dos9_GetNextParameterEs(lpCmdLine, lpEsParam)) {
             Dos9_EsReplace(lpEsParam, " ", "^ ");
             Dos9_EsReplace(lpEsParam, ";", "^;");
             Dos9_EsReplace(lpEsParam, ",", "^,");
@@ -312,12 +312,17 @@ int Dos9_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
             Dos9_EsCatE(lpEsCmd, lpEsParam);
             Dos9_EsCat(lpEsCmd, " ");
 
-	    }
+        }
+
 
         /* set the %+ parameter */
         Dos9_SetLocalVar(lpvTmpArgs, '+', lpEsCmd->str);
 
         Dos9_EsFree(lpEsCmd);
+
+	} else {
+
+	    Dos9_SetLocalVar(lpvTmpArgs, '+', "");
 
 	}
 
