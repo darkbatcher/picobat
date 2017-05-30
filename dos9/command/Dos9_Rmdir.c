@@ -154,6 +154,7 @@ int Dos9_CmdRmdir(char* lpLine)
     if (!(mode & DOS9_SEARCH_RECURSIVE) && n == 1) {
 
         /* This is simple case where we just need to remove the dir */
+        choice = DOS9_ASK_ALL;
         Dos9_CmdRmdirFile(name[0], param, &choice);
 
     } else if (n == 0) {
