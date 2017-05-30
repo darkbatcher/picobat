@@ -40,7 +40,8 @@
 
 #define DOS9_IF_EXIST_TEST(ret, file, filelist) \
     filelist = Dos9_GetMatchFileList(file, DOS9_SEARCH_GET_FIRST_MATCH \
-                                                | DOS9_SEARCH_NO_STAT); \
+                                                | DOS9_SEARCH_NO_STAT \
+                                                | DOS9_SEARCH_NO_PSEUDO_DIR); \
     ret=(filelist != NULL); \
     if (filelist) \
         Dos9_FreeFileList(filelist);

@@ -89,10 +89,10 @@ static FILELIST* Dos9_AddMatch(char* name, FILELIST* files, struct match_args_t*
     }
 
     if (files)
-        files->lpflPrevious = file;
+        files->lpflNext = file;
 
-    file->lpflPrevious = files;
     file->lpflNext = NULL;
+    file->lpflPrevious = files;
 
     /* Well, this turns out to produce heaps */
     return file;
@@ -387,7 +387,9 @@ end:
     if (cleanup)
         *cleanup = '/';
 
-    Dos9_EsFree(path);
+    if (path)
+        Dos9_EsFree(path);
+
     return ret;
 
 err:

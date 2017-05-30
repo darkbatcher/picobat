@@ -1902,3 +1902,9 @@ FRIDAY 25TH, MAY
 
         - Fixed man pages and i18n messages.
 
+TUESDAY 30TH, MAY
+
+        - Fixed dir search function for non-unicode and unicode versions.
+
+        - Fixed pseudo-directory bug with if exist.
+
