@@ -113,6 +113,7 @@ int main(int argc, char *argv[])
 
     /* Set the error handler called on errors that require the process to exit */
     pErrorHandler=Dos9_Exit;
+    pErrorHandler=Dos9_Exit;
 
     /* atexit(Dos9_Exit); */
 

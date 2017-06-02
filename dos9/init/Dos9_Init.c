@@ -312,7 +312,7 @@ char* Dos9_GetParameters(char** argv, char** lpFileName, int* bExitAfterCmd, int
 
                 }
 
-                Dos9_AssignCommandLine('+', argv + j);
+                Dos9_AssignCommandLine('+', (argv + j == NULL) ? "" : argv + j);
 
                 break;
             }

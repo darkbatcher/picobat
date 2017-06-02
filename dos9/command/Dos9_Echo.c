@@ -68,6 +68,7 @@ int Dos9_CmdEcho(char* lpLine)
 
 		Dos9_GetEndOfLine(lpLine+1, lpEsParameter);
 		fputs(Dos9_EsToChar(lpEsParameter), stdout);
+        fputs(DOS9_NL, stdout);
 
 
 	} else if (tmp = Dos9_GetNextParameterEs(lpLine, lpEsParameter)) {
@@ -90,6 +91,7 @@ int Dos9_CmdEcho(char* lpLine)
 
 			Dos9_GetEndOfLine(lpLine+1, lpEsParameter);
 			fputs(lpEsParameter->str, stdout);
+            fputs(DOS9_NL, stdout);
 
 		}
 
@@ -99,9 +101,9 @@ int Dos9_CmdEcho(char* lpLine)
 		if (bEchoOn) fputs(lpMsgEchoOn, stdout);
 		else fputs(lpMsgEchoOff, stdout);
 
-	}
+        fputs(DOS9_NL, stdout);
 
-    fputs(DOS9_NL, stdout);
+	}
 
 	Dos9_EsFree(lpEsParameter);
 
