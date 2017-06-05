@@ -43,7 +43,7 @@ static HANDLE self = INVALID_HANDLE_VALUE;
 
 /* A pointer array that hold absolute address of libcu8 functions
    near the actual location of msvcrt functions, so that relative
-   addressing can be use  */
+   addressing can be used  */
 static void** fn_tbl = NULL;
 
 #define BASE_MASK 0xffffffffff000000

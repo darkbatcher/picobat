@@ -303,6 +303,15 @@ LPSTREAMSTACK Dos9_Pipe(LPSTREAMSTACK lppsStreamStack)
 	}
 }
 
+LPSTREAMSTACK Dos9_PopStreamStackUntilLock(LPSTREAMSTACK lppsStack)
+{
+    while (lppsStack && Dos9_GetStreamStackLockState(lppsStack) == 0)
+        lppsStack = Dos9_PopStreamStack(lppsStack);
+
+    return lppsStack;
+}
+
+
 LPSTREAMSTACK Dos9_PopStreamStack(LPSTREAMSTACK lppsStack)
 {
 	LPSTREAMLVL lpStream;

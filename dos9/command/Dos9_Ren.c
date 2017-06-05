@@ -110,8 +110,8 @@ int Dos9_CmdRen(char* lpLine)
 			lpFileDest[FILENAME_MAX-1]='\0';
 			/* can't assume that what was buffered is NULL-terminated
 			   see the C-89,99,11 standards for further informations */
-			if (!printf("<DEBUG> renaming `%s` to `%s`\n", lpFileName, lpFileDest)
-                /* rename(lpFileName, lpFileDest) */) {
+
+			if (rename(lpFileName, lpFileDest)) {
 
 				Dos9_ShowErrorMessage(DOS9_UNABLE_RENAME, lpFileName, FALSE);
 				Dos9_EsFree(lpEstr);

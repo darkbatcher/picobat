@@ -194,7 +194,7 @@ int libcu8_write_console(int fd, void* buf, size_t cnt, size_t* written)
 
         /* hard to figure out how many bytes from buf have been written
            since conversion is not fixed size to fixed size. To make it
-           easier, pretend we wrote nothing */
+           easier, pretend we wrote wrote everything */
         *written = 0;
     }
 

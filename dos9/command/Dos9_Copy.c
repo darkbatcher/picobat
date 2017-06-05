@@ -394,6 +394,9 @@ int Dos9_CmdCopyRecursive(const char* file, const char* dest, short attr, int* f
     int  status = 0;
     size_t size  = Dos9_GetStaticLength(file);
 
+    if (size != 0)
+        size +=1;
+
     if (!(files = Dos9_GetMatchFileList(file, DOS9_SEARCH_DIR_MODE
                                              | DOS9_SEARCH_RECURSIVE
                                              | DOS9_SEARCH_NO_PSEUDO_DIR))) {
@@ -407,13 +410,13 @@ int Dos9_CmdCopyRecursive(const char* file, const char* dest, short attr, int* f
 
     }
 
-    Dos9_AttributesSplitFileList((attr & ~ DOS9_ATTR_NO_DIR),
+    Dos9_AttributesSplitFileList(attr,
                                  files,
                                  &files,
                                  &end
                                  );
 
-    Dos9_AttributesSplitFileList(attr,
+    Dos9_AttributesSplitFileList(DOS9_ATTR_NO_DIR,
                                  files,
                                  &files,
                                  &dirs
@@ -421,11 +424,10 @@ int Dos9_CmdCopyRecursive(const char* file, const char* dest, short attr, int* f
 
     item = dirs;
 
+    /* duplicate directories */
     while (item) {
 
-        Dos9_MakePath(real_dest, 2, dest, (item->lpFileName)+(size+1));
-
-
+        Dos9_MakePath(real_dest, 2, dest, (item->lpFileName)+(size));
         status |= Dos9_CmdMakeDirs(real_dest->str);
 
         item = item->lpflNext;
@@ -434,11 +436,13 @@ int Dos9_CmdCopyRecursive(const char* file, const char* dest, short attr, int* f
 
     item = files;
 
+    /* copy file */
     while (item) {
 
         Dos9_MakePath(real_dest, 2, dest, (item->lpFileName)+(size));
-
         status |= Dos9_CmdCopyFile(item->lpFileName, real_dest->str, flags);
+
+        item = item->lpflNext;
 
     }
 

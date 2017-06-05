@@ -376,6 +376,23 @@ static FILELIST* Dos9_GetMatch(char* base, char* up, struct match_args_t* arg)
 
             }
 
+        } else if ((arg->flags & DOS9_SEARCH_RECURSIVE)
+                   && Dos9_DirExists(ent->d_name)) {
+
+            /* Compute the path of the current matching entity */
+            if (base != NULL) {
+                Dos9_EsCpy(path, base);
+                Dos9_EsCat(path, "/");
+                Dos9_EsCat(path, ent->d_name);
+            } else {
+                Dos9_EsCpy(path, ent->d_name);
+            }
+
+            /* if it does not match *but* we are in recursive mode, browse
+               anyway */
+            arg->files = ret;
+            ret = Dos9_GetMatch(path->str, up, arg);
+
         }
 
     }

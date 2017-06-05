@@ -81,7 +81,8 @@ void Dos9_TypeFile(char* lpFileName)
         fwrite(buf, 1, size, stdout);
 
 end:
-    fclose(pFile);
+    if (pFile)
+        fclose(pFile);
 }
 
 int Dos9_CmdType(char* lpLine)

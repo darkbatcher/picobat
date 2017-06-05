@@ -236,14 +236,6 @@ int Dos9_CmdDel(char* lpLine)
 
     Dos9_FreeFileList(next);
 
-    printf("Files found ...\n");
-    end = list;
-
-    while (end) {
-        printf("\t* \"%s\"\n", end->lpFileName);
-        end = end->lpflNext;
-    }
-
     end = list;
     while (end) {
 

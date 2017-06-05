@@ -195,7 +195,7 @@ loop:
 		/* if the input descriptor is from a previous pipe */
 		if (olddes != 0) {
 
-            Dos9_SetFdInheritance(pipedes[0], 1);
+            Dos9_SetFdInheritance(olddes, 1);
 
 			snprintf(input, sizeof(input), "%d", olddes);
 			lpArgs[++i] =  "/I";
@@ -258,13 +258,8 @@ loop:
     } else if (olddes != 0) {
 
     	/* This is logically the last pipe of a series of pipes */
-    	lppsStreamStack = Dos9_PushStreamStackIfNotPipe(lppsStreamStack);
+    	lppsStreamStack = Dos9_PushStreamStack(lppsStreamStack);
 		Dos9_OpenOutputD(lppsStreamStack, olddes, DOS9_STDIN);
-
-    } else if (!lppsStream->lppsNode
-               && lppsStream->cNodeType != PARSED_STREAM_NODE_PIPE) {
-
-        lppsStreamStack = Dos9_Pipe(lppsStreamStack);
 
     }
 
@@ -278,11 +273,9 @@ loop:
 	case PARSED_STREAM_NODE_NOT :
 		/* this condition is true when the instruction
 		   before failed */
-		   Dos9_Pipe(lppsStreamStack);
 		return iErrorLevel;
 
 	case PARSED_STREAM_NODE_YES:
-		   Dos9_Pipe(lppsStreamStack);
 		return !iErrorLevel;
 
 	}
@@ -338,10 +331,10 @@ loop:
 
             close(pipedes[1]); /* do not need it yeah */
 
-            /* do not create enormous stack in case of following pipes */
-            lppsStreamStack = Dos9_PushStreamStackIfNotPipe(lppsStreamStack);
+            /* create a new stack level */
+            lppsStreamStack = Dos9_PushStreamStack(lppsStreamStack);
 
-            /* Child process recieve's parent output */
+            /* Child process receives parent output */
             Dos9_OpenOutputD(lppsStreamStack, pipedes[0], DOS9_STDIN);
 
             if (lppsStream->lppsNode) {
@@ -353,11 +346,6 @@ loop:
 
         }
 
-    } else if (!lppsStream->lppsNode
-               && lppsStream->cNodeType != PARSED_STREAM_NODE_PIPE) {
-
-        lppsStreamStack = Dos9_Pipe(lppsStreamStack);
-
     }
 
 	switch (lppsStream->cNodeType) {
@@ -366,18 +354,15 @@ loop:
         return TRUE;
 
 	case PARSED_STREAM_NODE_NONE :
-		/* this condition is alwais true */
-		lppsStreamStack = Dos9_Pipe(lppsStreamStack);
+		/* this condition is always true */
 		return TRUE;
 
 	case PARSED_STREAM_NODE_NOT :
 		/* this condition is true when the instruction
 		   before failed */
-        lppsStreamStack = Dos9_Pipe(lppsStreamStack);
 		return iErrorLevel;
 
 	case PARSED_STREAM_NODE_YES:
-        lppsStreamStack = Dos9_Pipe(lppsStreamStack);
 		return !iErrorLevel;
 
 	}
@@ -419,20 +404,19 @@ int Dos9_ExecOutput(PARSED_STREAM_START* lppssStart)
 
 	lppsStreamStack=Dos9_PushStreamStack(lppsStreamStack);
 
+	if (lppssStart->lpInputFile)
+		Dos9_OpenOutput(lppsStreamStack,
+		                lppssStart->lpInputFile,
+		                DOS9_STDIN,
+		                0
+		               );
+
 	if (lppssStart->cOutputMode
 	    && lppssStart->lpOutputFile )
 		Dos9_OpenOutput(lppsStreamStack,
 		                lppssStart->lpOutputFile,
 		                lppssStart->cOutputMode & ~PARSED_STREAM_START_MODE_TRUNCATE,
 		                lppssStart->cOutputMode & PARSED_STREAM_START_MODE_TRUNCATE
-		               );
-
-
-	if (lppssStart->lpInputFile)
-		Dos9_OpenOutput(lppsStreamStack,
-		                lppssStart->lpInputFile,
-		                DOS9_STDIN,
-		                0
 		               );
 
 	return 0;
@@ -442,6 +426,8 @@ int Dos9_RunLine(ESTR* lpLine)
 {
 	PARSED_STREAM_START* lppssStreamStart;
 	PARSED_STREAM* lppsStream;
+
+    int lock;
 
 #ifdef DOS9_DBG_MODE
 	STREAMSTACK* lpStack;
@@ -460,9 +446,12 @@ int Dos9_RunLine(ESTR* lpLine)
 		return -1;
 	}
 
-	Dos9_ExecOutput(lppssStreamStart);
+    /* lock current state */
+    lock = Dos9_GetStreamStackLockState(lppsStreamStack);
+	Dos9_SetStreamStackLockState(lppsStreamStack, 1);
 
-	DOS9_DBG("\t[*] Global streams set.\n");
+    /* open file streams (ie. those induced by '>' or '<') */
+	Dos9_ExecOutput(lppssStreamStart);
 
 	lppsStream=lppssStreamStart->lppsStream;
 
@@ -475,7 +464,9 @@ int Dos9_RunLine(ESTR* lpLine)
 
 	} while ((lppsStream=lppsStream->lppsNode));
 
-	lppsStreamStack=Dos9_PopStreamStack(lppsStreamStack);
+    /* wipe stream stack changes */
+	lppsStreamStack = Dos9_PopStreamStackUntilLock(lppsStreamStack);
+    Dos9_SetStreamStackLockState(lppsStreamStack, lock);
 
 	Dos9_FreeLine(lppssStreamStart);
 

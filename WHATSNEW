@@ -1914,3 +1914,7 @@ TUESDAY 30TH, MAY
 
         - Fixed call bug.
 
+FRIDAY 2ND, JUNE
+
+        - Fixed extra newline bug after echo off.
+

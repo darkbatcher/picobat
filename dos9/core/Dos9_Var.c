@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2016 Romain Garbi
+ *   Copyright (C) 2010-2017 Romain Garbi
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -436,17 +436,21 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 			lpName--;
 
 			if (lpvBlock[(int)cFlag[i]]) {
-				/* the flag are all valid varnames */
 
+				/* the flag are all valid varnames so backtrack
+				   we always take the longest match */
 				cVarName=cFlag[i];
+
+                if (i == 0)
+                    cFlag[0] = DOS9_ALL_PATH;
+                else
+                    cFlag[i] = 0; /* end the flag list */
+
 				break;
 
 			}
 
 		}
-
-		if (i == 0)
-            cFlag[0] = DOS9_ALL_PATH;
 
 		if (cVarName==0)
 			return NULL;
@@ -504,7 +508,7 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 
 	}
 
-	if (cFlag[0]!=DOS9_ALL_PATH && i != 0) {
+	if (cFlag[0]!=DOS9_ALL_PATH) {
 
 		*Dos9_EsToChar(lpRecieve) = '\0';
 
