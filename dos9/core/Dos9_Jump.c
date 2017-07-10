@@ -36,7 +36,7 @@ int Dos9_JumpToLabel(char* lpLabelName, char* lpFileName)
     size_t size = strlen(lpLabelName);
     int new;
 
-    /* If neither label nor filename are given or if interactive more */
+    /* If neither label nor filename are given or if interactive mode */
     if ((lpLabelName == NULL && lpFileName == NULL)
         || (*(ifIn.lpFileName) == '\0' && lpFileName == NULL))
         return -1;
@@ -132,25 +132,9 @@ int Dos9_JumpToLabel_Cmdly(char* lpLabelName, char* lpFileName)
 				/* at that time, we can assume that lpFileName is not
 				   the void string, because the void string is not usually
 				   a valid file name */
-				if (*lpFileName=='/'
-				    || !strncmp(":/", lpFileName+1, 2)
-				    || !strncmp(":\\", lpFileName+1, 2)) {
 
-					/* the path is absolute */
-					strncpy(ifIn.lpFileName, lpFileName, sizeof(ifIn.lpFileName));
-					ifIn.lpFileName[FILENAME_MAX-1]='\0';
-
-				} else {
-
-					/* the path is relative */
-					snprintf(ifIn.lpFileName,
-					         sizeof(ifIn.lpFileName),
-					         "%s/%s",
-					         Dos9_GetCurrentDir(),
-					         lpFileName
-					        );
-
-				}
+                strncpy(ifIn.lpFileName, lpFileName, sizeof(ifIn.lpFileName));
+                ifIn.lpFileName[FILENAME_MAX-1]='\0';
 
 			}
 

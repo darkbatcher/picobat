@@ -27,6 +27,7 @@
 #define Dos9_CmdCd Dos9_CmdCd_nix
 #endif
 
+int Dos9_SetCurrentDir(char* lpLine);
 int Dos9_CmdCd_nix(char* lpLine);
 int Dos9_CmdCd_win(char* lpLine);
 

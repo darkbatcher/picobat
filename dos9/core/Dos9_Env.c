@@ -106,8 +106,6 @@ error:
         || !(pRet->content = strdup(content)))
         goto error;
 
-    pRet->modif = 1;
-
     return pRet;
 }
 
@@ -265,8 +263,6 @@ void Dos9_SetEnv(ENVBUF* pEnv, const char* name, const char* content)
 
         free((*pRes)->content);
 
-        (*pRes)->modif = 1;
-
         if (!((*pRes)->content=strdup(content))) {
 error:
             Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION | DOS9_PRINT_C_ERROR,
@@ -292,7 +288,6 @@ error:
             goto error;
 
         (*pRes)->name = namecpy;
-        (*pRes)->modif = 1;
 
     } else {
 
@@ -314,7 +309,6 @@ error:
             goto error;
 
         pEnv->envbuf[pEnv->index]->name = namecpy;
-        pEnv->envbuf[pEnv->index]->modif = 1;
         ++ pEnv->index;
 
     }
@@ -378,11 +372,8 @@ void Dos9_ApplyEnv(ENVBUF* pEnv)
 
     for (i=0; i < pEnv->index; i++) {
 
-        if (!pEnv->envbuf[i]->modif
-            || pEnv->envbuf[i]->name == NULL)
+        if (pEnv->envbuf[i]->name == NULL)
             continue;
-
-        pEnv->envbuf[i]->modif = 0;
 
         #if !defined(WIN32)
         setenv(pEnv->envbuf[i]->name, pEnv->envbuf[i]->content, 1);
@@ -400,4 +391,43 @@ void Dos9_ApplyEnv(ENVBUF* pEnv)
     }
 
     Dos9_EsFree(exp);
+}
+
+void* Dos9_GetEnvBlock(ENVBUF* pEnv, size_t *s)
+{
+    int i = 0;
+    void *block, *p;
+    size_t size = 0;
+
+    for (i = 0; i < pEnv->index; i++) {
+
+        pEnv->envbuf[i]->size = strlen(pEnv->envbuf[i]->content)
+                + strlen(pEnv->envbuf[i]->name) + 2;
+        size += pEnv->envbuf[i]->size;
+
+    }
+
+    size ++;
+
+    if (!(block = malloc(size)))
+        Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION |
+                                    DOS9_PRINT_C_ERROR,
+                                __FILE__ "/Dos9_GetEnvBlock()", -1);
+
+    p = block;
+
+    for (i = 0; i < pEnv->index; i++) {
+
+        strcpy(p, pEnv->envbuf[i]->name);
+        strcat(p, "=");
+        strcat(p, pEnv->envbuf[i]->content);
+
+        p += pEnv->envbuf[i]->size;
+
+    }
+
+    *((char*)p) = '\0';
+    *s = size;
+
+    return block;
 }

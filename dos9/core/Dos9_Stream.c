@@ -33,454 +33,247 @@
 //#define DOS9_DBG_MODE
 #include "Dos9_Debug.h"
 
-void Dos9_DumpStreamStack(LPSTREAMSTACK lppsStack)
+/* initializes the stream stack */
+STREAMSTACK* Dos9_InitStreamStack(void)
 {
-	STREAMLVL* lpLvl;
+    /* I guess, nothing to be done here, since there is no need
+       for an initial copy of standard standard streams. This task is
+       indeed accomplished by new output opening functions.
 
-	fprintf(stderr, "** Dumping Stream stack **\n");
-
-	while (lppsStack) {
-
-		lpLvl=lppsStack->ptrContent;
-
-		if (lpLvl) {
-
-			fprintf(stderr, "\tElement :\n"
-			        "\t\t- iPopLock = %d\n"
-			        "\t\t- iPipeIndicator = %d\n"
-			        "\t\t- iFreeDescriptors = {%d,%d,%d}\n"
-			        "\t\t- iStandardDescriptors = {%d,%d,%d}\n"
-			        "\n",
-			        lpLvl->iPopLock,
-			        lpLvl->iPipeIndicator,
-			        lpLvl->iFreeDescriptors[0],
-			        lpLvl->iFreeDescriptors[1],
-			        lpLvl->iFreeDescriptors[2],
-			        lpLvl->iStandardDescriptors[0],
-			        lpLvl->iStandardDescriptors[1],
-			        lpLvl->iStandardDescriptors[2]
-			       );
-
-		}
-
-		lppsStack=lppsStack->lpcsPrevious;
-	}
-
-	fprintf(stderr, "** End **\n\n");
-
+       Thus, just return NULL and let the good old others functions
+       handle it;
+    */
+    return NULL;
 }
 
-LPSTREAMSTACK Dos9_InitStreamStack(void)
+/* frees the stream stack */
+void Dos9_FreeStreamStack(STREAMSTACK* stack)
 {
-	LPSTREAMSTACK lpssStream=NULL;
-	LPSTREAMLVL lpStream;
-	if ((lpStream=Dos9_AllocStreamLvl())) {
-		Dos9_GetDescriptors(lpStream->iStandardDescriptors);
-		/* when the stream stack is instancied we can assume that outpout
-		and input descriptors are standard inputs and output */
+    STREAMSTACK* tmp;
 
-		lpStream->iPopLock=TRUE;
-	}
-	lpssStream=Dos9_PushStack(lpssStream, lpStream);
-	return lpssStream;
+    /* Here, speed is not critical at all, so do things
+       consciously, hopefully, it is simple, normally no
+       file redirection is on, so just close descriptors */
+    while (stack) {
+
+        if (Dos9_GetStreamStackLockState(stack))
+            Dos9_SetStreamStackLockState(stack, 0);
+
+        stack = Dos9_PopStreamStack(stack);
+
+    }
 }
 
-void Dos9_CloseStackLvl(STREAMLVL* lpLvl)
+/* Duplicate file based on a file name or a file descriptor */
+STREAMSTACK* Dos9_OpenOutput(STREAMSTACK* stack, char* name, int fd, int mode)
 {
+    int newfd, fmode;
+    STREAMSTACK* item;
 
-	Dos9_CloseDescriptors(lpLvl->iFreeDescriptors);
-	free(lpLvl);
+    /* try to malloc a new stack item */
+    if (!(item = malloc(sizeof(STREAMSTACK))))
+        Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION
+                                | DOS9_PRINT_C_ERROR,
+                                __FILE__ "/Dos9_OpenOutput", -1);
 
+
+    item->previous = stack;
+
+    switch (fd) {
+
+    case DOS9_STDIN:
+        fmode = O_RDONLY | O_BINARY;
+        break;
+
+    default:
+        fmode = O_WRONLY | O_CREAT | O_APPEND | O_BINARY
+            | ((mode & PARSED_STREAM_START_MODE_TRUNCATE) ? O_TRUNC : 0);
+
+    }
+
+    /* open the file for redirection. TRANS() is used as a way to translate
+       windows-specific files into unix-compatible names (eg. NUL -> /dev/null)
+
+       Note that cmd.exe implements a mechanism to create path that do not exist
+       upon opening of the file. This is not implemented yet. */
+    if ((newfd = open(TRANS(name), fmode, S_IREAD | S_IWRITE)) == -1) {
+
+        Dos9_ShowErrorMessage(DOS9_FILE_ERROR | DOS9_PRINT_C_ERROR,
+                                name, 0);
+        free(item);
+        return stack;
+
+    }
+
+    Dos9_SetFdInheritance(newfd, 0); /* do not inherit this file descriptor
+                                        the only inheritable file descriptors
+                                        should be standard fds */
+
+    item->lock = 0;
+    item->fd = fd;
+    item->newfd = -1;
+    item->oldfd2 = -1;
+
+    /* do not forget to update the standard thread specific streams */
+    switch (fd) {
+
+    case DOS9_STDIN:
+        DOS9_XDUP(item->oldfd, fInput);
+        DOS9_DUP_STD(newfd, fInput);
+        close(newfd);
+        break;
+
+    case DOS9_STDOUT:
+        DOS9_XDUP(item->oldfd, fOutput);
+        DOS9_DUP_STD(newfd, fOutput);
+        close(newfd);
+        break;
+
+    case DOS9_STDERR:
+        DOS9_XDUP(item->oldfd, fError);
+        DOS9_DUP_STD(newfd, fError);
+        close(newfd);
+        break;
+
+    case DOS9_STDERR | DOS9_STDOUT:
+        DOS9_XDUP(item->oldfd, fOutput);
+        DOS9_XDUP(item->oldfd2, fError);
+        DOS9_DUP_STD(newfd, fError);
+        DOS9_DUP_STD(newfd, fOutput);
+        close(newfd);
+        break;
+
+    default: /* extension, for further use */
+        item->newfd = newfd;
+        item->oldfd = -1;
+    }
+
+    return item;
 }
 
-void Dos9_FreeStreamStack(LPSTREAMSTACK lpssStream)
+STREAMSTACK* Dos9_OpenOutputD(STREAMSTACK* stack, int newfd, int fd)
 {
-	if (!lpssStream) return;
+    STREAMSTACK* item;
 
-	Dos9_ClearStack(lpssStream, (void(*)(void*))Dos9_CloseStackLvl);
+    /* try to malloc a new stack item */
+    if (!(item = malloc(sizeof(STREAMSTACK))))
+        Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION
+                                | DOS9_PRINT_C_ERROR,
+                                __FILE__ "/Dos9_OpenOutput", -1);
 
+
+    item->previous = stack;
+
+    Dos9_SetFdInheritance(newfd, 0); /* do not inherit this file descriptor
+                                        the only inheritable file descriptors
+                                        should be standard fds */
+
+    item->lock = 0;
+    item->fd = fd;
+    item->newfd = -1;
+    item->oldfd2 = -1;
+
+    /* do not forget to update the standard thread specific streams */
+    switch (fd) {
+
+    case DOS9_STDIN:
+        DOS9_XDUP(item->oldfd, fInput);
+        DOS9_DUP_STDIN(newfd, fInput);
+        break;
+
+    case DOS9_STDOUT:
+        DOS9_XDUP(item->oldfd, fOutput);
+        DOS9_DUP_STD(newfd, fOutput);
+        break;
+
+    case DOS9_STDERR:
+        DOS9_XDUP(item->oldfd, fError);
+        DOS9_DUP_STD(newfd, fError);
+        break;
+
+    case DOS9_STDERR | DOS9_STDOUT:
+        DOS9_XDUP(item->oldfd, fOutput);
+        DOS9_XDUP(item->oldfd2, fError);
+        DOS9_DUP_STD(newfd, fError);
+        DOS9_DUP_STD(newfd, fOutput);
+        break;
+
+    default: /* extension, for further use */
+        item->newfd = newfd;
+        item->oldfd = -1;
+    }
+
+    return item;
 }
 
-void  Dos9_SetStreamStackLockState(STREAMSTACK* lppsStack, int iState)
+/* Pop stream stack functions */
+STREAMSTACK* Dos9_PopStreamStack(STREAMSTACK* stack)
 {
-	LPSTREAMLVL lpStream;
+    STREAMSTACK* item = stack->previous;
 
-	Dos9_GetStack(lppsStack, (void**)&lpStream);
-	if (lpStream)
-		lpStream->iPopLock=iState;
+    /* Do not pop if locked or if stack is NULL*/
+    if (stack == NULL || stack->lock)
+        return stack;
+
+    switch (stack->fd) {
+
+    case DOS9_STDIN:
+        DOS9_DUP_STDIN(stack->oldfd, fInput);
+        close(stack->oldfd);
+        break;
+
+    case DOS9_STDOUT:
+        DOS9_DUP_STD(stack->oldfd, fOutput);
+        close(stack->oldfd);
+        break;
+
+    case DOS9_STDERR:
+        DOS9_DUP_STD(stack->oldfd, fError);
+        close(stack->oldfd);
+        break;
+
+    case DOS9_STDERR | DOS9_STDOUT:
+        DOS9_DUP_STD(stack->oldfd, fOutput);
+        DOS9_DUP_STD(stack->oldfd2, fError);
+        close(stack->oldfd);
+        close(stack->oldfd2);
+        break;
+
+    default:
+        /* duplicate the old fd.
+
+           This is for a later implementation of more flexible file changes. */
+        close(stack->newfd);
+    }
+
+    free(stack);
+
+    return item;
 }
 
-int Dos9_GetStreamStackLockState(STREAMSTACK* lppsStack)
+STREAMSTACK* Dos9_PopStreamStackUntilLock(STREAMSTACK* stack)
 {
-	LPSTREAMLVL lpStream;
+    while(!Dos9_GetStreamStackLockState(stack))
+        stack = Dos9_PopStreamStack(stack);
 
-	Dos9_GetStack(lppsStack, (void**)&lpStream);
-	if (lpStream)
-		return lpStream->iPopLock;
-
-	return FALSE;
+    return stack;
 }
 
-int Dos9_OpenOutputD(LPSTREAMSTACK lpssStreamStack, int iNewDescriptor, int iDescriptor)
+void Dos9_ApplyStreams(STREAMSTACK* stack)
 {
+    /* simple fast method */
+    DOS9_XDUP(fdStdin, stdin);
+    DOS9_XDUP(fdStdout, stdout);
+    DOS9_XDUP(fdStderr, stderr);
 
-	LPSTREAMLVL lpStream;
-	int  *iStd, /* the descriptor listing current standard descriptors */
-	     *iFreeStd; /* the buffer listing descriptor to be freeed on pop */
-
-	Dos9_GetStack(lpssStreamStack, (void**)&lpStream);
-
-	iStd=lpStream->iStandardDescriptors;
-	iFreeStd=lpStream->iFreeDescriptors;
-
-	iFreeStd[iDescriptor]=iNewDescriptor;
-	iStd[iDescriptor]=iNewDescriptor;
-	Dos9_FlushDescriptor(iStd[iDescriptor], iDescriptor);
-
-	return 0;
+    DOS9_DUP_STDIN(fileno(fInput), stdin);
+    DOS9_DUP_STD(fileno(fOutput), stdout);
+    DOS9_DUP_STD(fileno(fError), stderr);
 }
 
-int Dos9_OpenOutput(LPSTREAMSTACK lpssStreamStack, char* lpName, int iDescriptor, int iMode)
+void Dos9_UnApplyStreams(STREAMSTACK* stack)
 {
-	LPSTREAMLVL lpStream;
-	int  *iStd, /* the descriptor listing current standard descriptors */
-	     *iFreeStd; /* the buffer listing descriptor to be freeed on pop */
-
-	int iRedirectBoth=FALSE;
-
-	Dos9_GetStack(lpssStreamStack, (void**)&lpStream);
-
-	iStd=lpStream->iStandardDescriptors;
-	iFreeStd=lpStream->iFreeDescriptors;
-
-	if (!lpName || iDescriptor>3) {
-		return -1;
-	}
-
-	if (iMode!=0) iMode=0xffffffff;
-
-	switch ((iDescriptor)) {
-
-	case DOS9_STDERR | DOS9_STDOUT:
-		iDescriptor=DOS9_STDOUT;
-		iRedirectBoth=TRUE;
-		/*  if we selected both descriptors, then considers that we want
-		to redirect stdout */
-
-	case DOS9_STDERR:
-	case DOS9_STDOUT:
-		iMode=O_WRONLY | O_CREAT | O_APPEND | (O_TRUNC & iMode) | O_BINARY;
-		/* setting the descriptor's right (apend, create, and rd-only) */
-		break;
-
-	case DOS9_STDIN:
-		iMode=O_RDONLY | O_BINARY;
-	}
-
-	DEBUG("File is about to be loaded");
-	if ((iStd[iDescriptor]=open(TRANS(lpName),
-                                    iMode, S_IREAD | S_IWRITE))!= -1) {
-
-        Dos9_SetFdInheritance(iStd[iDescriptor], 0);
-
-		DEBUG("File loaded !");
-		Dos9_FlushDescriptor(iStd[iDescriptor], iDescriptor);
-		iFreeStd[iDescriptor]=iStd[iDescriptor];
-
-		if (iRedirectBoth) {
-			iStd[DOS9_STDERR]=iStd[DOS9_STDOUT];
-			Dos9_FlushDescriptor(iStd[DOS9_STDOUT], DOS9_STDERR);
-		}
-
-		return 0;
-
-	} else {
-
-        Dos9_ShowErrorMessage(DOS9_FILE_ERROR | DOS9_PRINT_C_ERROR, lpName, 1);
-
-	}
-
-	DEBUG("Error: Cant load file !");
-	return -1;
-}
-
-LPSTREAMSTACK Dos9_PushStreamStackIfNotPipe(LPSTREAMSTACK lpssStreamStack)
-{
-    LPSTREAMLVL lpLvl;
-
-    Dos9_GetStack(lpssStreamStack, (void**)&lpLvl);
-
-    if (!lpLvl->iPipeIndicator)
-        lpssStreamStack = Dos9_PushStreamStack(lpssStreamStack);
-
-    Dos9_GetStack(lpssStreamStack, (void**)&lpLvl);
-    lpLvl->iPipeIndicator = TRUE ;
-
-    return lpssStreamStack;
-
-}
-
-int Dos9_OpenPipe(LPSTREAMSTACK lpssStreamStack)
-{
-	int iPipeDescriptors[2], iOldInputDescriptor;
-	LPSTREAMLVL lpLvl;
-
-	if (_Dos9_Pipe(iPipeDescriptors, 0x8000, O_BINARY) == -1)
-		Dos9_ShowErrorMessage(DOS9_UNABLE_CREATE_PIPE | DOS9_PRINT_C_ERROR,
-		                      __FILE__ "/Dos9_OpenPipe()",
-		                      TRUE);
-
-    /* set appropriate fd inheritance for both fds */
-    Dos9_SetFdInheritance(iPipeDescriptors[0], 0);
-    Dos9_SetFdInheritance(iPipeDescriptors[1], 0);
-
-	Dos9_GetStack(lppsStreamStack, (void**)&lpLvl);
-	if (!lpLvl->iPipeIndicator) {
-		lppsStreamStack=Dos9_PushStreamStack(lppsStreamStack);
-	}
-
-	Dos9_GetStack(lppsStreamStack, (void**)&lpLvl);
-	if (lpLvl) {
-
-		iOldInputDescriptor=lpLvl->iStandardDescriptors[DOS9_STDIN];
-		lpLvl->iFreeDescriptors[DOS9_STDIN]=iPipeDescriptors[0];
-		lpLvl->iStandardDescriptors[DOS9_STDIN]=iPipeDescriptors[0];
-		lpLvl->iPipeIndicator=TRUE;
-
-	}
-
-	lppsStreamStack=Dos9_PushStreamStack(lppsStreamStack);
-	Dos9_GetStack(lppsStreamStack, (void**)&lpLvl);
-
-	if (lpLvl) {
-
-		lpLvl->iStandardDescriptors[DOS9_STDIN]=iOldInputDescriptor;
-		lpLvl->iStandardDescriptors[DOS9_STDOUT]=iPipeDescriptors[1];
-		lpLvl->iFreeDescriptors[DOS9_STDOUT]=iPipeDescriptors[1];
-		lpLvl->iPipeIndicator=TRUE;
-
-		Dos9_FlushDescriptor(iPipeDescriptors[1], DOS9_STDOUT);
-		return 0;
-	}
-
-
-	Dos9_ShowErrorMessage(DOS9_STREAM_MODULE_ERROR, strerror(errno), TRUE);
-	return -1;
-}
-
-
-LPSTREAMSTACK Dos9_Pipe(LPSTREAMSTACK lppsStreamStack)
-{
-	LPSTREAMLVL lpLvl;
-
-	Dos9_GetStack(lppsStreamStack, (void**)&lpLvl);
-	/* get current level content */
-
-	DEBUG("In Pipe callback function");
-	DEBUG_(lpLvl->iPipeIndicator);
-	if (lpLvl->iPipeIndicator) {
-
-		if (lpLvl->iFreeDescriptors[DOS9_STDIN]) {
-
-			/* we need to disable buffering because stdin is not to be
-			   buffered since it causes unexpected behavior, because pipes
-			   lines which have been buffered remain buffered in the file */
-
-			setvbuf(stdin, NULL, _IONBF, 0);
-
-		}
-
-#ifdef DOS9_DBG_MODE
-		Dos9_DumpStreamStack(lppsStreamStack);
-#endif
-
-		return Dos9_PopStreamStack(lppsStreamStack);
-
-	} else {
-
-		return lppsStreamStack;
-
-	}
-}
-
-LPSTREAMSTACK Dos9_PopStreamStackUntilLock(LPSTREAMSTACK lppsStack)
-{
-    while (lppsStack && Dos9_GetStreamStackLockState(lppsStack) == 0)
-        lppsStack = Dos9_PopStreamStack(lppsStack);
-
-    return lppsStack;
-}
-
-
-LPSTREAMSTACK Dos9_PopStreamStack(LPSTREAMSTACK lppsStack)
-{
-	LPSTREAMLVL lpStream;
-
-	Dos9_GetStack(lppsStack, (void**)&lpStream);
-	DEBUG("Ending a redirection lvl");
-
-	if (lpStream) {
-
-		if (lpStream->iPopLock==TRUE) {
-            #ifdef WIN32
-
-                Dos9_SetStdBuffering();
-
-            #endif
-			DEBUG("## ERROR [:] STREAM LEVEL LOCKED ##");
-			return lppsStack;
-		}
-
-		Dos9_FlushStd();
-
-		Dos9_CloseDescriptors(lpStream->iFreeDescriptors);
-		free(lpStream);
-
-	}
-
-	lppsStack=Dos9_PopStack(lppsStack, NULL);
-	Dos9_GetStack(lppsStack, (void**)&lpStream);
-
-	if (lpStream) {
-
-		DEBUG("Flushing low-level descriptors");
-		Dos9_FlushDescriptors(lpStream->iStandardDescriptors);
-
-	} else {
-
-		DEBUG("REACHED BOTTOM OF STACK");
-
-	}
-
-#ifdef WIN32
-
-	Dos9_SetStdBuffering();
-
-#endif
-
-	return lppsStack;
-}
-
-LPSTREAMSTACK Dos9_PushStreamStack(LPSTREAMSTACK lppsStack)
-{
-	LPSTREAMLVL lpStream;
-	LPSTREAMLVL lpLastStream;
-	int i;
-
-	DEBUG("Push a redirection level");
-	Dos9_GetStack(lppsStack, (void**)&lpStream);
-	//Dos9_FlushStd();
-
-
-	lpLastStream=lpStream;
-	lpStream=Dos9_AllocStreamLvl();
-
-	for (i=0; i<3; i++) {
-
-		lpStream->iStandardDescriptors[i]=lpLastStream->iStandardDescriptors[i];
-		lpStream->iFreeDescriptors[i]=0;
-
-	}
-
-	lpStream->iPipeIndicator=0;
-	lppsStack=Dos9_PushStack(lppsStack, lpStream);
-	return lppsStack;
-}
-
-
-int Dos9_GetDescriptors(int* Array)
-{
-	int i;
-	for (i=0; i<3; i++) {
-		Array[i]=dup(i);
-
-		if (Array[i]==-1) {
-
-			Dos9_ShowErrorMessage(DOS9_UNABLE_DUPLICATE_FD | DOS9_PRINT_C_ERROR
-			                      , (const char*)i, TRUE);
-
-		}
-
-	}
-	return 0;
-}
-
-void Dos9_FlushDescriptors(int* Array)
-{
-	int i;
-	for (i=0; i<3; i++) {
-		if (Array[i]) {
-
-			DOS9_DBG("[Dos9_FlushDescriptors] Flushing #%d on #%d\n", Array[i], i);
-
-			if (dup2(Array[i], i)==-1) {
-
-				Dos9_ShowErrorMessage(DOS9_UNABLE_DUPLICATE_FD | DOS9_PRINT_C_ERROR
-				                      , (const char*)i, TRUE);
-
-			}
-		}
-	}
-	return;
-}
-
-void Dos9_CloseDescriptors(int* Array)
-{
-	int i;
-	for (i=0; i<3; i++) {
-
-		if (Array[i]) {
-
-			//_commit(Array[i]);
-			close(Array[i]);
-
-		}
-
-	}
-}
-
-void Dos9_FlushDescriptor(int iDescriptor, unsigned int iStd)
-{
-	if (iStd>2 || !iDescriptor) return;
-	if (dup2(iDescriptor, iStd) == -1) {
-
-		/* if that fail, the only way to possibly recover from
-		   it is exiting */
-		Dos9_ShowErrorMessage(DOS9_UNABLE_DUPLICATE_FD | DOS9_PRINT_C_ERROR
-		                      , (const char*)iStd, TRUE);
-
-	}
-	return ;
-}
-
-void Dos9_FlushStd(void)
-{
-	fflush(stdin);
-	fflush(stdout);
-	fflush(stderr);
-}
-
-void Dos9_SetStdBuffering(void)
-{
-	//if (isatty(DOS9_STDOUT))
-        setvbuf( stdout, NULL, _IONBF, 0 );
-	//if (isatty(DOS9_STDERR))
-        setvbuf( stderr, NULL, _IONBF, 0 );
-}
-
-LPSTREAMLVL Dos9_AllocStreamLvl(void)
-{
-	LPSTREAMLVL lpStreamLvl;
-	int i;
-
-	if ((lpStreamLvl=malloc(sizeof(STREAMLVL)))) {
-		for (i=0; i<3; i++) {
-			lpStreamLvl->iStandardDescriptors[i]=0;
-			lpStreamLvl->iFreeDescriptors[i]=0;
-		}
-	}
-	lpStreamLvl->iPipeIndicator=0;
-	lpStreamLvl->iPopLock=FALSE;
-
-	return lpStreamLvl;
+    DOS9_DUP_STDIN(fdStdin, stdin);
+    DOS9_DUP_STD(fdStdout, stdout);
+    DOS9_DUP_STD(fdStderr, stderr);
 }

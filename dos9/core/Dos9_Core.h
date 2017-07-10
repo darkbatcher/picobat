@@ -45,6 +45,7 @@
 #include "Dos9_OsStream.h"
 #include "Dos9_FdInheritance.h"
 #include "Dos9_ReadScript.h"
+#include "Dos9_Clone.h"
 
 #include "Dos9_Globals.h"
 

@@ -41,10 +41,8 @@
 #define S_IREAD _S_IREAD
 #define O_IWRITE _S_IWRITE
 #else
-
 #include <unistd.h>
 #define flushall()
-
 #endif
 
 #define DOS9_STDIN STDIN_FILENO
@@ -54,57 +52,61 @@
 #define STREAM_MODE_ADD 0
 #define STREAM_MODE_TRUNCATE 0xffffffff
 
-#define DOS9MOD
-#define MODSTREAM
+#define DOS9_RESET_BUFFERING(fd, s) \
+            if (isatty(fd)) \
+                setvbuf(s, NULL, _IONBF, 0)
+
+#define __DOS9_DUP_STD(fd, s) \
+            fflush(s);\
+            if (dup2(fd, fileno(s)) == -1) \
+                Dos9_ShowErrorMessage(DOS9_UNABLE_DUPLICATE_FD \
+                                        | DOS9_PRINT_C_ERROR, \
+                                            __FILE__ "/DOS9_DUP_STD()", -1);
+
+#define DOS9_DUP_STD(fd, s) \
+            __DOS9_DUP_STD(fd, s) \
+            DOS9_RESET_BUFFERING(fd, s)
+
+#define DOS9_DUP_STDIN(fd, s) \
+            __DOS9_DUP_STD(fd, s)
+
+#define DOS9_XDUP(fd, s) \
+            if (((fd) = dup(fileno(s))) == -1) \
+                Dos9_ShowErrorMessage(DOS9_UNABLE_DUPLICATE_FD \
+                                        | DOS9_PRINT_C_ERROR, \
+                                            __FILE__ "/DOS9_DUP_STD()", -1);
+
+#define Dos9_SetStreamStackLockState(stack, state) \
+                                ((stack) ? (stack->lock = state) : 0)
 
 
-typedef struct STREAMLVL {
-	int iStandardDescriptors[3]; /* stores the standard outputs an output descriptors */
-	int iFreeDescriptors[3];/* stores the descriptors to be feed during poping from stack */
-	int iPipeIndicator; /* outdated */
-	int iPopLock;
-	//int iResetStdBuff;
-} STREAMLVL,*LPSTREAMLVL;
+#define Dos9_GetStreamStackLockState(stack) ((stack) ? stack->lock : 1)
 
+/* structure used to store the state of stream redirections */
+typedef struct STREAMSTACK {
+    int fd; /* the file descriptor that has been redirected */
+    int newfd; /* the new file descriptor (ie. the descriptor to be destroyed
+                  when popping element of the stack) */
+    int oldfd; /* a duplicate of the previous fd associated with fd */
+    int oldfd2; /* a duplicate of the previous file if composed file */
+    int lock; /* a lock to prevent element from being popped */
+    struct STREAMSTACK* previous;
+} STREAMSTACK, *LPSTREAMSTACK;
 
+/* initializes the stream stack */
+STREAMSTACK* Dos9_InitStreamStack(void);
 
-typedef STACK STREAMSTACK,*LPSTREAMSTACK;
+/* frees the stream stack */
+void Dos9_FreeStreamStack(STREAMSTACK* stack);
 
+/* Duplicate file based on a file name or a file descriptor */
+STREAMSTACK* Dos9_OpenOutput(STREAMSTACK* stack, char* name, int fd, int mode);
+STREAMSTACK* Dos9_OpenOutputD(STREAMSTACK* stack, int newfd, int fd);
 
-LPSTREAMSTACK Dos9_InitStreamStack(void);
+/* Pop stream stack functions */
+STREAMSTACK* Dos9_PopStreamStack(STREAMSTACK* stack);
+STREAMSTACK* Dos9_PopStreamStackUntilLock(STREAMSTACK* stack);
 
-void Dos9_FreeStreamStack(LPSTREAMSTACK lpssStream);
-
-int Dos9_OpenOutput(LPSTREAMSTACK lpssStreamStack, char* lpName, int iDescriptor, int iMode);
-int Dos9_OpenOutputD(LPSTREAMSTACK lpssStreamStack, int iNewDescriptor, int iDescriptor);
-
-/* outdated */
-int               Dos9_OpenPipe(LPSTREAMSTACK lpssStreamStack);
-LPSTREAMSTACK     Dos9_Pipe(LPSTREAMSTACK lppsStreamStack);
-/* outdated */
-
-LPSTREAMSTACK     Dos9_PopStreamStack(LPSTREAMSTACK lppsStack);
-LPSTREAMSTACK     Dos9_PopStreamStackUntilLock(LPSTREAMSTACK lppsStack);
-LPSTREAMSTACK     Dos9_PushStreamStack(LPSTREAMSTACK lppsStack);
-
-void              Dos9_DumpStreamStack(LPSTREAMSTACK lppsStack);
-
-
-
-void  Dos9_SetStreamStackLockState(STREAMSTACK* lppsStack, int iState);
-int Dos9_GetStreamStackLockState(STREAMSTACK* lppsStack);
-
-
-int Dos9_GetDescriptors(int* Array);
-void Dos9_FlushDescriptor(int iDescriptor, unsigned int iStd);
-void Dos9_FlushDescriptors(int* Array);
-void Dos9_CloseDescriptors(int* Array);
-int Dos9_CreatePipe(int* Array);
-int Dos9_FlushPipeDescriptors(int* Array, int iLastDescriptor, int iStdOut);
-void Dos9_FlushStd(void);
-void Dos9_SetStdBuffering(void);
-LPSTREAMLVL Dos9_AllocStreamLvl(void);
-
-LPSTREAMSTACK Dos9_PushStreamStackIfNotPipe(LPSTREAMSTACK lpssStreamStack);
-
+void Dos9_ApplyStreams(STREAMSTACK* stack);
+void Dos9_UnApplyStreams(STREAMSTACK* stack);
 #endif

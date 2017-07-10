@@ -111,7 +111,7 @@ int Dos9_GetLine_Cmdly(ESTR* lpesLine, INPUT_FILE* pIn)
 
 	if (*(pIn->lpFileName) == '\0') {
 
-		pFile=stdin;
+		pFile=fInput;
 
 	} else if (!(pFile=fopen(pIn->lpFileName, "r"))) {
 
@@ -138,9 +138,9 @@ int Dos9_GetLine_Cmdly(ESTR* lpesLine, INPUT_FILE* pIn)
 		lpCh=Dos9_SkipAllBlanks(Dos9_EsToChar(lpesTmp));
 
 		/* split comments label and void lines from input */
-		if (*lpCh==':' || *lpCh=='\0') {
+		if (*lpCh==':' || *lpCh=='\0' || *lpCh=='\n') {
 
-            if (pFile != stdin)
+            if (pFile != fInput)
                 continue;
 
             bCorrectBlocks=TRUE;

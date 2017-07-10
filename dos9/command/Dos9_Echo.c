@@ -90,18 +90,18 @@ int Dos9_CmdEcho(char* lpLine)
 		} else {
 
 			Dos9_GetEndOfLine(lpLine+1, lpEsParameter);
-			fputs(lpEsParameter->str, stdout);
-            fputs(DOS9_NL, stdout);
+			fputs(lpEsParameter->str, fOutput);
+            fputs(DOS9_NL, fOutput);
 
 		}
 
 	} else {
 
 		/* si rien n'est entré on affiche l'état de la commannd echo */
-		if (bEchoOn) fputs(lpMsgEchoOn, stdout);
-		else fputs(lpMsgEchoOff, stdout);
+		if (bEchoOn) fputs(lpMsgEchoOn, fOutput);
+		else fputs(lpMsgEchoOff, fOutput);
 
-        fputs(DOS9_NL, stdout);
+        fputs(DOS9_NL, fOutput);
 
 	}
 

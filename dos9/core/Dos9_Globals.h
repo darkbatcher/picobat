@@ -22,6 +22,7 @@
 #define DOS9_GLOBALS_H
 
 #include <setjmp.h>
+#include <stdio.h>
 
 #include "../../config.h"
 
@@ -29,37 +30,40 @@
 extern char** environ;
 #endif
 
-extern int bAbortCommand;
-extern int bDelayedExpansion;
-extern int bUseFloats;
-extern int bIsScript;
+/* static variable for initialization */
+extern int iMainThreadId; /* thread id of the main thread */
+extern void(*pErrorHandler)(void); /* error handler */
+extern char* lpInitVar[]; /* list of variable for initialization */
 
-#if !defined(DOS9_STATIC_CMDLYCORRECT)
-extern int bCmdlyCorrect;
-#else
-#define bCmdlyCorrect DOS9_STATIC_CMDLYCORRECT
-#endif
+/* Mutex to prevent data races with sub threads */
+extern MUTEX mDuppedStream; /* a mutex to prevent streams from being
+                               wrongly dupped ie, prevent simultan */
+extern int fdStdin; /* temporary storage for streams */
+extern int fdStdout;
+extern int fdStderr;
 
-extern int iMainThreadId;
 
-extern int bEchoOn;
-extern int iErrorLevel;
-extern LPCOMMANDLIST lpclCommands;
-extern LOCAL_VAR_BLOCK* lpvLocalVars;
-extern LOCAL_VAR_BLOCK* lpvArguments;
-extern LPSTREAMSTACK lppsStreamStack;
-extern COLOR colColor;
-extern INPUT_FILE ifIn;
-
-extern ENVBUF* lpeEnv;
-
-extern char* lpInitVar[];
-
-extern int iInputD,
-       iOutputD;
-extern void(*pErrorHandler)(void);
-
-extern jmp_buf jbBreak;
-
+/* Current state of the interpreter associated to this
+   thread */
+extern __thread int bAbortCommand; /* abort the command (0: no , 1: jump to next,
+                                    -1 : move to upper execution level) */
+extern __thread int bDelayedExpansion; /* state of the delayed expansion */
+extern __thread int bCmdlyCorrect; /* state of cmdly correct interface */
+extern __thread int bUseFloats; /* state of use of floats */
+extern __thread int bIsScript; /* are we running a script ? */
+extern __thread int bEchoOn; /* is echo on ? */
+extern __thread int iErrorLevel; /* errorlevel state */
+extern __thread LPCOMMANDLIST lpclCommands; /* binary tree of commands */
+extern __thread LOCAL_VAR_BLOCK* lpvLocalVars; /* local variables array */
+extern __thread LOCAL_VAR_BLOCK* lpvArguments; /* arguments array */
+extern __thread LPSTREAMSTACK lppsStreamStack; /* status associated with streams */
+extern __thread COLOR colColor; /* current command prompt colors */
+extern __thread INPUT_FILE ifIn; /* current parsed script */
+extern __thread ENVBUF* lpeEnv; /* environment variables local to threads */
+extern __thread FILE* fInput; /* current thread input stream */
+extern __thread FILE* fOutput; /* current thread output stream */
+extern __thread FILE* fError; /* current thread error stream */
+extern __thread jmp_buf jbBreak; /* current thread ctrl-C fallback */
+extern __thread char lpCurrentDir[FILENAME_MAX]; /* current path */
 
 #endif

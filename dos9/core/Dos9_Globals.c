@@ -22,45 +22,7 @@
 #include "Dos9_Core.h"
 #include "../../config.h"
 
-int bDelayedExpansion=FALSE;
-int bUseFloats=FALSE;
-int bEchoOn=TRUE;
-int iErrorLevel=0;
-int bIsScript;
-
-#if !defined(DOS9_STATIC_CMDLYCORRECT)
-int bCmdlyCorrect=FALSE;
-#endif
-
 int iMainThreadId;
-
-int bAbortCommand=FALSE;
-LPCOMMANDLIST lpclCommands;
-LOCAL_VAR_BLOCK* lpvLocalVars;
-/* use a distinct local block for command arguments
-
-    %1-%9 : arguments
-    %* : full line
-    %+ : remaning args */
-LOCAL_VAR_BLOCK* lpvArguments;
-LPSTREAMSTACK lppsStreamStack;
-COLOR colColor;
-
-ENVBUF* lpeEnv;
-
-int iInputD=0,
-    iOutputD=0;
-
-INPUT_FILE ifIn;
-
-void(*pErrorHandler)(void)=NULL;
-
-#ifdef WIN32
-#define environ _environ
-#else
-extern char** environ;
-#endif
-
 char* lpInitVar[]= {
 	"DOS9_VERSION", DOS9_VERSION,
 	"DOS9_OS", DOS9_OS,
@@ -74,4 +36,43 @@ char* lpInitVar[]= {
 	NULL, NULL
 };
 
-jmp_buf jbBreak;
+void(*pErrorHandler)(void)=NULL;
+int fdStdin;
+int fdStdout;
+int fdStderr;
+MUTEX mDuppedStream;
+
+
+__thread int bDelayedExpansion=FALSE;
+__thread int bUseFloats=FALSE;
+__thread int bEchoOn=TRUE;
+__thread int iErrorLevel=0;
+__thread int bIsScript;
+__thread int bCmdlyCorrect=FALSE;
+
+__thread int bAbortCommand=FALSE;
+__thread LPCOMMANDLIST lpclCommands;
+__thread LOCAL_VAR_BLOCK* lpvLocalVars;
+    /* use a distinct local block for command arguments
+
+        %1-%9 : arguments
+        %* : full line
+        %+ : remaning args */
+__thread LOCAL_VAR_BLOCK* lpvArguments;
+__thread LPSTREAMSTACK lppsStreamStack;
+__thread COLOR colColor=DOS9_COLOR_DEFAULT;
+__thread FILE* fInput; /* current thread input stream */
+__thread FILE* fOutput; /* current thread output stream */
+__thread FILE* fError; /* current thread error stream */
+
+__thread ENVBUF* lpeEnv;
+__thread INPUT_FILE ifIn;
+__thread char lpCurrentDir[FILENAME_MAX];
+
+#ifdef WIN32
+#define environ _environ
+#else
+extern char** environ;
+#endif
+
+__thread jmp_buf jbBreak;

@@ -41,7 +41,6 @@
 
 #define Dos9_GetLocalBlock() (LOCAL_VAR_BLOCK*)calloc(LOCAL_VAR_BLOCK_SIZE, sizeof(LOCAL_VAR_BLOCK))
 #define Dos9_IsLocalVarValid(c)  (c < 0x80 && c > 0x20)
-#define Dos9_FreeLocalBlock(lpBlock) free(lpBlock)
 
 
 typedef char* LOCAL_VAR_BLOCK;
@@ -53,5 +52,8 @@ int              Dos9_SetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char cVarName, char
 char*            Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve);
 int              Dos9_GetVar(char* lpName, ESTR* lpRecieve);
 char*            Dos9_GetLocalVarPointer(LOCAL_VAR_BLOCK* lpvBlock, char cVarName);
+
+LOCAL_VAR_BLOCK* Dos9_DuplicateLocalVar(LOCAL_VAR_BLOCK* local);
+void             Dos9_FreeLocalBlock(LOCAL_VAR_BLOCK* local);
 
 #endif

@@ -85,7 +85,7 @@ typedef struct FILE_LIST_T {
     ESTR* lpesFiles[FILE_LIST_T_BUFSIZ+1];
     int   index;
     FILE* pFile;
-    void* handle; /* process handle of the ran command */
+    THREAD handle; /* process handle of the ran command */
 } FILE_LIST_T;
 
 #define INPUTINFO_TYPE_STREAM 0
@@ -156,15 +156,7 @@ int Dos9_ForAdjustInput(char* lpInput);
 
 int Dos9_ForInputParseFileList(FILE_LIST_T* lpList, ESTR* lpInput);
 
-
-#if defined(WIN32)
-#define Dos9_ForInputProcess Dos9_ForInputProcess_win
-#else
-#define Dos9_ForInputProcess Dos9_ForInputProcess_nix
-#endif
-
-int Dos9_ForInputProcess_nix(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn, int* iPipeFdOut);
-int Dos9_ForInputProcess_win(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn, int* iPipeFdOut);
+int Dos9_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFd);
 /* Start a new process for command input */
 
 int Dos9_ForGetInputLine(ESTR* lpReturn, INPUTINFO* lpipInfo);

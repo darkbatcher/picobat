@@ -67,13 +67,163 @@
 
     ** End Windows specific **
 
+    NOTE a little inconsistency with cmd.exe. %CD% *never* ends with a '\' on
+    windows ! This allows doing proper treatment when being a disk root ...
  */
 
-/* FIXME : Make it more compatible with cmd.exe
-   In fact, cmd.exe supports different paths on differents drives
-   through variables like %=x:% where x is the name of the drive.
-   So that the /d switch is *really* usefull.
-*/
+#ifndef WIN32
+#define TEST_ABSOLUTE_PATH(p) (*p == '/')
+#define TEST_SEPARATOR(p) (*p == '/')
+#define DEFAULT_SEPARATOR '\\'
+#elif defined WIN32
+#define TEST_ABSOLUTE_PATH(p) ((*p && *(p+1)==':' && (*(p+2)=='\\' || *(p+2)=='/')) || (*p == '/'))
+#define TEST_SEPARATOR(p) (*p == '\\' || *p == '/')
+#define DEFAULT_SEPARATOR '/'
+#endif // _POSIX_C_SOURCE
+
+int /*__inline__ */ Dos9_Canonicalize(char* path)
+{
+    char *previous = NULL, *next, *orig = path;
+    size_t size = strlen(path) + 1;
+
+
+    /* first pass to clean multiple separators and "." characters */
+    while (*path) {
+
+#ifndef WIN32
+        if (*path == '\\')
+            *path = '/';
+#else
+        if (*path == '/')
+            *path = '\\';
+#endif
+
+#ifndef WIN32
+        if (*path == '/') {
+#else
+        if (*path == '\\') {
+#endif
+            /* Try to swallow multiple delimiters */
+            next = path + 1;
+
+reloop:
+            while (TEST_SEPARATOR(next))
+                next ++;
+
+            /* check this not a dull "." folder */
+            if (*next == '.' && TEST_SEPARATOR((next + 1))) {
+                next ++;
+                goto reloop;
+            } else if (*next == '.' && *(next + 1) == '\0')
+                next ++;
+
+            if (next != path + 1) {
+                memmove(path + 1, next, size - (next - orig));
+                size -= next - (path + 1); /* remove bytes that were swallowed */
+            }
+
+            if (*(path + 1) == '.' && *(path + 2) == '.'
+                && (TEST_SEPARATOR((path + 3)) || *(path + 3) == '\0')) {
+
+                /* Apparently, this folder is "..", find the previous dir & swallow both */
+                previous = path - 1;
+                while (previous >= orig && !TEST_SEPARATOR(previous))
+                    previous --;
+
+                if (previous < orig) {
+
+                    /* this is not meant to happen unless if .. follows directly the root
+                       remove it then */
+#ifdef WIN32
+                    *path = '\0';
+#else
+                    *(path + 1) = '\0';
+#endif // WIN32
+
+                } else {
+
+                    /* squeeze the preceeding dir and the separator */
+                    memmove(previous, path+3, size - ((path + 3 ) - orig));
+                    size -= (path + 3) - previous;
+                    path = previous;
+
+                }
+
+            }
+
+            if (*path && *(path + 1) == '\0') {
+                *path = '\0';
+                break;
+            }
+
+        }
+
+        if (*path)
+            path ++;
+    }
+
+    /* Wait ... */
+
+    return 0;
+}
+
+int Dos9_SetCurrentDir(char* lpLine)
+{
+    char *p, *p2 = NULL;
+    size_t remain;
+
+    if (TEST_ABSOLUTE_PATH(lpLine)
+        && Dos9_DirExists(lpLine)) {
+
+ #ifdef WIN32
+        /* Under windows, we do not have unique filesystem
+           root, so that '/' refers to the current active drive, we have
+           to deal with it */
+
+        if (*lpLine == '/') {
+
+            /* well, arguably lpCurrentDir[2] is a slash ... */
+            strncpy(lpCurrentDir + 2, lpLine, FILENAME_MAX-2);
+            lpCurrentDir[FILENAME_MAX-1];
+
+            return Dos9_Canonicalize(lpCurrentDir);
+        }
+ #endif
+
+        strncpy(lpCurrentDir, lpLine, FILENAME_MAX);
+        lpCurrentDir[FILENAME_MAX - 1];
+        return Dos9_Canonicalize(lpCurrentDir);
+
+    }
+
+    /* find the end of the current dir */
+    p = lpCurrentDir;
+    while (*p)
+        p ++;
+
+#ifdef WIN32
+    *p = '\\';
+#else
+    *p = '/';
+#endif
+
+    remain = FILENAME_MAX - (p + 1 - lpCurrentDir);
+
+    if (remain > 0) {
+
+        strncpy(p + 1, lpLine, remain);
+        lpCurrentDir[FILENAME_MAX - 1] = '\0';
+
+        if (Dos9_DirExists(lpCurrentDir))
+            return Dos9_Canonicalize(lpCurrentDir);
+
+    }
+
+    *p = '\0';
+
+    errno = ENOENT;
+    return -1;
+}
 
 int Dos9_CmdCd_nix(char* lpLine)
 {
@@ -164,7 +314,7 @@ int Dos9_CmdCd_nix(char* lpLine)
 
 	} else {
 
-		puts(Dos9_GetCurrentDir());
+		fputs(lpCurrentDir, fOutput);
 
 	}
 
@@ -184,7 +334,7 @@ int Dos9_CmdCd_win(char* lpLine)
 {
     char varname[]="=x:",
 		*lpNext,
-		 current=*Dos9_GetCurrentDir(),
+		 current=*lpCurrentDir,
 		 passed=0;
 
     ESTR* lpesStr=Dos9_EsInit();
@@ -201,7 +351,7 @@ int Dos9_CmdCd_win(char* lpLine)
 
     if (!(lpNext = Dos9_GetNextParameterEs(lpLine, lpesStr))) {
 
-        puts(Dos9_GetCurrentDir());
+        fputs(lpCurrentDir, fOutput);
 
         status = 0;
 

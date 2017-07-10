@@ -80,7 +80,7 @@ void Dos9_FileFind(char* str, char* name, int count, int flag, int reverse)
 
     if (!name) {
 
-        pFile = stdin;
+        pFile = fInput;
 
     } else if (!(pFile = fopen(TRANS(name), "r"))) {
 
@@ -128,9 +128,9 @@ void Dos9_FileFind(char* str, char* name, int count, int flag, int reverse)
         if (!reverse ^ !res) {
 
             if (count == 1)
-                printf("[%d]%s" DOS9_NL, line, Dos9_EsToChar(lpEsLine));
+                fprintf(fOutput, "[%d]%s" DOS9_NL, line, Dos9_EsToChar(lpEsLine));
             else if (count == 0)
-                printf("%s" DOS9_NL, Dos9_EsToChar(lpEsLine));
+                fprintf(fOutput, "%s" DOS9_NL, Dos9_EsToChar(lpEsLine));
 
             i++;
         }
@@ -139,15 +139,15 @@ void Dos9_FileFind(char* str, char* name, int count, int flag, int reverse)
     }
 
     if (count == 2)
-        printf("%d" DOS9_NL, i);
+        fprintf(fOutput, "%d" DOS9_NL, i);
 
 
 end:
     Dos9_EsFree(lpEsLine);
     if (name)
         fclose(pFile); /* do no close stdin, please */
-    else if (isatty(DOS9_STDIN))
-        clearerr(stdin);
+    else if (isatty(fileno(fInput)))
+        clearerr(fInput);
 
     return;
 
@@ -322,7 +322,7 @@ int Dos9_CmdFind(char* lpLine)
 
         while (pTmp) {
 
-            printf("---------- %s\n", pTmp->lpFileName);
+            fprintf(fOutput, "---------- %s" DOS9_NL, pTmp->lpFileName);
             Dos9_FileFind(str, pTmp->lpFileName, count, flag, reverse);
 
             pTmp = pTmp->lpflNext;
@@ -339,8 +339,6 @@ end:
 
     if (pBegin)
         Dos9_FreeFileList(pBegin);
-
-    setvbuf(stdout, NULL, _IONBF, 0);
 
     Dos9_EsFree(lpEsParam);
 

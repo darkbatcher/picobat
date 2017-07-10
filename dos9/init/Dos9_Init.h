@@ -24,5 +24,6 @@ char* Dos9_GetParameters(char** argv, char** lpFileName, int* bExitAfterCmd, int
                             bQuiet);
 void Dos9_InitConsoleTitles(char *lpFileName, int bQuiet);
 void Dos9_RunAutoBat(void);
+void Dos9_DuplicateStdStreams(void);
 
 

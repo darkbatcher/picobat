@@ -143,7 +143,6 @@ __LIBCU8__IMP __cdecl int libcu8_dup2(int fd1, int fd2)
     if (info2->osfile & FHND)
         CloseHandle(info2->osfhnd);
 
-
     ret = libcu8_dup2_nolock(fd1, fd2);
 
     LeaveCriticalSection(&(info2->lock));
@@ -184,7 +183,7 @@ __LIBCU8__IMP __cdecl int libcu8_dup2_nolock(int fd1, int fd2)
 void __inline__ libcu8_manage_std_files(int file, void* handle)
 {
     /* Try to keep crt infos up to date with actual console
-       configuration. It does not really matter, of course, is
+       configuration. It does not really matter, of course, if
        no console is actually opened, just let windows return
        errors. */
     switch(file) {

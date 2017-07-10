@@ -74,7 +74,7 @@ void Dos9_SetFdInheritance(int fd, int mode)
 
 void Dos9_SetStdInheritance(int mode)
 {
-    Dos9_SetFdInheritance(DOS9_STDERR, mode);
-    Dos9_SetFdInheritance(DOS9_STDIN, mode);
-    Dos9_SetFdInheritance(DOS9_STDOUT, mode);
+    Dos9_SetFdInheritance(fileno(fOutput), mode);
+    Dos9_SetFdInheritance(fileno(fInput), mode);
+    Dos9_SetFdInheritance(fileno(fError), mode);
 }

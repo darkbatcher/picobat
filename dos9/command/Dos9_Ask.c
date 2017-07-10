@@ -26,6 +26,7 @@
 #include <libDos9.h>
 
 #include "Dos9_Ask.h"
+#include "../core/Dos9_Core.h"
 #include "../lang/Dos9_Lang.h"
 
 int Dos9_AskConfirmation(int iFlags, const char* lpMsg, ...)
@@ -98,11 +99,11 @@ int Dos9_AskConfirmation(int iFlags, const char* lpMsg, ...)
 
 	do {
 
-		vfprintf(stderr, lpMsg, vaArgs);
+		vfprintf(fError, lpMsg, vaArgs);
 
-		fputs(lpChoices, stderr);
+		fputs(lpChoices, fError);
 
-		Dos9_EsGet(lpInput, stdin);
+		Dos9_EsGet(lpInput, fInput);
 
 		if ((lpLf=strchr(Dos9_EsToChar(lpInput), '\n')))
 			*lpLf='\0';

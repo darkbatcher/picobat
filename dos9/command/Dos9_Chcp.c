@@ -121,7 +121,7 @@ int Dos9_CmdChcp(char* line)
 
 int Dos9_CmdChcp(char* line)
 {
-    fprintf(stderr, "The CHCP command is not supported on platforms other than Windows\n");
+    fprintf(fError, "The CHCP command is not supported on platforms other than Windows\n");
     return -1;
 }
 

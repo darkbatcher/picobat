@@ -44,10 +44,10 @@
 
 #include "Dos9_Dir.h"
 
-static int iDirNb,
+static __thread int iDirNb,
     iFileNb;
-static short wAttr;
-static char bSimple;
+static __thread short wAttr;
+static __thread char bSimple;
 
 void Dos9_CmdDirShow(FILELIST* lpElement)
 {
@@ -94,7 +94,7 @@ void Dos9_CmdDirShow(FILELIST* lpElement)
 
 			lTime=localtime(&Dos9_GetModifTime(lpElement));
 
-			printf("%02d/%02d/%02d %02d:%02d %s\t%s\t%s" DOS9_NL, lTime->tm_mday,
+			fprintf(fOutput, "%02d/%02d/%02d %02d:%02d %s\t%s\t%s" DOS9_NL, lTime->tm_mday,
                                                             lTime->tm_mon+1,
                                                             1900+lTime->tm_year,
                                                             lTime->tm_hour,
@@ -130,7 +130,7 @@ int Dos9_CmdDir(char* lpLine)
 	wAttr=DOS9_CMD_ATTR_ALL;
 	bSimple=FALSE;
 
-	setvbuf(stdout, buf, _IOFBF, sizeof(buf));
+	setvbuf(fOutput, buf, _IOFBF, sizeof(buf));
 
 	while ((lpNext=Dos9_GetNextParameterEs(lpNext, lpParam))) {
 
@@ -167,7 +167,8 @@ int Dos9_CmdDir(char* lpLine)
 				Dos9_EsFree(lpParam);
 				return -1;
 			}
-			strncpy(lpFileName, lpToken, FILENAME_MAX);
+
+			Dos9_MakeFullPath(lpFileName, lpToken, FILENAME_MAX);
 
 		}
 	}
@@ -176,8 +177,7 @@ int Dos9_CmdDir(char* lpLine)
 		/* if no file or directory name have been specified
 		   the put a correct value on it */
 
-		*lpFileName='*';
-		lpFileName[1]='\0';
+		snprintf(lpFileName, FILENAME_MAX, "%s" DEF_DELIMITER "*", lpCurrentDir);
 
 	}
 
@@ -187,28 +187,28 @@ int Dos9_CmdDir(char* lpLine)
 	iFileNb=0;
 
 	if (!bSimple) {
-        fputs(DOS9_NL, stdout);
-        fputs(lpDirListTitle, stdout);
-        fputs(DOS9_NL, stdout);
+        fputs(DOS9_NL, fOutput);
+        fputs(lpDirListTitle, fOutput);
+        fputs(DOS9_NL, fOutput);
 	}
 
 	/* Get a list of file and directories matching to the
 	   current filename and options set */
 	if (!(Dos9_GetMatchFileCallback(lpFileName, iFlag, Dos9_CmdDirShow))
 	    && !bSimple) {
-		fputs(lpDirNoFileFound, stdout);
-        fputs(DOS9_NL, stdout);
+		fputs(lpDirNoFileFound, fOutput);
+        fputs(DOS9_NL, fOutput);
 	}
 
 	if (!bSimple) {
-        printf("\t\t\t\t%d %s" DOS9_NL "\t\t\t\t%d %s" DOS9_NL,
+        fprintf(fOutput, "\t\t\t\t%d %s" DOS9_NL "\t\t\t\t%d %s" DOS9_NL,
                                 iFileNb, lpDirFile, iDirNb, lpDirDir);
 	}
 
 	Dos9_EsFree(lpParam);
 
-    fflush(stdout);
-	setvbuf(stdout, NULL, _IONBF, 0);
+    fflush(fOutput);
+	setvbuf(fOutput, NULL, _IONBF, 0);
 
 	return 0;
 }

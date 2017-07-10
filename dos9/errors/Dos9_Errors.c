@@ -274,14 +274,14 @@ void Dos9_ShowErrorMessage(unsigned int iErrorNumber,
 	Dos9_SetConsoleTextColor(DOS9_BACKGROUND_DEFAULT | DOS9_FOREGROUND_IRED);
 
 	if ((iErrorNumber & ~DOS9_PRINT_C_ERROR) < sizeof(lpErrorMsg))
-		fprintf(stderr,
+		fprintf(fError,
 		        lpErrorMsg[iErrorNumber & ~DOS9_PRINT_C_ERROR],
 		        lpComplement
 		       );
 
 	if (iErrorNumber & DOS9_PRINT_C_ERROR) {
 
-		fprintf(stderr,
+		fprintf(fError,
 				"\tReason: %s\n",
 				strerror(errno)
 				);
@@ -292,8 +292,8 @@ void Dos9_ShowErrorMessage(unsigned int iErrorNumber,
 
 		Dos9_SetConsoleTextColor(DOS9_COLOR_DEFAULT);
 
-        fputs("\n", stderr);
-		fprintf(stderr, lpQuitMessage);
+        fputs("\n", fError);
+		fprintf(fError, lpQuitMessage);
 
 		getch();
 

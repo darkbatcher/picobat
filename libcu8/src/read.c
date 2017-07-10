@@ -467,7 +467,7 @@ int libcu8_readconsole(int fd, char* buf, size_t size, size_t* written)
     }
 next:
 
-    if (*utf8 != '\n') {
+    /* if (size && *utf8 != '\n') {
         while (!libcu8_get_console_wchar(handle, (wchar_t*)wcs)
                && *(wchar_t*)wcs != L'\r'
                );
@@ -475,7 +475,7 @@ next:
         size --;
         *buf = '\n';
     }
-
+    */
     iconv_close (context);
 
     *written = orig - size;

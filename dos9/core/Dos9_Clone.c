@@ -47,7 +47,9 @@ THREAD Dos9_CloneInstance(void(*func)(void*), void* arg)
     data->fn = func;
     data->arg = arg;
 
-    Dos9_BeginThread(&th, Dos9_CloneTrampoline, 0, data);
+    if (Dos9_BeginThread(&th, Dos9_CloneTrampoline, 0, data))
+        Dos9_ShowErrorMessage(DOS9_FAILED_FORK | DOS9_PRINT_C_ERROR,
+                                __FILE__ "/Dos9_CloneInstance()", -1);
 
     return th;
 }
@@ -72,6 +74,7 @@ void Dos9_CloneTrampoline(void* data)
     colColor = cloned->colColor;
     lpeEnv = cloned->lpeEnv;
     strncpy(ifIn.lpFileName, cloned->ifIn.lpFileName, FILENAME_MAX);
+    strncpy(lpCurrentDir, cloned->lpCurrentDir, FILENAME_MAX);
     ifIn.bEof = cloned->ifIn.bEof;
     ifIn.iPos = cloned->ifIn.iPos;
     *(ifIn.batch.name) = '\0';
@@ -87,6 +90,8 @@ void Dos9_CloneTrampoline(void* data)
     func(arg);
 
     Dos9_Exit();
+
+    Dos9_EndThread(iErrorLevel);
 }
 
 /* Duplicate Dos9 internal structures */
@@ -111,7 +116,8 @@ int Dos9_DuplicateData(struct clone_data_t* data)
     data->lppsStreamStack = NULL;
     data->colColor = colColor;
     data->lpeEnv = Dos9_EnvDup(lpeEnv);
-    strcpy(data->ifIn.lpFileName, ifIn.lpFileName);
+    strncpy(data->lpCurrentDir, lpCurrentDir, FILENAME_MAX);
+    strncpy(data->ifIn.lpFileName, ifIn.lpFileName, FILENAME_MAX);
     data->ifIn.bEof = ifIn.bEof;
     data->ifIn.iPos = ifIn.iPos;
 

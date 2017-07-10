@@ -66,14 +66,17 @@ int Dos9_CmdGoto(char* lpLine)
 
         } else if (!bCmdlyCorrect && !strnicmp(arg->str, "/F", 2)) {
 
-
             pch = arg->str + 2;
 
             if (*pch == ':')
                 pch ++;
 
-            strncpy(lpFileName, pch, sizeof(lpFileName));
-            lpFileName[sizeof(lpFileName)-1] = '\0';
+            if (Dos9_GetFileFullPath(lpFileName, pch, FILENAME_MAX) == -1) {
+
+                Dos9_ShowErrorMessage(DOS9_FILE_ERROR, pch, 0);
+                goto err;
+
+            }
 
         } else {
 
@@ -104,7 +107,7 @@ int Dos9_CmdGoto(char* lpLine)
     if (!stricmp(lpLabelName, ":EOF")) {
 
         bAbortCommand = -1;
-        return 0;
+        goto next;
 
     }
 
@@ -118,6 +121,7 @@ int Dos9_CmdGoto(char* lpLine)
 
     bAbortCommand = 1;
 
+next:
     Dos9_EsFree(arg);
     return 0;
 

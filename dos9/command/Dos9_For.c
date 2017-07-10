@@ -1048,8 +1048,7 @@ int Dos9_ForMakeInputInfo(ESTR* lpInput, INPUTINFO* lpipInfo, FORINFO* lpfrInfo)
 {
 	int bUsebackq=lpfrInfo->bUsebackq,
 	    iInputType,
-	    iPipeFdIn[2],
-	    iPipeFdOut[2];
+	    iPipeFd[2];
 
 	char *lpToken=Dos9_EsToChar(lpInput);
 
@@ -1171,14 +1170,7 @@ int Dos9_ForMakeInputInfo(ESTR* lpInput, INPUTINFO* lpipInfo, FORINFO* lpfrInfo)
 			lpipInfo->cType=INPUTINFO_TYPE_COMMAND;
             lpipInfo->Info.InputFile.lpesFiles[0]=NULL;
 
-			if (_Dos9_Pipe(iPipeFdIn, 1024, O_TEXT) == -1) {
-				Dos9_ShowErrorMessage(DOS9_CREATE_PIPE | DOS9_PRINT_C_ERROR ,
-                                      __FILE__ "/Dos9_MakeInputInfo()",
-                                      FALSE);
-				return -1;
-			}
-
-			if (_Dos9_Pipe(iPipeFdOut, 1024, O_BINARY) == -1) {
+			if (_Dos9_Pipe(iPipeFd, 1024, O_BINARY) == -1) {
 
 				Dos9_ShowErrorMessage(DOS9_CREATE_PIPE | DOS9_PRINT_C_ERROR ,
                                         __FILE__ "/Dos9_MakeInputInfo()",
@@ -1189,7 +1181,7 @@ int Dos9_ForMakeInputInfo(ESTR* lpInput, INPUTINFO* lpipInfo, FORINFO* lpfrInfo)
 
 			/* Launch the actual command from which we get input on a separate
                Dos9 process */
-			if (Dos9_ForInputProcess(lpInput, lpipInfo, iPipeFdIn, iPipeFdOut)==-1) {
+			if (Dos9_ForInputProcess(lpInput, lpipInfo, iPipeFd)==-1) {
 
 				return -1;
 
@@ -1234,89 +1226,47 @@ int Dos9_ForAdjustInput(char* lpInput)
 
 }
 
-#if defined(WIN32)
-
-int Dos9_ForInputProcess_win(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn, int* iPipeFdOut)
+int Dos9_ExecuteForSubCommand(struct pipe_launch_data_t* arg)
 {
-	char* lpArgs[10];
-	char lpInArg[16],
-	     lpOutArg[16],
-	     lpAttrArg[16]="/A:QE",
-	     lpFileName[FILENAME_MAX],
-	     lpQuoteFileName[FILENAME_MAX+2];
-	FILE* pFile;
-	void* handle;
+    BLOCKINFO bkBlock;
 
-	int i=0,
-		j=5;
+    Dos9_OpenOutputD(lppsStreamStack, arg->fd, DOS9_STDOUT);
+    close (arg->fd);
 
-    Dos9_GetExeFilename(lpFileName, FILENAME_MAX);
-    snprintf(lpQuoteFileName, sizeof(lpQuoteFileName), "\"%s\"", lpFileName);
+    bkBlock.lpBegin = Dos9_EsToChar(arg->str);
+    bkBlock.lpEnd = bkBlock.lpBegin;
 
-	lpArgs[i++]=lpQuoteFileName;
-	lpArgs[i++]=lpAttrArg;
+    while (*(bkBlock.lpEnd ++));
 
-	if (bDelayedExpansion)
-		lpAttrArg[j++]='V';
+    Dos9_RunBlock(&bkBlock);
 
-	if (bCmdlyCorrect)
-		lpAttrArg[j++]='C';
+    Dos9_EsFree(arg->str);
+    free(arg);
+}
 
-    if (bUseFloats)
-        lpAttrArg[j++]='F';
+int Dos9_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFd)
+{
+    struct pipe_launch_data_t* param;
+    FILE* pFile;
 
-	lpAttrArg[j]='\0';
-
-	lpArgs[i++]="/I";
-
-	snprintf(lpInArg, sizeof(lpInArg), "%d", iPipeFdIn[0]);
-
-	lpArgs[i++]=lpInArg;
-
-	lpArgs[i++]="/O";
-
-	snprintf(lpOutArg, sizeof(lpOutArg), "%d", iPipeFdOut[1]);
-
-	lpArgs[i++]=lpOutArg;
-
-	/* give the input descriptor to the child */
-
-	lpArgs[i]=NULL;
-
-	Dos9_SetFdInheritance(iPipeFdIn[1], 0);
-	Dos9_SetFdInheritance(iPipeFdOut[0], 0);
-
-    /* apply Dos9 internal environment variables */
-	Dos9_ApplyEnv(lpeEnv);
-	Dos9_SetStdInheritance(1);
-
-    write(iPipeFdIn[1], lpInput->str, strlen(lpInput->str));
-    write(iPipeFdIn[1], "&exit\n", sizeof("&exit\n")-1);
-
-    close (iPipeFdIn[1]);
-
-	lpipInfo->Info.InputFile.handle =
-            spawnv(_P_NOWAIT, lpFileName, (char * const*)lpArgs);
-
-	if (errno == ENOENT) {
-
-		Dos9_ShowErrorMessage(DOS9_FOR_LAUNCH_ERROR | DOS9_PRINT_C_ERROR,
-		                      Dos9_EsToChar(lpInput),
-		                      FALSE);
+    if ((param = malloc(sizeof(struct pipe_launch_data_t))) == NULL)
+        Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION | DOS9_PRINT_C_ERROR,
+                                __FILE__ "/Dos9_ForInputProcess()", -1);
 
 
+    param->fd = iPipeFd[1];
+    param->str = Dos9_EsInit();
+
+    Dos9_EsCpyE(param->str, lpInput);
+
+    Dos9_SetFdInheritance(iPipeFd[1], 0);
+	Dos9_SetFdInheritance(iPipeFd[0], 0);
+
+    lpipInfo->Info.InputFile.handle
+        = Dos9_CloneInstance(Dos9_ExecuteForSubCommand, param);
+
+	if (!(pFile=fdopen(iPipeFd[0], "rb")))
 		goto error;
-
-	}
-
-	if (!(pFile=fdopen(iPipeFdOut[0], "r"))) {
-
-		goto error;
-
-	}
-
-    close(iPipeFdIn[0]);
-	close(iPipeFdOut[1]);
 
 	lpipInfo->Info.InputFile.pFile=pFile;
 
@@ -1326,93 +1276,11 @@ int Dos9_ForInputProcess_win(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn,
 	return 0;
 
 error:
-	close(iPipeFdIn[0]);
-	close(iPipeFdOut[1]);
-	close(iPipeFdOut[0]);
+	close(iPipeFd[0]);
+	close(iPipeFd[1]);
 
 	return -1;
 }
-
-#else
-
-#include <limits.h>
-
-int Dos9_ForInputProcess_nix(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFdIn, int* iPipeFdOut)
-{
-
-	FILE* pFile;
-	BLOCKINFO bkBlock;
-	int iPid;
-
-    /* empty returned child lists */
-	waitpid(-1, &iPid, WNOHANG);
-
-	iPid=fork();
-
-	lpipInfo->Info.InputFile.handle = iPid;
-
-    Dos9_SetFdInheritance(iPipeFdIn[1], 0);
-	Dos9_SetFdInheritance(iPipeFdOut[0], 0);
-
-	if (iPid == 0 ) {
-         /* if we are in the son, and, you know, unix is very convenient with us,
-            *really*, he lets us continue without even start dos9 with the command
-            line, far simplier than using windows */
-
-            Dos9_OpenOutputD(lppsStreamStack, iPipeFdOut[1], DOS9_STDOUT);
-
-            bkBlock.lpBegin = Dos9_EsToChar(lpInput);
-            bkBlock.lpEnd = bkBlock.lpBegin;
-
-            while (*(bkBlock.lpEnd ++));
-
-            Dos9_RunBlock(&bkBlock);
-
-            close (iPipeFdOut[1]);
-
-            exit(iErrorLevel);
-
-	} else {
-		/* if we are in the father */
-
-		if (iPid == (pid_t)-1) {
-
-			/* the execution failed */
-			Dos9_ShowErrorMessage(DOS9_FOR_LAUNCH_ERROR | DOS9_PRINT_C_ERROR,
-			                      Dos9_EsToChar(lpInput),
-			                      FALSE);
-			return -1;
-
-		}
-
-	}
-
-	if (!(pFile=fdopen(iPipeFdOut[0], "rb"))) {
-
-		goto error;
-
-	}
-
-    close(iPipeFdIn[0]);
-	close(iPipeFdIn[1]);
-	close(iPipeFdOut[1]);
-
-	lpipInfo->Info.InputFile.pFile=pFile;
-
-	lpipInfo->Info.InputFile.lpesFiles[1]=NULL;
-	lpipInfo->Info.InputFile.index=0;
-
-	return 0;
-
-error:
-	close(iPipeFdIn[0]);
-	close(iPipeFdOut[1]);
-	close(iPipeFdOut[0]);
-
-	return -1;
-}
-
-#endif
 
 int Dos9_ForGetStringInput(ESTR* lpReturn, STRINGINFO* lpsiInfo)
 {
@@ -1558,20 +1426,14 @@ void Dos9_ForCloseInputInfo(INPUTINFO* lpipInfo)
 {
     int i=0;
 
-
 	switch(lpipInfo->cType) {
 
         case INPUTINFO_TYPE_COMMAND:
 
 
 		    fclose(lpipInfo->Info.InputFile.pFile);
-
-#ifdef WIN32
-            WaitForSingleObject(lpipInfo->Info.InputFile.handle, INFINITE);
-            CloseHandle(lpipInfo->Info.InputFile.handle);
-#else
-            waitpid(lpipInfo->Info.InputFile.handle, &i, 0);
-#endif // WIN32
+            Dos9_WaitForThread(&(lpipInfo->Info.InputFile.handle), &i);
+            Dos9_CloseThread(lpipInfo->Info.InputFile.handle);
 
 		    break;
 

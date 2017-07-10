@@ -21,6 +21,7 @@
 #define _X_OPEN_SOURCE
 #endif
 
+#include <stdio.h>
 #include <string.h>
 #include <errno.h>
 #include <assert.h>
@@ -33,7 +34,13 @@
 #include <unistd.h>
 #endif
 
+#include "../../config.h"
+#ifdef DOS9_USE_LIBCU8
+#include <libcu8.h>
+#endif
+
 #include "Dos9_Core.h"
+#include "../init/Dos9_Init.h"
 
 //#define DOS9_DBG_MODE
 #include "Dos9_Debug.h"
@@ -41,14 +48,11 @@
 #include "../errors/Dos9_Errors.h"
 #include "../lang/Dos9_Lang.h"
 
-
 int Dos9_RunBatch(INPUT_FILE* pIn)
 {
 	ESTR* lpLine=Dos9_EsInit();
 
 	INPUT_FILE pIndIn;
-
-	char* const lpCurrentDir=Dos9_GetCurrentDir();
 
 	char *lpCh,
 	     *lpTmp;
@@ -82,11 +86,11 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
 		    && bEchoOn ) {
 
 			Dos9_SetConsoleTextColor(DOS9_FOREGROUND_IGREEN | DOS9_GET_BACKGROUND(colColor));
-			printf(DOS9_NL "DOS9 ");
+			fprintf(fOutput, DOS9_NL "DOS9 ");
 
 			Dos9_SetConsoleTextColor(colColor);
 
-			printf("%s>" , lpCurrentDir);
+			fprintf(fOutput, "%s>" , lpCurrentDir);
 
 		}
 
@@ -106,10 +110,10 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
 		    && *lpCh!='@') {
 
 			Dos9_SetConsoleTextColor(DOS9_FOREGROUND_IGREEN | DOS9_GET_BACKGROUND(colColor));
-			printf(DOS9_NL "DOS9 ");
+			fprintf(fOutput, DOS9_NL "DOS9 ");
 			Dos9_SetConsoleTextColor(colColor);
 
-			printf("%s>%s" DOS9_NL, lpCurrentDir, Dos9_EsToChar(lpLine));
+			fprintf(fOutput, "%s>%s" DOS9_NL, lpCurrentDir, Dos9_EsToChar(lpLine));
 
 		}
 
@@ -134,162 +138,12 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
 
 }
 
-#ifdef WIN32
-
-int Dos9_ExecOperators(PARSED_STREAM** lpppsStream)
-{
-	PARSED_STREAM* lppsStream = *lpppsStream;
-	ESTR *lpExpanded;
-
-	char lpProgName[FILENAME_MAX],
-         lpQuoteProgName[FILENAME_MAX+2],
-		 lpAttrArgs[16]="/A:QE",
-		 input[16],
-		 output[16];
-	char* lpArgs[FILENAME_MAX];
-
-	int i,
-		j=5,
-		pipedes[2];
-
-	int olddes = 0;
-
-	lppsStreamStack=Dos9_Pipe(lppsStreamStack);
-
-loop:
-
-    if (lppsStream->lppsNode
-        && lppsStream->lppsNode->cNodeType == PARSED_STREAM_NODE_PIPE) {
-
-		/* OK, so we are running on Micro$oft Windows... This is pretty annoying
-		   because the lack of fork equivalent call messes everything up,
-		   resulting in harder job */
-
-		/* Get pipe file descriptors */
-		if (pipe(pipedes, 0, O_BINARY) == -1)
-            Dos9_ShowErrorMessage(DOS9_CREATE_PIPE | DOS9_PRINT_C_ERROR,
-                                    __FILE__ "/Dos9_ExecOperators()",
-                                    -1);
-
-        Dos9_SetFdInheritance(pipedes[0], 0);
-
-		/* prepare the command-line arguments before launching the program */
-		Dos9_GetExeFilename(lpProgName, sizeof(lpProgName));
-        snprintf(lpQuoteProgName, sizeof(lpQuoteProgName),
-                                            "\"%s\"", lpProgName);
-
-		lpArgs[(i=0)] = lpQuoteProgName;
-		lpArgs[++i] = lpAttrArgs;
-
-        if (bUseFloats)
-            lpAttrArgs[j++] = 'F';
-
-		if (bDelayedExpansion)
-			lpAttrArgs[j++] = 'V';
-
-		if (bCmdlyCorrect)
-			lpAttrArgs[j++] = 'C';
-
-		lpAttrArgs[j] = '\0';
-
-		/* if the input descriptor is from a previous pipe */
-		if (olddes != 0) {
-
-            Dos9_SetFdInheritance(olddes, 1);
-
-			snprintf(input, sizeof(input), "%d", olddes);
-			lpArgs[++i] =  "/I";
-			lpArgs[++i] =  input;
-
-		}
-
-		snprintf(output, sizeof(output), "%d", pipedes[1]);
-
-		lpArgs[++i] = "/O";
-		lpArgs[++i] = output;
-
-		/* Start the line */
-		lpArgs[++i] = "/C";
-
-		lpExpanded = Dos9_EsInit();
-        Dos9_GetEndOfLine(lppsStream->lpCmdLine->str, lpExpanded);
-
-        Dos9_SetEnv(lpeEnv, "__DOS9_COMMAND__", lpExpanded->str);
-
-		lpArgs[++i] = "@";
-
-		/* The last parameter must be NULL */
-		lpArgs[++i] = NULL;
-
-        Dos9_ApplyEnv(lpeEnv);
-        Dos9_SetStdInheritance(1);
-
-        /* Launches a sub Dos9 command prompt */
-		_spawnv(_P_NOWAIT, lpProgName, (char * const*)lpArgs);
-
-		if (errno == ENOENT) {
-
-			Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR | DOS9_PRINT_C_ERROR,
-		        	              lpArgs[0],
-		    	    			  FALSE);
-            Dos9_EsFree(lpExpanded);
-
-			return FALSE;
-
-		}
-
-		/* Save the output of the pipe */
-		close(pipedes[1]);
-
-		if (olddes != 0)
-			close(olddes);
-
-		olddes = pipedes[0];
-
-		Dos9_EsFree(lpExpanded);
-
-    	if (lppsStream->lppsNode) {
-
-    		lppsStream = *lpppsStream = lppsStream->lppsNode;
-    		goto loop;
-
-    	}
-
-    } else if (olddes != 0) {
-
-    	/* This is logically the last pipe of a series of pipes */
-    	lppsStreamStack = Dos9_PushStreamStack(lppsStreamStack);
-		Dos9_OpenOutputD(lppsStreamStack, olddes, DOS9_STDIN);
-
-    }
-
-	switch (lppsStream->cNodeType) {
-
-	case PARSED_STREAM_NODE_PIPE:
-	case PARSED_STREAM_NODE_NONE :
-		/* this condition is always true */
-		return TRUE;
-
-	case PARSED_STREAM_NODE_NOT :
-		/* this condition is true when the instruction
-		   before failed */
-		return iErrorLevel;
-
-	case PARSED_STREAM_NODE_YES:
-		return !iErrorLevel;
-
-	}
-
-	return FALSE;
-
-}
-
-#elif !defined(WIN32)
 
 int Dos9_ExecOperators(PARSED_STREAM** lpppsStream)
 {
     int pipedes[2];
-    pid_t  pid;
+    THREAD res;
+    struct pipe_launch_data_t* infos;
     PARSED_STREAM* lppsStream=*lpppsStream;
 
 loop:
@@ -297,9 +151,7 @@ loop:
     if (lppsStream->lppsNode
         && lppsStream->lppsNode->cNodeType == PARSED_STREAM_NODE_PIPE) {
 
-        /* We're under Unix-like OS, fork, fork, fork, fork */
-
-        if (pipe(pipedes) == -1)
+        if (_Dos9_Pipe(pipedes, 4096, O_BINARY) == -1)
             Dos9_ShowErrorMessage(DOS9_CREATE_PIPE | DOS9_PRINT_C_ERROR,
                                     __FILE__ "/Dos9_ExecOperators()",
                                     -1);
@@ -307,45 +159,28 @@ loop:
         Dos9_SetFdInheritance(pipedes[0], 0);
         Dos9_SetFdInheritance(pipedes[1], 0);
 
-        pid = fork();
+        if ((infos = malloc(sizeof(struct pipe_launch_data_t))) == NULL)
+            Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION | DOS9_PRINT_C_ERROR,
+                                    __FILE__ "/Dos9_ExecOperators()", -1);
 
-        if (pid == 0) {
+        /* prepare data to launch threads */
+        infos->fd = pipedes[1];
+        infos->str = Dos9_EsInit();
+        Dos9_EsCpyE(infos->str, lppsStream->lpCmdLine);
 
-            /* don't care about redirections, this process will *eventually* die */
-            Dos9_OpenOutputD(lppsStreamStack, pipedes[1], DOS9_STDOUT);
+        res = Dos9_CloneInstance(Dos9_LaunchPipe, infos);
+        Dos9_CloseThread(&res);
 
-            Dos9_RunCommand(lppsStream->lpCmdLine);
+        /* Listen from the pipe */
+        lppsStreamStack = Dos9_OpenOutputD(lppsStreamStack, pipedes[0], DOS9_STDIN);
+        close(pipedes[0]);
 
-            close (pipedes[1]);
+        if (lppsStream->lppsNode) {
 
-            exit(iErrorLevel);
-
-        } else if (pid == -1) {
-
-
-            Dos9_ShowErrorMessage(DOS9_FAILED_FORK | DOS9_PRINT_C_ERROR,
-                                    __FILE__ "/Dos9_ExecOperators()",
-                                    -1);
-
-        } else {
-
-            close(pipedes[1]); /* do not need it yeah */
-
-            /* create a new stack level */
-            lppsStreamStack = Dos9_PushStreamStack(lppsStreamStack);
-
-            /* Child process receives parent output */
-            Dos9_OpenOutputD(lppsStreamStack, pipedes[0], DOS9_STDIN);
-
-            if (lppsStream->lppsNode) {
-
-                lppsStream = *lpppsStream = lppsStream->lppsNode;
-                goto loop;
-
-            }
+            lppsStream = *lpppsStream = lppsStream->lppsNode;
+            goto loop;
 
         }
-
     }
 
 	switch (lppsStream->cNodeType) {
@@ -371,7 +206,24 @@ loop:
 
 }
 
-#endif
+void Dos9_LaunchPipe(struct pipe_launch_data_t* infos)
+{
+
+    lppsStreamStack = Dos9_OpenOutputD(lppsStreamStack, infos->fd, DOS9_STDOUT);
+    close(infos->fd);
+
+    fprintf( stderr, "[SECOND THREAD]Trying to run the command : \"%s\"\n", infos->str->str);
+
+    Dos9_RunCommand(infos->str);
+
+    fprintf(stderr, "Ok\n");
+
+    Dos9_EsFree(infos->str);
+
+    /* don't forget to free unneeded memory */
+    free(infos);
+
+}
 
 int Dos9_ExecOutput(PARSED_STREAM_START* lppssStart)
 {
@@ -401,11 +253,8 @@ int Dos9_ExecOutput(PARSED_STREAM_START* lppssStart)
 
 
 	/* open the redirections */
-
-	lppsStreamStack=Dos9_PushStreamStack(lppsStreamStack);
-
 	if (lppssStart->lpInputFile)
-		Dos9_OpenOutput(lppsStreamStack,
+		lppsStreamStack = Dos9_OpenOutput(lppsStreamStack,
 		                lppssStart->lpInputFile,
 		                DOS9_STDIN,
 		                0
@@ -413,7 +262,7 @@ int Dos9_ExecOutput(PARSED_STREAM_START* lppssStart)
 
 	if (lppssStart->cOutputMode
 	    && lppssStart->lpOutputFile )
-		Dos9_OpenOutput(lppsStreamStack,
+		lppsStreamStack = Dos9_OpenOutput(lppsStreamStack,
 		                lppssStart->lpOutputFile,
 		                lppssStart->cOutputMode & ~PARSED_STREAM_START_MODE_TRUNCATE,
 		                lppssStart->cOutputMode & PARSED_STREAM_START_MODE_TRUNCATE
@@ -506,7 +355,6 @@ RestartSearch:
     }
 
 #endif
-
 	switch((iFlag=Dos9_GetCommandProc(lpCmdLine, lpclCommands, (void**)&lpProc))) {
 
 	case -1:
@@ -662,17 +510,17 @@ int Dos9_RunExternalCommand(char* lpCommandLine, int* error)
 	     lpTmp[FILENAME_MAX],
 	     lpExePath[FILENAME_MAX];
 
-	ESTR* lpEstr[FILENAME_MAX];
+	ESTR* lpEstr[FILENAME_MAX],
+          *lpCmdLine = Dos9_EsInit();
 
 	int i=0,
         status=0;
 
 	Dos9_GetParamArrayEs(lpCommandLine, lpEstr, FILENAME_MAX);
+    Dos9_GetEndOfLine(lpCommandLine, lpCmdLine);
 
 	if (!lpEstr[0])
 		return 0;
-
-	Dos9_EsReplace(lpEstr[0], "\"", "");
 
 	for (; lpEstr[i] && (i < FILENAME_MAX); i++)
 		lpArguments[i]=Dos9_EsToChar(lpEstr[i]);
@@ -696,17 +544,19 @@ int Dos9_RunExternalCommand(char* lpCommandLine, int* error)
 	if (!stricmp(".bat", lpExt)
 	    || !stricmp(".cmd", lpExt)) {
 
-        status=Dos9_RunExternalBatch(lpFileName, lpCommandLine, lpArguments);
+        status=Dos9_RunExternalBatch(lpFileName, lpCmdLine->str, lpArguments);
 
 	} else {
 
-		status=Dos9_RunExternalFile(lpFileName, lpArguments);
+		status=Dos9_RunExternalFile(lpFileName, lpCmdLine->str, lpArguments);
 
     }
 
 error:
 	for (i=0; lpEstr[i] && (i < FILENAME_MAX); i++)
 		Dos9_EsFree(lpEstr[i]);
+
+    Dos9_EsFree(lpCmdLine);
 
 	return status;
 
@@ -715,43 +565,134 @@ error:
 
 #ifdef WIN32
 
-int Dos9_RunExternalFile(char* lpFileName, char** lpArguments)
+#ifndef DOS9_USE_LIBCU8
+int Dos9_RunExternalFile(char* lpFileName, char* lpFullLine, char** lpArguments)
 {
-	int res;
-	char str[FILENAME_MAX+2],
-		 *tmp;
-	errno=0;
+    STARTUPINFO si;
+    PROCESS_INFORMATION pi;
+    void* envblock;
+    int status;
+    size_t size;
 
-	Dos9_ApplyEnv(lpeEnv);
-	Dos9_SetStdInheritance(1);
+    envblock = Dos9_GetEnvBlock(lpeEnv, &size);
 
-	snprintf(str, sizeof(str), "\"%s\"", lpArguments[0]);
-	tmp = lpArguments[0];
-	lpArguments[0] = str;
+    ZeroMemory(&si, sizeof(si));
 
+    Dos9_SetFdInheritance(fileno(fInput), 1);
+    Dos9_SetFdInheritance(fileno(fOutput), 1);
+    Dos9_SetFdInheritance(fileno(fError), 1);
 
+    si.cb = sizeof(si);
 
-	/* in windows the result is directly returned */
-	res=spawnv(_P_WAIT, lpFileName, (char * const*)lpArguments);
+    si.dwFlags = STARTF_USESTDHANDLES;
+    si.hStdInput = _get_osfhandle(fileno(fInput));
+    si.hStdOutput = _get_osfhandle(fileno(fOutput));
+    si.hStdError = _get_osfhandle(fileno(fError));
 
-	lpArguments[0] = tmp;
+    if (!CreateProcessA(lpFileName,
+                        lpFullLine,
+                        NULL,
+                        NULL,
+                        TRUE,
+                        0,
+                        envblock,
+                        lpCurrentDir,
+                        &si,
+                        &pi))
+        Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR,
+                                lpFileName, 0);
 
-	if (errno==ENOENT) {
+    Dos9_SetFdInheritance(fileno(fInput), 1);
+    Dos9_SetFdInheritance(fileno(fOutput), 1);
+    Dos9_SetFdInheritance(fileno(fError), 1);
 
-		res=-1;
+    WaitForSingleObject(pi.hProcess, INFINITE);
 
-		Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR,
-		                      lpArguments[0],
-		                      FALSE
-		                     );
+    GetExitCodeProcess(pi.hProcess, &status);
 
-	}
+    CloseHandle(pi.hProcess);
+    CloseHandle(pi.hThread);
 
+    free(envblock);
 
-	return res;
-
+    return status;
 }
 
+#else
+
+int Dos9_RunExternalFile(char* lpFileName, char* lpFullLine, char** lpArguments)
+{
+    STARTUPINFOW si;
+    PROCESS_INFORMATION pi;
+    void* envblock;
+    int status;
+    size_t size;
+    size_t ret;
+
+    wchar_t *wenvblock,
+            *wfullline,
+            *wfilename,
+            *wcurrdir;
+
+    envblock = Dos9_GetEnvBlock(lpeEnv, &size);
+
+    if (!(wenvblock = libcu8_xconvert(LIBCU8_TO_U16, envblock, size, &ret))
+        || !(wfullline = libcu8_xconvert(LIBCU8_TO_U16, lpFullLine,
+                                            strlen(lpFullLine) + 1, &ret))
+        || !(wfilename = libcu8_xconvert(LIBCU8_TO_U16, lpFileName,
+                                            strlen(lpFileName) + 1, &ret))
+        || !(wcurrdir = libcu8_xconvert(LIBCU8_TO_U16, lpCurrentDir,
+                                            strlen(lpCurrentDir) + 1, &ret)))
+        Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION | DOS9_PRINT_C_ERROR,
+                                __FILE__ "/Dos9_RunExternalFile()", -1);
+
+
+    ZeroMemory(&si, sizeof(si));
+
+    Dos9_SetFdInheritance(fileno(fInput), 1);
+    Dos9_SetFdInheritance(fileno(fOutput), 1);
+    Dos9_SetFdInheritance(fileno(fError), 1);
+
+    si.cb = sizeof(si);
+
+    si.dwFlags = STARTF_USESTDHANDLES;
+    si.hStdInput = _get_osfhandle(fileno(fInput));
+    si.hStdOutput = _get_osfhandle(fileno(fOutput));
+    si.hStdError = _get_osfhandle(fileno(fError));
+
+    if (!CreateProcessW(wfilename,
+                        wfullline,
+                        NULL,
+                        NULL,
+                        TRUE,
+                        0,
+                        wenvblock,
+                        wcurrdir,
+                        &si,
+                        &pi))
+        Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR,
+                                lpFileName, 0);
+
+    Dos9_SetFdInheritance(fileno(fInput), 1);
+    Dos9_SetFdInheritance(fileno(fOutput), 1);
+    Dos9_SetFdInheritance(fileno(fError), 1);
+
+    WaitForSingleObject(pi.hProcess, INFINITE);
+
+    GetExitCodeProcess(pi.hProcess, &status);
+
+    CloseHandle(pi.hProcess);
+    CloseHandle(pi.hThread);
+
+    free(envblock);
+    free(wenvblock);
+    free(wfullline);
+    free(wfilename);
+    free(wcurrdir);
+
+    return status;
+}
+#endif
 #elif !defined(WIN32)
 
 int Dos9_RunExternalFile(char* lpFileName, char** lpArguments)
@@ -764,9 +705,10 @@ int Dos9_RunExternalFile(char* lpFileName, char** lpArguments)
 
 	if (iPid == 0 ) {
 		/* if we are in the son */
-
+        Dos9_SetStdInheritance(1); /* make std inheritable */
         Dos9_ApplyEnv(lpeEnv); /* set internal variable */
-        Dos9_SetStdInheritance(1); /* make std* inheritable */
+        Dos9_ApplyStreams(lppsStreamStack);
+        chdir(lpCurrentDir);
 
 		if ( execv(lpFileName, lpArguments) == -1) {
 
@@ -822,122 +764,92 @@ int Dos9_RunExternalFile(char* lpFileName, char** lpArguments)
 
 #endif // WIN32 || _POSIX_C_SOURCE
 
+struct batch_launch_data_t {
+    char* lpFileName;
+    char* lpFullLine;
+    char** lpArguments;
+};
 
-#if defined(WIN32)
-
-int Dos9_RunExternalBatch(char* lpFileName, char* lpFullLine, char** lpArguments)
+void Dos9_LaunchExternalBatch(struct batch_launch_data_t* arg)
 {
-
-        int i=FILENAME_MAX-1;
-        int ret;
-
-        char lpFile[FILENAME_MAX+3],
-             lpExePath[FILENAME_MAX],
-             lpModes[FILENAME_MAX] = {'/', 'a', ':' ,'q'},
-             *lpArgs[FILENAME_MAX+3];
-
-        /* these are batch */
-
-		for (i; (i > 0) && (i < FILENAME_MAX); i--)
-			lpArgs[i+3]=lpArguments[i];
-
-
-		Dos9_GetExeFilename(lpExePath, sizeof(lpExePath));
-
-        snprintf(lpFile, sizeof(lpFile), "\"%s\"", lpFileName);
-
-		lpArgs[0]=lpExePath;
-		lpArgs[3]=lpFile;
-		lpArgs[2]="//"; /* use this switch to prevent
-                                other switches from being executed */
-
-        lpArgs[1]=lpModes;
-
-        i = 4;
-
-        if (bUseFloats)
-            *(lpModes + (i++)) = 'f';
-        if (bDelayedExpansion)
-            *(lpModes + (i++)) = 'v';
-        if (!bEchoOn)
-            *(lpModes + (i++)) = 'e';
-        if (bCmdlyCorrect)
-            *(lpModes + (i++)) = 'c';
-
-        *(lpModes + i) = '\0';
-
-		ret = Dos9_RunExternalFile(lpExePath, lpArgs);
-}
-
-#elif !defined(WIN32)
-
-int Dos9_RunExternalBatch(char* lpFileName, char* lpFullLine, char** lpArguments)
-{
-
-    pid_t pid;
-    int status;
     int i;
 
-    pid = fork();
+    Dos9_FreeLocalBlock(lpvLocalVars);
+    Dos9_FreeLocalBlock(lpvArguments);
+    lpvLocalVars = Dos9_GetLocalBlock();
+    lpvArguments = Dos9_GetLocalBlock();
 
-    if (pid == 0) {
+    for (i=1;arg->lpArguments[i] && i <= 9; i++)
+        Dos9_SetLocalVar(lpvArguments, '0'+i, arg->lpArguments[i]);
 
-        /* if we are in the son process */
 
-        //Dos9_SetStreamStackLockState(lppsStreamStack, TRUE);
+    Dos9_AssignCommandLine('+', arg->lpArguments + i);
 
-        Dos9_ClearStack(lppsStreamStack, (void(*)(void*))free);
-        lppsStreamStack = Dos9_InitStreamStack();
+    for (;i <= 9;i++)
+        Dos9_SetLocalVar(lpvArguments, '0'+i , "");
 
-        Dos9_FreeLocalBlock(lpvLocalVars);
-        lpvLocalVars = Dos9_GetLocalBlock();
+    Dos9_SetLocalVar(lpvArguments, '*', arg->lpFullLine);
 
-        for (i=1;lpArguments[i] && i <= 9; i++) {
+    Dos9_SetLocalVar(lpvArguments, '0', arg->lpFileName);
 
-            Dos9_SetLocalVar(lpvArguments, '0'+i, lpArguments[i]);
+    bIsScript = 1; /* this is obviously a script */
 
-        }
+    strncpy(ifIn.lpFileName, arg->lpFileName, sizeof(ifIn.lpFileName));
+    ifIn.lpFileName[sizeof(ifIn.lpFileName)-1] = '\0';
 
-        for (;i <= 9;i++)
-            Dos9_SetLocalVar(lpvArguments, '0'+i , "");
+    for (i = 0; arg->lpArguments[i]; i++);
+        free(arg->lpArguments[i]);
 
-        Dos9_SetLocalVar(lpvArguments, '*', lpFullLine);
+    free(arg->lpArguments);
+    free(arg->lpFileName);
+    free(arg->lpFullLine);
+    free(arg);
 
-        Dos9_SetLocalVar(lpvArguments, '0', lpFileName);
+    ifIn.bEof = 0;
+    ifIn.iPos = 0;
 
-        bIsScript = 1; /* this is obviously a script */
+    Dos9_RunBatch(&ifIn);
+}
 
-        strncpy(ifIn.lpFileName, lpFileName, sizeof(ifIn.lpFileName));
-        ifIn.lpFileName[sizeof(ifIn.lpFileName)-1] = '\0';
 
-        ifIn.bEof = 0;
-        ifIn.iPos = 0;
+int Dos9_RunExternalBatch(char* lpFileName, char* lpFullLine, char** lpArguments)
+{
 
-        Dos9_RunBatch(&ifIn);
+    THREAD th;
+    struct batch_launch_data_t* arg;
+    int size = 0;
+    void* ret;
 
-        exit(iErrorLevel);
+    while (lpArguments[size])
+        size ++; /* count argument items */
 
-    } else if (pid == -1) {
+    if ((arg = malloc(sizeof(struct batch_launch_data_t))) == NULL
+        || (arg->lpFileName = strdup(lpFileName)) == NULL
+        || (arg->lpFullLine = strdup(lpFullLine)) == NULL
+        || (arg->lpArguments = malloc((size + 1) * sizeof(char*))) == NULL)
+        Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION | DOS9_PRINT_C_ERROR,
+                              __FILE__ "/Dos9_RunExternalBatch()", -1);
 
-        /* error */
-        status = -1;
+    size = 0;
+    while (lpArguments[size]) {
 
-        Dos9_ShowErrorMessage(DOS9_FAILED_FORK | DOS9_PRINT_C_ERROR,
-                                __FILE__ "/Dos9_RunExternalFile()",
-                                -1
-                                );
+        if ((arg->lpArguments[size] = strdup(lpArguments[size])) == NULL)
+            Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION | DOS9_PRINT_C_ERROR,
+                              __FILE__ "/Dos9_RunExternalBatch()", -1);
 
-    } else {
-
-        waitpid(pid, &status, 0);
+        size ++;
 
     }
 
-    return WEXITSTATUS(status);
+    arg->lpArguments[size] = NULL;
 
+    th = Dos9_CloneInstance(Dos9_LaunchExternalBatch, arg);
+
+    Dos9_WaitForThread(&th, &ret);
+    Dos9_CloseThread(&th);
+
+    return (int)ret;
 }
-
-#endif /* WIN32 */
 
 #ifndef WIN32
 

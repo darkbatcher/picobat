@@ -25,6 +25,7 @@
 #include "../../config.h"
 #include "../gettext.h"
 
+#include "../core/Dos9_Core.h"
 #include "Dos9_ShowHelp.h"
 
 /* the main purpose of this functions is to provide little
@@ -238,8 +239,8 @@ void Dos9_ShowInternalHelp(int cmdId)
 	if ((cmdId >= 0)
 	    && (cmdId < DOS9_HELP_ARRAY_SIZE)) {
 
-		fputs(lpInternalHelp[cmdId], stderr);
-		fputs(lpExternalMsg, stderr);
+		fputs(lpInternalHelp[cmdId], fError);
+		fputs(lpExternalMsg, fError);
 
 	}
 

@@ -116,7 +116,7 @@
 
 #ifdef WIN32
 
-typedef DWORD THREAD;
+typedef HANDLE THREAD;
 typedef HANDLE MUTEX;
 typedef int    PROCESS;
 
@@ -133,6 +133,8 @@ LIBDOS9 int      Dos9_BeginThread(THREAD* lpThId, void(*pFunc)(void*),
 LIBDOS9 void     Dos9_EndThread(void* iReturn);
 LIBDOS9 void     Dos9_AbortThread(THREAD* lpThId);
 LIBDOS9 int      Dos9_WaitForThread(THREAD* thId, void** pRet);
+LIBDOS9 void     Dos9_CloseThread(THREAD* thId);
+
 LIBDOS9 int      Dos9_WaitForAllThreads(void);
 LIBDOS9 void     Dos9_AbortAllThreads(void);
 
@@ -409,15 +411,10 @@ LIBDOS9 char* Dos9_GetNextChar(const char* lpContent);
 LIBDOS9 int Dos9_GetConsoleEncoding(char* lpEnc, size_t iSize);
 LIBDOS9 const char* Dos9_ConsoleCP2Encoding(int cp);
 
-#define Dos9_GetCurrentDir() _Dos9_Currdir
-
-EXTERN LIBDOS9 char _Dos9_Currdir[FILENAME_MAX];
 LIBDOS9 int Dos9_FileExists(const char* lpPath);
 LIBDOS9 char* Dos9_GetFirstExistingFile(char** files);
 LIBDOS9 int Dos9_DirExists(const char* lpPath);
 LIBDOS9 int Dos9_SetFileMode(const char* file, int attr);
-LIBDOS9 int Dos9_UpdateCurrentDir(void);
-LIBDOS9 int Dos9_SetCurrentDir(const char* lpPath);
 LIBDOS9 int Dos9_GetExePath(char* lpBuf, size_t iBufSize);
 LIBDOS9 int Dos9_GetExeFilename(char* lpBuf, size_t iBuffSize);
 

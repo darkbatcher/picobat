@@ -79,6 +79,44 @@ void Dos9_AssignCommandLine(int c, char** argv)
     Dos9_EsFree(lpEsParam);
 }
 
+void Dos9_DuplicateStdStreams(void)
+{
+    int newInput, newOutput, newErr; /* descriptors to duplicate std streams */
+
+    if ((newInput = dup(DOS9_STDIN)) == -1
+        || (newOutput = dup(DOS9_STDOUT)) == -1
+        || (newErr = dup(DOS9_STDERR)) == -1) {
+
+        /* cowardly refuse to do anything if we failed to duplicate stream */
+        fputs("Error: Unable to duplicate current standard streams.\b", stderr);
+        exit(-1);
+    }
+
+    fInput = fdopen(newInput, "r");
+    fOutput = fdopen(newOutput, "w");
+    fError = fdopen(newErr, "w");
+
+    if (!fInput || !fOutput || !fError) {
+
+        fputs("Error: Unable to load standard streams duplicates", stderr);
+        exit(-1);
+
+    }
+
+    /* Re-set appropriate flags for the standard streams if they
+       actually refer to a tty (no reason not to buffer files that
+       are not reffering to tty) */
+
+    /* if (isatty(newInput))
+        setvbuf(fInput, NULL, _IONBF, 0); */
+
+    if (isatty(newOutput))
+        setvbuf(fOutput, NULL, _IONBF, 0);
+
+    if (isatty(newErr))
+        setvbuf(fError, NULL, _IONBF, 0);
+}
+
 void Dos9_InitLibDos9(void)
 {
     char lpExePath[FILENAME_MAX];
@@ -91,7 +129,6 @@ void Dos9_InitLibDos9(void)
 
         puts("Error : Unable to load LibDos9. Exiting ...");
         exit(-1);
-
 
     }
 
@@ -122,7 +159,7 @@ void Dos9_InitLibDos9(void)
     Dos9_LoadInternalHelp();
 
     DOS9_DBG("Loading current directory...\n");
-    Dos9_UpdateCurrentDir();
+    getcwd(lpCurrentDir, FILENAME_MAX);
 
     DOS9_DBG("Getting current executable name ...\n");
     Dos9_GetExePath(lpExePath, FILENAME_MAX);
@@ -164,9 +201,7 @@ int Dos9_InitSetModes(char* str)
 
             case 'C':
                 /* enable cmd-compatible mode */
-                #if !defined(DOS9_STATIC_CMDLYCORRECT)
                 bCmdlyCorrect=TRUE;
-                #endif
                 break;
 
             case 'Q':
@@ -203,6 +238,7 @@ char* Dos9_GetParameters(char** argv, char** lpFileName, int* bExitAfterCmd, int
                             bQuiet)
 {
     int i, c, j, bGetSwitch = 1;
+    //int iInputD, iOutputD;
     char* lpCmdCSwitch = NULL;
 
     ESTR* lpCmdC;
@@ -210,11 +246,8 @@ char* Dos9_GetParameters(char** argv, char** lpFileName, int* bExitAfterCmd, int
     if (!argv[0])
         Dos9_ShowErrorMessage(DOS9_BAD_COMMAND_LINE, "Dos9", -1);
 
-    DOS9_DBG("Getting command line arguments ... \n");
     /* get command line arguments */
     for (i=1; argv[i]; i++) {
-
-        DOS9_DBG("* Got \"%s\" as argument...\n", argv[i]);
 
         if (*argv[i]=='/' && bGetSwitch) {
 
@@ -224,25 +257,6 @@ char* Dos9_GetParameters(char** argv, char** lpFileName, int* bExitAfterCmd, int
 
                 case 'A':
                     *bQuiet = Dos9_InitSetModes(argv[i]);
-                    break;
-
-                case 'I':
-                    if (!argv[++i])
-                        Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "Dos9", -1);
-
-
-                    iInputD=atoi(argv[i]); // select input descriptor
-                    Dos9_SetFdInheritance(iInputD, 0);
-                    Dos9_OpenOutputD(lppsStreamStack, iInputD, DOS9_STDIN);
-                    break;
-
-                case 'O':
-                    if (!argv[++i])
-                        Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "Dos9", -1);
-
-                    iOutputD=atoi(argv[i]); /* select input descriptor */
-                    Dos9_SetFdInheritance(iOutputD, 0);
-                    Dos9_OpenOutputD(lppsStreamStack, iOutputD, DOS9_STDOUT);
                     break;
 
                 case 'K':
@@ -312,7 +326,7 @@ char* Dos9_GetParameters(char** argv, char** lpFileName, int* bExitAfterCmd, int
 
                 }
 
-                Dos9_AssignCommandLine('+', (argv + j == NULL) ? "" : argv + j);
+                Dos9_AssignCommandLine('+', argv + j);
 
                 break;
             }

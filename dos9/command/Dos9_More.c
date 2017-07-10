@@ -231,7 +231,7 @@ int Dos9_MoreFile(int flags, int tabsize, int begin, char* filename)
 
      } else {
 
-        file = stdin;
+        file = fInput;
 
      }
 
@@ -275,10 +275,10 @@ int Dos9_MoreFile(int flags, int tabsize, int begin, char* filename)
      }
 
 end:
-     if (file != stdin)
+     if (file != fInput)
         fclose(file);
-     else if (isatty(DOS9_STDIN))
-        clearerr(stdin);
+     else if (isatty(fileno(fInput)))
+        clearerr(fInput);
 
      return status;
 
@@ -374,11 +374,11 @@ int Dos9_MoreWriteLine(int* begin, int flags, int tabsize, FILE* file)
                 col += ncol;
 
                 while (ncol --)
-                    more_fputc(' ', stdout);
+                    more_fputc(' ', fOutput);
 
             } else {
 
-                more_fputc('\n', stdout);
+                more_fputc('\n', fOutput);
 
                 return 1;
 
@@ -387,7 +387,7 @@ int Dos9_MoreWriteLine(int* begin, int flags, int tabsize, FILE* file)
         } else if ((flags & DOS9_MORE_ANSICODES) && c==0x1B) {
 
             /* if this is a csi escape code */
-            more_fputc(0x1B, stdout);
+            more_fputc(0x1B, fOutput);
 
             switch (c=fgetc(file)) {
 
@@ -395,17 +395,17 @@ int Dos9_MoreWriteLine(int* begin, int flags, int tabsize, FILE* file)
                     break;
 
                 case '[':
-                    more_fputc(c, stdout);
+                    more_fputc(c, fOutput);
 
                     while (((c = fgetc(file)) != EOF) && !(c <= '~' && c >= '@'))
-                        more_fputc(c, stdout);
+                        more_fputc(c, fOutput);
 
-                    more_fputc(c, stdout);
+                    more_fputc(c, fOutput);
 
                     break;
 
                 default:
-                    more_fputc(c, stdout);
+                    more_fputc(c, fOutput);
                     break;
 
             }
@@ -413,7 +413,7 @@ int Dos9_MoreWriteLine(int* begin, int flags, int tabsize, FILE* file)
         } else if ((flags & DOS9_MORE_USEU8) && (c & 0x80) && !(c & 0x40)) {
 
             /* this is a following utf-8 byte */
-            more_fputc(c, stdout);
+            more_fputc(c, fOutput);
 
         } else {
 
@@ -435,7 +435,7 @@ int Dos9_MoreWriteLine(int* begin, int flags, int tabsize, FILE* file)
 
                 }
 
-                more_fputc('\n', stdout);
+                more_fputc('\n', fOutput);
 
                 return 1;
 
@@ -443,7 +443,7 @@ int Dos9_MoreWriteLine(int* begin, int flags, int tabsize, FILE* file)
 
             blank = 0;
 
-            more_fputc(c, stdout);
+            more_fputc(c, fOutput);
             col ++;
 
         }
@@ -457,7 +457,7 @@ int Dos9_MoreWriteLine(int* begin, int flags, int tabsize, FILE* file)
 
     if (col == 79 && c != '\n') {
 
-        more_fputc('\n', stdout);
+        more_fputc('\n', fOutput);
         cr = 1;
 
     }
@@ -483,7 +483,7 @@ int Dos9_GetMoreNb(void)
 int Dos9_MorePrompt(int* toprint, int* skip, int* ok)
 {
 	int i;
-    printf("-- More --");
+    fprintf(fOutput, "-- More --");
 
     while (1) {
 
@@ -522,10 +522,10 @@ int Dos9_MorePrompt(int* toprint, int* skip, int* ok)
             case '?':
                 /* clean the line */
                 Dos9_ClearConsoleLine();
-                printf("-- ? : Help    Q : Quit   Sn : Skip n lines    Pn : Print n lines --");
+                fprintf(fOutput, "-- ? : Help    Q : Quit   Sn : Skip n lines    Pn : Print n lines --");
                 Dos9_Getch();
                 Dos9_ClearConsoleLine();
-                printf("-- More --");
+                fprintf(fOutput, "-- More --");
                 break;
         }
 

@@ -73,7 +73,7 @@ int Dos9_FileCounts(int mode, const char* file, struct wc_count_t* cnt)
 
     if (file == NULL) {
 
-        fd = DOS9_STDIN;
+        fd = fileno(fInput);
 
     } else if ((fd = open(file, O_RDONLY | O_BINARY)) == -1) {
 
@@ -145,10 +145,10 @@ int Dos9_FileCounts(int mode, const char* file, struct wc_count_t* cnt)
 
     /* Wait ... Fool, were you just about to close a file that could refer
        to stdin ? double check it's not so before closing the file */
-    if (fd != DOS9_STDIN) {
+    if (fd != fileno(fInput)) {
         close(fd);
-    } else if (isatty(DOS9_STDIN)) {
-        clearerr(stdin);
+    } else if (isatty(fileno(fInput))) {
+        clearerr(fInput);
     }
 
     return !size;
@@ -165,21 +165,21 @@ void Dos9_AddCounts(struct wc_count_t* res, const struct wc_count_t* val)
 void Dos9_PrintCounts(int mode, struct wc_count_t* cnt, const char* file)
 {
     if (mode & DOS9_WC_LINES)
-        printf("%lu ", cnt->lines);
+        fprintf(fOutput, "%lu ", cnt->lines);
 
     if (mode & DOS9_WC_WORDS)
-        printf("%lu ", cnt->words);
+        fprintf(fOutput, "%lu ", cnt->words);
 
     if (mode & DOS9_WC_BYTES)
-        printf("%lu ", cnt->bytes);
+        fprintf(fOutput, "%lu ", cnt->bytes);
 
     if (mode & DOS9_WC_CHARS)
-        printf("%lu ", cnt->chars);
+        fprintf(fOutput, "%lu ", cnt->chars);
 
     if (file)
-        printf("%s", file);
+        fprintf(fOutput, "%s", file);
 
-    fputs(DOS9_NL, stdout);
+    fputs(DOS9_NL, fOutput);
 }
 
 int Dos9_CmdWc(const char* line)
@@ -293,7 +293,7 @@ int Dos9_CmdWc(const char* line)
 
             total.bytes += Dos9_GetFileSize(item);
 
-            printf("%lu %s" DOS9_NL, Dos9_GetFileSize(item), item->lpFileName);
+            fprintf(fOutput, "%lu %s" DOS9_NL, Dos9_GetFileSize(item), item->lpFileName);
 
         } else if (Dos9_FileCounts(mode, item->lpFileName, &cnt)) {
             /* Reading the whole file is required */

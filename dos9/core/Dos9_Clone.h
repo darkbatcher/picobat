@@ -42,6 +42,7 @@ struct clone_data_t {
     FILE* fError; /* current thread error stream */
     ENVBUF* lpeEnv;
     INPUT_FILE ifIn;
+    char lpCurrentDir[FILENAME_MAX];
     void(*fn)(void*);
     void* arg;
 };

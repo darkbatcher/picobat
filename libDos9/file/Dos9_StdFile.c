@@ -32,8 +32,6 @@
 
 #include "Dos9_File.h"
 
-char _Dos9_Currdir[FILENAME_MAX]="";
-
 #ifndef WIN32
 
 #include <sys/stat.h>
@@ -77,13 +75,13 @@ int Dos9_GetExePath(char* lpBuf, size_t iBufSize)
 
         snprintf(lpBuf, iBufSize, BINARY_PATH);
 
-    #endif
-
     return 0;
 }
 
 int Dos9_DirExists(const char *ptrName)
 {
+    #endif
+
     struct stat sStat;
 
     if (stat(ptrName, &sStat)==-1)
@@ -105,20 +103,6 @@ int Dos9_FileExists(const char* ptrName)
 }
 
 #endif
-
-int Dos9_UpdateCurrentDir(void)
-{
-    return (int)getcwd(_Dos9_Currdir, FILENAME_MAX);
-}
-
-int Dos9_SetCurrentDir(const char* lpPath)
-{
-    int status=chdir(lpPath);
-
-    getcwd(_Dos9_Currdir, FILENAME_MAX);
-
-    return status;
-}
 
 char* Dos9_GetFirstExistingFile(char** files)
 {

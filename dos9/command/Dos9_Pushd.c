@@ -1,7 +1,6 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2016 Romain GARBI
  *   Copyright (C) 2016      Astie Teddy
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -28,6 +27,7 @@
 #include "../core/Dos9_Core.h"
 
 #include "Dos9_Pushd.h"
+#include "Dos9_Cd.h"
 
 #include "../errors/Dos9_Errors.h"
 #include "../lang/Dos9_Lang.h"
@@ -79,7 +79,7 @@ int Dos9_CmdPushd (char *lpLine)
 
         ESTR *lpEscd=Dos9_EsInit();
 
-        Dos9_EsCat(lpEscd, Dos9_GetCurrentDir());
+        Dos9_EsCat(lpEscd, lpCurrentDir);
 
         if (!Dos9_SetCurrentDir(Dos9_EsToChar(lpEstr)))
             lpStack = Dos9_PushStack(lpStack, lpEscd);

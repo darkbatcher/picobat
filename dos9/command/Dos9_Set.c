@@ -239,7 +239,7 @@ int Dos9_CmdSet(char *lpLine)
 		lpLine = Dos9_SkipBlanks(lpLine+3);
 
 		/* if a variable have been found,
-		   this variable varry usually
+		   this variable vary usually
 		   when using a prefix
 		*/
 		char found = 0;
@@ -254,7 +254,7 @@ int Dos9_CmdSet(char *lpLine)
 				found = TRUE;
 
 				/* variable valid */
-	            printf("%s=%s" DOS9_NL, lpeEnv->envbuf[i]->name,
+	            fprintf(fOutput, "%s=%s" DOS9_NL, lpeEnv->envbuf[i]->name,
 	                                    lpeEnv->envbuf[i]->content);
 			}
 		}
@@ -398,7 +398,7 @@ int Dos9_CmdSetP(char* lpLine)
 
 		printf("%s", lpEqual);
 
-		Dos9_EsGet(lpEsInput, stdin);
+		Dos9_EsGet(lpEsInput, fInput);
 
 		if ((lpEqual=strchr(Dos9_EsToChar(lpEsInput), '\n')))
 			*lpEqual='\0';
@@ -559,7 +559,7 @@ int Dos9_CmdSetEvalFloat(ESTR* lpExpression)
 	snprintf(lpResult, sizeof(lpResult), "%.16g", dVal);
 
     if (!bIsScript)
-        printf("\t\t\t\t%.16g", dVal);
+        fprintf(fOutput, "\t\t\t\t%.16g", dVal);
 
 	Dos9_SetEnv(lpeEnv, Dos9_EsToChar(lpExpression), lpResult);
 
@@ -715,7 +715,7 @@ int Dos9_CmdSetEvalInt(ESTR* lpExpression)
 	snprintf(lpResult, sizeof(lpResult), "%d", iVal);
 
     if (!bIsScript)
-        printf("\t\t\t\t\t\t%d", iVal);
+        fprintf(fOutput, "\t\t\t\t\t\t%d", iVal);
 
 	Dos9_SetEnv(lpeEnv, Dos9_EsToChar(lpExpression), lpResult);
 

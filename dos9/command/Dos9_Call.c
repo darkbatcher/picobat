@@ -243,17 +243,17 @@ int Dos9_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 	memcpy(&ifOldFile, &ifIn, sizeof(INPUT_FILE));
 	Dos9_CopyBatchScript(&(ifIn.batch), &(ifOldFile.batch));
 
-	/* Set the INPUT_INFO FILE */
-
-	if (!lpLabel) {
-
-		if (Dos9_GetFilePath(lpAbsPath, lpFile, sizeof(lpAbsPath))==-1) {
+    if (lpFile != NULL
+        && Dos9_GetFileFullPath(lpAbsPath, lpFile, sizeof(lpAbsPath))==-1) {
 
 			Dos9_ShowErrorMessage(DOS9_FILE_ERROR, lpFile, FALSE);
 
 			goto error;
 
-		}
+    }
+
+	/* Set the INPUT_INFO FILE */
+	if (!lpLabel) {
 
 		ifIn.bEof=FALSE;          /* the file is not at EOF */
 		ifIn.iPos=0;              /* places the cursor at the origin */
@@ -263,9 +263,9 @@ int Dos9_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 		         lpAbsPath
 		        );               /* sets input to given file */
 
-		Dos9_SetLocalVar(lpvTmpArgs, '0', lpFile);
+		Dos9_SetLocalVar(lpvTmpArgs, '0', lpAbsPath);
 
-	} else if (Dos9_JumpToLabel(lpLabel, lpFile)== -1) {
+	} else if (Dos9_JumpToLabel(lpLabel, lpFile ? lpAbsPath : NULL)== -1) {
 
 		Dos9_ShowErrorMessage(DOS9_LABEL_ERROR, lpLabel, FALSE);
 		goto error;

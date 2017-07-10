@@ -113,9 +113,9 @@ int main(int argc, char *argv[])
 
     /* Set the error handler called on errors that require the process to exit */
     pErrorHandler=Dos9_Exit;
-    pErrorHandler=Dos9_Exit;
 
-    /* atexit(Dos9_Exit); */
+    /* duplicate std streams */
+    Dos9_DuplicateStdStreams();
 
     /* Process the command line, and set the appropriate special variables for
      * special parameters. (note %0 is set when the absolute path of the script
@@ -124,9 +124,6 @@ int main(int argc, char *argv[])
 
     /* Initialize stdlib random */
     srand(time(NULL));
-
-    /* Set the default terminal color */
-    colColor=DOS9_COLOR_DEFAULT;
 
     /* Set the console title depending on the type of actions performed (ie.
      * command prompt or batch interpretor) and set the DOS9_IS_SCRIPT var

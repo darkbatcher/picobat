@@ -33,10 +33,133 @@
 
 #ifndef WIN32
 #define TEST_ABSOLUTE_PATH(p) (*p == '/')
+#define DEF_DELIMITER "/"
 #elif defined WIN32
-#define TEST_ABSOLUTE_PATH(p) (*p && *(p+1)==':' && (*(p+2)=='\\' || *(p+2)=='/'))
+#define TEST_ABSOLUTE_PATH(p) ((*p && *(p+1)==':' && (*(p+2)=='\\' || *(p+2)=='/')) || (*p == '/'))
+#define DEF_DELIMITER "\\"
 #endif // _POSIX_C_SOURCE
 
+int Dos9_GetFileFullPath(char* full, const char* partial, size_t size)
+{
+    if (TEST_ABSOLUTE_PATH(partial)) {
+
+#ifdef WIN32
+        if (*partial == '/') {
+            snprintf(full, size, "%c:\\%s", *lpCurrentDir, partial + 1);
+
+            if (!Dos9_FileExists(full))
+                return -1;
+        }
+#endif // WIN32
+
+        if (!Dos9_FileExists(partial))
+            return -1;
+
+        strncpy(full, partial, size);
+        full[size - 1] = '\0';
+
+        return 0;
+    }
+
+    snprintf(full, size, "%s" DEF_DELIMITER "%s", lpCurrentDir, partial);
+
+    if (!Dos9_FileExists(full))
+        return -1;
+
+    return 0;
+}
+
+void __inline__ Dos9_MakeFullPath(char* full, const char* partial, size_t size)
+{
+    if (TEST_ABSOLUTE_PATH(partial)) {
+
+#ifdef WIN32
+        if (*partial == '/') {
+            snprintf(full, size, "%c:\\%s", *lpCurrentDir, partial + 1);
+            return;
+        }
+#endif // WIN32
+        strncpy(full, partial, size);
+        full[size - 1] = '\0';
+        return;
+    }
+
+    snprintf(full, size, "%s" DEF_DELIMITER "%s", lpCurrentDir, partial);
+}
+
+void __inline__ Dos9_MakeFullPathEs(ESTR* full, const char* partial)
+{
+    char begin[] = "c:/";
+
+    if (TEST_ABSOLUTE_PATH(partial)) {
+
+#ifdef WIN32
+        if (*partial == '/') {
+
+            begin[0] = *lpCurrentDir;
+            Dos9_EsCpy(full, begin);
+            Dos9_EsCat(full, partial + 1);
+            return;
+
+        }
+#endif // WIN32
+
+        Dos9_EsCpy(full, partial);
+        return;
+    }
+
+    Dos9_EsCpy(full, lpCurrentDir);
+    Dos9_EsCat(full, DEF_DELIMITER);
+    Dos9_EsCat(full, partial);
+}
+
+__inline__ char* Dos9_FullPathDup(const char* path)
+{
+    char *ret;
+    size_t needed = strlen(path) + 1;
+
+    if (TEST_ABSOLUTE_PATH(path)) {
+        /* this is already absolute */
+
+#ifdef WIN32
+        if (*path == '/') {
+            ret = malloc(2 + needed);
+
+            if (!ret)
+                return NULL;
+
+            *ret = *lpCurrentDir;
+            *(ret + 1) = ':';
+            strcat(ret, path);
+
+            return ret;
+        }
+#endif // WIN32
+
+        ret = malloc(needed);
+
+        if (!ret)
+            return NULL;
+
+        strcpy(ret, path);
+        return 0;
+
+    } else {
+        /* this has to be converted to absolute */
+        needed += strlen(lpCurrentDir) + 1;
+
+        ret = malloc(needed);
+
+        if (!ret)
+            return NULL;
+
+        strcpy(ret, lpCurrentDir);
+        strcat(ret, DEF_DELIMITER);
+        strcat(ret, path);
+
+        return ret;
+    }
+}
 
 int Dos9_GetFilePath(char* lpFullPath, const char* lpPartial, size_t iBufSize)
 {
@@ -46,7 +169,7 @@ int Dos9_GetFilePath(char* lpFullPath, const char* lpPartial, size_t iBufSize)
 
 	char *lpPathToken=Dos9_GetEnv(lpeEnv, "PATH");
 
-	int   bFirstLoop=TRUE;
+	int   bFirstLoop=TRUE, bLoop=TRUE;
 
 #ifdef WIN32
 
@@ -58,23 +181,10 @@ int Dos9_GetFilePath(char* lpFullPath, const char* lpPartial, size_t iBufSize)
 
 	if (TEST_ABSOLUTE_PATH(lpPartial)) {
 		/* if the path is already absolute */
+        bLoop = FALSE;
 
-		DOS9_DBG("[Dos9_GetFilePath()]*** Path is absolute");
-
-		if (!Dos9_FileExists(lpPartial)) {
-            bFirstLoop = FALSE;
-			goto next;
-		}
-
-		strncpy(lpFullPath, lpPartial, iBufSize);
-		lpFullPath[iBufSize-1] = '\0';
-
-        Dos9_EsFree(lpEsTmp);
-        Dos9_EsFree(lpEsFinalPath);
-        Dos9_EsFree(lpEsPart);
-
-		return 0;
 	}
+
 	DOS9_DBG("[Dos9_GetFilePath()]*** Start research of file : \"%s\"\n\n", lpPartial);
 
 next:
@@ -82,7 +192,7 @@ next:
 
 		if (bFirstLoop) {
 
-			Dos9_MakePath(lpEsTmp, 2, Dos9_GetCurrentDir(), lpPartial);
+			Dos9_MakeFullPathEs(lpEsTmp, lpPartial);
 			bFirstLoop=FALSE;
 
 		} else {
@@ -139,7 +249,8 @@ next:
 			break;
 
 
-	} while ((lpPathToken=Dos9_GetPathNextPart(lpPathToken, lpEsPart)));
+	} while ((lpPathToken=Dos9_GetPathNextPart(lpPathToken, lpEsPart))
+          && bLoop);
 
 	Dos9_EsFree(lpEsPart);
 	Dos9_EsFree(lpEsTmp);
@@ -218,7 +329,7 @@ int Dos9_MakePath(ESTR* lpReturn, int nOps, ...)
 			/* if there are no dir terminating characters and still
 			   arguments, just cat a '/' */
 
-			Dos9_EsCat(lpReturn, "/");
+			Dos9_EsCat(lpReturn, DEF_DELIMITER);
 
 		}
 

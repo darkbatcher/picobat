@@ -150,7 +150,7 @@ int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
 	if (!stricmp(lpNameCpy, "CD")) {
 
         /* requested current dir */
-        lpVarContent=Dos9_GetCurrentDir();
+        lpVarContent=lpCurrentDir;
 
 	} else if (!(stricmp(lpNameCpy, "RANDOM"))) {
 
@@ -579,4 +579,41 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 	}
 
 	return lpName+1;
+}
+
+LOCAL_VAR_BLOCK* Dos9_DuplicateLocalVar(LOCAL_VAR_BLOCK* block)
+{
+    LOCAL_VAR_BLOCK* new;
+    int i;
+
+    if ((new = Dos9_GetLocalBlock()) == NULL)
+        Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION
+                              | DOS9_PRINT_C_ERROR,
+                              __FILE__ "/Dos9_DuplicateLocalVar", -1);
+
+
+    while (i < LOCAL_VAR_BLOCK_SIZE) {
+
+        if (block[i]
+            && (new[i] = strdup(block[i])) == NULL)
+            Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION
+                              | DOS9_PRINT_C_ERROR,
+                              __FILE__ "/Dos9_DuplicateLocalVar", -1);
+
+
+        i++;
+    }
+
+    return new;
+}
+
+void Dos9_FreeLocalBlock(LOCAL_VAR_BLOCK* local)
+{
+    int i;
+
+    for (i = 0x21; i < 0x80; i++)
+        if (local[i])
+            free(local[i]);
+
+    free(local);
 }

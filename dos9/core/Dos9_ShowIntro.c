@@ -77,7 +77,7 @@ void Dos9_PrintIntroduction(void)
 
 	Dos9_SetConsoleTextColor(DOS9_BACKGROUND_IBLUE | DOS9_FOREGROUND_IYELLOW);
 
-	fprintf(stderr, "  ______   _______  _______   _____                                            \n\
+	fprintf(fError, "  ______   _______  _______   _____                                            \n\
  (  __  \\ (  ___  )(  ____ \\ / ___ \\  %s\n\
  | (  \\  )| (   ) || (    \\/( (   ) ) Copyright (c) 2010-" DOS9_BUILDYEAR "                  \n\
  | |   ) || |   | || (_____ ( (___) |    %s\n\
@@ -90,5 +90,5 @@ void Dos9_PrintIntroduction(void)
 	       lpAuth
 	      );
 	Dos9_SetConsoleTextColor(DOS9_COLOR_DEFAULT);
-	printf("\n");
+	fprintf(fError, "\n");
 }

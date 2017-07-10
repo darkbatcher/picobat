@@ -341,6 +341,7 @@ LIBDOS9 LPCOMMANDLIST   Dos9_DuplicateCommandList(LPCOMMANDLIST lpclList)
         strcpy(lpclRet->ptrCommandName, lpclList->ptrCommandName);
 
         lpclRet->cfFlag = lpclList->cfFlag;
+        lpclRet->iLenght = lpclList->iLenght;
 
         if (lpclRet->cfFlag & DOS9_ALIAS_FLAG) {
 

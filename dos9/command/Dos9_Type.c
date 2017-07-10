@@ -55,7 +55,7 @@ void Dos9_TypeFileF(FILE* pFile)
     size_t size;
 
     while (size = fread(buf, 1, sizeof(buf), pFile))
-        fwrite(buf, 1, size, stdout);
+        fwrite(buf, 1, size, fOutput);
 
     if (isatty(fileno(pFile)))
         clearerr(pFile);
@@ -78,7 +78,7 @@ void Dos9_TypeFile(char* lpFileName)
     }
 
     while (size = fread(buf, 1, sizeof(buf), pFile))
-        fwrite(buf, 1, size, stdout);
+        fwrite(buf, 1, size, fOutput);
 
 end:
     if (pFile)
@@ -96,10 +96,12 @@ int Dos9_CmdType(char* lpLine)
     int status=0;
     char buf[8192];
 
+    fprintf(stderr, "Running \"%s\"\n", lpLine);
+
     lpLine += 4;
 
     /* adjust buffering size to get maximum performances */
-    setvbuf(stdout, buf, _IOFBF, sizeof(buf));
+    setvbuf(fOutput, buf, _IOFBF, sizeof(buf));
 
     while ((lpLine = Dos9_GetNextParameterEs(lpLine, lpEsParam))) {
 
@@ -139,61 +141,62 @@ int Dos9_CmdType(char* lpLine)
 
     if (pTmp == NULL) {
         /* If the command has no parameter */
-        Dos9_TypeFileF(stdin);
-    }
-
-    /* split directories from input */
-    Dos9_AttributesSplitFileList(DOS9_ATTR_NO_DIR,
-                                    pBegin,
-                                    &pBegin,
-                                    &pTmp
-                                    );
-
-    if (pTmp)
-        Dos9_FreeFileList(pTmp);
-
-    pEnd = pBegin;
-
-    while (pEnd && pEnd->lpflNext)
-        pEnd = pEnd->lpflNext;
-
-    if (!pBegin) {
-
-        Dos9_ShowErrorMessage(DOS9_NO_VALID_FILE,
-                                "TYPE",
-                                FALSE
-                                );
-
-        status = -1;
-        goto end;
-
-    }
-
-    if (pEnd == pBegin) {
-
-        /* only one file matching */
-        Dos9_TypeFile(pBegin->lpFileName);
+        Dos9_TypeFileF(fInput);
 
     } else {
 
-        /* several files matching */
-        pTmp = pBegin;
+        /* split directories from input */
+        Dos9_AttributesSplitFileList(DOS9_ATTR_NO_DIR,
+                                        pBegin,
+                                        &pBegin,
+                                        &pTmp
+                                        );
 
-        while (pTmp) {
-            fprintf(stderr, "---------- %s" DOS9_NL , pTmp->lpFileName);
+        if (pTmp)
+            Dos9_FreeFileList(pTmp);
 
-            Dos9_TypeFile(pTmp->lpFileName);
+        pEnd = pBegin;
 
-            pTmp = pTmp->lpflNext;
+        while (pEnd && pEnd->lpflNext)
+            pEnd = pEnd->lpflNext;
+
+        if (!pBegin) {
+
+            Dos9_ShowErrorMessage(DOS9_NO_VALID_FILE,
+                                    "TYPE",
+                                    FALSE
+                                    );
+
+            status = -1;
+            goto end;
 
         }
 
-    }
+        if (pEnd == pBegin) {
 
+            /* only one file matching */
+            Dos9_TypeFile(pBegin->lpFileName);
+
+        } else {
+
+            /* several files matching */
+            pTmp = pBegin;
+
+            while (pTmp) {
+                fprintf(fOutput, "---------- %s" DOS9_NL , pTmp->lpFileName);
+
+                Dos9_TypeFile(pTmp->lpFileName);
+
+                pTmp = pTmp->lpflNext;
+
+            }
+
+        }
+    }
 end:
 
-    fflush(stdout);
-    setvbuf(stdout, NULL, _IONBF, 0);
+    fflush(fOutput);
+    setvbuf(fOutput, NULL, _IONBF, 0);
 
     if (pBegin)
         Dos9_FreeFileList(pBegin);

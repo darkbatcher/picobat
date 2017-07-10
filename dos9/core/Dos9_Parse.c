@@ -191,7 +191,7 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 
 			}
 
-			if (!(lppssStart->lpOutputFile=strdup(Dos9_EsToChar(lpesParam)))) {
+			if (!(lppssStart->lpOutputFile=Dos9_FullPathDup(Dos9_EsToChar(lpesParam)))) {
 
 				Dos9_FreeLine(lppssStart);
 
@@ -230,7 +230,7 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 
 			}
 
-			if (!(lppssStart->lpInputFile=strdup(Dos9_EsToChar(lpesParam)))) {
+			if (!(lppssStart->lpInputFile=Dos9_FullPathDup(Dos9_EsToChar(lpesParam)))) {
 
 				Dos9_FreeLine(lppssStart);
 

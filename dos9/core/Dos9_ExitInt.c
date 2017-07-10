@@ -32,11 +32,9 @@ void Dos9_Exit(void)
 	Dos9_FreeLocalBlock(lpvArguments);
 	Dos9_EnvFree(lpeEnv);
 
-	if (iInputD)
-		close(iInputD);
+    /* Dos9_WaitForAllThreads(); */
 
-	if (iOutputD)
-		close(iOutputD);
-
-    Dos9_WaitForAllThreads();
+    fclose(fInput);
+    fclose(fOutput);
+    fclose(fError);
 }

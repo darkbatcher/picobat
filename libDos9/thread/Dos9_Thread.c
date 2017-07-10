@@ -26,20 +26,7 @@
 #include "../libDos9.h"
 #include "../libDos9-int.h"
 
-
-STACK* _lpcsThreadStack=NULL;
-
-/* do not initialize this, because it might be an
-   implicit data structure
- */
-MUTEX _threadStack_Mutex;
-
 int _Dos9_Thread_Init(void) {
-
-    _lpcsThreadStack=NULL;
-
-    return Dos9_CreateMutex(&_threadStack_Mutex);
-
 }
 
 #ifndef WIN32
@@ -50,12 +37,6 @@ int _Dos9_Thread_Init(void) {
    interfaces, then, use it */
 
 void _Dos9_Thread_Close(void) {
-
-    pthread_t *lpThId;
-
-    Dos9_ClearStack(_lpcsThreadStack, free);
-
-    Dos9_CloseMutex(&_threadStack_Mutex);
 }
 
 
@@ -65,7 +46,6 @@ void _Dos9_Thread_Close(void) {
 int Dos9_BeginThread(THREAD* lpThId, void(*lpFunction)(void*) , int iMemAmount, void* lpArgList)
 {
     int            iRet;
-    pthread_t     *lpTh2;
     pthread_attr_t attr;
 
     pthread_attr_init(&attr);
@@ -75,38 +55,6 @@ int Dos9_BeginThread(THREAD* lpThId, void(*lpFunction)(void*) , int iMemAmount, 
                         (void* (*)(void*))lpFunction,
                         (void*)lpArgList);
 
-    if (iRet==0) {
-
-        if (!(lpTh2=malloc(sizeof(pthread_t))))
-            return -1;
-
-        /* duplicate the pthread_t structure */
-        memcpy(lpTh2, lpThId, sizeof(pthread_t));
-
-        Dos9_LockMutex(&_threadStack_Mutex);
-
-        /* push the pthread_t structure on the stack */
-        _lpcsThreadStack=Dos9_PushStack(_lpcsThreadStack,
-                                         lpTh2
-                                         );
-
-        Dos9_ReleaseMutex(&_threadStack_Mutex);
-
-    }
-
-    #ifndef LIBDOS9_THREAD_SILENT
-
-    if (iRet) {
-
-        fprintf(stderr,
-                "[libDos9/Dos9_BeginThread()] Error: %s\n",
-                strerror(errno));
-
-
-    }
-
-    #endif
-
     pthread_attr_destroy(&attr);
 
     return iRet;
@@ -114,63 +62,7 @@ int Dos9_BeginThread(THREAD* lpThId, void(*lpFunction)(void*) , int iMemAmount, 
 
 LIBDOS9 void Dos9_AbortThread(THREAD* thSelfId)
 {
-
-    /* aborts the given thread */
-    pthread_t *thId;
-
-    STACK    *lpThreadStack,
-             *lpLastThreadStack=NULL;
-
-    /* lock the mutex to acces to
-       the thread stack */
-
-    Dos9_LockMutex(&_threadStack_Mutex);
-
-    lpThreadStack=_lpcsThreadStack;
-    lpLastThreadStack=NULL;
-
-    /* picks the stack element that matche
-       curent thread pthread_t structure */
-    while (lpThreadStack) {
-
-        /* gets the value from the stack */
-        Dos9_GetStack(lpThreadStack, (void**)&thId);
-
-        if (pthread_equal(*thId, *thSelfId)) {
-            /* both threads are the same */
-
-            if (lpLastThreadStack) {
-
-                lpLastThreadStack->lpcsPrevious=
-                    lpThreadStack->lpcsPrevious;
-
-                free(lpThreadStack);
-
-            } else {
-
-                _lpcsThreadStack=
-                    Dos9_PopStack(_lpcsThreadStack, free);
-
-            }
-
-            /* don't free anything because things are freed by
-               the if */
-
-            break;
-
-        }
-
-        /* if we hav'nt found anything, dig deeper
-           into the stack */
-        lpLastThreadStack=lpThreadStack;
-        lpThreadStack=lpThreadStack->lpcsPrevious;
-
-    }
-
-    Dos9_ReleaseMutex(&_threadStack_Mutex);
-
     pthread_cancel(*thSelfId);
-
 }
 
 /*
@@ -178,66 +70,6 @@ LIBDOS9 void Dos9_AbortThread(THREAD* thSelfId)
  */
 LIBDOS9 void     Dos9_EndThread(void* iReturn)
 {
-    /* ends the current thread */
-    pthread_t thSelfId,
-             *thId;
-
-    STACK    *lpThreadStack,
-             *lpLastThreadStack=NULL;
-
-    /* gets the current thread image */
-    thSelfId=pthread_self();
-
-    /* lock the mutex to acces to
-       the thread stack */
-
-    Dos9_LockMutex(&_threadStack_Mutex);
-
-    lpThreadStack=_lpcsThreadStack;
-    lpLastThreadStack=NULL;
-
-    /* picks the stack element that matche
-       curent thread pthread_t structure */
-    while (lpThreadStack) {
-
-        /* gets the value from the stack */
-        Dos9_GetStack(lpThreadStack, (void**)&thId);
-
-
-
-        if (pthread_equal(*thId, thSelfId)) {
-            /* both threads are the same */
-
-            if (lpLastThreadStack) {
-
-                lpLastThreadStack->lpcsPrevious=
-                    lpThreadStack->lpcsPrevious;
-
-                free(lpThreadStack);
-
-            } else {
-
-                _lpcsThreadStack=
-                    Dos9_PopStack(_lpcsThreadStack, free);
-
-            }
-
-            /* don't free anything because things are freed by
-               the if */
-
-            break;
-
-        }
-
-        /* if we hav'nt found anything, dig deeper
-           into the stack */
-        lpLastThreadStack=lpThreadStack;
-        lpThreadStack=lpThreadStack->lpcsPrevious;
-
-    }
-
-    Dos9_ReleaseMutex(&_threadStack_Mutex);
-
     pthread_exit(iReturn);
 }
 
@@ -261,507 +93,106 @@ LIBDOS9 int Dos9_CreateMutex(MUTEX* lpMuId)
     /* create the mutex */
     iRet=pthread_mutex_init(lpMuId, &attr);
 
-    #ifndef LIBDOS9_THREAD_SILENT
-
-    if (iRet) {
-
-        fprintf(stderr,
-                "[libDos9/Dos9_CreateMutex()] Error: %s\n",
-                strerror(errno));
-
-        exit(-1);
-
-    }
-
-    #endif
-
     pthread_mutexattr_destroy(&attr);
 
-
-
     return iRet;
-
 }
 
 LIBDOS9 int     Dos9_CloseMutex(MUTEX* lpMuId)
 {
-    int iRet;
-
-    iRet=pthread_mutex_destroy(lpMuId);
-
-    #ifndef LIBDOS9_THREAD_SILENT
-
-    if (iRet) {
-
-        fprintf(stderr,
-                "[libDos9/Dos9_CloseMutex()] Error: %s\n",
-                strerror(errno));
-
-        exit(-1);
-
-
-    }
-
-    #endif
-
-    return iRet;
+    return pthread_mutex_destroy(lpMuId);;
 }
 
 LIBDOS9 int     Dos9_LockMutex(MUTEX* lpMuId)
 {
-    int iRet;
-
-    iRet=pthread_mutex_lock(lpMuId);
-
-    #ifndef LIBDOS9_THREAD_SILENT
-
-    if (iRet) {
-
-        fprintf(stderr,
-                "[libDos9/Dos9_LockMutex()] Error: %s\n",
-                strerror(errno));
-
-        exit(-1);
-
-    }
-
-    #endif
-
-    return iRet;
-
+    return pthread_mutex_lock(lpMuId);
 }
 
 LIBDOS9 int     Dos9_ReleaseMutex(MUTEX* lpMuId)
 {
-    int iRet;
+    return pthread_mutex_unlock(lpMuId);
+}
 
-    iRet=pthread_mutex_unlock(lpMuId);
-
-    #ifndef LIBDOS9_THREAD_SILENT
-
-    if (iRet) {
-
-        fprintf(stderr,
-                "[libDos9/Dos9_ReleaseMutex()] Error: %s\n",
-                strerror(errno));
-
-
-        exit(-1);
-
-    }
-
-    #endif
-
-    return iRet;
-
+LIBDOS9 void     Dos9_CloseThread(THREAD* thId)
+{
+    pthread_detach(*thId);
 }
 
 #else
 
     #include <windows.h>
 
-    /* use the windows interface */
-
-struct threadstack_info {
-    THREAD id; /* thread identifier */
-    void* ret; /* thread return value (have to deal with WIN32 threads only
-                  able to return dword, fucks up everything with pointers) */
-};
-
 void _Dos9_Thread_Close(void)
 {
-    Dos9_LockMutex(&_threadStack_Mutex);
-
-    Dos9_ClearStack(_lpcsThreadStack, NULL);
-
-    Dos9_ReleaseMutex(&_threadStack_Mutex);
-
-    Dos9_CloseMutex(&_threadStack_Mutex);
-
 }
 
 LIBDOS9 int  Dos9_BeginThread(THREAD* lpThId, void(*pFunc)(void*), int iMemAmount, void* arg)
 {
-
-    HANDLE hThread;
-    struct threadstack_info* pInfo;
-
-    hThread=CreateThread(NULL,
+    *lpThId=CreateThread(NULL,
                          0,
                          (LPTHREAD_START_ROUTINE)pFunc,
                          (PVOID)arg,
                          0,
-                         lpThId
+                         NULL
                          );
 
-    #ifndef LIBDOS9_THREAD_SILENT
-
-    if (hThread==INVALID_HANDLE_VALUE) {
-
-        fprintf(stderr,
-                "[libDos9/Dos9_BeginThread()] Error: Unable to start thread : %d.\n",
-                (int)GetLastError()
-                );
-
-        exit(-1);
-
-    }
-
-    #endif
-
-    if (hThread!=INVALID_HANDLE_VALUE
-        && (pInfo = malloc(sizeof(struct threadstack_info)))) {
-
-        Dos9_LockMutex(&_threadStack_Mutex);
-
-        pInfo->id = *lpThId;
-        pInfo->ret = NULL;
-
-        _lpcsThreadStack=
-            Dos9_PushStack(_lpcsThreadStack,
-                           pInfo
-                           );
-
-
-        Dos9_ReleaseMutex(&_threadStack_Mutex);
-
-        CloseHandle(hThread);
-
+    if (*lpThId!=INVALID_HANDLE_VALUE)
         return 0;
-
-    }
 
     return -1;
 }
 
 LIBDOS9 void     Dos9_AbortThread(THREAD* lpThId)
 {
-
-    STACK *lpStackElement,
-          *lpLastStackElement;
-    size_t iCurrent=*lpThId;
-
-    struct threadstack_info* pInfo;
-
-    HANDLE hThread;
-
-    Dos9_LockMutex(&_threadStack_Mutex);
-
-    lpLastStackElement=NULL;
-    lpStackElement=_lpcsThreadStack;
-
-    while (lpStackElement) {
-
-        Dos9_GetStack(lpStackElement, &pInfo);
-
-        if (iCurrent == pInfo->id) {
-
-            if (lpLastStackElement) {
-
-                lpLastStackElement->lpcsPrevious=
-                    lpStackElement->lpcsPrevious;
-
-                free(pInfo);
-                free(lpStackElement);
-
-            } else {
-
-                _lpcsThreadStack=Dos9_PopStack(_lpcsThreadStack, free);
-
-            }
-
-            break;
-
-        }
-
-        lpLastStackElement=lpStackElement;
-        lpStackElement=lpStackElement->lpcsPrevious;
-
-    }
-
-    Dos9_ReleaseMutex(&_threadStack_Mutex);
-
-    hThread=OpenThread(THREAD_ALL_ACCESS,
-                       FALSE,
-                       *lpThId);
-
-    TerminateThread(hThread, 0);
-
-    CloseHandle(hThread);
+    TerminateThread(*lpThId, 0);
 }
 
 LIBDOS9 void     Dos9_EndThread(void* iReturn)
 {
-
-	//fprintf(stderr, "Ending thread !\n");
-
-    STACK *lpStackElement,
-          *lpLastStackElement;
-    size_t   iCurrent;
-
-    struct threadstack_info* pInfo;
-
-    iCurrent=(size_t)GetCurrentThreadId();
-
-    Dos9_LockMutex(&_threadStack_Mutex);
-
-    lpLastStackElement=NULL;
-    lpStackElement=_lpcsThreadStack;
-
-    while (lpStackElement) {
-
-        Dos9_GetStack(lpStackElement, &pInfo);
-
-        if (iCurrent == pInfo->id) {
-
-            pInfo->ret = iReturn;
-
-            break;
-
-        }
-
-        lpLastStackElement=lpStackElement;
-        lpStackElement=lpStackElement->lpcsPrevious;
-
-    }
-
-    Dos9_ReleaseMutex(&_threadStack_Mutex);
-
     ExitThread((DWORD)iReturn);
-
-    //fprintf(stderr, "Thread ended\n");
 }
 
 LIBDOS9 int      Dos9_WaitForThread(THREAD* thId, void** lpRet)
 {
-    int iRet;
-    HANDLE hThread;
-    struct threadstack_info* pInfo;
-
-    STACK *lpStackElement,
-          *lpLastStackElement;
-
-    hThread=OpenThread(THREAD_ALL_ACCESS,
-                       FALSE,
-                       *thId);
-
-    if (hThread==NULL)
-        return 0;
-
-    iRet=WaitForSingleObject(hThread, INFINITE);
-
-    #ifndef LIBDOS9_THREAD_SILENT
-
-    switch(iRet) {
-        case WAIT_ABANDONED:
-        case WAIT_TIMEOUT:
-            fprintf(stderr, "[libDos9/Dos9_WaitForThread()] Error : Unable to join the process.\n");
-            exit(-1);
-
-        case WAIT_FAILED:
-            fprintf(stderr, "[libDos9/Dos9_WaitForThread()] Error : Wait failed : %d", (int)GetLastError());
-            exit(-1);
-    }
-
-    #endif
-
-    if (iRet)
-        return iRet;
-
-    Dos9_LockMutex(&_threadStack_Mutex);
-
-    lpLastStackElement=NULL;
-    lpStackElement=_lpcsThreadStack;
-
-    while (lpStackElement) {
-
-        Dos9_GetStack(lpStackElement, &pInfo);
-
-        if (*thId == pInfo->id) {
-
-            *lpRet = pInfo->ret;
-
-            if (lpLastStackElement) {
-
-                lpLastStackElement->lpcsPrevious=
-                    lpStackElement->lpcsPrevious;
-
-                free(pInfo);
-                free(lpStackElement);
-
-            } else {
-
-                _lpcsThreadStack=Dos9_PopStack(_lpcsThreadStack, free);
-
-            }
-
-            break;
-
-        }
-
-        lpLastStackElement=lpStackElement;
-        lpStackElement=lpStackElement->lpcsPrevious;
-
-    }
-
-    Dos9_ReleaseMutex(&_threadStack_Mutex);
-
-    return iRet;
-
+    return !WaitForSingleObject(*thId, INFINITE);;
 }
 
 LIBDOS9 int      Dos9_CreateMutex(MUTEX* lpMuId)
 {
     *lpMuId=CreateMutex(NULL, FALSE, NULL);
 
-    #ifndef LIBDOS9_THREAD_SILENT
-
-    if (*lpMuId==NULL) {
-
-        fprintf(stderr,
-                "[libDos9/Dos9_CreateMutex()]Error : Unable create mutex object : %d",
-                (int)GetLastError()
-                );
-
-        exit(-1);
-    }
-
-    #endif
-
-    return (*lpMuId==NULL);
+    return (*lpMuId!=NULL);
 }
 
 LIBDOS9 int      Dos9_CloseMutex(MUTEX* lpMuId)
 {
     CloseHandle(*lpMuId);
-
     return 0;
 }
 
 LIBDOS9 int      Dos9_LockMutex(MUTEX* lpMuId)
 {
-    int iRet;
-
-    iRet=WaitForSingleObject(*lpMuId, INFINITE);
-
-    #ifndef LIBDOS9_THREAD_SILENT
-
-    switch(iRet) {
-        case WAIT_ABANDONED:
-        case WAIT_TIMEOUT:
-            fprintf(stderr, "[libDos9/Dos9_LockMutex()] Error : Unable to get mutex back.\n");
-            exit(-1);
-
-        case WAIT_FAILED:
-            fprintf(stderr,
-                    "[libDos9/Dos9_LockMutex()] Error : Try to get mutex "
-                    "failed : %d",
-                    (int)GetLastError()
-                   );
-
-            exit(-1);
-
-    }
-
-    #endif
-
-    return iRet;
+    return !WaitForSingleObject(*lpMuId, INFINITE);
 }
 
 LIBDOS9 int      Dos9_ReleaseMutex(MUTEX* lpMuId)
 {
-    int iRet;
+    return !ReleaseMutex(*lpMuId);
+}
 
-    iRet=ReleaseMutex(*lpMuId);
-
-    #ifndef LIBDOS9_THREAD_SILENT
-
-    if (iRet == 0) {
-
-            fprintf(stderr, "Error : Unable to release Mutex : %d\n", (int)GetLastError());
-            exit(-1);
-
-    }
-
-    #endif
-
-    return iRet;
-
+LIBDOS9 void     Dos9_CloseThread(THREAD* thId)
+{
+    CloseHandle(*thId);
 }
 
 #endif
 
 LIBDOS9 int      Dos9_WaitForAllThreads(void)
 {
-    THREAD thId;
-    #ifdef WIN32
-        struct threadstack_info* pInfo;
-    #endif // WIN32
-
-    int iContinue=TRUE,
-        iAttempt=0;
-
-    void* garbage;
-
-    do {
-
-        Dos9_LockMutex(&_threadStack_Mutex);
-
-        if (_lpcsThreadStack ==NULL) {
-
-            iContinue = FALSE;
-            break;
-
-        }
-
-        /* retrieve the next thread id */
-        #ifdef WIN32
-            Dos9_GetStack(_lpcsThreadStack, &pInfo);
-            thId = pInfo->id;
-        #else
-            Dos9_GetStack(_lpcsThreadStack, (void*)&thId);
-        #endif
-
-        Dos9_ReleaseMutex(&_threadStack_Mutex);
-
-        Dos9_WaitForThread(&thId, &garbage);
-
-    } while (iContinue);
-
     return 0;
 }
 
 LIBDOS9 void     Dos9_AbortAllThreads(void)
 {
-    THREAD thId;
-#ifdef WIN32
-    struct threadstack_info* pInfo;
-#endif // WIN32
-    int iContinue=TRUE;
-
-    while (iContinue) {
-
-        Dos9_LockMutex(&_threadStack_Mutex);
-
-        if (_lpcsThreadStack == NULL) {
-
-            iContinue=FALSE;
-            break;
-
-        }
-
-        /* retrieve the next thread id */
-        #ifdef WIN32
-            Dos9_GetStack(_lpcsThreadStack, &pInfo);
-            thId = pInfo->id;
-        #else
-            Dos9_GetStack(_lpcsThreadStack, (void*)&thId);
-        #endif
-
-        Dos9_ReleaseMutex(&_threadStack_Mutex);
-
-        Dos9_AbortThread(&thId);
-
-    }
 }
 

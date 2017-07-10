@@ -37,18 +37,25 @@
 #include <libDos9.h>
 #include "Dos9_Core.h"
 
+struct pipe_launch_data_t {
+    int fd;
+    ESTR* str;
+};
+
 /* applies redirections */
 int Dos9_ExecOutput(PARSED_STREAM_START* lppssStart);
+
+void Dos9_LaunchPipe(struct pipe_launch_data_t* infos);
 
 /* applies conditional operators */
 int Dos9_ExecOperators(PARSED_STREAM** lppsStream);
 
-int Dos9_RunCommand(ESTR* lpCommand); // the fucbtions that run every command
+int Dos9_RunCommand(ESTR* lpCommand); // the function that run every command
 int Dos9_RunLine(ESTR* lpLine);
 int Dos9_RunBlock(BLOCKINFO* lpbkInfo); // the function that run blocks
 int Dos9_RunBatch(INPUT_FILE* pIn); // the function that runs the batch
 int Dos9_RunExternalCommand(char* lpCommandLine, int* error);
-int Dos9_RunExternalFile(char* lpFileName, char** lpArguments);
+int Dos9_RunExternalFile(char* lpFileName, char* lpFullLine, char** lpArguments);
 
 int Dos9_RunExternalBatch(char* lpFileName, char* lpFullLine, char** lpArguments);
 

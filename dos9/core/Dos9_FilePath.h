@@ -31,6 +31,19 @@
 
 #endif
 
+#ifndef WIN32
+#define TEST_ABSOLUTE_PATH(p) (*p == '/')
+#define DEF_DELIMITER "/"
+#elif defined WIN32
+#define TEST_ABSOLUTE_PATH(p) ((*p && *(p+1)==':' && (*(p+2)=='\\' || *(p+2)=='/')) || (*p == '/'))
+#define DEF_DELIMITER "\\"
+#endif // _POSIX_C_SOURCE
+
+
+int     Dos9_GetFileFullPath(char* full, const char* partial, size_t size);
+void    Dos9_MakeFullPath(char* full, const char* partial, size_t size);
+void    Dos9_MakeFullPathEs(ESTR* full, const char* partial);
+char*   Dos9_FullPathDup(const char* path);
 int     Dos9_GetFilePath(char* lpFullPath, const char* lpPartial, size_t iBufSize);
 char*   Dos9_GetPathNextPart(char* lpPath, ESTR* lpReturn);
 int     Dos9_MakePath(ESTR* lpReturn, int nOps, ...);

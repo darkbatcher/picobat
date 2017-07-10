@@ -27,14 +27,13 @@ typedef struct ENVVAR {
                    it is not portable on most platforms through standard
                    libC calls */
     char* content; /* a pointer to the content of the variable */
-    int modif; /* set to 1 if the variable as been modified */
+    size_t size; /* size for elaborating blocks */
 } ENVVAR;
 
 /* definition of stucture that represent an environment buffer */
 typedef struct ENVBUF {
     int nb; /* number of elements of the environment buffer */
-    int index; /* the index of the last element actually used in the
-                  the environment buffer */
+    int index; /* number of used elements in the buffer */
     ENVVAR** envbuf; /* environment buffer */
 } ENVBUF;
 
@@ -52,6 +51,8 @@ ENVBUF* Dos9_EnvDup(ENVBUF* pBuf);
 char* Dos9_GetEnv(ENVBUF* pEnv, const char* name);
 void  Dos9_SetEnv(ENVBUF* pEnv, const char* name, const char* content);
 void  Dos9_UnSetEnv(ENVBUF* pEnv, const char* name);
+
+void* Dos9_GetEnvBlock(ENVBUF* pEnv, size_t *s);
 
 void Dos9_ApplyEnv(ENVBUF* pEnv);
 
