@@ -212,11 +212,9 @@ void Dos9_LaunchPipe(struct pipe_launch_data_t* infos)
     lppsStreamStack = Dos9_OpenOutputD(lppsStreamStack, infos->fd, DOS9_STDOUT);
     close(infos->fd);
 
-    fprintf( stderr, "[SECOND THREAD]Trying to run the command : \"%s\"\n", infos->str->str);
+    bIgnoreExit = TRUE;
 
     Dos9_RunCommand(infos->str);
-
-    fprintf(stderr, "Ok\n");
 
     Dos9_EsFree(infos->str);
 
@@ -629,15 +627,13 @@ int Dos9_RunExternalFile(char* lpFileName, char* lpFullLine, char** lpArguments)
     size_t size;
     size_t ret;
 
-    wchar_t *wenvblock,
-            *wfullline,
+    wchar_t *wfullline,
             *wfilename,
             *wcurrdir;
 
     envblock = Dos9_GetEnvBlock(lpeEnv, &size);
 
-    if (!(wenvblock = libcu8_xconvert(LIBCU8_TO_U16, envblock, size, &ret))
-        || !(wfullline = libcu8_xconvert(LIBCU8_TO_U16, lpFullLine,
+    if (!(wfullline = libcu8_xconvert(LIBCU8_TO_U16, lpFullLine,
                                             strlen(lpFullLine) + 1, &ret))
         || !(wfilename = libcu8_xconvert(LIBCU8_TO_U16, lpFileName,
                                             strlen(lpFileName) + 1, &ret))
@@ -666,7 +662,7 @@ int Dos9_RunExternalFile(char* lpFileName, char* lpFullLine, char** lpArguments)
                         NULL,
                         TRUE,
                         0,
-                        wenvblock,
+                        envblock,
                         wcurrdir,
                         &si,
                         &pi))
@@ -685,7 +681,6 @@ int Dos9_RunExternalFile(char* lpFileName, char* lpFullLine, char** lpArguments)
     CloseHandle(pi.hThread);
 
     free(envblock);
-    free(wenvblock);
     free(wfullline);
     free(wfilename);
     free(wcurrdir);
@@ -792,6 +787,7 @@ void Dos9_LaunchExternalBatch(struct batch_launch_data_t* arg)
 
     Dos9_SetLocalVar(lpvArguments, '0', arg->lpFileName);
 
+    bIgnoreExit = TRUE;
     bIsScript = 1; /* this is obviously a script */
 
     strncpy(ifIn.lpFileName, arg->lpFileName, sizeof(ifIn.lpFileName));

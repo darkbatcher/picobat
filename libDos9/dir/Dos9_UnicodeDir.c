@@ -40,6 +40,57 @@ struct match_args_t {
     void (*callback)(FILELIST*);
 };
 
+static void xwcsncat(wchar_t* restrict dest, wchar_t* restrict source, size_t size)
+{
+    /* skip first bytes */
+    while (*dest && size > 1) {
+        dest ++;
+        size --;
+    }
+
+    while (*source && size > 1) {
+        *dest = *source;
+        dest ++;
+        source ++;
+        size --;
+    }
+
+    *dest = '\0';
+}
+
+wchar_t* Dos9_GetNextLevel(wchar_t* up, int* jok)
+{
+    int joker = 0;
+    wchar_t* prev = NULL;
+
+    *jok = 0;
+
+    while (*up) {
+
+        switch (*up) {
+
+        case L'*':
+        case L'?':
+            joker = 1;
+            if (prev)
+                return prev;
+            *jok = 1;
+            break;
+
+        case L'/':
+        case L'\\':
+            if (joker)
+                return up;
+            prev = up;
+
+        }
+
+        up++;
+    }
+
+    return NULL;
+}
+
 static int __inline__ Dos9_FileExists_W(const wchar_t* ptrName)
 {
     int iAttrib;
@@ -143,7 +194,8 @@ static FILELIST* Dos9_AddMatch(wchar_t* wname, FILELIST* files, struct match_arg
     if ((file = malloc(sizeof(FILELIST))) == NULL)
         goto err;
 
-    snprintf(file->lpFileName, FILENAME_MAX, "%s", name);
+    strncpy(file->lpFileName, name, FILENAME_MAX);
+    file->lpFileName[FILENAME_MAX - 1] = '\0';
 
     /* if the program requested stat infos */
     if (!(arg->flags & DOS9_SEARCH_NO_STAT)) {
@@ -175,24 +227,25 @@ err:
     return NULL;
 }
 
-static FILELIST* Dos9_GetMatch(wchar_t* base, wchar_t* up, struct match_args_t* arg)
+static FILELIST* Dos9_GetMatch(wchar_t* restrict base, wchar_t* restrict up, struct match_args_t* arg)
 {
     FILELIST *ret = arg->files, *tmp;
 
     wchar_t path[FILENAME_MAX];
     wchar_t *item, *cleanup = NULL;
 
-    HANDLE dir;
+    HANDLE dir = INVALID_HANDLE_VALUE;
     WIN32_FIND_DATAW ent;
 
-    int loop;
+    int loop, joker;
 
     /* if something has already been found ... */
     if ((ret != (FILELIST*)-1) && (ret != NULL)
         && (arg->flags & DOS9_SEARCH_GET_FIRST_MATCH))
         return ret;
 
-    if (base == NULL) {
+    if (base == NULL
+        /* && Dos9_IsRegExpTrivial(up) */) {
         /* This is somewhat the top-level instance of Dos9_GetMatch ...*/
 
         if ((arg->flags &
@@ -254,8 +307,9 @@ static FILELIST* Dos9_GetMatch(wchar_t* base, wchar_t* up, struct match_args_t* 
     if (up == NULL) {
 
        item = L"*";
+       joker = 1;
 
-    } else if ((up = wcspbrk(up, L"\\/"))) {
+    } else if ((up = Dos9_GetNextLevel(up, &joker))) {
 
         cleanup = up;
         *cleanup = L'\0';
@@ -263,92 +317,103 @@ static FILELIST* Dos9_GetMatch(wchar_t* base, wchar_t* up, struct match_args_t* 
 
     }
 
-    /* Check if the item is trivial before really trying
-       to recurse in base folder ... */
-    if (base != NULL) {
+    if (!joker) {
+        /* Check if the item is trivial before really trying
+           to recurse in base folder ... */
+        if (base != NULL) {
 
-        snwprintf(path, XSIZE(path), L"%s\\%s", base, item);
-
-    } else {
-
-        snwprintf(path, XSIZE(path), L"%s", item);
-
-    }
-
-
-
-    if (Dos9_FileExists_W(path)) {
-        /* if path corresponds to a file (ie. not a dir), there is two
-           possibilities (a) up is NULL and then the files matches since
-           we already reached top level, or (b) up is not NULL and then
-           the file cannot match and it is wise to stop search in this
-           folder */
-        if (up == NULL) {
-
-            if ((tmp = Dos9_AddMatch(path, ret, arg, NULL)) == NULL)
-                goto err;
-
-            ret = tmp;
-            goto end;
+            wcsncpy(path, base, XSIZE(path));
+            xwcsncat(path, L"\\", XSIZE(path));
+            xwcsncat(path, item, XSIZE(path));
 
         } else {
 
-            /*abort search */
-            goto end;
+            wcsncpy(path, item, XSIZE(path));
+            path[XSIZE(path) - 1] = '\0';
 
         }
-    }
 
-    if (Dos9_DirExists_W(path)) {
-        /* if path corresponds to a dir, always continue search. But path
-           is not necessarily to be added to results... ! */
 
-        if (up == NULL) {
 
-            /* add the file and browse if recursive. If the returns uses
-               callback, do not forget to add match first. */
-            if (arg->callback != NULL) {
+        if (Dos9_FileExists_W(path)) {
+            /* if path corresponds to a file (ie. not a dir), there is two
+               possibilities (a) up is NULL and then the files matches since
+               we already reached top level, or (b) up is not NULL and then
+               the file cannot match and it is wise to stop search in this
+               folder */
+            if (up == NULL) {
+
                 if ((tmp = Dos9_AddMatch(path, ret, arg, NULL)) == NULL)
                     goto err;
 
                 ret = tmp;
+                goto end;
+
+            } else {
+
+                /*abort search */
+                goto end;
+
             }
+        }
 
-            if (arg->flags & DOS9_SEARCH_RECURSIVE) {
+        if (Dos9_DirExists_W(path)) {
+            /* if path corresponds to a dir, always continue search. But path
+               is not necessarily to be added to results... ! */
 
+            if (up == NULL) {
+
+                /* add the file and browse if recursive. If the returns uses
+                   callback, do not forget to add match first. */
+                if (arg->callback != NULL) {
+                    if ((tmp = Dos9_AddMatch(path, ret, arg, NULL)) == NULL)
+                        goto err;
+
+                    ret = tmp;
+                }
+
+                if (arg->flags & DOS9_SEARCH_RECURSIVE) {
+
+                    arg->files = ret;
+                    ret = Dos9_GetMatch(path, up, arg);
+
+                }
+
+                if (arg->callback == NULL) {
+                    if ((tmp = Dos9_AddMatch(path, ret, arg, NULL)) == NULL)
+                        goto err;
+
+                    ret = tmp;
+                }
+
+            } else {
+
+                /* always browse */
                 arg->files = ret;
                 ret = Dos9_GetMatch(path, up, arg);
 
             }
 
-            if (arg->callback == NULL) {
-                if ((tmp = Dos9_AddMatch(path, ret, arg, NULL)) == NULL)
-                    goto err;
-
-                ret = tmp;
-            }
-
-        } else {
-
-            /* always browse */
-            arg->files = ret;
-            ret = Dos9_GetMatch(path, up, arg);
+            goto end;
 
         }
 
+
+        /* path->str is trivial but it is neither a dir or a file... We can
+           be sure we won't get any matching file */
         goto end;
 
     }
 
-    /* path->str is trivial but it is neither a dir or a file... We can
-       be sure we won't get any matching file */
-    if (Dos9_IsRegExpTrivial(path))
-        goto end;
-
     if (base != NULL) {
-        snwprintf(path, XSIZE(path), L"%s\\*", base);
+
+        wcsncpy(path, base, XSIZE(path));
+        xwcsncat(path, L"\\*", XSIZE(path));
+
     } else {
-        snwprintf(path, XSIZE(path), L"*");
+
+        *path = L'*';
+        *(path + 1) = L'\0';
     }
 
 
@@ -369,12 +434,19 @@ static FILELIST* Dos9_GetMatch(wchar_t* base, wchar_t* up, struct match_args_t* 
 
         /* Compute the path of the current matching entity */
         if (base != NULL) {
-            snwprintf(path, XSIZE(path), L"%s\\%s", base, ent.cFileName);
+
+            wcsncpy(path, base, XSIZE(path));
+            xwcsncat(path, L"\\", XSIZE(path));
+            xwcsncat(path, ent.cFileName, XSIZE(path));
+
         } else {
-            snwprintf(path, XSIZE(path), L"%s", ent.cFileName);
+
+            wcsncpy(path, ent.cFileName, XSIZE(path));
+            path[XSIZE(path) - 1] = '\0';
+
         }
 
-        if (Dos9_FileExists_W(path)
+        if (!(ent.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
             && PathMatchSpecW(ent.cFileName, item)) {
             /* The entity is a file, so only add if up is NULL */
 

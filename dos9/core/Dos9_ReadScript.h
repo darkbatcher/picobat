@@ -92,4 +92,8 @@ void Dos9_FreeLabels(struct labels_t* labels);
 /* Free cmdlines */
 void Dos9_FreeCmdlines(struct cmdlines_t* cmdlines);
 
+size_t Dos9_GetScriptSize(struct batch_script_t* script, int* restrict err);
+
+char* xstrdup(const char* str);
+
 #endif // DOS9_READSCRIPT_H

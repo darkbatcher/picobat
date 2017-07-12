@@ -56,4 +56,7 @@ char*            Dos9_GetLocalVarPointer(LOCAL_VAR_BLOCK* lpvBlock, char cVarNam
 LOCAL_VAR_BLOCK* Dos9_DuplicateLocalVar(LOCAL_VAR_BLOCK* local);
 void             Dos9_FreeLocalBlock(LOCAL_VAR_BLOCK* local);
 
+char* Dos9_SkipU8Chars(char* ch, size_t cnt);
+size_t Dos9_CountU8Chars(const char* ch);
+
 #endif

@@ -237,7 +237,7 @@ void Dos9_InitHelp(void)
 char* Dos9_GetParameters(char** argv, char** lpFileName, int* bExitAfterCmd, int*
                             bQuiet)
 {
-    int i, c, j, bGetSwitch = 1;
+    int i, c = '0', j, bGetSwitch = 1;
     //int iInputD, iOutputD;
     char* lpCmdCSwitch = NULL;
 

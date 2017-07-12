@@ -46,6 +46,7 @@ MUTEX mDuppedStream;
 __thread int bDelayedExpansion=FALSE;
 __thread int bUseFloats=FALSE;
 __thread int bEchoOn=TRUE;
+__thread int bIgnoreExit=FALSE;
 __thread int iErrorLevel=0;
 __thread int bIsScript;
 __thread int bCmdlyCorrect=FALSE;

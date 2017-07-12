@@ -140,11 +140,14 @@ int Dos9_GetLine_Cmdly(ESTR* lpesLine, INPUT_FILE* pIn)
 		/* split comments label and void lines from input */
 		if (*lpCh==':' || *lpCh=='\0' || *lpCh=='\n') {
 
-            if (pFile != fInput)
-                continue;
+            if (*(lpesLine->str) == '\0') {
 
-            bCorrectBlocks=TRUE;
-            break;
+                bCorrectBlocks=TRUE;
+                break;
+
+            }
+
+            continue;
 		}
 
         /* the read line should *definitely* end with a '\n' (in

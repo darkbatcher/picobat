@@ -39,7 +39,7 @@
 #define DEF_DELIMITER "\\"
 #endif // _POSIX_C_SOURCE
 
-
+char*   Dos9_EsToFullPath(ESTR* full);
 int     Dos9_GetFileFullPath(char* full, const char* partial, size_t size);
 void    Dos9_MakeFullPath(char* full, const char* partial, size_t size);
 void    Dos9_MakeFullPathEs(ESTR* full, const char* partial);

@@ -303,6 +303,6 @@ __LIBCU8__IMP __cdecl int libcu8_stat64i32(const char* file,
 
 ****************************************************************************
  */
-void __inline__ libcu8_manage_std_files(int file, void* handle);
+void libcu8_manage_std_files(int file, void* handle);
 
 #endif // INTERNALS_H

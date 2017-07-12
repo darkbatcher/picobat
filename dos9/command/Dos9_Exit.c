@@ -86,6 +86,12 @@ int Dos9_CmdExit(char* lpLine)
 		}
 	}
 
-	exit(ret);
+    Dos9_Exit();
+
+	if (bIgnoreExit)
+        Dos9_EndThread(ret);
+    else
+        exit(ret);
+
 	return 0;
 }

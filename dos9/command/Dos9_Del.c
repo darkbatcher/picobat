@@ -147,7 +147,7 @@ int Dos9_CmdDel(char* lpLine)
 
             }
 
-            if ((name[n] = strdup(lpToken)) == NULL) {
+            if ((name[n] = Dos9_FullPathDup(lpToken)) == NULL) {
 
                 Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION,
                                         __FILE__ "/Dos9_CmdDel()", 0);

@@ -113,6 +113,61 @@ void __inline__ Dos9_MakeFullPathEs(ESTR* full, const char* partial)
     Dos9_EsCat(full, partial);
 }
 
+__inline__ char* Dos9_EsToFullPath(ESTR* full)
+{
+    size_t len, size;
+    char* p = TRANS(full->str);
+
+    if (TEST_ABSOLUTE_PATH(p)) {
+
+#ifdef WIN32
+        if (*(full->str) == '/') {
+            /* we need at least two more bytes */
+            len = strlen(p) + 1;
+
+            if (len + 2 > full->len) {
+                full->len *= 2;
+
+                if (!(full->str = realloc(full->str, full->len)))
+                    Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION |
+                                            DOS9_PRINT_C_ERROR,
+                                            __FILE__ "/Dos9_EsToFullPath()",
+                                            -1);
+
+            }
+
+            memmove(full->str + 2, p, len);
+            *(full->str) = *lpCurrentDir;
+            *(full->str) = ':';
+
+        }
+#endif // WIN32
+
+        /* do nothing */
+        return full->str;
+    }
+
+    /* need to cat with a lpCurrentDir */
+    len = strlen(p) + 1;
+    size = strlen(lpCurrentDir);
+
+    if (len + size + 1 > full->len) {
+        full->len *= (((len + size + 1 ) / (full->len)) + 1);
+
+        if (!(full->str = realloc(full->str, full->len)))
+                    Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION |
+                                            DOS9_PRINT_C_ERROR,
+                                            __FILE__ "/Dos9_EsToFullPath()",
+                                            -1);
+    }
+
+    memmove(full->str + size + 1, p, len);
+    memcpy(full->str, lpCurrentDir, size);
+    *(full->str + size) = '/';
+
+    return full->str;
+}
+
 __inline__ char* Dos9_FullPathDup(const char* path)
 {
     char *ret;
@@ -142,7 +197,7 @@ __inline__ char* Dos9_FullPathDup(const char* path)
             return NULL;
 
         strcpy(ret, path);
-        return 0;
+        return ret;
 
     } else {
         /* this has to be converted to absolute */

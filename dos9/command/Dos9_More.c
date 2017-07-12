@@ -52,6 +52,7 @@ int Dos9_CmdMore(char* line)
 
     char *ret,
          *ptr;
+    char name[FILENAME_MAX];
 
     line +=4;
 
@@ -124,10 +125,9 @@ int Dos9_CmdMore(char* line)
             }
 
         } else {
-
             /* this is a file name */
 
-            if (!(next = Dos9_GetMatchFileList(Dos9_EsToChar(param), 0))) {
+            if (!(next = Dos9_GetMatchFileList(Dos9_EsToFullPath(param), 0))) {
 
                 Dos9_ShowErrorMessage(DOS9_NO_MATCH,
                                         Dos9_EsToChar(param),

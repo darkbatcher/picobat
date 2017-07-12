@@ -135,7 +135,7 @@ int Dos9_CmdRmdir(char* lpLine)
 
             }
 
-            if ((name[n] = strdup(lpEstr->str)) == NULL) {
+            if ((name[n] = Dos9_FullPathDup(lpEstr->str)) == NULL) {
 
                 Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION,
                                                 __FILE__ "/Dos9_CmdRmdir()", 0);

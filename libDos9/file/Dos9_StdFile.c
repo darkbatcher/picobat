@@ -75,13 +75,13 @@ int Dos9_GetExePath(char* lpBuf, size_t iBufSize)
 
         snprintf(lpBuf, iBufSize, BINARY_PATH);
 
+    #endif
+
     return 0;
 }
 
 int Dos9_DirExists(const char *ptrName)
 {
-    #endif
-
     struct stat sStat;
 
     if (stat(ptrName, &sStat)==-1)

@@ -114,7 +114,7 @@ int Dos9_CmdType(char* lpLine)
         } else  {
 
             /* Get a list of files that matches the argument */
-            if (!(pTmp = Dos9_GetMatchFileList(Dos9_EsToChar(lpEsParam),
+            if (!(pTmp = Dos9_GetMatchFileList(Dos9_EsToFullPath(lpEsParam),
                                                     DOS9_SEARCH_DEFAULT))) {
 
                 Dos9_ShowErrorMessage(DOS9_NO_MATCH,
@@ -127,7 +127,7 @@ int Dos9_CmdType(char* lpLine)
 
             }
 
-            if (!pBegin)
+             if (!pBegin)
                 pBegin = (pEnd = pTmp);
             else
                 pEnd->lpflNext = pTmp; /* catenate the lists */

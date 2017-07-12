@@ -183,7 +183,7 @@ int Dos9_CmdFind(char* lpLine)
         reverse=0,
         passed_names=0;
 
-    char buf[8192];
+    /* char buf[8192]; */
     char* str=NULL;
 
     lpLine += 4;
@@ -241,8 +241,7 @@ int Dos9_CmdFind(char* lpLine)
 
             passed_names = 1;
 
-            /* Get a list of files that matches the argument */
-            if (!(pTmp = Dos9_GetMatchFileList(Dos9_EsToChar(lpEsParam),
+            if (!(pTmp = Dos9_GetMatchFileList(Dos9_EsToFullPath(lpEsParam),
                                                     DOS9_SEARCH_DEFAULT))) {
 
                 Dos9_ShowErrorMessage(DOS9_NO_MATCH,

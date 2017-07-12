@@ -39,7 +39,10 @@
 #define CMP_FLOAT_COMP 0x10
 
 #define DOS9_IF_EXIST_TEST(ret, file, filelist) \
-    filelist = Dos9_GetMatchFileList(file, DOS9_SEARCH_GET_FIRST_MATCH \
+    char _if_exist_test_name[FILENAME_MAX]; \
+    Dos9_MakeFullPath(_if_exist_test_name, file, FILENAME_MAX); \
+    filelist = Dos9_GetMatchFileList(_if_exist_test_name, \
+                                                DOS9_SEARCH_GET_FIRST_MATCH \
                                                 | DOS9_SEARCH_NO_STAT \
                                                 | DOS9_SEARCH_NO_PSEUDO_DIR); \
     ret=(filelist != NULL); \

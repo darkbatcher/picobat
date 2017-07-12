@@ -35,9 +35,6 @@ extern int iMainThreadId; /* thread id of the main thread */
 extern void(*pErrorHandler)(void); /* error handler */
 extern char* lpInitVar[]; /* list of variable for initialization */
 
-/* Mutex to prevent data races with sub threads */
-extern MUTEX mDuppedStream; /* a mutex to prevent streams from being
-                               wrongly dupped ie, prevent simultan */
 extern int fdStdin; /* temporary storage for streams */
 extern int fdStdout;
 extern int fdStderr;
@@ -47,6 +44,7 @@ extern int fdStderr;
    thread */
 extern __thread int bAbortCommand; /* abort the command (0: no , 1: jump to next,
                                     -1 : move to upper execution level) */
+extern __thread int bIgnoreExit; /* ignore exit */
 extern __thread int bDelayedExpansion; /* state of the delayed expansion */
 extern __thread int bCmdlyCorrect; /* state of cmdly correct interface */
 extern __thread int bUseFloats; /* state of use of floats */

@@ -56,7 +56,6 @@ int Dos9_CmdMkdir(char* lpLine)
 {
 	ESTR* lpEstr=Dos9_EsInit();
 
-
 	if (!(lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
 
 		Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "MD/MKDIR", FALSE);
@@ -72,7 +71,7 @@ int Dos9_CmdMkdir(char* lpLine)
 
 		} else {
 
-            if (Dos9_CmdMakeDirs(Dos9_EsToChar(lpEstr)))
+            if (Dos9_CmdMakeDirs(Dos9_EsToFullPath(lpEstr)))
                 goto error;
 
 		}

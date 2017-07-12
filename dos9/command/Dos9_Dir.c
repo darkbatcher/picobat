@@ -44,74 +44,6 @@
 
 #include "Dos9_Dir.h"
 
-static __thread int iDirNb,
-    iFileNb;
-static __thread short wAttr;
-static __thread char bSimple;
-
-void Dos9_CmdDirShow(FILELIST* lpElement)
-{
-	char lpType[]="D RHSA ",
-	              lpSize[16];
-
-	struct tm* lTime;
-
-	/* This structures get only one argument at a time,
-	   thus ``lpElement->lpNext'' is inconsistent */
-
-	if (Dos9_CheckFileAttributes(wAttr, lpElement)) {
-
-		/* if the file has right attributes */
-
-		if (!bSimple) {
-
-			strcpy(lpType, "       ");
-			if (Dos9_GetFileMode(lpElement) & DOS9_FILE_DIR) {
-				lpType[0]='D';
-				iDirNb++;
-
-				strcpy(lpSize, "<REP>\t");
-
-			} else {
-
-                strcpy(lpSize, "       ");
-                Dos9_FormatFileSize(lpSize+7, 8, Dos9_GetFileSize(lpElement));
-
-				iFileNb++;
-
-			}
-
-			if (Dos9_GetFileMode(lpElement) & DOS9_FILE_READONLY) lpType[2]='R';
-
-			if (Dos9_GetFileMode(lpElement) & DOS9_FILE_HIDDEN) lpType[3]='H';
-
-			if (Dos9_GetFileMode(lpElement) & DOS9_FILE_SYSTEM) lpType[4]='S';
-
-			if (Dos9_GetFileMode(lpElement) & DOS9_FILE_ARCHIVE) lpType[5]='A';
-
-			/* !! Recyclage de la variable lpFilename pour afficher la taille du fichier */
-
-
-			lTime=localtime(&Dos9_GetModifTime(lpElement));
-
-			fprintf(fOutput, "%02d/%02d/%02d %02d:%02d %s\t%s\t%s" DOS9_NL, lTime->tm_mday,
-                                                            lTime->tm_mon+1,
-                                                            1900+lTime->tm_year,
-                                                            lTime->tm_hour,
-                                                            lTime->tm_min,
-                                                            lpSize,
-                                                            lpType,
-                                                            lpElement->lpFileName
-                                                            );
-
-		} else {
-
-			printf("%s" DOS9_NL, lpElement->lpFileName);
-
-		}
-	}
-}
-
 int Dos9_CmdDir(char* lpLine)
 {
 	char *lpNext,
@@ -123,8 +55,18 @@ int Dos9_CmdDir(char* lpLine)
 	int iFlag=DOS9_SEARCH_DEFAULT | DOS9_SEARCH_DIR_MODE;
 
 	ESTR* lpParam=Dos9_EsInit();
+    FILELIST *files, *item, *others;
 
-	//if (lpNext=strchr(lpLine, ' ')) *lpNext='\0';
+    int iDirNb, iFileNb;
+    short wAttr;
+    char bSimple;
+    size_t nSize;
+
+    char lpType[]="D RHSA ",
+	              lpSize[16];
+
+	struct tm* lTime;
+
 	lpNext=lpLine+3;
 
 	wAttr=DOS9_CMD_ATTR_ALL;
@@ -181,29 +123,109 @@ int Dos9_CmdDir(char* lpLine)
 
 	}
 
+
 	/* do a little global variable setup before
 	   starting file research */
 	iDirNb=0;
 	iFileNb=0;
 
 	if (!bSimple) {
+
+        nSize = strlen(lpCurrentDir);
+        if (!strncmp(lpFileName, lpCurrentDir, nSize))
+            nSize ++;
+        else
+            nSize = 0;
+
         fputs(DOS9_NL, fOutput);
         fputs(lpDirListTitle, fOutput);
         fputs(DOS9_NL, fOutput);
+
 	}
 
 	/* Get a list of file and directories matching to the
 	   current filename and options set */
-	if (!(Dos9_GetMatchFileCallback(lpFileName, iFlag, Dos9_CmdDirShow))
+	/* if (!(Dos9_GetMatchFileCallback(lpFileName, iFlag, Dos9_CmdDirShow))
 	    && !bSimple) {
-		fputs(lpDirNoFileFound, fOutput);
+
+	} */
+
+	if (!(files = Dos9_GetMatchFileList(lpFileName, iFlag))
+        && !bSimple) {
+
+        fputs(lpDirNoFileFound, fOutput);
         fputs(DOS9_NL, fOutput);
+
+	} else  {
+
+        Dos9_AttributesSplitFileList(wAttr, files, &files, &others);
+
+        if (others)
+            Dos9_FreeFileList(others);
+
+        item = files;
+
+        while (item) {
+
+            if (!bSimple) {
+
+                strcpy(lpType, "       ");
+                if (Dos9_GetFileMode(item) & DOS9_FILE_DIR) {
+                    lpType[0]='D';
+                    iDirNb++;
+
+                    strcpy(lpSize, "<REP>\t");
+
+                } else {
+
+                    strcpy(lpSize, "       ");
+                    Dos9_FormatFileSize(lpSize+7, 8, Dos9_GetFileSize(item));
+
+                    iFileNb++;
+
+                }
+
+                if (Dos9_GetFileMode(item) & DOS9_FILE_READONLY) lpType[2]='R';
+
+                if (Dos9_GetFileMode(item) & DOS9_FILE_HIDDEN) lpType[3]='H';
+
+                if (Dos9_GetFileMode(item) & DOS9_FILE_SYSTEM) lpType[4]='S';
+
+                if (Dos9_GetFileMode(item) & DOS9_FILE_ARCHIVE) lpType[5]='A';
+
+                /* !! Recyclage de la variable lpFilename pour afficher la taille du fichier */
+
+
+                lTime=localtime(&Dos9_GetModifTime(item));
+
+                fprintf(fOutput, "%02d/%02d/%02d %02d:%02d %s\t%s\t%s" DOS9_NL, lTime->tm_mday,
+                                                                lTime->tm_mon+1,
+                                                                1900+lTime->tm_year,
+                                                                lTime->tm_hour,
+                                                                lTime->tm_min,
+                                                                lpSize,
+                                                                lpType,
+                                                                item->lpFileName + nSize
+                                                                );
+
+            } else {
+
+                printf("%s" DOS9_NL, item->lpFileName);
+
+            }
+
+            item = item->lpflNext;
+
+        }
+
+        Dos9_FreeFileList(files);
+
+        if (!bSimple)
+            fprintf(fOutput, "\t\t\t\t%d %s" DOS9_NL "\t\t\t\t%d %s" DOS9_NL,
+                                iFileNb, lpDirFile, iDirNb, lpDirDir);
+
 	}
 
-	if (!bSimple) {
-        fprintf(fOutput, "\t\t\t\t%d %s" DOS9_NL "\t\t\t\t%d %s" DOS9_NL,
-                                iFileNb, lpDirFile, iDirNb, lpDirDir);
-	}
 
 	Dos9_EsFree(lpParam);
 

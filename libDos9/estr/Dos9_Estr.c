@@ -21,7 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define DEFAULT_ESTR 64
+#define DEFAULT_ESTR 256
 #define _Dos9_EsTotalLen(ptrChaine) ((strlen(ptrChaine)/DEFAULT_ESTR+1)*DEFAULT_ESTR)
 #define _Dos9_EsTotalLen2(ptrChaine, ptrString) (((strlen(ptrChaine)+strlen(ptrString))/DEFAULT_ESTR+1)*DEFAULT_ESTR)
 #define _Dos9_EsTotalLen3(ptrChaine,iSize) (((strlen(ptrChaine)+iSize)/DEFAULT_ESTR+1)*DEFAULT_ESTR)

@@ -71,7 +71,7 @@ int Dos9_CmdRen(char* lpLine)
 
 	if ((lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
 
-		strncpy(lpFileName, Dos9_EsToChar(lpEstr), FILENAME_MAX);
+		strncpy(lpFileName, Dos9_EsToFullPath(lpEstr), FILENAME_MAX);
 		lpFileName[FILENAME_MAX-1]='\0';
 		/* can't assume that what was buffered is NULL-terminated
 		   see the C-89,99,11 standards for further informations */

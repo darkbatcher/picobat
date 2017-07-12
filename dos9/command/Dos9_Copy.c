@@ -176,7 +176,7 @@ int Dos9_CmdCopy(char* line)
 
             }
 
-            if ((file[len] = strdup(str)) == NULL) {
+            if ((file[len] = Dos9_FullPathDup(str)) == NULL) {
 
                 Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION,
                                         __FILE__ "/Dos9_CmdCopy()", 0);

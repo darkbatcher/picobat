@@ -164,6 +164,8 @@ void Dos9_AddCounts(struct wc_count_t* res, const struct wc_count_t* val)
 
 void Dos9_PrintCounts(int mode, struct wc_count_t* cnt, const char* file)
 {
+    /* Do not pretty print, gnu does so, but we won't */
+
     if (mode & DOS9_WC_LINES)
         fprintf(fOutput, "%lu ", cnt->lines);
 
@@ -190,7 +192,8 @@ int Dos9_CmdWc(const char* line)
              *dirs,
              *item;
     int mode = 0,
-        nb = 0;
+        nb = 0,
+        size;
     char* fmt;
     struct wc_count_t total = {0, 0, 0, 0}, cnt;
 
@@ -235,8 +238,15 @@ int Dos9_CmdWc(const char* line)
 
         } else {
 
+            if (!TEST_ABSOLUTE_PATH(param->str))
+                size = strlen(lpCurrentDir) + 1;
+            else
+                size = 0;
+
+
             /* Search for the appropriate files */
-            if (!(item = Dos9_GetMatchFileList(param->str, DOS9_SEARCH_NO_PSEUDO_DIR))) {
+            if (!(item = Dos9_GetMatchFileList(Dos9_EsToFullPath(param),
+                                               DOS9_SEARCH_NO_PSEUDO_DIR))) {
 
                 Dos9_ShowErrorMessage(DOS9_NO_MATCH, param->str, 0);
                 goto error;
@@ -264,6 +274,8 @@ int Dos9_CmdWc(const char* line)
             /* Find the last item of the list */
             while (item) {
                 end = item;
+                item->stFileStats.st_uid = size; /* hack : use an unused file info to
+                                                   store length of the added prefix  */
                 item = item->lpflNext;
             }
         }
@@ -293,12 +305,14 @@ int Dos9_CmdWc(const char* line)
 
             total.bytes += Dos9_GetFileSize(item);
 
-            fprintf(fOutput, "%lu %s" DOS9_NL, Dos9_GetFileSize(item), item->lpFileName);
+            fprintf(fOutput, "%lu %s" DOS9_NL, Dos9_GetFileSize(item),
+                        item->lpFileName + (size_t)item->stFileStats.st_uid);
 
         } else if (Dos9_FileCounts(mode, item->lpFileName, &cnt)) {
             /* Reading the whole file is required */
 
-            Dos9_PrintCounts(mode, &cnt, item->lpFileName);
+            Dos9_PrintCounts(mode, &cnt,
+                                item->lpFileName + (size_t)item->stFileStats.st_uid);
             Dos9_AddCounts(&total, &cnt);
 
         }
@@ -314,8 +328,7 @@ int Dos9_CmdWc(const char* line)
         Dos9_PrintCounts(mode, &total, "Total");
 
     }
-            /* remember we number of files we parsed sucessfully */
-            nb ++;
+
 end:
     if (match)
         Dos9_FreeFileList(match);

@@ -1119,10 +1119,11 @@ int Dos9_ForMakeInputInfo(ESTR* lpInput, INPUTINFO* lpipInfo, FORINFO* lpfrInfo)
                at the beginning. Notice we do not check for *all* files
                existence before starting the loop, Although cmd.exe may do
                so (haven't checked yet) */
+
 			if (!(lpipInfo->Info.InputFile.pFile=
-                    fopen(TRANS(
-                        Dos9_EsToChar(lpipInfo->Info.InputFile.lpesFiles[0])
-                        ), "rb"))) {
+                    fopen(Dos9_EsToFullPath(
+                            lpipInfo->Info.InputFile.lpesFiles[0]
+                    ), "rb"))) {
 
 				Dos9_ShowErrorMessage(DOS9_FILE_ERROR | DOS9_PRINT_C_ERROR,
                                         lpToken,
@@ -1233,6 +1234,8 @@ int Dos9_ExecuteForSubCommand(struct pipe_launch_data_t* arg)
     Dos9_OpenOutputD(lppsStreamStack, arg->fd, DOS9_STDOUT);
     close (arg->fd);
 
+    bIgnoreExit = TRUE;
+
     bkBlock.lpBegin = Dos9_EsToChar(arg->str);
     bkBlock.lpEnd = bkBlock.lpBegin;
 
@@ -1311,6 +1314,7 @@ int Dos9_ForGetInputLine(ESTR* lpReturn, INPUTINFO* lpipInfo)
 
 	int iReturn=0;
 	char* lpToken;
+	char name[FILENAME_MAX];
 
 loop_begin:
     iReturn=0;
@@ -1335,14 +1339,12 @@ retry:
 
                 /* if the file list is not finished, then, open the next file */
                 if (!(lpipInfo->Info.InputFile.pFile =
-                        fopen(Dos9_EsToChar(lpipInfo->Info.InputFile.lpesFiles[
+                        fopen(Dos9_EsToFullPath(lpipInfo->Info.InputFile.lpesFiles[
                             		lpipInfo->Info.InputFile.index
-                            	]), "r"))) {
+                            	]->str), "rb"))) {
 
                     Dos9_ShowErrorMessage(DOS9_FILE_ERROR | DOS9_PRINT_C_ERROR,
-                            lpipInfo->Info.InputFile.lpesFiles[
-                            lpipInfo->Info.InputFile.index
-                            ]->str,
+                            name,
                             FALSE
                             );
 
