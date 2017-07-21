@@ -88,10 +88,23 @@ typedef struct STREAMSTACK {
     int newfd; /* the new file descriptor (ie. the descriptor to be destroyed
                   when popping element of the stack) */
     int oldfd; /* a duplicate of the previous fd associated with fd */
-    int oldfd2; /* a duplicate of the previous file if composed file */
+    int subst; /* a operation of file substitution if either 2>&1 or 1>&2 is used */
     int lock; /* a lock to prevent element from being popped */
     struct STREAMSTACK* previous;
 } STREAMSTACK, *LPSTREAMSTACK;
+
+
+#define DOS9_SUBST_FOUTPUT 0x1
+#define DOS9_SUBST_FERROR 0x2
+
+#define DOS9_APPLY_SUBST(state) \
+    fOutput = (state & DOS9_SUBST_FOUTPUT) ? _fOutput : _fError; \
+    fError = (state & DOS9_SUBST_FERROR) ? _fOutput : _fError
+
+#define DOS9_GET_SUBST() \
+    ((_fOutput == fOutput ) ? DOS9_SUBST_FOUTPUT : 0) \
+                    | ( (fError == _fOutput) ? DOS9_SUBST_FERROR : 0)
+
 
 /* initializes the stream stack */
 STREAMSTACK* Dos9_InitStreamStack(void);

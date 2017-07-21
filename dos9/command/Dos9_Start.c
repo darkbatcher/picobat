@@ -81,6 +81,7 @@ int Dos9_StartFile(const char* file, const char* args, const char* dir,
 	SHELLEXECUTEINFOW info;
 	wchar_t *chr;
 	size_t cvt;
+	int status;
 
 	memset(&info, 0, sizeof(info));
 	info.cbSize = sizeof(info);
@@ -88,6 +89,7 @@ int Dos9_StartFile(const char* file, const char* args, const char* dir,
         ((mode & START_MODE_BACKGROUND) ? (SEE_MASK_NO_CONSOLE) : (0));
 	info.lpVerb = NULL;
 	info.lpDirectory = NULL;
+	info.lpParameters = NULL;
 	info.nShow = mode & ~START_MODE_BACKGROUND;
 
     if (!(info.lpFile = libcu8_xconvert(LIBCU8_TO_U16, file,
@@ -145,19 +147,20 @@ int Dos9_StartFile(const char* file, const char* args, const char* dir,
 
     Dos9_ApplyEnv(lpeEnv);
     Dos9_SetStdInheritance(1);
-	ShellExecuteExW(&info);
+	status = !ShellExecuteExW(&info);
 
 	if (wait)
 		WaitForSingleObject(info.hProcess, INFINITE);
 
 	CloseHandle(info.hProcess);
 
+    Dos9_UnApplyEnv(lpeEnv);
 
     free(info.lpFile);
     free(info.lpParameters);
     free(info.lpDirectory);
 
-	return 0;
+	return status;
 }
 
 
@@ -168,6 +171,7 @@ int Dos9_StartFile(const char* file, const char* args, const char* dir,
 	SHELLEXECUTEINFO info;
 	char buf[FILENAME_MAX],
          *chr;
+    int status;
 
 	memset(&info, 0, sizeof(info));
 	info.cbSize = sizeof(info);
@@ -194,14 +198,16 @@ int Dos9_StartFile(const char* file, const char* args, const char* dir,
     info.lpParameters = args;
     info.lpFile = buf;
 
-	ShellExecuteExA(&info);
+	status = !ShellExecuteExA(&info);
+
+    Dos9_UnApplyEnv(lpeEnv);
 
 	if (wait)
 		WaitForSingleObject(info.hProcess, INFINITE);
 
 	CloseHandle(info.hProcess);
 
-	return 0;
+	return status;
 }
 #endif
 #else /* !defined(WIN32)  */
@@ -491,24 +497,27 @@ int Dos9_CmdStart(char* line)
 
         Dos9_EsFree(param);
         param = tmp;
+
     }
 
 #ifdef WIN32
 	Dos9_UseBackSlash(line);
 #endif // WIN32
 
+    Dos9_LockMutex(&mThreadLock);
 	if (Dos9_StartFile(file,
 						param->str,
-						dir,
+						dir ? dir : lpCurrentDir,
 						mode,
 						wait))
 		goto error;
 
+    Dos9_ReleaseMutex(&mThreadLock);
 	Dos9_EsFree(param);
 	return 0;
 
 error:
-
+        Dos9_ReleaseMutex(&mThreadLock);
 		Dos9_EsFree(param);
 		return -1;
 

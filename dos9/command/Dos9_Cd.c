@@ -146,6 +146,7 @@ reloop:
                     memmove(previous, path+3, size - ((path + 3 ) - orig));
                     size -= (path + 3) - previous;
                     path = previous;
+                    continue;
 
                 }
 

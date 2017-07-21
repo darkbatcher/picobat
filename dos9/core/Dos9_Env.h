@@ -55,6 +55,7 @@ void  Dos9_UnSetEnv(ENVBUF* pEnv, const char* name);
 void* Dos9_GetEnvBlock(ENVBUF* pEnv, size_t *s);
 
 void Dos9_ApplyEnv(ENVBUF* pEnv);
+void Dos9_UnApplyEnv(ENVBUF* pEnv);
 
 void Dos9_EnvFree(ENVBUF* pEnv);
 #endif

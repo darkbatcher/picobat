@@ -110,6 +110,11 @@ int Dos9_CmdDir(char* lpLine)
 				return -1;
 			}
 
+			if (!TEST_ABSOLUTE_PATH(lpToken))
+                nSize = strlen(lpCurrentDir) + 1;
+            else
+                nSize = 0;
+
 			Dos9_MakeFullPath(lpFileName, lpToken, FILENAME_MAX);
 
 		}
@@ -120,6 +125,7 @@ int Dos9_CmdDir(char* lpLine)
 		   the put a correct value on it */
 
 		snprintf(lpFileName, FILENAME_MAX, "%s" DEF_DELIMITER "*", lpCurrentDir);
+		nSize = strlen(lpCurrentDir) + 1;
 
 	}
 
@@ -131,24 +137,11 @@ int Dos9_CmdDir(char* lpLine)
 
 	if (!bSimple) {
 
-        nSize = strlen(lpCurrentDir);
-        if (!strncmp(lpFileName, lpCurrentDir, nSize))
-            nSize ++;
-        else
-            nSize = 0;
-
         fputs(DOS9_NL, fOutput);
         fputs(lpDirListTitle, fOutput);
         fputs(DOS9_NL, fOutput);
 
 	}
-
-	/* Get a list of file and directories matching to the
-	   current filename and options set */
-	/* if (!(Dos9_GetMatchFileCallback(lpFileName, iFlag, Dos9_CmdDirShow))
-	    && !bSimple) {
-
-	} */
 
 	if (!(files = Dos9_GetMatchFileList(lpFileName, iFlag))
         && !bSimple) {
@@ -210,7 +203,10 @@ int Dos9_CmdDir(char* lpLine)
 
             } else {
 
-                printf("%s" DOS9_NL, item->lpFileName);
+                if (bCmdlyCorrect && (iFlag & DOS9_SEARCH_RECURSIVE))
+                    fprintf(fOutput, "%s" DOS9_NL, item->lpFileName);
+                else
+                    fprintf(fOutput, "%s" DOS9_NL, item->lpFileName + nSize);
 
             }
 

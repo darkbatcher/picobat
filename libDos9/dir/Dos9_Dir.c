@@ -109,7 +109,7 @@ static FILELIST* Dos9_GetMatch(char* base, char* up, struct match_args_t* arg)
     ESTR* path = NULL;
     char *item, *cleanup = NULL;
 
-    DIR* dir;
+    DIR* dir = NULL;
     struct dirent* ent;
 
     /* printf("Called Dos9_GetMatch(%s, %s, arg)\n", base, up); */

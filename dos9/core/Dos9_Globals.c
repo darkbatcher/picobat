@@ -40,7 +40,7 @@ void(*pErrorHandler)(void)=NULL;
 int fdStdin;
 int fdStdout;
 int fdStderr;
-MUTEX mDuppedStream;
+MUTEX mThreadLock;
 
 
 __thread int bDelayedExpansion=FALSE;
@@ -63,8 +63,8 @@ __thread LOCAL_VAR_BLOCK* lpvArguments;
 __thread LPSTREAMSTACK lppsStreamStack;
 __thread COLOR colColor=DOS9_COLOR_DEFAULT;
 __thread FILE* fInput; /* current thread input stream */
-__thread FILE* fOutput; /* current thread output stream */
-__thread FILE* fError; /* current thread error stream */
+__thread FILE *fOutput, *_fOutput; /* current thread output stream */
+__thread FILE *fError, *_fError; /* current thread error stream */
 
 __thread ENVBUF* lpeEnv;
 __thread INPUT_FILE ifIn;

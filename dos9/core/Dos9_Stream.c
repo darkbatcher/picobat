@@ -112,7 +112,7 @@ STREAMSTACK* Dos9_OpenOutput(STREAMSTACK* stack, char* name, int fd, int mode)
     item->lock = 0;
     item->fd = fd;
     item->newfd = -1;
-    item->oldfd2 = -1;
+    item->subst = DOS9_GET_SUBST();
 
     /* do not forget to update the standard thread specific streams */
     switch (fd) {
@@ -124,28 +124,23 @@ STREAMSTACK* Dos9_OpenOutput(STREAMSTACK* stack, char* name, int fd, int mode)
         break;
 
     case DOS9_STDOUT:
-        DOS9_XDUP(item->oldfd, fOutput);
-        DOS9_DUP_STD(newfd, fOutput);
+        DOS9_XDUP(item->oldfd, _fOutput);
+        DOS9_DUP_STD(newfd, _fOutput);
+        fOutput = _fOutput;
         close(newfd);
         break;
 
     case DOS9_STDERR:
-        DOS9_XDUP(item->oldfd, fError);
-        DOS9_DUP_STD(newfd, fError);
+        DOS9_XDUP(item->oldfd, _fError);
+        DOS9_DUP_STD(newfd, _fError);
+        fError = _fError;
         close(newfd);
         break;
 
     case DOS9_STDERR | DOS9_STDOUT:
-        DOS9_XDUP(item->oldfd, fOutput);
-        DOS9_XDUP(item->oldfd2, fError);
-        DOS9_DUP_STD(newfd, fError);
-        DOS9_DUP_STD(newfd, fOutput);
-        close(newfd);
         break;
 
-    default: /* extension, for further use */
-        item->newfd = newfd;
-        item->oldfd = -1;
+    default:;
     }
 
     return item;
@@ -164,14 +159,15 @@ STREAMSTACK* Dos9_OpenOutputD(STREAMSTACK* stack, int newfd, int fd)
 
     item->previous = stack;
 
-    Dos9_SetFdInheritance(newfd, 0); /* do not inherit this file descriptor
+    if (newfd != -1)
+        Dos9_SetFdInheritance(newfd, 0); /* do not inherit this file descriptor
                                         the only inheritable file descriptors
                                         should be standard fds */
 
     item->lock = 0;
     item->fd = fd;
     item->newfd = -1;
-    item->oldfd2 = -1;
+    item->subst = DOS9_GET_SUBST();
 
     /* do not forget to update the standard thread specific streams */
     switch (fd) {
@@ -182,25 +178,16 @@ STREAMSTACK* Dos9_OpenOutputD(STREAMSTACK* stack, int newfd, int fd)
         break;
 
     case DOS9_STDOUT:
-        DOS9_XDUP(item->oldfd, fOutput);
-        DOS9_DUP_STD(newfd, fOutput);
+        DOS9_XDUP(item->oldfd, _fOutput);
+        DOS9_DUP_STD(newfd, _fOutput);
         break;
 
     case DOS9_STDERR:
-        DOS9_XDUP(item->oldfd, fError);
-        DOS9_DUP_STD(newfd, fError);
+        DOS9_XDUP(item->oldfd, _fError);
+        DOS9_DUP_STD(newfd, _fError);
         break;
 
-    case DOS9_STDERR | DOS9_STDOUT:
-        DOS9_XDUP(item->oldfd, fOutput);
-        DOS9_XDUP(item->oldfd2, fError);
-        DOS9_DUP_STD(newfd, fError);
-        DOS9_DUP_STD(newfd, fOutput);
-        break;
-
-    default: /* extension, for further use */
-        item->newfd = newfd;
-        item->oldfd = -1;
+    default:;
     }
 
     return item;
@@ -209,11 +196,13 @@ STREAMSTACK* Dos9_OpenOutputD(STREAMSTACK* stack, int newfd, int fd)
 /* Pop stream stack functions */
 STREAMSTACK* Dos9_PopStreamStack(STREAMSTACK* stack)
 {
-    STREAMSTACK* item = stack->previous;
+    STREAMSTACK* item;
 
     /* Do not pop if locked or if stack is NULL*/
     if (stack == NULL || stack->lock)
         return stack;
+
+    item = stack->previous;
 
     switch (stack->fd) {
 
@@ -223,28 +212,19 @@ STREAMSTACK* Dos9_PopStreamStack(STREAMSTACK* stack)
         break;
 
     case DOS9_STDOUT:
-        DOS9_DUP_STD(stack->oldfd, fOutput);
+        DOS9_DUP_STD(stack->oldfd, _fOutput);
         close(stack->oldfd);
         break;
 
     case DOS9_STDERR:
-        DOS9_DUP_STD(stack->oldfd, fError);
+        DOS9_DUP_STD(stack->oldfd, _fError);
         close(stack->oldfd);
         break;
 
-    case DOS9_STDERR | DOS9_STDOUT:
-        DOS9_DUP_STD(stack->oldfd, fOutput);
-        DOS9_DUP_STD(stack->oldfd2, fError);
-        close(stack->oldfd);
-        close(stack->oldfd2);
-        break;
-
-    default:
-        /* duplicate the old fd.
-
-           This is for a later implementation of more flexible file changes. */
-        close(stack->newfd);
+    default:;
     }
+
+    DOS9_APPLY_SUBST(stack->subst);
 
     free(stack);
 

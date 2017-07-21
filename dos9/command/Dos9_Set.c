@@ -249,7 +249,7 @@ int Dos9_CmdSet(char *lpLine)
 		*/
 		for (i=0; i < lpeEnv->index; i++) {
 			if (*lpLine == '\0'
-                && strnicmp(lpeEnv->envbuf[i]->name, lpLine, strlen(lpLine)) == 0) {
+                || !strnicmp(lpeEnv->envbuf[i]->name, lpLine, strlen(lpLine))) {
 
 				found = TRUE;
 

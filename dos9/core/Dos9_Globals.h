@@ -23,6 +23,7 @@
 
 #include <setjmp.h>
 #include <stdio.h>
+#include <libDos9.h>
 
 #include "../../config.h"
 
@@ -34,6 +35,7 @@ extern char** environ;
 extern int iMainThreadId; /* thread id of the main thread */
 extern void(*pErrorHandler)(void); /* error handler */
 extern char* lpInitVar[]; /* list of variable for initialization */
+extern MUTEX mThreadLock; /* a mutex for single threaded parts */
 
 extern int fdStdin; /* temporary storage for streams */
 extern int fdStdout;
@@ -58,9 +60,9 @@ extern __thread LPSTREAMSTACK lppsStreamStack; /* status associated with streams
 extern __thread COLOR colColor; /* current command prompt colors */
 extern __thread INPUT_FILE ifIn; /* current parsed script */
 extern __thread ENVBUF* lpeEnv; /* environment variables local to threads */
-extern __thread FILE* fInput; /* current thread input stream */
-extern __thread FILE* fOutput; /* current thread output stream */
-extern __thread FILE* fError; /* current thread error stream */
+extern __thread FILE *fInput; /* current thread input stream */
+extern __thread FILE *fOutput, *_fOutput; /* current thread output stream */
+extern __thread FILE *fError, *_fError; /* current thread error stream */
 extern __thread jmp_buf jbBreak; /* current thread ctrl-C fallback */
 extern __thread char lpCurrentDir[FILENAME_MAX]; /* current path */
 

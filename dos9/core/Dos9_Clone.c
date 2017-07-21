@@ -81,6 +81,8 @@ void Dos9_CloneTrampoline(void* data)
     fInput = cloned->fInput;
     fOutput = cloned->fOutput;
     fError = cloned->fError;
+    _fError = fError;
+    _fOutput = fOutput;
 
     func = cloned->fn;
     arg = cloned->arg;

@@ -116,7 +116,7 @@ int main(int argc, char *argv[])
 
     /* duplicate std streams */
     Dos9_DuplicateStdStreams();
-
+    Dos9_CreateMutex(&mThreadLock);
     /* Process the command line, and set the appropriate special variables for
      * special parameters. (note %0 is set when the absolute path of the script
      * is computed) */

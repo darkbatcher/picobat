@@ -242,9 +242,7 @@ int Dos9_LoadBatchScript(struct batch_script_t* script)
                 continue;
             }
 
-        } else if (*pch == '\0' ||
-                   (!strnicmp(pch, "REM", 3)
-                        && Dos9_IsDelim(*(pch+3)))) {
+        } else if (*pch == '\0') {
 
             /* This is a blank line, or a comment, skip it */
             continue;

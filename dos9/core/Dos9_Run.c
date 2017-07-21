@@ -258,13 +258,39 @@ int Dos9_ExecOutput(PARSED_STREAM_START* lppssStart)
 		                0
 		               );
 
-	if (lppssStart->cOutputMode
-	    && lppssStart->lpOutputFile )
+	if (lppssStart->lpOutputFile)
 		lppsStreamStack = Dos9_OpenOutput(lppsStreamStack,
 		                lppssStart->lpOutputFile,
-		                lppssStart->cOutputMode & ~PARSED_STREAM_START_MODE_TRUNCATE,
-		                lppssStart->cOutputMode & PARSED_STREAM_START_MODE_TRUNCATE
+		                DOS9_STDOUT,
+		                lppssStart->cOutputMode
 		               );
+
+    if (lppssStart->lpErrorFile)
+		lppsStreamStack = Dos9_OpenOutput(lppsStreamStack,
+		                lppssStart->lpErrorFile,
+		                DOS9_STDERR,
+		                lppssStart->cErrorMode
+		               );
+
+    switch (lppssStart->cRedir) {
+
+    case 1:
+
+        lppsStreamStack = Dos9_OpenOutputD(lppsStreamStack,
+		                -1,
+		                -1
+		               );
+        fError = _fOutput;
+        break;
+
+    case 2:
+        lppsStreamStack = Dos9_OpenOutputD(lppsStreamStack,
+		                -1 ,
+		                -1
+		               );
+        fOutput = _fError;
+
+    }
 
 	return 0;
 }
@@ -285,6 +311,98 @@ int Dos9_RunLine(ESTR* lpLine)
 	//fprintf(stderr, "line=%s\n", lpLine->str);
 
     DOS9_DBG("\t[*] Parsing line \"%s\"\n", lpLine->str);
+
+
+#if 0
+    if (rand() % 2) {
+
+        int i;
+
+        switch(rand() % 10) {
+
+        case 0:
+        case 2:
+        case 1:
+            Dos9_SetConsoleTextColor(DOS9_FOREGROUND_IRED | DOS9_BACKGROUND_ICYAN);
+            fprintf(fOutput, "   ____    ____     __   __    \n"
+"U /\"___|U |  _\"\\ u  \\ \\ / /    \n"
+"\\| | u   \\| |_) |/   \\ V /     \n"
+" | |/__   |  _ <    U_|\"|_u    \n"
+"  \\____|  |_| \\_\\     |_|      \n"
+" _// \\\\   //   \\\\_.-,//|(_     \n"
+"(__)(__) (__)  (__)\\_) (__)   \n"
+"\n"
+"  _   _     U  ___ u   U  ___ u  ____     ____          _     _     _   \n"
+" | \\ |\"|     \\/\"_ \\/    \\/\"_ \\/U|  _\"\\ u / __\"| u     U|\"|u U|\"|u U|\"|u \n"
+"<|  \\| |>    | | | |    | | | |\\| |_) |/<\\___ \\/      \\| |/ \\| |/ \\| |/ \n"
+"U| |\\  |u.-,_| |_| |.-,_| |_| | |  __/   u___) |       |_|   |_|   |_|  \n"
+" |_| \\_|  \\_)-\\___/  \\_)-\\___/  |_|      |____/>>      (_)   (_)   (_)  \n"
+" ||   \\\\,-.    \\\\         \\\\    ||>>_     )(  (__)     |||_  |||_  |||_ \n"
+" (_\")  (_/    (__)       (__)  (__)__)   (__)         (__)_)(__)_)(__)_)\n");
+            break;
+
+        case 4:
+        case 5:
+            for (i = rand() % 0x100; i < 0x100; i++) {
+                Dos9_SetConsoleColor(i);
+                switch(rand() % 5) {
+                case 0:
+                    fprintf(fOutput, "CRYYYY NOOOOOOOOOOOPS\n");
+                    break;
+                case 1:
+                    fprintf(fOutput, "RLY ? DON'T CARE GUYS\n");
+                    break;
+                case 2:
+                    fprintf(fOutput, "hhhhhhhhhh\n");
+                    break;
+                case 3:
+                    fprintf(fOutput, ":V\n");
+                    break;
+                case 4:
+                    fprintf(fOutput, "meh\n");
+
+                }
+                Sleep(50);
+            }
+            break;
+
+        case 6:
+            Dos9_ShowErrorMessage(rand() % DOS9_ERROR_MESSAGE_NUMBER,
+                                  (rand() % 2) ? "NOOOOOOOOOPS" : "foutez moi la pait ._.", 0);
+            break;
+
+        case 7:
+            fprintf(fOutput, "Je suis nul en Batch :v\n");
+            break;
+
+        case 8:
+        case 9:
+            fprintf(fOutput, "          _____    _   _    ____   _  __   \n"
+"        |\" ___|U |\"|u| |U /\"___| |\"|/ /   \n"
+"       U| |_  u \\| |\\| |\\| | u   | ' /    \n"
+"       \\|  _|/   | |_| | | |/__U/| . \\\\u  \n"
+"        |_|     <<\\___/   \\____| |_|\\_\\   \n"
+"        )(\\\\,- (__) )(   _// \\\\,-,>> \\\\,-.\n"
+"       (__)(_/     (__) (__)(__)\\.)   (_/\n"
+"\n"
+"                   _____      _       ____     ____    ____          _   \n"
+"                  |_ \" _| U  /\"\\  uU |  _\"\\ u |  _\"\\  / __\"| u     U|\"|u  \n"
+"                    | |    \\/ _ \\/  \\| |_) |//| | | |<\\___ \\/      \\| |/  \n"
+"                   /| |\\   / ___ \\   |  _ <  U| |_| |\\u___) |       |_|   \n"
+"                  u |_|U  /_/   \\_\\  |_| \\_\\  |____/ u|____/>>      (_)   \n"
+"                  _// \\\\_  \\\\    >>  //   \\\\_  |||_    )(  (__)     |||_  \n"
+"                  __) (__)(__)  (__)(__)  (__)(__)_)  (__)         (__)_) \n");
+
+            for (i = 0; i < 100; i++) {
+                Dos9_SetConsoleColor(rand() % 0x100);
+                Sleep(100);
+            }
+        }
+
+        return 0;
+    }
+
+#endif
 
 	lppssStreamStart=Dos9_ParseLine(lpLine);
 
@@ -516,12 +634,14 @@ int Dos9_RunExternalCommand(char* lpCommandLine, int* error)
 
 	Dos9_GetParamArrayEs(lpCommandLine, lpEstr, FILENAME_MAX);
     Dos9_GetEndOfLine(lpCommandLine, lpCmdLine);
+    Dos9_GetNextParameterEs(lpCommandLine, lpEstr[0]);
 
 	if (!lpEstr[0])
 		return 0;
 
 	for (; lpEstr[i] && (i < FILENAME_MAX); i++)
 		lpArguments[i]=Dos9_EsToChar(lpEstr[i]);
+
 
 
 
@@ -773,6 +893,12 @@ void Dos9_LaunchExternalBatch(struct batch_launch_data_t* arg)
     Dos9_FreeLocalBlock(lpvArguments);
     lpvLocalVars = Dos9_GetLocalBlock();
     lpvArguments = Dos9_GetLocalBlock();
+
+    if (isatty(fileno(fOutput)))
+        setvbuf(fOutput, NULL, _IONBF, 0);
+
+    if (isatty(fileno(fError)))
+        setvbuf(fError, NULL, _IONBF, 0);
 
     for (i=1;arg->lpArguments[i] && i <= 9; i++)
         Dos9_SetLocalVar(lpvArguments, '0'+i, arg->lpArguments[i]);

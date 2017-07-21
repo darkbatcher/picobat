@@ -93,8 +93,11 @@ void Dos9_DuplicateStdStreams(void)
     }
 
     fInput = fdopen(newInput, "r");
-    fOutput = fdopen(newOutput, "w");
-    fError = fdopen(newErr, "w");
+    _fOutput = fdopen(newOutput, "w");
+    _fError = fdopen(newErr, "w");
+
+    fOutput = _fOutput;
+    fError = _fError;
 
     if (!fInput || !fOutput || !fError) {
 

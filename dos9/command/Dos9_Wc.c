@@ -255,7 +255,9 @@ int Dos9_CmdWc(const char* line)
 
             /* Select files that are not dirs */
             Dos9_AttributesSplitFileList(DOS9_ATTR_NO_DIR, item, &item, &dirs);
-            Dos9_FreeFileList(dirs);
+
+            if (dirs)
+                Dos9_FreeFileList(dirs);
 
             /* return error if no file match */
             if (item == NULL) {

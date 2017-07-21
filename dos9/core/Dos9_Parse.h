@@ -39,7 +39,10 @@ struct PARSED_STREAM {
 struct PARSED_STREAM_START {
 	struct PARSED_STREAM* lppsStream;
 	char cOutputMode;
+	char cErrorMode;
+	char cRedir;
 	char* lpOutputFile;
+	char* lpErrorFile;
 	char* lpInputFile;
 };
 
@@ -52,8 +55,6 @@ typedef struct PARSED_STREAM_START PARSED_STREAM_START,*LPPARSED_STREAM_START;
 #define PARSED_STREAM_NODE_PIPE 0x03
 #define PARSED_STREAM_NODE_RESET -1
 
-#define PARSED_STREAM_START_MODE_OUT DOS9_STDOUT
-#define PARSED_STREAM_START_MODE_ERROR DOS9_STDERR
 #define PARSED_STREAM_START_MODE_TRUNCATE 0x04
 
 PARSED_STREAM_START* Dos9_ParseLine(ESTR* lpLine);

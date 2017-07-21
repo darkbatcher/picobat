@@ -117,10 +117,17 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 
 			if (!strncmp(lpNextToken, ">&1", 3)) {
 
-				/* redirect stderr in stdout */
-				lppssStart->cOutputMode|=(PARSED_STREAM_START_MODE_ERROR
-				                          | PARSED_STREAM_START_MODE_OUT );
+				if (lppssStart->cRedir) {
 
+                    Dos9_FreeLine(lppssStart);
+
+                    Dos9_ShowErrorMessage(DOS9_ALREADY_REDIRECTED, "1>&2", FALSE);
+
+                    goto error;
+
+				}
+
+				lppssStart->cRedir = 1;
 				lpCh=lpNextToken+3;
 
 				break;
@@ -128,6 +135,26 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 			}
 
 		case '1':
+
+            if (!strncmp(lpNextToken, ">&2", 3)) {
+
+				if (lppssStart->cRedir) {
+
+                    Dos9_FreeLine(lppssStart);
+
+                    Dos9_ShowErrorMessage(DOS9_ALREADY_REDIRECTED, "1>&2", FALSE);
+
+                    goto error;
+
+				}
+
+				lppssStart->cRedir = 2;
+
+				lpCh=lpNextToken+3;
+
+				break;
+
+			}
 
 			if (*lpNextToken!='>') {
 
@@ -146,7 +173,8 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 		case '>' :
 			/* this is ouput */
 
-			if (lppssStart->lpOutputFile) {
+			if ((cChar != '2' && lppssStart->lpOutputFile)
+                || (cChar == '2' && lppssStart->lpErrorFile)) {
 
 				Dos9_FreeLine(lppssStart);
 
@@ -159,7 +187,10 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 
 			if (*lpNextToken!='>') {
 
-				lppssStart->cOutputMode|=PARSED_STREAM_START_MODE_TRUNCATE;
+				if (cChar == '2')
+                    lppssStart->cErrorMode|=PARSED_STREAM_START_MODE_TRUNCATE;
+                else
+                    lppssStart->cOutputMode|=PARSED_STREAM_START_MODE_TRUNCATE;
 
 			} else {
 
@@ -178,20 +209,10 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 
 			}
 
-			/* determine redirection type */
-			if (cChar=='2') {
-
-				lppssStart->cOutputMode|=
-				    (lppssStart->cOutputMode | PARSED_STREAM_START_MODE_ERROR)
-				    & ~PARSED_STREAM_START_MODE_OUT;
-
-			} else {
-
-				lppssStart->cOutputMode|=PARSED_STREAM_START_MODE_OUT;
-
-			}
-
-			if (!(lppssStart->lpOutputFile=Dos9_FullPathDup(Dos9_EsToChar(lpesParam)))) {
+			if ((cChar != '2' && !(lppssStart->lpOutputFile =
+                                Dos9_FullPathDup(Dos9_EsToChar(lpesParam))))
+                || (cChar == '2' && !(lppssStart->lpErrorFile =
+                                Dos9_FullPathDup(Dos9_EsToChar(lpesParam))))) {
 
 				Dos9_FreeLine(lppssStart);
 
@@ -409,10 +430,13 @@ PARSED_STREAM_START* Dos9_AllocParsedStreamStart(void)
 	if ((lppssStreamStart=malloc(sizeof(PARSED_STREAM_START)))) {
 
 		lppssStreamStart->cOutputMode=0;
+        lppssStreamStart->cErrorMode=0;
+        lppssStreamStart->cRedir=0;
 
 		lppssStreamStart->lppsStream=NULL;
 		lppssStreamStart->lpInputFile=NULL;
 		lppssStreamStart->lpOutputFile=NULL;
+		lppssStreamStart->lpErrorFile=NULL;
 
 		return lppssStreamStart;
 	}

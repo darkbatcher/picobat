@@ -67,8 +67,8 @@ int Dos9_CmdEcho(char* lpLine)
 	if (ispunct(*lpLine)) {
 
 		Dos9_GetEndOfLine(lpLine+1, lpEsParameter);
-		fputs(Dos9_EsToChar(lpEsParameter), stdout);
-        fputs(DOS9_NL, stdout);
+		fputs(Dos9_EsToChar(lpEsParameter), fOutput);
+        fputs(DOS9_NL, fOutput);
 
 
 	} else if (tmp = Dos9_GetNextParameterEs(lpLine, lpEsParameter)) {

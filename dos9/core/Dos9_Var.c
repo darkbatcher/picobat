@@ -494,6 +494,8 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 
 	if (bSplitPath) {
 
+        lpPos=Dos9_EsToFullPath(lpRecieve);
+
 		Dos9_SplitPath(lpPos, lpDrive, lpDir, lpFileName, lpExt);
 
 		/* printf("lpDrive=`%s`\n"

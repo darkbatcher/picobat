@@ -329,6 +329,8 @@ int Dos9_CmdForSimple(ESTR* lpInput, BLOCKINFO* lpbkCommand, char cVarName, char
          *lpBegin,
          *tmp;
 
+    size_t nSize;
+
     ESTR* lpesStr=Dos9_EsInit();
     FILELIST *files = NULL,
              *item = NULL;
@@ -347,7 +349,7 @@ int Dos9_CmdForSimple(ESTR* lpInput, BLOCKINFO* lpbkCommand, char cVarName, char
 
             }
 
-            Dos9_EsCpy(lpesStr, item->lpFileName);
+            Dos9_EsCpy(lpesStr, item->lpFileName + nSize);
             item = item->lpflNext;
 
         } else {
@@ -391,10 +393,23 @@ int Dos9_CmdForSimple(ESTR* lpInput, BLOCKINFO* lpbkCommand, char cVarName, char
 
                 }
 
+                if (!TEST_ABSOLUTE_PATH(lpesStr->str))
+                    nSize = strlen(lpCurrentDir) + 1;
+                else
+                    nSize = 0;
+
                 /* We came across a reg expression, just launch a search */
-                files = Dos9_GetMatchFileList(lpesStr->str,
+                files = Dos9_GetMatchFileList(Dos9_EsToFullPath(lpesStr),
                                                 DOS9_SEARCH_NO_PSEUDO_DIR
                                                 | DOS9_SEARCH_NO_STAT);
+
+                Dos9_AttributesSplitFileList(DOS9_ATTR_NO_DIR,
+                                             files,
+                                             &files,
+                                             &item);
+
+                if (item)
+                    Dos9_FreeFileList(item);
 
                 /* do not bother that much if the input expression does not
                    match anything */
@@ -1435,7 +1450,7 @@ void Dos9_ForCloseInputInfo(INPUTINFO* lpipInfo)
 
 		    fclose(lpipInfo->Info.InputFile.pFile);
             Dos9_WaitForThread(&(lpipInfo->Info.InputFile.handle), &i);
-            Dos9_CloseThread(lpipInfo->Info.InputFile.handle);
+            Dos9_CloseThread(&(lpipInfo->Info.InputFile.handle));
 
 		    break;
 
@@ -1484,6 +1499,7 @@ int  Dos9_CmdForDeprecatedWrapper(ESTR* lpMask, ESTR* lpDir, char* lpAttribute, 
 	Dos9_EsCpy(lpCommandLine, "'DIR /b /s ");
 	Dos9_EsCat(lpCommandLine, lpAttribute);
 	Dos9_EsCat(lpCommandLine, " ");
+	Dos9_Canonicalize(lpDir->str);
 	Dos9_EsCatE(lpCommandLine, lpDir);
 	Dos9_EsCat(lpCommandLine, "/");
 	Dos9_EsCatE(lpCommandLine, lpMask);

@@ -380,18 +380,35 @@ void Dos9_ApplyEnv(ENVBUF* pEnv)
         #elif defined(WIN32)
         SetEnvironmentVariable(pEnv->envbuf[i]->name,
                                             pEnv->envbuf[i]->content);
-
-        Dos9_EsCpy(exp, pEnv->envbuf[i]->name);
-        Dos9_EsCat(exp, "=");
-        Dos9_EsCat(exp, pEnv->envbuf[i]->content);
-        putenv(exp->str);
-
         #endif
 
     }
 
     Dos9_EsFree(exp);
 }
+
+void Dos9_UnApplyEnv(ENVBUF* pEnv)
+{
+    int i;
+    ESTR* exp = Dos9_EsInit();
+
+    for (i=0; i < pEnv->index; i++) {
+
+        if (pEnv->envbuf[i]->name == NULL)
+            continue;
+
+        #if !defined(WIN32)
+        setenv(pEnv->envbuf[i]->name, NULL, 1);
+        #elif defined(WIN32)
+        SetEnvironmentVariable(pEnv->envbuf[i]->name,
+                                            NULL);
+        #endif
+
+    }
+
+    Dos9_EsFree(exp);
+}
+
 
 void* Dos9_GetEnvBlock(ENVBUF* pEnv, size_t *s)
 {
@@ -400,6 +417,9 @@ void* Dos9_GetEnvBlock(ENVBUF* pEnv, size_t *s)
     size_t size = 0;
 
     for (i = 0; i < pEnv->index; i++) {
+
+        if (pEnv->envbuf[i]->name == NULL)
+            continue;
 
         pEnv->envbuf[i]->size = strlen(pEnv->envbuf[i]->content)
                 + strlen(pEnv->envbuf[i]->name) + 2;
@@ -417,6 +437,9 @@ void* Dos9_GetEnvBlock(ENVBUF* pEnv, size_t *s)
     p = block;
 
     for (i = 0; i < pEnv->index; i++) {
+
+        if (pEnv->envbuf[i]->name == NULL)
+            continue;
 
         strcpy(p, pEnv->envbuf[i]->name);
         strcat(p, "=");

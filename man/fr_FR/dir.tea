@@ -24,7 +24,7 @@
 
 {{Synopsis}}
 
-${	DIR [/A[:]attributs] [/S] [/B] [chemin]}
+${DIR [/A[:]attributs] [/S] [/B] [chemin]}
 
 	Recherche et affiche des fichiers et des dossiers.
 
@@ -46,6 +46,31 @@ ${	DIR [/A[:]attributs] [/S] [/B] [chemin]}
 		- {/S} : Active la recherche récursive. Voir la page {spec/regexp|
 		  Caractères génériques} pour plus d'information.
 
+{{Syntaxe des chemins}}
+
+	Les chemins retournés par la commande {DIR} sont influencés par la
+	valeur de la variable {setlocal|CMDLYCORRECT}. Par défaut, les
+	chemins affichés par Dos9 sont différents de ceux affichés par
+	cmd.exe:
+	
+		- Si {CMDLYCORRECT} n'est pas activé, alors le comportement est
+		très simple:
+		
+			-- si {chemin} est un chemin absolu, alors la commande
+			affiche des chemin absolus.
+			
+			-- si {chemin} est un chemin relatif, alors des chemins
+			relatifs sont affichés.
+			
+		- Si {CMDLYCORRECT} est activé, alors Dos9 essaie le plus
+		possible d'imiter le comportement de cmd:
+		
+			-- si la recherche est récursive, alors les chemins
+			affichés sont des chemins absolus
+			
+			-- sinon, les chemins affichés sont les chemins relatifs,
+			sauf si {chemin} est un chemin absolu.
+		
 {{Compatibilité}}
 
 	Disponible depuis la version {0.4}
