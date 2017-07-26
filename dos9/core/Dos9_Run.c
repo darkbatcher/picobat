@@ -808,9 +808,10 @@ int Dos9_RunExternalFile(char* lpFileName, char* lpFullLine, char** lpArguments)
     return status;
 }
 #endif
+
 #elif !defined(WIN32)
 
-int Dos9_RunExternalFile(char* lpFileName, char** lpArguments)
+int Dos9_RunExternalFile(char* lpFileName, char* lpFullLine, char** lpArguments)
 {
 	pid_t iPid;
 
