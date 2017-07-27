@@ -67,15 +67,15 @@ typedef struct ifexp_t {
     ifexp_child_t child2;
 } ifexp_t;
 
-char * Dos9_IfExp_Compute(const char* line, int* ret, int flags);
+char * Dos9_IfExp_Compute(char* line, int* ret, int flags);
 int Dos9_IfExp_Evaluate(ifexp_t* exp, int flags);
 int Dos9_IfExp_ExecuteTest(ifexp_line_t* test, int flags);
 ifexp_t* Dos9_IfExp_Parse(ifexp_line_t* line);
 void Dos9_IfExp_FillChild(ifexp_child_t* child, ifexp_line_t* line);
 void Dos9_IfExp_SuppressBrackets(ifexp_line_t** line);
 int Dos9_IfExp_SuppressOneBracketPair(ifexp_line_t** line);
-int Dos9_IfExp_Cut(const char* tok, ifexp_line_t** begin, ifexp_line_t** end);
-char * Dos9_IfExp_ParseLine(const char* line, ifexp_line_t** ops);
+int Dos9_IfExp_Cut(char* tok, ifexp_line_t** begin, ifexp_line_t** end);
+char * Dos9_IfExp_ParseLine(char* line, ifexp_line_t** ops);
 int Dos9_IfExp_AddLineElement(ESTR* elem, ifexp_line_t** line, ifexp_line_t** ops);
 void Dos9_IfExp_Free(ifexp_t* exp);
 void Dos9_IfExp_FreeLine(ifexp_line_t* line);

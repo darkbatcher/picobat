@@ -18,6 +18,9 @@
  *
  */
 
+#ifndef DOS9_INIT_INCLUDED_H
+#define DOS9_INIT_INCLUDED_H
+
 void Dos9_AssignCommandLine(int c, char** argv);
 void Dos9_InitLibDos9();
 char* Dos9_GetParameters(char** argv, char** lpFileName, int* bExitAfterCmd, int*
@@ -26,4 +29,4 @@ void Dos9_InitConsoleTitles(char *lpFileName, int bQuiet);
 void Dos9_RunAutoBat(void);
 void Dos9_DuplicateStdStreams(void);
 
-
+#endif

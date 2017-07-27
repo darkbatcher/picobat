@@ -89,11 +89,10 @@ void __inline__ Dos9_MakeFullPath(char* full, const char* partial, size_t size)
 
 void __inline__ Dos9_MakeFullPathEs(ESTR* full, const char* partial)
 {
-    char begin[] = "c:/";
-
     if (TEST_ABSOLUTE_PATH(partial)) {
 
 #ifdef WIN32
+        char begin[] = "c:/";
         if (*partial == '/') {
 
             begin[0] = *lpCurrentDir;
@@ -116,7 +115,7 @@ void __inline__ Dos9_MakeFullPathEs(ESTR* full, const char* partial)
 __inline__ char* Dos9_EsToFullPath(ESTR* full)
 {
     size_t len, size;
-    char* p = TRANS(full->str);
+    const char* p = TRANS(full->str);
 
     if (TEST_ABSOLUTE_PATH(p)) {
 
@@ -242,7 +241,7 @@ int Dos9_GetFilePath(char* lpFullPath, const char* lpPartial, size_t iBufSize)
 
 	DOS9_DBG("[Dos9_GetFilePath()]*** Start research of file : \"%s\"\n\n", lpPartial);
 
-next:
+/* next: */
 	do {
 
 		if (bFirstLoop) {

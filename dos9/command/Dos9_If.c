@@ -35,7 +35,7 @@
 
 int Dos9_CmdIf(char* lpParam)
 {
-	char lpArgument[FILENAME_MAX], *lpNext, *lpToken, *lpToken2, *lpEnd;
+	char lpArgument[FILENAME_MAX], *lpNext, *lpToken, *lpToken2 /*, *lpEnd */;
 	int iFlag=0,
 	    iResult;
 
@@ -305,7 +305,7 @@ int Dos9_CmdIf(char* lpParam)
             lpNext=Dos9_SkipBlanks(lpNext);
 
             if (!strnicmp(lpNext, "ELSE", 4)
-                    && (Dos9_IsDelim(*(lpNext+4)) | *(lpNext+4)=='\0')) {
+                    && (Dos9_IsDelim(*(lpNext+4)) | (*(lpNext+4)=='\0'))) {
 
                 lpNext=Dos9_SkipBlanks(lpNext+4);
 

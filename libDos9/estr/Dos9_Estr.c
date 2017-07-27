@@ -17,9 +17,19 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
+#ifndef _XOPEN_SOURCE
+#define _XOPEN_SOURCE 700
+#endif
+
 #include "../libDos9.h"
+#include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
+
+#ifndef WIN32
+#include <strings.h>
+#endif
 
 #define DEFAULT_ESTR 256
 #define _Dos9_EsTotalLen(ptrChaine) ((strlen(ptrChaine)/DEFAULT_ESTR+1)*DEFAULT_ESTR)
@@ -422,12 +432,12 @@ LIBDOS9 int Dos9_EsReplace(ESTR* ptrESTR, const char* ptrPattern, const char* pt
 
 char * stristr(const char* str, const char *pattern)
 {
-    char c,
-         *pattern_start=pattern;
+    char c/*,
+         *pattern_start=pattern*/;
     size_t size;
 
     if (*pattern == '\0')
-        return str;
+        return (char *)str;
 
     c = tolower(*pattern++);
     size = strlen(pattern);
@@ -441,7 +451,7 @@ char * stristr(const char* str, const char *pattern)
 
     } while (strnicmp(str, pattern, size));
 
-    return str;
+    return (char *)str;
 
 }
 
@@ -451,7 +461,7 @@ LIBDOS9 int Dos9_EsReplaceI(ESTR* ptrESTR, const char* ptrPattern, const char* p
     int iLength=strlen(ptrPattern);
     ESTR *lpReturn=Dos9_EsInit();
 
-    while ((lpToken=stristr(lpBuffer, ptrPattern))) {
+    while ((lpToken=(char *)stristr(lpBuffer, ptrPattern))) {
 
         *lpToken='\0';
 
@@ -468,4 +478,3 @@ LIBDOS9 int Dos9_EsReplaceI(ESTR* ptrESTR, const char* ptrPattern, const char* p
 
     return 0;
 }
-

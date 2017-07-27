@@ -20,6 +20,8 @@
 #ifndef DOS9_ENV_H
 #define DOS9_ENV_H
 
+#include <stdlib.h>
+
 /* Definition of struct that represent an environment variable */
 typedef struct ENVVAR {
     char* name; /* a pointer to the name of the variable, this storage
@@ -49,8 +51,8 @@ ENVBUF* Dos9_InitEnv(char** env);
 ENVBUF* Dos9_EnvDup(ENVBUF* pBuf);
 
 char* Dos9_GetEnv(ENVBUF* pEnv, const char* name);
-void  Dos9_SetEnv(ENVBUF* pEnv, const char* name, const char* content);
-void  Dos9_UnSetEnv(ENVBUF* pEnv, const char* name);
+void  Dos9_SetEnv(ENVBUF* pEnv, char* name, const char* content);
+void  Dos9_UnSetEnv(ENVBUF* pEnv, char* name);
 
 void* Dos9_GetEnvBlock(ENVBUF* pEnv, size_t *s);
 

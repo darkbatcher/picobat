@@ -20,6 +20,6 @@
 #ifndef DOS9_XARGS_H
 #define DOS9_XARGS_H
 
-int Dos9_CmdXargs(const char* line);
+int Dos9_CmdXargs(char* line);
 
 #endif /* DOS9_XARGS_H */

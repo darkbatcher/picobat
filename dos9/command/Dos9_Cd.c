@@ -170,7 +170,7 @@ reloop:
 
 int Dos9_SetCurrentDir(char* lpLine)
 {
-    char *p, *p2 = NULL;
+    char *p/*, *p2 = NULL */;
     size_t remain;
 
     if (TEST_ABSOLUTE_PATH(lpLine)

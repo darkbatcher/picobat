@@ -27,11 +27,12 @@
 #include "../libDos9-int.h"
 
 int _Dos9_Thread_Init(void) {
+	return 0;
 }
 
 #ifndef WIN32
 
-    #include <pthread.h>
+#include <pthread.h>
 
 /* the system provide posix compliant
    interfaces, then, use it */
@@ -195,4 +196,3 @@ LIBDOS9 int      Dos9_WaitForAllThreads(void)
 LIBDOS9 void     Dos9_AbortAllThreads(void)
 {
 }
-

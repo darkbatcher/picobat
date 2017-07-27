@@ -62,7 +62,7 @@ int Dos9_CmdPushd (char *lpLine)
 
         ESTR *lpEsDir;
 
-        if (!Dos9_GetStack(lpStack, &lpEsDir)) {
+        if (!Dos9_GetStack(lpStack, (void **)&lpEsDir)) {
             fputs(Dos9_EsToChar(lpEsDir), stdout);
             fputs(DOS9_NL, stdout);
         }
@@ -92,7 +92,7 @@ int Dos9_CmdPushd (char *lpLine)
 
         count++;
 
-    } while(lpLine = Dos9_GetNextParameterEs(lpLine, lpEstr));
+    } while((lpLine = Dos9_GetNextParameterEs(lpLine, lpEstr)));
 
     free:
         Dos9_EsFree(lpEstr);
@@ -109,7 +109,7 @@ int Dos9_CmdPushd (char *lpLine)
 int Dos9_CmdPopd (char *lpLine)
 {
     ESTR *lpEsDir;
-    char *lpDir;
+    /* char *lpDir; */
 
     lpLine += 4;
 
@@ -120,7 +120,7 @@ int Dos9_CmdPopd (char *lpLine)
         return 0;
     }
 
-    if (Dos9_GetStack(lpStack, &lpEsDir))
+    if (Dos9_GetStack(lpStack, (void **)&lpEsDir))
         return -1;
 
     lpStack = Dos9_PopStack(lpStack, NULL);

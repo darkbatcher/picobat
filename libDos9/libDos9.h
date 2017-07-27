@@ -64,8 +64,8 @@
     #define O_RDONLY _O_RDONLY
     #define O_TRUNC _O_TRUNC
     #define O_TEXT _O_TEXT
-    #define S_IREAD _S_IREAD
-    #define O_IWRITE _S_IWRITE
+    #define S_IRUSR _S_IREAD
+    #define S_IWUSR _S_IWRITE
 
     /*
      * provide some wrapper over windows pseudo-POSIX functions

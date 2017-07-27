@@ -18,11 +18,16 @@
  *
  */
 
+ #ifndef _XOPEN_SOURCE
+ #define _XOPEN_SOURCE 700
+ #endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "../errors/Dos9_Errors.h"
+#include "Dos9_Core.h"
 #include "Dos9_Env.h"
 
 #include <libDos9.h>
@@ -132,7 +137,7 @@ ENVBUF* Dos9_InitEnv(char** env)
     ENVBUF* pEnv;
     ENVVAR** pBuf;
     char   *pStr,
-           *pEqual,
+           /* *pEqual, */
            *pCh;
 
     /* count the elements in the env array */
@@ -227,7 +232,7 @@ char* Dos9_GetEnv(ENVBUF* pEnv, const char* name)
         is ignored and the variable is deleted from the environement.
 
  */
-void Dos9_SetEnv(ENVBUF* pEnv, const char* name, const char* content)
+void Dos9_SetEnv(ENVBUF* pEnv, char* name, const char* content)
 {
     ENVVAR **pRes,
             key,
@@ -235,7 +240,7 @@ void Dos9_SetEnv(ENVBUF* pEnv, const char* name, const char* content)
 
     char*   namecpy;
 
-    int i;
+    /* int i; */
 
     if (content == NULL || *content == '\0') {
 
@@ -324,7 +329,7 @@ error:
          name cannot be NULL, unless the behaviour is undefined.
 */
 
-void  Dos9_UnSetEnv(ENVBUF* pEnv, const char* name)
+void  Dos9_UnSetEnv(ENVBUF* pEnv, char* name)
 {
     ENVVAR **pRes,
             key={name, NULL},

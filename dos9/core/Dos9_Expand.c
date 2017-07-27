@@ -45,7 +45,7 @@ void Dos9_ExpandSpecialVar(ESTR* ptrCommandLine, ESTR** buf)
 
 		if ((lpTokenBegin=Dos9_GetLocalVar(lpvLocalVars, lpTokenBegin, lpVarContent))) {
 
-			/* si la variable est bien définie */
+			/* si la variable est bien dï¿½finie */
 			*lpNextToken='\0';
 
 			Dos9_EsCat(lpExpanded, lpPreviousToken);
@@ -56,7 +56,7 @@ void Dos9_ExpandSpecialVar(ESTR* ptrCommandLine, ESTR** buf)
 
 		} else {
 
-			/* si la variable n'est pas définie */
+			/* si la variable n'est pas dï¿½finie */
 			lpToken=lpNextToken+1;
 
 		}
@@ -89,13 +89,13 @@ void Dos9_ExpandVar(ESTR* ptrCommandLine, char cDelimiter, ESTR** buf)
 
 		DEBUG(ptrToken);
 		*ptrNextToken='\0';
-		ptrNextToken++; // on passe au caractère suivant
+		ptrNextToken++; // on passe au caractï¿½re suivant
 
-		if ((*ptrNextToken==cDelimiter)) {
+		if (*ptrNextToken==cDelimiter) {
 
-			// si un % est échappé via %%
+			// si un % est ï¿½chappï¿½ via %%
 
-			/* on supprime le caractère qui peut éventuellement
+			/* on supprime le caractï¿½re qui peut ï¿½ventuellement
 			   trainer dans ce buffer */
 
 			Dos9_EsCat(lpExpanded, ptrToken);
@@ -151,7 +151,7 @@ void Dos9_ExpandVar(ESTR* ptrCommandLine, char cDelimiter, ESTR** buf)
 		}
 	}
 
-	Dos9_EsCat(lpExpanded, ptrToken); // si pas de séquence détectée
+	Dos9_EsCat(lpExpanded, ptrToken); // si pas de sï¿½quence dï¿½tectï¿½e
 	Dos9_EsCpy(ptrCommandLine, Dos9_EsToChar(lpExpanded));
 
 	DOS9_DBG("[ExpandVar] : '%s'\n",

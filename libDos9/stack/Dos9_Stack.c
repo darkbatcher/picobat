@@ -80,4 +80,3 @@ LIBDOS9     int Dos9_ClearStack(LPSTACK lpcsStack, void(*pFunc)(void*))
 
     return 0;
 }
-

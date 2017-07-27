@@ -22,8 +22,8 @@
 #define DOS9_CMD_COPY_H
 
 int Dos9_CmdCopy(char* lpLine);
-int Dos9_CmdCopyFile(const char* file, const char* dest, int* flags);
-int Dos9_CmdCopyRecursive(const char* file, const char* dest, short attr, int* flags);
+int Dos9_CmdCopyFile(char* file, const char* dest, int* flags);
+int Dos9_CmdCopyRecursive(char* file, const char* dest, short attr, int* flags);
 
 int Dos9_CopyFile(const char* file, const char* dest);
 int Dos9_MoveFile(const char* file, const char* dest);

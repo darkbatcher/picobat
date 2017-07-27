@@ -61,7 +61,7 @@ void  _Dump_Line_t(ifexp_line_t* line)
 
 }
 
-char * Dos9_IfExp_Compute(const char* line, int* ret, int flags)
+char * Dos9_IfExp_Compute(char* line, int* ret, int flags)
 {
     ifexp_t* exp;
     ifexp_line_t* lineexp, *linetmp;
@@ -273,7 +273,7 @@ void Dos9_IfExp_FillChild(ifexp_child_t* child, ifexp_line_t* line)
 
     Dos9_IfExp_SuppressBrackets(&line);
 
-    if (child->child.exp = Dos9_IfExp_Parse(line)) {
+    if ((child->child.exp = Dos9_IfExp_Parse(line))) {
 
         child->type = IFEXP_NODE_EXP;
 
@@ -351,7 +351,7 @@ int Dos9_IfExp_SuppressOneBracketPair(ifexp_line_t** line)
     return 1;
 }
 
-int Dos9_IfExp_Cut(const char* tok, ifexp_line_t** begin, ifexp_line_t** end)
+int Dos9_IfExp_Cut(char* tok, ifexp_line_t** begin, ifexp_line_t** end)
 {
     ifexp_line_t * line = *begin;
     int level = 0;
@@ -400,7 +400,7 @@ int Dos9_IfExp_Cut(const char* tok, ifexp_line_t** begin, ifexp_line_t** end)
     return 0;
 }
 
-char * Dos9_IfExp_ParseLine(const char* line, ifexp_line_t** ops)
+char * Dos9_IfExp_ParseLine(char* line, ifexp_line_t** ops)
 {
     int level = 0;
     ESTR* str = Dos9_EsInit();

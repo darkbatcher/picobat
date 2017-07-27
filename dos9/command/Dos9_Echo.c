@@ -71,7 +71,7 @@ int Dos9_CmdEcho(char* lpLine)
         fputs(DOS9_NL, fOutput);
 
 
-	} else if (tmp = Dos9_GetNextParameterEs(lpLine, lpEsParameter)) {
+	} else if ((tmp = Dos9_GetNextParameterEs(lpLine, lpEsParameter))) {
 
 		tmp = Dos9_GetNextParameter(tmp, buf, sizeof(buf));
 
@@ -97,7 +97,7 @@ int Dos9_CmdEcho(char* lpLine)
 
 	} else {
 
-		/* si rien n'est entré on affiche l'état de la commannd echo */
+		/* si rien n'est entrï¿½ on affiche l'ï¿½tat de la commannd echo */
 		if (bEchoOn) fputs(lpMsgEchoOn, fOutput);
 		else fputs(lpMsgEchoOff, fOutput);
 

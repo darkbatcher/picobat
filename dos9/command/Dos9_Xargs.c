@@ -53,7 +53,7 @@
 
  */
 
-int Dos9_CmdXargs(const char* line)
+int Dos9_CmdXargs(char* line)
 {
     ESTR *param = Dos9_EsInit(),
          *cmdline = Dos9_EsInit();

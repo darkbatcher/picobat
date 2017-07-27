@@ -29,7 +29,7 @@ struct wc_count_t {
     size_t chars;
 };
 
-int Dos9_CmdWc(const char* line);
+int Dos9_CmdWc(char* line);
 
 #define DOS9_WC_LINES 1
 #define DOS9_WC_CHARS 2

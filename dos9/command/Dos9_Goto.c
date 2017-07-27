@@ -53,7 +53,7 @@ int Dos9_CmdGoto(char* lpLine)
 
     lpLine+=4;
 
-    while (next = Dos9_GetNextParameterEs(lpLine, arg)) {
+    while ((next = Dos9_GetNextParameterEs(lpLine, arg))) {
 
         if (!strcmp(arg->str, "/?")) {
 

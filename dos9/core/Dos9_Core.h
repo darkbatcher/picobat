@@ -58,6 +58,8 @@
 
 #elif !defined(WIN32)
 
+#include <strings.h>
+
 #define stricmp strcasecmp
 #define strnicmp strncasecmp
 

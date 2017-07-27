@@ -18,11 +18,18 @@
  *
  */
 
+#ifndef _XOPEN_SOURCE
+#define _XOPEN_SOURCE 700
+#endif
 
 #include <ctype.h>
 #include "../libDos9.h"
 #include "../libDos9-int.h"
 #include "../../config.h"
+
+#ifndef WIN32
+#include <strings.h>
+#endif
 
 #if !defined(DOS9_USE_LIBCU8)
 
@@ -279,7 +286,7 @@ static FILELIST* Dos9_GetMatch(char* base, char* up, struct match_args_t* arg)
         goto end;
 
     /* loop through the directory entities */
-    while (ent = readdir(dir)) {
+    while ((ent = readdir(dir))) {
 
         /* printf("ent : %s\n", ent->d_name);
         getch(); */
@@ -472,9 +479,9 @@ LIBDOS9 int Dos9_GetMatchFileCallback(char* lpPathMatch, int iFlag, void(*pCallB
 #endif
 
 
-LIBDOS9 char* Dos9_SeekPattern(const char* restrict match, const char* restrict pattern, size_t len)
+LIBDOS9 const char *Dos9_SeekPattern(const char* restrict match, const char* restrict pattern, size_t len)
 {
-    const char* tok;
+    /* const char* tok; */
     int   i = 0;
 
     //printf("Looking for pattern \"%s\"[%d] in\"%s\"\n", pattern, len, match);
@@ -539,11 +546,11 @@ LIBDOS9 int Dos9_RegExpMatch(const char* restrict regexp, const char* restrict m
                 if (*regexp == '\0')
                     return 1;
 
-                if (next = strpbrk(regexp, "*?")) {
+                if ((next = strpbrk(regexp, "*?"))) {
 
                     size = next - regexp;
 
-                    if (match = Dos9_SeekPattern(match, regexp, size)) {
+                    if ((match = Dos9_SeekPattern(match, regexp, size))) {
 
                         //printf("Match found\n");
 
@@ -610,7 +617,7 @@ LIBDOS9 char* Dos9_SeekCasePattern(const char* restrict match, const char* restr
 
         if (len == i) {
     //        printf("OK\n");
-            return match;
+            return (char *)match;
         }
         match ++;
     }
@@ -659,11 +666,11 @@ LIBDOS9 int Dos9_RegExpCaseMatch(const char* restrict regexp, const char* restri
                 if (*regexp == '\0')
                     return 1;
 
-                if (next = strpbrk(regexp, "*?")) {
+                if ((next = strpbrk(regexp, "*?"))) {
 
                     size = next - regexp;
 
-                    if (match = Dos9_SeekCasePattern(match, regexp, size)) {
+                    if ((match = Dos9_SeekCasePattern(match, regexp, size))) {
 
                         //printf("Match found\n");
 
@@ -734,8 +741,8 @@ LIBDOS9 int Dos9_FormatFileSize(char* lpBuf, int iLength, unsigned int iFileSize
 
 LIBDOS9 size_t Dos9_GetStaticLength(const char* str)
 {
-    char *ptr = str,
-         *orig = str;
+    const char *ptr = str,
+               *orig = str;
 
     while (*str) {
 

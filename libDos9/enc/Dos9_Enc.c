@@ -43,14 +43,14 @@ LIBDOS9 char* Dos9_GetNextChar(const char* lpContent)
 {
 
     if (_Dos9_TextMode==DOS9_UTF8_ENCODING) {
-        /* système de gestion des caractères UTF-8 */
+        /* systï¿½me de gestion des caractï¿½res UTF-8 */
 
         if (!(*lpContent & UNICODE_BYTE)) {
-            /* il s'agit d'un caractère de la norme ASCII */
+            /* il s'agit d'un caractï¿½re de la norme ASCII */
             return (char*)lpContent+1;
         }
 
-        /* sinon on boucle pour parvenir au prochain caractère */
+        /* sinon on boucle pour parvenir au prochain caractï¿½re */
 
         lpContent++;
 

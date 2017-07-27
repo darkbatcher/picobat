@@ -20,6 +20,8 @@
 #ifndef DUMP_H
 #define DUMP_H
 
+#include <stdlib.h>
+
 #define PAGE_MODE_ON 0x01
 #define ADDRESSES_ON 0x02
 #define CHARS_ON 0x04

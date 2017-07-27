@@ -17,6 +17,15 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
+#ifndef _XOPEN_SOURCE
+#define _XOPEN_SOURCE 700
+#endif
+
+#ifndef WIN32
+#include <strings.h>
+#endif
+
 #include "../libDos9.h"
 #include "../libDos9-int.h"
 
@@ -401,7 +410,7 @@ LIBDOS9 LPCOMMANDLIST   Dos9_ReMapCommandInfo(LPCOMMANDLIST lpclCommandList)
        commandinfo structure and Map it again */
 
     size_t iNewSize;
-    size_t i;
+    /* size_t i; */
     COMMANDINFO* lpciCmdInfo;
     COMMANDLIST* lpclList;
 

@@ -17,6 +17,10 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef _XOPEN_SOURCE
+#define _XOPEN_SOURCE 700
+#endif
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -49,7 +53,7 @@ STREAMSTACK* Dos9_InitStreamStack(void)
 /* frees the stream stack */
 void Dos9_FreeStreamStack(STREAMSTACK* stack)
 {
-    STREAMSTACK* tmp;
+    /* STREAMSTACK* tmp; */
 
     /* Here, speed is not critical at all, so do things
        consciously, hopefully, it is simple, normally no
@@ -96,7 +100,7 @@ STREAMSTACK* Dos9_OpenOutput(STREAMSTACK* stack, char* name, int fd, int mode)
 
        Note that cmd.exe implements a mechanism to create path that do not exist
        upon opening of the file. This is not implemented yet. */
-    if ((newfd = open(TRANS(name), fmode, S_IREAD | S_IWRITE)) == -1) {
+    if ((newfd = open(TRANS(name), fmode, S_IRUSR | S_IWUSR)) == -1) {
 
         Dos9_ShowErrorMessage(DOS9_FILE_ERROR | DOS9_PRINT_C_ERROR,
                                 name, 0);
