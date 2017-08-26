@@ -1447,16 +1447,19 @@ int Dos9_ForInputParseFileList(FILE_LIST_T* lpList, ESTR* lpInput)
 
 void Dos9_ForCloseInputInfo(INPUTINFO* lpipInfo)
 {
-    int i=0;
+    int i = 0;
 
 	switch(lpipInfo->cType) {
 
-        case INPUTINFO_TYPE_COMMAND:
+        case INPUTINFO_TYPE_COMMAND:;
 
+            void *ptr = NULL;
+            THREAD *t = &(lpipInfo->Info.InputFile.handle);
 
 		    fclose(lpipInfo->Info.InputFile.pFile);
-            Dos9_WaitForThread(&(lpipInfo->Info.InputFile.handle), &i);
-            Dos9_CloseThread(&(lpipInfo->Info.InputFile.handle));
+
+            if (Dos9_WaitForThread(t, &ptr) != 0)
+                Dos9_CloseThread(t);
 
 		    break;
 

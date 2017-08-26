@@ -18,7 +18,7 @@
  *
  */
 #if !defined(WIN32) && !defined(_X_OPEN_SOURCE)
-#define _X_OPEN_SOURCE
+#define _XOPEN_SOURCE 700
 #endif
 
 #include <stdio.h>
@@ -968,8 +968,8 @@ int Dos9_RunExternalBatch(char* lpFileName, char* lpFullLine, char** lpArguments
 
     th = Dos9_CloneInstance(Dos9_LaunchExternalBatch, arg);
 
-    Dos9_WaitForThread(&th, &ret);
-    Dos9_CloseThread(&th);
+    if (Dos9_WaitForThread(&th, &ret) != 0)
+        Dos9_CloseThread(&th);
 
     return (int)ret;
 }
