@@ -1442,6 +1442,7 @@ int Dos9_ForInputParseFileList(FILE_LIST_T* lpList, ESTR* lpInput)
 void Dos9_ForCloseInputInfo(INPUTINFO* lpipInfo)
 {
     int i=0;
+    void *p;
 
 	switch(lpipInfo->cType) {
 
@@ -1449,7 +1450,7 @@ void Dos9_ForCloseInputInfo(INPUTINFO* lpipInfo)
 
 
 		    fclose(lpipInfo->Info.InputFile.pFile);
-            Dos9_WaitForThread(&(lpipInfo->Info.InputFile.handle), &i);
+            Dos9_WaitForThread(&(lpipInfo->Info.InputFile.handle), &p);
             Dos9_CloseThread(&(lpipInfo->Info.InputFile.handle));
 
 		    break;

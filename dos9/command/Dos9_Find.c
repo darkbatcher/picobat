@@ -82,10 +82,10 @@ void Dos9_FileFind(char* str, char* name, int count, int flag, int reverse)
 
         pFile = fInput;
 
-    } else if (!(pFile = fopen(TRANS(name), "r"))) {
+    } else if (!(pFile = fopen(name, "r"))) {
 
         Dos9_ShowErrorMessage(DOS9_FILE_ERROR | DOS9_PRINT_C_ERROR,
-                                TRANS(name),
+                                name,
                                 FALSE
                                 );
 

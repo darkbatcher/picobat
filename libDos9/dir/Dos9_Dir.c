@@ -41,6 +41,50 @@ static int __inline__ Dos9_IsRegExpTrivial(char* exp)
     }
 }
 
+/* Return the next level of the string pointed to by up, taking
+   account of various parameter.
+
+   if *jok is zero, then, the return value points to the end of
+   a string constituted by at least (but maybe more than) one level of
+   regular expression, but without any joker or question mark inside
+   them.
+
+   if *jok is non-zero, then the return value refers to the end of a
+   string of exactly one expression level that contains at least one
+   question mark or joker */
+char* Dos9_GetNextLevel(char* up, int* jok)
+{
+    int joker = 0;
+    char* prev = NULL;
+
+    *jok = 0;
+
+    while (*up) {
+
+        switch (*up) {
+
+        case '*':
+        case '?':
+            joker = 1;
+            if (prev)
+                return prev;
+            *jok = 1;
+            break;
+
+        case '/':
+        case '\\':
+            if (joker)
+                return up;
+            prev = up;
+
+        }
+
+        up++;
+    }
+
+    return NULL;
+}
+
 static FILELIST* Dos9_AddMatch(char* name, FILELIST* files, struct match_args_t* arg)
 {
     FILELIST *file,
@@ -102,18 +146,18 @@ static FILELIST* Dos9_AddMatch(char* name, FILELIST* files, struct match_args_t*
 /* Fixme : This function is quite a lot unefficient under windows,
    its perfomances can be enhanced by using native winapi functions for
    file search */
-static FILELIST* Dos9_GetMatch(char* base, char* up, struct match_args_t* arg)
+static FILELIST* Dos9_GetMatch(char* restrict base, char* restrict up, struct match_args_t* arg)
 {
     FILELIST *ret = arg->files, *tmp;
 
     ESTR* path = NULL;
-    char *item, *cleanup = NULL;
+    char *item, *cleanup = NULL, tmpbase[]="x:";
 
     DIR* dir = NULL;
     struct dirent* ent;
 
     /* printf("Called Dos9_GetMatch(%s, %s, arg)\n", base, up); */
-
+    int joker;
 
     /* if something has already been found ... */
     if ((ret != (FILELIST*)-1) && (ret != NULL)
@@ -170,6 +214,48 @@ static FILELIST* Dos9_GetMatch(char* base, char* up, struct match_args_t* arg)
             return NULL;
         }
 
+        /* As this is the top level instance of file match, it is wise
+           to check that *up does not refer to an absolute path, and such
+           path use quite a special syntax that may mess up with the
+           delimiter searching functions. Indeed in both *nixes and
+           Windows, absolute path may start with '/' which is indeed
+           a valid path delimiter.
+
+           Windows also provide a wide variety of other syntaxes to refer
+           to the concept of device :
+
+                - x:\ : Traditional device root
+                - \\.\ : Path referring to special objects
+                - \\?\ : Path referring to the current computer
+                - \\unc-name\ : A unc path
+
+          */
+        if (TEST_ROOT_PATH(up)) {
+
+            /* For convenience, if a '/' is
+               encountered, just set *base to be the empty string, as no file may
+               bear an empty name anyway. */
+
+            base = ""; /* simple as hell */
+
+            if (up && *up)
+                up ++;
+
+        } else if (TEST_DRIVE_PATH(up)) {
+
+            base = basetmp;
+            basetmp[0] = *up;
+
+            if (up && *up)
+                up++;
+
+        } else if (TEST_UNC_PATH(up)) {
+
+            /* not implemented */
+
+        }
+
+
     }
 
     /* we will need this */
@@ -182,7 +268,7 @@ static FILELIST* Dos9_GetMatch(char* base, char* up, struct match_args_t* arg)
 
        item = "*";
 
-    } else if ((up = strpbrk(up, "\\/"))) {
+    } else if ((up = Dos9_GetNextLevel(up, &joker))) {
 
         cleanup = up;
         *cleanup = '\0';
@@ -190,78 +276,76 @@ static FILELIST* Dos9_GetMatch(char* base, char* up, struct match_args_t* arg)
 
     }
 
-    /* Check if the item is trivial before really trying
-       to recurse in base folder ... */
-    if (base != NULL) {
+    if (!joker) {
 
-        Dos9_EsCpy(path, base);
-        Dos9_EsCat(path, "/");
-        Dos9_EsCat(path, item);
+        /* Check if the item is trivial before really trying
+           to recurse in base folder ... */
+        if (base != NULL) {
 
-    } else {
-
-        Dos9_EsCpy(path, item);
-
-    }
-
-
-
-    if (Dos9_FileExists(path->str)) {
-        /* if path corresponds to a file (ie. not a dir), there is two
-           possibilities (a) up is NULL and then the files matches sinces
-           we already reached top level, or (b) up is not NULL and then
-           the file cannot match and it is wise to stop search in this
-           folder */
-        if (up == NULL) {
-
-            if ((tmp = Dos9_AddMatch(path->str, ret, arg)) == NULL)
-                goto err;
-
-            ret = tmp;
-            goto end;
+            Dos9_EsCpy(path, base);
+            Dos9_EsCat(path, "/");
+            Dos9_EsCat(path, item);
 
         } else {
 
-            /*abort search */
-            goto end;
+            Dos9_EsCpy(path, item);
 
         }
-    }
 
-    if (Dos9_DirExists(path->str)) {
-        /* if path corresponds to a dir, always continue search. But path
-           is not necessarily to be added to results... ! */
 
-        if (up == NULL) {
 
-            /* add the file and browse if recursive. If the returns uses
-               callback, do not forget to add match first. */
-            if (arg->callback != NULL) {
+        if (Dos9_FileExists(path->str)) {
+            /* if path corresponds to a file (ie. not a dir), there is two
+               possibilities (a) up is NULL and then the files matches sinces
+               we already reached top level, or (b) up is not NULL and then
+               the file cannot match and it is wise to stop search in this
+               folder */
+            if (up == NULL) {
+
                 if ((tmp = Dos9_AddMatch(path->str, ret, arg)) == NULL)
                     goto err;
 
                 ret = tmp;
+
             }
+        }
 
-            if (arg->flags & DOS9_SEARCH_RECURSIVE) {
+        if (Dos9_DirExists(path->str)) {
+            /* if path corresponds to a dir, always continue search. But path
+               is not necessarily to be added to results... ! */
 
+            if (up == NULL) {
+
+                /* add the file and browse if recursive. If the returns uses
+                   callback, do not forget to add match first. */
+                if (arg->callback != NULL) {
+                    if ((tmp = Dos9_AddMatch(path->str, ret, arg)) == NULL)
+                        goto err;
+
+                    ret = tmp;
+                }
+
+                if (arg->flags & DOS9_SEARCH_RECURSIVE) {
+
+                    arg->files = ret;
+                    ret = Dos9_GetMatch(path->str, up, arg);
+
+                }
+
+                if (arg->callback == NULL) {
+                    if ((tmp = Dos9_AddMatch(path->str, ret, arg)) == NULL)
+                        goto err;
+
+                    ret = tmp;
+                }
+
+            } else {
+
+                /* always browse */
                 arg->files = ret;
                 ret = Dos9_GetMatch(path->str, up, arg);
 
             }
-
-            if (arg->callback == NULL) {
-                if ((tmp = Dos9_AddMatch(path->str, ret, arg)) == NULL)
-                    goto err;
-
-                ret = tmp;
-            }
-
-        } else {
-
-            /* always browse */
-            arg->files = ret;
-            ret = Dos9_GetMatch(path->str, up, arg);
 
         }
 

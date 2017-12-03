@@ -103,7 +103,12 @@ int   IntEval_GetValue(const char* str)
     int ret;
     char *pch;
 
-    if ((pch = strpbrk(str, "+-*/|^><&=")))
+    if (*str == '-')
+        pch = strpbrk(str + 1, "+-*/|^><&= \n\t");
+    else
+        pch = strpbrk(str, "+-*/|^><&= \n\t");
+
+    if (pch)
         *pch = '\0';
 
     ret = strtol(str, &pch, 0);

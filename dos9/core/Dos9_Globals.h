@@ -36,6 +36,8 @@ extern int iMainThreadId; /* thread id of the main thread */
 extern void(*pErrorHandler)(void); /* error handler */
 extern char* lpInitVar[]; /* list of variable for initialization */
 extern MUTEX mThreadLock; /* a mutex for single threaded parts */
+extern MUTEX mSetILock; /* a mutex for set (integers) */
+extern MUTEX mSetFLock; /* a mutex for set (floats) */
 
 extern int fdStdin; /* temporary storage for streams */
 extern int fdStdout;

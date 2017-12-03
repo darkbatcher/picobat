@@ -586,7 +586,7 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 LOCAL_VAR_BLOCK* Dos9_DuplicateLocalVar(LOCAL_VAR_BLOCK* block)
 {
     LOCAL_VAR_BLOCK* new;
-    int i;
+    int i = 0;
 
     if ((new = Dos9_GetLocalBlock()) == NULL)
         Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION

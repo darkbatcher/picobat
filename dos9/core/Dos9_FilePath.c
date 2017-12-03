@@ -31,20 +31,14 @@
 #include "Dos9_Core.h"
 #include "Dos9_FilePath.h"
 
-#ifndef WIN32
-#define TEST_ABSOLUTE_PATH(p) (*p == '/')
-#define DEF_DELIMITER "/"
-#elif defined WIN32
-#define TEST_ABSOLUTE_PATH(p) ((*p && *(p+1)==':' && (*(p+2)=='\\' || *(p+2)=='/')) || (*p == '/'))
-#define DEF_DELIMITER "\\"
-#endif // _POSIX_C_SOURCE
-
-int Dos9_GetFileFullPath(char* full, const char* partial, size_t size)
+int Dos9_GetFileFullPath(char* full, const char* p, size_t size)
 {
+    char* partial = TRANS(p);
+
     if (TEST_ABSOLUTE_PATH(partial)) {
 
 #ifdef WIN32
-        if (*partial == '/') {
+        if (TEST_ROOT_PATH(partial)) {
             snprintf(full, size, "%c:\\%s", *lpCurrentDir, partial + 1);
 
             if (!Dos9_FileExists(full))
@@ -69,16 +63,19 @@ int Dos9_GetFileFullPath(char* full, const char* partial, size_t size)
     return 0;
 }
 
-void __inline__ Dos9_MakeFullPath(char* full, const char* partial, size_t size)
+void __inline__ Dos9_MakeFullPath(char* full, const char* p, size_t size)
 {
+    char* partial = TRANS(p);
+
     if (TEST_ABSOLUTE_PATH(partial)) {
 
 #ifdef WIN32
-        if (*partial == '/') {
+        if (TEST_ROOT_PATH(partial)) {
             snprintf(full, size, "%c:\\%s", *lpCurrentDir, partial + 1);
             return;
         }
 #endif // WIN32
+
         strncpy(full, partial, size);
         full[size - 1] = '\0';
         return;
@@ -87,14 +84,15 @@ void __inline__ Dos9_MakeFullPath(char* full, const char* partial, size_t size)
     snprintf(full, size, "%s" DEF_DELIMITER "%s", lpCurrentDir, partial);
 }
 
-void __inline__ Dos9_MakeFullPathEs(ESTR* full, const char* partial)
+void __inline__ Dos9_MakeFullPathEs(ESTR* full, const char* p)
 {
     char begin[] = "c:/";
+    char* partial = TRANS(p);
 
     if (TEST_ABSOLUTE_PATH(partial)) {
 
 #ifdef WIN32
-        if (*partial == '/') {
+        if (TEST_ROOT_PATH(partial)) {
 
             begin[0] = *lpCurrentDir;
             Dos9_EsCpy(full, begin);
@@ -121,7 +119,7 @@ __inline__ char* Dos9_EsToFullPath(ESTR* full)
     if (TEST_ABSOLUTE_PATH(p)) {
 
 #ifdef WIN32
-        if (*(full->str) == '/') {
+        if (TEST_ROOT_PATH(full->str)) {
             /* we need at least two more bytes */
             len = strlen(p) + 1;
 
@@ -163,21 +161,21 @@ __inline__ char* Dos9_EsToFullPath(ESTR* full)
 
     memmove(full->str + size + 1, p, len);
     memcpy(full->str, lpCurrentDir, size);
-    *(full->str + size) = '/';
+    *(full->str + size) = DEF_DELIMITER;
 
     return full->str;
 }
 
-__inline__ char* Dos9_FullPathDup(const char* path)
+__inline__ char* Dos9_FullPathDup(const char* p)
 {
-    char *ret;
+    char *ret, *path = TRANS(p);
     size_t needed = strlen(path) + 1;
 
     if (TEST_ABSOLUTE_PATH(path)) {
         /* this is already absolute */
 
 #ifdef WIN32
-        if (*path == '/') {
+        if (TEST_ROOT_PATH(path)) {
             ret = malloc(2 + needed);
 
             if (!ret)

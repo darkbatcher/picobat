@@ -71,15 +71,7 @@
     windows ! This allows doing proper treatment when being a disk root ...
  */
 
-#ifndef WIN32
-#define TEST_ABSOLUTE_PATH(p) (*p == '/')
-#define TEST_SEPARATOR(p) (*p == '/')
-#define DEFAULT_SEPARATOR '\\'
-#elif defined WIN32
-#define TEST_ABSOLUTE_PATH(p) ((*p && *(p+1)==':' && (*(p+2)=='\\' || *(p+2)=='/')) || (*p == '/'))
-#define TEST_SEPARATOR(p) (*p == '\\' || *p == '/')
-#define DEFAULT_SEPARATOR '/'
-#endif // _POSIX_C_SOURCE
+
 
 int /*__inline__ */ Dos9_Canonicalize(char* path)
 {
@@ -90,19 +82,11 @@ int /*__inline__ */ Dos9_Canonicalize(char* path)
     /* first pass to clean multiple separators and "." characters */
     while (*path) {
 
-#ifndef WIN32
-        if (*path == '\\')
-            *path = '/';
-#else
-        if (*path == '/')
-            *path = '\\';
-#endif
+        if (TEST_SEPARATOR(path))
+            *path = DEF_SEPARATOR;
 
-#ifndef WIN32
-        if (*path == '/') {
-#else
-        if (*path == '\\') {
-#endif
+        if (TEST_SEPARATOR(path)) {
+
             /* Try to swallow multiple delimiters */
             next = path + 1;
 
@@ -177,13 +161,15 @@ int Dos9_SetCurrentDir(char* lpLine)
         && Dos9_DirExists(lpLine)) {
 
  #ifdef WIN32
-        /* Under windows, we do not have unique filesystem
+        /* Under windows, we do not have unique file system
            root, so that '/' refers to the current active drive, we have
            to deal with it */
 
         if (*lpLine == '/') {
 
-            /* well, arguably lpCurrentDir[2] is a slash ... */
+            /* well, arguably lpCurrentDir[2] is a slash ...
+               unless lpCurrentDir refers to a unc path, but this
+               is not handled yet */
             strncpy(lpCurrentDir + 2, lpLine, FILENAME_MAX-2);
             lpCurrentDir[FILENAME_MAX-1];
 

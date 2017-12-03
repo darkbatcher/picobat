@@ -91,12 +91,9 @@ STREAMSTACK* Dos9_OpenOutput(STREAMSTACK* stack, char* name, int fd, int mode)
 
     }
 
-    /* open the file for redirection. TRANS() is used as a way to translate
-       windows-specific files into unix-compatible names (eg. NUL -> /dev/null)
-
-       Note that cmd.exe implements a mechanism to create path that do not exist
+    /* Note that cmd.exe implements a mechanism to create path that do not exist
        upon opening of the file. This is not implemented yet. */
-    if ((newfd = open(TRANS(name), fmode, S_IREAD | S_IWRITE)) == -1) {
+    if ((newfd = open(name, fmode, S_IREAD | S_IWRITE)) == -1) {
 
         Dos9_ShowErrorMessage(DOS9_FILE_ERROR | DOS9_PRINT_C_ERROR,
                                 name, 0);

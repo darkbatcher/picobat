@@ -41,7 +41,8 @@ int fdStdin;
 int fdStdout;
 int fdStderr;
 MUTEX mThreadLock;
-
+MUTEX mSetILock;
+MUTEX mSetFLock;
 
 __thread int bDelayedExpansion=FALSE;
 __thread int bUseFloats=FALSE;

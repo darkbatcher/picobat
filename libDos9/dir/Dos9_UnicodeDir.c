@@ -169,7 +169,7 @@ static FILELIST* Dos9_AddMatch(wchar_t* wname, FILELIST* files, struct match_arg
         snprintf(block.lpFileName, FILENAME_MAX, "%s", name);
 
         if (!(arg->flags & DOS9_SEARCH_NO_STAT)) {
-            /* Using windows, more detailled directory information
+            /* Using windows, more detailed directory information
                can be obtained */
             if (data == NULL) {
 
@@ -244,8 +244,7 @@ static FILELIST* Dos9_GetMatch(wchar_t* restrict base, wchar_t* restrict up, str
         && (arg->flags & DOS9_SEARCH_GET_FIRST_MATCH))
         return ret;
 
-    if (base == NULL
-        /* && Dos9_IsRegExpTrivial(up) */) {
+    if (base == NULL) {
         /* This is somewhat the top-level instance of Dos9_GetMatch ...*/
 
         if ((arg->flags &
@@ -333,9 +332,8 @@ static FILELIST* Dos9_GetMatch(wchar_t* restrict base, wchar_t* restrict up, str
 
         }
 
-
-
         if (Dos9_FileExists_W(path)) {
+
             /* if path corresponds to a file (ie. not a dir), there is two
                possibilities (a) up is NULL and then the files matches since
                we already reached top level, or (b) up is not NULL and then
@@ -349,18 +347,14 @@ static FILELIST* Dos9_GetMatch(wchar_t* restrict base, wchar_t* restrict up, str
                 ret = tmp;
                 goto end;
 
-            } else {
-
-                /*abort search */
-                goto end;
-
             }
+
         }
 
         if (Dos9_DirExists_W(path)) {
+
             /* if path corresponds to a dir, always continue search. But path
                is not necessarily to be added to results... ! */
-
             if (up == NULL) {
 
                 /* add the file and browse if recursive. If the returns uses
@@ -400,12 +394,17 @@ static FILELIST* Dos9_GetMatch(wchar_t* restrict base, wchar_t* restrict up, str
 
 
         /* path->str is trivial but it is neither a dir or a file... We can
-           be sure we won't get any matching file */
+           bet we won't get any matching file */
         goto end;
 
     }
 
     if (base != NULL) {
+
+        /* we could do better than that, in case of non recursive search,
+           but we won't, because various versions of windows result in
+           various regular expression interpretation, as such we may
+           prefer to use our custom functions when it is needed */
 
         wcsncpy(path, base, XSIZE(path));
         xwcsncat(path, L"\\*", XSIZE(path));
@@ -414,8 +413,8 @@ static FILELIST* Dos9_GetMatch(wchar_t* restrict base, wchar_t* restrict up, str
 
         *path = L'*';
         *(path + 1) = L'\0';
-    }
 
+    }
 
     if ((dir = FindFirstFileW(path, &ent)) == INVALID_HANDLE_VALUE)
         goto end;
@@ -461,6 +460,7 @@ static FILELIST* Dos9_GetMatch(wchar_t* restrict base, wchar_t* restrict up, str
                         goto end;
 
             }
+
         } else {
             /* the entity is a directory, browse if (a) up is not NULL
             or (b) the search is recursive and up is NULL. Only add if

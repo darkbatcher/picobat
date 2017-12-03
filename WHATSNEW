@@ -1926,3 +1926,18 @@ FRIDAY 2ND, JUNE
 
         - Fixed file search bug for vanilla functions under windows.
 
+FRIDAY 21ST, JULY
+
+        - Heavily modified the interpretor that no uses threads instead of of 
+          separated processes.
+
+        - Fix of the set command.
+
+        - Lots of bugfixes.
+
+SUNDAY 3RD, DECEMBER
+
+        - Fixes for path name handling in Dos9_GetMatchFileList 
+
+        - Added semaphores to fix SET command. 
+
