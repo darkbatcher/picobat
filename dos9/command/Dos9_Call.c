@@ -63,7 +63,7 @@ int Dos9_CmdCall(char* lpLine)
 
 	lpFullLine= lpLine = Dos9_SkipBlanks(lpLine+4);
 
-	while (lpNxt=Dos9_GetNextParameterEs(lpLine, lpEsParameter)) {
+	while ((lpNxt=Dos9_GetNextParameterEs(lpLine, lpEsParameter))) {
 
 		lpCh=Dos9_EsToChar(lpEsParameter);
 
@@ -233,8 +233,8 @@ int Dos9_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 	char lpAbsPath[FILENAME_MAX];
 
 	ESTR *lpEsParam=Dos9_EsInit(),
-         *lpEsCmd,
-         *lpEsTmp;
+         *lpEsCmd
+         /*, *lpEsTmp */;
 	int   c='1',
 	      iLockState;
 
@@ -302,7 +302,7 @@ int Dos9_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 
         lpEsCmd = Dos9_EsInit();
 
-        while (lpCmdLine = Dos9_GetNextParameterEs(lpCmdLine, lpEsParam)) {
+        while ((lpCmdLine = Dos9_GetNextParameterEs(lpCmdLine, lpEsParam))) {
             Dos9_EsReplace(lpEsParam, " ", "^ ");
             Dos9_EsReplace(lpEsParam, ";", "^;");
             Dos9_EsReplace(lpEsParam, ",", "^,");

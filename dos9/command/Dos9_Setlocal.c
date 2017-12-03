@@ -18,6 +18,10 @@
  *
  */
 
+#ifndef _XOPEN_SOURCE
+#define _XOPEN_SOURCE 700
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -73,8 +77,8 @@ int Dos9_CmdSetLocal(char* lpLine)
 			Dos9_ShowErrorMessage(DOS9_UNABLE_SET_OPTION,
 						"CMDLYCORRECT",
 						FALSE
-						);			
-#endif 
+						);
+#endif
 		} else if (!stricmp(lpName, "CMDLYINCORRECT")) {
 #if !defined(DOS9_STATIC_CMDLYCORRECT)
 			bCmdlyCorrect=FALSE;

@@ -18,6 +18,10 @@
  *
  */
 
+#ifndef _XOPEN_SOURCE
+#define _XOPEN_SOURCE 700
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -72,7 +76,7 @@ double _Dos9_SetGetVarFloat(const char* lpName)
 
 }
 
-double _Dos9_SetSetVarFloat(const char* name, double f)
+double _Dos9_SetSetVarFloat(char* name, double f)
 {
 	char value[FILENAME_MAX];
 
@@ -83,7 +87,7 @@ double _Dos9_SetSetVarFloat(const char* name, double f)
     return f;
 }
 
-int _Dos9_SetGetVarInt(const char* lpName)
+int _Dos9_SetGetVarInt(char* lpName)
 {
 	char* lpContent;
 
@@ -101,13 +105,13 @@ int _Dos9_SetGetVarInt(const char* lpName)
 
 }
 
-int _Dos9_SetSetVarInt(const char* lpName, int v)
+int _Dos9_SetSetVarInt(char* lpName, int v)
 {
 	char lpContent[FILENAME_MAX];
     char *tok;
 
     /* BIG HACK */
-    if (tok = strchr(lpName, '='))
+    if ((tok = strchr(lpName, '=')))
         *tok = '\0';
 
     snprintf(lpContent, sizeof(lpContent), "%d", v);
@@ -184,8 +188,8 @@ int Dos9_CmdSet(char *lpLine)
         nok = 0,
 	    bFloats;
 
-	if (lpNextToken=Dos9_GetNextParameter(lpLine+3, lpArgBuf,
-            sizeof(lpArgBuf)))  {
+	if ((lpNextToken=Dos9_GetNextParameter(lpLine+3, lpArgBuf,
+            sizeof(lpArgBuf))))  {
 
 		if (!stricmp(lpArg, "/?")) {
 
@@ -361,7 +365,7 @@ int Dos9_CmdSetS(char* lpLine)
 	Dos9_EsFree(lpEsVar);
 	return 0;
 
-error:
+/* error: */
 	Dos9_EsFree(lpEsVar);
 	return -1;
 
@@ -433,7 +437,7 @@ int Dos9_CmdSetA(char* lpLine, int bFloats)
 
 	lpLine=Dos9_SkipBlanks(lpLine);
 
-	while (lpLine=Dos9_GetNextParameterEsD(lpLine, lpExpression , "\",")) {
+	while ((lpLine=Dos9_GetNextParameterEsD(lpLine, lpExpression , "\","))) {
 
 		/* get the expression back */
 		//Dos9_GetEndOfLine(lpLine, lpExpression);

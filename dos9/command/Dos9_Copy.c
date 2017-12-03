@@ -57,7 +57,7 @@
     at the end of the static part of the regular expression. For example, if
     COPY encounters :
 
-        path/to/folder/*.*
+        path/to/folder/ *.*
         \_____________/\_/
           Static part   Regexp
 
@@ -112,7 +112,7 @@ int Dos9_CmdCopy(char* line)
 
     }
 
-    while (line = Dos9_GetNextParameterEs(line, param)) {
+    while ((line = Dos9_GetNextParameterEs(line, param))) {
 
         str = Dos9_EsToChar(param);
 
@@ -193,7 +193,7 @@ int Dos9_CmdCopy(char* line)
     if (len < 2) {
 
         Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "COPY", FALSE);
-        status -1;
+        status = -1;
 
         goto end;
     }
@@ -308,7 +308,7 @@ int Dos9__EndWithDirectoryMark(const char* dir)
     return IS_DIR_DELIM(c);
 }
 
-int Dos9_CmdCopyFile(const char* file, const char* dest, int* flags)
+int Dos9_CmdCopyFile(char* file, const char* dest, int* flags)
 {
     int ok=1;
 
@@ -382,7 +382,7 @@ int Dos9_CmdCopyFile(const char* file, const char* dest, int* flags)
     return 0;
 }
 
-int Dos9_CmdCopyRecursive(const char* file, const char* dest, short attr, int* flags)
+int Dos9_CmdCopyRecursive(char* file, const char* dest, short attr, int* flags)
 {
     FILELIST *files=NULL,
              *dirs=NULL,
@@ -681,4 +681,3 @@ int Dos9_CatFile(const char* file, const char* dest, int* flags)
     return 0;
 
 }
-

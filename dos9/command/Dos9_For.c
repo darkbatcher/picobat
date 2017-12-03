@@ -18,6 +18,10 @@
  *
  */
 
+#ifndef _XOPEN_SOURCE
+#define _XOPEN_SOURCE 700
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
@@ -275,7 +279,7 @@ int Dos9_CmdFor(char* lpLine)
 
     lpToken = Dos9_SkipBlanks(lpToken);
 
-    if (*lpToken && *lpToken != NULL) {
+    if (*lpToken && lpToken != NULL) {
 
             /* There is trailing characters after the block */
 			Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpToken, FALSE);
@@ -1042,7 +1046,7 @@ int Dos9_ForVarCheckAssignment(FORINFO* lpfrInfo)
 
 		if ((Dos9_GetLocalVarPointer(lpvLocalVars, cVarName))) {
 
-			Dos9_ShowErrorMessage(DOS9_FOR_TRY_REASSIGN_VAR, (char*)((int)cVarName), FALSE);
+			Dos9_ShowErrorMessage(DOS9_FOR_TRY_REASSIGN_VAR, (char*)(cVarName), FALSE);
 			return -1;
 
 		}
@@ -1260,6 +1264,8 @@ int Dos9_ExecuteForSubCommand(struct pipe_launch_data_t* arg)
 
     Dos9_EsFree(arg->str);
     free(arg);
+
+    return 0;
 }
 
 int Dos9_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFd)
@@ -1281,7 +1287,7 @@ int Dos9_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFd)
 	Dos9_SetFdInheritance(iPipeFd[0], 0);
 
     lpipInfo->Info.InputFile.handle
-        = Dos9_CloneInstance(Dos9_ExecuteForSubCommand, param);
+        = Dos9_CloneInstance((void (*)(void *))Dos9_ExecuteForSubCommand, param);
 
 	if (!(pFile=fdopen(iPipeFd[0], "rb")))
 		goto error;
@@ -1446,8 +1452,10 @@ void Dos9_ForCloseInputInfo(INPUTINFO* lpipInfo)
 
 	switch(lpipInfo->cType) {
 
-        case INPUTINFO_TYPE_COMMAND:
+        case INPUTINFO_TYPE_COMMAND:;
 
+            void *ptr = NULL;
+            THREAD *t = &(lpipInfo->Info.InputFile.handle);
 
 		    fclose(lpipInfo->Info.InputFile.pFile);
             Dos9_WaitForThread(&(lpipInfo->Info.InputFile.handle), &p);

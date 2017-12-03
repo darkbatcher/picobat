@@ -18,8 +18,13 @@
  *
  */
 
+#ifndef _XOPEN_SOURCE
+#define _XOPEN_SOURCE 700
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <fcntl.h>
 
 #ifndef WIN32
@@ -36,6 +41,8 @@
 
 #include "../../config.h"
 
+static int Dos9_MoreWriteLine(int* begin, int flags, int tabsize, FILE* file);
+static int Dos9_MorePrompt(int* toprint, int* skip, int* ok);
 
 int Dos9_CmdMore(char* line)
 {
@@ -52,7 +59,7 @@ int Dos9_CmdMore(char* line)
 
     char *ret,
          *ptr;
-    char name[FILENAME_MAX];
+    /* char name[FILENAME_MAX]; */
 
     line +=4;
 
@@ -210,7 +217,7 @@ int Dos9_MoreFile(int flags, int tabsize, int begin, char* filename)
 {
 
     FILE *file;
-    char buf[80];
+    /* char buf[80]; */
     int status=0,
         ok=1,
         toprint;
@@ -246,7 +253,7 @@ int Dos9_MoreFile(int flags, int tabsize, int begin, char* filename)
      } else {
 
         /* skip lines at beginning */
-        while (begin && Dos9_MoreWriteLine(&begin, flags, tabsize, file));
+        while (begin && Dos9_MoreWriteLine(&begin, flags, tabsize, file))
             toprint = 23;
 
         /* run interractive */
@@ -284,7 +291,7 @@ end:
 
 }
 
-int more_void(int c, FILE* p) {}
+int more_void(int c, FILE* p) { return 0; }
 
 #ifdef WIN32
 
@@ -334,7 +341,7 @@ int more_fputc_u8_wrapper (int c, FILE* p)
 }
 #endif
 
-int Dos9_MoreWriteLine(int* begin, int flags, int tabsize, FILE* file)
+static int Dos9_MoreWriteLine(int* begin, int flags, int tabsize, FILE* file)
 {
     int c,
         col=0,
@@ -480,7 +487,7 @@ int Dos9_GetMoreNb(void)
 }
 
 
-int Dos9_MorePrompt(int* toprint, int* skip, int* ok)
+static int Dos9_MorePrompt(int* toprint, int* skip, int* ok)
 {
 	int i;
     fprintf(fOutput, "-- More --");

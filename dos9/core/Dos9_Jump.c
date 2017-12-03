@@ -33,7 +33,7 @@ int Dos9_JumpToLabel(char* lpLabelName, char* lpFileName)
 {
     struct labels_t* lbl;
     struct batch_script_t script;
-    size_t size = strlen(lpLabelName);
+    /* size_t size = strlen(lpLabelName); */
     int new;
 
     /* If neither label nor filename are given or if interactive mode */
@@ -99,7 +99,7 @@ int Dos9_JumpToLabel_Cmdly(char* lpLabelName, char* lpFileName)
 	ESTR* lpLine=Dos9_EsInit();
 
 
-	if ((lpFileName==NULL)) {
+	if (lpFileName==NULL) {
 		lpName=ifIn.lpFileName;
 	}
 
@@ -160,5 +160,3 @@ int Dos9_JumpToLabel_Cmdly(char* lpLabelName, char* lpFileName)
 
 	return -1;
 }
-
-

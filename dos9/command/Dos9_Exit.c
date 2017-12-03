@@ -17,6 +17,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -61,7 +62,7 @@ int Dos9_CmdExit(char* lpLine)
             /* /b allow resuming to upper executiong level, with or without
                specifying a return value in ERRORLEVEL */
 
-            if (ntoken = Dos9_GetNextParameterEs(ntoken, param)) {
+            if ((ntoken = Dos9_GetNextParameterEs(ntoken, param))) {
 
                 if (*ntoken) {
 

@@ -17,6 +17,11 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
+#ifndef _XOPEN_SOURCE
+#define _XOPEN_SOURCE 700
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -47,7 +52,7 @@ void Dos9_AssignCommandLine(int c, char** argv)
     ESTR *lpEsStr=Dos9_EsInit(),
           *lpEsParam=Dos9_EsInit();
 
-    int i;
+    /* int i; */
 
     char*  delims=" ,;=\t&|";
 

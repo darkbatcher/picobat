@@ -17,6 +17,10 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef _XOPEN_SOURCE
+#define _XOPEN_SOURCE 700
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -205,7 +209,8 @@ int Dos9_LoadBatchScript(struct batch_script_t* script)
                 /* If this is actually inside a block, treat it seriously,
                    this is a chiefly important error */
                 if (checkres == FALSE)
-                    Dos9_ShowErrorMessage(DOS9_INVALID_LABEL, nb, -1);
+                    /* TODO: What is nb ? */
+                    Dos9_ShowErrorMessage(DOS9_INVALID_LABEL, /* nb */ "TODO", -1);
 
                 /* This one is apparently ok, do nothing and let the command
                    part treat it as a command. */

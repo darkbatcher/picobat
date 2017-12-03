@@ -57,6 +57,9 @@ void Dos9_SetFdInheritance(int fd, int mode)
 }
 
 #else
+#ifndef _XOPEN_SOURCE
+#define _XOPEN_SOURCE 700
+#endif
 
 #include <sys/types.h>
 #include <sys/wait.h>

@@ -114,7 +114,7 @@ void __inline__ Dos9_MakeFullPathEs(ESTR* full, const char* p)
 __inline__ char* Dos9_EsToFullPath(ESTR* full)
 {
     size_t len, size;
-    char* p = TRANS(full->str);
+    const char* p = TRANS(full->str);
 
     if (TEST_ABSOLUTE_PATH(p)) {
 
@@ -240,7 +240,7 @@ int Dos9_GetFilePath(char* lpFullPath, const char* lpPartial, size_t iBufSize)
 
 	DOS9_DBG("[Dos9_GetFilePath()]*** Start research of file : \"%s\"\n\n", lpPartial);
 
-next:
+/* next: */
 	do {
 
 		if (bFirstLoop) {

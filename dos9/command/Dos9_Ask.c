@@ -78,7 +78,7 @@ int Dos9_AskConfirmation(int iFlags, const char* lpMsg, ...)
 
 		}
 
-		switch (iFlags & (DOS9_ASK_DEFAULT_Y || DOS9_ASK_DEFAULT_N)) {
+		switch (iFlags & (DOS9_ASK_DEFAULT_Y | DOS9_ASK_DEFAULT_N)) {
 
 			case DOS9_ASK_DEFAULT_Y:
 				lpChoices=lpAskYn;

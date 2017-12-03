@@ -47,7 +47,7 @@ int Dos9_GetParameterPointers(char** lpPBegin, char** lpPEnd, const char* lpDeli
 			/* look for the next quote */
 			lpEnd++;
 
-			if (lpLine=Dos9_SearchChar(lpEnd, '"')) {
+			if ((lpLine=Dos9_SearchChar(lpEnd, '"'))) {
 
 				lpLine++;
 				continue;

@@ -17,6 +17,10 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef _XOPEN_SOURCE
+#define _XOPEN_SOURCE 700
+#endif
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -93,6 +97,7 @@ void Dos9_CloneTrampoline(void* data)
 
     Dos9_Exit();
 
+    /* TODO: sizeof(int) != sizeof(void *) */
     Dos9_EndThread(iErrorLevel);
 }
 
@@ -137,4 +142,6 @@ int Dos9_DuplicateData(struct clone_data_t* data)
     DUPLICATE_STREAM(data->fInput, fInput, "r");
     DUPLICATE_STREAM(data->fOutput, fOutput, "w");
     DUPLICATE_STREAM(data->fError, fError, "w");
+
+    return 0;
 }

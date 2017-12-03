@@ -17,6 +17,11 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
+#ifndef _XOPEN_SOURCE
+#define _XOPEN_SOURCE 700
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -184,7 +189,7 @@ void Dos9_PrintCounts(int mode, struct wc_count_t* cnt, const char* file)
     fputs(DOS9_NL, fOutput);
 }
 
-int Dos9_CmdWc(const char* line)
+int Dos9_CmdWc(char* line)
 {
     ESTR* param = Dos9_EsInit();
     FILELIST *match = NULL,
@@ -194,12 +199,12 @@ int Dos9_CmdWc(const char* line)
     int mode = 0,
         nb = 0,
         size;
-    char* fmt;
+    /* char* fmt; */
     struct wc_count_t total = {0, 0, 0, 0}, cnt;
 
     line += 2;
 
-    while (line = Dos9_GetNextParameterEs(line, param)) {
+    while ((line = Dos9_GetNextParameterEs(line, param))) {
 
         if (*(param->str) == '/' && *(param->str + 1)
             && *(param->str + 2) == '\0') {

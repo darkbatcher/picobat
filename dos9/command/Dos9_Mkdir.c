@@ -128,5 +128,6 @@ int Dos9_CmdMakeDirs(char* str)
         return -1;
 
     }
-}
 
+    return 0;
+}

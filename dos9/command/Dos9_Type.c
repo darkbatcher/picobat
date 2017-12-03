@@ -18,6 +18,10 @@
  *
  */
 
+#ifndef _XOPEN_SOURCE
+#define _XOPEN_SOURCE 700
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -54,7 +58,7 @@ void Dos9_TypeFileF(FILE* pFile)
     char buf[1024];
     size_t size;
 
-    while (size = fread(buf, 1, sizeof(buf), pFile))
+    while ((size = fread(buf, 1, sizeof(buf), pFile)))
         fwrite(buf, 1, size, fOutput);
 
     if (isatty(fileno(pFile)))
@@ -77,7 +81,7 @@ void Dos9_TypeFile(char* lpFileName)
         goto end;
     }
 
-    while (size = fread(buf, 1, sizeof(buf), pFile))
+    while ((size = fread(buf, 1, sizeof(buf), pFile)))
         fwrite(buf, 1, size, fOutput);
 
 end:
@@ -211,5 +215,3 @@ end:
 
     return status;
 }
-
-

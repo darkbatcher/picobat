@@ -230,7 +230,7 @@ end:
     if (name) {
 
         for (i=0;i < n; i++)
-            name[i];
+            free(name[i]);
 
         free(name);
 

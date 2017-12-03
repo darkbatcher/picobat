@@ -36,9 +36,11 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#include "libDos9.h"
+
 #ifdef WIN32
-    #define S_IREAD _S_IREAD
-    #define O_IWRITE _S_IWRITE
+    #define S_IRUSR _S_IREAD
+    #define S_IWUSR _S_IWRITE
 #endif
 
 

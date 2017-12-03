@@ -62,7 +62,7 @@ int Dos9_CmdShift(char* lpLine)
 
 	lpLine+=5;
 
-	while (lpLine=Dos9_GetNextParameterEs(lpLine, lpEsArg)) {
+	while ((lpLine=Dos9_GetNextParameterEs(lpLine, lpEsArg))) {
 
 		lpToken=Dos9_EsToChar(lpEsArg);
 
@@ -235,4 +235,3 @@ error:
 	return -1;
 
 }
-

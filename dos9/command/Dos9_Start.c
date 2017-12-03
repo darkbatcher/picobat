@@ -18,12 +18,17 @@
  *
  */
 
+#ifndef _XOPEN_SOURCE
+#define _XOPEN_SOURCE 700
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #if !defined(WIN32)
 #include <sys/wait.h>
+#include <strings.h>
 #endif
 
 #include <libDos9.h>
@@ -220,8 +225,7 @@ int Dos9_StartFile(const char* file, const char* args, const char* dir,
 
 
 #if defined(XDG_OPEN)
-int Dos9_StartFile_X(const char* file, const char* args, const char* dir,
-					int mode, int wait)
+int Dos9_StartFile_X(char* file, char* args, const char* dir, int mode, int wait)
 {
     pid_t pid;
 
@@ -285,8 +289,7 @@ int Dos9_StartFile_X(const char* file, const char* args, const char* dir,
 }
 #endif /* defined(XDG_OPEN) */
 
-int Dos9_StartFile_S(const char* file, const char* args, const char* dir,
-					int mode, int wait)
+int Dos9_StartFile_S(char* file, char* args, const char* dir, int mode, int wait)
 {
     pid_t pid;
 
@@ -350,7 +353,7 @@ void Dos9_UseBackSlash(char* line)
     if (line == NULL)
         return;
 
-	while (line = strchr(line, '/')) *(line ++) = '\\';
+	while ((line = strchr(line, '/'))) *(line ++) = '\\';
 }
 
 int Dos9_CmdStart(char* line)
@@ -370,7 +373,7 @@ int Dos9_CmdStart(char* line)
 
 	line += 5;
 
-	while (line = Dos9_GetNextParameterEs(line, param)) {
+	while ((line = Dos9_GetNextParameterEs(line, param))) {
 
 		if (!stricmp("/wait", Dos9_EsToChar(param))) {
 
@@ -389,7 +392,7 @@ int Dos9_CmdStart(char* line)
 			if (((line = Dos9_GetNextParameterEs(line, param)) == NULL)
 				|| dir != NULL) {
 
-				Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, "/d", NULL);
+				Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, "/d", 0);
 				goto error;
 
 			}
@@ -424,7 +427,6 @@ int Dos9_CmdStart(char* line)
                 /* this is an internal command */
 
                 command = 1;
-                nok;
 
                 strncpy(file, param->str, sizeof(file));
                 file[FILENAME_MAX-1]='\0';
@@ -457,7 +459,7 @@ int Dos9_CmdStart(char* line)
 
 	if (nok == 0) {
 
-		Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "START", NULL);
+		Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "START", 0);
 		goto error;
 
 	}

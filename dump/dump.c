@@ -32,6 +32,8 @@
 #include "dump.h"
 
 #ifndef WIN32
+#include <strings.h>
+
 #define stricmp(a, b) strcasecmp(a, b)
 #define strnicmp(a , b, c) strncasecmp(a, b, c)
 #endif
@@ -385,15 +387,15 @@ Ce programme est un logiciel Libre, pour plus d'information, tapez ``dump /l''\n
 \t     specifie, alors la sortie est l'ecran de la console\n\n\
 \t   - /H : Active le mode hexadecimal. Ne marche que pour les types\n\
 \t     entiers (``int'', ``short'', ``char'')\n\n\
-\t   - /P[:]nb : Choisi le nombre maximal d'octect à afficher par ligne\n\n\
-\t   - /T[:]type : Choisi le type de données a afficher, parmi les\n\
+\t   - /P[:]nb : Choisi le nombre maximal d'octect ï¿½ afficher par ligne\n\n\
+\t   - /T[:]type : Choisi le type de donnï¿½es a afficher, parmi les\n\
 \t      suivants :\n\n\
 \t      C : octet                   S : mot (2 octets)\n\
 \t      I : double-mot (4 octets)   L : long\n\
 \t      LL: double long             V : pointeur\n\
         F : nombre flotant simple   D : nombre flotant double\n\n\
 \t   - /B : Desactive le titre, les en-tetes de tableau, les addresses et\n\
-\t     le char dump. Utile pour créer des fichier pour en generer des\n\
+\t     le char dump. Utile pour crï¿½er des fichier pour en generer des\n\
 \t     copies portables via un script\n\n\
 \t   - /E:endianess : Corrige les problemes d'endianess, marche pour les\n\
 \t     types d'endianness suivants :\n\n\
