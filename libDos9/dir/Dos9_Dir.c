@@ -158,7 +158,7 @@ static FILELIST* Dos9_GetMatch(char* restrict base, char* restrict up, struct ma
     FILELIST *ret = arg->files, *tmp;
 
     ESTR* path = NULL;
-    char *item, *cleanup = NULL, tmpbase[]="x:";
+    char *item, *cleanup = NULL, basetmp[]="x:";
 
     DIR* dir = NULL;
     struct dirent* ent;
