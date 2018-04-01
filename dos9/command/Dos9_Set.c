@@ -509,6 +509,10 @@ int Dos9_CmdSetEvalFloat(ESTR* lpExpression)
 
 	}
 
+    if (Dos9_LockMutex(&mSetFLock))
+        Dos9_ShowErrorMessage(DOS9_LOCK_MUTEX_ERROR,
+                              __FILE__ "/Dos9_CmdSetEvalFloat()" , -1);
+
 	/* create evaluator */
 	if (!(evaluator=evaluator_create(lpEqual+1))) {
 
@@ -567,9 +571,16 @@ int Dos9_CmdSetEvalFloat(ESTR* lpExpression)
 
 	Dos9_SetEnv(lpeEnv, Dos9_EsToChar(lpExpression), lpResult);
 
+    if (!Dos9_ReleaseMutex(&mSetFLock))
+        Dos9_ShowErrorMessage(DOS9_RELEASE_MUTEX_ERROR,
+                              __FILE__ "/Dos9_CmdSetEvalFloat()" , -1);
+
 	return 0;
 
 error:
+    if (Dos9_ReleaseMutex(&mSetFLock))
+        Dos9_ShowErrorMessage(DOS9_RELEASE_MUTEX_ERROR,
+                              __FILE__ "/Dos9_CmdSetEvalFloat()" , -1);
 	return -1;
 }
 
@@ -613,6 +624,10 @@ int Dos9_CmdSetEvalInt(ESTR* lpExpression)
 		cLeftAssign=*(lpEqual-1);
 
 	}
+
+	if (Dos9_LockMutex(&mSetILock))
+        Dos9_ShowErrorMessage(DOS9_LOCK_MUTEX_ERROR,
+                              __FILE__ "/Dos9_CmdSetEvalInt()" , -1);
 
     IntEval_Set_Fn(_Dos9_SetGetVarInt, _Dos9_SetSetVarInt);
 	iResult=IntEval_Eval(lpEqual+1);
@@ -723,8 +738,15 @@ int Dos9_CmdSetEvalInt(ESTR* lpExpression)
 
 	Dos9_SetEnv(lpeEnv, Dos9_EsToChar(lpExpression), lpResult);
 
+    if (Dos9_ReleaseMutex(&mSetILock))
+            Dos9_ShowErrorMessage(DOS9_RELEASE_MUTEX_ERROR,
+                                  __FILE__ "/Dos9_CmdSetEvalInt()" , -1);
+
 	return 0;
 
 error:
+    if (Dos9_ReleaseMutex(&mSetILock))
+            Dos9_ShowErrorMessage(DOS9_RELEASE_MUTEX_ERROR,
+                                  __FILE__ "/Dos9_CmdSetEvalInt()" , -1);
 	return -1;
 }

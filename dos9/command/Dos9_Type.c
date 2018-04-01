@@ -155,7 +155,7 @@ int Dos9_CmdType(char* lpLine)
 
     } else {
 
-        /* split directories from input */
+        /* remove directories from input */
         Dos9_AttributesSplitFileList(DOS9_ATTR_NO_DIR,
                                         pBegin,
                                         &pBegin,

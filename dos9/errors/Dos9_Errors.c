@@ -261,6 +261,12 @@ void Dos9_LoadErrors(void)
     lpErrorMsg[DOS9_INVALID_LABEL] =
         gettext("Error : Invalid label encountered within a block (at line %d).\n");
 
+    lpErrorMsg[DOS9_LOCK_MUTEX_ERROR] =
+        gettext("Error : Unable to lock mutex (%s).\n");
+
+    lpErrorMsg[DOS9_RELEASE_MUTEX_ERROR] =
+        gettext("Error : Unable to release mutex (%s).\n");
+
 	lpQuitMessage=
 	    gettext("\nAborting current command, press any key to end Dos9.\n");
 

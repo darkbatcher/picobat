@@ -94,7 +94,9 @@ void Dos9_LoadErrors(void);
 #define DOS9_INVALID_CODEPAGE               52
 #define DOS9_BREAK_ERROR                    53
 #define DOS9_INVALID_LABEL                  54
-#define DOS9_ERROR_MESSAGE_NUMBER           55
+#define DOS9_LOCK_MUTEX_ERROR               55
+#define DOS9_RELEASE_MUTEX_ERROR            56
+#define DOS9_ERROR_MESSAGE_NUMBER           57
 
 #define DOS9_PRINT_C_ERROR 0x80
 

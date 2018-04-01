@@ -161,7 +161,7 @@ __inline__ char* Dos9_EsToFullPath(ESTR* full)
 
     memmove(full->str + size + 1, p, len);
     memcpy(full->str, lpCurrentDir, size);
-    *(full->str + size) = DEF_DELIMITER;
+    *(full->str + size) = *(DEF_DELIMITER); /* DEF_DELIMITER is a string literal */
 
     return full->str;
 }

@@ -1939,5 +1939,9 @@ SUNDAY 3RD, DECEMBER
 
         - Fixes for path name handling in Dos9_GetMatchFileList 
 
-        - Added semaphores to fix SET command. 
+        - Added semaphores to fix SET command.
+
+SUNDAY 1ST APRIL, 2018
+
+        - Added fixes for Dos9_EsToFullPath(). 
 

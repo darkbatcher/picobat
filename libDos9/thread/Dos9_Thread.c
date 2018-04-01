@@ -155,7 +155,7 @@ LIBDOS9 void     Dos9_EndThread(void* iReturn)
 
 LIBDOS9 int      Dos9_WaitForThread(THREAD* thId, void** lpRet)
 {
-    return !WaitForSingleObject(*thId, INFINITE);;
+    return WaitForSingleObject(*thId, INFINITE);;
 }
 
 LIBDOS9 int      Dos9_CreateMutex(MUTEX* lpMuId)
@@ -173,7 +173,7 @@ LIBDOS9 int      Dos9_CloseMutex(MUTEX* lpMuId)
 
 LIBDOS9 int      Dos9_LockMutex(MUTEX* lpMuId)
 {
-    return !WaitForSingleObject(*lpMuId, INFINITE);
+    return WaitForSingleObject(*lpMuId, INFINITE);
 }
 
 LIBDOS9 int      Dos9_ReleaseMutex(MUTEX* lpMuId)
