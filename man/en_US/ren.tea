@@ -1,31 +1,45 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+{{REN and RENAME Commands}}
 
-{{Commandes REN et RENAME}}
-
-	   Les commandes {REN} et {RENAME} permettent de renommer des fichiers
-	via {dos9|Dos9}. Cette commande permet uniquement de changer le nom d'
-	un fichier, elle ne peut pas le déplacer.
+	{REN} and {RENAME} commands are used to rename files. Theses commands
+	can only rename files, they can not move them.
 
 {{Synopsis}}
 
-${	REN fichier nom.ext
-	RENAME fichier nom.ext}
+${REN file name.ext
+RENAME file name.ext}
 
-	Renomme le fichier {fichier}.
+	Renames {file}:
 
-		- {fichier} : Le chemin du fichier à renommer. Il ne peut pas
-		  contenir de {spec/regexp|caractères génériques}.
+		- {file} : A path referring to the file to be renamed. It can not
+		be a {spec/regexp|regular expression}.
 
-		- {nom.ext} : Le nom et l'extension du fichier à renommer. Il
-		  ne peut pas contenir de cactères spéciaux, mais l'extension
-		  peut être ômise.
+		- {nom.ext} : The new name and extension of the file. The extension can
+		be omitted
 
-{{Compatibilité}}
+{{Compatibility}}
 
-	Disponible depuis la version {0.4}.
+	Available since {0.4}.
 
-	Parfaitement compatible avec {cmd.exe}
+	Fully compatible with {cmd.exe}
 
-{{A voir aussi}}
+{{See Also}}
 
-	{copy|Commande COPY}, {move|Commande MOVE}, {type|Commandes TYPE et MORE}
-	{del|Commandes DEL et ERASE}
+	{copy|COPY Command}, {move|MOVE Command}, {type|TYPE and MORE Commands}
+	{del|DEL and ERASE Commands}

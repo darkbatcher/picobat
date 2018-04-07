@@ -15,28 +15,27 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-{{%TIME% and %DATE% Variables}}
 
-	Generate date and time within a batch script.
+{{Commande REM}}
+
+	The {REM} Command introduces a comment inside a batch script.
 
 {{Synopsis}}
 
-${%TIME%}
+	${REM comment}
 
-	Gets expanded into the current computer time, using {HH:MM:SS,00} as
-	format. Milliseconds are set to 0 for compatibility.
+	Introduces a comment inside a batch script
 
-${%DATE%}
+		- {comment} : The comment to be included. This parameter can not
+		contain any special characters that could be interpreted by Dos9 such as
+		{|} or {&}.
 
-	Gets expanded into the current computer date, using {DD/MM/YYYY} as
-	format.
+{{Notes}}
+
+	This commande is somehow useless, either inside a script or on the command
+	prompt. It is highly recommended to use the newer style of comment as
+	described in {spec/comments|comments} page.
 	
-{{Compatiblity}}
-
-	Compatible with {cmd.exe}.
-
-	Available since {0.7}.
-
 {{See also}}
 
-	{spec/var|Environment variables}, {spec/index|Specifications index}
+	{commands|Command list}, {echo|ECHO Command}

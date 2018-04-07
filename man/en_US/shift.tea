@@ -15,40 +15,36 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-{{Commande SHIFT}}
+{{SHIFT Command}}
 
-	La commande {SHIFT} permet de changer la position des paramètres d'un script de commandes.
-	Cette commande est très utile pour produire des commandes en batch à plusieurs paramètres.
-
+	The {SHIFT} command shifts batch script arguments. This command is
+	very useful to create batch scripts requiring many parameters.
+	
 {{Synopsis}}
 
-	${SHIFT [/début | /s[:]début] [/d[:]déplacement]}
+	${SHIFT [/start | /s[:]start] [/d[:]step]}
 
-	Déplace la position des paramètres dans les variables {%0} à {%9}.
+	Changes position of parameters within the variable {%0} to {%9}.
 
-		- {/début} ou {/s[:]début} : Spécifie la variable à laquelle va commencer le déplacement.
-		{début} doit être un chiffre (et donc être compris entre {0} et {9}). La première syntaxe
-		est compatible avec {cmd.exe}, alors que la seconde est une extension de {dos9|Dos9}. La
-		libertée est laissée au programmeur d'utiliser l'une ou l'autre des syntaxe, même si la
-		seconde est nettement plus lisible et plus en accord avec la syntaxe générale des paramètres
-		de batch. Par défaut, le déplacement commence à la variable {%0}.
+		- {/start} ou {/s[:]start} : Specify a number {start} between {0} and {9} that indicate
+		at which parameters the command should start. The first syntax is compatible with {cmd.exe}
+		while the other one is not. By default, displacement of parameters starts at {%0}.
 
-		- {/d[:]déplacement} : Spécifie la longueur du déplacement. Il est nécessaire que {déplacement}
-		soit aussi un chiffre. Ce paramètre est une extension de {dos9|Dos9}. Par défaut la longueur du
-		déplacement est de {1}.
+		- {/d[:]step} : Specify the length of the displacement. {Step} has to be a number between {0}
+		and {9}. The default value is {1}. This is a Dos9 extension.
+		
+	Displacement takes place from the the lowest parameter to the highest. If any argument is left
+	empty by the process, then {SHIFT} tries to put some additional arguments using remaining
+	arguments stored in {%+}. If {%+} is already empty, these variables are left empty.
+	
+	The content of the variable {%*} is not modified by the {SHIFT} command.
 
-	Le déplacement se fait du plus grand chiffre vers le plus petit. Les paramètres qui se retrouveraient dans
-	une variable plus petite que {%0} à la suite d'un déplacement est supprimée. Il n'y a pas d'éléments
-	ajoutés lors d'un déplacement, donc les variables qui on été "vidées" par le déplacement le restent.
+{{Compatibility}}
 
-{{Compatibilité}}
+	Mostly compatible with {cmd.exe}. Indeed, while replacing the {%0} parameter, {cmd.exe}
+	checks that the new argument refers to a file or a directory and if it is not, replace it
+	by the current directory. This behaviours is not implemented by Dos9.
 
-	Principalement compatible avec {cmd.exe}, À l'exception du déplacement vers {%0}. En effet, lors du remplissage
-	de {%0} procède à un test visant à savoir si le nouveau contenu de {%0} est un chemin valide de fichier ou de
-	répertoire, et si ce n'est pas le cas, le remplace le contenu de {%0} par le chemin courrant. Ce comportement
-	n'est pas implémenté dans {dos9|Dos9} car il n'a que peu d'intérêt et est même troublant pour un utilisateur non
-	averti (qui peut très bien le prendre pour un bogue).
+{{See Also}}
 
-{{À voir aussi}}
-
-	{commands|Liste des commandes}, {dos9|Dos9}
+	{commands|Commands list}, {dos9|Dos9}

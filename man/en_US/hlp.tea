@@ -44,12 +44,42 @@ ${HLP [name | /b language [encoding] | /l | /d]}
 
 	- {/l} : Print a list of all languages avaliable on the current machine.
 	Available languages are shown through {POSIX} locales, that is in form of
-	{language_COUNTRY} where {language} and {country} are both abreviations.
+	{language_COUNTRY} where {language} and {country} are both abbreviations.
+	
+	- {/c} : Configures {hlp.bat} command parameter. Prompt the user for the
+	selected language, format (html, text or ansi) and encoding to be used.
+	This option is an user-friendly way to configure the configuration file
+	{%USERPROFILE%/.dos9/hlp/hlp.conf.bat}.
+	
+{{Config file}}
 
-	- {/d} : Download the documentation from the repository
-	{http://www.dos9.org}. This switch requires the {wget} command to be
-	installed.
+${%USERPROFILE%/share/hlp/hlp.conf.bat}
 
+	A batch script defining hlp setting through a set of variables. This file
+	can be generated using the {/c} switch. This file is run on {hlp.bat} startup.
+	Variables that must be set are the following:
+
+		- {%mode%} : The file format to be used by {hlp.bat}. It must be one of the
+		following three formats:
+		
+			-- {html} : Help pages will be displayed through an html medium and a web
+			browser. This requires a web browser and a working {start} command.
+			
+			-- {ansi} : Help pages will be displayed at the command prompt, using
+			ANSI escape codes for formatting. This obviously requires an ANSI-compatible
+			terminal.
+			-- {txt} : Help pages will be displayed at the command prompt using plain text
+
+		- {%locale%} : The language of help pages using a {POSIX} local (e.g {language_COUNTRY}).
+		The corresponding locale has to be installed in {%DOS9_PATH%/share/hlp/man}.
+	
+		- {%view_cmd%} : The command to be used for Help pages display. This can either be an
+		internal or an external command. By default, {hlp} uses :
+
+		${set view_cmd=!%mode%_prg!}
+
+		@- Where variables {%txt_prg%}, {%html_prg%} et {%ansi_prg%} define the commands to be
+		executed for every format.
 
 {{Compatibility}}
 

@@ -141,12 +141,17 @@ ECHO. 3] Produce the output :
 FOR /F "tokens=*" %%A in ('cd %hlp_data_dir%/%lang_build%
 dir /b /s /a:-d') do (
 
-
-	ECHO    [*] Building "%%~pnA" :
-
-	SET ansi_build=ansi/%%~pnA.ansi
-	SET html_build=html/%%~pnA.html
-	SET txt_build=txt/%%~pnA.txt
+	:: unfortunately, we used %~dpnA before to get all the stuff
+	:: this is no longer possible since %~d gets absolute path ...
+	:: we need a little hack then
+	
+	SET name=%%~A
+	
+	SET ansi_build=ansi/!name:.tea=!.ansi
+	SET html_build=html/!name:.tea=!.md
+	SET txt_build=txt/!name:.tea=!.txt
+	
+	ECHO    [*] Building "!name:.tea=!" :
 
 	ECHO      - file : !txt_build!
 	tea "%hlp_data_dir%/%lang_build%/%%A" !txt_build!.tmp /E:UTF-8 /O:TEXT-PLAIN

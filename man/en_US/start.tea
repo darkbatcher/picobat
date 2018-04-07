@@ -1,0 +1,54 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2017  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+{{START Command}}
+
+	Run a program in a new terminal or run the program associated to
+	the file type.
+
+{{Synopsis}}
+
+${START [/d dir] [/b] [/min] [/max] [/wait] command parameters}
+
+	Runs {command} inside a new terminal window.
+	
+	- {command} : The command to be run
+	
+	- {parameters} : A list of parameters that will be passed to {command}.
+	
+	- {/d dir} : The directory in which {commande} will be run.
+	
+	- {/max} : Maximize the new window.
+	
+	- {/min} : Minimize the new window.
+	
+	- {/wait} : Wait for {command} to complete.
+	
+	- {/b} : Hide the new window.
+	
+	if {command} is the empty string, then Dos9 assume that you want to start
+	the {dos9|Dos9 command}.
+
+{{Compatibility}}
+
+	Allmost compatible with {cmd.exe}.
+
+	Available since 2014.0.9b. The support may vary greatly between operating systems.
+
+{{See also}}
+
+{call|Call Command}, {commands|Command List}

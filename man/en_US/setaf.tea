@@ -1,6 +1,6 @@
 #
 #   Dos9 Manual pages, The Dos9 project
-#   Copyright (C) 2012-2013  Romain Garbi (DarkBatcher)
+#   Copyright (C) 2012-2017  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -16,155 +16,150 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+{{SET (/A) Command (floating point)}}
 
-{{Commande SET (/A)(flotants)}}
+	The {SET /A} commande enables the value of an arithmetical expression to
+	be stored into a variable.
 
-	La commande {SET /A} permet d'assigner la valeur d'une expression mathématique à
-	une variable.
-
-	Ce manuel traite uniquement de l'option {/A} de la commande {SET}, dans le cas
-	particulier des expressions utilisant des nombres flotants. Pour
-	consulter le manuel de la commande {SET}, rendez vous sur le manuel {set|SET}.
-	Vous pouvez aussi consulter le manuel traitant des expression a nombres entiers
-	à la page {setai|SET (/A)(entiers)}.
+	This manual pages is only about the use of the {/A} of the {SET} command
+	and the use of floating point numbers. To learn more about the general use
+	of the command, please see the {set|SET manual page}.
 
 {{Synopsis}}
 
 	${SET [/a | /a[:]f] variable=expression}
 
-   Affecte la valeur d'une {expression mathématique} à la variable
-   {variable}. Cette commande à un comportement dépendent du mode fixé par
-   la commande {setlocal|SETLOCAL} avec le paramètre {ENABLEFLOATS}.
+	
+	Computes the value of the arithmetical expression {expression} and stores
+	it into {variable}. The behaviour of the command depends on the 
+	{EnableFloats} setting of the {setlocal|SETLOCAL} command.
+   
+	The {=} sign can be replaced by one of the following operator:
 
-   L'opérateur {=} peut être remplacé dans cet exemple par les opérateurs suivants:
+		- {+=} : Adds the result to {variable}.
 
-		- {+=} : Addition du résultat à {variable}.
+		- {-=} : Subtract the result to {variable}.
 
-		- {-=} : Soustraction du résultat à {variable}.
+		- {*=} : Multiply {variable} by the result.
 
-		- {*=} : Multiplication de {variable} par le résultat.
-
-		- {/=} : Division de {variable} par le résultat.
-
-
-{{Les Opérateurs}}
-
-   L'expression mathématique doit être constituée d'une suite d'opérateurs et d'opérandes. Chaque opérande
-   doît être séparé de l'opérande suivant par un opérateur.
-
-   Les opérateurs utilisables avec les nombres {flotants} sont:
-
-		- {+} : Addition.
-
-		- {-} : Soustraction.
-
-		- {*} : Mutiplication.
-
-		- {/} : Division.
-
-		- {^} : Elevation à une puissance.
-
-		- {%} : Modulo (Reste de la division Euclidienne étendue aux nombres flotants).
-
-	La multiplication, la division et le modulo sont tous prioritaires sur l'addition et la soustraction.
-	Il est néamoins possible de modifier la priorité des opérations en utilisant les parenthèse {(} et {)}.
-
-	Il est également possible d'utiliser des opérateurs unaires, c'est-à-dire des opérateur affectant
-	uniquement l'opérande qui le suit à droite. Ces opérateurs sont :
-
-		- {-} : Signe négatif.
-
-	Les opérateurs unaires ont la priorité la plus haute.
-
-{{Les fonctions mathématiques}}
+		- {/=} : Divide {variable} by the result.
 
 
-	En plus de contenir des opérateurs, l'{expression mathématique} peut contenir des
-	fonctions mathématiques. Pour spécifier une fonction mathématique,
-	il faut entourer son argument par des parenthèses. Par exemple :
+{{Operators}}
 
-${fonction(expression)}
+	The arithmetical expression has to be made of combination of the following
+	operators and operands.
+   
+	Binary operators available with floating point arithmetics are:
 
-	Les fonction fournies sont :
+		 - {+} : Addition.
 
-		- {exp} : Fonction exponnentielle.
+		 - {-} : Subtraction.
 
-		- {log} : Fonction logarithme népérien.
+		 - {*} : Multiplication.
 
-		- {log10} : Fonction logarithme décimal.
+		 - {/} : Division.
 
-		- {sqrt} : Fonction racine carrée.
+		 - {^} : Exponentiation.
 
-		- Fonctions trigonométiques :
+		 - {%} : Modulo.
 
-		-- {sin} : Fonction sinus.
+	Multiplication and division have precedence over addition and subtration.
+	Precedence rules can be overridden using parenthesis.
+		 
+	Only one unary operator is available with floating point arithmetics:
+	
+		- {-} : Minus sign.
 
-		-- {cos} : Fonction cosinus.
+	Unary operators have highest precedence.
 
-		-- {tan} : Fonction tangente.
+{{Mathematical function}}
 
-		-- {cot} : Fonction cotangente.
+	In addition to operators, {expression} may contain mathematical function.
+	To use such a function use the name of it followed by its arguments enclosed
+	in parenthesis :
 
-		-- {sec} : Fonction sécante.
+${function(expression)}
 
-		-- {csc} : Fonction cosécante.
+	Available functions are:
 
-		- Fonction trigonométiques inverses :
+		- {exp} : Exponential.
 
-		-- {asin} : Fonction arc sinus.
+		- {log} : Neperian logarithm.
 
-		-- {acos} : Fonction arc cosinus.
+		- {log10} : Decimal logarithm.
 
-		-- {atan} : Fonction arc tangente.
+		- {sqrt} : Square route.
 
-		-- {acot} : Fonction arc cotangente.
+		- Trigonometry :
 
-		-- {acec} : Fonction arc sécante.
+		-- {sin} : Sine.
 
-		-- {acsc} : Fonction arc cosécante.
+		-- {cos} : Cosine.
 
-		- Fonctions trigonométiques hyperboliques :
+		-- {tan} : Tangent.
 
-		-- {sinh} : Fonction sinus hyperbolique.
+		-- {cot} : Cotangent.
 
-		-- {cosh} : Fonction cosinus hyperbolique.
+		-- {sec} : Secant.
 
-		-- {tanh} : Fonction tangente hyperbolique.
+		-- {csc} : Cosecant.
 
-		-- {coth} : Fonction cotangente hyperbolique.
+		- Reverse Trigonometry :
 
-		-- {sech} : Fonction sécante hyperbolique.
+		-- {asin} : Reverse sine.
 
-		-- {csch} : Fonction cosécante hyperbolique.
+		-- {acos} : Reverse cosine.
 
-		- Fonction trigonométiques hyperboliques inverses :
+		-- {atan} : Reverse tangent.
 
-		-- {asinh} : Fonction argument sinus hyperbolique.
+		-- {acot} : Reverse cotangent.
 
-		-- {acosh} : Fonction argument cosinus hyperbolique.
+		-- {acec} : Reverse secant.
 
-		-- {atanh} : Fonction argument tangente hyperbolique.
+		-- {acsc} : Reverse cosecant.
 
-		-- {acoth} : Fonction argument cotangente hyperbolique.
+		- Hyperbolic trigonometry :
 
-		-- {acech} : Fonction argument sécante hyperbolique.
+		-- {sinh} : Hyperbolic sine.
 
-		-- {acsch} : Fonction argument cosécante hyperbolique.
+		-- {cosh} : Hyperbolic cosine.
 
-		- {abs} : Fonction valeur absolue.
+		-- {tanh} : Hyperbolic tangent.
 
-		- {step} : Fonction échelon unitaire (fonction de Heaviside). La fonction
-		vaut {0} si {x < 0} et {1} sinon.
+		-- {coth} : Hyperbolic cotangent.
 
-		- {delta} : Fonction de Dirac. Cette fonction vaut l'infini si {x = 0} et
-		{0} sinon.
+		-- {sech} : Hyperbolic secant.
 
-		- {nandelta} : Fonction de Dirac avec {NAN}. Cette fonction vaut {NAN} (Not A Number)
-		si {x=0} et {0} sinon.
+		-- {csch} : Hyperbolic cosecant.
 
-{{Les Constantes}}
+		- Reverse hyperbolic trigonometry :
 
-	Enfin, des constantes mathématiques sont aussi définies. Ces constantes sont :
+		-- {asinh} : Reverse hyperbolic sine.
+                                        
+		-- {acosh} : Reverse hyperbolic cosine.
+                                        
+		-- {atanh} : Reverse hyperbolic tangent.
+                                        
+		-- {acoth} : Reverse hyperbolic cotangent.
+                                        
+		-- {acech} : Reverse hyperbolic secant.
+                                        
+		-- {acsch} : Reverse hyperbolic cosecant.
+
+		- {abs} : Absolute value.
+
+		- {step} : Step function (Heaviside's function). Returns
+		 {0} if {x < 0}, {1} else.
+
+		- {delta} : Dirac's function. Returns plus infinity if {x = 0} and
+		{0} else.
+
+		- {nandelta} : Dirac's function returning NAN instead of infinity.
+
+{{Constants}}
+
+	Finally, the following constants are defined
 
 		- {e}
 
@@ -190,64 +185,58 @@ ${fonction(expression)}
 
 		- {sqrt2} : sqrt(2)
 
-		- {sqrt1_2} : sqrt(1/2), ou bien 1/sqrt(2) ou sqrt(2)/2.
+		- {sqrt1_2} : sqrt(1/2), or 1/sqrt(2) or sqrt(2)/2.
 
-{{Les nombres spéciaux}}
+{{Special numbers}}
 
-	Les nombres spéciaux sont des valeurs qui ne sont pas des chiffres mais
-	qui sont interprétés comme tels. Ces valeurs sont dérivées des standard de
-	l'IEEE sur les calculs en nombres flotants. Il y a deux nombre spéciaux supportés
-	par {Dos9}
+	Special numbers are values that are not numbers but are considered as so.
+	The values have been defined by IEEE standard, but Dos9 only support two
+	of them:
 
-		- {inf} (INFINITY) : Valeur infinie. Cette valeur est obtenue quand un dépassement à
-		lieux, ou qu'on effectue une division par 0 (cette liste n'est pas exhaustive).
+		- {inf} (INFINITY) : Infinite value.
 
-		- {nan} (NotANumber) : Valeur non défine. Cette valeur est obtenue quand on exécute une
-		fonction avec un argument en dehors de son ensemble de définition.
+		- {nan} (NotANumber) : not a number.
 
-{{Précision}}
+{{Precisness}}
 
-	Contrairement aux entiers, traditionnelement bornés entre {-2 147 483 648} et {+2 147 483 647}, les
-	nombres flotants ont un rayon d'utilisation de {2,2250738585072014e-308} à {1,7976931348623157e+308} (en
-	valeur absolue). Les nombres flotants ont néamoins une précision restreinte (environ 16 chiffres significatifs),
-	les calculs qui sont exécutés sont donc de manière approchée, et les valeurs sont arrondies à la valeur la plus
-	proche.
+	As opposed to integers, wich are usually bound between {-2 147 483 648} 
+	and {+2 147 483 647}, floating point numbers offer a much greater range, between4
+	{2,2250738585072014e-308} à {1,7976931348623157e+308}. However, this gain on 
+	range causes a loss of precision because of approached computing.
 
-{{Bogues fréquents}}
+{{Bugs}}
 
-	Le premier des bogues fréquents est du au fait que la précision des nombres flotants est réduite. En effet,
-	cette précision réduite cause des problèmes d'associativité (importance de l'odre des opérations)
-	durant les opérations mathématiques entre des
-	nombres d'ordre de grandeurs très éloignés. L'exemple suivant illustre ce cas de figure:
+	It is not unusual to encounter preciseness bug as floating point number have
+	a finite precision of about 15 decimal places. As a result some expression
+	may be subject to approximation errors when dealing with numbers
+	several orders of magnitude away from one another. Here is an example:
 
 ${(2*10^60+1)-2*10^60)}
 
-	Si l'on évaluait l'expression suivante avec des nombres flotants, on s'appercevrait que le résultat en est 0, ce
-	qui est surprenant car le résultat réel est évidemment 1. Ce problème est du au fait que {2*10^60} est largement
-	prépondérant devant {1} et donc que {2*10^60+1} est arrondi à {2*10^60}. On retombe bien sur le résultat inatendu.
-	L'ordre des opération est donc important. Ce problème peut être résolu de la façon suivante:
+	Computing this expression using floating points arithmetics will lead to
+	a precision error as the result would be 0 even though it is clearly 1.
+	This happen because {10^60} is several orders of magnitude greater that 1.
+	Changing slightly the expression can fix this issue : 
 
 ${2*10^60-2*10^60+1}
 
-	Un autre problème peut être la comparaison de deux résultats de nombres flotants. En effet, il est possible que les
-	arrondi donnent deux résultat distincts (et néanmoins très proches) pour deux expression qui rigoureusement donnent
-	le même résultat. Un tel exemple est {1/3*3} qui donnera {0.999999...} et non {1}. Ce type de petites imprécisions est
-	problématique pour la comparaision de nombres flotants. Pour rendre cette comparaison correcte, il faut utiliser le
-	comparant {FEQ} de la {if|commande IF}.
+	Another problem may be comparing two results of floating point computing,
+	as approximations may lead to a slightly different values even though they
+	are equal from a mathematical point of view. To fix this kind of bugs, use
+	the {FEQ} comparison from the {if|IF command}.
 
 {{Notes}}
 
-	Cette commande utilise une version modifiée de la bibliothèque {GNU libmatheval}.
+	This command uses a modified version of the {GNU libmatheval} library.
+	
+{{Compatibility}}
 
-{{Compatibilité}}
+	Available since {0.7.1.0}, before the support of expressions was
+	incomplete, supporting neither the {%} operating system nor functions.
 
-	Disponible depuis la version {0.7.1.0}. Auparavant, le support des expression n'était
-	pas complet. La version {0.7.0.0} ne supportait pas l'opérateur {%} ni la fonction {log}.
-	Les versions précédentes ne supportaient quant à elles qu'une version simplifiée des expressions.
+	Not compatible with {cmd.exe} that does not support floating point
+	arithmetics.
 
-	Non compatible avec {cmd.exe}. En effet, {cmd.exe} ne supporte pas les expression
-	avec des nombres flotants.
+{{See also}}
 
-{{À voir aussi}}
-
-	{set|Commande SET}, {setai|Commande SET(/a)(entiers)}
+	{set|SET Command}, {setai|SET (/a) Command (integers)}

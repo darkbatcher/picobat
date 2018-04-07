@@ -56,7 +56,7 @@ void Tea_TextAnsiOutputParagraph(size_t iMargin, size_t iFirstLine, size_t iLeng
 void Tea_HtmlOutputHandler(TEAPAGE* lpTeaPage, FILE* pFile, int i, char** argv);
 void Tea_HtmlParseHandler(int iMsg ,void* lpData);
 
-void Tea_HtmlOutputParagraph(TEANODE* lpTeaNode, FILE* pFile);
+void Tea_HtmlOutputParagraph(TEANODE* lpTeaNode, FILE* pFile, int iCompMode);
 void Tea_HtmlEscapeChar(ESTR* lpEsStr);
 
 void Tea_HtmlGetTitle(TEAPAGE* lpTeaPage, ESTR* lpEsStr);

@@ -62,29 +62,38 @@ ${	IF [/i] string1 cmp string2 (
 	Test comparison specified by {cmp} to strings {string1} and {string2} and run
 	the code to be executed if the specified comparison is true.
 
-	   Values of {cmp} are :
+	   Where {cmp} can be one of the following:
 
-		- {EQU} : (EQUal). String {string1} is equal to {string2}.
+		- {EQU} : (EQUal). The condition is true if the value associated
+		to {string1} and {string2} are identical. Values can be specified
+		in various numeral bases, decimal, octal or hexadecimal as long as
+		the right prefix is specified ({0} for octal and {0x} for hexadecimal).
+		If any of {string1} and {string2} do not represent any valid number
+		(eg. {[-][prefix][value]}), then {EQU} compares the strings behaving
+		exactly as {==}.
 
-		- {NEQ} : (Not EQual). String {string1} differs from {string2}.
+		- {NEQ} : (Not EQual). Exact opposite of preceeding condition.
 
-		- {LEQ} : (Less or EQual). String {string1} is lesser or equal to {string2}.
+		- {LEQ} : (Less or EQual). The value associated to
+		  {string1} is lesser or equal to that of {string2}.
 
-		- {LSS} : (LeSS). String {string1} is strictly lesser to {string2}.
+		- {LSS} : (LeSS). The value associated to
+		  {string1} is strictly lesser than that of {string2}.
 
-		- {GTR} : (GreaTeR). String {string1} is strictly greater to {string2}.
+		- {GTR} : (GreaTeR). The value associated to
+		  {string1} is strictly greater than that of {string2}.
 
-		- {GEQ} : (Greater or EQual). String {string1} is greater or equal to {string2}.
+		- {GEQ} : (Greater or EQual). The value associated to
+		  {string1} is greater or equal to that of {string2}.
 
-		- {FEQ} : (Float EQual) (Dos9 extension). String {string1} is equal to {string2},
-		with a relative precision of {10^-13}. This comparison is used to compare floating
-		number, wich cannot be compared by {EQU}, as explained in {setaf|SET(/A) Command (floats)} manual.
-
-	Comparisons {LSS}, {GTR}, {LEQ}, {FEQ} and {GEQ}  requires both {string1} and
-	{string2} to be numbers (intergers or floating numbers), otherwise, comparisons results are undefined.
-
-	The {/i} switch makes comparison case insensitive. Note that this switch only affects
-	{EQU} and {NEQ} comparisons.
+	{LSS}, {GTR}, {LEQ} and {GEQ} conditions require {string1} and {string2}
+	to represent integers otherwise the result is unspecified.
+	
+	Analogous conditions can be obtained for floating point numbers by
+	prefixing condition with an {F}, leading to {FEQU}, {FGTR}, {FGEQ}, {FLSS} and
+	{FLEQ}. The ability to deal with octal or hexadecimal floating point number
+	is not warranted and may depend on platform or versions. To remain compatible,
+	you have to use only the standard format [sign][number][.number][e|E][exponent].
 
 {{Synopsis - Third syntax}}
 
@@ -114,6 +123,45 @@ ${	IF %ERRORLEVEL%==value}
 	If you specify operator {NOT}, then the code to be executed is ran if
 	the condition is false.
 
+{{Synopsis - Expressions (Fourth syntax)}}
+
+	{Dos9} offer a fourth syntax for the {IF} command. This syntax allows
+	using logical connectors to build expressions.
+
+${IF [/i] [ expression ] (
+	:: code to run
+...
+)}
+	
+	Run the code if the conditions specified by {expression} are met.
+	
+		- {/i} : Discard case-sensitiveness.
+
+		- {[ expression ]} : A list of conditions to be met for the code
+		to be executed. The use of brackets and space around elements is
+		mandatory.
+		
+		@- An expression should be built made of comparisons connected
+		together with some logical operators.
+
+		-- Two types of tests are available :
+
+${[NOT] cmp1 comparison cmp2
+[NOT] [Defined|Errorlevel|Exist] objet}
+
+		@-- Both these forms are the same as those described above.
+
+		-- There is two operators available:
+
+			--- {or} : Logical or.
+
+			--- {and} : Logical and.
+
+		@-- The {and} operator own precedence over {or} operators.
+
+		@- Finally, one can affect precedence using brackets {[]}.
+	
+	
 {{Synopsis - ELSE subcommand}}
 
 	After any kind of previously described {IF}, an {ELSE} keyword may be inserted
@@ -174,7 +222,7 @@ ${IF %my_var%==test (
 }
 
 	As long as {my_var} does not contains any space, or whatever possibly interpreted
-	(such as & and |), this exemple works pretty well. But, if {my_var} do contains such characters,
+	(such as & and |), this example works pretty well. But, if {my_var} do contains such characters,
 	it goes wrong. This effect is caused because {my_var} is expanded before even the line
 	interpretation, thus, any characters from {my_var} will be interpreted. There's several trick
 	to fix that bug.

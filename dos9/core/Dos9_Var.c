@@ -523,7 +523,9 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 			case 'd':
 				Dos9_EsCat(lpRecieve, lpDrive);
 
-				if (cFlag[i+1]!=0 && cFlag[i+1]!='p')
+				if (cFlag[i+1] == 'p')
+                    Dos9_EsCat(lpRecieve, "/");
+				else if (cFlag[i+1]!=0)
 					Dos9_EsCat(lpRecieve, "\t");
 
 				break;

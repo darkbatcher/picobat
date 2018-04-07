@@ -1943,5 +1943,13 @@ SUNDAY 3RD, DECEMBER
 
 SUNDAY 1ST APRIL, 2018
 
-        - Added fixes for Dos9_EsToFullPath(). 
+        - Added fixes for Dos9_EsToFullPath().
+
+SUNDAY 7TH, APRIL
+
+        - Fixed hlp.bat bug related to the behaviour change of %~pA.
+
+        - Fixed bug that caused Dos9 not to append a / after disc in %~dpA.
+
+        - Added a /C:MD file to generate html files compatible with pico 
 

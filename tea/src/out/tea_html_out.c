@@ -104,6 +104,10 @@ void Tea_HtmlOutputHandler(TEAPAGE* lpTeaPage, FILE* pFile, int i, char** argv)
 
 				iCompMode=2;
 
+			} else if (!stricmp(argv[i], "MD")) {
+
+			    iCompMode=3;
+
 			} else {
 
 				fprintf(stderr,"TEA :: Error : ``%s'' is not a valid html flavour.\n", argv[i]);
@@ -192,6 +196,17 @@ void Tea_HtmlOutputHandler(TEAPAGE* lpTeaPage, FILE* pFile, int i, char** argv)
 		        Dos9_EsToChar(lpEsHead));
 
 
+	} else if (iCompMode == 3) {
+
+        fprintf(pFile, "---\n"
+                "Title: %s\n"
+                "Description: %s\n"
+                "template: index\n"
+                "---\n\n",
+                Dos9_EsToChar(lpEsTitle),
+                Dos9_EsToChar(lpEsTitle)
+                );
+
 	}
 
 	while (lpTeaPage) {
@@ -274,7 +289,7 @@ void Tea_HtmlOutputHandler(TEAPAGE* lpTeaPage, FILE* pFile, int i, char** argv)
 
 			fputs("<p>", pFile);
 
-			Tea_HtmlOutputParagraph(lpTeaPage->lpTeaNode, pFile);
+			Tea_HtmlOutputParagraph(lpTeaPage->lpTeaNode, pFile,  iCompMode);
 
 			fputs("</p>", pFile);
 
@@ -294,7 +309,8 @@ void Tea_HtmlOutputHandler(TEAPAGE* lpTeaPage, FILE* pFile, int i, char** argv)
 
 	}
 
-	fprintf(pFile, "%s\n"
+	if (iCompMode != 3)
+        fprintf(pFile, "%s\n"
 	        "</body>\n"
 	        "</html>",
 	        Dos9_EsToChar(lpEsFoot));
@@ -316,7 +332,7 @@ error:
 	exit(-1);
 }
 
-void Tea_HtmlOutputParagraph(TEANODE* lpTeaNode, FILE* pFile)
+void Tea_HtmlOutputParagraph(TEANODE* lpTeaNode, FILE* pFile, int iCompMode)
 {
 	char* lpCh, *ext;
 	int   bFirstLine=TRUE;
@@ -340,7 +356,8 @@ void Tea_HtmlOutputParagraph(TEANODE* lpTeaNode, FILE* pFile)
 
             if (!strncmp(lpTeaNode->lpTarget, "http://", 7)
                 || !strncmp(lpTeaNode->lpTarget, "https://", 8)
-                || !strncmp(lpTeaNode->lpTarget, "mail://", 7))
+                || !strncmp(lpTeaNode->lpTarget, "mail://", 7)
+                || iCompMode == 3 )
                 ext = "";
 
 			fprintf(pFile, "<a href=\"%s%s\">", lpTeaNode->lpTarget, ext);

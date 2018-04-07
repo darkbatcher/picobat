@@ -1,0 +1,58 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2017  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+{{WC Command}}
+
+	The {WC} command display count of a files (size, number of lines or
+	words).
+	
+{{Synopsis}}
+
+${WC [/L] [/C] [/M] [/W] [files ...]}
+
+	Print files counts and the associated total if several {files} have be specified.
+	
+	- {files ...}: A liste of paths referring to the files which counts will be
+	printed. This path may contain {spec/regexp|regular expression}. If no files have
+	been specified, Dos9 will show standard input counts.
+	
+	- {/L}: Display the number of lines.
+	
+	- {/C}: Display the number of bytes.
+	
+	- {/M}: Counts characters on an utf-8 basis. If Dos9 have not been compiled with
+	utf-8 support, this option is identical to {/C}.
+	
+	- {/W}: Display the number of lines.
+	
+	The counts are printed in the following order. If any count have been omited,
+	these are not displayed by the command.
+	
+${line_number word_number byte_number character_numbers file}
+
+	If no switch was supplied to Dos9, the default command is:
+	
+${WC /C files ...}
+
+{{Compatibility}}
+
+	Not available on {cmd.exe}. Available since {217.1}.
+	
+{{See Also}}
+
+	{commands|Command list}, {xargs|XARGS command}
+	

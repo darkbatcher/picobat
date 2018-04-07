@@ -1,6 +1,6 @@
 #
 #   Dos9 Manual pages, The Dos9 project
-#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#   Copyright (C) 2012-2017  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -15,20 +15,31 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-{{TITLE Command}}
+{{XARGS Command}}
 
-	Change console title.
-
+	The {XARGS} command allow to run a command with arguments from the standard
+	input.
+	
 {{Synopsis}}
 
-${	TITLE title}
+${XARGS [command ...]}
 
-	Change title to {title}.
+	Run a command with arguments from the standard input.
+	
+	- {command ...}: A command, either internal or external. Any special charactersUne
+	encountered in command or in the command input (| et &) will have no effect.
+	
+	As {Dos9} reads through the standard input, only newlines will be removed from
+	final parameters.
+	
+	Lorsque {Dos9} lit l'entrée standard, seuls les retours à la lignes seront
+	retirés des arguments finaux. 
 
 {{Compatibility}}
 
-	Fully compatible with {cmd.exe}
+	Unavailable on {cmd.exe}. Available since {217.1}.
+	
+{{À voir aussi}}
 
-{{See Also}}
-
-	{echo|ECHO Command}, {cls|CLS command}, {commands|Command list}
+	{commands|Command list}, {wc|WC command}
+	
