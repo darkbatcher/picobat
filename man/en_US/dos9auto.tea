@@ -1,0 +1,55 @@
+﻿#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2016  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+{{Dos9 Initialization (Dos9_Auto.bat)}}
+
+	{dos9|Dos9} is initialized through the execution of a batch script
+	named {Dos9_Auto.bat}. This file sets some variables and calls
+	user defined scripts.
+
+{{Synopsis}}
+
+${%DOS9_PATH%/Dos9_Auto.bat}
+
+	This file is not ment to be edited directly, since it calls
+	user defined scripts. It can be nonetheless useful to modify it
+	to fit some special requirements. If you modify it, be careful
+	not to do anything wrong with it as it can eventually affect the
+	behaviour of some scripts.
+	
+	Usually, the file {Dos9_Auto.bat} sets {dos9var|Dos9 global variables}
+	that are not dynamic.
+	
+	Finally {Dos9_Auto.bat} also call two user defined scripts :
+	
+	- {%USERPROFILE%/.dos9/Dos9_Auto.bat} : User startup file
+	
+	- {%DOS9_ETC%/Dos9_Auto.bat} : System wide startup file.
+
+	In both of these script, any {commands|Dos9 command} can be used
+	safely.
+	
+{{Compatibility}}
+
+	Not compatible with {cmd.exe}, the initialization mechanisms differ.
+
+	Available since {0.7}.
+
+{{See Also}}
+
+	{spec/var|Environment variables}, {spec/index|Specifications Index}

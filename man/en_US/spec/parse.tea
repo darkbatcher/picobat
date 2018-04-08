@@ -1,3 +1,70 @@
-{{Le étapes du parsage}}
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+{{Le parsage}}
 
-	TODO : faire la documentation
+	The command line {parsing} is done by {../dos9|Dos9} in a precise order.
+	Knowing the order of different parsing step is really useful to a batch
+	programmer.
+
+{{Parsing steps}} 
+
+	During parsing, Dos9 execute steps in the following order:
+
+	- {Line reading} : During this step {../dos9|Dos9} reads a {cmdline|command line}, either from 
+	commands typed in the prompt or from a file. The line reading can occur in two different ways,
+	depending on the {CMDLYCORRECT} setting of {../setlocal|SETLOCAL command}:
+	
+	-- If {CMDLYCORRECT} is disabled, the file is read entirely at startup, pre-parsing commands
+	lines. This behaviour is specific to {../dos9|Dos9}, this enables saving up execution time
+	compared to the historical reading method of batch files. Before every new line execution, {Dos9}
+	checks that the source file has not been modified, it is, it loads it again and continues execution
+	at same line number.
+
+	-- If {CMDLYCORRECT} is enabled, {Dos9} uses the same mechanics as {cmd.exe}. That is, before
+	every new line reading, the script file is opened, the line is read, and then the script is
+	closed. This method is inherited from older versions of ms-dos which had very few memory.
+	Even though this strategy saves up memory, it causes a high penalty on execution speed.
+	Thus this method is not the default any more for {Dos9}
+
+	@- A change of {CMDLYCORRECT} setting during script execution leads to a restart of the script
+	from the beginning. Thus, any {CMDLYCORRECT} change is discourage during a script execution.
+	
+	- {Conventional expansion} : During this step Dos9 expands variables according to
+	{exp|expansion process}.
+
+	- {red|Redirections} {parsing} : During this step redirections are detected and applied.	
+
+	- {condop|Conditional operators} parsing : During this step, conditional operators are
+	detected
+
+	- {Argument parsing} : During this step, Dos9 detects {cmdline|command line} argument.
+	
+	- {xvar|Special variables} {expansion} : During this step, Dos9 expands special variables.
+
+	- {Delayed expansion} : During this step Dos9 performs {exp|delayed expansion}.
+	
+{{Note}}
+
+	When the line contains command using some command blocks argument like {../if|if} or
+	{../for|for}, this behaviour is applied recursively on each block.
+	
+{{See also}}
+
+	{cmdline|Command line}, {condop|Conditional operators}
+
+

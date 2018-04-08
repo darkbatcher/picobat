@@ -16,11 +16,14 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-{{%DOS9_VER%, %DOS9_OS%, %DOS9_PATH% variables}}
+{{%DOS9_VER%, %DOS9_OS%, %DOS9_OS_TYPE%, %DOS9_PATH%, %DOS9_SHARE%, %DOS9_ETC% variables}}
 
-	   {%DOS9_VER%} contains the version number of {dos9|Dos9}.
+	{%DOS9_VER%} contains the version number of {dos9|Dos9}.
 
-	   {%DOS9_OS%} contains the os type on which {dos9|Dos9} is runing.
+	{%DOS9_OS%} contains the name of the os on which {dos9|Dos9} is runing.
+	
+	{%DOS9_OS_TYPE%} contains the name of the type of os on which {dos9|Dos9}
+	is running.
 
 	{%DOS9_PATH%} contains the path to the {dos9|Dos9} executable.
 
@@ -28,21 +31,54 @@
 
 {{Synopsis}}
 
-${	%DOS9_VER%}
+${%DOS9_VER%}
 
 	Contain {dos9|Dos9} version number.
 
-${	%DOS9_OS%}
+${%DOS9_OS%}
+	
+	Contains the OS name on which {Dos9} is runnig. This variable does
+	not give any information on OS version though. The possible value are:
 
-	Contain the os type on which {dos9|Dos9} is runing. This varibable does not make different between different oses, but
-	it contains its kind (either {WINDOWS} or {LINUX}).
+	- {WINDOWS}
+	
+	- {GNU/Linux}
 
-${	%DOS9_PATH%}
+	- {NetBSD}
+	
+	- {OpenBSD}
 
-	{%DOS9_PATH%} contain the path to the {dos9|Dos9} executable. This path is
+	- {DragonFlyBSD} 
+
+	- If none of these operating system is found by {Dos9}, then {%DOS9_OS_TYPE%}
+	will contain the host triplet for which Dos9 has been compiled.
+	
+	This variable is interesting to execute specific code for any of these
+	platforms. In most cases, the variable {%DOS9_OS_TYPE%} is sufficient.
+
+${%DOS9_PATH%}
+
+	{%DOS9_PATH%} contains the path to the {dos9|Dos9} executable. This path is
 	dinamically generated, so that the path will be correct even from non
 	conventionnal paths, this enables making portable version on removable
 	media.
+	
+${%DOS9_OS_TYPE%}
+
+	Contains the type of operating system on which Dos9 is running. It can
+	have two values:
+
+	- {*NIX} : For Unix-based operating systems.
+
+	- {WINDOWS} : For windows based operating systems.
+	
+${%DOS9_SHARE%}
+	
+	Contains the path to the folder where Dos9 static data is stored.
+	
+${%DOS9_ETC%}
+	
+	Contains the path to the folder where Dos9 configuration files are stored.
 
 {{Compatibility}}
 

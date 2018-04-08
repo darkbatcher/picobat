@@ -1,0 +1,109 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+{{Les redirections}}
+
+	Les redirections permettent de rediriger les sorties et les entrées de l'interpréteur de commande
+	(l'entrée standard, la sortie standardet les sorties d'erreur) vers des fichiers.
+
+{{Les entrées et les sorties de l'interpréteur}}
+
+	Traditionellement, chaque programme en mode console est doté de trois entrées et sorties dites
+	standard. Ces trois entrées sont :
+
+		- {L'entrée standard} (stdin) : Il s'agit de l'entrée par défaut des programmes. En général,
+		cette entrée correspond à du texte entré directement dans la console. Par exemple,
+		lorsqu'aucun fichier n'est donné en tant qu'argument, {dos9|Dos9} prend ses commandes sur
+		cette entrée. Beaucoup de commandes utilisent l'entrée standard si l'on ne leur donne pas
+		d'arguments.
+
+		- {La sortie standard} (stdio) : Il s'agit de la sortie par défaut des programme. En général,
+		cette sortie correspond à la sortie de la console. C'est par cette entrée que les programmes
+		écrivent (par défaut), leur sortie. C'est le cas par exemple de la commande {type|TYPE}.
+
+		- {La sortie d'erreur standard} (stderr) : Il s'agit de la sortie utilisée par défaut pour les
+		programmes pour afficher des erreurs ou des messages à l'utilisateur, plutôt que sa véritable
+		sortie. Cela permet entre autres d'empêcher les messages d'erreurs d'être mélangés avec la
+		sortie en cas de redirection.
+
+	Ces trois entrées sont les entrées que vous pouvez rediriger avec {Dos9}. Auparavant, en utilisant
+	{cmd.exe}, il était posssible de rediriger un descripteur de fichier quelconque via les redirections,
+	mais celà amenait à des résultats abhérants car on ne savait pas réelement à quel fichier un descripteur
+	pouvait correspondre et comment obtenir un redirection adéquate. On pouvait aussi aboutir à des effets de
+	bords assez supprenant (par exemple, avec un peu d'expérimentations il était possible de créer une
+	redirection circulaire). Ce support a donc été abandonné pour {dos9|Dos9}.
+
+{{Rediriger les entrées et sorties}}
+
+	{dos9|Dos9} utilise les caractères {>} et {<} pour spécifier les redirections. Le caractère {>} est
+	utilisé pour rediriger {stdout} et {stderr}, alors que le caractère {<} est utilisé pour rediriger
+	{stdin}.
+
+	Lorsque {dos9|Dos9} rencontre un {>} ou un {<}, alors Dos9 utilise le premier paramètre
+	immédiatement à droite du signe comme nom de fichier (le nom de fichier et le signe ne doivent pas
+	nécessairement être séparé par un espace) et le retire de la ligne de commande, et ceci
+	sans se soucier de la position du {<} ou du {>}. Les syntaxes suivantes sont donc valides:
+
+${echo >fichier test de redirection}
+${> fichier echo test de redirection}
+${echo test de redirection > fichier}
+
+	Toutes ces écritures sont valides, mais pourtant elle ne sont pas toutes d'une lisibilité égale, c'est
+	pourquoi nous vous conseillons d'utiliser la dernière syntaxe.
+
+	Alors qu'une redirection avec {<} ne possède qu'une unique syntaxe, il existe plusieurs syntaxes pour les
+	redirections avec {>}. Nous allons donc développer les redirections avec {>}:
+
+		- Par défaut, si vous utilisez le {>} seul, alors c'est la sortie standard qui est redirigée.
+		Par exemple le code suivant :
+
+			${echo redirection de la sortie standard > fichier}
+
+		@- redirigera la sortie standard vers {fichier}.
+
+		- Il est possible de faire précéder {>} par les nombres {1} ou {2}. Cela a pour effet de changer la sortie
+		qui est redirigée vers {fichier}. En fonction du nombre, la sortie redirigée est :
+
+			-- {1} : La sortie standard.
+
+			-- {2} : La sortie d'erreur standard.
+
+		@- Par exemple, on peut rediriger {stderr} uniquement en utilisant :
+
+
+		- Il est possible de rediriger la sortie {stderr} vers {stdout} en spécifiant {2>&1}. Il faut cependant que
+		le la sortie {stdout} soit redirigée, sinon cela n'a aucun effet.
+
+		@- Ainsi, on peut rediriger {stderr} et {stdout} vers fichier en utilisant l'exemple suivant :
+
+		${echo redirection de stderr et stdout > fichier 2>&1}
+
+		@- Le logiciel propriétaire {cmd.exe} exigeait que le {2>&1} soit placé après la redirection de {stdout} vers
+		{fichier}, cette limitation n'est plus effective avec {Dos9}.
+
+{{Compatibilité}}
+
+	Partiellement compatible avec {cmd.exe}.
+
+	Disponible depuis la version {0.48}, mais le système à été re-crée à l'occasion de la version
+	{2014.0.9}, il se peut donc qu'il y ait des incompatibilités cachées.
+
+{{À voir aussi}}
+
+	{cmdline|La ligne de commande}, {condop|Les opérateurs conditionnels}
+
+

@@ -1,0 +1,101 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+{{Les opérateurs conditionnels}}
+
+	Les {opérateurs conditionnels} sont des opérateurs très pratiques permettant
+	d'interconnecter les actions de différentes. Par exemple, avec les
+	{opérateurs conditionnels}, ont peut executer une commande seulement si
+	la commande précédente a échoué.
+
+{{Synopsis}}
+
+	${commande1 opérateur commande2 ...}
+
+	Execute des commandes liées par un opérateur conditionnel.
+
+	- {commande1}, {commande2} : Deux commandes pouvant être exécutées par
+	{dos9|Dos9}.
+
+	- {opérateur} : Un opérateur conditionnel liant les deux commandes.
+
+{{Les Types d'opérateurs conditionels}}
+
+	Il existe 4 types d'opérateurs conditionnels :
+
+	- {&} : Aucune condition, les deux commandes liées par l'opérateur sont
+	exécutées l'une après l'autre.
+
+	@- Cet opérateur n'a pas de réel intérêt puisque le même résultat est
+	obtenu en plaçant les deux commandes sur des lignes différentes (moyennant
+	l'utilisation de parenthèses pour les commandes {../for|FOR} et {../if|IF}),
+	on obtient alors une meilleure lisibilité.
+
+	- {&&} : Exécute la commande {commande2} si et seulement si la commande
+	{commande1} se termine sans retourner d'erreur. Pour déterminer si la
+	commande a réussi, {dos9|Dos9}
+	utilise la valeur de {../errorlevel|%ERRORLEVEL%} fixé par {commande1} et :
+
+		- si {%ERRORLEVEL} = 0, Alors la commande s'est terminé avec succès.
+
+		- sinon, alors la commande {commande1} a échoué.
+
+	- {\|\|} : Exécute la commande {commande2} si et seulement si la commande
+	{commande1} échoue. La méthode de détection d'échec est la même que pour
+	{&&}
+
+	- {\|} : Connecte la sortie standard de la commande {commande1} à l'entrée
+	standard de la commande {commande2}. Il est donc possible pour la {commande2}
+	d'utiliser les données générées par {commande1}.
+
+	@- Lors de l'éxécution, {commande1} et {commande2} sont exécutés simultanément.
+	La {commande1} est exécuté sur un nouveau processus {../dos9|Dos9} crée par le
+	processus {Dos9} principal. Pendant ce temps, la {commande2} est exécutée sur
+	le processus principal. Une fois que la {commande1} a achevé son exécution,
+	le nouveau processus meurt et l'exécution du script continue sur le processus
+	principal.
+
+	@- C'est pour cela que si la commande {commande1} est censée modifier l'environnement
+	de {Dos9}, il ne se passera rien, i.e. la variable ne sera pas assigné. Ainsi
+
+	${set exemple=1 | more test.txt}
+
+	@- N'assignera pas la variable {%exemple%}. Néanmoins, la commande {commande2} peut
+	contenir un tel assignement :
+
+	${ more test.txt | set /p exemple=}
+
+	@- Assignera bel et bien la première ligne du fichier {test.txt} a la variable
+	{%exemple%}.
+
+	@- Ce comportement est inversé sur {cmd.exe}, mais il m'a semblé plus logique
+	de conserver le comportement actuel car il permet de récupérer la sortie d'une
+	commande dans une variable.
+
+	Il est évidemment possible d'utiliser un nombre quelquonque d'opérateurs
+	conditionnels à la suite tant qu'ils respectent la syntaxe précédente.
+
+{{Compatibilité}}
+
+	Disponible depuis la version {0.5.0.0}.
+
+	Entièrement compatible avec {cmd.exe}, à l'exception de la subtilité décrite
+	plus haut sur le traitement des pipes.
+
+{{À voir aussi}}
+
+	{index|Index des spécifications}, {var|Les variables d'environement}

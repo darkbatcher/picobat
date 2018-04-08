@@ -1,164 +1,219 @@
-{{L'expansion des variables}}
+﻿#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+{{Conventional and delayed expansion}}
 
-	   L'expansion des variables est une étape du {parse|parsage} au
-	cours de laquelle les variables sont remplacés dans l'entrée de
-	commande.
+	Variable expansion is a {parse|parsing} step during which
+	variables get replaced in the command line.
 
-	   Il y a en réalité deux types d'expansions {l'expansion
-	conventionnelle} et {l'expansion retardée}. La première a lieu lors
-	de la lecture du fichier et la seconde a lieu lors de l'exécution de
-	la ligne.
+	This step in fact consist of two different step. The first,
+	the {conventional expansion} and the {delayed expansion}. The
+	first takes places as the file is read by Dos9. The second
+	one takes place just before the command execution.
 
-{{L'expansion conventionnelle}}
+{{Conventional expansion}}
 
-	   L'expansion conventionnelle a lieu à chaque lecture de ligne. On
-	ne peut pas la désactiver.
+	Conventional expansion takes places at every new line read. It 
+	can not be discarded.
+	
+	During this step {../dos9|Dos9} searches string delimited by
+	some {%}. If Dos9 finds any of those, it will consider it to be
+	{var|variable} names and replace it by their content.
+	
+	Once {Dos9} encounters such a string, it proceeds the following
+	way :
+	
+		- if the string refers to a valid variable name, then {Dos9} will
+		expand the string into the variable content.
+	
+		@- As example :
 
-	   Lors de cette étape {../dos9|Dos9} recherche les chaines délimitées
-	par des {%}. Si Dos9 trouve de telles chaines, il considère qu'il
-	s'agit de noms de {var|variables} et les remplace par leur contenu.
+${SET var=hello world !
+ECHO %var%}
 
-	Exemple:
+		@- will display :
 
-${	SET var=Hello world !
-	ECHO %var%
-	:: affichera "hello world !"}
+${hello world !}
 
-	   Si la chaine comprise entre deux signes {%} ne correspond pas à un
-	nom de variable, alors Dos9 procède de la façon suivante :
+		- If both {%} are next to one another, Dos9 replace it by a single
+		{%}
 
-		- Si les deux {%} sont accolés, alors Dos9 les remplace par
-		  un unique {%}. Ex:
+		@- As example:
 
-		${	ECHO copie : 10%%
-			:: Affichera "copie: 10%"}
+		${ECHO copy : 10%%}
 
-		- Si le second {%} encadre avec le prochain {%} un nom de
-		  variable valide, alors, le texte est conservé et le nom de
-		  variable valide est remplacé. Ex:
+		@- will display :
 
-		${	SET foo=
-			SET var=hello world
-			ECHO %foo%var%
-			:: Affichera "%foohello world"}
+		${copy 10%}
 
-		- Si on n'est dans aucun des deux cas, alors la chaine est
-		  ignorée. Ex:
+		- If we are in neither of the previous conditions are met, then the
+		string is just deleted from the line.
+		
+		@- As example :
 
-		${	SET foo=
-			ECHO %foo% hello world !
-			::Affichera "%foo% hello world!"}
+${SET foo=
+ECHO %foo% hello world !
+}
 
-	   On peut aussi spécifier des options lors de l'expansion. Pour cela
-	il suffit d'insérer un signe {:} entre les signes {%} et après le nom
-	de la variable. On peut donc utiliser les options suivantes :
+		@- will display:
 
-		- La troncature du contenu de la variable en utilisant l'option
-		${	nom_variable:~nb1,nb2}
+${hello world !}
 
-			-- {nb1} : position du caractère de {nom_variable} où
-			  commence la chaîne qui doit être vraiment
-			  remplacée. le premier caractère est le caractère 0.
+	Some options can also be specified during the expansion by inserting
+	a column {:} between the {%} signs just after the variable name. The
+	following options can be used :
 
-			-- {nb2} : nombre de caractères a conserver après le
-			  {nb1}-ième caractère de {nom_variable}. Si {nb2}
-			  est négatif, alors la chaine qui sera remplacée
-			  s'arrêtera {nb2} caractères avant la fin de
-			  {nom_variable}
+		- Truncation of the content of the variable using the option
 
-		Exemple:
-		${	SET foo=Hello world
-			ECHO %foo:~2,3%
-			:: Affichera "llo"
-			ECHO %foo:~2,-3%
-			:: Afficherra "llo wo"}
+		${%variable:~nb1,nb2%}		
 
-		- Le remplacement d'une sous chaîne en utilisant l'option
-		${	nom_variable:chaine1=chaine2}
+			-- {nb1} : the position of character of {variable}
+			that should be the beginning of the part to part that
+			should be used for expansion. The first character of
+			{variable} is at position 0. If {nb1} is a negative
+			number, then the position are counted from the end of
+			the string
 
-			-- {chaine1} : chaine à remplacer dans la variable
-			  {nom_variable}
+			-- {nb2} : the number of character of {variable} after
+			{nb1} that should be used for expansion. If {nb2} is a negative
+			number, then the position are counted from the end of
+			the string
+			
+		@- Note that if the version of Dos9 that is running supports utf-8,
+		then the variable truncation happens only counting entire characters.
+		If not, this is not warranted.
 
-			-- {chaine2} : chaine remplaçant {chaine1} dans la
-			  variable {nom_variable}
+		@- As example:
 
-		Exemple:
-		${	SET foo=Ceci est un test
-			ECHO %foo:est=pingouin%
-			:: Affichera "Ceci pingouin un tpingouin"}
+${SET foo=Hello world
+ECHO %foo:~2,3%
+ECHO %foo:~2,-3%}
 
-{{L'expansion retardée}}
+		@- Will print :
 
-	   L'expansion retardée a lieu juste avant l'exécution de la ligne.
-	Cette étape peut être activée ou désactivée via la commande
-	{../setlocal|SETLOCAL} en utilisant les options {ENABLEDELAYEDEXPANSION}
-	ou {DISABLEDELAYEDEXPANSION}
+${llo
+llo wo}
 
-	   L'expansion des variables d'environnement se fait selon les même
-	méthodes et options sauf qu'il faut alors remplacer les {%} par des {!}
 
-	Exemple:
-${	SETLOCAL ENABLEDELAYEDEXPANSION
-	SET var=Hello world
-	ECHO !var!
-	:: Affichera "Hello world"}
 
-	   L'expansion des variables permet de pouvoir gérer convenablement
-	les variables à l'intérieur des {../if|IF} ou des {../for|FOR}, car la
-	valeur de la variable est mise à jour à chaque exécution.
+		- Replacement of a string of {variable} :
+		
+		${%variable:string1=string2%}
 
-	Exemple:
-${	SETLOCAL ENABLEDELAYEDEXPANSION
-	SET var=première valeur
-	IF 1==1 (
-		SET var=seconde valeur
-		ECHO %var%
-		:: Affichera "première valeur"
-		ECHO !var!
-		:: Affichera "seconde valeur"
-	)}
+			-- {string1} : string to be replaced in {variable}
 
-	   D'autre part, l'expansion retardée permet aussi de contouner
-	certains problème de parsages qui apparaissent traditionelement dans
-	les scripts batch, notamment le problème de l'expansion de variables
-	contenant des espace. Par exemple, le script suivant ne marche pas:
+			-- {string2} : string remplacing {string1} in {variable}
 
-${	SET var=variable avec des espaces
-	IF %var%==test (
-		:: du code
-	)}
+		@- As example:
 
-	   Le code précédent ne fonctionnera pas car la variable {var}
-	contient des espaces qui vont empêcher l'exécution correcte du {if|IF}.
+${SET foo=Ceci est un test
+ECHO %foo:est=pingouin%}
 
-	   Dans ce cas il n'est pas efficace de mettre {%var%} entre guillemets,
-	car il subsisterait un bug si {var} contenait un {"}.
+		@- will print :
 
-${	SETLOCAL ENABLEDELAYEDEXPANSION
-	SET var=variable avec des espaces
-	IF !var!==test (
-		:: du code
-	)}
+${Ceci pingouin un tpingouin}
 
-	   L'expansion retardée des variables permet ainsi d'empêcher les bugs
-	dus à des entrée contenant, par example des {spec/char|Charactères
-	spéciaux}.
+		- Replacing a {variable} by a default string if {variable} is undefined :
+		
+${nom_variable:string}
 
-{{L'expansion des variables spéciales}}
+			-- {string} : Defaut string.
+			
+		@- For example :
+		
+${SET var=
+ECHO %var:rien%}
 
-	   Les {xvar|Variables spéciales} sont aussi remplacées lors de
-	l'exécution de la ligne. (Voir la page pour plus d'infos)
+		@- will print : 
+		
+${rien}
 
-{{Compatibilité}}
+{Delayed expansion}}
 
-	   Compatible avec {cmd.exe} pour la majorité des tests, mais on ne
-	peut pas être sûr que ce soit le cas étant donné que microsoft ne
-	publie pas les spécifications de {cmd.exe}.
+	Delayed expansion takes place juste before line execution. This step
+	can be discarded via the {../setlocal|SETLOCAL} command using the
+	{ENABLEDELAYEDEXPANSION} or {DISABLEDELAYEDEXPANSION} options.
 
-	   L'expansion suit les règles annoncées depuis la version {0.7},
-	avant, l'expansion était beaucoup plus annarchique.
+	Delayed expansion works exactly as conventional expansion excepting
+	that it uses {!} instead of {%}.
 
-{{A voir aussi}}
+	It enables some very frequent batch programming issue to be solved :
+	
+		- Correctly handle variables within a {../for|FOR} loop or a {../if|IF}
+		command, since variables get expanded again after every new loop, as opposed
+		to conventionnal expansion which does not.
+		
+		@- As an example, the following code that use only conventional expansion
+		exhibits a strange behaviour :
 
-	{var|Variables d'environnement}, {xvar|Variables spéciales},
-	{../setlocal|Commande SETLOCAL}, {index|Index des spécifications}
+${SET var=1
+ECHO 1: %var%
+IF %var% equ 1 (
+	SET var=2
+	echo 2: %var%
+)}
+
+		@- The output is quite surprise as it seems that {%var%} does not get modified.
+		However, in fact, it is but only when the line was read from the file. 
+
+		@- To get the expected result, using delayed expansion is necessary, that is
+		modifying a bit the code:
+
+${SETLOCAL EnableDelayedExpansion
+SET var=1
+ECHO 1: %var%
+IF %var% equ 1 (
+	SET var=2
+	echo 2: !var!
+)}
+
+
+	- Work around some parsing problems that occur when a variable containing spaces
+	gets expanded :
+
+	@- As an example, the following code will fail as spaces in {%var%} will raise
+	an error:
+
+${SET var=some variable with spaces
+IF %var% equ test (
+:: some code
+)}
+
+	@- The best way to work around this is to use delayed expansion. A couples of other
+	workaround and the reason this one is the base are discussed in the {../if|IF command} page.
+
+${SETLOCAL EnableDelayedExpansion
+SET var=some variable with spaces
+IF !var! equ test (
+:: some code
+)}
+
+{{Special var expansion}}
+
+	{xvar|Special variables} are replaced during the command line
+	execution. This topic is discussed on the associated page.
+
+{{Compatibility}}
+
+	Compatible with {cmd.exe}.
+	
+	Available since {0.7}
+
+{{See also}}
+
+	{var|Environment variables}, {xvar|Special variables},
+	{../setlocal|SETLOCAL command}, {index|Specification index}

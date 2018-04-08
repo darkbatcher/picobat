@@ -27,6 +27,8 @@
 
 	An external command is a command which needs an additionnal binaries. These commands
 	provide more flexibility to batch programs.
+	
+	The specification can be found in {spec/index|specifications index}.
 
 {{User-interface command}}
 
@@ -70,8 +72,12 @@
 
 	- {set|SET}    {[int]} : Modify an environment variable. Either
 	through a string litteral, a mathematical expression or an user input.
+	
+	- {start|START} {[int]} : Run a command.
 
 	- {setlocal|SETLOCAL} {[int]} : Changes {dos9|Dos9} mode.
+	
+	- {rem|REM}		 {[int]} : Introduce a comment.
 
 	- {exit|EXIT} {[int]} : Exit {dos9|Dos9}.
 
@@ -104,3 +110,9 @@
 	- {ren|RENAME, REN} {[int]} : Rename files.
 
 	- {find|FIND} {[int]} : Find strings in files.
+	
+	- {wc|WC} {[int]} : Display file counts.
+	
+	- {xargs|XARGS} {[int]} : Run a command taking argument on standard input.
+
+	- {tea|TEA} {[ext]} : Fast and simple text preprocessor.

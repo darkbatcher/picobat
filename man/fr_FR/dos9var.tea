@@ -16,12 +16,12 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-{{Variables %DOS9_VER%, %DOS9_OS%, %DOS9_OS_TYPE%, %DOS9_PATH%}}
+{{Variables %DOS9_VER%, %DOS9_OS%, %DOS9_OS_TYPE%, %DOS9_PATH%, %DOS9_SHARE%, %DOS9_ETC%}}
 
-	   La variable {%DOS9_VER%} permet d'obtenir la version de {dos9|Dos9}
+	La variable {%DOS9_VER%} permet d'obtenir la version de {dos9|Dos9}
 	en cours d'execution.
 
-	   La variable {%DOS9_OS%} permet d'obenir l'os sur lequel
+	La variable {%DOS9_OS%} permet d'obenir l'os sur lequel
 	{dos9|Dos9} s'exécute.
 
 	La variable {%DOS9_OS_TYPE%}, d'obtenir le type d'os sur lequel
@@ -29,6 +29,9 @@
 
 	La variable {%DOS9_PATH%} permet d'obtenir le chemin de l'exécutable
 	{dos9|Dos9}.
+	
+	Les variables {%DOS9_SHARE%} et {%DOS9_ETC%} indiquent l'emplacement
+	des fichiers de {dos9|Dos9}.
 
 	Ces variable sont directement définies par {Dos9}.
 
@@ -84,6 +87,14 @@
 	Contient le chemin de l'exécutable {Dos9.exe} (WINDOWS) ou {Dos9}(*NIX). Ce chemin est généré à chaque
 	lancement de {Dos9}. Donc, il peut s'accommoder avec toutes sortes d'installations, par exemple, une
 	installation sur support amovible est tout à fait envisageable.
+	
+	${%DOS9_SHARE%}
+	
+	Contient le chemin du dossier ou sont stockées les données statiques de Dos9.
+	
+	${%DOS9_ETC%}
+	
+	Contient le chemin du dossier ou sont stockées les fichiers de configuration de Dos9.
 
 {{Compatibilité}}
 
