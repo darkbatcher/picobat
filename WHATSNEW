@@ -1951,5 +1951,12 @@ SUNDAY 7TH, APRIL
 
         - Fixed bug that caused Dos9 not to append a / after disc in %~dpA.
 
-        - Added a /C:MD file to generate html files compatible with pico 
+        - Added a /C:MD file to generate html files compatible with pico
+
+WEDNESDAY 11TH, APRIL
+
+        - Fixed error on handling 2>&1 redirection.
+
+        - Fixed Dos9_FilePath.c error that led Dos9 to check for file before 
+          using %PATHEXT%. 
 

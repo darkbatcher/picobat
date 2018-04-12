@@ -331,7 +331,7 @@ char* Dos9_GetPathNextPart(char* lpPath, ESTR* lpReturn)
 {
 	char*   lpNextToken;
 
-	if (*lpPath=='\0')
+	if (lpPath == NULL || *lpPath=='\0')
 		return NULL;
 
 	if (!(lpNextToken=strchr(lpPath, DOS9_PATH_DELIMITER))) {
