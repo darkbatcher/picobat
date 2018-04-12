@@ -27,13 +27,13 @@
 
 		- {L'entrée standard} (stdin) : Il s'agit de l'entrée par défaut des programmes. En général,
 		cette entrée correspond à du texte entré directement dans la console. Par exemple,
-		lorsqu'aucun fichier n'est donné en tant qu'argument, {dos9|Dos9} prend ses commandes sur
+		lorsqu'aucun fichier n'est donné en tant qu'argument, {../dos9|Dos9} prend ses commandes sur
 		cette entrée. Beaucoup de commandes utilisent l'entrée standard si l'on ne leur donne pas
 		d'arguments.
 
-		- {La sortie standard} (stdio) : Il s'agit de la sortie par défaut des programme. En général,
+		- {La sortie standard} (stdout) : Il s'agit de la sortie par défaut des programme. En général,
 		cette sortie correspond à la sortie de la console. C'est par cette entrée que les programmes
-		écrivent (par défaut), leur sortie. C'est le cas par exemple de la commande {type|TYPE}.
+		écrivent (par défaut), leur sortie. C'est le cas par exemple de la commande {../type|TYPE}.
 
 		- {La sortie d'erreur standard} (stderr) : Il s'agit de la sortie utilisée par défaut pour les
 		programmes pour afficher des erreurs ou des messages à l'utilisateur, plutôt que sa véritable
@@ -45,7 +45,7 @@
 	mais celà amenait à des résultats abhérants car on ne savait pas réelement à quel fichier un descripteur
 	pouvait correspondre et comment obtenir un redirection adéquate. On pouvait aussi aboutir à des effets de
 	bords assez supprenant (par exemple, avec un peu d'expérimentations il était possible de créer une
-	redirection circulaire). Ce support a donc été abandonné pour {dos9|Dos9}.
+	redirection circulaire). Ce support a donc été abandonné pour {../dos9|Dos9}.
 
 {{Rediriger les entrées et sorties}}
 
@@ -84,7 +84,8 @@ ${echo test de redirection > fichier}
 
 		@- Par exemple, on peut rediriger {stderr} uniquement en utilisant :
 
-
+		${echo redirection de stderr 2> fichier}
+		
 		- Il est possible de rediriger la sortie {stderr} vers {stdout} en spécifiant {2>&1}. Il faut cependant que
 		le la sortie {stdout} soit redirigée, sinon cela n'a aucun effet.
 

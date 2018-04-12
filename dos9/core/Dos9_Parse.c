@@ -127,7 +127,7 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 
 				}
 
-				lppssStart->cRedir = 1;
+				lppssStart->cRedir =  PARSED_STREAM_START_STDERR2STDOUT;
 				lpCh=lpNextToken+3;
 
 				break;
@@ -148,7 +148,7 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 
 				}
 
-				lppssStart->cRedir = 2;
+				lppssStart->cRedir = PARSED_STREAM_START_STDOUT2STDERR;
 
 				lpCh=lpNextToken+3;
 

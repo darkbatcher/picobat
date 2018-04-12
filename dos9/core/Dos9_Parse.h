@@ -36,11 +36,14 @@ struct PARSED_STREAM {
 	struct PARSED_STREAM* lppsNode;
 };
 
+#define PARSED_STREAM_START_STDOUT2STDERR   2
+#define PARSED_STREAM_START_STDERR2STDOUT   1
+
 struct PARSED_STREAM_START {
 	struct PARSED_STREAM* lppsStream;
-	char cOutputMode;
-	char cErrorMode;
-	char cRedir;
+	char cOutputMode; /* the oupout mode of stdout */
+	char cErrorMode; /* the output mode of stderr */
+	char cRedir; /* if we have 2>&1 or 1>&2 */
 	char* lpOutputFile;
 	char* lpErrorFile;
 	char* lpInputFile;

@@ -15,95 +15,106 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-{{Les redirections}}
+{{Redirections}}
 
-	Les redirections permettent de rediriger les sorties et les entrées de l'interpréteur de commande
-	(l'entrée standard, la sortie standardet les sorties d'erreur) vers des fichiers.
+	Redirections allow standard input and outputs to me redirected by the
+	command interpretor.
 
-{{Les entrées et les sorties de l'interpréteur}}
+{{Interpreter's input and outputs}}
 
-	Traditionellement, chaque programme en mode console est doté de trois entrées et sorties dites
-	standard. Ces trois entrées sont :
+	Traditionally, every console programe is given three files that a referred to
+	as standard output and inputs.
 
-		- {L'entrée standard} (stdin) : Il s'agit de l'entrée par défaut des programmes. En général,
-		cette entrée correspond à du texte entré directement dans la console. Par exemple,
-		lorsqu'aucun fichier n'est donné en tant qu'argument, {dos9|Dos9} prend ses commandes sur
-		cette entrée. Beaucoup de commandes utilisent l'entrée standard si l'on ne leur donne pas
-		d'arguments.
+	- {Standard input} (stdin) : The default input of console programs. Usually this
+	input refers to text typed directly in the the terminal. As an example, when no
+	file path is given to {../dos9|Dos9}, it reads commands directly from the standard
+	input.
+	
+	- {Standard Output} (stdout) : The default output for console programs. Usually,
+	this output refers to the terminal. This output is usually the default output for
+	programs. As an example, {../type|TYPE} uses {stdout} to output files. 
+	
+	- {Standard Error} (stderr) : This is the default output used to print error message.
+	It is usually used to separate error message from actual output in redirections.
+	
+	Theses three output can be redirected using {Dos9}. However, {cmd.exe} allows user to
+	redirect any file descriptor through redirections. But this could lead to absurd results
+	since knowing which descriptor refers to which file. Moreover, this behavior can lead
+	to strange side effects. Thus, this feature is not supported by {../dos9|Dos9}.
 
-		- {La sortie standard} (stdio) : Il s'agit de la sortie par défaut des programme. En général,
-		cette sortie correspond à la sortie de la console. C'est par cette entrée que les programmes
-		écrivent (par défaut), leur sortie. C'est le cas par exemple de la commande {type|TYPE}.
+{{Redirecting input and outputs}}
 
-		- {La sortie d'erreur standard} (stderr) : Il s'agit de la sortie utilisée par défaut pour les
-		programmes pour afficher des erreurs ou des messages à l'utilisateur, plutôt que sa véritable
-		sortie. Cela permet entre autres d'empêcher les messages d'erreurs d'être mélangés avec la
-		sortie en cas de redirection.
+	{../dos9|Dos9} uses {<} and {>} characaters to set redirections. {>} character is used to redirect
+	{stdout} and {stderr}, whereas the {<} is used to specify {stdin} redirections.
 
-	Ces trois entrées sont les entrées que vous pouvez rediriger avec {Dos9}. Auparavant, en utilisant
-	{cmd.exe}, il était posssible de rediriger un descripteur de fichier quelconque via les redirections,
-	mais celà amenait à des résultats abhérants car on ne savait pas réelement à quel fichier un descripteur
-	pouvait correspondre et comment obtenir un redirection adéquate. On pouvait aussi aboutir à des effets de
-	bords assez supprenant (par exemple, avec un peu d'expérimentations il était possible de créer une
-	redirection circulaire). Ce support a donc été abandonné pour {dos9|Dos9}.
+	When {../dos9|dos9} encounters either a {>} or a {<}, then Dos9 uses the very first
+	paramater to the right of the same an use it as the name of a file to which the input
+	or output will be redirected. The name of the file and the sign do not have to be
+	separated by any blank character. Then Dos9 removes the file name from the
+	command line. The {>} or {<} signs can be used anywhere in the command line, 
+	all of the following lines are valid.
 
-{{Rediriger les entrées et sorties}}
+${echo >file redirection test
+> file echo redirection test
+echo redirection test > file}
 
-	{dos9|Dos9} utilise les caractères {>} et {<} pour spécifier les redirections. Le caractère {>} est
-	utilisé pour rediriger {stdout} et {stderr}, alors que le caractère {<} est utilisé pour rediriger
-	{stdin}.
+	Any of the previous syntax are valid. However, some of them give the code more
+	readability, as such, using the third syntax is highly recommended.
+	
+	Altough the is only one syntax using {<}, redirections using {>} are provided
+	with a bunch of different syntaxes, which are the following.
 
-	Lorsque {dos9|Dos9} rencontre un {>} ou un {<}, alors Dos9 utilise le premier paramètre
-	immédiatement à droite du signe comme nom de fichier (le nom de fichier et le signe ne doivent pas
-	nécessairement être séparé par un espace) et le retire de la ligne de commande, et ceci
-	sans se soucier de la position du {<} ou du {>}. Les syntaxes suivantes sont donc valides:
+		- The default behaviour if you use only the {>} sign, is to redirect the
+		standard output to the specified file.
+		
+			${echo redirecting stdout > file}
 
-${echo >fichier test de redirection}
-${> fichier echo test de redirection}
-${echo test de redirection > fichier}
+		@- The previous example will redirect stdout to {file}. That is, {file}
+		will be emptied and will recieve {"redirecting stdout"} as its new content.
+		
+		@- File emptying can be inhibited by doubling the {>} sign to get the
+		following code. In that case, the line "redirecting stdout" will be
+		added at the end of {file}.
+		
+			${echo redirecting stdout >> file}
 
-	Toutes ces écritures sont valides, mais pourtant elle ne sont pas toutes d'une lisibilité égale, c'est
-	pourquoi nous vous conseillons d'utiliser la dernière syntaxe.
-
-	Alors qu'une redirection avec {<} ne possède qu'une unique syntaxe, il existe plusieurs syntaxes pour les
-	redirections avec {>}. Nous allons donc développer les redirections avec {>}:
-
-		- Par défaut, si vous utilisez le {>} seul, alors c'est la sortie standard qui est redirigée.
-		Par exemple le code suivant :
-
-			${echo redirection de la sortie standard > fichier}
-
-		@- redirigera la sortie standard vers {fichier}.
-
+		- Either of stdout or stderr can be chosen by preceding the {>} sign 
+		by either {1} or {2}. As a result, the stream that gets redirected to
+		{file} change depending on the number:
+		
+			-- {1} : standard output.
+		
+			-- {2} : standard error.
+			
 		- Il est possible de faire précéder {>} par les nombres {1} ou {2}. Cela a pour effet de changer la sortie
 		qui est redirigée vers {fichier}. En fonction du nombre, la sortie redirigée est :
 
 			-- {1} : La sortie standard.
 
 			-- {2} : La sortie d'erreur standard.
+			
+		@- As an example, {stderr} can be redirected to {file} using:
 
-		@- Par exemple, on peut rediriger {stderr} uniquement en utilisant :
+		${echo redirecting stderr 2> file}
 
+		- It possible to redirect either stderr to stdout or stdout to stderr using
+		{2>&1} or {1>&2}.
+		
+		@- Thus, {stderr} and {stdout} can be redirected to {file} using the following syntax:
 
-		- Il est possible de rediriger la sortie {stderr} vers {stdout} en spécifiant {2>&1}. Il faut cependant que
-		le la sortie {stdout} soit redirigée, sinon cela n'a aucun effet.
+		${echo redirecting stderr and stdout at the same > file 2>&1}
 
-		@- Ainsi, on peut rediriger {stderr} et {stdout} vers fichier en utilisant l'exemple suivant :
+		@- Note that Dos9 allow the {2>&1} to be placed before the actual redirection, even
+		though this would raise an error using {cmd.exe}
 
-		${echo redirection de stderr et stdout > fichier 2>&1}
+{{Compatibility}}
 
-		@- Le logiciel propriétaire {cmd.exe} exigeait que le {2>&1} soit placé après la redirection de {stdout} vers
-		{fichier}, cette limitation n'est plus effective avec {Dos9}.
+	Partially compatible with {cmd.exe}.
+	
+	Available since {0.48}.
 
-{{Compatibilité}}
+{{See Also}}
 
-	Partiellement compatible avec {cmd.exe}.
-
-	Disponible depuis la version {0.48}, mais le système à été re-crée à l'occasion de la version
-	{2014.0.9}, il se peut donc qu'il y ait des incompatibilités cachées.
-
-{{À voir aussi}}
-
-	{cmdline|La ligne de commande}, {condop|Les opérateurs conditionnels}
+	{cmdline|Command line}, {condop|Conditionnal operators}
 
 

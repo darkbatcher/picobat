@@ -15,71 +15,64 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-{{Les variables d'environnement}}
+{{Environment variables}}
 
-	   Les variables d'environnement sont le principal moyen de gérer les
-	variables pour {../dos9|Dos9}. Elles sont définies par le système
-	d'exploitation, donc chaque programme en possède certaines. Il faut
-	savoir que n'importe quel programmme lancé à partir de Dos9 hérite
-	des variables d'environnement de celui-ci, ces variables sont donc
-	{globales}.
+	Environment variables are the most common way to deal with
+	variables with {../dos9|Dos9}. They are usually defined by the 
+	operating system but {Dos9} uses its own implementation.
+	Any external binary executed from {Dos9} inherits its
+	environment.
 
-{{Utilisation}}
+{{Use}}
 
-	   Vous pouvez définir, modifier ou suppprimmer une variable
-	d'environement via la commande {../set|SET}.
+	Environment variables can be defined, deleted or modified
+	using the {../set|SET command}.
 
-	   Ensuite, les variables peuvent être dévellopées dans les entrées
-	de commande (voir {exp|l'expansion des variables}).
+	Environment variables can be included in command using
+	{exp|Variable expansion}.
 
-{{Variables définies automatiquement}}
+{{Default defined variables}}
 
-	   {Dos9} définie et supporte de manière native plusieurs
-	{variables d'environnement}.
+	Some environment variables are automatically defined
+	by {Dos9}.
 
-	Il y a huit variables natives :
+	Eight of them are native variables :
 
-		- {../dos9var|%DOS9_OS%}      : Contient le type d'os sous lequel
-		  {Dos9} s'exécute ({LINUX} ou {WINDOWS})
+		- {../dos9var|%DOS9_OS%} : OS type.
 
-		- {../dos9var|%DOS9_PATH%}    : Contient le chemin de
-		  l'exécutable {Dos9}
+		- {../dos9var|%DOS9_PATH%} : Dos9 binary path.
 
-		- {../dos9var|%DOS9_VERSION%} : Contient le numéro de version de
-		  {Dos9}
-
-		- {../errorlevel|%ERRORLEVEL%}   : Contient la valeur de retour de
+		- {../dos9var|%DOS9_VERSION%} : Dos9 version.
+		
+		- {../errorlevel|%ERRORLEVEL%} : Contient la valeur de retour de
 		  la dernière commande exécutée
 
-		- {../cd|%CD%}           : Contient le chemin courrant
+		- {../cd|%CD%} : Current directory.
 
-		- {../random|%RANDOM%}       : Retourne un nombre aléatoire
+		- {../random|%RANDOM%} : A random number.
 
-		- {../time|%DATE%}         : Contient la date du jour
+		- {../time|%DATE%} : Date.
 
-		- {../time|%TIME%}         : Contient l'heure
+		- {../time|%TIME%} : Time.
+		
+	Some other variables are defined by the operating system or by
+	{../dos9auto|Dos9_Auto.bat}:
 
-	   D'autres variables sont définies par {Windows} ou par le ficher
-	{../dos9auto|Dos9_Auto.bat}
+		- {%PATH%} : Dos9 paths list variable.
 
-		- {../path|%PATH%}        : Contient la variable path du système
-		  modifiée par {Dos9}
+		- {%SYSTEMDRIVE%} : Disk root.
+		
+		- {%SYSTEMROOT%} : Operating system folder path. 
 
-		- {../systemdrive|%SYSTEMDRIVE%} : Contient la racine du disque
-		  (ou la racine sous LINUX)
-
-		- {../systemroot|%SYSTEMROOT%}  : Contient le chemin du système
-		  d'exploitation
-
-		- {../userprofile|%USERPROFILE%} : Contient le chemain du dossier
-		  de l'utilisateur
+		- {%USERPROFILE%} : Current user folder path.
 
 {{Note}}
 
-	   Les noms de variables sont insensibles à la casse (i.e.
-	{%erRorlEveL%} désigne la même variable que {%errorlevel%})
+	Variables names are case insensitive (eg. {%ErrorLevel%} is
+	equivalent to {%errorlevel%}).
 
-{{A voir aussi}}
 
-	{xvar|Variables spéciales}, {exp|L'expansion des variables},
-	{index|Index des spécifications}
+{{See also}}
+
+	{xvar|Special variables }, {exp|Variable expansion},
+	{index|Specifications index}.

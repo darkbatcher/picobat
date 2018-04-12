@@ -228,7 +228,7 @@ int Dos9_GetFilePath(char* lpFullPath, const char* lpPartial, size_t iBufSize)
 
 	char *lpPathExtToken,
 	     *lpPathExtBegin=Dos9_GetEnv(lpeEnv, "PATHEXT");
-	int bFirstSubLoop;
+	int bFinalSubLoop;
 
 #endif // WIN32
 
@@ -258,20 +258,21 @@ int Dos9_GetFilePath(char* lpFullPath, const char* lpPartial, size_t iBufSize)
 
 #ifdef WIN32
 
-		bFirstSubLoop=TRUE;
+		bFinalSubLoop=TRUE;
 		lpPathExtToken=lpPathExtBegin;
 
-		do {
+		while ((lpPathExtToken=Dos9_GetPathNextPart(lpPathExtToken, lpEsPart))
+                || bFinalSubLoop) {
 
-			if (bFirstSubLoop) {
+			if (lpPathExtToken != NULL) {
 
-				Dos9_EsCpyE(lpEsFinalPath, lpEsTmp);
-				bFirstSubLoop=FALSE;
-
-			} else {
-
-				Dos9_EsCpyE(lpEsFinalPath, lpEsTmp);
+                Dos9_EsCpyE(lpEsFinalPath, lpEsTmp);
 				Dos9_EsCatE(lpEsFinalPath, lpEsPart);
+
+			} else if (bFinalSubLoop) {
+
+				Dos9_EsCpyE(lpEsFinalPath, lpEsTmp);
+				bFinalSubLoop=FALSE;
 
 			}
 
@@ -280,12 +281,7 @@ int Dos9_GetFilePath(char* lpFullPath, const char* lpPartial, size_t iBufSize)
 			if (Dos9_FileExists(Dos9_EsToChar(lpEsFinalPath)))
 				goto file_found;
 
-			if (lpPathExtToken == NULL)
-				break;
-
-
-
-		} while ((lpPathExtToken=Dos9_GetPathNextPart(lpPathExtToken, lpEsPart)));
+		}
 
 #else
 

@@ -241,7 +241,9 @@ int Dos9_ExecOutput(PARSED_STREAM_START* lppssStart)
 	        );
 
 	if (!(lppssStart->lpInputFile)
-	    && !(lppssStart->lpOutputFile)) {
+	    && !(lppssStart->lpOutputFile)
+        && !(lppssStart->lpErrorFile)
+        && !(lppssStart->cRedir)) {
 
 		/* nothing to be done, just return, now */
 		return 0;
@@ -274,7 +276,7 @@ int Dos9_ExecOutput(PARSED_STREAM_START* lppssStart)
 
     switch (lppssStart->cRedir) {
 
-    case 1:
+    case PARSED_STREAM_START_STDERR2STDOUT:
 
         lppsStreamStack = Dos9_OpenOutputD(lppsStreamStack,
 		                -1,
@@ -283,7 +285,7 @@ int Dos9_ExecOutput(PARSED_STREAM_START* lppssStart)
         fError = _fOutput;
         break;
 
-    case 2:
+    case PARSED_STREAM_START_STDOUT2STDERR:
         lppsStreamStack = Dos9_OpenOutputD(lppsStreamStack,
 		                -1 ,
 		                -1

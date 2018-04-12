@@ -15,67 +15,66 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-{{Les attributs de fichiers}}
+{{Files attributes}}
 
-	Chaque fichiers a ses attributs qui sont définis par le systèrme
-	d'exploitation. {../dos9|Dos9} vous permet d'utiliser ces attributs pour
-	modifier le fonctionnement de vos scripts de commandes.
-
-	{Attention:} Tous ces attributs ne sont pas portables sur les systemes
-	Unix-like. Cependant, si vous décidez de les utiliser, ils seront juste
-	ignorés par l'interpréteur {../dos9|Dos9}.
+	Every file has specific files attributes defined by operating
+	systems. {../dos9|Dos9} can handle these attributes to change
+	the behaviour of command scripts.
+	
+	[Warning:} All these attributes are not portable on Unix-like system.
+	Anyway if you choose to use them, they will just be ignored by the
+	interpreter.
 
 {{Synopsis}}
 
-	En général, {../dos9|Dos9} fournit un commutateur standard pour spécifier
-	les attributs. Cette  syntaxe est:
+	Usualy, {../dos9|Ds9} provides a standard switch to specify attributes
+	filters. The syntax is:
 
 	${/a[:]attr}
+	
+	The use of the column is not mandatory but it is recommanded for readability
+	reasons.
+	
+		- {attr} : A sequence of letters (optionnally preceded by hyphen {-} to
+		discard an attribute).
+		
+{{Attributes}}
 
-	L'usage des deux points n'est pas obligatoire mais est recommandée pour des
-	raisons de lisibilité.
+	The following letters denote the following :
 
-		- {attr} : Une suite de lettres (éventuellement précédé du signe
-		{-}) qui décrivent les attributs des fichiers.
+		- On windows {WINDOWS} and {UNIX-like} systems:
 
-{{Les attributs}}
+			-- {D} : is a directory.
 
-	Les différents lettres qui dénottent les attributs sont les suivantes:
+			-- {R} : is read-only.
 
-		- Pour les systêmes {WINDOWS} et {UNIX-like}:
+			-- {I} : is empty.
 
-			-- {D} : Le fichier est un répertoire.
+		- On windows {WINDOWS} systems:
 
-			-- {R} : Le fichier est en lecture seule.
+			-- {H} : is hidden.
 
-			-- {I} : Le fichier est vide.
+			-- {S} : is system.
 
-		- Pour les systèmes {WINDOWS} uniquement:
+			-- {A} : is an archive.
 
-			-- {H} : Le fichier est caché.
+			-- {L} : is an analyse.
 
-			-- {S} : Le fichier est système.
+	You can select file not having an attributes by prefixing the letter
+	by an hyphen {-}.
 
-			-- {A} : Le fichier est archivé.
-
-			-- {L} : Le fichier est un point d'analyse.
-
-	Il est possible de sélectionner les fichiers n'ayant pas un attribut en
-	préfixant la lettre correspondante à l'atribut par le préfixe {-} (négation).
-
-{{Exemple}}
+{{Example}}
 
 	${/A:R-I}
 
-	Sélectionne les fichier en lecture seule et non vides.
+	Select read-only files that are not empty.
 
-{{Compatibilité}}
+{{Compatibility}}
 
-	Les sélecteurs d'attributs d'attributs sont disponibles depuis la version
-	{0.4.0.2}.
+	Available since {0.4.0.2}.
 
-	Totalement compatible avec {cmd.exe}
+	Compatible since {cmd.exe}.
 
-{{À voir aussi}}
+{{See also}}
 
-	{index|Index des spécifications}, {../dir|Commande DIR}, {../del|Commande DEL}
+	{index|Specification index}, {../dir|DIR Command}, {../del|DEL Command}

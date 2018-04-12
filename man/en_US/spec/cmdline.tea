@@ -15,102 +15,94 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-{{La ligne de commande}}
+{{Command line}}
 
-	La ligne de commande de commande est le concept central de la programmation
-	batch. Elle permet de décrire le comportement des commandes et est utilisée
-	pour le parsage des scripts.
+	
+	The {command line} is one of the central concepts of batch programming.
+	It is used to describe command behaviours and to parse scripts.
+	
+	The conventions presented here are used a {Dos9} standard.
+	
+{{Commands and Blocks}}
 
-	Les conventions de noms présentés ici seront utilisés dans toute la documentation
-	de {../dos9|Dos9}.
-
-{{Les commandes et les blocs de commandes}}
-
-	Il existe typement deux types de structures dans les scripts de commandes. Les premières
-	sont les {commandes}, la partie élémentaire du langage batch, et la seconde sont les
-	{blocs de commandes} qui sont, eux, des groupes de {commandes}:
-
-		- les {commandes} sont la structure élémentaire du langage {batch}, chaque action est
-		exécutée au travers d'une commande. Les commandes sont une ligne (ou une partie, si des
-		{condop|opérateurs conditionnels} sont utilisés), qui dénote une action a exécuter. Typiquement
-		les commandes sont notées de la manière suivante:
-
-		${COMMANDE argument_obligatoire [argument_optionel] [choix1|choix2]}
-
-		@- Où les différentes notations sont expliquées ci-après:
-
-			-- {COMMANDE} : le nom de la commande a exécuter.
-
-			-- {argument_obligatoire} : Un argument qui doît être spécifié pour que la commande
-			fonctionne. Un argument est soit un mot, séparé des autres arguments par des espaces
-			dans la commande, où alors un groupe de mot soit entouré par des {'} ou {"} ou dont
-			les espaces ont été échappés via le caractère '^'. Ansi, il existe plusieurs manières
-			de spécifier un argument possédant des espaces, par exemple pour l'argument {foo bar}:
+	The is two kinds of structures within batch scripts. The first are {commands}, the
+	most important part of code and the second are {blocks} that form a group of
+	{commands}.
+	
+	- {Commands} are the simplest structure of batch programming. Every action is done
+	using a {command}. Commands are lines (or a part of line, if {condop|conditonnal operators}
+	are used), that denote an action to be done. Typically, {commands} are described using
+	the following syntax :
+	
+	${COMMAND mandatory_argument [optional_argument] [choice1 | choice2]}
+	
+	@- Where :
+	
+	-- {COMMAND} is the name of the command.
+	
+	-- {madatory_argument} is an argument that must be specified for the command to run
+	properly. It can either be a word or a group of words surrounded by quotes ({'} or {"})
+	or with spaces escaped with {^}. Thus, there is several ways of passing an argument:
 
 ${COMMANDE "foo bar"
 COMMANDE 'foo bar'
 COMMANDE foo^ bar}
 
-			@-- Et ces trois manières sont bien évidemment équivalentes, on peut les permuter sans
-			aucune incompatibilité.
+	@-- All of theses syntaxes are valid and can be used interchangeably.
+	Note that no {condop|conditional operator} will be interpreted within quotes.
 
-			-- {[argument optionel]} : Il s'agit d'un argument que l'on peut spécifier optionnellement,
-			c'est-à-dire que la commande va tout de même s'exécuter, cet argument modifie juste le
-			comportement de la commande. La même syntaxe peut être utilisée pour dénoter deux arguments
-			qui sont optionnels ensemble, et qu'on doit spécifier les deux ensemble si on les spécifie,
-			comme dans l'exemple suivant:
+	-- {Optional_argument} is an argument that is not required by the command
+	and is optional. These arguments only affect the behaviours of the command.
+	Two arguments can be simultaneously optional is specified as:
+	
+	${COMMAND [arg1 arg2]}
+	
+	@-- In this case, {arg1} and {arg2} have to be both specified for the command
+	to be executed. Obviously, when specifying optional parameters you should not
+	use the square brackets ({[} and {]}), theses are just a way to depict
+	optionality.
 
-			${COMMANDE [argument_1 argument_2]}
+	-- {[choice1\|choice2]} specify a choice that have to be made between {choice1} and {choice2}.
+	Usually, specifying one of them is not mandatory as square brackets depict optionality. Some
+	can consider this syntax ambiguous and depict the necessity of making a choice not using
+	brackets, like:
 
-			@-- Dans ce cas, on peut ne pas spécifer {argument_1} ni {argument_2}, mais on ne peux pas
-			spécifier un seul des deux, il faut spécifier {argument_1} et {argument_2} simultanément. Il
-			ne faut évidemment pas conserver les {[]} dans la ligne de commande, mais se contenter de
-			placer les arguments dans la ligne de commande.
+	${COMMANDE {choix1|choix2}}
+	
+	@-- No {Dos9} command is supposed to use this syntax as it not required
+	for well designed command to require the user to make a mandatory
 
-			-- {[choix1\|choix2]} : Spécifie qu'un choix doît être fait entre {choix1} et {choix2}. En
-			général, il n'est pas nécessaire de spécifier un des paramètres {choix1} et {choix2} puisque
-			les {[]} dénottent l'optionallité. Certaines personnes considèrent alors qu'il y a ambiguité,
-			et signalent l'obligation de spécifier un des deux paramètres {choix1} et {choix2} en utilisant
-			la syntaxe suivante:
-
-			${COMMANDE {choix1|choix2}}
-
-			@-- Nous n'utilisons pas cette syntaxe, car les commandes bien conçues n'imposent normalement pas
-			à l'utilisateur un choix au sens strict, ces choix ne doivent servir que pour rendre possible la modification
-			comportement de la commande. L'exemple type de cette usage sont les commutateurs. les commutateurs
-			sont des arguments qui sont précédées d'un "{/}" pour signaler qu'ils activent ou désativent certaines
-			fonctionnalitées de la commande. Les commutateurs doivent {toujours} être optionnels.
-
-		- les {blocs de commandes} sont des blocks qui contiennent plusieurs commandes devant être exécutées ensemble,
-		à noter que le lien entre ces commandes est plus {logique} que temporel.
-		Pour cela, il faut entourer les commandes à mettre dans un block à l'intérieur de parenthèses "{(}", comme ci-après:
-
-${(COMANDE_1
-COMMANDE_2
+	- {Command blocs} are groups of commands that need to be
+	executed together. They are obtained by the use of parenthesis:
+	
+${(COMMAND_1
+COMMAND_2
 ...
-COMMANDE_N
+COMMAND_N
 )}
 
-		@- Il ne faut pas reproduire les {...} qui sont bien évidement une ellipse montrant qu'il est possible de mettre autant de
-		commandes dans un bloc qu'on le désire.
+	@- {condop|Conditional operators} and {red|redirections} are not active
+	within blocs by default, this means that neither {\|}, {^}, {&}, {<} nor
+	{>} have to be escaped using {^} within blocs. However, if you
+	set {../setlocal} {CMDLYCORRECT} setting, then it will be possible to
+	have theses symbols escaped.
 
-		@- Les {condop|opérateurs conditionnels} et les {red|redirections} ne sont pas actives dans les {blocs} par défaut, c'est-à-dire
-		que les caractères {\|},{^},{&},{<},{>} ne doivent pas être échappés avec le {^} à l'intérieur des blocs. Cependant, si vous avez
-		spécifié l'option {CMDLYCORRECT} de la commande {setlocal|SETLOCAL}, alors cet aspect sera compatible avec {cmd.exe} et vous devrez
-		donc les échapper.
-
-		@- Il est possible d'intégrer des blocs comme arguments dans certaines commandes. Ces commandes sont restreintes, et sont les commandes
-		{for|FOR} et {if|IF}. Un bloc peut en plus être entré comme tel dans un script et il sera exécuté. Un exemple d'utilisation de
-		blocs pour a commande {if|IF} est:
+	@- Within a block, every command share the same output and input
+	with other commands (unless if the output is redirected within the
+	block). This enables grouped output as :
+	
+${(ECHO first line
+ECHO second line) > file}
+	
+	@- Command blocks are sometimes used by some commands as arguments.
+	The only commands that can do so are {../for|FOR} and {../if|IF} commands.
+	For instance :
 
 ${IF 1==1 (
 ECHO une ligne
 ECHO une autre ligne
 )}
 
-		@- Pour obtenir d'avantage d'information sur la manière dont les {condop|Opérateurs conditionels} et les {red|redirections} agissent à
-		l'intéreur d'un bloc, vous pouvez consultez les pages qui leur sont dédiées.
+{{See also}}
 
-{{À voir aussi}}
-
-	{condop|Les opérateurs conditionels}, {red|Les redirections}
+	{condop|Conditional operators}, {red|Redirections}

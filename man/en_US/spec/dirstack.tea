@@ -17,52 +17,50 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-{{La pile de répertoire}}
+{{Directories stack}}
 
-    {La pile de répertoire} permet de stocker et de réutiliser les répertoires
-    dans une pile, c'est par exemple pratique dans le cas où l'on veut se déplacer
-    dans un dossier puis de revenir à celui auquel on était avant. On peut
-    également s'en servir pour vérifier si un dossier ou un groupe de dossier
-    existe sans passer par la commande {if exist}.
+	The {directories stack} allow saving and retrieving directory on a
+	stack. This is useful in case one needs to move inside a directory
+	and then return to the previous directory. It can also be used to
+	detect if a directory exists without using {../if|if exist}.
 
-{{Pousser/Tirer un répertoire sur la pile}}
+{{Push or pop a directory on the stack}}
 
-    Lorsque que l'on pousse un répertoire sur la pile, il se retrouvera tout en
-    haut de la pile, celui qui est le plus bas de la pile est donc le dernier
-    inséré.
+	As a directory is pushed on the stack, it will get on the very top of
+	the stack. The last insterted directory is then on the top.
 
-    Lorsque que l'on tire un répertoire sur la pile, on récupère celui qui est
-    le plus haut sur la pile, c'est à dire le dernier qui a été inséré, puis
-    on passe au suivant (on retire celui que l'on vient de traiter).
+	As a directory is poped off the stack, the one preceding it is grabbed
+	and used as the new current directory.
 
-    Exemple :
+    Example:
+	
 ${cd dir1/
-:: Nous sommes maintenant dans le répertoire dir1/
+:: We are in dir1/
 
 PUSHD dir2/
-:: dir1/ est ajouté sur la pile, le dossier courant
-:: devient dir2/
+:: dir1/ is pushed on the stack and the current directory 
+:: becomes dir2/
 
 PUSHD ..
-:: dir1/dir2/ est ajouté sur la pile, le dossier
-:: courant devient dir1/
+:: dir1/dir2/ is pushed on the stack and the 
+:: current directory becomes dir1/
 
-:: Actuellement, la pile contient :
+:: The stack now contains (from top to bottom)
 ::  - dir1/dir2/
 ::  - dir1/
 
 POPD
-:: Le dossier courant devient dir1/dir2
+:: current directory becomes dir1/dir2
 
 POPD
-:: Le dossier courant devient dir1/
-:: La pile est vide}
+:: current directory becomes dir1/
+:: the bottom of the heap is reached}
 
-{{Compatibilité}}
+{{Compatibility}}
 
-    Parfaitement compatible avec {cmd.exe}.
+	Fully compatible with {cmd.exe}.
 
-{{A voir aussi}}
+{{See also}}
 
-    {../pushd|Commande PUSHD}, {../popd|Command POPD},
-	{index|Index des spécifications}
+    {../pushd|PUSHD Command}, {../popd|POPD Command },
+	{index|Specifications index}

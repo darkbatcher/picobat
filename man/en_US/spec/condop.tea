@@ -15,87 +15,80 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-{{Les opérateurs conditionnels}}
+{{Conditional operators}}
 
-	Les {opérateurs conditionnels} sont des opérateurs très pratiques permettant
-	d'interconnecter les actions de différentes. Par exemple, avec les
-	{opérateurs conditionnels}, ont peut executer une commande seulement si
-	la commande précédente a échoué.
+	{Conditional operators} are operators useful allowing different
+	commands to be interconnected. For example, using {conditionnal operators}
+	a command can be executed only upon failure of another command.
 
 {{Synopsis}}
 
-	${commande1 opérateur commande2 ...}
+	${command1 operator command2 ...}
+	
+	Run two commands linked by a conditional operator:
 
-	Execute des commandes liées par un opérateur conditionnel.
+	- {command1}, {command2} : Two valid {../dos9|Dos9} commands.
 
-	- {commande1}, {commande2} : Deux commandes pouvant être exécutées par
-	{dos9|Dos9}.
+	- {operator} : An operator linking {command1} and {command2}.
 
-	- {opérateur} : Un opérateur conditionnel liant les deux commandes.
+{{Operators type}}
 
-{{Les Types d'opérateurs conditionels}}
+	There is four types of conditional operators:
 
-	Il existe 4 types d'opérateurs conditionnels :
+	- {&} : No condition. {Command2} gets executed after {command1}.
+	
+	@- This operator is not really interesting as the same result can
+	be achieved by placing both commands on separates names (through
+	the use of parenthesis for {../for|FOR} and {../if|IF} commands),
+	achieving also a higher readability.
 
-	- {&} : Aucune condition, les deux commandes liées par l'opérateur sont
-	exécutées l'une après l'autre.
+	- {&&} : Run {command2} if {command1} does not return any error.
+	To determine if an error occured, {../dos9|Dos9} uses the value
+	of the {%ERRORLEVEL%} variable fixed by {command1} and :
+	
+		-- if {%ERRORLEVEL%} is zero, then the command completed
+		successfully.
+		
+		-- else the command returned on error.
+		
+	- {\|\|} : Run {command2} if {command1} fails.
+	
+	- {\|} : Connects {command1} standard output to {command2} standard
+	input and run both simultaneously.
+	
+	@- As both commands are executed simultaneously, the process {../dos9|Dos9}
+	forks and a child interpreter is created. While {command2} runs on the
+	parent interpreter, {command1} is executed on the child. Once {command1}
+	exits, the child interpreter dies and the script execution continues on
+	the parent intepreter.
+	
+	@- Thus, if a {command1} modifies {Dos9} environement variable, the
+	changes will not affect the parent interpretor, and the environement of
+	the parent will be left unchanged. As an example:
+	
+	${set example=1 | more test.txt}
+	
+	@- will not assign the {%exemple%} variable. However, {command2} can
+	actually change environment variables of the parent interpreter. As an
+	example:
 
-	@- Cet opérateur n'a pas de réel intérêt puisque le même résultat est
-	obtenu en plaçant les deux commandes sur des lignes différentes (moyennant
-	l'utilisation de parenthèses pour les commandes {../for|FOR} et {../if|IF}),
-	on obtient alors une meilleure lisibilité.
+	${ more test.txt | set /p example=}
 
-	- {&&} : Exécute la commande {commande2} si et seulement si la commande
-	{commande1} se termine sans retourner d'erreur. Pour déterminer si la
-	commande a réussi, {dos9|Dos9}
-	utilise la valeur de {../errorlevel|%ERRORLEVEL%} fixé par {commande1} et :
+	@- will assign the {%example%} variable.
+	
+	@- This behaviour is the opposite of {cmd.exe}, but it seem more
+	worthwhile to keep the current behaviour as it make possible to assign
+	easily the outpout of a command to a variable.
 
-		- si {%ERRORLEVEL} = 0, Alors la commande s'est terminé avec succès.
+	Obviously, there is no limation in the number of conditional operators
+	that can be used in a single line.
 
-		- sinon, alors la commande {commande1} a échoué.
+{{Compatibility}}
 
-	- {\|\|} : Exécute la commande {commande2} si et seulement si la commande
-	{commande1} échoue. La méthode de détection d'échec est la même que pour
-	{&&}
+	Available since {0.5.0.0}.
 
-	- {\|} : Connecte la sortie standard de la commande {commande1} à l'entrée
-	standard de la commande {commande2}. Il est donc possible pour la {commande2}
-	d'utiliser les données générées par {commande1}.
+	Compatible with {cmd.exe}, except for the order of process in pipes.
 
-	@- Lors de l'éxécution, {commande1} et {commande2} sont exécutés simultanément.
-	La {commande1} est exécuté sur un nouveau processus {../dos9|Dos9} crée par le
-	processus {Dos9} principal. Pendant ce temps, la {commande2} est exécutée sur
-	le processus principal. Une fois que la {commande1} a achevé son exécution,
-	le nouveau processus meurt et l'exécution du script continue sur le processus
-	principal.
+{{See Also}}
 
-	@- C'est pour cela que si la commande {commande1} est censée modifier l'environnement
-	de {Dos9}, il ne se passera rien, i.e. la variable ne sera pas assigné. Ainsi
-
-	${set exemple=1 | more test.txt}
-
-	@- N'assignera pas la variable {%exemple%}. Néanmoins, la commande {commande2} peut
-	contenir un tel assignement :
-
-	${ more test.txt | set /p exemple=}
-
-	@- Assignera bel et bien la première ligne du fichier {test.txt} a la variable
-	{%exemple%}.
-
-	@- Ce comportement est inversé sur {cmd.exe}, mais il m'a semblé plus logique
-	de conserver le comportement actuel car il permet de récupérer la sortie d'une
-	commande dans une variable.
-
-	Il est évidemment possible d'utiliser un nombre quelquonque d'opérateurs
-	conditionnels à la suite tant qu'ils respectent la syntaxe précédente.
-
-{{Compatibilité}}
-
-	Disponible depuis la version {0.5.0.0}.
-
-	Entièrement compatible avec {cmd.exe}, à l'exception de la subtilité décrite
-	plus haut sur le traitement des pipes.
-
-{{À voir aussi}}
-
-	{index|Index des spécifications}, {var|Les variables d'environement}
+	{index|Specification index}, {var|Environment variables}

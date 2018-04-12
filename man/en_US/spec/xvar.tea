@@ -15,88 +15,78 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-{{Les variables spéciales}}
+{{Special variables}}
 
-	   Les variables spéciales sont des variables internes à {dos9|Dos9}:
-	Les commandes lancées avec {Dos9} n'héritent pas des variables
-	spéciales, ces variables sont donc locales.
+	Special variables are internal variables provided by {../dos9|Dos9}.
+	Special variables are local, thus they can not be inherited by
+	external programs.
 
-{{Utilisation des variables spéciales}}
+{{Special variable use}}
 
-	Les variables spéciales ne sont pas modifiables, elles sont
-	uniquement définies par {../dos9|Dos9} ou par {../for|FOR}.
+	Special variables can not be modified, the can only be defined
+	by {../dos9|Dos9} or the {../for|FOR command}.
 
-	Les variables spéciales {%%0} à {%%9} (la syntaxe {%0} à {%9} est aussi
-	acceptée) sont affectés par les arguments passés au programme, dans l'ordre
-	dans lequels ils ont été passés. Par convention {%0} est le nom du script,
-	néanmoins il se peut que cette convention soit contournée.
+	Special variables {%%0} through {%%9} (as a special exception
+	{%0} through {%9} is also a valid syntax) are set to arguments
+	passed to the script using the command line. As a convention,
+	{%0} is always the script name.
+	
+	The {%%*} (or {%*}) contains a line containing the parameters
+	that have been passed to the script, that is it is the content
+	of {%0} trough {%9} inside a single variable plus all the
+	parameters beyond the ninth if any has been passed. On UNIX-based
+	operating systems, it is not possible to retrieve the exact syntax
+	of the command line. Thus {%*} is created using the parameters
+	and some added quotation if necessary.
+	
+{{Special variable expansion}}
 
-	La variable {%%*} (ou {%*}) est constituée d'un ligne contenant tous les
-	paramètres passés au script, c'est-à-dire du contenu des variables {%1} à
-	{%9} et des paramètres suivants qui n'ont pas été affectés a une variable.
-	Sous les systèmes de type UNIX, il n'est pas possible de retrouver la
-	syntaxe exacte de la ligne de commande avec laquelle {../dos9|Dos9} a été
-	invoqué, elle est reconstituée en plaçant les paramètres sur une même ligne
-	en les séparant par des espaces, en ajoutant des guillemets quand le
-	paramètre contient des délimiteurs valides ou des opérateurs conditionels,
-	et en échappant les guillemets seuls.
+	Special variables names are made of a single letter or a digit.
+	Any ASCII character except the 33 first (ie. from 0x20) can be
+	used. However, for readability purposes it is better to use
+	only letters.
 
-{{L'expansion des variables spéciales}}
+	Special variable names need to be preceded by two {%0}, (except for
+	{%0} up to {%9}, {%*} and {%+}) to be developed. Some option can be
+	enabled by using the {~} sign. These options are the following:
+	
+		- {%%~I} : Remove quotes around {%%I}.
 
-	   Le nom des variables spéciales est constitué d'une lettre ou d'un
-	chiffre. Tous les caractères ASCII supérieurs à 32 peuvent être
-	utilisés cepandant pour préserver la lisibilité du code il est
-	préférable de se limiter au lettres, au chiffres et aux symboles.
+		- {%%~dI} : Expands to {%%I} disk letter.
 
-	Les variables spéciales doivent être précédés de deux {%}, à l'exception
-	des variables {%%0} à {%%9} qui peuvent être dévellopés en utilisant {%0}
-	à {%9}, et ce pour des raisons de compatibilité, même si l'usage de cette
-	notation n'est pas déprécié.
+		- {%%~pI} : Expands to {%%I} path.
 
-	   On peut aussi utiliser les options suivantes pour le dévelloppement
-	des variables spéciales, pour cela il faut insérer un tilde {~} après
-	le {%}, et combiner les options suivantes puis mettre le caractère
-	correspondant à la variables a la fin.
+		- {%%~nI} : Expands to {%%I} file name.
 
-	Les options disponibles sont (en prenant l'exemple de la variable {%%I}):
+		- {%%~xI} : Expands to {%%I} file extension.
 
-		- {%%~dI} : dévellope {%%I} en lettre de lecteur
+		- {%%~zI} : Expands to {%%I} file size.
 
-		- {%%~pI} : dévellope {%I} en chemin d'accès
+		- {%%~aI} : Expands to {%%I} attributes.
 
-		- {%%~nI} : dévellope {%I} en nom de ficher
+		- {%%~tI} : Expands to {%%I} access time.
 
-		- {%%~xI} : dévellope {%I} en extension de fichier
-
-		- {%%~zI} : dévellope {%I} en taille de fichier
-
-		- {%%~aI} : dévellope {%I} en attribut de fichier
-
-		- {%%~tI} : dévellope {%I} en date et heure d'accès
-
-	On peut biensûr combiner les options (jusqu'a 16 simultanément).
-
-	Il se peut que des conflits entres options et noms de variables arrivent.
-	Si c'est le cas, {Dos9} utilisera la combinaison d'option la plus longue possible
-	donnant une variable valide (une variable définie). Ainsi, dans le code suivant :
+	Several options may be combined simultaneously (up to 16 different options).
+	
+	As options are letters, conflicts can happen between variables
+	names and options. If it is the case {Dos9} will use the longest combination
+	of options (maximum greediness). As an example, the following code :
 
 	${ECHO %%~aI}
 
-	Il existe plusieurs interprétation possibles :
+	Can be interpreted in two different ways:
 
-		- Si {%%I} est définie, alors la variable {%%I} sera dévellopée en utilisant le l'option {a}.
+		- If {%%I} is defined, then {%%~aI} will be expanded. 
+		
+		- If {%%I} is defined and {%%a} is, then {%%~a} will be expanded.
 
-		- Si {%%I} n'est pas définie et que {%%a} l'est, alors la variable qui sera dévellopée sera
-		{%~a}.
-
-		- Si aucune variable n'est définie, la variable est laissée telle qu'elle.
+		- Otherwise, no expansion takes place.
 
 {{Note}}
 
-	{Dos9} est sensible à la casse pour les options et les noms de
-	{variables spéciales}
+	{Special variable} names and options are case sensitive.
 
-{{À voir aussi}}
+{{See also}}
 
-	{var|Les variables d'environnement}, {exp|L'expansion des variables},
-	{index|Index des spécification}
+	{var|Environment variables}, {exp|Variable expansion},
+	{index|Specification index}
