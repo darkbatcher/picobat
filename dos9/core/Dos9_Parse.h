@@ -30,27 +30,24 @@
  * - Blocks of commands : blocks of commands defined by usi braces
  */
 
-struct PARSED_STREAM {
-	ESTR* lpCmdLine;
-	char cNodeType;
-	struct PARSED_STREAM* lppsNode;
-};
-
-#define PARSED_STREAM_START_STDOUT2STDERR   2
-#define PARSED_STREAM_START_STDERR2STDOUT   1
-
-struct PARSED_STREAM_START {
-	struct PARSED_STREAM* lppsStream;
+typedef struct PARSED_STREAM {
 	char cOutputMode; /* the oupout mode of stdout */
 	char cErrorMode; /* the output mode of stderr */
 	char cRedir; /* if we have 2>&1 or 1>&2 */
 	char* lpOutputFile;
 	char* lpErrorFile;
 	char* lpInputFile;
-};
+} PARSED_STREAM;
 
-typedef struct PARSED_STREAM PARSED_STREAM,*LPPARSED_STREAM;
-typedef struct PARSED_STREAM_START PARSED_STREAM_START,*LPPARSED_STREAM_START;
+typedef struct PARSED_LINE {
+	ESTR* lpCmdLine;
+	struct PARSED_STREAM* sStream;
+	char cNodeType;
+	struct PARSED_LINE* lppsNode;
+} PARSED_LINE;
+
+#define PARSED_STREAM_STDOUT2STDERR   2
+#define PARSED_STREAM_STDERR2STDOUT   1
 
 #define PARSED_STREAM_NODE_NONE 0x00
 #define PARSED_STREAM_NODE_YES 0x01
@@ -58,19 +55,19 @@ typedef struct PARSED_STREAM_START PARSED_STREAM_START,*LPPARSED_STREAM_START;
 #define PARSED_STREAM_NODE_PIPE 0x03
 #define PARSED_STREAM_NODE_RESET -1
 
-#define PARSED_STREAM_START_MODE_TRUNCATE 0x04
+#define PARSED_STREAM_MODE_TRUNCATE 0x04
 
-PARSED_STREAM_START* Dos9_ParseLine(ESTR* lpLine);
+PARSED_LINE* Dos9_ParseLine(ESTR* lpLine);
 
-PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine);
-PARSED_STREAM*       Dos9_ParseOperators(ESTR* lpesLine);
+PARSED_STREAM* Dos9_ParseOutput(ESTR* lpesLine);
+PARSED_LINE* Dos9_ParseOperators(ESTR* lpesLine);
 
-PARSED_STREAM_START* Dos9_AllocParsedStreamStart(void);
-PARSED_STREAM*       Dos9_AllocParsedStream(PARSED_STREAM* lppsStream);
+PARSED_LINE* Dos9_AllocParsedLine(PARSED_LINE* lppsStream);
+PARSED_STREAM* Dos9_AllocParsedStream(void);
 
-void                 Dos9_FreeParsedStream(PARSED_STREAM* lppsStream);
-void                 Dos9_FreeParsedStreamStart(PARSED_STREAM_START* lppssStart);
+void Dos9_FreeParsedLine(PARSED_LINE* lppsStream);
+void Dos9_FreeParsedStream(PARSED_STREAM* lppssStart);
 
-#define Dos9_FreeLine(lpssStreamStart) Dos9_FreeParsedStreamStart(lpssStreamStart)
+#define Dos9_FreeLine(lpssStreamStart) Dos9_FreeParsedLine(lpssStreamStart)
 
 #endif // DOS9_PARSE_H

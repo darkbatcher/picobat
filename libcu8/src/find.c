@@ -45,13 +45,26 @@
 
 #ifdef HAVE__FINDFIRST64
 /* Gen libcu8_findfirst64 and libcu8_findnext64 */
-#ifdef __x86_64__
-#define __libcu8_finddata_t  __finddata64_t
-#define __libcu8_wfinddata_t _wfinddata64_t
-#else
-#define __libcu8_finddata_t  __finddata64_t
-#define __libcu8_wfinddata_t __wfinddata64_t
-#endif
+
+struct _xfinddata64_t {
+    unsigned attrib;
+    __time64_t time_create;
+    __time64_t time_access;
+    __time64_t time_write;
+    __int64 size;
+    char name[260];
+};
+
+struct _xwfinddata64_t {
+    unsigned attrib;
+    __time64_t time_create;
+    __time64_t time_access;
+    __time64_t time_write;
+    __int64 size;
+    wchar_t name[260];
+};
+#define __libcu8_finddata_t  _xfinddata64_t
+#define __libcu8_wfinddata_t _xwfinddata64_t
 #define __libcu8_wfindfirst  _wfindfirst64
 #define __libcu8_wfindnext   _wfindnext64
 #define __libcu8_findfirst   libcu8_findfirst64
@@ -67,8 +80,27 @@
 #undef __libcu8_wfindnext
 #undef __libcu8_findfirst
 #undef __libcu8_findnext
-#define __libcu8_finddata_t  _finddata64i32_t
-#define __libcu8_wfinddata_t _wfinddata64i32_t
+
+struct _xfinddata64i32_t {
+    unsigned attrib;
+    __time64_t time_create;
+    __time64_t time_access;
+    __time64_t time_write;
+    _fsize_t size;
+    char name[260];
+};
+
+struct _xwfinddata64i32_t {
+    unsigned attrib;
+    __time64_t time_create;
+    __time64_t time_access;
+    __time64_t time_write;
+    _fsize_t size;
+    wchar_t name[260];
+};
+
+#define __libcu8_finddata_t  _xfinddata64i32_t
+#define __libcu8_wfinddata_t _xwfinddata64i32_t
 #define __libcu8_wfindfirst  _wfindfirst64i32
 #define __libcu8_wfindnext   _wfindnext64i32
 #define __libcu8_findfirst   libcu8_findfirst64i32
@@ -85,8 +117,27 @@
 #undef __libcu8_wfindnext
 #undef __libcu8_findfirst
 #undef __libcu8_findnext
-#define __libcu8_finddata_t  _finddata32_t
-#define __libcu8_wfinddata_t _wfinddata32_t
+
+struct _xwfinddata32_t {
+    unsigned attrib;
+    __time32_t time_create;
+    __time32_t time_access;
+    __time32_t time_write;
+    _fsize_t size;
+    wchar_t name[260];
+};
+
+struct _xfinddata32_t {
+    unsigned attrib;
+    __time32_t time_create;
+    __time32_t time_access;
+    __time32_t time_write;
+    _fsize_t size;
+    char name[260];
+};
+
+#define __libcu8_finddata_t  _xfinddata32_t
+#define __libcu8_wfinddata_t _xwfinddata32_t
 #define __libcu8_wfindfirst  _wfindfirst32
 #define __libcu8_wfindnext   _wfindnext32
 #define __libcu8_findfirst   libcu8_findfirst32
@@ -102,8 +153,27 @@
 #undef __libcu8_wfindnext
 #undef __libcu8_findfirst
 #undef __libcu8_findnext
-#define __libcu8_finddata_t  _finddata32i64_t
-#define __libcu8_wfinddata_t _wfinddata32i64_t
+
+struct _xfinddata32i64_t {
+    unsigned attrib;
+    __time32_t time_create;
+    __time32_t time_access;
+    __time32_t time_write;
+    __int64 size;
+    char name[260];
+};
+
+struct _xwfinddata32i64_t {
+    unsigned attrib;
+    __time32_t time_create;
+    __time32_t time_access;
+    __time32_t time_write;
+    __int64 size;
+    wchar_t name[260];
+};
+
+#define __libcu8_finddata_t  _xfinddata32i64_t
+#define __libcu8_wfinddata_t _xwfinddata32i64_t
 #define __libcu8_wfindfirst  _wfindfirst32i64
 #define __libcu8_wfindnext   _wfindnext32i64
 #define __libcu8_findfirst   libcu8_findfirst32i64

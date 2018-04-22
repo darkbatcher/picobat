@@ -27,29 +27,32 @@
 #include "Dos9_Core.h"
 #include "../errors/Dos9_Errors.h"
 
-PARSED_STREAM_START* Dos9_ParseLine(ESTR* lpesLine)
+PARSED_LINE* Dos9_ParseLine(ESTR* lpesLine)
 {
-	PARSED_STREAM_START* lppssReturn; /* a pointer to the structure to be
-                                         returned */
+	PARSED_LINE *item, *begin;
 
-	PARSED_STREAM* lppsStream;
-
-	if (!(lppssReturn=Dos9_ParseOutput(lpesLine)))
+	if (!(begin=Dos9_ParseOperators(lpesLine)))
 		return NULL;
 
-	if (!(lppsStream=Dos9_ParseOperators(lpesLine))) {
+	item = begin;
 
-		Dos9_FreeLine(lppssReturn);
-		return NULL;
+    while (item) {
 
-	}
+        if (!(item->sStream = Dos9_ParseOutput(item->lpCmdLine))) {
 
-	lppssReturn->lppsStream=lppsStream;
+            Dos9_FreeParsedLine(begin);
+            return NULL;
 
-	return lppssReturn;
+        }
+
+        item = item->lppsNode;
+
+    }
+
+	return begin;
 }
 
-PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
+PARSED_STREAM* Dos9_ParseOutput(ESTR* lpesLine)
 {
 
 	char *lpCh=Dos9_EsToChar(lpesLine),
@@ -63,9 +66,9 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 	ESTR *lpesFinal=Dos9_EsInit(),
 	      *lpesParam=Dos9_EsInit();
 
-	PARSED_STREAM_START* lppssStart;
+	PARSED_STREAM* lppssStart;
 
-	if (!(lppssStart=Dos9_AllocParsedStreamStart())) {
+	if (!(lppssStart=Dos9_AllocParsedStream())) {
 
 		Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION | DOS9_PRINT_C_ERROR,
 		                      __FILE__ "/ParseOutput()",
@@ -85,7 +88,7 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 			lpSearchBegin=Dos9_GetNextBlockEnd(lpNextBlock);
             if (lpSearchBegin==NULL) {
 
-				Dos9_FreeLine(lppssStart);
+				Dos9_FreeParsedStream(lppssStart);
 
 				Dos9_ShowErrorMessage(DOS9_MALFORMED_BLOCKS, lpCh, FALSE);
 
@@ -119,7 +122,7 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 
 				if (lppssStart->cRedir) {
 
-                    Dos9_FreeLine(lppssStart);
+                    Dos9_FreeParsedStream(lppssStart);
 
                     Dos9_ShowErrorMessage(DOS9_ALREADY_REDIRECTED, "1>&2", FALSE);
 
@@ -127,7 +130,7 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 
 				}
 
-				lppssStart->cRedir =  PARSED_STREAM_START_STDERR2STDOUT;
+				lppssStart->cRedir =  PARSED_STREAM_STDERR2STDOUT;
 				lpCh=lpNextToken+3;
 
 				break;
@@ -140,7 +143,7 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 
 				if (lppssStart->cRedir) {
 
-                    Dos9_FreeLine(lppssStart);
+                    Dos9_FreeParsedStream(lppssStart);
 
                     Dos9_ShowErrorMessage(DOS9_ALREADY_REDIRECTED, "1>&2", FALSE);
 
@@ -148,7 +151,7 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 
 				}
 
-				lppssStart->cRedir = PARSED_STREAM_START_STDOUT2STDERR;
+				lppssStart->cRedir = PARSED_STREAM_STDOUT2STDERR;
 
 				lpCh=lpNextToken+3;
 
@@ -176,7 +179,7 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 			if ((cChar != '2' && lppssStart->lpOutputFile)
                 || (cChar == '2' && lppssStart->lpErrorFile)) {
 
-				Dos9_FreeLine(lppssStart);
+				Dos9_FreeParsedStream(lppssStart);
 
 				Dos9_ShowErrorMessage(DOS9_ALREADY_REDIRECTED, lpNextToken, FALSE);
 
@@ -188,9 +191,9 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 			if (*lpNextToken!='>') {
 
 				if (cChar == '2')
-                    lppssStart->cErrorMode|=PARSED_STREAM_START_MODE_TRUNCATE;
+                    lppssStart->cErrorMode|=PARSED_STREAM_MODE_TRUNCATE;
                 else
-                    lppssStart->cOutputMode|=PARSED_STREAM_START_MODE_TRUNCATE;
+                    lppssStart->cOutputMode|=PARSED_STREAM_MODE_TRUNCATE;
 
 			} else {
 
@@ -201,7 +204,7 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 			if (!(lpCh=Dos9_GetNextParameterEsD(lpNextToken, lpesParam,
                                                     DOS9_DELIMITERS "&|><"))) {
 
-				Dos9_FreeLine(lppssStart);
+				Dos9_FreeParsedStream(lppssStart);
 
 				Dos9_ShowErrorMessage(DOS9_INVALID_REDIRECTION, lpNextToken, FALSE);
 
@@ -214,7 +217,7 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
                 || (cChar == '2' && !(lppssStart->lpErrorFile =
                                 Dos9_FullPathDup(Dos9_EsToChar(lpesParam))))) {
 
-				Dos9_FreeLine(lppssStart);
+				Dos9_FreeParsedStream(lppssStart);
 
 				Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION | DOS9_PRINT_C_ERROR,
 				                      __FILE__ "/ParseOutput()",
@@ -231,7 +234,7 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 
 			if (lppssStart->lpInputFile) {
 
-				Dos9_FreeLine(lppssStart);
+				Dos9_FreeParsedStream(lppssStart);
 
 				Dos9_ShowErrorMessage(DOS9_ALREADY_REDIRECTED, lpNextToken, FALSE);
 
@@ -243,7 +246,7 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 			if (!(lpCh=Dos9_GetNextParameterEsD(lpNextToken, lpesParam,
                                                  DOS9_DELIMITERS "&|><"))) {
 
-				Dos9_FreeParsedStreamStart(lppssStart);
+				Dos9_FreeParsedStream(lppssStart);
 
 				Dos9_ShowErrorMessage(DOS9_INVALID_REDIRECTION, lpNextToken, FALSE);
 
@@ -253,7 +256,7 @@ PARSED_STREAM_START* Dos9_ParseOutput(ESTR* lpesLine)
 
 			if (!(lppssStart->lpInputFile=Dos9_FullPathDup(Dos9_EsToChar(lpesParam)))) {
 
-				Dos9_FreeLine(lppssStart);
+				Dos9_FreeParsedStream(lppssStart);
 
 				Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION | DOS9_PRINT_C_ERROR,
 				                      __FILE__ "/ParseOutput()",
@@ -286,9 +289,9 @@ error:
 
 }
 
-PARSED_STREAM*       Dos9_ParseOperators(ESTR* lpesLine)
+PARSED_LINE*       Dos9_ParseOperators(ESTR* lpesLine)
 {
-	PARSED_STREAM *lppsStream=NULL,
+	PARSED_LINE *lppsStream=NULL,
 					*lppsStreamBegin=NULL;
 
 	char *lpCh=Dos9_EsToChar(lpesLine),
@@ -299,7 +302,7 @@ PARSED_STREAM*       Dos9_ParseOperators(ESTR* lpesLine)
 	char cChar,
 	     cNodeType=PARSED_STREAM_NODE_NONE;
 
-	if (!(lppsStreamBegin=Dos9_AllocParsedStream(NULL))) {
+	if (!(lppsStreamBegin=Dos9_AllocParsedLine(NULL))) {
 
 		Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION | DOS9_PRINT_C_ERROR,
 		                      __FILE__ "/Dos9_ParseOperators()",
@@ -343,7 +346,7 @@ PARSED_STREAM*       Dos9_ParseOperators(ESTR* lpesLine)
 		Dos9_EsCpy(lppsStream->lpCmdLine, lpCh);
 		lppsStream->cNodeType=cNodeType;
 
-		if (!(lppsStream=Dos9_AllocParsedStream(lppsStream))) {
+		if (!(lppsStream=Dos9_AllocParsedLine(lppsStream))) {
 
 			Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION | DOS9_PRINT_C_ERROR,
 			                      __FILE__ "/Dos9_ParseOperators()",
@@ -397,24 +400,26 @@ PARSED_STREAM*       Dos9_ParseOperators(ESTR* lpesLine)
 
 error:
 
-	Dos9_FreeParsedStream(lppsStreamBegin);
+	Dos9_FreeParsedLine(lppsStreamBegin);
 	return NULL;
 
 }
 
 
 
-PARSED_STREAM* Dos9_AllocParsedStream(PARSED_STREAM* lppsStream)
+PARSED_LINE* Dos9_AllocParsedLine(PARSED_LINE* lppsStream)
 {
 
-	PARSED_STREAM* lppsNewElement;
+	PARSED_LINE* lppsNewElement;
 
-	if ((lppsNewElement=(PARSED_STREAM*)malloc(sizeof(PARSED_STREAM)))) {
+	if ((lppsNewElement=(PARSED_LINE*)malloc(sizeof(PARSED_LINE)))) {
+
 		if (lppsStream)
 			lppsStream->lppsNode=lppsNewElement;
 
-		lppsNewElement->lppsNode=NULL;
-		lppsNewElement->lpCmdLine=Dos9_EsInit();
+		lppsNewElement->lppsNode = NULL;
+		lppsNewElement->lpCmdLine = Dos9_EsInit();
+		lppsNewElement->sStream = NULL;
 
 		return lppsNewElement;
 	}
@@ -423,50 +428,60 @@ PARSED_STREAM* Dos9_AllocParsedStream(PARSED_STREAM* lppsStream)
 
 }
 
-PARSED_STREAM_START* Dos9_AllocParsedStreamStart(void)
+PARSED_STREAM* Dos9_AllocParsedStream(void)
 {
-	PARSED_STREAM_START* lppssStreamStart;
+	PARSED_STREAM* lppssStream;
 
-	if ((lppssStreamStart=malloc(sizeof(PARSED_STREAM_START)))) {
+	if ((lppssStream = malloc(sizeof(PARSED_STREAM)))) {
 
-		lppssStreamStart->cOutputMode=0;
-        lppssStreamStart->cErrorMode=0;
-        lppssStreamStart->cRedir=0;
+		lppssStream->cOutputMode=0;
+        lppssStream->cErrorMode=0;
+        lppssStream->cRedir=0;
 
-		lppssStreamStart->lppsStream=NULL;
-		lppssStreamStart->lpInputFile=NULL;
-		lppssStreamStart->lpOutputFile=NULL;
-		lppssStreamStart->lpErrorFile=NULL;
+		lppssStream->lpInputFile=NULL;
+		lppssStream->lpOutputFile=NULL;
+		lppssStream->lpErrorFile=NULL;
 
-		return lppssStreamStart;
+		return lppssStream;
 	}
 
 	return NULL;
 }
 
-void Dos9_FreeParsedStreamStart(PARSED_STREAM_START* lppssStart)
+void Dos9_FreeParsedStream(PARSED_STREAM* stream)
 {
-	free(lppssStart->lpInputFile);
-	free(lppssStart->lpOutputFile);
+    if (stream->lpInputFile)
+        free(stream->lpInputFile);
 
-	Dos9_FreeParsedStream(lppssStart->lppsStream);
+    if (stream->lpOutputFile)
+        free(stream->lpOutputFile);
 
-	free(lppssStart);
+	if (stream->lpErrorFile)
+        free(stream->lpErrorFile);
+
+	free(stream);
 }
 
-void Dos9_FreeParsedStream(PARSED_STREAM* lppsStream)
+void Dos9_FreeParsedLine(PARSED_LINE* line)
 {
-	PARSED_STREAM* lppsLast=NULL;
+	PARSED_LINE* last=NULL;
 
-	for(; lppsStream; lppsStream=lppsStream->lppsNode) {
+    while (line) {
 
-		if (lppsLast)
-			free(lppsLast);
+        if (last)
+            free(last);
 
-		lppsLast=lppsStream;
-		Dos9_EsFree(lppsStream->lpCmdLine);
+        last = line;
 
-	}
+        if (line->sStream)
+            Dos9_FreeParsedStream(line->sStream);
 
-	if (lppsLast) free(lppsLast);
+        Dos9_EsFree(line->lpCmdLine);
+
+        line = line->lppsNode;
+
+    }
+
+	if (last)
+        free(last);
 }

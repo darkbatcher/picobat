@@ -41,10 +41,26 @@
 #include "internals.h"
 #include "libcu8.h"
 
+
 /* build libcu8_stat32 */
 #ifdef HAVE__STAT32
+
+struct _xstat32 {
+    _dev_t st_dev;
+    _ino_t st_ino;
+    unsigned short st_mode;
+    short st_nlink;
+    short st_uid;
+    short st_gid;
+    _dev_t st_rdev;
+    _off_t st_size;
+    __time32_t st_atime;
+    __time32_t st_mtime;
+    __time32_t st_ctime;
+};
+
 #define __libcu8_stat libcu8_stat32
-#define __libcu8_stat_t _stat32
+#define __libcu8_stat_t _xstat32
 #define __libcu8_wstat _wstat32
 #include "stat_gen.c"
 #undef __libcu8_stat
@@ -54,8 +70,22 @@
 
 #ifdef HAVE__STAT32I64
 /* build libcu8_stat32i64 */
+struct _xstat32i64 {
+    _dev_t st_dev;
+    _ino_t st_ino;
+    unsigned short st_mode;
+    short st_nlink;
+    short st_uid;
+    short st_gid;
+    _dev_t st_rdev;
+    __int64 st_size;
+    __time32_t st_atime;
+    __time32_t st_mtime;
+    __time32_t st_ctime;
+};
+
 #define __libcu8_stat libcu8_stat32i64
-#define __libcu8_stat_t _stat32i64
+#define __libcu8_stat_t _xstat32i64
 #define __libcu8_wstat _wstat32i64
 #include "stat_gen.c"
 #undef __libcu8_stat
@@ -65,8 +95,21 @@
 
 #ifdef HAVE__STAT64
 /* build libcu8_stat64 */
+struct _xstat64 {
+    _dev_t st_dev;
+    _ino_t st_ino;
+    unsigned short st_mode;
+    short st_nlink;
+    short st_uid;
+    short st_gid;
+    _dev_t st_rdev;
+    __int64 st_size;
+    __time64_t st_atime;
+    __time64_t st_mtime;
+    __time64_t st_ctime;
+};
 #define __libcu8_stat libcu8_stat64
-#define __libcu8_stat_t __stat64
+#define __libcu8_stat_t _xstat64
 #define __libcu8_wstat _wstat64
 #include "stat_gen.c"
 #undef __libcu8_stat
@@ -76,8 +119,22 @@
 
 #ifdef HAVE__STAT64I32
 /* build libcu8_stat64i32 */
+struct _xstat64i32 {
+    _dev_t st_dev;
+    _ino_t st_ino;
+    unsigned short st_mode;
+    short st_nlink;
+    short st_uid;
+    short st_gid;
+    _dev_t st_rdev;
+    _off_t st_size;
+    __time64_t st_atime;
+    __time64_t st_mtime;
+    __time64_t st_ctime;
+};
+
 #define __libcu8_stat libcu8_stat64i32
-#define __libcu8_stat_t _stat64i32
+#define __libcu8_stat_t _xstat64i32
 #define __libcu8_wstat _wstat64i32
 #include "stat_gen.c"
 #undef __libcu8_stat

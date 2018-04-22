@@ -28,25 +28,7 @@ AM_INIT_AUTOMAKE([libmatheval], [2014.1.0])
 AC_CONFIG_SRCDIR([configure.ac])
 AM_CONFIG_HEADER([config.h])
 
-AC_ARG_ENABLE([guile],
-	    [AC_HELP_STRING([--enable-guile],
-			    [Enable the use of guile.])],
-	    [],
-	    [enable_guile=no])
-
-dnl Initialize the test suite.
-dnl This suite is using GNU guile, so that if you do not specify
-dnl --enable-guile, it will not work
-
-AS_IF([test "x$enable_guile" != "xno"], 
-      [AC_CONFIG_TESTDIR([tests])
-AC_CONFIG_FILES([tests/matheval.sh], [chmod +x tests/matheval.sh])
-AC_CONFIG_FILES([tests/Makefile])
-])
-
 LT_INIT
-
-AM_CONDITIONAL([ENABLE_GUILE], [test "x$enable_guile" = "xno"])
 
 dnl Checks for programs.
 AC_PROG_CC
@@ -60,9 +42,6 @@ AC_PROG_LIBTOOL
 AC_PROG_MAKE_SET
 AC_PROG_YACC
 AM_MISSING_PROG([AUTOM4TE], [autom4te])
-AS_IF([test "x$enable_guile" != "xno"], [GUILE_FLAGS])
-
-dnl Checks for libraries.
 
 dnl Checks for header files.
 AC_HEADER_STDC
@@ -74,13 +53,6 @@ AC_TYPE_SIZE_T
 
 dnl Checks for library functions.
 AC_CHECK_FUNCS([bzero memset], [break])
-
-dnl Additional Guile feature checks.
-AS_IF([test "x$enable_guile" != "xno"],[
-AC_CHECK_TYPE([scm_t_bits], [AC_DEFINE([HAVE_SCM_T_BITS], [1], [Define to 1 if you have the `scm_t_bits' type.])], [], [#include <libguile.h>])
-AC_CHECK_LIB([guile], [scm_c_define_gsubr], [AC_DEFINE([HAVE_SCM_C_DEFINE_GSUBR], [1], [Define to 1 if you have the `scm_c_define_gsubr' function.])], [], [$GUILE_LDFLAGS])
-AC_CHECK_LIB([guile], [scm_make_gsubr], [AC_DEFINE([HAVE_SCM_MAKE_GSUBR], [1], [Define to 1 if you have the `scm_make_gsubr' function.])], [], [$GUILE_LDFLAGS])
-AC_CHECK_LIB([guile], [scm_num2dbl], [AC_DEFINE([HAVE_SCM_NUM2DBL], [1], [Define to 1 if you have the `scm_num2dbl' function.])], [], [$GUILE_LDFLAGS])])
 
 AC_CONFIG_FILES([Makefile doc/Makefile lib/Makefile])
 AC_OUTPUT(libmatheval.pc)

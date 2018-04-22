@@ -27,10 +27,7 @@ $(ac_aux_dir)/mkinstalldirs $(ac_aux_dir)/texinfo.tex
 MAINTAINERCLEANFILES = Makefile.in aclocal.m4 configure config.h.in	\
 config.log config.status stamp-h.in $(AUX_DIST)
 
-if ENABLE_GUILE
-	guile_test=tests
-endif
-SUBDIRS = doc lib $(guile_test)
+SUBDIRS = doc lib
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libmatheval.pc

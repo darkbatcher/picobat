@@ -116,11 +116,6 @@ int Dos9_CmdType(char* lpLine)
 
         } else  {
 
-            if (!TEST_ABSOLUTE_PATH(lpEsParam->str))
-                nSize = strlen(lpCurrentDir) + 1;
-            else
-                nSize = 0;
-
             /* Get a list of files that matches the argument */
             if (!(pTmp = Dos9_GetMatchFileList(Dos9_EsToFullPath(lpEsParam),
                                                     DOS9_SEARCH_DEFAULT))) {
@@ -139,11 +134,6 @@ int Dos9_CmdType(char* lpLine)
                 pBegin = (pEnd = pTmp);
             else
                 pEnd->lpflNext = pTmp; /* catenate the lists */
-
-            while (pEnd->lpflNext != NULL) {
-                pEnd->stFileStats.st_uid = nSize;
-                pEnd=pEnd->lpflNext;
-            }
 
         }
 
@@ -193,7 +183,7 @@ int Dos9_CmdType(char* lpLine)
             pTmp = pBegin;
 
             while (pTmp) {
-                fprintf(fOutput, "---------- %s" DOS9_NL , pTmp->lpFileName + pTmp->stFileStats.st_uid);
+                fprintf(fOutput, "---------- %s" DOS9_NL , pTmp->lpFileName);
 
                 Dos9_TypeFile(pTmp->lpFileName);
 

@@ -16,17 +16,17 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-{{FOR Command (Technical)}}
+{{FOR Command}}
 
-	The {FOR} loop is the most powerfull tool provided by batch language
+	The {FOR} loop is the most powerfully tool provided by batch language
 	to process various types of data, from integers, text files, command
 	outputs and even directories. Thus, the {FOR} loop is an important
-	piece to eleborate advanced and complex batch scripts and commands.
+	piece to elaborate advanced and complex batch scripts and commands.
 
 	The {FOR} loops may seem difficult to understand and mysty for
-	beginners, however, it is a very powerfull tool for batch programmers.
+	beginners, however, it is a very powerful tool for batch programmers.
 
-	If you wish to have more detailled description of the {FOR} loop
+	If you wish to have more detailed description of the {FOR} loop
 	syntax, please consider reading {for-tech|FOR (technical)}
 
 {{Synopsis - First Syntax}}
@@ -38,10 +38,10 @@ ${FOR %%A IN (string) DO (
 	Split {string} in tokens and processes specified commands for each
 	token.
 
-		- {%%A} : The name of the special var that will recieve the token to
+		- {%%A} : The name of the special var that will receive the token to
 		be processed with specified commands.
 
-		- {string} : The string to be splitted in tokens. The delimiters used
+		- {string} : The string to be split in tokens. The delimiters used
 		split the string in tokens are :
 
 			-- {' '} : Spaces.
@@ -52,7 +52,7 @@ ${FOR %%A IN (string) DO (
 
 			-- {:} : Columns.
 
-			-- {;} : Semi-culumns.
+			-- {;} : Semi-columns.
 
 			-- {,} : Coma.
 
@@ -78,9 +78,9 @@ ${FOR /F [options] %%A IN (object) DO (
 	:: some commands
 )}
 
-	Processes either a string, a command output or a file. For convienience, and to
-	ease reading of the page, none of the previously describded parameters will
-	describded again.
+	Processes either a string, a command output or a file. For convenience, and to
+	ease reading of the page, none of the previously described parameters will
+	described again.
 
 		- {object} : The object to be processed by the {FOR} loop. This parameters
 		consist of a string that can be (or not) enclosed in only one type of the following
@@ -91,11 +91,11 @@ ${FOR /F [options] %%A IN (object) DO (
 
 			-- {"} : The object {object} is considered as a simple string. The {FOR} loop
 			will so process the string. If the string include either line feeds or new
-			lines, then they will not be splitted from the processed string, and the string
+			lines, then they will not be split from the processed string, and the string
 			will be processed line-by-line.
 
 			-- If neither of the previous delimiters encloses {object}, then object will
-			be considered as a filename. The {FOR} loop will open the file named by {object}
+			be considered as a file name. The {FOR} loop will open the file named by {object}
 			and read all its content, and finally process what have been read.
 
 		- {options} : The options that must be used by {FOR} to process {object}. This must
@@ -126,7 +126,7 @@ ${FOR /F [options] %%A IN (object) DO (
 			@-- Each token will be assigned to a different special var,
 			starting from the specified variable (in the previous code {%%A}) and incrementing
 			the ASCII code of the variables (ranging from ``A'' to ``Z'', and from ``a'' to ``z'').
-			You can get detailled information about the algorithm on the page
+			You can get detailed information about the algorithm on the page
 			{for-tech|FOR (technical)}.
 
 			-- {delims} : Specify characters that will be used as delimiters to split the
@@ -250,10 +250,10 @@ ${1
 9
 10}
 
-{{Synopsis - Other deprecated syntaxs}}
+{{Synopsis - Other deprecated syntaxes}}
 
 	Both following syntax are deprecated as richer effects can be achieved through
-	use of the previously descibded {/F} option.
+	use of the previously described {/F} option.
 
 	The first syntax allows user to get files in a directory and in subdirectories,
 	matching up with a given mask.
@@ -273,7 +273,7 @@ ${FOR /F "tokens=*" %%A IN ('dir /b /s /a:-D basedir/mask') DO (
 	:: some stuff
 )}
 
-	The second synthax allows user to get subdirectories in a directory, matching up with a given
+	The second syntax allows user to get subdirectories in a directory, matching up with a given
 	mask. The syntax is the same as previous syntax, just replace {/R} switch by {/D}.
 
 {{Compatibility}}
@@ -281,7 +281,7 @@ ${FOR /F "tokens=*" %%A IN ('dir /b /s /a:-D basedir/mask') DO (
 	Mostly compatible with {cmd.exe}. Nevertheless, the syntax is backward compatible with
 	{cmd.exe}, so that any old code not written for Dos9 will run in Dos9.
 
-	The {FOR} command is available since version {0.7.0.0}. The {FOR /F} is fully fonctionnnal
+	The {FOR} command is available since version {0.7.0.0}. The {FOR /F} is fully functional
 	since version {0.7.0.2}.
 
 {{See also}}

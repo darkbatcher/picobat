@@ -43,12 +43,12 @@ struct pipe_launch_data_t {
 };
 
 /* applies redirections */
-int Dos9_ExecOutput(PARSED_STREAM_START* lppssStart);
+int Dos9_ExecOutput(PARSED_STREAM* lppssStart);
 
 void Dos9_LaunchPipe(struct pipe_launch_data_t* infos);
 
 /* applies conditional operators */
-int Dos9_ExecOperators(PARSED_STREAM** lppsStream);
+int Dos9_ExecOperators(PARSED_LINE** lppsStream);
 
 int Dos9_RunCommand(ESTR* lpCommand); // the function that run every command
 int Dos9_RunLine(ESTR* lpLine);

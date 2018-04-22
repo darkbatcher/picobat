@@ -163,7 +163,6 @@ static FILELIST* Dos9_GetMatch(char* restrict base, char* restrict up, struct ma
     DIR* dir = NULL;
     struct dirent* ent;
 
-    /* printf("Called Dos9_GetMatch(%s, %s, arg)\n", base, up); */
     int joker;
 
     /* if something has already been found ... */
@@ -252,6 +251,12 @@ static FILELIST* Dos9_GetMatch(char* restrict base, char* restrict up, struct ma
 
             base = basetmp;
             basetmp[0] = *up;
+
+            if (up && *up)
+                up++;
+
+            if (up && *up)
+                up++;
 
             if (up && *up)
                 up++;
@@ -360,20 +365,12 @@ static FILELIST* Dos9_GetMatch(char* restrict base, char* restrict up, struct ma
 
     }
 
-    /* path->str is trivial but it is neither a dir or a file... We can
-       be sure we won't get any matching file */
-    if (Dos9_IsRegExpTrivial(path->str))
-        goto end;
-
     /* Now we have checked every possible trivial dir, browse dir */
     if ((dir = opendir((base != NULL) ? (base) : ("."))) == NULL)
         goto end;
 
     /* loop through the directory entities */
     while ((ent = readdir(dir))) {
-
-        /* printf("ent : %s\n", ent->d_name);
-        getch(); */
 
         /* skip basic pseudo dirs */
         if ((arg->flags & DOS9_SEARCH_NO_PSEUDO_DIR)

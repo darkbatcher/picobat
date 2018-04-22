@@ -139,17 +139,17 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
 }
 
 
-int Dos9_ExecOperators(PARSED_STREAM** lpppsStream)
+int Dos9_ExecOperators(PARSED_LINE** lpLine)
 {
     int pipedes[2];
     THREAD res;
     struct pipe_launch_data_t* infos;
-    PARSED_STREAM* lppsStream=*lpppsStream;
+    PARSED_LINE* line=*lpLine;
 
 loop:
 
-    if (lppsStream->lppsNode
-        && lppsStream->lppsNode->cNodeType == PARSED_STREAM_NODE_PIPE) {
+    if (line->lppsNode
+        && line->lppsNode->cNodeType == PARSED_STREAM_NODE_PIPE) {
 
         if (_Dos9_Pipe(pipedes, 4096, O_BINARY) == -1)
             Dos9_ShowErrorMessage(DOS9_CREATE_PIPE | DOS9_PRINT_C_ERROR,
@@ -166,7 +166,7 @@ loop:
         /* prepare data to launch threads */
         infos->fd = pipedes[1];
         infos->str = Dos9_EsInit();
-        Dos9_EsCpyE(infos->str, lppsStream->lpCmdLine);
+        Dos9_EsCpyE(infos->str, line->lpCmdLine);
 
         res = Dos9_CloneInstance(Dos9_LaunchPipe, infos);
         Dos9_CloseThread(&res);
@@ -175,15 +175,15 @@ loop:
         lppsStreamStack = Dos9_OpenOutputD(lppsStreamStack, pipedes[0], DOS9_STDIN);
         close(pipedes[0]);
 
-        if (lppsStream->lppsNode) {
+        if (line->lppsNode) {
 
-            lppsStream = *lpppsStream = lppsStream->lppsNode;
+            line = *lpLine = line->lppsNode;
             goto loop;
 
         }
     }
 
-	switch (lppsStream->cNodeType) {
+	switch (line->cNodeType) {
 
 	case PARSED_STREAM_NODE_PIPE:
         return TRUE;
@@ -223,7 +223,7 @@ void Dos9_LaunchPipe(struct pipe_launch_data_t* infos)
 
 }
 
-int Dos9_ExecOutput(PARSED_STREAM_START* lppssStart)
+int Dos9_ExecOutput(PARSED_STREAM* lppssStart)
 {
 
     DOS9_DBG("lppssStart->lpInputFile=%s\n"
@@ -235,8 +235,8 @@ int Dos9_ExecOutput(PARSED_STREAM_START* lppssStart)
 	         lppssStart->lpInputFile,
 	         lppssStart->lpOutputFile,
 	         lppssStart->cOutputMode,
-	         lppssStart->cOutputMode & ~PARSED_STREAM_START_MODE_TRUNCATE,
-	         lppssStart->cOutputMode & PARSED_STREAM_START_MODE_TRUNCATE,
+	         lppssStart->cOutputMode & ~PARSED_STREAM_MODE_TRUNCATE,
+	         lppssStart->cOutputMode & PARSED_STREAM_MODE_TRUNCATE,
 	         STDOUT_FILENO
 	        );
 
@@ -276,7 +276,7 @@ int Dos9_ExecOutput(PARSED_STREAM_START* lppssStart)
 
     switch (lppssStart->cRedir) {
 
-    case PARSED_STREAM_START_STDERR2STDOUT:
+    case PARSED_STREAM_STDERR2STDOUT:
 
         lppsStreamStack = Dos9_OpenOutputD(lppsStreamStack,
 		                -1,
@@ -285,7 +285,7 @@ int Dos9_ExecOutput(PARSED_STREAM_START* lppssStart)
         fError = _fOutput;
         break;
 
-    case PARSED_STREAM_START_STDOUT2STDERR:
+    case PARSED_STREAM_STDOUT2STDERR:
         lppsStreamStack = Dos9_OpenOutputD(lppsStreamStack,
 		                -1 ,
 		                -1
@@ -299,143 +299,42 @@ int Dos9_ExecOutput(PARSED_STREAM_START* lppssStart)
 
 int Dos9_RunLine(ESTR* lpLine)
 {
-	PARSED_STREAM_START* lppssStreamStart;
-	PARSED_STREAM* lppsStream;
+	PARSED_LINE *line, *orig; /* the parsed line*/
 
-    int lock;
-
-#ifdef DOS9_DBG_MODE
-	STREAMSTACK* lpStack;
-#endif
-
-	//Dos9_RmTrailingNl(Dos9_EsToChar(lpLine));
-
-	//fprintf(stderr, "line=%s\n", lpLine->str);
+    int lock; /* lock for stream */
 
     DOS9_DBG("\t[*] Parsing line \"%s\"\n", lpLine->str);
 
+	line = (orig = Dos9_ParseLine(lpLine));
 
-#if 0
-    if (rand() % 2) {
+	if (line == NULL) {
 
-        int i;
-
-        switch(rand() % 10) {
-
-        case 0:
-        case 2:
-        case 1:
-            Dos9_SetConsoleTextColor(DOS9_FOREGROUND_IRED | DOS9_BACKGROUND_ICYAN);
-            fprintf(fOutput, "   ____    ____     __   __    \n"
-"U /\"___|U |  _\"\\ u  \\ \\ / /    \n"
-"\\| | u   \\| |_) |/   \\ V /     \n"
-" | |/__   |  _ <    U_|\"|_u    \n"
-"  \\____|  |_| \\_\\     |_|      \n"
-" _// \\\\   //   \\\\_.-,//|(_     \n"
-"(__)(__) (__)  (__)\\_) (__)   \n"
-"\n"
-"  _   _     U  ___ u   U  ___ u  ____     ____          _     _     _   \n"
-" | \\ |\"|     \\/\"_ \\/    \\/\"_ \\/U|  _\"\\ u / __\"| u     U|\"|u U|\"|u U|\"|u \n"
-"<|  \\| |>    | | | |    | | | |\\| |_) |/<\\___ \\/      \\| |/ \\| |/ \\| |/ \n"
-"U| |\\  |u.-,_| |_| |.-,_| |_| | |  __/   u___) |       |_|   |_|   |_|  \n"
-" |_| \\_|  \\_)-\\___/  \\_)-\\___/  |_|      |____/>>      (_)   (_)   (_)  \n"
-" ||   \\\\,-.    \\\\         \\\\    ||>>_     )(  (__)     |||_  |||_  |||_ \n"
-" (_\")  (_/    (__)       (__)  (__)__)   (__)         (__)_)(__)_)(__)_)\n");
-            break;
-
-        case 4:
-        case 5:
-            for (i = rand() % 0x100; i < 0x100; i++) {
-                Dos9_SetConsoleColor(i);
-                switch(rand() % 5) {
-                case 0:
-                    fprintf(fOutput, "CRYYYY NOOOOOOOOOOOPS\n");
-                    break;
-                case 1:
-                    fprintf(fOutput, "RLY ? DON'T CARE GUYS\n");
-                    break;
-                case 2:
-                    fprintf(fOutput, "hhhhhhhhhh\n");
-                    break;
-                case 3:
-                    fprintf(fOutput, ":V\n");
-                    break;
-                case 4:
-                    fprintf(fOutput, "meh\n");
-
-                }
-                Sleep(50);
-            }
-            break;
-
-        case 6:
-            Dos9_ShowErrorMessage(rand() % DOS9_ERROR_MESSAGE_NUMBER,
-                                  (rand() % 2) ? "NOOOOOOOOOPS" : "foutez moi la pait ._.", 0);
-            break;
-
-        case 7:
-            fprintf(fOutput, "Je suis nul en Batch :v\n");
-            break;
-
-        case 8:
-        case 9:
-            fprintf(fOutput, "          _____    _   _    ____   _  __   \n"
-"        |\" ___|U |\"|u| |U /\"___| |\"|/ /   \n"
-"       U| |_  u \\| |\\| |\\| | u   | ' /    \n"
-"       \\|  _|/   | |_| | | |/__U/| . \\\\u  \n"
-"        |_|     <<\\___/   \\____| |_|\\_\\   \n"
-"        )(\\\\,- (__) )(   _// \\\\,-,>> \\\\,-.\n"
-"       (__)(_/     (__) (__)(__)\\.)   (_/\n"
-"\n"
-"                   _____      _       ____     ____    ____          _   \n"
-"                  |_ \" _| U  /\"\\  uU |  _\"\\ u |  _\"\\  / __\"| u     U|\"|u  \n"
-"                    | |    \\/ _ \\/  \\| |_) |//| | | |<\\___ \\/      \\| |/  \n"
-"                   /| |\\   / ___ \\   |  _ <  U| |_| |\\u___) |       |_|   \n"
-"                  u |_|U  /_/   \\_\\  |_| \\_\\  |____/ u|____/>>      (_)   \n"
-"                  _// \\\\_  \\\\    >>  //   \\\\_  |||_    )(  (__)     |||_  \n"
-"                  __) (__)(__)  (__)(__)  (__)(__)_)  (__)         (__)_) \n");
-
-            for (i = 0; i < 100; i++) {
-                Dos9_SetConsoleColor(rand() % 0x100);
-                Sleep(100);
-            }
-        }
-
-        return 0;
-    }
-
-#endif
-
-	lppssStreamStart=Dos9_ParseLine(lpLine);
-
-	if (!lppssStreamStart) {
 		DOS9_DBG("!!! Can't parse line : \"%s\".\n", strerror(errno));
 		return -1;
+
 	}
 
     /* lock current state */
     lock = Dos9_GetStreamStackLockState(lppsStreamStack);
 	Dos9_SetStreamStackLockState(lppsStreamStack, 1);
 
-    /* open file streams (ie. those induced by '>' or '<') */
-	Dos9_ExecOutput(lppssStreamStart);
-
-	lppsStream=lppssStreamStart->lppsStream;
-
 	do {
 
-		if (Dos9_ExecOperators(&lppsStream)==FALSE || bAbortCommand)
+		if (Dos9_ExecOperators(&line)==FALSE || bAbortCommand)
 			break;
 
-		Dos9_RunCommand(lppsStream->lpCmdLine);
+        /* open file streams (ie. those induced by '>' or '<') */
+        Dos9_ExecOutput(line->sStream);
 
-	} while ((lppsStream=lppsStream->lppsNode));
+		Dos9_RunCommand(line->lpCmdLine);
+
+	} while ((line=line->lppsNode));
 
     /* wipe stream stack changes */
 	lppsStreamStack = Dos9_PopStreamStackUntilLock(lppsStreamStack);
     Dos9_SetStreamStackLockState(lppsStreamStack, lock);
 
-	Dos9_FreeLine(lppssStreamStart);
+	Dos9_FreeLine(orig);
 
 	DOS9_DBG("\t[*] Line run.\n");
 

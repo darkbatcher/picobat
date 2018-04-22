@@ -91,7 +91,7 @@ STREAMSTACK* Dos9_OpenOutput(STREAMSTACK* stack, char* name, int fd, int mode)
 
     default:
         fmode = O_WRONLY | O_CREAT | O_APPEND | O_BINARY
-            | ((mode & PARSED_STREAM_START_MODE_TRUNCATE) ? O_TRUNC : 0);
+            | ((mode & PARSED_STREAM_MODE_TRUNCATE) ? O_TRUNC : 0);
 
     }
 
