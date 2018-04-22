@@ -1958,5 +1958,18 @@ WEDNESDAY 11TH, APRIL
         - Fixed error on handling 2>&1 redirection.
 
         - Fixed Dos9_FilePath.c error that led Dos9 to check for file before 
-          using %PATHEXT%. 
+          using %PATHEXT%.
+
+SUNDAY 23RD, APRIL
+
+        - Changed conditional operators and redirections semantics (ie. 
+          conditional operators now own precedence over redirections, just the 
+          regular cmd-way).
+
+        - Fixed an error with file search not using libcu8.
+
+        - Fixed some typos on english manual.
+
+        - Fixed compatibility issue due to msvcrt inconsistent structures name 
+          for finddata and stat.
 

@@ -22,22 +22,10 @@
 #define DOS9_FILEPATH_H
 
 #ifndef WIN32
-
 #define DOS9_PATH_DELIMITER ':'
-
 #else
-
 #define DOS9_PATH_DELIMITER ';'
-
 #endif
-
-#ifndef WIN32
-#define TEST_ABSOLUTE_PATH(p) (*p == '/')
-#define DEF_DELIMITER "/"
-#elif defined WIN32
-#define TEST_ABSOLUTE_PATH(p) ((*p && *(p+1)==':' && (*(p+2)=='\\' || *(p+2)=='/')) || (*p == '/'))
-#define DEF_DELIMITER "\\"
-#endif // _POSIX_C_SOURCE
 
 char*   Dos9_EsToFullPath(ESTR* full);
 int     Dos9_GetFileFullPath(char* full, const char* partial, size_t size);
