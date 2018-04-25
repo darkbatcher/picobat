@@ -1352,7 +1352,6 @@ retry:
                         ++ (lpipInfo->Info.InputFile.index)
                         ] == NULL) {
 
-
                     /* there is no more remaining files to be read */
                     break;
 

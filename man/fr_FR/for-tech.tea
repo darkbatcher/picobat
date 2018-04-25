@@ -1,4 +1,4 @@
-﻿#
+#
 #   Dos9 Manual pages, The Dos9 project
 #   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
 #
@@ -223,7 +223,7 @@ ${FOR /F [options] %%A IN (objet) DO (
 
 	{Exemple 1:} Parsage de chaîne:
 
-${:: Le premier parse une chaîne simple
+${:: Le premier exemple parse une chaîne simple
 :: Dans cette exemple, on va parser des en-tête
 :: http
 
@@ -248,7 +248,7 @@ L'entrée du header est : Connection
 La valeur du header est: keep alive
 }
 
-	{Example 2:} Obtention des sous répertoire d'un répertoire:
+	{Exemple 2:} Obtention des sous répertoire d'un répertoire:
 
 ${FOR /F "tokens=*" %%A IN ('dir /b /a:D') DO (
 
@@ -281,7 +281,7 @@ Nathaniel B. Nichols,américain,ingénieur,a contribué à la théorie des asser
 	(Remarquez la variante de la syntaxe pour la spécification des options de la
 	commande.)
 
-${FOR /F "tokens=1,2,3" "delims=," %%A IN (my_csv.csv) DO (
+${FOR /F "tokens=1,2,3" "delims=," %%A IN (mon_csv.csv) DO (
 	:: découpe le fichier en éléments
 	:: %%A recevra le nom
 	:: %%B recevra la nationalité
@@ -345,7 +345,7 @@ ${1
 	haut.
 
 	La première syntaxe permet d'obtenir les fichiers localisés dans un dossier et dans ses
-	sous dossier, qui concorde avec une {regexp|expression régulier}.
+	sous dossier, qui concorde avec une {regexp|expression réguliere}.
 
 ${FOR /R basedir %%A IN (masque) DO (
 	:: some stuff

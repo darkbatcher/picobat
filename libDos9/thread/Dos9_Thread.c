@@ -51,11 +51,13 @@ int Dos9_BeginThread(THREAD* lpThId, void(*lpFunction)(void*) , int iMemAmount, 
 
     pthread_attr_init(&attr);
 
-    iRet=pthread_create(lpThId,
+    iRet=pthread_create(&(lpThId->thread),
                         &attr,
                         (void* (*)(void*))lpFunction,
                         (void*)lpArgList);
 
+
+    lpThId->joined = 0;
     pthread_attr_destroy(&attr);
 
     return iRet;
@@ -63,7 +65,8 @@ int Dos9_BeginThread(THREAD* lpThId, void(*lpFunction)(void*) , int iMemAmount, 
 
 LIBDOS9 void Dos9_AbortThread(THREAD* thSelfId)
 {
-    pthread_cancel(*thSelfId);
+    pthread_cancel(thSelfId->thread);
+    thSelfId->joined = 1;
 }
 
 /*
@@ -79,9 +82,14 @@ LIBDOS9 void     Dos9_EndThread(void* iReturn)
  */
 LIBDOS9 int     Dos9_WaitForThread(THREAD* thId, void** lpRet)
 {
-
+    int ret;
     /* join the thread to get the exit code */
-    return pthread_join(*thId,lpRet);
+    if (ret = pthread_join(thId->thread,lpRet))
+        return ret;
+
+    thId->joined = 1;
+
+    return 0;
 }
 
 LIBDOS9 int Dos9_CreateMutex(MUTEX* lpMuId)
@@ -116,7 +124,8 @@ LIBDOS9 int     Dos9_ReleaseMutex(MUTEX* lpMuId)
 
 LIBDOS9 void     Dos9_CloseThread(THREAD* thId)
 {
-    pthread_detach(*thId);
+    if (thId->joined != 1)
+        pthread_detach(thId->thread);
 }
 
 #else

@@ -122,7 +122,12 @@ typedef int    PROCESS;
 
 #else
 
-typedef pthread_t       THREAD;
+struct dos9_thread_t {
+    pthread_t thread;
+    int joined;
+};
+
+typedef struct dos9_thread_t   THREAD;
 typedef pthread_mutex_t MUTEX;
 typedef pid_t           PROCESS;
 
