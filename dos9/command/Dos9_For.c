@@ -1140,9 +1140,8 @@ int Dos9_ForMakeInputInfo(ESTR* lpInput, INPUTINFO* lpipInfo, FORINFO* lpfrInfo)
                so (haven't checked yet) */
 
 			if (!(lpipInfo->Info.InputFile.pFile=
-                    fopen(Dos9_EsToFullPath(
-                            lpipInfo->Info.InputFile.lpesFiles[0]
-                    ), "rb"))) {
+                    fopen(lpipInfo->Info.InputFile.lpesFiles[0]->str
+                        , "rb"))) {
 
 				Dos9_ShowErrorMessage(DOS9_FILE_ERROR | DOS9_PRINT_C_ERROR,
                                         lpToken,
@@ -1172,20 +1171,6 @@ int Dos9_ForMakeInputInfo(ESTR* lpInput, INPUTINFO* lpipInfo, FORINFO* lpfrInfo)
 			break;
 
 		case INPUTINFO_TYPE_COMMAND:
-			/* this is a litte bit more difficult (indeed, platform dependent)
-			   the program should open a pipe, print the script and then get the output
-
-                ** WINDOWS specific **
-
-			   The command is
-
-			        Dos9 /Q /N /E /V /D n
-
-			   The /Q avoid the presentation to be printed and the title to be change
-
-               ** End WINDOWS specific **
-
-			*/
 
 			lpipInfo->cType=INPUTINFO_TYPE_COMMAND;
             lpipInfo->Info.InputFile.lpesFiles[0]=NULL;
@@ -1359,9 +1344,9 @@ retry:
 
                 /* if the file list is not finished, then, open the next file */
                 if (!(lpipInfo->Info.InputFile.pFile =
-                        fopen(Dos9_EsToFullPath(lpipInfo->Info.InputFile.lpesFiles[
+                        fopen(lpipInfo->Info.InputFile.lpesFiles[
                             		lpipInfo->Info.InputFile.index
-                            	]->str), "rb"))) {
+                            	]->str, "rb"))) {
 
                     Dos9_ShowErrorMessage(DOS9_FILE_ERROR | DOS9_PRINT_C_ERROR,
                             name,
@@ -1424,7 +1409,9 @@ int Dos9_ForInputParseFileList(FILE_LIST_T* lpList, ESTR* lpInput)
     while ((lpToken=Dos9_GetNextParameterEs(lpToken, lpesStr))
             && (i < FILE_LIST_T_BUFSIZ)) {
 
-        /* loop to get the approriate elements */
+        /* loop to get the appropriate elements */
+
+        Dos9_EsToFullPath(lpesStr)
 
         lpList->lpesFiles[i++]=lpesStr;
 
@@ -1451,7 +1438,7 @@ void Dos9_ForCloseInputInfo(INPUTINFO* lpipInfo)
 
 	switch(lpipInfo->cType) {
 
-        case INPUTINFO_TYPE_COMMAND:;
+        case INPUTINFO_TYPE_COMMAND:
 
             void *ptr = NULL;
             THREAD *t = &(lpipInfo->Info.InputFile.handle);

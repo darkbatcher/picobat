@@ -429,7 +429,7 @@ static FILELIST* Dos9_GetMatch(char* restrict base, char* restrict up, struct ma
                         arg->files = ret;
                         ret = Dos9_GetMatch(path->str, item, arg);
 
-                        if ((ret == -1)
+                        if ((ret == (FILELIST*)-1)
                             || ((ret != (FILELIST*)-1) && (ret != NULL)
                                 && (arg->flags & DOS9_SEARCH_GET_FIRST_MATCH)))
                             goto end;

@@ -1811,4 +1811,10 @@ ${for %%a in (*.exe) do echo %%a}
  
 	- Fixed some manual pages.
 	
-	- Fixed additionnal {Dos9_CloseThread}
+	- Fixed additionnal {Dos9_CloseThread()} bug on unices.
+	
+	- Fixed memory leak in {Dos9_InitEnv.
+	
+	- Fixed some {FOR} commands bug using {Dos9_EsToFullPath()}.
+	
+	- Fixed some invalid casts in search functions.

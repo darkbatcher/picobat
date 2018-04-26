@@ -141,7 +141,7 @@ ENVBUF* Dos9_InitEnv(char** env)
            *pCh;
 
     /* count the elements in the env array */
-    while (env[nb ++] != NULL)
+    while (env[nb ++] != NULL);
 
     /* allocate the ENVBUF consequently */
     if (!(pEnv = malloc(sizeof(ENVBUF)))) {
