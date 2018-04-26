@@ -148,7 +148,7 @@ dir /b /s /a:-d') do (
 	SET name=%%~A
 	
 	SET ansi_build=ansi/!name:.tea=!.ansi
-	SET html_build=html/!name:.tea=!.md
+	SET html_build=html/!name:.tea=!.html
 	SET txt_build=txt/!name:.tea=!.txt
 	
 	ECHO    [*] Building "!name:.tea=!" :

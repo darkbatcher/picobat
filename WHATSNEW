@@ -1973,3 +1973,9 @@ SUNDAY 23RD, APRIL
         - Fixed compatibility issue due to msvcrt inconsistent structures name 
           for finddata and stat.
 
+THURSDAY 26TH, APRIL
+
+        - Fixed some manual pages.
+
+        - Fixed additionnal Dos9_CloseThread
+
