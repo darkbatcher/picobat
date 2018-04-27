@@ -818,7 +818,7 @@ void Dos9_LaunchExternalBatch(struct batch_launch_data_t* arg)
     strncpy(ifIn.lpFileName, arg->lpFileName, sizeof(ifIn.lpFileName));
     ifIn.lpFileName[sizeof(ifIn.lpFileName)-1] = '\0';
 
-    for (i = 0; arg->lpArguments[i]; i++);
+    for (i = 0; arg->lpArguments[i]; i++)
         free(arg->lpArguments[i]);
 
     free(arg->lpArguments);
