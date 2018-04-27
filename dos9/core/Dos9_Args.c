@@ -282,7 +282,7 @@ int   Dos9_GetParamArrayEs(char* lpLine, ESTR** lpArray, size_t iLenght)
 	ESTR* lpTemp=Dos9_EsInit();
 	char* lpNext;
 
-	while ((iIndex < iLenght) && (lpNext = Dos9_GetNextParameterEs(lpLine, lpParam))) {
+	while ((iIndex < iLenght-1) && (lpNext = Dos9_GetNextParameterEs(lpLine, lpParam))) {
 
 		while (*lpLine=='\t' || *lpLine==' ') lpLine++;
 

@@ -543,9 +543,6 @@ int Dos9_RunExternalCommand(char* lpCommandLine, int* error)
 	for (; lpEstr[i] && (i < FILENAME_MAX); i++)
 		lpArguments[i]=Dos9_EsToChar(lpEstr[i]);
 
-
-
-
 	lpArguments[i]=NULL;
 	/* check if the program exist */
 
