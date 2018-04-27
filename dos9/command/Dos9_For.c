@@ -1411,7 +1411,7 @@ int Dos9_ForInputParseFileList(FILE_LIST_T* lpList, ESTR* lpInput)
 
         /* loop to get the appropriate elements */
 
-        Dos9_EsToFullPath(lpesStr)
+        Dos9_EsToFullPath(lpesStr);
 
         lpList->lpesFiles[i++]=lpesStr;
 
@@ -1438,16 +1438,14 @@ void Dos9_ForCloseInputInfo(INPUTINFO* lpipInfo)
 
 	switch(lpipInfo->cType) {
 
-        case INPUTINFO_TYPE_COMMAND:
+        case INPUTINFO_TYPE_COMMAND:;
 
             void *ptr = NULL;
             THREAD *t = &(lpipInfo->Info.InputFile.handle);
 
-		    fclose(lpipInfo->Info.InputFile.pFile);
+    		    fclose(lpipInfo->Info.InputFile.pFile);
             Dos9_WaitForThread(&(lpipInfo->Info.InputFile.handle), &p);
-            Dos9_CloseThread(&(lpipInfo->Info.InputFile.handle));
-
-		    break;
+    		    break;
 
 		case INPUTINFO_TYPE_STREAM:
 

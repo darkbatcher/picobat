@@ -19,6 +19,9 @@
 
 #ifndef _XOPEN_SOURCE
 #define _XOPEN_SOURCE 700
+
+#define S_IREAD S_IRUSR
+#define S_IWRITE S_IWUSR
 #endif
 
 #include <stdlib.h>

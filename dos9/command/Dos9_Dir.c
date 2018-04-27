@@ -225,7 +225,7 @@ int Dos9_CmdDir(char* lpLine)
 
 	Dos9_EsFree(lpParam);
 
-    fflush(fOutput);
+  fflush(fOutput);
 	setvbuf(fOutput, NULL, _IONBF, 0);
 
 	return 0;

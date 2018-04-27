@@ -37,7 +37,7 @@ __LIBCU8__IMP __cdecl intptr_t __libcu8_findfirst (const char* file,
     size_t cvt;
     intptr_t handle;
     struct __libcu8_wfinddata_t info;
-    struct __libcu8_findata_t* inf =
+    struct __libcu8_finddata_t* inf =
             (struct __libcu8_finddata_t*) findinf;
 
     printf("libcu8: findfirst: looking for %s\n", file);
@@ -83,7 +83,7 @@ __LIBCU8__IMP __cdecl int __libcu8_findnext (intptr_t handle,
     size_t cvt;
     int ret;
     struct __libcu8_wfinddata_t info;
-    struct __libcu8_findata_t* inf =
+    struct __libcu8_finddata_t* inf =
             (struct __libcu8_finddata_t*) findinf;
 
     ret = __libcu8_wfindnext (handle, &info);

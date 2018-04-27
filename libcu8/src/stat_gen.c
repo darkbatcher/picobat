@@ -30,13 +30,13 @@
 */
 
 __LIBCU8__IMP __cdecl int __libcu8_stat (const char* file,
-                                          void* inbbuf)
+                                          void* inbuf)
 {
     wchar_t *wcs;
     int ret = 0;
     size_t cvt;
     struct __libcu8_stat_t* buf =
-                (__libcu8_stat_t*)inbuf;
+                (struct __libcu8_stat_t *)inbuf;
 
     if (!(wcs = (wchar_t*) libcu8_xconvert(LIBCU8_TO_U16,
                                             file, strlen(file)+1, &cvt))
