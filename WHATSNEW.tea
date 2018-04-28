@@ -1807,14 +1807,20 @@ ${for %%a in (*.exe) do echo %%a}
 	- Fixed compatibility issue due to msvcrt inconsistent
 	structures name for {finddata} and {stat}.
 	
- {{Thursday 26th, April}}
+{{Thursday 26th, April}}
  
 	- Fixed some manual pages.
 	
 	- Fixed additionnal {Dos9_CloseThread()} bug on unices.
 	
-	- Fixed memory leak in {Dos9_InitEnv.
+	- Fixed memory leak in {Dos9_InitEnv()}.
 	
 	- Fixed some {FOR} commands bug using {Dos9_EsToFullPath()}.
 	
 	- Fixed some invalid casts in search functions.
+
+{{Saturday 29th, April}}
+
+    - Fixed a memory leak.
+
+    - Changed version to 218.1
