@@ -521,29 +521,51 @@ int Dos9_RunBlock(BLOCKINFO* lpbkInfo)
 int Dos9_RunExternalCommand(char* lpCommandLine, int* error)
 {
 
-	char *lpArguments[FILENAME_MAX],
+	char **lpArguments = NULL,
 	     lpFileName[FILENAME_MAX],
-	     lpExt[_MAX_EXT],
-	     lpTmp[FILENAME_MAX],
-	     lpExePath[FILENAME_MAX];
+	     lpExt[_MAX_EXT];
 
-	ESTR* lpEstr[FILENAME_MAX],
-          *lpCmdLine = Dos9_EsInit();
+	ESTR *lpCmdLine = Dos9_EsInit();
+
+	PARAMLIST *list=NULL, *item;
 
 	int i=0,
         status=0;
 
-	Dos9_GetParamArrayEs(lpCommandLine, lpEstr, FILENAME_MAX);
+    size_t nb=0;
+
+    if ((list = Dos9_GetParamList(lpCommandLine)) == NULL)
+        return 0;
+
+    item = list;
+
+    while (item) {
+
+        nb ++;
+        item = item->next;
+
+    }
+
     Dos9_GetEndOfLine(lpCommandLine, lpCmdLine);
-    Dos9_GetNextParameterEs(lpCommandLine, lpEstr[0]);
 
-	if (!lpEstr[0])
-		return 0;
+    if ((lpArguments = malloc((nb + 1) * sizeof(char*))) == NULL) {
 
-	for (; lpEstr[i] && (i < FILENAME_MAX); i++)
-		lpArguments[i]=Dos9_EsToChar(lpEstr[i]);
+        *error = *error+1;
+        status=-1;
+        goto error;
 
-	lpArguments[i]=NULL;
+    }
+
+    item = list;
+
+    while (i < nb) {
+
+        lpArguments[i] = item->param->str;
+        item = item->next;
+        i ++;
+    }
+
+	lpArguments[nb]=NULL;
 	/* check if the program exist */
 
 	if (Dos9_GetFilePath(lpFileName, lpArguments[0], sizeof(lpFileName))==-1) {
@@ -569,10 +591,13 @@ int Dos9_RunExternalCommand(char* lpCommandLine, int* error)
     }
 
 error:
-	for (i=0; lpEstr[i] && (i < FILENAME_MAX); i++)
-		Dos9_EsFree(lpEstr[i]);
-
     Dos9_EsFree(lpCmdLine);
+
+    if (lpArguments)
+        free(lpArguments);
+
+    if (list)
+        Dos9_FreeParamList(list);
 
 	return status;
 
@@ -618,9 +643,9 @@ int Dos9_RunExternalFile(char* lpFileName, char* lpFullLine, char** lpArguments)
         Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR,
                                 lpFileName, 0);
 
-    Dos9_SetFdInheritance(fileno(fInput), 1);
-    Dos9_SetFdInheritance(fileno(fOutput), 1);
-    Dos9_SetFdInheritance(fileno(fError), 1);
+    Dos9_SetFdInheritance(fileno(fInput), 0);
+    Dos9_SetFdInheritance(fileno(fOutput), 0);
+    Dos9_SetFdInheritance(fileno(fError), 0);
 
     WaitForSingleObject(pi.hProcess, INFINITE);
 
@@ -687,9 +712,9 @@ int Dos9_RunExternalFile(char* lpFileName, char* lpFullLine, char** lpArguments)
         Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR,
                                 lpFileName, 0);
 
-    Dos9_SetFdInheritance(fileno(fInput), 1);
-    Dos9_SetFdInheritance(fileno(fOutput), 1);
-    Dos9_SetFdInheritance(fileno(fError), 1);
+    Dos9_SetFdInheritance(fileno(fInput), 0);
+    Dos9_SetFdInheritance(fileno(fOutput), 0);
+    Dos9_SetFdInheritance(fileno(fError), 0);
 
     WaitForSingleObject(pi.hProcess, INFINITE);
 

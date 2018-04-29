@@ -45,7 +45,7 @@ void Dos9_ExpandSpecialVar(ESTR* ptrCommandLine, ESTR** buf)
 
 		if ((lpTokenBegin=Dos9_GetLocalVar(lpvLocalVars, lpTokenBegin, lpVarContent))) {
 
-			/* si la variable est bien d�finie */
+			/* si la variable est bien définie */
 			*lpNextToken='\0';
 
 			Dos9_EsCat(lpExpanded, lpPreviousToken);

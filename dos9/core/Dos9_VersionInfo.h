@@ -49,7 +49,7 @@
 
 #define DOS9_AUTHORS "Romain Garbi, Teddy Astie"
 #define DOS9_BUILDDATE __DATE__
-#define DOS9_BUILDYEAR "2017"
+#define DOS9_BUILDYEAR "2018"
 #define DOS9_BUILDCOMMENTS "Beta release"
 
 /* Choose between different known operating systems.

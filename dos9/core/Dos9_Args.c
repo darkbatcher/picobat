@@ -272,17 +272,17 @@ next:
 	return lpEnd;
 }
 
-int   Dos9_GetParamArrayEs(char* lpLine, ESTR** lpArray, size_t iLenght)
+struct PARAMLIST* Dos9_GetParamList(char* lpLine)
 /*
-    gets command-line argument in an array of extended string
+    gets a list of parameters
 */
 {
-	size_t iIndex=0;
 	ESTR* lpParam=Dos9_EsInit();
 	ESTR* lpTemp=Dos9_EsInit();
 	char* lpNext;
+	struct PARAMLIST *ret = NULL, *item, *next;
 
-	while ((iIndex < iLenght-1) && (lpNext = Dos9_GetNextParameterEs(lpLine, lpParam))) {
+	while ((lpNext = Dos9_GetNextParameterEs(lpLine, lpParam))) {
 
 		while (*lpLine=='\t' || *lpLine==' ') lpLine++;
 
@@ -309,7 +309,23 @@ int   Dos9_GetParamArrayEs(char* lpLine, ESTR** lpArray, size_t iLenght)
         }
         #endif
 
-		lpArray[iIndex]=lpParam;
+		if ((next = malloc(sizeof(struct PARAMLIST))) == NULL)
+            Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION,
+                                    "Dos9_Args/Dos9_GetParamList()",
+                                    -1);
+
+        if (ret == NULL) {
+            ret = (item = next);
+
+        } else {
+
+            item->next = next;
+            item = next;
+
+        }
+
+        next->next = NULL;
+        next->param = lpParam;
 
 		Dos9_DelayedExpand(lpParam, bDelayedExpansion);
 
@@ -317,22 +333,26 @@ int   Dos9_GetParamArrayEs(char* lpLine, ESTR** lpArray, size_t iLenght)
 
 		lpLine=lpNext;
 
-		iIndex++;
 	}
 
 	Dos9_EsFree(lpParam);
 	Dos9_EsFree(lpTemp);
 
+	return ret;
+}
 
-	while (iIndex < iLenght) {
+void Dos9_FreeParamList(struct PARAMLIST* list)
+{
+    struct PARAMLIST* item;
 
-		lpArray[iIndex] = NULL;
+    while (list) {
 
-		iIndex++;
+        Dos9_EsFree(list->param);
+        item = list->next;
+        free(list);
+        list = item;
 
-	}
-
-	return 0;
+    }
 }
 
 LIBDOS9 char* Dos9_GetEndOfLine(char* lpLine, ESTR* lpReturn)

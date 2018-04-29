@@ -12,6 +12,8 @@ echo "	aclocal -I m4 --install"
 aclocal -I m4 --install
 echo "	autoheader"
 autoheader
+echo "  libtoolize --install"
+libtoolize --install
 echo "	automake --add-missing"
 automake --add-missing
 echo "	libtoolize --install"

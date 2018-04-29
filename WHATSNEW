@@ -1983,5 +1983,11 @@ THURSDAY 26TH, APRIL
 
         - Fixed some FOR commands bug using Dos9_EsToFullPath().
 
-        - Fixed some invalid casts in search functions. 
+        - Fixed some invalid casts in search functions.
+
+SATURDAY 29TH, APRIL
+
+        - Fixed a memory leak.
+
+        - Changed version to 218.1 
 

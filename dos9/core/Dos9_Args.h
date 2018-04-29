@@ -30,6 +30,11 @@ typedef struct BLOCKINFO {
 	char* lpEnd;
 } BLOCKINFO;
 
+typedef struct PARAMLIST {
+    ESTR* param;
+    struct PARAMLIST* next;
+} PARAMLIST;
+
 int   Dos9_GetParameterPointers(char** lpPBegin, char** lpPEnd,
 				 const char* lpDelims, const char* lpLine);
 
@@ -43,7 +48,8 @@ char* Dos9_GetNextParameterEsD(char* lpLine, ESTR* lpReturn, const
 
 char* Dos9_GetNextParameter(char* lpLine, char* lpResponseBuffer, int iLength);
 
-int   Dos9_GetParamArrayEs(char* lpLine, ESTR** lpArray, size_t iLenght);
+struct PARAMLIST* Dos9_GetParamList(char* lpLine);
+void Dos9_FreeParamList(struct PARAMLIST* list);
 
 char* Dos9_GetNextBlockEs(char* lpLine, ESTR* lpReturn);
 
