@@ -49,6 +49,8 @@
    On cmd.exe, pushd can mount UNC paths.
 */
 
+/* TODO: Use Dos9_DirStack. */
+
 LPSTACK lpStack;
 
 int Dos9_CmdPushd (char *lpLine)

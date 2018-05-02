@@ -30,8 +30,8 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-#ifndef YY_EVALUATOR_PARSER_H_INCLUDED
-# define YY_EVALUATOR_PARSER_H_INCLUDED
+#ifndef YY_EVALUATOR_LIB_PARSER_H_INCLUDED
+# define YY_EVALUATOR_LIB_PARSER_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -66,12 +66,12 @@ extern int evaluator_debug;
 
 union YYSTYPE
 {
-#line 67 "parser.y" /* yacc.c:1909  */
+#line 67 "lib/parser.y" /* yacc.c:1909  */
 
   Node *node;
   Record *record;
 
-#line 75 "parser.h" /* yacc.c:1909  */
+#line 75 "lib/parser.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -84,4 +84,4 @@ extern YYSTYPE evaluator_lval;
 
 int evaluator_parse (void);
 
-#endif /* !YY_EVALUATOR_PARSER_H_INCLUDED  */
+#endif /* !YY_EVALUATOR_LIB_PARSER_H_INCLUDED  */
