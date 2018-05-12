@@ -19,8 +19,8 @@
 ROOTDIR = ..
 include ../config.mk
 
-CFLAGS += -I$(LIBDOS9_INC)
-LDFLAGS += -L$(LIBDOS9_LIB) -lDos9
+CFLAGS += $(LIBDOS9_INC)
+LDFLAGS += $(LIBDOS9_LD)
 SRC_FILES = dos9ize.c pairs.c
 
 all: dos9ize
