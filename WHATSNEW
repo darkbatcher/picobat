@@ -1989,5 +1989,8 @@ SATURDAY 29TH, APRIL
 
         - Fixed a memory leak.
 
-        - Changed version to 218.1 
+        - Changed version to 218.1
+
+        - Fixed Dos9_RunExternalCommand() which add a pretty big footprint on 
+          the stack, sometimes causing stackoverflows with Musl libc. 
 

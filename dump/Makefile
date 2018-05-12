@@ -1,6 +1,6 @@
 #
-#   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
-#   Copyright (C) 2010-2014 Romain Garbi (DarkBatcher)
+#   Dos9 Makefiles, The Dos9 project
+#   Copyright (C) 2012-2018  Romain Garbi, Teddy Astie
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -16,6 +16,20 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-bin_PROGRAMS = dump
-dump_SOURCES = dump.c
-noinst_HEADERS = dump.h
+ROOTDIR = ..
+include ../config.mk
+
+SRC_FILES=dump.c
+
+all: dump
+
+dump:
+	$(CC) -o dump$(EXEC_SUFFIX) $(LDFLAGS) $(CFLAGS) $(SRC_FILES)
+
+clean:
+	rm -f dump$(EXEC_SUFFIX)
+
+bin: dump
+	cp dump$(EXEC_SUFFIX) $(BINDIR)/cmd/
+
+.PHONY: all clean bin

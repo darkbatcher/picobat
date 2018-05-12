@@ -23,34 +23,40 @@
 # ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-ACLOCAL_AMFLAGS = -I m4
-AUTOMAKE_OPTIONS = foreign subdir-objects
-EXTRA_DIST = check_u8 check_850
 
 noinst_PROGRAMS = convert ansi read read850 readconsole
 
 ansi_SOURCES = ansi.c log_msg.c
-ansi_LDADD = ../src/libcu8.la
+ansi_LDADD = -L.. -lcu8
 ansi_CFLAGS = -I../include
 
 convert_SOURCES = convert.c log_msg.c
-convert_LDADD = ../src/libcu8.la
+convert_LDADD = -L.. -lcu8
 convert_CFLAGS = -I../include
 
 read_SOURCES = read.c log_msg.c
-read_LDADD = ../src/libcu8.la
+read_LDADD =  -L.. -lcu8
 read_CFLAGS = -I../include
 
 read850_SOURCES = read850.c log_msg.c
-read850_LDADD = ../src/libcu8.la
+read850_LDADD =  -L.. -lcu8
 read850_CFLAGS = -I../include
 
 readconsole_SOURCES = readconsole.c log_msg.c
-readconsole_LDADD = ../src/libcu8.la
+readconsole_LDADD = -L.. -lcu8
 readconsole_CFLAGS = -I../include
 
+all: $(noinst_PROGRAMS)
+
+$(noinst_PROGRAMS): 
+	$(CC) -o $@$(EXEC_SUFFIX) $($@_SOURCES) $($@_CFLAGS) $($@_LDADD) $(CFLAGS) $(LDFLAGS) 
+	
+clean:
+	rm -f *.o
+	rm -f $(addsuffix $(EXEC_SUFFIX),$(noinst_PROGRAMS)) 	
+
 # Run the tests
-run-tests: 
+run-tests: all
 	@for i in $(noinst_PROGRAMS); do \
 		echo $(ECHO_N) "Running test ./$$i... " $(ECHO_C); \
 		./$$i ; \
@@ -61,3 +67,5 @@ run-tests:
 			exit -1;; \
 		esac;\
 	done; 2>&1
+
+.PHONY: run-tests all $(noinst_PROGRAMS) clean

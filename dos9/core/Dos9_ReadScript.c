@@ -210,7 +210,7 @@ int Dos9_LoadBatchScript(struct batch_script_t* script)
                    this is a chiefly important error */
                 if (checkres == FALSE)
                     /* TODO: What is nb ? */
-                    Dos9_ShowErrorMessage(DOS9_INVALID_LABEL, /* nb */ "TODO", -1);
+                    Dos9_ShowErrorMessage(DOS9_INVALID_LABEL, nb, -1);
 
                 /* This one is apparently ok, do nothing and let the command
                    part treat it as a command. */

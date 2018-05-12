@@ -1,6 +1,6 @@
 #
-#   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
-#   Copyright (C) 2010-2016 Romain GARBI
+#   Dos9 Makefiles, The Dos9 project
+#   Copyright (C) 2012-2018  Romain Garbi, Teddy Astie
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -16,17 +16,28 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-AUTOMAKE_OPTIONS = foreign subdir-objects
+ROOTDIR = ..
+include ../config.mk
+CFLAGS += -DHAVE_STDINT_H -DHAVE_CONFIG_H -DSTDC_HEADERS
 
-bin_PROGRAMS = tea
+SRC_FILES = inteval.c lexer.c parser.c
+OBJ_FILES = $(SRC_FILES:.c=.o)
 
-noinst_HEADERS = src/Tea.h src/out/tea_out.h
+all: libinteval.a
 
-tea_SOURCES = src/Tea_Load.c src/Tea_Node.c src/Tea_Output.c \
-src/out/tea_ansi_out.c src/out/tea_html_out.c src/out/tea_text_out.c \
-src/tea.c src/tea_strupr.c
+clean:
+	rm -f $(OBJ_FILES) lexer.c parser.c parser.h libinteval.a
 
-tea_LDFLAGS = -no-undefined
-tea_LDADD = $(top_builddir)/libDos9/libDos9.la @LIBS@
+bin:
 
-AM_CFLAGS = -I$(top_srcdir)/libDos9 @CFLAGS@
+libinteval.a: $(OBJ_FILES)
+	$(AR) $@ $(OBJ_FILES)
+	$(RANLIB) $@
+
+lexer.c: lexer.l parser.c
+	$(LEX) -PIntEval_ -L -o$@ lexer.l
+
+parser.c: parser.y
+	$(YACC) -d -p IntEval_ -o $@ $^
+
+.PHONY: all clean bin

@@ -1,0 +1,54 @@
+/* 
+   Dos9 Makefiles, The Dos9 project
+   Copyright (C) 2012-2018  Romain Garbi (DarkBatcher)
+
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+ 
+#define BINARY_PATH "@BINDIR@"
+
+#define DATA_PATH "@BINDIR@/share"
+
+#if @use_cmdlycorrect@
+	#define DOS9_STATIC_CMDLYCORRECT 1
+#endif
+
+#if @use_libcu8@
+	#define DOS9_USE_LIBCU8 1
+#endif
+
+#if @use_nls@
+	#define ENABLE_NLS 1
+#endif
+
+#if !@use_console@
+	#define LIBDOS9_NO_CONSOLE 1
+#endif 
+
+#define PACKAGE "Dos9"
+#define PACKAGE_BUGREPORT "darkbatcher@dos9.org"
+#define PACKAGE_NAME "Dos9"
+#define PACKAGE_STRING "Dos9 218.1"
+#define PACKAGE_TARNAME "Dos9"
+#define PACKAGE_URL "http://www.dos9.org/"
+#define PACKAGE_VERSION "218.1"
+#define STDC_HEADERS 1
+#define HOST "@HOST@"
+#define __YEAR__ "@YEAR@"
+
+#define VERSION "218.1"
+
+#if @prg_xdg-open@
+	#define XDG_OPEN "@path_xdg-open@"
+#endif

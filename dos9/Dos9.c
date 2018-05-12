@@ -108,6 +108,10 @@ int main(int argc, char *argv[])
     }
 #endif
 
+    /* Ignore the SIGFPS signal */
+    signal(SIGFPE, SIG_IGN);
+
+
     /* Initialize libDos9 */
     Dos9_InitLibDos9();
 

@@ -2,7 +2,7 @@
 # 2010-2016
 #
 # This is free software: you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software 
+# terms of the GNU General Public License as published by the Free Software
 # Foundation, either version 3 of the License, or (at your option) any later
 # version.
 #
@@ -13,24 +13,11 @@
 PO_BUILD=$$(ls po/)
 SHARE_DIR=./share/locale
 
-MSGFMT = @MSGFMT@
-XGETTEXT = @XGETTEXT@
-MSGMERGE = @MSGMERGE@
-prefix = @prefix@
-datarootdir = @datarootdir@
-datadir= @datadir@
+MSGFMT = msgfmt
+XGETTEXT = xgettext
+MSGMERGE = msgmerge
+
 all: m-po
-
-dist:
-distdir:
-
-install-exec:
-install-exec-recursive:
-install-data: install
-install-data-recursive:
-
-install:
-	cp -R ./share/locale $(datadir)
 
 m-po: po-tree
 	mkdir -p $(SHARE_DIR)
@@ -51,7 +38,7 @@ po-tree:
 	done;
 
 
-# this target is for devellopers that want to merge po when they updated sources
+# this target is for developers that want to merge po when they updated sources
 po-merge: m-pot
 	for i  in $(PO_BUILD); do \
 		$(MSGMERGE) -U "po/$$i/Dos9-msg.po" "pot/Dos9-msg.pot" ; \
@@ -64,5 +51,5 @@ m-pot: ../dos9/lang/Dos9_Lang.c ../dos9/lang/Dos9_ShowHelp.c ../dos9/errors/Dos9
 	$(XGETTEXT) -d Dos9-errors -o pot/Dos9-errors.pot "../dos9/errors/Dos9_Errors.c" -c="//"
 	$(XGETTEXT) -d Dos9-msg -o pot/Dos9-msg.pot "../dos9/lang/Dos9_Lang.c" -c="//"
 	$(XGETTEXT) -d Dos9-hlp -o pot/Dos9-hlp.pot "../dos9/lang/Dos9_ShowHelp.c" -c="//"
-	
+
 clean:

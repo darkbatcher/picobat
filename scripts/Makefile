@@ -1,6 +1,6 @@
 #
-#   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
-#   Copyright (C) 2010-2014 Romain Garbi (DarkBatcher)
+#   Dos9 Makefiles, The Dos9 project
+#   Copyright (C) 2012-2018  Romain Garbi, Teddy Astie
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -16,14 +16,23 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-lib_LTLIBRARIES = libinteval.la
+ROOTDIR = ..
+include ../config.mk
 
-noinst_HEADERS = global.h
+cmds = hlp.bat
+root_cmds = Dos9_Auto.bat
 
-include_HEADERS = inteval.h
+all:
 
-libinteval_la_SOURCES = parser.y lexer.l inteval.c
-libinteval_la_LDFLAGS = -no-undefined
+clean:
 
-AM_YFLAGS = -d -p IntEval_
-AM_LFLAGS = -PIntEval_ -olex.yy.c
+bin: hlp_man
+	mkdir -p $(BINDIR)/cmd
+	cp -f $(root_cmds) $(BINDIR)
+	cp -f $(cmds) $(BINDIR)/cmd
+
+hlp_man:
+	mkdir -p $(BINDIR)/share/dos9/
+	cp -rL $(ROOTDIR)/man $(BINDIR)/share/dos9/hlp
+
+.PHONY: all clean bin

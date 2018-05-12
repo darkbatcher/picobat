@@ -9,9 +9,7 @@
 .hg
 config
 m4
-Makefile
 bin
-config.*
 autom4te.cache
 .libs
 .deps
@@ -51,7 +49,5 @@ libmatheval/doc/libmatheval.info
 dos9/dos9
 dos9ize/dos9ize
 dump/dump
-scripts/Dos9_Auto.bat
-scripts/hlp.bat
 tea/tea
 .clang_complete

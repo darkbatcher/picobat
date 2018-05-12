@@ -33,13 +33,13 @@ IF %DOS9_OS%==WINDOWS (
 	
 	:: set windows compatible variable
 	SET SYSTEMROOT=/bin
-	SET PROGRAMFILES=@bindir@
-	SET SYSTEMDRIVE=@prefix@
+	SET PROGRAMFILES=/desktop/dos9-code/bin
+	SET SYSTEMDRIVE=/desktop/dos9-code/bin
 	SET "USERPROFILE=%HOME%"
 	
 	:: Define additionnal paths for sub-programs
-	SET DOS9_SHARE=@datadir@
-	SET DOS9_ETC=@sysconfdir@
+	SET DOS9_SHARE=/desktop/dos9-code/bin/share
+	SET DOS9_ETC=/desktop/dos9-code/bin/etc
 
 )
 
