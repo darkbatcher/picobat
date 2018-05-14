@@ -5,8 +5,8 @@
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is furnished
-# to do so, subject to the following conditions:
+# copies of the Software, and to permit persons to whom the Software is
+# furnished  to do so, subject to the following conditions:
 # 
 # The above copyright notice and this permission notice shall be included in all
 # copies or substantial portions of the Software.
@@ -52,7 +52,7 @@ $(PROGRAMS):
 $(LIBS):
 	@echo "Looking for lib : $@ ..."
 	@echo "int main() { return 0;}" > config.c
-	@if $(CC) config.c $(CFLAGS) $(LDFLAGS) -l$@ 2> /dev/null;	then \
+	@if $(CC) config.c $(CFLAGS) $(LDFLAGS) -l$@ -O0 2> /dev/null;	then \
 		echo "lib_$@ = 1" >>  femto-config.mk; \
 		echo "	found"; \
 	else \
@@ -63,7 +63,7 @@ $(LIBS):
 $(FUNCTIONS):
 	@echo "Looking for function : $@ ..."
 	@sed -e 's,[@]fn[@],$@,g' < config.c.in > config.c
-	@if $(CC) config.c $(CFLAGS) $(LDFLAGS) 2> /dev/null;	then \
+	@if $(CC) config.c $(CFLAGS) $(LDFLAGS) -O0 2> /dev/null; then \
 		echo "fn_$@ = 1" >>  femto-config.mk; \
 		echo "	found"; \
 	else \
