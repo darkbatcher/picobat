@@ -64,9 +64,13 @@
     #define O_RDONLY _O_RDONLY
     #define O_TRUNC _O_TRUNC
     #define O_TEXT _O_TEXT
-    #define S_IRUSR _S_IREAD
-    #define S_IWUSR _S_IWRITE
-
+	#ifndef S_IRUSR
+		#define S_IRUSR _S_IREAD
+	#endif
+	#ifndef S_IWUSR
+		#define S_IWUSR _S_IWRITE
+	#enduf
+	
     /*
      * provide some wrapper over windows pseudo-POSIX functions
      */

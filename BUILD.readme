@@ -1,5 +1,43 @@
-BUILDING Dos9 :
-===============
+BUILDING Dos9 (Newer versions):
+===============================
+
+Dos9 switched from autotools to a more lightweight build system based
+on gmake called femto (https://gitlab.com/darkbatcher/femto) which
+eases greatly the compiling process. Of course, some libraries are
+still needed :
+
+	- gcc, gmake etc.
+	- GNU gettext
+	- GNU libiconv
+
+Building Dos9 is quite rapid, first configure the build using :
+
+	$ make config
+
+Then you can specify or discard some options using either `use-option`
+or `no-option` targets.
+
+	$ make use-option
+	
+Dos9 currently provides 4 options :
+
+	- libcu8 : Add native utf-8 support (disabled by default). Do not
+	  use under *nix.
+	- nls : Add translations (enabled by default).
+	- cmdlycorrect : Be the most compatible to cmd as possible (disabled
+	  by default).
+	- console : Add visual console features like colours (enabled by
+	default). On some exotic systems (I'm thinking of NetBSD), the
+	terminal does not support such features, so this must be disabled.
+	
+Once you have configured your options, just compile using :
+
+	$ make all bin
+	
+This will compile Dos9 and put the resulting installation inside bin/.
+	
+BUILDING Dos9 (Older versions):
+===============================
 
 Dos9 uses the autotool build system, so that building and compiling Dos9
 distribution is quite straightforward. In order to buid Dos9, you need the
