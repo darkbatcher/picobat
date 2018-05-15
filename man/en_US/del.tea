@@ -35,9 +35,12 @@ ERASE [/P] [/F] [/S] [/Q] [/A[:]attributes] name ...}
 
 	- {/A[:]attributes} : Delete only the files that match the specified
 	attributes. Check {spec/regexp|regular expression} for more information.
+	
+	- {/S} : Recursive mode. Deletes files in folders and sub folders.
 
 	- {name} : A list of files to be deleted. Paths can include
-	{spec/regexp|regular expressions}.
+	{spec/regexp|regular expressions}. If any of the paths specified refer
+	to a directory, every file inside that directory is deleted
 
 {{Compatibility}}
 

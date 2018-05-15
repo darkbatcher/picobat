@@ -66,6 +66,9 @@ __thread COLOR colColor=DOS9_COLOR_DEFAULT;
 __thread FILE* fInput; /* current thread input stream */
 __thread FILE *fOutput, *_fOutput; /* current thread output stream */
 __thread FILE *fError, *_fError; /* current thread error stream */
+/* Note : the underscore prefixed version are internally used to
+   handle output substitution (eg. 2>&1) to be used as backup and
+   so prevent unnecessary duplication of files */
 
 __thread ENVBUF* lpeEnv;
 __thread INPUT_FILE ifIn;

@@ -61,7 +61,8 @@ int Dos9_CmdDel(char* lpLine)
 
 	short attr=DOS9_CMD_ATTR_ALL;
 
-	int flag=DOS9_SEARCH_NO_PSEUDO_DIR,
+	int flag=DOS9_SEARCH_NO_PSEUDO_DIR
+            | DOS9_SEARCH_DIR_MODE,
 	    choice = DOS9_ASK_ALL,
 	    status = 0,
 	    n=0,
@@ -206,10 +207,10 @@ int Dos9_CmdDel(char* lpLine)
     if (attr == 0) {
         /* Set the default attributes based for the search */
         if (!(param & DOS9_DELETE_READONLY))
-            attr |= DOS9_CMD_ATTR_READONLY_N | DOS9_CMD_ATTR_READONLY;
+            attr |= DOS9_ATTR_NO_READONLY;
 
         if (!(flag  & DOS9_SEARCH_RECURSIVE))
-            attr|=DOS9_CMD_ATTR_DIR | DOS9_CMD_ATTR_DIR_N;
+            attr|= DOS9_ATTR_NO_DIR;
 
     }
 

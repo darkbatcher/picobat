@@ -29,6 +29,8 @@ ifdef use_libcu8
 endif
 
 SUBDIRS = libDos9 libinteval libmatheval $(SUBDIRS_ADD) dos9 dos9ize dump tea scripts po
+TEAFILES = README.tea WHATSNEW.tea GUIDELINES.tea THANKS.tea
+TEXTFILES = $(TEAFILES:.tea=)
 
 SUBDIRS_CLEAN := $(addsuffix .clean,$(SUBDIRS))
 SUBDIRS_BIN := $(addsuffix .bin,$(SUBDIRS))
@@ -45,13 +47,14 @@ po-merge:
 	$(MAKE) -C po po-merge
 
 clean: $(SUBDIRS_CLEAN)
+	rm -f $(TEXTFILES)
 
 $(SUBDIRS_CLEAN):
 	$(MAKE) -C $(basename $@) clean
 	
 bin: bindir $(SUBDIRS_BIN)
 
-bindir: README WHATSNEW
+bindir: $(TEXTFILES)
 	mkdir -p $(BINDIR)
 	mkdir -p $(BINDIR)/cmd
 	cp -r ./po/share $(BINDIR)
@@ -62,8 +65,8 @@ bindir: README WHATSNEW
 	cp libmatheval/COPYING $(BINDIR)/COPYING.libmatheval
 	cp THANKS $(BINDIR)/
 	
-README WHATSNEW: README.tea WHATSNEW.tea
-	tea/tea //e:utf-8 //o:text-plain $@.tea $@
+$(TEXTFILES): $(TEAFILES)
+	tea/tea -e:utf-8 -o:text-plain $@.tea $@
 	
 $(SUBDIRS_BIN): $(SUBDIRS)
 	$(MAKE) -C $(basename $@) bin || true

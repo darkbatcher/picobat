@@ -31,7 +31,7 @@
 #define TEA_TEXT_WIDTH        79 /* the width of the text */
 #define TEA_TEXT_CODE_INDENT  8 /* the witdh of code indent */
 #define TEA_TEXT_CODE_NINDENT 6 /* the witdh of code indent */
-#define TEA_TEXT_PAR_INDENT   5 /* the witdh of paragraph indent */
+#define TEA_TEXT_PAR_INDENT   4 /* the witdh of paragraph indent */
 #define TEA_TEXT_HEAD_INDENT  0 /* the width of paragaph indent */
 
 #include <libDos9.h>

@@ -66,7 +66,6 @@ void Tea_TextOutputHandler(TEAPAGE* lpTeaPage, FILE* pFile, int i, char** argv)
 			                        "\n",
 			                        pFile);
 
-
 		}
 
 		fputs("\n\n", pFile);
@@ -236,7 +235,7 @@ void Tea_TextParseHandler(int iMsg ,void* lpData)
 		free(lpTeaNode->lpContent);
 
 		if (!(lpTeaNode->lpContent=strdup(Dos9_EsToChar(lpEsStr)))) {
-		
+
 			perror("TEA : Unable to allocate memory ");
 			exit(-1);
 
@@ -248,7 +247,7 @@ void Tea_TextParseHandler(int iMsg ,void* lpData)
 		Dos9_EsCpy(lpEsStr, lpTeaNode->lpContent);
 		Dos9_EsCat(lpEsStr, " ");
 		Dos9_EsCat(lpEsStr, "(<");
-		Dos9_EsCat(lpEsStr, lpTeaNode->lpTarget);		
+		Dos9_EsCat(lpEsStr, lpTeaNode->lpTarget);
 		Dos9_EsCat(lpEsStr, ">)");
 
 		free(lpTeaNode->lpContent);

@@ -38,12 +38,17 @@
 #define O_RDONLY _O_RDONLY
 #define O_TRUNC _O_TRUNC
 
+#ifndef S_IRUSR
 #define S_IRUSR _S_IREAD
+#endif /* S_IRUSR */
+
+#ifndef S_IWUSR
 #define S_IWUSR _S_IWRITE
-#else
+#endif /* S_IWUSR */
+#else /* WIN32 */
 #include <unistd.h>
 #define flushall()
-#endif
+#endif /* WIN32 */
 
 #define DOS9_STDIN STDIN_FILENO
 #define DOS9_STDOUT STDOUT_FILENO

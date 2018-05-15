@@ -64,7 +64,8 @@ int main(int argc, char *argv[])
 
 	while (argv[i] && iContinue) {
 
-		if (!strnicmp("/O", argv[i], 2)) {
+		if (!strnicmp("/O", argv[i], 2)
+            || !strnicmp("-O", argv[i], 2)) {
 
 			argv[i]+=2;
 			if (*(argv[i])==':') argv[i]++;
@@ -95,7 +96,8 @@ int main(int argc, char *argv[])
 				exit(-1);
 			}
 
-		} else if (!strnicmp("/E", argv[i], 2)) {
+		} else if (!strnicmp("/E", argv[i], 2)
+                   || !strnicmp("-E", argv[i], 2)) {
 
 			argv[i]+=2;
 			if (*(argv[i])==':') argv[i]++;
@@ -114,7 +116,9 @@ int main(int argc, char *argv[])
 
 		} else if (!strcmp("/?", argv[i])) {
 
-			puts("See file tea.txt\n");
+			puts("Tea text preprocessor - version 1\n"
+                 "Copyright (C) 2010-2018 Romain Garbi.\n"
+                 "Distributed under the terms of the GPL v3");
 			return 0;
 
 		} else {

@@ -69,8 +69,8 @@
 	#endif
 	#ifndef S_IWUSR
 		#define S_IWUSR _S_IWRITE
-	#enduf
-	
+	#endif
+
     /*
      * provide some wrapper over windows pseudo-POSIX functions
      */
@@ -354,12 +354,17 @@ LIBDOS9 void            Dos9_GetMousePos(char on_move, CONSOLECOORD* coords, int
 #define Dos9_GetFileSize(lpList) lpList->stFileStats.st_size
 #define Dos9_GetFileMode(lpList) lpList->stFileStats.st_mode
 
-
+/* Match everything in the directory */
 #define DOS9_SEARCH_DEFAULT 0x00
+/* Browse sub-dir for matches */
 #define DOS9_SEARCH_RECURSIVE 0x01
+/* Stop after the first match is found */
 #define DOS9_SEARCH_GET_FIRST_MATCH 0x02
+/* Do not grab informations about files */
 #define DOS9_SEARCH_NO_STAT 0x04
+/* Do not list pseudo dirs '.' and '..' */
 #define DOS9_SEARCH_NO_PSEUDO_DIR 0x08
+/* Search mode equivalent DIR (ie "dir" is equivalent to "dir/*" */
 #define DOS9_SEARCH_DIR_MODE 0x10
 
 #ifndef WIN32
