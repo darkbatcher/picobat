@@ -1981,3 +1981,7 @@ TUESDAY 15TH, MAY
       - Added the possibility of using unix-style switches with tea due to 
         problems of mingw that mangled the slash of switches.
 
+      - Fixed a bug of the DEL command. If the required file refers to a dir, 
+        the same behaviour as the one used with DIR is used so that files 
+        inside that dir get deleted.
+
