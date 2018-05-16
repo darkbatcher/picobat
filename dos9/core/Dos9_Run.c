@@ -946,7 +946,7 @@ BOOL WINAPI Dos9_SigHandler(DWORD dwCtrlType)
                 /* we are running a script, so give two options : either
                    continuing or killing Dos9 */
 
-                fputs(DOS9_NL, stderr);
+                fputs(DOS9_NL, fError);
                 choice = Dos9_AskConfirmation(DOS9_ASK_YN
                                               | DOS9_ASK_DEFAULT_N
                                               | DOS9_ASK_INVALID_REASK,

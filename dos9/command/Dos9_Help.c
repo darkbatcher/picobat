@@ -51,8 +51,8 @@
 int Dos9_CmdHelp(char* lpLine)
 {
 
-	fputs(lpHlpDeprecated, stdout);
-	fputs(DOS9_NL, stdout);
+	fputs(lpHlpDeprecated, fOutput);
+	fputs(DOS9_NL, fOutput);
 	return 0;
 
 }
