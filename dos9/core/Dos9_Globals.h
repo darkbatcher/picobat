@@ -65,7 +65,6 @@ extern __thread ENVBUF* lpeEnv; /* environment variables local to threads */
 extern __thread FILE *fInput; /* current thread input stream */
 extern __thread FILE *fOutput, *_fOutput; /* current thread output stream */
 extern __thread FILE *fError, *_fError; /* current thread error stream */
-extern __thread jmp_buf jbBreak; /* current thread ctrl-C fallback */
 extern __thread char lpCurrentDir[FILENAME_MAX]; /* current path */
 
 #endif

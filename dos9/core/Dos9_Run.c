@@ -59,24 +59,6 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
 
 	int res;
 
-	#ifndef WIN32
-    	struct sigaction action;
-    	memset(&action, 0, sizeof(action));
-	#endif
-
-	/* Create a non-local jump to get back to here if the user presses CTRL-C (ie. break)
-       Note that by using break, the user admits some part of memory leakage...
-       */
-    if (setjmp(jbBreak));
-
-	#ifndef WIN32
-    	action.sa_handler=Dos9_SigHandlerBreak;
-    	action.sa_flags=SA_NODEFER;
-		sigaction(SIGINT, &action, NULL); /* Sets the default signal handler */
-	#elif defined(WIN32)
-		SetConsoleCtrlHandler(Dos9_SigHandler, TRUE); /* set default signal handler */
-	#endif // WINDOWS
-
 	while (!(pIn->bEof)) {
 
 		DOS9_DBG("[*] %d : Parsing new line\n", __LINE__);
@@ -898,24 +880,71 @@ int Dos9_RunExternalBatch(char* lpFileName, char* lpFullLine, char** lpArguments
 }
 
 #ifndef WIN32
-
+#include "../command/Dos9_Ask.h"
+/* Unix is more sympathetic to us than windows. Indeed,
+   Posix thread guaranties a signal handler to be ran
+   by any of the existing threads. This means that
+   every thread-local data is initialized and that we
+   won't have any problem for the streams but we may
+   have if we use allocated structures like ENVBUF* */
 void Dos9_SigHandlerBreak(int sig)
 {
-    if (bIsScript == 0) {
-        longjmp(jbBreak, 1);
-    } else {
-        exit(1);
+    int choice, i;
+    char lpExePath[FILENAME_MAX];
+    ESTR* attr;
+
+    /* using bIsScript is safe because it is inherited on a
+       call to Dos9_CloneInstance() */
+    if (bIsScript) {
+
+        Dos9_AskConfirmation(DOS9_ASK_YN
+                                | DOS9_ASK_INVALID_REASK
+                                | DOS9_ASK_DEFAULT_N,
+                                lpBreakConfirm);
+
+        if (choice == DOS9_ASK_NO)
+            return 0;
+
     }
+
+    attr = Dos9_EsInit();
+
+    Dos9_GetExeFilename(lpExePath, sizeof(lpExePath));
+
+    Dos9_EsCat(attr, " /a:q");
+
+    if (!bEchoOn)
+        Dos9_EsCat(attr, "e");
+    if (bUseFloats)
+        Dos9_EsCat(attr, "f");
+    if (bDelayedExpansion)
+        Dos9_EsCat(attr, "v");
+    if (bCmdlyCorrect)
+        Dos9_EsCat(attr, "c");
+
+    execl(lpExePath, attr->str);
 }
 
 #elif defined WIN32
-#include "../command/Dos9_Ask.h"
 
-BOOL WINAPI Dos9_BreakIgn2(DWORD dwCtrlType)
-{
-    return TRUE;
-}
+/* This is getting increasingly complicated since the
+   multi-threaded version. Before, it was kind of simple
+   since we had the correspondence 1 interpreter = one process
+   and when a signal was raised a new thread was launched
+   on the same process.
 
+   This golden time is somehow now over since we have
+   several threads inside.
+
+   The biggest problem we have here, is the fact we might
+   start Dos9 from *scratch* due to the difficulty to
+   retrieve environment variables that are now stored
+   thread-local and the fact that Windows calls this
+   handler within a brand-new thread (with nothing
+   initialized of course...).
+
+   Beware not to refer to any of fInput, fOutput, and
+   whatever thread-local here. */
 BOOL WINAPI Dos9_SigHandler(DWORD dwCtrlType)
 {
     int choice, i;
@@ -926,12 +955,10 @@ BOOL WINAPI Dos9_SigHandler(DWORD dwCtrlType)
     STARTUPINFO si;
     PROCESS_INFORMATION pi;
 
-
-
 	switch(dwCtrlType) {
 		case CTRL_C_EVENT:
 		case CTRL_BREAK_EVENT:
-		    SetConsoleCtrlHandler(Dos9_BreakIgn2, TRUE);
+		    SetConsoleCtrlHandler(NULL, TRUE);
 
             /* Request a handle to the main thread and try to freeze it */
             thread = OpenThread(THREAD_ALL_ACCESS, FALSE, iMainThreadId);
@@ -946,78 +973,108 @@ BOOL WINAPI Dos9_SigHandler(DWORD dwCtrlType)
                 /* we are running a script, so give two options : either
                    continuing or killing Dos9 */
 
-                fputs(DOS9_NL, fError);
-                choice = Dos9_AskConfirmation(DOS9_ASK_YN
-                                              | DOS9_ASK_DEFAULT_N
-                                              | DOS9_ASK_INVALID_REASK,
-                    lpBreakConfirm);
-
-                if (choice == DOS9_ASK_YES)
-                    exit(-1);
-
-                ResumeThread(thread);
-                CloseHandle(thread);
-
-            } else {
-                /* Kill the main thread right now */
-                TerminateThread(thread, -1);
-                CloseHandle(thread);
-
-                /* Odds are that some dos9 internal structures may
-                   have been corrupted by the somehow brutal kill of the
-                   main process. As the user *is* likely running interactive
-                   command, (he is indeed to trigger CTRL-C), do not bother
-                   that much and simply restart a new Dos9 command prompt. This
-                   implies a little performance penalty, but ... */
+                fputs(DOS9_NL, stderr);
+                fprintf(stderr, "%s %s ", lpBreakConfirm, lpAskyN);
 
                 args = Dos9_EsInit();
 
-                Dos9_GetExeFilename(lpExePath, sizeof(lpExePath));
-                Dos9_EsCpy(args, "\"");
-                Dos9_EsCat(args, lpExePath);
-                Dos9_EsCat(args, "\"");
-                Dos9_EsCat(args, " /a:q");
+                choice = DOS9_ASK_NO;
 
-                if (!bEchoOn)
-                    Dos9_EsCat(args, "e");
-                if (bUseFloats)
-                    Dos9_EsCat(args, "f");
-                if (bDelayedExpansion)
-                    Dos9_EsCat(args, "v");
-                if (bCmdlyCorrect)
-                    Dos9_EsCat(args, "c");
+                while (Dos9_EsGet(args, stdin)) {
 
-                ZeroMemory( &si, sizeof(si) );
-                si.cb = sizeof(si);
-                ZeroMemory( &pi, sizeof(pi) );
+                    Dos9_RmTrailingNl(args->str);
 
-                /* By default, any file opened by Dos9 is set not to be
-                   inherited by any subprocess. As this policy a bit
-                   strict, just make the standard streams inheritable */
-                Dos9_SetStdInheritance(1);
+                    if (!stricmp(args->str, lpAskYes)
+                        || !stricmp(args->str, lpAskYesA)) {
 
-                /* Use create process rather than spawn in order to break
-                   inheritance of probably broken stuff like fds */
-                if( !CreateProcess( lpExePath,
-                                    args->str,
-                                    NULL,
-                                    NULL,
-                                    FALSE,
-                                    0,
-                                    NULL,
-                                    NULL,
-                                    &si,
-                                    &pi ))
-                    Dos9_ShowErrorMessage(DOS9_BREAK_ERROR, NULL, -1);
+                        choice = DOS9_ASK_YES;
+                        break;
 
-                CloseHandle(pi.hProcess);
-                CloseHandle(pi.hThread);
+                    } else if (!stricmp(args->str, lpAskNo)
+                               || !stricmp(args->str, lpAskNoA))
+                        break;
 
-                exit(0);
+                }
+
+                if (choice == DOS9_ASK_NO) {
+
+                    ResumeThread(thread);
+                    CloseHandle(thread);
+                    return TRUE;
+
+                }
+            }
+
+            /* Kill the main thread right now */
+            TerminateThread(thread, -1);
+            CloseHandle(thread);
+
+            /* Odds are that some dos9 internal structures may
+               have been corrupted by the somehow brutal kill of the
+               main process. As the user *is* likely running interactive
+               command, (he is indeed to trigger CTRL-C), do not bother
+               that much and simply restart a new Dos9 command prompt. This
+               implies a little performance penalty, but ... */
+
+            args = Dos9_EsInit();
+
+            Dos9_GetExeFilename(lpExePath, sizeof(lpExePath));
+            Dos9_EsCpy(args, "\"");
+            Dos9_EsCat(args, lpExePath);
+            Dos9_EsCat(args, "\"");
+            Dos9_EsCat(args, " /a:q");
+
+            if (!bEchoOn)
+                Dos9_EsCat(args, "e");
+            if (bUseFloats)
+                Dos9_EsCat(args, "f");
+            if (bDelayedExpansion)
+                Dos9_EsCat(args, "v");
+            if (bCmdlyCorrect)
+                Dos9_EsCat(args, "c");
+
+            ZeroMemory( &si, sizeof(si) );
+            si.cb = sizeof(si);
+            ZeroMemory( &pi, sizeof(pi) );
+
+            /* Use create process rather than spawn in order to break
+               inheritance of probably broken stuff like fds */
+            if( !CreateProcess( lpExePath,
+                                args->str,
+                                NULL,
+                                NULL,
+                                FALSE,
+                                0,
+                                NULL,
+                                NULL,
+                                &si,
+                                &pi )) {
+
+                /* The purpose of this is not to rewrite code again and again for
+                   unmaintainability's sake, but, not to refer to all this
+                   thread local defined stuff */
+
+                Dos9_SetConsoleTextColor(DOS9_BACKGROUND_DEFAULT | DOS9_FOREGROUND_IRED);
+
+                fprintf(stderr, lpErrorMsg[DOS9_BREAK_ERROR]);
+
+                Dos9_SetConsoleTextColor(DOS9_COLOR_DEFAULT);
+
+                fputs(DOS9_NL, stderr);
+                fprintf(stderr, lpQuitMessage);
+                Dos9_Getch();
+
+
+                exit(-1);
 
             }
 
-	}
+            CloseHandle(pi.hProcess);
+            CloseHandle(pi.hThread);
+
+            exit(0);
+
+    }
 
 	return TRUE;
 }

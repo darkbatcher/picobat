@@ -1844,3 +1844,8 @@ ${for %%a in (*.exe) do echo %%a}
 	- Fixed a bug of the {DEL} command. If the required file refers to a dir,
 	the same behaviour as the one used with {DIR} is used so that files inside
 	that dir get deleted.
+	
+{{Thursday 17th, May}}
+
+	- Fixed CTRC-C handling. Sadly the new multi-thread implementation makes it
+	impossible to grab any current directory or modified environment.

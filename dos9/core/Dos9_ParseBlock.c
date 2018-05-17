@@ -75,6 +75,11 @@ char* Dos9_GetBlockLineEndEx(char* pch, int par_end)
            terminal character (here it is just \n to be able to
            check line integrity at reading) */
 
+
+        /* The Dos9_SearchToken_Hybrid() is a bit special as it is a
+           mix of Dos9_SearchToken() for the first parameter and of
+           Dos9_SearchToken_OutQuotes() for the second parameter */
+
         if ((next = Dos9_SearchToken_Hybrid(pch, "\n",
                                            par_end ? ")&|" : "&|")) == NULL) {
             /* apparently, neither of theses, so the lines terminates

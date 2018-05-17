@@ -105,8 +105,7 @@ int Dos9_AskConfirmation(int iFlags, const char* lpMsg, ...)
 
 		Dos9_EsGet(lpInput, fInput);
 
-		if ((lpLf=strchr(Dos9_EsToChar(lpInput), '\n')))
-			*lpLf='\0';
+		Dos9_RmTrailingNl(Dos9_EsToChar(lpInput));
 
 		if (!stricmp(Dos9_EsToChar(lpInput), lpAskYes)
 		    || !stricmp(Dos9_EsToChar(lpInput), lpAskYesA)) {

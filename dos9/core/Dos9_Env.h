@@ -36,6 +36,7 @@ typedef struct ENVVAR {
 typedef struct ENVBUF {
     int nb; /* number of elements of the environment buffer */
     int index; /* number of used elements in the buffer */
+    int editing;
     ENVVAR** envbuf; /* environment buffer */
 } ENVBUF;
 
@@ -60,4 +61,5 @@ void Dos9_ApplyEnv(ENVBUF* pEnv);
 void Dos9_UnApplyEnv(ENVBUF* pEnv);
 
 void Dos9_EnvFree(ENVBUF* pEnv);
+
 #endif

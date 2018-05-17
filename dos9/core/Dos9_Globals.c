@@ -79,5 +79,3 @@ __thread char lpCurrentDir[FILENAME_MAX];
 #else
 extern char** environ;
 #endif
-
-__thread jmp_buf jbBreak;

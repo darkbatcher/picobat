@@ -81,23 +81,6 @@ int main(int argc, char *argv[])
 
     ESTR* lpesCmd;
 
-
-#if !defined(WIN32)
-    /* Change buffuring method on *NIXes
-       to fix output buffuring issues.
-    */
-    setvbuf(stdout, NULL, _IONBF, 0);
-#else
-
-    /* Ignore CRTL-C signals as long as the interpretor is not fully
-       loaded */
-    SetConsoleCtrlHandler(Dos9_BreakIgn, TRUE);
-
-    /* Retrieve the main thread id */
-    iMainThreadId = GetCurrentThreadId();
-
-#endif
-
 #if defined(WIN32) && defined(DOS9_USE_LIBCU8)
 
     if (libcu8_init(&argv) == -1) {
@@ -106,6 +89,28 @@ int main(int argc, char *argv[])
         return -1;
 
     }
+#endif
+
+#if !defined(WIN32)
+
+    /* Sets the default signal handler */
+
+    struct sigaction action;
+    memset(&action, 0, sizeof(action));
+    action.sa_handler=Dos9_SigHandlerBreak;
+    action.sa_flags=SA_NODEFER;
+    sigaction(SIGINT, &action, NULL);
+
+#else
+
+    /* Retrieve the main thread id */
+    iMainThreadId = GetCurrentThreadId();
+
+    /* Stop ignoring CTRL-C Event */
+    SetConsoleCtrlHandler(NULL, FALSE);
+
+    /* Set default signal handler */
+    SetConsoleCtrlHandler(Dos9_SigHandler, TRUE);
 #endif
 
     /* Ignore the SIGFPS signal */

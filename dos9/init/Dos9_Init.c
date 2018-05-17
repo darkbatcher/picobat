@@ -115,9 +115,6 @@ void Dos9_DuplicateStdStreams(void)
        actually refer to a tty (no reason not to buffer files that
        are not reffering to tty) */
 
-    /* if (isatty(newInput))
-        setvbuf(fInput, NULL, _IONBF, 0); */
-
     if (isatty(newOutput))
         setvbuf(fOutput, NULL, _IONBF, 0);
 
