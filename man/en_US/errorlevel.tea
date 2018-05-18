@@ -16,23 +16,33 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-{{%ERRORLEVEL% variable}}
+{{%ERRORLEVEL%, %=EXITCODEASCII% variables}}
 
-	{%ERRORLEVEL%} is an environment variable definie automatically by {dos9|Dos9}
-	at end of command runing. It enables checking if the previous command failed.
-	With most commands, if {%ERRORLEVEL%} is equal to 0, then no error as occured.
+	{%ERRORLEVEL%} is an environment variable defined automatically by {dos9|Dos9}
+	at end of command execution. It enables checking if the previous command failed.
+	With most commands, if {%ERRORLEVEL%} is equal to 0, then no error occurred.
 
 {{Synopsis}}
 
-${	%ERRORLEVEL%}
+${%ERRORLEVEL%}
 
-	The value of {%ERRORLEVEL%} makes no sense because any command is able to set its
-	own {%ERRORLEVEL%} return values. Thus you should just consider if %ERRORLEVEL% is
-	null to determine if errors have occured.
+	A variable containing the exit code of the last command, either {internal} or
+	{external} command. In general, a return value of {0} indicates the command
+	ran successfully and any other value indicates an error, though this is not
+	always the case.
+	
+	The %ERRORLEVEL% variable should not be modified using the {set|SET} command
+	because these changes will be overridden by the {SET} command exit code.
 
-	In a general way, signification of error codes in {%ERRORLEVEL%} is not
-	important as long as most commands print an error message on failure.
+${%=EXITCODEASCII%}
+	
+	A variable containing the character associated to exit code according to
+	the {ASCII} codeset. If {dos9|Dos9} has been build with UTF-8 support,
+	then {%=EXITCODEASCII%} will contain the character associated according
+	to UTF-8, taking account of all the bits of the exit code in {%ERRORLEVEL%}.
+	If not, {dos9|Dos9} will only use the least significant 8 bits of the
+	exit code.
 
 {{See also}}
 
-	{spec/var|Variables}, {home|home}
+	{spec/var|Variables}, {commands|Commands list}

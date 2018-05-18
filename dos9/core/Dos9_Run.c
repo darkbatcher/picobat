@@ -27,6 +27,7 @@
 #include <assert.h>
 #include <setjmp.h>
 #include <signal.h>
+#include <limits.h>
 #include <sys/types.h>
 
 #ifndef WIN32
@@ -328,8 +329,12 @@ int Dos9_RunLine(ESTR* lpLine)
 int Dos9_RunCommand(ESTR* lpCommand)
 {
 
+#define XSTR(x) #x
+#define STR(x) STR_HELPER(x)
+
+
 	int (*lpProc)(char*);
-	char lpErrorlevel[sizeof("-3000000000")],
+	char lpErrorlevel[sizeof(STR(INT_MAX))],
          lpTmpLine[]="CD X:";
 	static int lastErrorLevel=0;
 	char *lpCmdLine, *tmp;
@@ -407,6 +412,16 @@ RestartSearch:
 
 		snprintf(lpErrorlevel, sizeof(lpErrorlevel), "%d", iErrorLevel);
 		Dos9_SetEnv(lpeEnv, "ERRORLEVEL", lpErrorlevel);
+
+		/* define exitcodeascii */
+#if defined(DOS9_USE_LIBCU8)
+        snprintf(lpErrorlevel, sizeof(iErrorLevel)+1, "%s", &iErrorLevel);
+#else
+        snprintf(lpErrorlevel, 2, "%s", &iErrorLevel);
+#endif /* DOS9_USE_LIBCU8 */
+
+        Dos9_SetEnv(lpeEnv, "=EXITCODEASCII", lpErrorlevel);
+
 		lastErrorLevel=iErrorLevel;
 	}
 

@@ -43,6 +43,16 @@
 
 #include "../errors/Dos9_Errors.h"
 
+/* exit [/b] [code]
+
+    Exit the interpretor.
+
+        - /b : Exit only the current execution level (subroutine)
+
+        - code : A code to be returned upon exit
+
+ */
+
 int Dos9_CmdExit(char* lpLine)
 {
     ESTR* param=Dos9_EsInit();
@@ -59,7 +69,7 @@ int Dos9_CmdExit(char* lpLine)
 
 		} else if (!stricmp(param->str, "/b")) {
 
-            /* /b allow resuming to upper executiong level, with or without
+            /* /b allow resuming to upper execution level, with or without
                specifying a return value in ERRORLEVEL */
 
             if ((ntoken = Dos9_GetNextParameterEs(ntoken, param))) {
@@ -89,6 +99,7 @@ int Dos9_CmdExit(char* lpLine)
 
     Dos9_Exit();
 
+    /* End thread or  the program */
 	if (bIgnoreExit)
         Dos9_EndThread(ret);
     else
