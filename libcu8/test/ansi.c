@@ -45,31 +45,31 @@ int main(void)
     /* init the libcu8 library */
     if (libcu8_init(NULL)) {
         log_msg("libcu8_init() failed");
-        return -1;
+        return 1;
     }
 
     libcu8_get_fencoding(enc, sizeof(enc));
 
     if (strcmp(enc, "UTF-8")) {
         log_msg("libcu8_get_fencoding() returned wrong charset");
-        return -1;
+        return 1;
     }
 
     if (libcu8_set_fencoding("CP850")) {
         log_msg("libcu8_set_fencoding() failed");
-        return -1;
+        return 1;
     }
 
     libcu8_get_fencoding(enc, sizeof(enc));
 
     if (strcmp(enc, "CP850")) {
         log_msg("libcu8_set_fencoding() failed to set encoding");
-        return -1;
+        return 1;
     }
 
     if (!libcu8_set_fencoding("caca")) {
         log_msg("libcu8_set_fencoding() set invalid encoding");
-        return -1;
+        return 1;
     }
 
     return 0;

@@ -50,24 +50,24 @@ int main(void)
 
     if (libcu8_init(NULL)) {
         log_msg("libcu8_init() failed");
-        return -1;
+        return 1;
     }
 
     if ((fd = open(CHECK_U8_FILE, O_RDONLY)) == -1) {
         log_msg("Unable to open() check_u8 file");
-        return -1;
+        return 1;
     }
 
     rd = read(fd, buf, sizeof(buf));
 
     if (rd != sizeof(check_u8)-1) {
         log_msg("read() did not read enough bytes");
-        return -1;
+        return 1;
     }
 
     if (memcmp(buf, check_u8, rd)) {
         log_msg("read() returned wrong content");
-        return -1;
+        return 1;
     }
 
     close (fd);

@@ -31,11 +31,6 @@ SRC_FILES = src/init.c src/inject.c src/encoding.c src/read.c src/write.c \
 
 OBJ_FILES = $(SRC_FILES:.c=.o)
 
-TEST_FINDFIRST = _findfirst _findfirst32 _findfirst64 _findfirst32i64 \
-				_findfirst64i32
-
-TEST_STAT = 
-
 all: libcu8.a
 
 clean:
@@ -52,8 +47,8 @@ libcu8.a: $(OBJ_FILES)
 bin:
 
 # stuff to check
-PROGRAMS = xdg-open
-LIBS =
+PROGRAMS =
+LIBS = iconv
 FUNCTIONS = _findfirst _findfirst32 _findfirst64 _findfirst32i64 \
 			_findfirst64i32 _stat _stat32 _stat64 _stat64i32 \
 			_stat32i64
@@ -64,4 +59,4 @@ ADDITIONALVARS =
 
 include ../femto.mk
 
-.PHONY: all bin clean $(SUBDIRS) $(SUBDIRS_CLEAN) po-merge 
+.PHONY: all bin clean $(SUBDIRS) $(SUBDIRS_CLEAN) po-merge test

@@ -68,27 +68,24 @@ int main(void)
 
     int i;
 
-    /* we don't need init the libcu8 library */
-    //libcu8_init();
-
     /* Try to convert u8_lorem to utf16 */
     trans = (wchar_t*) libcu8_xconvert(LIBCU8_TO_U16, u8_lorem,
                                             sizeof(u8_lorem), &retsize);
 
     if (trans == NULL) {
         log_msg("libcu8_xconvert() returned null pointer");
-        return -1;
+        return 1;
     }
 
     if (retsize != sizeof(u16_lorem)) {
         log_msg("libcu8_xconvert() returned wrong size");
-        return 0;
+        return 1;
     }
 
 
     if(memcmp(trans, u16_lorem, retsize)) {
         log_msg("libcu8_convert() returned wrong translation");
-        return -1;
+        return 1;
     }
 
     free(trans);

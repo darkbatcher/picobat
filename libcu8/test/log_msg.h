@@ -34,4 +34,6 @@
 #define log_msg(msg) __log_msg(msg, sizeof(msg)-1)
 void __log_msg(const char* msg, size_t size);
 
+#include "log_msg.c"
+
 #endif /* TEST_LOG_MSG_H */

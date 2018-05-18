@@ -24,31 +24,44 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-noinst_PROGRAMS = convert ansi read read850 readconsole
+ifneq (,$(wildcard ../femto-config.mk))
+    include ../femto-config.mk
+endif
 
-ansi_SOURCES = ansi.c log_msg.c
+ifdef lib_iconv
+	LDFLAGS += -liconv
+endif
+
+noinst_SOURCES = convert.c ansi.c invalid.c read.c read850.c readconsole.c 
+noinst_PROGRAMS = $(noinst_SOURCES:.c=)
+
+ansi_SOURCES = ansi.c
 ansi_LDADD = -L.. -lcu8
 ansi_CFLAGS = -I../include
 
-convert_SOURCES = convert.c log_msg.c
+convert_SOURCES = convert.c
 convert_LDADD = -L.. -lcu8
 convert_CFLAGS = -I../include
 
-read_SOURCES = read.c log_msg.c
-read_LDADD =  -L.. -lcu8
+read_SOURCES = read.c
+read_LDADD =  -L.. -lcu8 
 read_CFLAGS = -I../include
 
-read850_SOURCES = read850.c log_msg.c
+read850_SOURCES = read850.c 
 read850_LDADD =  -L.. -lcu8
 read850_CFLAGS = -I../include
 
-readconsole_SOURCES = readconsole.c log_msg.c
+readconsole_SOURCES = readconsole.c
 readconsole_LDADD = -L.. -lcu8
 readconsole_CFLAGS = -I../include
 
+invalid_SOURCES = invalid.c
+invalid_LDADD = -L.. -lcu8
+invalid_CFLAGS = -I../include
+
 all: $(noinst_PROGRAMS)
 
-$(noinst_PROGRAMS): 
+$(noinst_PROGRAMS): $(noinst_SOURCES) ../libcu8.a
 	$(CC) -o $@$(EXEC_SUFFIX) $($@_SOURCES) $($@_CFLAGS) $($@_LDADD) $(CFLAGS) $(LDFLAGS) 
 	
 clean:
@@ -58,14 +71,14 @@ clean:
 # Run the tests
 run-tests: all
 	@for i in $(noinst_PROGRAMS); do \
-		echo $(ECHO_N) "Running test ./$$i... " $(ECHO_C); \
+		echo -n "Running test ./$$i... " ; \
 		./$$i ; \
 		case $$? in \
-			0) echo $(ECHO_T) "Ok";; \
-			*) echo $(ECHO_T) "Failed"; \
+			0) echo  "Ok";; \
+			*) echo "Failed"; \
 			echo ERROR: `[ -f log_msg ] && cat log_msg`; \
 			exit -1;; \
 		esac;\
 	done; 2>&1
 
-.PHONY: run-tests all $(noinst_PROGRAMS) clean
+.PHONY: run-tests all clean

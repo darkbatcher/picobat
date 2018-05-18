@@ -74,7 +74,6 @@ __LIBCU8__IMP __cdecl int libcu8_set_fencoding(const char* enc)
 
     iconv_close(test);
 
-    libcu8_dummy = !strcmp(enc, "UTF-8");
     snprintf(libcu8_fencoding, sizeof(libcu8_fencoding), "%s", enc);
 
     LeaveCriticalSection(&libcu8_fencoding_lock);
@@ -131,7 +130,6 @@ int libcu8_cat_chunk(char** buf, size_t* size, size_t* pos,
     /* alloc the new buffer */
     if ((tmp = realloc(*buf, newsize)) == NULL) {
 
-        //fprintf(stderr, "Failed to reallocate buffer [%d]", newsize);
         return -1;
     }
 
@@ -161,21 +159,8 @@ __LIBCU8__IMP __cdecl char* libcu8_xconvert(int mode, const char* src,
             retsize = 0,
             retpos = 0,
             count = 0;
+    int loop = 1;
 
-    if (libcu8_dummy
-        && (mode == LIBCU8_TO_ANSI || mode == LIBCU8_FROM_ANSI)) {
-
-        /* use dummy version (ie. ANSI is _exactly_ UTF-8) */
-       if ((ret = malloc(size)) == NULL)
-            return NULL;
-
-       memcpy(ret, src, size);
-       *converted = size;
-
-       return ret;
-    }
-
-    //fprintf(stderr, "Getting context\n");
     context = libcu8_mode2context(mode);
 
     if (context == (iconv_t) -1)
@@ -184,13 +169,9 @@ __LIBCU8__IMP __cdecl char* libcu8_xconvert(int mode, const char* src,
     /* reset iconv context */
     iconv(context, NULL, NULL, &chunk, &chunk_size);
 
-    //fwprintf(stderr, L"Converting \"%s\" (%d)\n", src, size);
-
-    while (1) {
+    while (loop) {
 
         count = iconv(context, &src, &size, &chunk, &chunk_size);
-
-        //fprintf(stderr, "Count : %d\tSize = %d\n", count, size);
 
         if (count == (size_t) -1) {
 
@@ -198,9 +179,9 @@ __LIBCU8__IMP __cdecl char* libcu8_xconvert(int mode, const char* src,
 
                 case E2BIG:
                     /* chunck is full, copy it to ret */
-                    //fprintf(stderr, "[E2BIG]Catting chunck !\n");
+
                     if (libcu8_cat_chunk(&ret, &retsize, &retpos,
-                                           chunk_buf, chunk_size)) {
+                               chunk_buf, chunk_size)) {
 
                         iconv_close(context);
                         if (ret)
@@ -208,21 +189,26 @@ __LIBCU8__IMP __cdecl char* libcu8_xconvert(int mode, const char* src,
                         return NULL;
 
                     }
+
+
                     chunk_size = CHUNK_SIZE;
                     chunk = chunk_buf;
+
                     break;
 
                 case EILSEQ:
-                    //fprintf(stderr, "EILSEQ triggered\n");
+                    /* We encountered invalid byte sequence in
+                       the input. Well, ignore the character */
+
+                    /* We can do this as we are not at the end of the string */
+                    size --;
+                    src ++;
+                    break;
+
                 case EINVAL:
-                    /* We encountered invalid or incomplete byte sequence in
-                       the input. As we have no way to get more input, give
-                       up with conversion. */
-                    //fprintf(stderr, "Bad character found  [%d]\n", CHUNK_SIZE - chunk_size);
-                    if (ret)
-                        free(ret);
-                    iconv_close(context);
-                    return NULL;
+                    /* We encountered incomplete byte sequence at the end of
+                       input. Just end the conversion */
+                    loop = 0;
 
             }
 
@@ -234,7 +220,7 @@ __LIBCU8__IMP __cdecl char* libcu8_xconvert(int mode, const char* src,
         }
     }
 
-    //fprintf(stderr, "[END]Catting chunck !\n");
+    /* add the last chunk */
     if (libcu8_cat_chunk(&ret, &retsize, &retpos, chunk_buf, chunk_size)) {
 
         iconv_close(context);
@@ -284,19 +270,6 @@ __LIBCU8__IMP __cdecl char* libcu8_convert(int mode, const char* src,
         *rcount = 0;
 
         src = tmp;
-    }
-
-    if (libcu8_dummy
-        && (mode == LIBCU8_TO_ANSI || mode == LIBCU8_FROM_ANSI)) {
-
-        /* use dummy version (ie. ANSI is _exactly_ UTF-8) */
-       if ((ret = malloc(size)) == NULL)
-            return NULL;
-
-       memcpy(ret, src, size);
-       *converted = size;
-
-       return ret;
     }
 
     context = libcu8_mode2context(mode);
@@ -352,14 +325,14 @@ __LIBCU8__IMP __cdecl char* libcu8_convert(int mode, const char* src,
                     goto next;
 
                 case EILSEQ:
-                    /* Encountered invalid character sequence,
-                       give up with conversion */
-                    if (ret)
-                        free(ret);
-                    if (tmp)
-                            free(tmp);
-                    iconv_close(context);
-                    return NULL;
+                    /* We encountered invalid byte sequence in
+                       the input. Well, ignore the character */
+
+                    /* We can do this as we are not at the end of the string */
+                    size --;
+                    src ++;
+                    break;
+
 
             }
 

@@ -49,26 +49,26 @@ int main(void)
 
     if (libcu8_init(NULL)) {
         log_msg("libcu8_init() failed");
-        return -1;
+        return 1;
     }
 
     libcu8_set_fencoding("CP850");
 
     if ((fd = open(CHECK_850_FILE, O_RDONLY | O_TEXT)) == -1) {
-        log_msg("Unable to open() check_u8 file");
-        return -1;
+        log_msg("Unable to open() check_850 file");
+        return 1;
     }
 
     rd = read(fd, buf, sizeof(buf));
 
     if (rd != sizeof(check_u8)-1) {
         log_msg("read() did not read enough bytes");
-        return -1;
+        return 1;
     }
 
     if (memcmp(buf, check_u8, rd)) {
         log_msg("read() returned wrong content");
-        return -1;
+        return 1;
     }
 
     close (fd);

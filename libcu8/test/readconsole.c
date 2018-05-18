@@ -74,7 +74,7 @@ int main(void)
 
     if (libcu8_init(NULL)) {
         log_msg("libcu8_init() failed");
-        return -1;
+        return 1;
     }
 
 
@@ -92,10 +92,10 @@ int main(void)
 
     if (size != sizeof(input_u8)-1) {
         log_msg("read() returned wrong size.\n");
-        return -1;
+        return 1;
     } else if (strncmp(buf, input_u8, size)) {
         log_msg("read() returned invalid translation\n");
-        return -1;
+        return 1;
     }
 
     return 0;
