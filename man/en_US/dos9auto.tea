@@ -26,7 +26,7 @@
 
 ${%DOS9_PATH%/Dos9_Auto.bat}
 
-	This file is not ment to be edited directly, since it calls
+	This file is not meant to be edited directly, since it calls
 	user defined scripts. It can be nonetheless useful to modify it
 	to fit some special requirements. If you modify it, be careful
 	not to do anything wrong with it as it can eventually affect the
@@ -43,6 +43,17 @@ ${%DOS9_PATH%/Dos9_Auto.bat}
 
 	In both of these script, any {commands|Dos9 command} can be used
 	safely.
+	
+	Note that since the first multi-threaded release {218.1}, the 
+	execution of {Dos9_Auto.bat} has changed a lot. The script gets
+	executed upon either:
+	
+	- {Dos9} start-up, that is when a new interpreter is launched
+	without parents.
+	
+	- or {Dos9} is {explicitly} called from a script or from the 
+	prompt. This means {Dos9_Auto.bat} does not get executed any more
+	upon {spec/condop|pipe} call or {for|FOR} command. 
 	
 {{Compatibility}}
 
