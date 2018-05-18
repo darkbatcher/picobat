@@ -926,7 +926,7 @@ void Dos9_SigHandlerBreak(int sig)
 }
 
 #elif defined WIN32
-
+#include "../command/Dos9_Ask.h"
 /* This is getting increasingly complicated since the
    multi-threaded version. Before, it was kind of simple
    since we had the correspondence 1 interpreter = one process

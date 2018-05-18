@@ -1985,3 +1985,8 @@ TUESDAY 15TH, MAY
         the same behaviour as the one used with DIR is used so that files 
         inside that dir get deleted.
 
+THURSDAY 17TH, MAY
+
+      - Fixed CTRC-C handling. Sadly the new multi-thread implementation makes 
+        it impossible to grab any current directory or modified environment.
+
