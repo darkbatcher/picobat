@@ -97,8 +97,7 @@ void Dos9_CloneTrampoline(void* data)
 
     Dos9_Exit();
 
-    /* TODO: sizeof(int) != sizeof(void *) */
-    Dos9_EndThread(iErrorLevel);
+    Dos9_EndThread((void*)iErrorLevel);
 }
 
 /* Duplicate Dos9 internal structures */
