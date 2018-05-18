@@ -654,7 +654,8 @@ int Dos9_RunExternalFile(char* lpFileName, char* lpFullLine, char** lpArguments)
 
     wchar_t *wfullline,
             *wfilename,
-            *wcurrdir;
+            *wcurrdir,
+            wenvblock;
 
     envblock = Dos9_GetEnvBlock(lpeEnv, &size);
 
@@ -663,7 +664,8 @@ int Dos9_RunExternalFile(char* lpFileName, char* lpFullLine, char** lpArguments)
         || !(wfilename = libcu8_xconvert(LIBCU8_TO_U16, lpFileName,
                                             strlen(lpFileName) + 1, &ret))
         || !(wcurrdir = libcu8_xconvert(LIBCU8_TO_U16, lpCurrentDir,
-                                            strlen(lpCurrentDir) + 1, &ret)))
+                                            strlen(lpCurrentDir) + 1, &ret))
+        || !(wenvblock = libcu8_xconvert(LIBCU8_TO_U16, envblock, size, &ret)))
         Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION | DOS9_PRINT_C_ERROR,
                                 __FILE__ "/Dos9_RunExternalFile()", -1);
 
@@ -686,8 +688,8 @@ int Dos9_RunExternalFile(char* lpFileName, char* lpFullLine, char** lpArguments)
                         NULL,
                         NULL,
                         TRUE,
-                        0,
-                        envblock,
+                        CREATE_UNICODE_ENVIRONMENT,
+                        wenvblock,
                         wcurrdir,
                         &si,
                         &pi))
@@ -709,6 +711,7 @@ int Dos9_RunExternalFile(char* lpFileName, char* lpFullLine, char** lpArguments)
     free(wfullline);
     free(wfilename);
     free(wcurrdir);
+    free(envblock);
 
     return status;
 }

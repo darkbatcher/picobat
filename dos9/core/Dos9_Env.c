@@ -137,7 +137,6 @@ ENVBUF* Dos9_InitEnv(char** env)
     ENVBUF* pEnv;
     ENVVAR** pBuf;
     char   *pStr,
-           /* *pEqual, */
            *pCh;
 
     /* count the elements in the env array */
@@ -189,7 +188,7 @@ error:
     pEnv->index = nb;
 
     /* sort the array, this is little time wasting, but it is far
-       simplier to retrieve variables */
+       simpler to retrieve variables */
 
     qsort(pEnv->envbuf, nb, sizeof(ENVVAR*), Dos9_EnvCompName);
 
