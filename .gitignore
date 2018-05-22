@@ -1,0 +1,10 @@
+*.o
+*.a
+*.exe
+bin/
+./config.h
+./config.c
+libcu8/config.h
+libcu8/config.c
+libcu8/test/log_msg
+femto-config.mk
