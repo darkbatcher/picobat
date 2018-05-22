@@ -738,14 +738,14 @@ int Dos9_CmdSetEvalInt(ESTR* lpExpression)
 
 	Dos9_SetEnv(lpeEnv, Dos9_EsToChar(lpExpression), lpResult);
 
-    if (Dos9_ReleaseMutex(&mSetFLock))
+    if (Dos9_ReleaseMutex(&mSetILock))
             Dos9_ShowErrorMessage(DOS9_RELEASE_MUTEX_ERROR,
                                   __FILE__ "/Dos9_CmdSetEvalInt()" , -1);
 
 	return 0;
 
 error:
-    if (Dos9_ReleaseMutex(&mSetFLock))
+    if (Dos9_ReleaseMutex(&mSetILock))
             Dos9_ShowErrorMessage(DOS9_RELEASE_MUTEX_ERROR,
                                   __FILE__ "/Dos9_CmdSetEvalInt()" , -1);
 	return -1;
