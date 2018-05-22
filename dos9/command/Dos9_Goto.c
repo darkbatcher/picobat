@@ -111,10 +111,11 @@ int Dos9_CmdGoto(char* lpLine)
 
     }
 
-    if ((Dos9_JumpToLabel(lpLabelName, *lpFileName ? lpFileName : NULL) == -1)
-        && !quiet) {
+    if ((Dos9_JumpToLabel(lpLabelName, *lpFileName ? lpFileName : NULL) == -1)) {
 
-        Dos9_ShowErrorMessage(DOS9_LABEL_ERROR, lpLabelName, 0);
+        if (! quiet)
+            Dos9_ShowErrorMessage(DOS9_LABEL_ERROR, lpLabelName, 0);
+
         goto err;
 
     }
@@ -123,7 +124,7 @@ int Dos9_CmdGoto(char* lpLine)
 
 next:
     Dos9_EsFree(arg);
-    return 0;
+    return iErrorLevel; /* leave errorlevel unaffected */
 
 err:
     Dos9_EsFree(arg);

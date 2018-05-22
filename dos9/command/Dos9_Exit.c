@@ -51,13 +51,15 @@
 
         - code : A code to be returned upon exit
 
+    if code is not specified, leave ERRORLEVEL unaffected.
+
  */
 
 int Dos9_CmdExit(char* lpLine)
 {
     ESTR* param=Dos9_EsInit();
     char* ntoken;
-    int ret=0;
+    int ret=iErrorLevel;
 
 	if ((ntoken=Dos9_GetNextParameterEs(lpLine+4, param))) {
 
@@ -82,13 +84,13 @@ int Dos9_CmdExit(char* lpLine)
 
                 }
 
-                Dos9_SetEnv(lpeEnv, "ERRORLEVEL", param->str);
+                ret = atoi(param->str);
 
             }
 
             Dos9_EsFree(param);
             bAbortCommand = -1;
-            return 0;
+            return ret;
 
 		} else {
 
@@ -97,13 +99,13 @@ int Dos9_CmdExit(char* lpLine)
 		}
 	}
 
-    Dos9_Exit();
-
     /* End thread or  the program */
 	if (bIgnoreExit)
-        Dos9_EndThread(ret);
-    else
+        Dos9_EndThread((void*)ret);
+    else {
+        Dos9_Exit();
         exit(ret);
+    }
 
 	return 0;
 }

@@ -27,7 +27,7 @@
 
 {{Synopsis}}
 
-${	GOTO [:]label [file] [/Q]}
+${GOTO [:]label [file] [/Q]}
 
 	Jump to a label.
 
@@ -40,13 +40,18 @@ ${	GOTO [:]label [file] [/Q]}
 		option requires the {spec/ext|dos9 extensions} to be enabled.
 
 		- {/Q} : Silently ignore warning if the given {label} is not found on the given
-		{file} and continue script execution at next line. However, it sets {errorlevel|%ERRORLEVEL%},
-		to {0} if jump is actually perform or {-1} if it does not. This switch enables
+		{file} and continue script execution at next line. This switch enables
 		creating a kind of {switch/case} statement.
 
 	If the {GOTO} command is called within a command bloc (such as within a {for|FOR
 	loop} or within a {if|IF}), then block execution is aborted and execution
 	restart at given label.
+	
+	The command {GOTO} does not affect {errorlevel|%ERRORLEVEL%} variable. If a jump
+	failed, the execution continues after the command.
+	
+	If {:label} is {:eof} then the {GOTO} command returns from the current subroutine
+	to the previous execution level.
 
 {{Constructing a switch/case statement}}
 
