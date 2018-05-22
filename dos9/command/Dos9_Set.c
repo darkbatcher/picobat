@@ -571,7 +571,7 @@ int Dos9_CmdSetEvalFloat(ESTR* lpExpression)
 
 	Dos9_SetEnv(lpeEnv, Dos9_EsToChar(lpExpression), lpResult);
 
-    if (!Dos9_ReleaseMutex(&mSetFLock))
+    if (Dos9_ReleaseMutex(&mSetFLock))
         Dos9_ShowErrorMessage(DOS9_RELEASE_MUTEX_ERROR,
                               __FILE__ "/Dos9_CmdSetEvalFloat()" , -1);
 
