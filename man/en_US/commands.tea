@@ -32,16 +32,6 @@
 
 {{User-interface command}}
 
-#	- {agraf|AGraf}  {[ext]} : Enable to make {GUI} rather than using the traditionnnal
-#	console interface. This command is no more develloped and is only provided for
-#	legacy support under windows.
-
-#	- {batbox|BatBox} {[ext]} : Allow to use console in a {graphical} way and extend basic
-#	user interraction through mouse, keys etc.
-
-#	- {bg|BG}     {[ext]} : Allow to use console in a {graphical} way. Slightly equivalent
-#	to {batbox|BatBox}.
-
 	- {color|COLOR}  {[int]} : Change the console screen color.
 
 	- {cls|CLS}    {[int]} : Clear the console screen.
@@ -49,8 +39,6 @@
 	- {echo|ECHO}   {[int]} : Display text in the console.
 
 	- {pause|PAUSE}  {[int]} : Make a pause in a batch script
-
-
 
 	- {title|TITLE}  {[int]} : Change console title.
 
@@ -75,7 +63,9 @@
 	
 	- {start|START} {[int]} : Run a command.
 
-	- {setlocal|SETLOCAL} {[int]} : Changes {dos9|Dos9} mode.
+	- {setlocal|SETLOCAL} {[int]} : Creates local environment and changes {dos9|Dos9} mode.
+	
+	- {endlocal|ENDLOCAL} {[int]} : Reverts changes to local environment after {setlocal|SETLOCAL} call.
 	
 	- {rem|REM}		 {[int]} : Introduce a comment.
 

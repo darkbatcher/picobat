@@ -18,14 +18,19 @@
 
 {{SETLOCAL command}}
 
-	The {SETLOCAL} command allows changing {dos9|Dos9} interpretors
-	settings at runtime.
+	The {SETLOCAL} command allows setting local environment and changing
+	{dos9|Dos9} interpretors settings at runtime.
+	
+	To revert modifications to environment after a {SETLOCAL} command, use
+	the {endlocal|ENDLOCAL} command.
 
 {{Synopsis}}
 
-${	SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] [ENABLEFLOATS | DISABLEFLOATS] [CMDLYCORRECT | CMDLYINCORRECT]}
+${SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] [ENABLEFLOATS | DISABLEFLOATS] [CMDLYCORRECT | CMDLYINCORRECT]}
 
-	Enable or disable following modes :
+	Create a local environment so that changes to variables after the {SETLOCAL}
+	command be discarded using the {ENDLOCAL} command. The option that can be
+	specified allow enabling or disabling following modes :
 
 	- {ENABLEDELAYEDEXPANSION}, {DISABLEDELAYEDEXPANSION} :
 	Enable or disable {spec/exp|delayed expansion}.
@@ -36,12 +41,16 @@ ${	SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] [ENABLEFLOATS | D
 	- {CMDLYCORRECT}, {CMDLYINCORRECT} : Enable or disable more
 	compatibility with {cmd.exe}.
 
+	When calling {SETLOCAL}, the {errorlevel|%ERRORLEVEL%} variable
+	is left unmodified, except if an error occurs, then {%ERRORLEVEL%}
+	will be set to {-1}.
+	
 {{Compatibility}}
 
-	Fully compatible with {cmd.exe}. {ENABLEEXTENSION} and
+	Fully compatible with {cmd.exe} since {218.2}. {ENABLEEXTENSION} and
 	{DISABLEEXTENSIONS} are ignored by {dos9|Dos9}, every extensions are
 	enabled.
 
 {{See also}}
 
-	{set|Commande SET}, {commands|Liste des commandes}
+	{endlocal|ENDLOCAL command}, {set|SET Command}, {commands|Commands list}

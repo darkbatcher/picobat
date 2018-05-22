@@ -172,8 +172,12 @@ void Dos9_LoadInternalHelp(void)
 	             "       SET /p variable=question\n");
 
 	lpInternalHelp[DOS9_HELP_SETLOCAL]
-	    =gettext("Set options of the Dos9 command prompt.\n"
+	    =gettext("Set local environment and options of the Dos9 command prompt.\n"
 	             "Usage: SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] [ENABLEFLOATS | DISABLEFLOATS] [CMDLYCORRECT | CMDLYINCORRECT]\n");
+
+	lpInternalHelp[DOS9_HELP_ENDLOCAL]
+        =gettext("Reverts changes to environments and options made after a call to SETLOCAL.\n"
+                 "Usage: ENDLOCAL\n");
 
 	lpInternalHelp[DOS9_HELP_TITLE]
 	    =gettext("Set console's title.\n"
@@ -185,7 +189,7 @@ void Dos9_LoadInternalHelp(void)
 
 	lpInternalHelp[DOS9_HELP_EXIT]
 	    =gettext("Exit from the command prompt.\n"
-	             "Usage: EXIT [/b code]\n");
+	             "Usage: EXIT [/b] [code]\n");
 
 	lpInternalHelp[DOS9_HELP_SHIFT]
 	    =gettext("Change positions of command-line parameters.\n"

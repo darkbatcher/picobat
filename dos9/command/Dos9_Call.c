@@ -226,6 +226,7 @@ error:
 int Dos9_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 {
 	INPUT_FILE ifOldFile;
+	ENVSTACK* lpesOld;
 	LOCAL_VAR_BLOCK* lpvOldBlock;
 	LOCAL_VAR_BLOCK lpvTmpBlock[LOCAL_VAR_BLOCK_SIZE]={NULL};
 	LOCAL_VAR_BLOCK* lpvOldArgs;
@@ -238,11 +239,6 @@ int Dos9_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 	int   c='1',
 	      iLockState;
 
-	/* We backup the old file informations */
-
-	memcpy(&ifOldFile, &ifIn, sizeof(INPUT_FILE));
-	Dos9_CopyBatchScript(&(ifIn.batch), &(ifOldFile.batch));
-
     if (lpFile != NULL
         && Dos9_GetFileFullPath(lpAbsPath, lpFile, sizeof(lpAbsPath))==-1) {
 
@@ -251,6 +247,19 @@ int Dos9_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 			goto error;
 
     }
+
+    	/* We backup the old file informations */
+	memcpy(&ifOldFile, &ifIn, sizeof(INPUT_FILE));
+
+	/* This does nothing but just marking &(ifIn.batch) as
+	   copy of &(iOldFile.batch) and so not be freed, all
+	   the content has already be copied in the previous line */
+	ifIn.batch.cpy = 1;
+
+	/* Separate different stacks to prevent endlocal from sub
+	   script. */
+	lpesOld = lpesEnv;
+	lpesEnv = NULL;
 
 	/* Set the INPUT_INFO FILE */
 	if (!lpLabel) {
@@ -368,8 +377,14 @@ int Dos9_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
         }
 	}
 
-	/* restore old settings before resuming to the old section */
+	/* free the newly allocated batch script */
+    Dos9_FreeBatchScript(&(ifIn.batch));
 
+    /* free list of nested setlocal */
+    Dos9_FreeEnvStack();
+    lpesEnv = lpesOld;
+
+	/* restore old settings before resuming to the old section */
 	memcpy(&ifIn, &ifOldFile, sizeof(INPUT_FILE));
 
 	lpvLocalVars = lpvOldBlock;
@@ -377,7 +392,7 @@ int Dos9_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 
 	Dos9_EsFree(lpEsParam);
 
-	return 0;
+	return iErrorLevel; /* do not affect errorlevel */
 
 error:
 	Dos9_EsFree(lpEsParam);
@@ -412,6 +427,6 @@ int Dos9_CmdCallExternal(char* lpFile, char* lpCh)
 
 	Dos9_EsFree(lpEsLine);
 
-	return 0;
+	return iErrorLevel; /* do not affect errorlevel */
 
 }

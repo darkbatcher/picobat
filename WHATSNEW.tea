@@ -1854,4 +1854,6 @@ ${for %%a in (*.exe) do echo %%a}
 
 	- Fixed Mutex locking error in the SET command.
 	
-	- Modify {GOTO} and {EXIT} to leave {%ERROLEVEL%} unmodified upon execution. 
+	- Modify {GOTO} and {EXIT} to leave {%ERROLEVEL%} unmodified upon execution.
+
+	- Added the local variable environment creation via {SETLOCAL} and {ENDLOCAL}.

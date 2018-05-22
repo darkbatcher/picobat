@@ -44,7 +44,7 @@ MUTEX mThreadLock;
 MUTEX mSetILock;
 MUTEX mSetFLock;
 
-__thread int bDelayedExpansion=FALSE;
+__thread int bDelayedExpansion=TRUE;
 __thread int bUseFloats=FALSE;
 __thread int bEchoOn=TRUE;
 __thread int bIgnoreExit=FALSE;
@@ -71,6 +71,7 @@ __thread FILE *fError, *_fError; /* current thread error stream */
    so prevent unnecessary duplication of files */
 
 __thread ENVBUF* lpeEnv;
+__thread ENVSTACK* lpesEnv = NULL;
 __thread INPUT_FILE ifIn;
 __thread char lpCurrentDir[FILENAME_MAX];
 

@@ -12,9 +12,7 @@
 :: you *really* pay attention to and know *exactly* what you are doing. Files
 :: intended for customisation should be :
 ::		- /etc/Dos9_Auto.bat or $HOME/.dos9/Dos9_Auto.bat
-::		- %APPDATA%/Dos9_Auto.bat   
-SETLOCAL EnableDelayedExpansion
-
+::		- %APPDATA%/Dos9_Auto.bat
 IF %DOS9_OS%==WINDOWS (
 
 	:: set special dos9 directories for commands

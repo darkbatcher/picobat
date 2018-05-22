@@ -52,8 +52,9 @@
 #define DOS9_HELP_POPD      30
 #define DOS9_HELP_WC        31
 #define DOS9_HELP_XARGS     32
+#define DOS9_HELP_ENDLOCAL  33
 
-#define DOS9_HELP_ARRAY_SIZE 33
+#define DOS9_HELP_ARRAY_SIZE 34
 
 
 /* this is to instanciate a little embedded command

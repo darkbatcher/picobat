@@ -123,10 +123,7 @@ int Dos9_CmdGoto(char* lpLine)
     bAbortCommand = 1;
 
 next:
-    Dos9_EsFree(arg);
-    return iErrorLevel; /* leave errorlevel unaffected */
-
 err:
     Dos9_EsFree(arg);
-    return -1;
+    return iErrorLevel; /* leave errorlevel unaffected */
 }

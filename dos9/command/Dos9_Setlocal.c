@@ -53,8 +53,11 @@ int Dos9_CmdSetLocal(char* lpLine)
 {
 	char lpName[FILENAME_MAX];
 	char* lpNext=lpLine+8;
+	int i = 0;
 
 	while ((lpNext=Dos9_GetNextParameter(lpNext, lpName, FILENAME_MAX))) {
+
+        i++;
 
 		if (!strcmp(lpName, "/?")) {
 
@@ -107,11 +110,31 @@ int Dos9_CmdSetLocal(char* lpLine)
 		} else {
 
 			Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpName, FALSE);
-			return 1;
+			return -1;
 
 		}
 
 	}
 
-	return 0;
+	Dos9_PushEnvStack();
+
+	return iErrorLevel;
+}
+
+int Dos9_CmdEndLocal(char* lpLine)
+{
+    lpLine += 8;
+
+    lpLine = Dos9_SkipBlanks(lpLine);
+
+    if (!strnicmp(lpLine, "/?", 2)) {
+
+        Dos9_ShowInternalHelp(DOS9_HELP_ENDLOCAL);
+        return 0;
+
+    }
+
+    Dos9_PopEnvStack();
+
+    return iErrorLevel; /* leave errorlevel unaffected */
 }

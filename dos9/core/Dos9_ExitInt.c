@@ -30,6 +30,7 @@ void Dos9_Exit(void)
 	Dos9_FreeStreamStack(lppsStreamStack);
 	Dos9_FreeLocalBlock(lpvLocalVars);
 	Dos9_FreeLocalBlock(lpvArguments);
+	Dos9_FreeEnvStack();
 	Dos9_EnvFree(lpeEnv);
 
     /* Dos9_WaitForAllThreads(); */

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dos9 0.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-05 15:06+0200\n"
+"POT-Creation-Date: 2018-05-22 10:36+0200\n"
 "PO-Revision-Date: 2014-03-12 16:18+0100\n"
 "Last-Translator: DarkBatcher <darkbatcher@gmail.com>\n"
 "Language-Team: French <darkbatcher@dos9.org>\n"
@@ -330,6 +330,16 @@ msgid "Error : Invalid label encountered within a block (at line %d).\n"
 msgstr "Erreur : étiquette rencontrée à l'intérieur d'un block (ligne %d).\n"
 
 #: ../dos9/errors/Dos9_Errors.c:265
+#, c-format
+msgid "Error : Unable to lock mutex (%s).\n"
+msgstr "Erreur : Impossible de saisir le mutex (%s).\n"
+
+#: ../dos9/errors/Dos9_Errors.c:268
+#, c-format
+msgid "Error : Unable to release mutex (%s).\n"
+msgstr "Erreur : Impossible de libérer le mutex (%s).\n"
+
+#: ../dos9/errors/Dos9_Errors.c:271
 msgid ""
 "\n"
 "Aborting current command, press any key to end Dos9.\n"
