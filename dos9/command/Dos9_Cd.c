@@ -329,16 +329,16 @@ int Dos9_CmdCd_win(char* lpLine)
     int force=0,
 		status=0;
 
-	if (!(lpLine=strchr(lpLine, ' '))) {
-		Dos9_ShowErrorMessage(DOS9_BAD_COMMAND_LINE, NULL, FALSE);
-		status = -1;
-		goto end;
-	}
+    if (!strnicmp("cd", lpLine, 2))
+        lpLine +=2;
+    else if (!strnicmp("chdir", lpLine, 5))
+        lpLine +=5;
 
 
     if (!(lpNext = Dos9_GetNextParameterEs(lpLine, lpesStr))) {
 
         fputs(lpCurrentDir, fOutput);
+        fputs(DOS9_NL, fOutput);
 
         status = 0;
 
