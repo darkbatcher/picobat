@@ -338,6 +338,15 @@ PARSED_LINE*       Dos9_ParseOperators(ESTR* lpesLine)
 			continue;
 		}
 
+		if (*lpNextToken == '&'
+            && (lpNextToken >= lpesLine->str +1)
+            && (*(lpNextToken - 1) == '>')) {
+
+            lpSearchBegin = lpNextToken + 1;
+            continue;
+
+        }
+
 		cChar=*lpNextToken;
 		*lpNextToken='\0';
 		lpNextToken++;
@@ -375,7 +384,6 @@ PARSED_LINE*       Dos9_ParseOperators(ESTR* lpesLine)
 			break;
 
 		case '&':
-
 			if (*lpNextToken=='&') {
 
 				lpNextToken++;

@@ -1873,3 +1873,6 @@ ${for %%a in (*.exe) do echo %%a}
 	- Added {ENDLOCAL} manual page.
 	
 	- Fixed memory leak when duplicating thread environment.
+	
+	- Fixed parsing errors that misinterpreted {2>&1} as a combination of
+	a redirection and the conditional operator {&}.
