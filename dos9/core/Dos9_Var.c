@@ -488,6 +488,11 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 	}
 
 	if (bSeekFile) {
+
+	    if (cVarName == '0')
+            Dos9_EsCpy(lpRecieve, ifIn.lpFileName);
+
+        lpPos=Dos9_EsToFullPath(lpRecieve);
 		stat(lpPos, &stFileInfo);
 
 #if defined WIN32
@@ -496,6 +501,9 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 	}
 
 	if (bSplitPath) {
+
+        if (cVarName == '0')
+            Dos9_EsCpy(lpRecieve, ifIn.lpFileName);
 
         lpPos=Dos9_EsToFullPath(lpRecieve);
 

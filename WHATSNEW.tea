@@ -1876,3 +1876,6 @@ ${for %%a in (*.exe) do echo %%a}
 	
 	- Fixed parsing errors that misinterpreted {2>&1} as a combination of
 	a redirection and the conditional operator {&}.
+	
+	- Fixed {%~d0} variables. When file modifiers are called on the {%0}
+	argument, the path used is the path of the current executed batch.
