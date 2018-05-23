@@ -51,26 +51,28 @@ LIBDOS9 char* Dos9_SkipAllBlanks(const char* lpCh)
 
 LIBDOS9 char* Dos9_SearchChar(const char* lpCh, int cChar)
 {
-
     char* lpNxt;
+    char ok;
+    int i;
 
     while ((lpNxt=strchr(lpCh, cChar))) {
 
-        /* if the we are at the beginnig, of the
-           string, don't search anymore and return
-           lpNext */
-
-        if (lpNxt==lpCh)
-            break;
-
-        /* else, we are further in the line, so that
-           the fact that *(lpNext-1) is not a buffer
-           overrun can be assumed */
-
         /* if the character is not escaped, use it
            as the needed character */
+        i = 1;
+        ok = 1;
 
-        if (*(lpNxt-1)!='^')
+        while(lpNxt - i >= lpCh) {
+
+            if (*(lpNxt - i) != '^')
+                break;
+
+            ok = !ok;
+            i ++;
+
+        }
+
+        if (ok)
             break;
 
         /* the character is escaped, just loop
@@ -88,19 +90,26 @@ LIBDOS9 char* Dos9_SearchLastChar(const char* lpCh, int cChar)
 {
     char *lpLastMatch=NULL,
          *lpNxt;
+    char ok;
+    int i;
 
     while ((lpNxt=strchr(lpCh, cChar))) {
 
-        if (lpCh==lpNxt) {
+        i = 1;
+        ok = 1;
 
-            lpLastMatch=lpNxt;
+        while(lpNxt - i >= lpCh) {
 
-        } else {
+            if (*(lpNxt - i) != '^')
+                break;
 
-            if (*(lpNxt-1)!='^')
-                lpLastMatch=lpNxt;
+            ok = !ok;
+            i ++;
 
         }
+
+        if (ok)
+            lpLastMatch = lpNxt;
 
         lpCh=lpNxt+1;
 
@@ -159,13 +168,25 @@ LIBDOS9 char* Dos9_SearchToken(const char* restrict lpCh, const char* restrict l
 {
 
     char* lpNxt;
+    char ok;
+    int i;
 
     while ((lpNxt=strpbrk(lpCh, lpDelims))) {
 
-        if (lpNxt==lpCh)
-            break;
+        i = 1;
+        ok = 1;
 
-        if (*(lpNxt-1)!='^')
+        while(lpNxt - i >= lpCh) {
+
+            if (*(lpNxt - i) != '^')
+                break;
+
+            ok = !ok;
+            i ++;
+
+        }
+
+        if (ok)
             break;
 
         lpCh=lpNxt+1;
@@ -181,19 +202,26 @@ LIBDOS9 char* Dos9_SearchLastToken(const char* restrict lpCh, const char* restri
     const char *lpNxt,
          *lpLastOccurence=NULL;
 
+    char ok;
+    int i;
 
     while ((lpNxt=strpbrk(lpCh, lpDelims))) {
 
-        if (lpCh==lpNxt) {
+        i = 1;
+        ok = 1;
 
-            lpLastOccurence=lpCh;
+        while(lpNxt - i >= lpCh) {
 
-        } else {
+            if (*(lpNxt - i) != '^')
+                break;
 
-            if (*(lpNxt-1)!='^')
-                lpLastOccurence=lpNxt;
+            ok = !ok;
+            i ++;
 
         }
+
+        if (ok)
+            lpLastOccurence = lpNxt;
 
         lpCh=lpNxt+1;
 
@@ -209,6 +237,8 @@ LIBDOS9 char* Dos9_SearchChar_OutQuotes(const char* lpCh, int cChar)
     	  *lpNextQuote;
 
 	int i;
+    char ok;
+    int j;
 
 	lpNextQuote=Dos9_SearchChar(lpCh, '"');
 
@@ -279,17 +309,20 @@ LIBDOS9 char* Dos9_SearchChar_OutQuotes(const char* lpCh, int cChar)
            string, don't search anymore and return
            lpNext */
 
-        if (lpNxt==lpCh)
-            break;
+        j = 1;
+        ok = 1;
 
-        /* else, we are further in the line, so that
-           the fact that *(lpNext-1) is not a buffer
-           overrun can be assumed */
+        while(lpNxt - j >= lpCh) {
 
-        /* if the character is not escaped, use it
-           as the needed character */
+            if (*(lpNxt - j) != '^')
+                break;
 
-        if (*(lpNxt-1)!='^')
+            ok = !ok;
+            j ++;
+
+        }
+
+        if (ok)
             break;
 
         /* the character is escaped, just loop
@@ -310,6 +343,8 @@ LIBDOS9 char* Dos9_SearchToken_OutQuotes(const char* restrict lpCh, const char* 
 		 *lpNextQuote;
 
 	int i;
+    char ok;
+    int j;
 
 	lpNextQuote=Dos9_SearchChar(lpCh, '"');
 
@@ -348,7 +383,7 @@ LIBDOS9 char* Dos9_SearchToken_OutQuotes(const char* restrict lpCh, const char* 
 				   unpaired. Then just assume there's no more characters to
 				   to be found. */
 
-				/* Note : (i==0) may suggest that there is an odd number of
+				/* Note : (i==0) may suggest that there is an even number of
 				   quotation marks. This is not true, in fact, the last loop
 				   to get (lpNextQuote == NULL) is also counted by i, thus,
 				   parity are reversed if (lpNextQuote == NULL) */
@@ -375,10 +410,20 @@ LIBDOS9 char* Dos9_SearchToken_OutQuotes(const char* restrict lpCh, const char* 
 			}
 		}
 
-        if (lpNxt==lpCh)
-            break;
+        j = 1;
+        ok = 1;
 
-        if (*(lpNxt-1)!='^')
+        while(lpNxt - j >= lpCh) {
+
+            if (*(lpNxt - j) != '^')
+                break;
+
+            ok = !ok;
+            j ++;
+
+        }
+
+        if (ok)
             break;
 
         lpCh=lpNxt+1;

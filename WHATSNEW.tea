@@ -1879,3 +1879,6 @@ ${for %%a in (*.exe) do echo %%a}
 	
 	- Fixed {%~d0} variables. When file modifiers are called on the {%0}
 	argument, the path used is the path of the current executed batch.
+	
+	- Fixed string search functions handling of escape {^} character. Before,
+	two adjacent {^} where misinterpreted as an escape anyway.
