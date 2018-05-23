@@ -1997,5 +1997,5 @@ TUESDAY 22ND, MAY
       - Modify GOTO and EXIT to leave %ERROLEVEL% unmodified upon execution.
 
       - Added the local variable environment creation via SETLOCAL and 
-        ENDLOCAL.
+        ENDLOCAL. 
 

@@ -1,0 +1,58 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+{{ENDLOCAL command}}
+
+	The {ENDLOCAL} command reverts modifications to environment that
+	have happened since the last {setlocal|SETLOCAL} command call.
+
+{{Synopsis}}
+
+${ENDLOCAL}
+
+	Reverts changes to the environment since last {setlocal|SETLOCAL}
+	command, and also reverts modifications to {dos9|Dos9} options by
+	the last {SETLOCAL}. If there is no previous call of this command, then
+	the command does nothing. 
+	
+	{SETLOCAL} and {ENDLOCAL} statements can be nested, so that various
+	environment states can be saved. However upon a {call|CALL} command,
+	the scope of {ENDLOCAL} is reduced: it can only revert changes made
+	after {SETLOCAL} commands called after the last {CALL} command.
+	
+	When calling {ENDLOCAL}, the {errorlevel|%ERRORLEVEL%} variable
+	is left unmodified.
+	
+{{Saving a modification to parent environment}}
+
+	{ENDLOCAL} reverts all modification to environment. To keep the
+	some modifications, {spec/condop|conditional operators} can be
+	used as follow:
+	
+${SET my_var=1
+SETLOCAL
+SET my_var=2
+ENDLOCAL & SET my_var=%my_var%}
+	
+{{Compatibility}}
+
+	Fully compatible with {cmd.exe} since {218.2}. 
+	
+{{See also}}
+
+	{setlocal|SETLOCAL command}, {set|SET Command}, {commands|Commands list}
