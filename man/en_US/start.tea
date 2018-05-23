@@ -1,0 +1,58 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2017  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+{{START command}}
+
+	The {START} command enables executing a command or a program inside
+	another console or in background. {START} also enables opening files
+	with appropriate programs, it is thus a very useful command.
+
+{{Synopsis}}
+
+${START [/d dir] [/b] [/min] [/max] [/wait] [title] command parameter ...}
+
+	Runs {command}.
+	
+	- {command} : A path to the executable to be launched.
+	
+	- {parameter ...} : A list of parameters to be passed to {command}.
+	
+	- {title} : The new window title (ignored by {dos9|Dos9}).
+	
+	- {/d dir} : A path to {command}'s current directory.
+	
+	- {/max} : Maximizes the window (ignored under UNIX-based OSes).
+	
+	- {/min} : Minimizes the window (ignored under UNIX-based OSes).
+	
+	- {/wait} : Waits until {command} returns
+	
+	- {/b} : Hides the new window (partial support under UNIX-based OSes).
+	
+	If {command} is an internal command and the {/b} switch is specified,
+	then the command will be ran as a thread of the current interpreter.
+
+{{Compatibilité}}
+
+Partiellement compatible avec {cmd.exe}.
+
+	Supporté depuis la version 2014.0.9b. Le support entre différents systèmes
+	d'exploitation peut différer grandement.
+
+{{À voir aussi}}
+
+{call|Commande Call}, {commands|Liste des commandes}

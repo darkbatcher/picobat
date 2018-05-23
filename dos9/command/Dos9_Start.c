@@ -348,6 +348,45 @@ int Dos9_StartFile_S(char* file, char* args, const char* dir, int mode, int wait
 
 #endif // defined
 
+void Dos9_StartCommandExec(struct pipe_launch_data_t* data)
+{
+    bIgnoreExit = TRUE;
+
+    Dos9_RunLine(data->str);
+
+    Dos9_EsFree(data->str);
+
+    /* don't forget to free unneeded memory */
+    free(data);
+}
+
+
+int Dos9_StartCommandBackground(char* file, ESTR* params, int wait)
+{
+    struct pipe_launch_data_t* data;
+    THREAD handle;
+    void* ret;
+
+    if ((data = malloc(sizeof(struct pipe_launch_data_t))) == NULL)
+        Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION,
+                                __FILE__ "/Dos9_StartCommandBackground()",
+                                -1);
+
+    data->str = Dos9_EsInit();
+
+    Dos9_EsCpy(data->str, file);
+    Dos9_EsCat(data->str, " ");
+    Dos9_EsCatE(data->str, params);
+
+    handle = Dos9_CloneInstance(Dos9_StartCommandExec, data);
+
+    if (wait)
+        Dos9_WaitForThread(&handle, &ret);
+    Dos9_CloseThread(&handle);
+
+    return 0;
+}
+
 void Dos9_UseBackSlash(char* line)
 {
     if (line == NULL)
@@ -427,6 +466,7 @@ int Dos9_CmdStart(char* line)
                 /* this is an internal command */
 
                 command = 1;
+                nok = 1;
 
                 strncpy(file, param->str, sizeof(file));
                 file[FILENAME_MAX-1]='\0';
@@ -470,7 +510,14 @@ int Dos9_CmdStart(char* line)
         Dos9_EsCpy(param, "");
     }
 
-    if (command) {
+    if (command && (mode & START_MODE_BACKGROUND)) {
+
+        /* The same as below, but implemented as a thread */
+        Dos9_StartCommandBackground(file, param, wait);
+
+        return 0;
+
+    } else if (command) {
 
         /* If the file specified was "", make the command line somehow
            equivalent to :
@@ -479,7 +526,6 @@ int Dos9_CmdStart(char* line)
 
          */
 
-        Dos9_GetExeFilename(file, FILENAME_MAX);
         tmp = Dos9_EsInit();
 
         /* add optionnal attributes */
@@ -494,10 +540,14 @@ int Dos9_CmdStart(char* line)
         if (bCmdlyCorrect)
             Dos9_EsCat(tmp, "c");
 
-        Dos9_EsCat(tmp, " /C ");
+        Dos9_EsCat(tmp, " /K ");
+        Dos9_EsCat(tmp, file);
+        Dos9_EsCat(tmp, " ");
         Dos9_EsCat(tmp, param->str);
-
         Dos9_EsFree(param);
+
+        Dos9_GetExeFilename(file, FILENAME_MAX);
+
         param = tmp;
 
     }
