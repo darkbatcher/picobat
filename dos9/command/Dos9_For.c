@@ -1231,12 +1231,12 @@ int Dos9_ForAdjustInput(char* lpInput)
 
 }
 
-int Dos9_ExecuteForSubCommand(struct pipe_launch_data_t* arg)
+void Dos9_ExecuteForSubCommand(struct pipe_launch_data_t* arg)
 {
     BLOCKINFO bkBlock;
 
-    Dos9_OpenOutputD(lppsStreamStack, arg->fd, DOS9_STDOUT);
-    close (arg->fd);
+    lppsStreamStack = Dos9_OpenOutputD(lppsStreamStack, arg->fd, DOS9_STDOUT);
+    close(arg->fd);
 
     bIgnoreExit = TRUE;
 
@@ -1250,7 +1250,6 @@ int Dos9_ExecuteForSubCommand(struct pipe_launch_data_t* arg)
     Dos9_EsFree(arg->str);
     free(arg);
 
-    return 0;
 }
 
 int Dos9_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFd)
@@ -1442,8 +1441,9 @@ void Dos9_ForCloseInputInfo(INPUTINFO* lpipInfo)
         case INPUTINFO_TYPE_COMMAND:;
 
 		    fclose(lpipInfo->Info.InputFile.pFile);
-            Dos9_WaitForThread(&(lpipInfo->Info.InputFile.handle), &p);
-    		    break;
+            Dos9_WaitForThread(t, &p);
+            Dos9_CloseThread(t);
+            break;
 
 		case INPUTINFO_TYPE_STREAM:
 
