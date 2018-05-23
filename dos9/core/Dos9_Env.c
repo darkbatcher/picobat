@@ -107,8 +107,15 @@ error:
 
     }
 
-    if (!(pRet->name = strdup(name))
-        || !(pRet->content = strdup(content)))
+
+    if (name == NULL
+        || content == NULL) {
+
+        pRet->content = NULL;
+        pRet->name = NULL;
+
+    } else if (!(pRet->name = strdup(name))
+            || !(pRet->content = strdup(content)))
         goto error;
 
     return pRet;

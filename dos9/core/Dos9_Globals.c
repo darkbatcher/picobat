@@ -53,6 +53,7 @@ __thread int bIsScript;
 __thread int bCmdlyCorrect=FALSE;
 
 __thread int bAbortCommand=FALSE;
+/* -1 : abort to main loop */
 __thread LPCOMMANDLIST lpclCommands;
 __thread LOCAL_VAR_BLOCK* lpvLocalVars;
     /* use a distinct local block for command arguments

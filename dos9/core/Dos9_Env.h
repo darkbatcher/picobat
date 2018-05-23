@@ -36,7 +36,6 @@ typedef struct ENVVAR {
 typedef struct ENVBUF {
     int nb; /* number of elements of the environment buffer */
     int index; /* number of used elements in the buffer */
-    int editing;
     ENVVAR** envbuf; /* environment buffer */
 } ENVBUF;
 
