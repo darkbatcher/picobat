@@ -670,7 +670,7 @@ int Dos9_RunExternalFile(char* lpFileName, char* lpFullLine, char** lpArguments)
     wchar_t *wfullline,
             *wfilename,
             *wcurrdir,
-            wenvblock;
+            *wenvblock;
 
     envblock = Dos9_GetEnvBlock(lpeEnv, &size);
 
@@ -726,7 +726,7 @@ int Dos9_RunExternalFile(char* lpFileName, char* lpFullLine, char** lpArguments)
     free(wfullline);
     free(wfilename);
     free(wcurrdir);
-    free(envblock);
+    free(wenvblock);
 
     return status;
 }

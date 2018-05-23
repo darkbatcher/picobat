@@ -113,7 +113,7 @@ void Dos9_DuplicateStdStreams(void)
 
     /* Re-set appropriate flags for the standard streams if they
        actually refer to a tty (no reason not to buffer files that
-       are not reffering to tty) */
+       are not referring to tty) */
 
     if (isatty(newOutput))
         setvbuf(fOutput, NULL, _IONBF, 0);
