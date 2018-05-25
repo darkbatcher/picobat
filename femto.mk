@@ -61,8 +61,8 @@ $(LIBS):
 	fi;
 	
 $(FUNCTIONS):
-	@echo "Looking for function : $@ ..."
-	@sed -e 's,[@]fn[@],$@,g' < config.c.in > config.c
+	@echo "Looking for : $@ ..."
+	@sed -e 's,[@]fn[@],$@,g' -e 's,[@]fnp[@],$(shell echo $@ | sed -e 's,/,_,g' -e 's,[.],_,g'),g'< config.c.in > config.c
 	@if $(CC) config.c $(CFLAGS) $(LDFLAGS) -O0 2> /dev/null; then \
 		echo "fn_$@ = 1" >>  femto-config.mk; \
 		echo "	found"; \

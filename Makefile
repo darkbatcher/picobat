@@ -74,10 +74,10 @@ $(SUBDIRS_BIN): $(SUBDIRS)
 # stuff to check
 PROGRAMS = xdg-open
 FUNCTIONS =
-LIBS = iconv intl pthread
+LIBS = iconv intl pthread m
 OPTIONS = libcu8 nls cmdlycorrect console
 DEFAULTOPTIONS = no-libcu8 use-nls no-cmdlycorrect use-console
-SUBCONFIG = libcu8
+SUBCONFIG = libcu8 libmatheval
 ADDITIONALVARS = HOST BINDIR YEAR
 
 include femto.mk

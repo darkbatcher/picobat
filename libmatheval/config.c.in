@@ -1,0 +1,33 @@
+#define CHECK_memset 1
+#define CHECK_bzero 2
+#define TYPE_const 1
+#define TYPE_size_t 2
+
+#ifdef CHECK_@fnp@
+
+#if CHECK_@fnp@ == CHECK_memset
+#include <string.h>
+#elif CHECK_@fnp@ == CHECK_bzero
+#include <strings.h>
+#endif
+
+int main() {
+	void* p = @fn@;
+	return 0;
+}
+#elif defined TYPE_@fnp@
+#if TYPE_@fnp@ == TYPE_size_t
+#include <sys/types.h>
+#endif 
+int main () {
+	@fn@ v = 1;
+	return 0;
+}
+#else  /* CHECK_@fnp@ */
+#include <@fn@>
+
+int main() {
+	return 0;
+}
+
+#endif /* CHECK_@fnp@ */

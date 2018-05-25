@@ -72,3 +72,7 @@ ifeq ($(lib_pthread),1)
 	LPTHREAD_LD = -lpthread
 endif
 
+ifeq ($(lib_m),1)
+	LM_LD = -lpthread
+endif
+

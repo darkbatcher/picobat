@@ -17,9 +17,14 @@
 #
 
 ROOTDIR = ..
+ifneq (,$(wildcard ./femto-config.mk))
+    include femto-config.mk
+endif
 include ../config.mk
 
-CFLAGS += -DHAVE_STDINT_H -DHAVE_CONFIG_H -DSTDC_HEADERS
+ifdef lib_m
+LDFLAGS += -lm
+endif
 
 SRC_FILES = \
 	lib/error.c lib/matheval.c lib/node.c lib/parser.c lib/scanner.c \
@@ -43,5 +48,17 @@ lib/scanner.c: lib/scanner.l lib/parser.c
 
 lib/parser.c: lib/parser.y
 	$(YACC) -d -p evaluator_ -o $@ $^
+	
+# stuff to check
+PROGRAMS =
+FUNCTIONS = memset bzero size_t const math.h memory.h stdint.h stdlib.h \
+strings.h string.h sys/stat.h sys/types.h unistd.h dlfcn.h inttypes.h
+LIBS = m
+OPTIONS =
+DEFAULTOPTIONS = 
+SUBCONFIG = 
+ADDITIONALVARS = 
+
+include ../femto.mk
 
 .PHONY: all clean bin
