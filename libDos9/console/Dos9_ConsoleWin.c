@@ -71,6 +71,7 @@ void Dos9_GetMousePos(char* move, CONSOLECOORD* coords, int* type)
 }
 
 #elif defined(WIN32)
+#include <conio.h>
 
 void Dos9_ClearConsoleLine(void)
 {

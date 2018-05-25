@@ -39,7 +39,7 @@ int Dos9_EnvCompName(const void* p1, const void* p2)
     if ((pVar1->name == NULL) || (pVar2->name == NULL))
         return pVar2->name - pVar1->name;
 
-    return strcasecmp(pVar1->name, pVar2->name);
+    return stricmp(pVar1->name, pVar2->name);
 }
 
 #define DOS9_ENV_BLOCK_MASK 0x7F

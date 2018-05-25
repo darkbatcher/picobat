@@ -330,7 +330,7 @@ int Dos9_RunCommand(ESTR* lpCommand)
 {
 
 #define XSTR(x) #x
-#define STR(x) STR_HELPER(x)
+#define STR(x) XSTR(x)
 
 
 	int (*lpProc)(char*);

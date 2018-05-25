@@ -32,6 +32,8 @@ SRC_FILES = \
 
 OBJ_FILES = $(SRC_FILES:.c=.o)
 
+CFLAGS += -DHAVE_CONFIG_H
+
 all: libmatheval.a
 
 clean:
@@ -52,7 +54,8 @@ lib/parser.c: lib/parser.y
 # stuff to check
 PROGRAMS =
 FUNCTIONS = memset bzero size_t const math.h memory.h stdint.h stdlib.h \
-strings.h string.h sys/stat.h sys/types.h unistd.h dlfcn.h inttypes.h
+strings.h string.h sys/stat.h sys/types.h unistd.h dlfcn.h inttypes.h \
+stddef.h
 LIBS = m
 OPTIONS =
 DEFAULTOPTIONS = 

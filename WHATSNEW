@@ -1997,5 +1997,43 @@ TUESDAY 22ND, MAY
       - Modify GOTO and EXIT to leave %ERROLEVEL% unmodified upon execution.
 
       - Added the local variable environment creation via SETLOCAL and 
-        ENDLOCAL. 
+        ENDLOCAL.
+
+WEDNESDAY 23RD, MAY
+
+      - Added new manual and functionalities to START. When calling internal 
+        command with /b option, The command is launched as an internal thread.
+
+      - Fixed the CD command that without argument displayed an error message.
+
+      - Fixed an error with file redirection inside the FOR command input. 
+
+      - Fixed set command SEGFAULT error when listing variables. Fixed typos 
+        in the manual page.
+
+      - Added ENDLOCAL manual page.
+
+      - Fixed memory leak when duplicating thread environment.
+
+      - Fixed parsing errors that misinterpreted 2>&1 as a combination of a 
+        redirection and the conditional operator &.
+
+      - Fixed %~d0 variables. When file modifiers are called on the %0 
+        argument, the path used is the path of the current executed batch.
+
+      - Fixed string search functions handling of escape ^ character. Before, 
+        two adjacent ^ where misinterpreted as an escape anyway.
+
+      - Fixed error with conversion of local var blocks to unicode.
+
+FRIDAY 25TH, MAY
+
+      - Added femto-style configuration to libmatheval. Provide a @fnp@ symbol 
+        to be conformant will preprocessor macros.
+
+      - Added tests for -lm.
+
+      - Fixed some bad libiconv linking options.
+
+      - Fixed a lot of compilation warnings.
 

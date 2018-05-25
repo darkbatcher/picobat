@@ -4,7 +4,7 @@
 #define HAVE_BZERO
 #endif
 
-#if @fn_dlcfn.h@
+#if @fn_dlfcn.h@
 #define HAVE_DLFCN_H 1
 #endif
 
@@ -24,11 +24,11 @@
 #define HAVE_MEMSET 1
 #endif
 
-#if @fn_stddef@
+#if @fn_stddef.h@
 #define HAVE_STDDEF_H 1
 #endif
 
-#if @fn_stdint@
+#if @fn_stdint.h@
 #define HAVE_STDINT_H 1
 #endif
 

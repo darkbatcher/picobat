@@ -35,6 +35,7 @@
 #include "../errors/Dos9_Errors.h"
 #include "../core/Dos9_Core.h"
 #include "Dos9_For.h"
+#include "Dos9_Cd.h"
 
 /*
     The for command

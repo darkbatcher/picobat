@@ -65,7 +65,7 @@ char* Dos9_strcasestr(const char* s, const char* find)
 				if ((sc = *s++) == 0)
 					return (NULL);
 			} while ((char)tolower((unsigned char)sc) != c);
-		} while (strncasecmp(s, find, len) != 0);
+		} while (strnicmp(s, find, len) != 0);
 		s--;
 	}
 	return ((char *)s);

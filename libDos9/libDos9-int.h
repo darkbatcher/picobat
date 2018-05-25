@@ -39,8 +39,12 @@
 #include "libDos9.h"
 
 #ifdef WIN32
-    #define S_IRUSR _S_IREAD
-    #define S_IWUSR _S_IWRITE
+    #ifndef S_IRUSR
+		#define S_IRUSR _S_IREAD
+	#endif
+	#ifndef S_IWUSR
+		#define S_IWUSR _S_IWRITE
+	#endif
 #endif
 
 
