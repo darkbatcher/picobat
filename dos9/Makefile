@@ -24,7 +24,8 @@ CFLAGS += $(LIBDOS9_INC) $(LIBINTEVAL_INC) $(LIBMATHEVAL_INC) \
 		  $(LIBCU8_INC)
 
 LDFLAGS += $(LIBDOS9_LD) $(LIBINTEVAL_LD) $(LIBMATHEVAL_LD) \
-		   $(LIBCU8_LD) $(LINTL_LD) $(PTHREAD_LD) $(LICONV_LD)
+		   $(LICONV_LD) $(LIBCU8_LD) $(LINTL_LD) $(PTHREAD_LD)  \
+		   $(LM_LD)
 		   
 ifeq ($(use_libcu8),1)
 	LDFLAGS += -lshlwapi
