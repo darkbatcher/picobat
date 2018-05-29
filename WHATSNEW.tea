@@ -1904,3 +1904,8 @@ ${for %%a in (*.exe) do echo %%a}
 	- Fixed {COPY} command to be more compatible to cmd.exe. The extension
 	is only enabled when {destination} is a folder or ends with a directory
 	delimiter.
+
+	- Modifyied all commands to provide more detailled errorlevel codes.
+	Allmost every command used to return -1 on error,  this is not the
+	case anymore. Commands now return an {%ERRORLEVEL%} value equal to
+	the error code associated with the message printed.

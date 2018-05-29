@@ -54,28 +54,33 @@ int Dos9_CmdChcp(char* line)
 {
     ESTR* param = Dos9_EsInit();
     char *enc;
-    int cp;
+    int cp,
+        status = DOS9_NO_ERROR;
 
     line += 4;
 
     if ((line = Dos9_GetNextParameterEs(line, param)) == NULL) {
 
         Dos9_ShowErrorMessage(DOS9_BAD_COMMAND_LINE, "CHCP", 0);
-        return -1;
+
+        status = DOS9_BAD_COMMAND_LINE;
+        goto error;
 
     }
 
     if (Dos9_GetNextParameterEs(line, param) != NULL) {
 
         Dos9_ShowErrorMessage(DOS9_BAD_COMMAND_LINE, "CHCP", 0);
-        return -1;
+
+        status = DOS9_BAD_COMMAND_LINE;
+        goto error;
 
     }
 
     if (!strcmp(param->str, "/?")) {
 
         Dos9_ShowInternalHelp(DOS9_HELP_CHCP);
-        return 0;
+        goto error;
 
     }
 
@@ -92,7 +97,9 @@ int Dos9_CmdChcp(char* line)
 #endif
         {
             Dos9_ShowErrorMessage(DOS9_INVALID_CODEPAGE, param->str, 0);
-            return -1;
+
+            status = DOS9_INVALID_CODEPAGE;
+            goto error;
 
         }
 
@@ -108,11 +115,14 @@ int Dos9_CmdChcp(char* line)
 #endif
         {
             Dos9_ShowErrorMessage(DOS9_INVALID_CODEPAGE, param->str, 0);
-            return -1;
+            status = DOS9_INVALID_CODEPAGE;
+            goto error;
 
         }
     }
 
+error:
+    Dos9_EsFree(param);
     return 0;
 
 }
@@ -121,8 +131,7 @@ int Dos9_CmdChcp(char* line)
 
 int Dos9_CmdChcp(char* line)
 {
-    fprintf(fError, "The CHCP command is not supported on platforms other than Windows\n");
-    return -1;
+    return DOS9_NO_ERROR;
 }
 
 #endif

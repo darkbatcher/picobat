@@ -65,7 +65,7 @@ int Dos9_CmdXargs(char* line)
     if (*line == '\0') {
 
         Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "XARGS", 0);
-        status = -1;
+        status = DOS9_EXPECTED_MORE;
         goto end;
 
     }

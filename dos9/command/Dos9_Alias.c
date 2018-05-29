@@ -37,7 +37,8 @@ int Dos9_CmdAlias(char* lpLine)
 	COMMANDLIST* lpclNewCommands;
 	COMMANDINFO  ciCommand;
 
-	int iReplace=FALSE;
+	int iReplace=FALSE,
+        status = DOS9_NO_ERROR;
 
 	COMMANDFLAG iRet;
 
@@ -81,6 +82,8 @@ int Dos9_CmdAlias(char* lpLine)
 		                      FALSE
 							 );
 
+        status = DOS9_UNEXPECTED_ELEMENT;
+
 		goto error;
 
 	}
@@ -104,21 +107,20 @@ int Dos9_CmdAlias(char* lpLine)
 
 		if ((Dos9_ReplaceCommand(&ciCommand, lpclCommands))) {
 
-			/* if we fail to reasign command, print an error message */
+			/* if we fail to reassign command, print an error message */
 
 			Dos9_ShowErrorMessage(DOS9_UNABLE_REPLACE_COMMAND,
 								  lpLine,
 								  FALSE
 								 );
 
-			goto error;
-
+            status = DOS9_UNABLE_REPLACE_COMMAND;
 
 		}
 
 		Dos9_EsFree(lpEsParam);
 
-		return 0;
+		return status;
 
 	}
 
@@ -131,6 +133,8 @@ int Dos9_CmdAlias(char* lpLine)
 							  FALSE
 							 );
 
+        status = DOS9_TRY_REDEFINE_COMMAND;
+
 		goto error;
 
 	}
@@ -141,6 +145,8 @@ int Dos9_CmdAlias(char* lpLine)
 		                      lpLine,
 		                      FALSE
 		                     );
+
+        status = DOS9_UNABLE_ADD_COMMAND;
 
 		goto error;
 
@@ -153,6 +159,8 @@ int Dos9_CmdAlias(char* lpLine)
 		                      FALSE
 		                     );
 
+		status = DOS9_UNABLE_REMAP_COMMANDS;
+
 		goto error;
 
 	}
@@ -161,12 +169,7 @@ int Dos9_CmdAlias(char* lpLine)
 
 	lpclCommands=lpclNewCommands;
 
-	Dos9_EsFree(lpEsParam);
-
-	return 0;
-
 error:
 	Dos9_EsFree(lpEsParam);
-	return 0;
-
+	return status;
 }

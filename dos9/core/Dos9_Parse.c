@@ -273,8 +273,9 @@ PARSED_STREAM* Dos9_ParseOutput(ESTR* lpesLine)
 	}
 
 	Dos9_EsCat(lpesFinal, lpCh);
-
 	Dos9_EsCpyE(lpesLine, lpesFinal);
+
+
 	Dos9_EsFree(lpesFinal);
 	Dos9_EsFree(lpesParam);
 

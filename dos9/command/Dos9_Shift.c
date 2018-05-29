@@ -58,7 +58,8 @@ int Dos9_CmdShift(char* lpLine)
 	ESTR* lpEsArg=Dos9_EsInit();
 	char *lpToken;
 	int iBegin=0,        /* the first parameter to be displaced */
-	    iDisplacement=1; /* the displacement of parameters on the left */
+	    iDisplacement=1, /* the displacement of parameters on the left */
+	    status = DOS9_NO_ERROR;
 
 	lpLine+=5;
 
@@ -98,6 +99,8 @@ int Dos9_CmdShift(char* lpLine)
 						                      lpToken,
 						                      FALSE);
 
+                        status = DOS9_UNEXPECTED_ELEMENT;
+
 						goto error;
 
 					}
@@ -110,6 +113,8 @@ int Dos9_CmdShift(char* lpLine)
 						Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT,
 						                      lpToken,
 						                      FALSE);
+
+                        status = DOS9_UNEXPECTED_ELEMENT;
 
 						goto error;
 
@@ -130,6 +135,8 @@ int Dos9_CmdShift(char* lpLine)
 						                      lpToken,
 						                      FALSE);
 
+                        status = DOS9_UNEXPECTED_ELEMENT;
+
 						goto error;
 
 					}
@@ -142,6 +149,8 @@ int Dos9_CmdShift(char* lpLine)
 						Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT,
 						                      lpToken,
 						                      FALSE);
+
+                        status = DOS9_UNEXPECTED_ELEMENT;
 
 						goto error;
 
@@ -160,6 +169,8 @@ int Dos9_CmdShift(char* lpLine)
 					                      FALSE
 					                     );
 
+                    status = DOS9_UNEXPECTED_ELEMENT;
+
 					goto error;
 
 
@@ -170,6 +181,8 @@ int Dos9_CmdShift(char* lpLine)
 			Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT,
 			                      lpToken,
 			                      FALSE);
+
+            status = DOS9_UNEXPECTED_ELEMENT;
 
 			goto error;
 
@@ -226,12 +239,8 @@ int Dos9_CmdShift(char* lpLine)
 
 	}
 
-	Dos9_EsFree(lpEsArg);
-	return 0;
-
 error:
-
 	Dos9_EsFree(lpEsArg);
-	return -1;
+	return status;
 
 }

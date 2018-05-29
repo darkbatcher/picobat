@@ -55,10 +55,12 @@
 int Dos9_CmdMkdir(char* lpLine)
 {
 	ESTR* lpEstr=Dos9_EsInit();
+	int status = DOS9_NO_ERROR;
 
 	if (!(lpLine=Dos9_GetNextParameterEs(lpLine, lpEstr))) {
 
 		Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "MD/MKDIR", FALSE);
+		status = DOS9_EXPECTED_MORE;
 		goto error;
 
 	}
@@ -71,18 +73,15 @@ int Dos9_CmdMkdir(char* lpLine)
 
 		} else {
 
-            if (Dos9_CmdMakeDirs(Dos9_EsToFullPath(lpEstr)))
+            if (status = Dos9_CmdMakeDirs(Dos9_EsToFullPath(lpEstr)))
                 goto error;
 
 		}
 	}
 
-	Dos9_EsFree(lpEstr);
-	return 0;
-
 error:
 	Dos9_EsFree(lpEstr);
-	return -1;
+	return status;
 
 }
 
@@ -107,7 +106,7 @@ int Dos9_CmdMakeDirs(char* str)
                 Dos9_ShowErrorMessage(DOS9_UNABLE_MKDIR | DOS9_PRINT_C_ERROR,
                                       dir,
                                       FALSE);
-                return -1;
+                return DOS9_UNABLE_MKDIR;
 
             }
 
@@ -125,7 +124,7 @@ int Dos9_CmdMakeDirs(char* str)
         Dos9_ShowErrorMessage(DOS9_MKDIR_ERROR | DOS9_PRINT_C_ERROR,
                               dir,
                               FALSE);
-        return -1;
+        return DOS9_MKDIR_ERROR;
 
     }
 

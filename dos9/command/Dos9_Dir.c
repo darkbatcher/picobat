@@ -50,7 +50,7 @@ int Dos9_CmdDir(char* lpLine)
 	     *lpToken,
 	     lpFileName[FILENAME_MAX]= {0};
 
-    char buf[8192];
+    char buf[4096];
 
 	int iFlag=DOS9_SEARCH_DEFAULT | DOS9_SEARCH_DIR_MODE;
 
@@ -107,7 +107,7 @@ int Dos9_CmdDir(char* lpLine)
 			if (*lpFileName) {
 				Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpToken, FALSE);
 				Dos9_EsFree(lpParam);
-				return -1;
+				return DOS9_UNEXPECTED_ELEMENT;
 			}
 
 			if (!TEST_ABSOLUTE_PATH(lpToken))
@@ -225,8 +225,8 @@ int Dos9_CmdDir(char* lpLine)
 
 	Dos9_EsFree(lpParam);
 
-  fflush(fOutput);
+    fflush(fOutput);
 	setvbuf(fOutput, NULL, _IONBF, 0);
 
-	return 0;
+	return DOS9_NO_ERROR;
 }

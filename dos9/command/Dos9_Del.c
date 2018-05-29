@@ -64,7 +64,7 @@ int Dos9_CmdDel(char* lpLine)
 	int flag=DOS9_SEARCH_NO_PSEUDO_DIR
             | DOS9_SEARCH_DIR_MODE,
 	    choice = DOS9_ASK_ALL,
-	    status = 0,
+	    status = DOS9_NO_ERROR,
 	    n=0,
 	    i;
 
@@ -83,7 +83,7 @@ int Dos9_CmdDel(char* lpLine)
 
         Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION,
                                         __FILE__ "/Dos9_CmdDel()", 0);
-        status = -1;
+        status = DOS9_FAILED_ALLOCATION;
         goto end;
 
     }
@@ -139,7 +139,7 @@ int Dos9_CmdDel(char* lpLine)
 
                     Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION,
                                         __FILE__ "/Dos9_CmdDel()", 0);
-                    status = -1;
+                    status = DOS9_FAILED_ALLOCATION;
                     goto end;
 
                 }
@@ -152,7 +152,7 @@ int Dos9_CmdDel(char* lpLine)
 
                 Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION,
                                         __FILE__ "/Dos9_CmdDel()", 0);
-                status = -1;
+                status = DOS9_FAILED_ALLOCATION;
                 goto end;
 
             }
@@ -178,7 +178,7 @@ int Dos9_CmdDel(char* lpLine)
             Dos9_ShowErrorMessage(DOS9_NO_MATCH,
                                     name[i],
                                     FALSE);
-            status = -1;
+            status = DOS9_NO_MATCH;
 
             goto end;
         }

@@ -40,19 +40,19 @@
 
 #include "Dos9_Find.h"
 
-char* Dos9_FindRegExpMatch(const char* s, const char* exp)
+char* Dos9_FindRegExpMatch(const char* restrict s, const char* restrict exp)
 {
     return (char*)Dos9_RegExpMatch(exp, s);
 }
 
-char* Dos9_FindRegExpCaseMatch(const char* s, const char* exp)
+char* Dos9_FindRegExpCaseMatch(const char* restrict s, const char* restrict exp)
 {
     return (char*)Dos9_RegExpCaseMatch(exp, s);
 }
 
 /* This function come from FreeBSD (and, BSD I think) implementation of
    strcasestr(), renamed for conflict avoiding purposes */
-char* Dos9_strcasestr(const char* s, const char* find)
+char* Dos9_strcasestr(const char* restrict s, const char* restrict find)
 {
 	char c, sc;
 	size_t len;
@@ -71,7 +71,7 @@ char* Dos9_strcasestr(const char* s, const char* find)
 	return ((char *)s);
 }
 
-void Dos9_FileFind(char* str, char* name, int count, int flag, int reverse)
+int Dos9_FileFind(char* restrict str, char* restrict name, int count, int flag, int reverse)
 {
     FILE* pFile;
     ESTR* lpEsLine=Dos9_EsInit();
@@ -88,6 +88,7 @@ void Dos9_FileFind(char* str, char* name, int count, int flag, int reverse)
 
     } else if (!(pFile = fopen(name, "r"))) {
 
+        /* This should not be reached anyway, so don't care about return */
         Dos9_ShowErrorMessage(DOS9_FILE_ERROR | DOS9_PRINT_C_ERROR,
                                 name,
                                 FALSE
@@ -153,7 +154,7 @@ end:
     else if (isatty(fileno(fInput)))
         clearerr(fInput);
 
-    return;
+    return i;
 
 }
 
@@ -234,7 +235,7 @@ int Dos9_CmdFind(char* lpLine)
                                         FALSE
                                         );
 
-                    status = -1;
+                    status = DOS9_FAILED_ALLOCATION;
                     goto end;
 
                  }
@@ -253,7 +254,7 @@ int Dos9_CmdFind(char* lpLine)
                                        FALSE
                                        );
 
-                status = -1;
+                status = DOS9_NO_MATCH;
                 goto end;
 
             }
@@ -277,7 +278,7 @@ int Dos9_CmdFind(char* lpLine)
                                 FALSE
                                 );
 
-        status = -1;
+        status = DOS9_EXPECTED_MORE;
         goto end;
 
     }
@@ -299,7 +300,7 @@ int Dos9_CmdFind(char* lpLine)
                                 FALSE
                                 );
 
-        status = -1;
+        status = DOS9_NO_VALID_FILE;
         goto end;
 
     }
@@ -326,7 +327,7 @@ int Dos9_CmdFind(char* lpLine)
         while (pTmp) {
 
             fprintf(fOutput, "---------- %s" DOS9_NL, pTmp->lpFileName);
-            Dos9_FileFind(str, pTmp->lpFileName, count, flag, reverse);
+            status |= !Dos9_FileFind(str, pTmp->lpFileName, count, flag, reverse);
 
             pTmp = pTmp->lpflNext;
 

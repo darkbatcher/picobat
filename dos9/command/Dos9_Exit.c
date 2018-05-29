@@ -80,7 +80,7 @@ int Dos9_CmdExit(char* lpLine)
 
                     Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, ntoken, 0);
                     Dos9_EsFree(param);
-                    return -1;
+                    return DOS9_UNEXPECTED_ELEMENT;
 
                 }
 
@@ -107,5 +107,6 @@ int Dos9_CmdExit(char* lpLine)
         exit(ret);
     }
 
+    /* this statement is never reached \o/ */
 	return 0;
 }

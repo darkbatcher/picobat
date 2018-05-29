@@ -90,7 +90,7 @@ int Dos9_CmdRmdir(char* lpLine)
 
         Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION,
                                         __FILE__ "/Dos9_CmdRmdir()", 0);
-        status = -1;
+        status = DOS9_FAILED_ALLOCATION;
 
         goto end;
 
@@ -125,7 +125,7 @@ int Dos9_CmdRmdir(char* lpLine)
 
                     Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION,
                                                     __FILE__ "/Dos9_CmdRmdir()", 0);
-                    status = -1;
+                    status = DOS9_FAILED_ALLOCATION;
 
                     goto end;
 
@@ -139,7 +139,7 @@ int Dos9_CmdRmdir(char* lpLine)
 
                 Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION,
                                                 __FILE__ "/Dos9_CmdRmdir()", 0);
-                status = -1;
+                status = DOS9_FAILED_ALLOCATION;
 
                 goto end;
 
@@ -160,7 +160,7 @@ int Dos9_CmdRmdir(char* lpLine)
     } else if (n == 0) {
 
         Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "RD/RMDIR", FALSE);
-        status = -1;
+        status = DOS9_EXPECTED_MORE;
 
         goto end;
 
@@ -173,7 +173,7 @@ int Dos9_CmdRmdir(char* lpLine)
                 Dos9_ShowErrorMessage(DOS9_NO_MATCH,
                                         name[i],
                                         FALSE);
-                status = -1;
+                status = DOS9_NO_MATCH;
 
                 goto end;
             }
@@ -276,7 +276,7 @@ int Dos9_Rmdir(const char* dir)
         Dos9_ShowErrorMessage(DOS9_UNABLE_RMDIR
                                 | DOS9_PRINT_C_ERROR, dir, 0);
 
-        return -1;
+        return DOS9_UNABLE_RMDIR;
 
     }
 

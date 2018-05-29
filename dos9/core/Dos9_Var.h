@@ -47,7 +47,7 @@ typedef char* LOCAL_VAR_BLOCK;
 
 int              Dos9_InitVar(char* lpArray[]);
 
-int              Dos9_SetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char cVarName, char* cVarContent);
+void             Dos9_SetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char cVarName, char* cVarContent);
 
 char*            Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve);
 int              Dos9_GetVar(char* lpName, ESTR* lpRecieve);

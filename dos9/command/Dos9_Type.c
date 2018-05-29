@@ -65,7 +65,7 @@ void Dos9_TypeFileF(FILE* pFile)
         clearerr(pFile);
 }
 
-void Dos9_TypeFile(char* lpFileName)
+int Dos9_TypeFile(char* lpFileName)
 {
     FILE* pFile;
     char buf[1024];
@@ -78,15 +78,15 @@ void Dos9_TypeFile(char* lpFileName)
                                 FALSE
                                 );
 
-        goto end;
+        return DOS9_FILE_ERROR;
     }
 
     while ((size = fread(buf, 1, sizeof(buf), pFile)))
         fwrite(buf, 1, size, fOutput);
 
-end:
-    if (pFile)
-        fclose(pFile);
+    fclose(pFile);
+
+    return 0;
 }
 
 int Dos9_CmdType(char* lpLine)
@@ -125,7 +125,7 @@ int Dos9_CmdType(char* lpLine)
                                        FALSE
                                        );
 
-                status = -1;
+                status = DOS9_NO_MATCH;
                 goto end;
 
             }
@@ -167,7 +167,7 @@ int Dos9_CmdType(char* lpLine)
                                     FALSE
                                     );
 
-            status = -1;
+            status = DOS9_NO_VALID_FILE;
             goto end;
 
         }
@@ -175,7 +175,7 @@ int Dos9_CmdType(char* lpLine)
         if (pEnd == pBegin) {
 
             /* only one file matching */
-            Dos9_TypeFile(pBegin->lpFileName);
+            status = Dos9_TypeFile(pBegin->lpFileName);
 
         } else {
 
@@ -183,9 +183,9 @@ int Dos9_CmdType(char* lpLine)
             pTmp = pBegin;
 
             while (pTmp) {
-                fprintf(fOutput, "---------- %s" DOS9_NL , pTmp->lpFileName);
 
-                Dos9_TypeFile(pTmp->lpFileName);
+                fprintf(fOutput, "---------- %s" DOS9_NL , pTmp->lpFileName);
+                status |= Dos9_TypeFile(pTmp->lpFileName);
 
                 pTmp = pTmp->lpflNext;
 

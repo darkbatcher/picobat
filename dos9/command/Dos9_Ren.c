@@ -65,7 +65,7 @@ int Dos9_CmdRen(char* lpLine)
 		Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "REN / RENAME", FALSE);
 		Dos9_EsFree(lpEstr);
 
-		return -1;
+		return DOS9_EXPECTED_MORE;
 
 	}
 
@@ -87,7 +87,7 @@ int Dos9_CmdRen(char* lpLine)
                                         0);
 
                 Dos9_EsFree(lpEstr);
-                return -1;
+                return DOS9_MOVE_NOT_RENAME;
 
 			}
 
@@ -115,7 +115,7 @@ int Dos9_CmdRen(char* lpLine)
 
 				Dos9_ShowErrorMessage(DOS9_UNABLE_RENAME, lpFileName, FALSE);
 				Dos9_EsFree(lpEstr);
-				return -1;
+				return DOS9_UNABLE_RENAME;
 
 			}
 
@@ -126,5 +126,5 @@ int Dos9_CmdRen(char* lpLine)
 	Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "REN / RENAME", FALSE);
 	Dos9_EsFree(lpEstr);
 
-	return -1;
+	return DOS9_EXPECTED_MORE;
 }

@@ -48,6 +48,7 @@ int Dos9_CmdBlock(char* lpLine)
 	BLOCKINFO bkCode;
 	char* lpToken;
 	ESTR* lpNextBlock=Dos9_EsInit();
+	int status = DOS9_NO_ERROR;
 
 	Dos9_GetNextBlockEs(lpLine, lpNextBlock);
 
@@ -56,14 +57,18 @@ int Dos9_CmdBlock(char* lpLine)
 	if (!lpToken) {
 
 		Dos9_ShowErrorMessage(DOS9_INVALID_TOP_BLOCK, lpLine, FALSE);
-		return -1;
+        status = DOS9_INVALID_TOP_BLOCK;
+
+		goto error;
 
 	}
 
 	if (*lpToken!=')') {
 
 		Dos9_ShowErrorMessage(DOS9_INVALID_TOP_BLOCK, lpLine, FALSE);
-		return -1;
+        status = DOS9_INVALID_TOP_BLOCK;
+
+		goto error;
 
 	}
 
@@ -75,13 +80,15 @@ int Dos9_CmdBlock(char* lpLine)
 	if (*lpToken) {
 
 		Dos9_ShowErrorMessage(DOS9_INVALID_TOP_BLOCK, lpLine, FALSE);
-		return -1;
+        status = DOS9_INVALID_TOP_BLOCK;
+
+		goto error;
 
 	}
 
 	Dos9_RunBlock(&bkCode);
 
+error:
 	Dos9_EsFree(lpNextBlock);
-
-	return iErrorLevel;
+	return status ? status : iErrorLevel;
 }

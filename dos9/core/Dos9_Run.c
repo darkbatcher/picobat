@@ -328,13 +328,11 @@ int Dos9_RunLine(ESTR* lpLine)
 
 int Dos9_RunCommand(ESTR* lpCommand)
 {
-
 #define XSTR(x) #x
 #define STR(x) XSTR(x)
 
-
 	int (*lpProc)(char*);
-	char lpErrorlevel[sizeof(STR(INT_MAX))],
+	char lpErrorlevel[sizeof(STR(INT_MIN))],
          lpTmpLine[]="CD X:";
 	static int lastErrorLevel=0;
 	char *lpCmdLine, *tmp;

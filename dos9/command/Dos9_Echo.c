@@ -58,7 +58,7 @@ int Dos9_CmdEcho(char* lpLine)
 	    && *lpLine!='\0') {
 
 		Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR, lpLine-4, FALSE);
-		return -1;
+		return DOS9_COMMAND_ERROR;
 
 	}
 
@@ -97,7 +97,7 @@ int Dos9_CmdEcho(char* lpLine)
 
 	} else {
 
-		/* si rien n'est entr� on affiche l'�tat de la commannd echo */
+		/* si rien n'est entré on affiche l'état de la commande echo */
 		if (bEchoOn) fputs(lpMsgEchoOn, fOutput);
 		else fputs(lpMsgEchoOff, fOutput);
 

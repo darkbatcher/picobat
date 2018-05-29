@@ -65,19 +65,20 @@ int Dos9_CmdColor(char* lpLine)
                 || (HWORD(code) == LWORD(code))) {
 
                 Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpArg, 0);
-                return -1;
+                return DOS9_UNEXPECTED_ELEMENT;
 
             }
 
 			Dos9_SetConsoleColor(colColor);
 
 		}
-		return 0;
+
+		return DOS9_NO_ERROR;
 
 	}
 
 	colColor=DOS9_COLOR_DEFAULT;
 	Dos9_SetConsoleColor(DOS9_COLOR_DEFAULT);
 
-	return 0;
+	return DOS9_NO_ERROR;
 }

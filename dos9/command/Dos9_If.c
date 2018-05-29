@@ -71,7 +71,7 @@ int Dos9_CmdIf(char* lpParam)
 			if (!(lpNext=Dos9_GetNextParameter(lpNext, lpArgument, 11))) {
 
 				Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
-				return 0;
+				return DOS9_EXPECTED_MORE;
 
 			}
 
@@ -86,7 +86,7 @@ int Dos9_CmdIf(char* lpParam)
 			if (!(lpNext=Dos9_GetNextParameter(lpNext, lpArgument, 11))) {
 
 				Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
-				return 0;
+				return DOS9_EXPECTED_MORE;
 
 			}
 
@@ -110,8 +110,10 @@ int Dos9_CmdIf(char* lpParam)
 		    && (iFlag & (DOS9_IF_ERRORLEVEL | DOS9_IF_EXIST | DOS9_IF_DEFINED))
 		   ) {
 
-			Dos9_ShowErrorMessage(DOS9_INCOMPATIBLE_ARGS, "'/i' (DEFINED, EXIST, ERRORLEVEL)", FALSE);
-			return 0;
+			Dos9_ShowErrorMessage(DOS9_INCOMPATIBLE_ARGS,
+                                     "'/i' (DEFINED, EXIST, ERRORLEVEL)",
+                                     FALSE);
+			return DOS9_INCOMPATIBLE_ARGS;
 
 		}
 
@@ -126,7 +128,7 @@ int Dos9_CmdIf(char* lpParam)
 		if (!(lpNext=Dos9_GetNextParameter(lpParam, lpArgument, FILENAME_MAX))) {
 
 			Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
-			return -1;
+			return DOS9_EXPECTED_MORE;
 
 		}
 
@@ -144,7 +146,7 @@ int Dos9_CmdIf(char* lpParam)
 		if (!(lpNext=Dos9_GetNextParameter(lpParam, lpArgument, FILENAME_MAX))) {
 
 			Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
-			return -1;
+			return DOS9_EXPECTED_MORE;
 
 		}
 
@@ -161,7 +163,7 @@ int Dos9_CmdIf(char* lpParam)
 		if (!(lpNext=Dos9_GetNextParameter(lpParam, lpArgument, FILENAME_MAX))) {
 
 			Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
-			return -1;
+			return DOS9_EXPECTED_MORE;
 
 		}
 
@@ -189,7 +191,7 @@ int Dos9_CmdIf(char* lpParam)
 
                 Dos9_EsFree(lpComparison);
                 Dos9_ShowErrorMessage(DOS9_INVALID_IF_EXPRESSION, lpParam, FALSE);
-                return -1;
+                return DOS9_INVALID_IF_EXPRESSION;
 
             }
 
@@ -233,7 +235,7 @@ int Dos9_CmdIf(char* lpParam)
 
 					Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
 					Dos9_EsFree(lpComparison);
-					return -1;
+					return DOS9_EXPECTED_MORE;
 
 				}
 
@@ -244,7 +246,7 @@ int Dos9_CmdIf(char* lpParam)
 					Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
 					Dos9_EsFree(lpOtherPart);
 					Dos9_EsFree(lpComparison);
-					return -1;
+					return DOS9_EXPECTED_MORE;
 
 				}
 
@@ -268,7 +270,7 @@ int Dos9_CmdIf(char* lpParam)
 
 			Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
 			Dos9_EsFree(lpComparison);
-			return -1;
+			return DOS9_EXPECTED_MORE;
 
 		}
 
@@ -330,7 +332,7 @@ int Dos9_CmdIf(char* lpParam)
 
                     /* there's something trailing that is not an else here*/
                     Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpNext, FALSE);
-                    return -1;
+                    return DOS9_UNEXPECTED_ELEMENT;
 
                 }
 
@@ -338,7 +340,7 @@ int Dos9_CmdIf(char* lpParam)
 
                     /* there's something trailing that is not an else here*/
                     Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpNext, FALSE);
-                    return -1;
+                    return DOS9_UNEXPECTED_ELEMENT;
 
             }
 

@@ -52,11 +52,6 @@ int Dos9_TestLocalVarName(char cVar)
 		/* if the name is not strict ASCII, it
 		   is not conformant */
 
-		if (cVar && cVar!='\n' && cVar!='\t' && cVar!=' ')
-			Dos9_ShowErrorMessage(DOS9_SPECIAL_VAR_NON_ASCII,
-			                      (const char*)((int)cVar),
-			                      FALSE);
-
 		return -1;
 	}
 
@@ -290,7 +285,7 @@ char* Dos9_GetLocalVarPointer(LOCAL_VAR_BLOCK* lpvBlock, char cVarName)
 
 }
 
-int Dos9_SetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char cVarName, char* cVarContent)
+void Dos9_SetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char cVarName, char* cVarContent)
 {
     char* old;
 
@@ -300,7 +295,7 @@ int Dos9_SetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char cVarName, char* cVarContent
 	   and space (code range from 0x00 to 0x20 included) */
 
 	if (Dos9_TestLocalVarName(cVarName))
-		return FALSE;
+		return;
 
 	/* Free the current content of the variable if it is
 	   already allocated */
@@ -308,9 +303,16 @@ int Dos9_SetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char cVarName, char* cVarContent
 	old = lpvBlock[(int)cVarName];
 
 	if (cVarContent) {
-		lpvBlock[(int)cVarName]=strdup(cVarContent);
+
+		if (!(lpvBlock[(int)cVarName]=strdup(cVarContent)))
+            Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION,
+                                    __FILE__ "Dos9_SetLocalVar()",
+                                    -1);
+
 	} else {
+
 		lpvBlock[(int)cVarName]=NULL;
+
 	}
 
     /* Makes this more resilient by allowing cVarContent to point to the actual
@@ -318,8 +320,7 @@ int Dos9_SetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char cVarName, char* cVarContent
 	if (old)
         free(old);
 
-
-	return TRUE;
+	return;
 }
 
 

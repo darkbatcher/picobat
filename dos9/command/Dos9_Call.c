@@ -59,7 +59,8 @@ int Dos9_CmdCall(char* lpLine)
 	     lpExt[_MAX_EXT];
 
 	int  bIsExtended=FALSE,
-	     iNbParam=0;
+	     iNbParam=0,
+	     status = DOS9_NO_ERROR;
 
 	lpFullLine= lpLine = Dos9_SkipBlanks(lpLine+4);
 
@@ -81,6 +82,8 @@ int Dos9_CmdCall(char* lpLine)
 				   command. */
 
 				Dos9_ShowErrorMessage(DOS9_EXTENSION_DISABLED_ERROR, lpCh, FALSE);
+				status = DOS9_EXTENSION_DISABLED_ERROR;
+
 				goto error;
 
 			}
@@ -169,6 +172,8 @@ int Dos9_CmdCall(char* lpLine)
 		/* neither ``file'' nor ``label'' were given */
 
 		Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "CALL", FALSE);
+
+		status = DOS9_EXPECTED_MORE;
 		goto error;
 
 
@@ -178,7 +183,7 @@ int Dos9_CmdCall(char* lpLine)
 		   since the function Dos9_CmdCallFile can cope with
 		   NULL as ``file'' */
 
-		Dos9_CmdCallFile(lpFile, lpFullLine, lpLabel, lpLine);
+		status = Dos9_CmdCallFile(lpFile, lpFullLine, lpLabel, lpLine);
 
 
 	} else {
@@ -195,32 +200,24 @@ int Dos9_CmdCall(char* lpLine)
 
 			/* ``file'' is a batch file, indeed */
 
-			Dos9_CmdCallFile(lpFile, lpFullLine, NULL, lpLine);
+			status = Dos9_CmdCallFile(lpFile, lpFullLine, NULL, lpLine);
 
 		} else {
 
 			/* this is an executable */
 			Dos9_GetEndOfLine(lpLine, lpEsParameter);
-			Dos9_CmdCallExternal(lpFile, Dos9_EsToChar(lpEsParameter));
+			status = Dos9_CmdCallExternal(lpFile, Dos9_EsToChar(lpEsParameter));
 
 		}
 
 	}
-
-	Dos9_EsFree(lpEsFile);
-	Dos9_EsFree(lpEsParameter);
-	Dos9_EsFree(lpEsLabel);
-
-	return 0;
-
 
 error:
 	Dos9_EsFree(lpEsFile);
 	Dos9_EsFree(lpEsParameter);
 	Dos9_EsFree(lpEsLabel);
 
-	return -1;
-
+	return status ? status : iErrorLevel;
 }
 
 int Dos9_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
@@ -232,6 +229,7 @@ int Dos9_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 	LOCAL_VAR_BLOCK* lpvOldArgs;
 	LOCAL_VAR_BLOCK lpvTmpArgs[LOCAL_VAR_BLOCK_SIZE]={NULL};
 	char lpAbsPath[FILENAME_MAX];
+	int status = DOS9_NO_ERROR;
 
 	ESTR *lpEsParam=Dos9_EsInit(),
          *lpEsCmd
@@ -244,6 +242,7 @@ int Dos9_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 
 			Dos9_ShowErrorMessage(DOS9_FILE_ERROR, lpFile, FALSE);
 
+            status = DOS9_FILE_ERROR;
 			goto error;
 
     }
@@ -277,6 +276,8 @@ int Dos9_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 	} else if (Dos9_JumpToLabel(lpLabel, lpFile ? lpAbsPath : NULL)== -1) {
 
 		Dos9_ShowErrorMessage(DOS9_LABEL_ERROR, lpLabel, FALSE);
+
+		status = DOS9_LABEL_ERROR;
 		goto error;
 
 	} else {
@@ -390,15 +391,9 @@ int Dos9_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 	lpvLocalVars = lpvOldBlock;
 	lpvArguments = lpvOldArgs;
 
-	Dos9_EsFree(lpEsParam);
-
-	return iErrorLevel; /* do not affect errorlevel */
-
 error:
 	Dos9_EsFree(lpEsParam);
-
-	return -1;
-
+	return status ? status : iErrorLevel; /* do not affect errorlevel */
 }
 
 int Dos9_CmdCallExternal(char* lpFile, char* lpCh)

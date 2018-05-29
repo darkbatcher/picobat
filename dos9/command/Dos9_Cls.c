@@ -52,12 +52,12 @@ int Dos9_CmdCls(char* lpLine)
 		if (!strcmp(lpArg, "/?")) {
 
 			Dos9_ShowInternalHelp(DOS9_HELP_CLS);
-			return 0;
+			return DOS9_NO_ERROR;
 
 		} else {
 
 			Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpArg, FALSE);
-			return -1;
+			return DOS9_UNEXPECTED_ELEMENT;
 
 		}
 
@@ -65,5 +65,5 @@ int Dos9_CmdCls(char* lpLine)
 
 	Dos9_ClearConsoleScreen();
 
-	return 0;
+	return DOS9_NO_ERROR;
 }

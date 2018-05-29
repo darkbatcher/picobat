@@ -53,7 +53,8 @@ int Dos9_CmdSetLocal(char* lpLine)
 {
 	char lpName[FILENAME_MAX];
 	char* lpNext=lpLine+8;
-	int i = 0;
+	int i = 0,
+        status = DOS9_NO_ERROR;
 
 	while ((lpNext=Dos9_GetNextParameter(lpNext, lpName, FILENAME_MAX))) {
 
@@ -81,6 +82,8 @@ int Dos9_CmdSetLocal(char* lpLine)
 						"CMDLYCORRECT",
 						FALSE
 						);
+
+            return DOS9_UNABLE_SET_OPTION;
 #endif
 		} else if (!stricmp(lpName, "CMDLYINCORRECT")) {
 #if !defined(DOS9_STATIC_CMDLYCORRECT)
@@ -89,6 +92,8 @@ int Dos9_CmdSetLocal(char* lpLine)
 			Dos9_ShowErrorMessage(DOS9_UNABLE_SET_OPTION,
 						"CMDLYINCORRECT",
 						FALSE);
+
+            return DOS9_UNABLE_SET_OPTION;
 #endif
 		} else if (!stricmp(lpName, "DISABLEFLOATS")) {
 
@@ -98,7 +103,8 @@ int Dos9_CmdSetLocal(char* lpLine)
 
 			bDelayedExpansion=FALSE;
 
-		} else if (!stricmp(lpName, "ENABLEEXTENSIONS") || !stricmp(lpName, "DISABLEEXTENSION")) {
+		} else if (!stricmp(lpName, "ENABLEEXTENSIONS")
+             || !stricmp(lpName, "DISABLEEXTENSION")) {
 
 			/* provided for backward compatibility. The ENABLEEXTENSIONS
 			   option was used to block some NT features to make scripts portables
@@ -109,8 +115,10 @@ int Dos9_CmdSetLocal(char* lpLine)
 
 		} else {
 
-			Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpName, FALSE);
-			return -1;
+			Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT,
+                                    lpName, FALSE);
+
+			return DOS9_UNEXPECTED_ELEMENT;
 
 		}
 

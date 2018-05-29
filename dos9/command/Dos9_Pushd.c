@@ -129,7 +129,7 @@ int Dos9_CmdPopd (char *lpLine)
 
     if (Dos9_SetCurrentDir(Dos9_EsToChar(lpEsDir))) {
         Dos9_ShowErrorMessage(DOS9_DIRECTORY_ERROR, Dos9_EsToChar(lpEsDir), FALSE);
-        return -1;
+        return DOS9_DIRECTORY_ERROR;
     }
 
     Dos9_EsFree(lpEsDir);

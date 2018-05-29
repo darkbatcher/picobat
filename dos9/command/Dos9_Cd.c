@@ -216,21 +216,12 @@ int Dos9_CmdCd_nix(char* lpLine)
 {
 	char* lpNext;
 	ESTR* lpEsDir=Dos9_EsInit();
+	int status = DOS9_NO_ERROR;
 
 	if (!strnicmp(lpLine,"CD", 2)){
 		lpLine+=2;
 	} else if (!strnicmp(lpLine, "CHDIR", 5)) {
 		lpLine+=5;
-	}
-
-	if (*lpLine!=' '
-		&& *lpLine!='\t'
-		&& *lpLine!='\0'
-		&& *lpLine!=';'
-
-		&& *lpLine!=',') {
-		Dos9_ShowErrorMessage(DOS9_BAD_COMMAND_LINE, NULL, FALSE);
-		goto error;
 	}
 
 	if ((lpNext=Dos9_GetNextParameterEs(lpLine, lpEsDir))) {
@@ -295,6 +286,8 @@ int Dos9_CmdCd_nix(char* lpLine)
 			*/
 
 			Dos9_ShowErrorMessage(DOS9_DIRECTORY_ERROR, lpLine, FALSE);
+
+            status = DOS9_DIRECTORY_ERROR;
 			goto error;
 
 		}
@@ -305,15 +298,9 @@ int Dos9_CmdCd_nix(char* lpLine)
 
 	}
 
-	Dos9_EsFree(lpEsDir);
-
-	DOS9_DBG("Returning from \"cd\" on success\n");
-	return 0;
-
 error:
-
 	Dos9_EsFree(lpEsDir);
-	return -1;
+	return status;
 }
 
 
@@ -378,7 +365,7 @@ int Dos9_CmdCd_win(char* lpLine)
                                       FALSE
                                       );
 
-                status = -1;
+                status = DOS9_DIRECTORY_ERROR;
 
             }
 
@@ -392,7 +379,9 @@ int Dos9_CmdCd_win(char* lpLine)
 
     }
 
-    if ((passed == 0) || (toupper(passed) == toupper(current)) || (force == TRUE)) {
+    if ((passed == 0)
+        || (toupper(passed) == toupper(current))
+        || (force == TRUE)) {
 
         /* change the current directory, yeah */
 
@@ -403,7 +392,7 @@ int Dos9_CmdCd_win(char* lpLine)
                                     FALSE
                                     );
 
-            status = -1;
+            status = DOS9_DIRECTORY_ERROR;
             goto end;
 
         }

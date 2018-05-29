@@ -51,7 +51,7 @@ int Dos9_CmdMore(char* line)
     int flags= DOS9_MORE_ANSICODES | DOS9_MORE_USEU8,
         tabsize=8,
         begin=0,
-        status=0;
+        status= DOS9_NO_ERROR;
 
     FILELIST *list=NULL,
              *next,
@@ -110,7 +110,7 @@ int Dos9_CmdMore(char* line)
                                         FALSE
                                       );
 
-                status = -1;
+                status = DOS9_INVALID_NUMBER;
                 goto end;
 
             }
@@ -126,7 +126,7 @@ int Dos9_CmdMore(char* line)
                                         FALSE
                                       );
 
-                status = -1;
+                status = DOS9_INVALID_NUMBER;
                 goto end;
 
             }
@@ -141,7 +141,7 @@ int Dos9_CmdMore(char* line)
                                         FALSE
                                         );
 
-                status = -1;
+                status = DOS9_NO_MATCH;
                 goto end;
 
             }
@@ -190,7 +190,7 @@ int Dos9_CmdMore(char* line)
                                     FALSE
                                     );
 
-            status = -1;
+            status = DOS9_NO_MATCH;
             goto end;
 
         }
@@ -231,7 +231,7 @@ int Dos9_MoreFile(int flags, int tabsize, int begin, char* filename)
                                     FALSE
                                     );
 
-            status = -1;
+            status = DOS9_FILE_ERROR;
 
             goto end;
         }
@@ -270,12 +270,8 @@ int Dos9_MoreFile(int flags, int tabsize, int begin, char* filename)
                 ok = Dos9_MoreWriteLine(&begin, flags, tabsize, file);
 
 
-            if (Dos9_MorePrompt(&toprint, &begin, &ok)) {
-
-                status = 1;
+            if (Dos9_MorePrompt(&toprint, &begin, &ok))
                 goto end;
-
-            }
 
         }
 

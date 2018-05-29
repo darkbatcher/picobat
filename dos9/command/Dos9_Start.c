@@ -113,7 +113,7 @@ int Dos9_StartFile(const char* file, const char* args, const char* dir,
 
             Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION, "libcu8_xconvert()", FALSE);
 
-            return -1;
+            return DOS9_FAILED_ALLOCATION;
     }
 
     if (dir) {
@@ -132,7 +132,7 @@ int Dos9_StartFile(const char* file, const char* args, const char* dir,
 
             Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION, "libcu8_xconvert()", FALSE);
 
-            return -1;
+            return DOS9_FAILED_ALLOCATION;
 
         }
 
@@ -241,8 +241,8 @@ int Dos9_StartFile_X(char* file, char* args, const char* dir, int mode, int wait
         if (dir && chdir(dir) == -1) {
             Dos9_ShowErrorMessage(DOS9_DIRECTORY_ERROR | DOS9_PRINT_C_ERROR,
                                     dir,
-                                    FALSE);
-            exit(-1);
+                                    -1);
+
         }
 
         arg[0] = XDG_OPEN;
@@ -266,8 +266,8 @@ int Dos9_StartFile_X(char* file, char* args, const char* dir, int mode, int wait
         if (execvp(XDG_OPEN, arg) == -1) {
             Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR | DOS9_PRINT_C_ERROR,
                                     XDG_OPEN,
-                                    FALSE);
-            exit(-1);
+                                    -1);
+
         }
 
     } else if (pid == -1) {
@@ -275,7 +275,7 @@ int Dos9_StartFile_X(char* file, char* args, const char* dir, int mode, int wait
         Dos9_ShowErrorMessage(DOS9_FAILED_FORK | DOS9_PRINT_C_ERROR,
                         __FILE__ "/Dos9_StartFile()",
                         FALSE);
-        return -1;
+        return DOS9_FAILED_FORK ;
 
     } else {
 
@@ -333,7 +333,7 @@ int Dos9_StartFile_S(char* file, char* args, const char* dir, int mode, int wait
         Dos9_ShowErrorMessage(DOS9_FAILED_FORK | DOS9_PRINT_C_ERROR,
                         __FILE__ "/Dos9_StartFile()",
                         FALSE);
-        return -1;
+        return DOS9_FAILED_FORK;
 
     } else {
 
@@ -407,7 +407,8 @@ int Dos9_CmdStart(char* line)
 		 file[FILENAME_MAX],
 		 *dir = NULL;
 
-    int nok = 0, command = 0;
+    int nok = 0, command = 0,
+        status = DOS9_NO_ERROR;
     void* trash;
 
 	line += 5;
@@ -432,6 +433,8 @@ int Dos9_CmdStart(char* line)
 				|| dir != NULL) {
 
 				Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, "/d", 0);
+				status = DOS9_UNEXPECTED_ELEMENT;
+
 				goto error;
 
 			}
@@ -500,6 +503,8 @@ int Dos9_CmdStart(char* line)
 	if (nok == 0) {
 
 		Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "START", 0);
+		status = DOS9_EXPECTED_MORE;
+
 		goto error;
 
 	}
@@ -513,9 +518,9 @@ int Dos9_CmdStart(char* line)
     if (command && (mode & START_MODE_BACKGROUND)) {
 
         /* The same as below, but implemented as a thread */
-        Dos9_StartCommandBackground(file, param, wait);
+        status = Dos9_StartCommandBackground(file, param, wait);
 
-        return 0;
+        goto error;
 
     } else if (command) {
 
@@ -556,21 +561,22 @@ int Dos9_CmdStart(char* line)
 	Dos9_UseBackSlash(line);
 #endif // WIN32
 
-    Dos9_LockMutex(&mThreadLock);
-	if (Dos9_StartFile(file,
+    if (Dos9_LockMutex(&mThreadLock))
+            Dos9_ShowErrorMessage(DOS9_RELEASE_MUTEX_ERROR,
+                                  __FILE__ "/Dos9_CmdStart()" , -1);
+
+	status = Dos9_StartFile(file,
 						param->str,
 						dir ? dir : lpCurrentDir,
 						mode,
-						wait))
-		goto error;
+						wait);
 
-    Dos9_ReleaseMutex(&mThreadLock);
-	Dos9_EsFree(param);
-	return 0;
+    if (Dos9_ReleaseMutex(&mThreadLock))
+            Dos9_ShowErrorMessage(DOS9_RELEASE_MUTEX_ERROR,
+                                  __FILE__ "/Dos9_CmdStart()" , -1);
 
 error:
-        Dos9_ReleaseMutex(&mThreadLock);
-		Dos9_EsFree(param);
-		return -1;
+	Dos9_EsFree(param);
+	return status;
 
 }

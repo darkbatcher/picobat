@@ -74,6 +74,7 @@ int Dos9_CmdGoto(char* lpLine)
             if (Dos9_GetFileFullPath(lpFileName, pch, FILENAME_MAX) == -1) {
 
                 Dos9_ShowErrorMessage(DOS9_FILE_ERROR, pch, 0);
+                iErrorLevel = DOS9_FILE_ERROR;
                 goto err;
 
             }
@@ -116,6 +117,7 @@ int Dos9_CmdGoto(char* lpLine)
         if (! quiet)
             Dos9_ShowErrorMessage(DOS9_LABEL_ERROR, lpLabelName, 0);
 
+        iErrorLevel = DOS9_LABEL_ERROR;
         goto err;
 
     }

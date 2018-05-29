@@ -186,7 +186,8 @@ int Dos9_CmdSet(char *lpLine)
 
 	int i,
         nok = 0,
-	    bFloats;
+	    bFloats,
+	    status = DOS9_NO_ERROR;
 
 	if ((lpNextToken=Dos9_GetNextParameter(lpLine+3, lpArgBuf,
             sizeof(lpArgBuf))))  {
@@ -216,12 +217,12 @@ int Dos9_CmdSet(char *lpLine)
 			}
 
 			/* get the floats */
-			if (Dos9_CmdSetA(lpNextToken, bFloats))
+			if (status = Dos9_CmdSetA(lpNextToken, bFloats))
 				goto error;
 
 		} else if (!stricmp(lpArg, "/p")) {
 
-			if ((Dos9_CmdSetP(lpNextToken)))
+			if (status = Dos9_CmdSetP(lpNextToken))
 				goto error;
 
 		} else {
@@ -265,15 +266,17 @@ int Dos9_CmdSet(char *lpLine)
 		}
 
 		if (!found) {
+
 			Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpLine, FALSE);
+			status = DOS9_UNEXPECTED_ELEMENT;
+
 			goto error;
+
 		}
 	}
 
-	return 0;
-
 error:
-    return -1;
+	return status;
 }
 
 /* simple set */
@@ -365,11 +368,6 @@ int Dos9_CmdSetS(char* lpLine)
 
 	Dos9_EsFree(lpEsVar);
 	return 0;
-
-/* error: */
-	Dos9_EsFree(lpEsVar);
-	return -1;
-
 }
 
 int Dos9_CmdSetP(char* lpLine)
@@ -378,6 +376,7 @@ int Dos9_CmdSetP(char* lpLine)
 	ESTR* lpEsVar=Dos9_EsInit();
 	ESTR* lpEsInput=Dos9_EsInit();
 	char* lpEqual;
+	int status = DOS9_NO_ERROR;
 
 	while (*lpLine==' ' || *lpLine=='\t') lpLine++;
 
@@ -417,24 +416,23 @@ int Dos9_CmdSetP(char* lpLine)
 		                      Dos9_EsToChar(lpEsVar),
 		                      FALSE);
 
+        status = DOS9_UNEXPECTED_ELEMENT;
+
 		goto error;
 
 	}
 
-	Dos9_EsFree(lpEsVar);
-	Dos9_EsFree(lpEsInput);
-	return 0;
-
 error:
 	Dos9_EsFree(lpEsVar);
 	Dos9_EsFree(lpEsInput);
-	return -1;
+	return status;
 }
 
 int Dos9_CmdSetA(char* lpLine, int bFloats)
 {
 
 	ESTR* lpExpression=Dos9_EsInit();
+	int status = DOS9_NO_ERROR;
 
 	lpLine=Dos9_SkipBlanks(lpLine);
 
@@ -445,16 +443,16 @@ int Dos9_CmdSetA(char* lpLine, int bFloats)
 
 		switch(bFloats) {
 
-			case TRUE:
-				/* evaluate floating expression */
-				if ((Dos9_CmdSetEvalFloat(lpExpression)))
-					goto error;
+        case TRUE:
+            /* evaluate floating expression */
+            if (status = Dos9_CmdSetEvalFloat(lpExpression))
+                goto error;
 
-				break;
+            break;
 
 		case FALSE:
 			/* evaluate integer expression */
-			if ((Dos9_CmdSetEvalInt(lpExpression)))
+			if (status = Dos9_CmdSetEvalInt(lpExpression))
 				goto error;
 
 			break;
@@ -462,12 +460,9 @@ int Dos9_CmdSetA(char* lpLine, int bFloats)
 		}
     }
 
-	Dos9_EsFree(lpExpression);
-	return 0;
-
 error:
 	Dos9_EsFree(lpExpression);
-	return -1;
+	return status;
 }
 
 int Dos9_CmdSetEvalFloat(ESTR* lpExpression)
@@ -479,6 +474,7 @@ int Dos9_CmdSetEvalFloat(ESTR* lpExpression)
 	char  cLeftAssign=0;
 	double dResult,
 	       dVal;
+    int status = DOS9_NO_ERROR;
 
 	lpVarName=Dos9_EsToChar(lpExpression);
 
@@ -488,7 +484,7 @@ int Dos9_CmdSetEvalFloat(ESTR* lpExpression)
 	if (!*lpVarName) {
 
 		Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "SET", FALSE);
-		goto error;
+		return DOS9_EXPECTED_MORE;
 
 	}
 
@@ -496,7 +492,7 @@ int Dos9_CmdSetEvalFloat(ESTR* lpExpression)
 	if (!(lpEqual=strchr(lpVarName, '='))) {
 
 		Dos9_ShowErrorMessage(DOS9_INVALID_EXPRESSION, lpVarName, FALSE);
-		goto error;
+		return DOS9_INVALID_EXPRESSION;
 
 	}
 
@@ -518,6 +514,8 @@ int Dos9_CmdSetEvalFloat(ESTR* lpExpression)
 	if (!(evaluator=evaluator_create(lpEqual+1))) {
 
 		Dos9_ShowErrorMessage(DOS9_INVALID_EXPRESSION, lpEqual+1, FALSE);
+		status = DOS9_INVALID_EXPRESSION;
+
 		goto error;
 
 	}
@@ -572,17 +570,12 @@ int Dos9_CmdSetEvalFloat(ESTR* lpExpression)
 
 	Dos9_SetEnv(lpeEnv, Dos9_EsToChar(lpExpression), lpResult);
 
-    if (Dos9_ReleaseMutex(&mSetFLock))
-        Dos9_ShowErrorMessage(DOS9_RELEASE_MUTEX_ERROR,
-                              __FILE__ "/Dos9_CmdSetEvalFloat()" , -1);
-
-	return 0;
-
 error:
     if (Dos9_ReleaseMutex(&mSetFLock))
         Dos9_ShowErrorMessage(DOS9_RELEASE_MUTEX_ERROR,
                               __FILE__ "/Dos9_CmdSetEvalFloat()" , -1);
-	return -1;
+
+	return status;
 }
 
 /* evaluate an interger expression */
@@ -594,7 +587,8 @@ int Dos9_CmdSetEvalInt(ESTR* lpExpression)
 	char  cLeftAssign=0;
 	int   iResult,
 	      iVal,
-	      bDouble=FALSE;
+	      bDouble=FALSE,
+	      status = 0;
 
 	Dos9_EsCat(lpExpression, "\n");
 
@@ -606,7 +600,7 @@ int Dos9_CmdSetEvalInt(ESTR* lpExpression)
 	if (!*lpVarName) {
 
 		Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "SET", FALSE);
-		goto error;
+        return DOS9_EXPECTED_MORE;
 
 	}
 
@@ -614,7 +608,7 @@ int Dos9_CmdSetEvalInt(ESTR* lpExpression)
 	if (!(lpEqual=strchr(lpVarName, '='))) {
 
 		Dos9_ShowErrorMessage(DOS9_INVALID_EXPRESSION, lpVarName, FALSE);
-		goto error;
+		return DOS9_EXPECTED_MORE;
 
 	}
 
@@ -636,6 +630,8 @@ int Dos9_CmdSetEvalInt(ESTR* lpExpression)
 	if (IntEval_Error != INTEVAL_NOERROR) {
 
 		Dos9_ShowErrorMessage(DOS9_INVALID_EXPRESSION, lpEqual+1, FALSE);
+		status = DOS9_INVALID_EXPRESSION;
+
 		goto error;
 
 	}
@@ -739,15 +735,11 @@ int Dos9_CmdSetEvalInt(ESTR* lpExpression)
 
 	Dos9_SetEnv(lpeEnv, Dos9_EsToChar(lpExpression), lpResult);
 
-    if (Dos9_ReleaseMutex(&mSetILock))
-            Dos9_ShowErrorMessage(DOS9_RELEASE_MUTEX_ERROR,
-                                  __FILE__ "/Dos9_CmdSetEvalInt()" , -1);
-
-	return 0;
-
 error:
     if (Dos9_ReleaseMutex(&mSetILock))
             Dos9_ShowErrorMessage(DOS9_RELEASE_MUTEX_ERROR,
                                   __FILE__ "/Dos9_CmdSetEvalInt()" , -1);
-	return -1;
+
+	return status;
+
 }

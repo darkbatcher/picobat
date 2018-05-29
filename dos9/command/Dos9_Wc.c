@@ -83,7 +83,7 @@ int Dos9_FileCounts(int mode, const char* file, struct wc_count_t* cnt)
     } else if ((fd = open(file, O_RDONLY | O_BINARY)) == -1) {
 
         Dos9_ShowErrorMessage(DOS9_FILE_ERROR, file,0);
-        return -1;
+        return DOS9_FILE_ERROR;
 
     }
 
@@ -156,7 +156,7 @@ int Dos9_FileCounts(int mode, const char* file, struct wc_count_t* cnt)
         clearerr(fInput);
     }
 
-    return !size;
+    return 0;
 }
 
 void Dos9_AddCounts(struct wc_count_t* res, const struct wc_count_t* val)
@@ -198,8 +198,10 @@ int Dos9_CmdWc(char* line)
              *item;
     int mode = 0,
         nb = 0,
-        size;
-    /* char* fmt; */
+        size,
+        status = DOS9_NO_ERROR,
+        r;
+
     struct wc_count_t total = {0, 0, 0, 0}, cnt;
 
     line += 2;
@@ -237,6 +239,8 @@ int Dos9_CmdWc(char* line)
 
             default:
                 Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, param->str, 0);
+                status = DOS9_UNEXPECTED_ELEMENT;
+
                 goto error;
 
             }
@@ -254,6 +258,8 @@ int Dos9_CmdWc(char* line)
                                                DOS9_SEARCH_NO_PSEUDO_DIR))) {
 
                 Dos9_ShowErrorMessage(DOS9_NO_MATCH, param->str, 0);
+                status = DOS9_NO_MATCH;
+
                 goto error;
 
             }
@@ -268,6 +274,8 @@ int Dos9_CmdWc(char* line)
             if (item == NULL) {
 
                 Dos9_ShowErrorMessage(DOS9_NO_MATCH, param->str, 0);
+                status = DOS9_NO_MATCH;
+
                 goto error;
 
             }
@@ -291,7 +299,7 @@ int Dos9_CmdWc(char* line)
     /* Display no error about file given ... */
     if (match == NULL) {
         /* Something to do with stdin */
-        Dos9_FileCounts(mode, NULL, &cnt);
+        status = Dos9_FileCounts(mode, NULL, &cnt);
         Dos9_PrintCounts(mode, &cnt, NULL);
     }
 
@@ -315,7 +323,7 @@ int Dos9_CmdWc(char* line)
             fprintf(fOutput, "%lu %s" DOS9_NL, Dos9_GetFileSize(item),
                         item->lpFileName + (size_t)item->stFileStats.st_uid);
 
-        } else if (Dos9_FileCounts(mode, item->lpFileName, &cnt)) {
+        } else if (!(r = Dos9_FileCounts(mode, item->lpFileName, &cnt))) {
             /* Reading the whole file is required */
 
             Dos9_PrintCounts(mode, &cnt,
@@ -324,7 +332,9 @@ int Dos9_CmdWc(char* line)
 
         }
 
-        /* remember we number of files we parsed sucessfully */
+        status |= r;
+
+        /* remember we number of files we parsed successfully */
         nb ++;
 
         item = item->lpflNext;
@@ -336,18 +346,12 @@ int Dos9_CmdWc(char* line)
 
     }
 
+error:
 end:
     if (match)
         Dos9_FreeFileList(match);
 
     Dos9_EsFree(param);
-    return 0;
-
-error:
-    if (match)
-        Dos9_FreeFileList(match);
-
-    Dos9_EsFree(param);
-    return -1;
+    return status;
 
 }
