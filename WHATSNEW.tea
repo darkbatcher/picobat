@@ -1895,3 +1895,12 @@ ${for %%a in (*.exe) do echo %%a}
 	- Fixed some bad libiconv linking options.
 	
 	- Fixed a lot of compilation warnings.
+
+{{Tuesday 29th, May}}
+
+	- Fixed libintl messages directories and initialisation of current
+	locale.
+
+	- Fixed {COPY} command to be more compatible to cmd.exe. The extension
+	is only enabled when {destination} is a folder or ends with a directory
+	delimiter.

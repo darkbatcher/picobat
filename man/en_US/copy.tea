@@ -21,7 +21,7 @@
 
 {{Synopsis}}
 
-${COPY [/-Y | /Y] [/R] [/A[:]attributes] source [...] destination}
+${COPY [/-Y | /Y] [/R] [/A[:]attributes] source [+] [...] destination}
 
 	Copy one or several files to another location.
 
@@ -30,7 +30,10 @@ ${COPY [/-Y | /Y] [/R] [/A[:]attributes] source [...] destination}
 	- {/Y} : Do not prompt the user for confirmation.
 
 	- {source} : The path of files to be copied (can include
-	{spec/regexp|regular expressions}).
+	{spec/regexp|regular expressions}). By using the {+} sign between
+	at least two paths, the behaviour of {COPY} will be affected as
+	follows: instead of trying to copy {source} into {destination},
+	the files referred to by {source} will be concatenated in {destination}.
 
 	- {destination} : The path of the new files to be created (can not
 	include {spec/regexp|regular expression}).
@@ -42,11 +45,11 @@ ${COPY [/-Y | /Y] [/R] [/A[:]attributes] source [...] destination}
 
 		-- {destination} ends with {/} or {\\};
 
-		-- {source} refers to multiple source files;
-
 	@- In any of the previous cases, {destination} is considered to be the
-	folder where files refered to by {source} must be copied. Thus files
-	resulting from copy will keep their original names.
+	folder where files referred to by {source} must be copied. Thus files
+	resulting from copy will keep their original names. If neither of
+	these conditions are met nor is the {/R} mode set, and {source} refers
+	to multiple files, then the files will be concatenated inside {destination}.
 
 	- {/R} : Turn on recursive mode. This mode allow copying a complete
 	tree. If {sources} refers to various tree, then the tree will be merged

@@ -44,8 +44,8 @@
 
 #include "Dos9_Copy.h"
 
-/* COPY [/R] [/-Y | /Y] [/A[:]attributes] source [...] destination
-   MOVE [/R] [/-Y | /Y] [/A[:]attributes] source [+] [...] destination
+/* COPY [/R] [/-Y | /Y] [/A[:]attributes] source [+] [...] destination
+   MOVE [/R] [/-Y | /Y] [/A[:]attributes] source  [...] destination
 
     - [/-Y | /Y] : Prompt the user.
 
@@ -69,16 +69,36 @@
     if any '+' is specified between any of the filenames, the command will
     consider that destination is the path of a file in which every file
     matching any of the source expressions will be concatenated, starting from
-    the first source expression.
+    the first source expression. Cmd used to accept filename concatenated with
+    a '+' such as file1+file2+file3+...+fileN. This is broken syntax since there
+    is *absolutely* no reason why a file could not contain any '+' sign in its
+    name. Thus Dos9 only supports detached names.
 
-
-    - destination : The location where the files will be copied. If
+    - destination : The location where the files will be copied/moved. If
     source is a single file, then destination is considered to be the destination
     filename unless (a) destination refers to a folder (b) destination is
-    terminated by either '/' or '\\' or (c) multiples files must be copied to
-    destination. No regular expression accepted.
+    terminated by either '/' or '\\' or (c) multiples files must be moved to
+    destination. If multiples files must be copied to a destination but neither of
+    (a) or (b) are met, then the file are concatenated inside a file named `destination`
+    No regular expression accepted.
 
 */
+
+#ifdef WIN32
+#define IS_DIR_DELIM(c) (c=='/' || c=='\\')
+#else
+#define IS_DIR_DELIM(c) (c=='/')
+#endif // WIN32
+
+int Dos9__EndWithDirectoryMark(const char* dir)
+{
+    int c;
+
+    while (*dir)
+        c = *(dir ++);
+
+    return IS_DIR_DELIM(c);
+}
 
 int Dos9_CmdCopy(char* line)
 {
@@ -107,7 +127,7 @@ int Dos9_CmdCopy(char* line)
 
         Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION,
                                 __FILE__ "/Dos9_CmdCopy()", 0);
-        status = -1;
+        status = DOS9_FAILED_ALLOCATION;
         goto end;
 
     }
@@ -150,7 +170,7 @@ int Dos9_CmdCopy(char* line)
                 if (flags & DOS9_COPY_MOVE) {
 
                     Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, str, FALSE);
-                    status = -1;
+                    status = DOS9_UNEXPECTED_ELEMENT;
                     goto end;
 
                 }
@@ -167,7 +187,7 @@ int Dos9_CmdCopy(char* line)
 
                     Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION,
                                             __FILE__ "/Dos9_CmdCopy()", 0);
-                    status = -1;
+                    status = DOS9_FAILED_ALLOCATION;
                     goto end;
 
                 }
@@ -180,7 +200,7 @@ int Dos9_CmdCopy(char* line)
 
                 Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION,
                                         __FILE__ "/Dos9_CmdCopy()", 0);
-                status = -1;
+                status = DOS9_FAILED_ALLOCATION;
                 goto end;
 
             }
@@ -193,7 +213,7 @@ int Dos9_CmdCopy(char* line)
     if (len < 2) {
 
         Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "COPY", FALSE);
-        status = -1;
+        status = DOS9_EXPECTED_MORE;
 
         goto end;
     }
@@ -203,7 +223,7 @@ int Dos9_CmdCopy(char* line)
 
         Dos9_ShowErrorMessage(DOS9_INCOMPATIBLE_ARGS, "/R, + (COPY)", FALSE);
 
-        status = -1;
+        status = DOS9_INCOMPATIBLE_ARGS;
         goto end;
 
     }
@@ -226,7 +246,7 @@ int Dos9_CmdCopy(char* line)
 
             Dos9_ShowErrorMessage(DOS9_NO_MATCH,
                                     file[i], FALSE);
-            status = -1;
+            status = DOS9_NO_MATCH;
 
             goto end;
 
@@ -265,10 +285,26 @@ int Dos9_CmdCopy(char* line)
 
     end = files;
 
+    /* actual matching items */
     while (end && (end = end->lpflNext) && (i++ < 2));
 
-    if (i == 3)
+    /* Cmd does not accept several file names used in with a
+       single *COPY* but for it, several files from a regular expression
+       mean concatenation of file, which is somehow strange. */
+    if (Dos9_DirExists(file[len-1])
+        || Dos9__EndWithDirectoryMark(file[len-1])) {
         flags |= DOS9_COPY_MULTIPLE;
+    }
+
+    if (i == 3) {
+
+        if (!(flags & DOS9_COPY_MULTIPLE)
+            && !(flags & DOS9_COPY_MOVE))
+            flags |= DOS9_COPY_CAT;
+        else
+            flags |= DOS9_COPY_MULTIPLE;
+    }
+
 
     while (files) {
 
@@ -292,25 +328,10 @@ end:
     return status;
 }
 
-#ifdef WIN32
-#define IS_DIR_DELIM(c) (c=='/' || c=='\\')
-#else
-#define IS_DIR_DELIM(c) (c=='/')
-#endif // WIN32
-
-int Dos9__EndWithDirectoryMark(const char* dir)
-{
-    int c;
-
-    while (*dir)
-        c = *(dir ++);
-
-    return IS_DIR_DELIM(c);
-}
-
 int Dos9_CmdCopyFile(char* file, const char* dest, int* flags)
 {
     int ok=1;
+    int status = DOS9_NO_ERROR;
 
     char  name[FILENAME_MAX],
           ext[FILENAME_MAX];
@@ -318,9 +339,7 @@ int Dos9_CmdCopyFile(char* file, const char* dest, int* flags)
     ESTR* dest_real = Dos9_EsInit();
 
     if (((*flags & DOS9_COPY_MULTIPLE)
-            && !(*flags & DOS9_COPY_CAT))
-        || Dos9_DirExists(dest)
-        || Dos9__EndWithDirectoryMark(dest)) {
+            && !(*flags & DOS9_COPY_CAT))) {
 
         Dos9_SplitPath(file, NULL, NULL, name, ext);
 
@@ -363,15 +382,15 @@ int Dos9_CmdCopyFile(char* file, const char* dest, int* flags)
 
         if (*flags & DOS9_COPY_MOVE) {
 
-            Dos9_MoveFile(file, dest_real->str);
+            status = Dos9_MoveFile(file, dest_real->str);
 
         } else if (*flags & DOS9_COPY_CAT) {
 
-            Dos9_CatFile(file, dest_real->str, flags);
+            status = Dos9_CatFile(file, dest_real->str, flags);
 
         } else {
 
-            Dos9_CopyFile(file, dest_real->str);
+            status = Dos9_CopyFile(file, dest_real->str);
 
         }
 
@@ -379,7 +398,7 @@ int Dos9_CmdCopyFile(char* file, const char* dest, int* flags)
 
     Dos9_EsFree(dest_real);
 
-    return 0;
+    return status;
 }
 
 int Dos9_CmdCopyRecursive(char* file, const char* dest, short attr, int* flags)
@@ -481,10 +500,10 @@ int Dos9_MoveFile(const char* file, const char* dest)
                                 file,
                                 0);
 
-        return -1;
+        return DOS9_UNABLE_MOVE;
     }
 
-    return 0;
+    return DOS9_NO_ERROR;
 }
 
 int Dos9_CopyFile(const char* file, const char* dest)
@@ -526,7 +545,7 @@ int Dos9_CopyFile(const char* file, const char* dest)
                                 | DOS9_PRINT_C_ERROR, file, 0);
 
 
-        return -1;
+        return DOS9_UNABLE_COPY;
 
     }
 
@@ -541,7 +560,7 @@ int Dos9_CopyFile(const char* file, const char* dest)
             Dos9_ShowErrorMessage(DOS9_UNABLE_COPY
                                     | DOS9_PRINT_C_ERROR, file, 0);
 
-            return -1;
+            return DOS9_UNABLE_COPY;
 
         }
 
@@ -557,7 +576,7 @@ int Dos9_CopyFile(const char* file, const char* dest)
                 Dos9_ShowErrorMessage(DOS9_UNABLE_COPY
                                         | DOS9_PRINT_C_ERROR, file, 0);
 
-                return -1;
+                return DOS9_UNABLE_COPY;
 
             }
 
@@ -574,7 +593,7 @@ int Dos9_CopyFile(const char* file, const char* dest)
     close(old);
     close(new);
 
-    return 0;
+    return DOS9_NO_ERROR;
 
 }
 
@@ -595,11 +614,11 @@ int Dos9_CatFile(const char* file, const char* dest, int* flags)
 
     if (old == -1) {
 
-        Dos9_ShowErrorMessage(DOS9_UNABLE_COPY
+        Dos9_ShowErrorMessage(DOS9_UNABLE_CAT
                                 | DOS9_PRINT_C_ERROR, file, 0);
 
 
-        return -1;
+        return DOS9_UNABLE_CAT;
 
     }
 
@@ -626,11 +645,11 @@ int Dos9_CatFile(const char* file, const char* dest, int* flags)
 
         close(old);
 
-        Dos9_ShowErrorMessage(DOS9_UNABLE_COPY
+        Dos9_ShowErrorMessage(DOS9_UNABLE_CAT
                                 | DOS9_PRINT_C_ERROR, file, 0);
 
 
-        return -1;
+        return DOS9_UNABLE_CAT;
 
     }
 
@@ -642,10 +661,10 @@ int Dos9_CatFile(const char* file, const char* dest, int* flags)
             close(old);
             close(new);
 
-            Dos9_ShowErrorMessage(DOS9_UNABLE_COPY
+            Dos9_ShowErrorMessage(DOS9_UNABLE_CAT
                                     | DOS9_PRINT_C_ERROR, file, 0);
 
-            return -1;
+            return DOS9_UNABLE_CAT;
 
         }
 
@@ -658,10 +677,10 @@ int Dos9_CatFile(const char* file, const char* dest, int* flags)
                 close(old);
                 close(new);
 
-                Dos9_ShowErrorMessage(DOS9_UNABLE_COPY
+                Dos9_ShowErrorMessage(DOS9_UNABLE_CAT
                                         | DOS9_PRINT_C_ERROR, file, 0);
 
-                return -1;
+                return DOS9_UNABLE_CAT;
 
             }
 
@@ -678,6 +697,6 @@ int Dos9_CatFile(const char* file, const char* dest, int* flags)
     close(old);
     close(new);
 
-    return 0;
+    return DOS9_NO_ERROR;
 
 }
