@@ -76,19 +76,10 @@ void Dos9_LoadStrings(void)
 	char lpEncoding[15];
 	char lpSharePath[FILENAME_MAX];
 
-#ifdef WIN32
-    /* On windows, the best is to suppose that *all* the read-only
-       files are in the same folder as the binary. */
-
     Dos9_GetExePath(lpPath, FILENAME_MAX);
 	Dos9_GetConsoleEncoding(lpEncoding, sizeof(lpEncoding));
 
     snprintf(lpSharePath, FILENAME_MAX, "%s/share/locale", lpPath);
-#else
-    /* Under *nixes, get the po files from the ordinary read-only
-       directory */
-    snprintf(lpSharePath, FILENAME_MAX, DATA_PATH "/locale");
-#endif // WIN32
 
 	bindtextdomain("Dos9-msg", lpSharePath);
 #if defined(WIN32) && !(defined(DOS9_USE_LIBCU8))

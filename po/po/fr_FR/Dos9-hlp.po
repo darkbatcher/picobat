@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Dos9 0.9\n"
+"Project-Id-Version: Dos9 218.2"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-22 10:48+0200\n"
+"POT-Creation-Date: 2018-05-29 11:42+0200\n"
 "PO-Revision-Date: 2016-10-26 19:41+0100\n"
 "Last-Translator: TSnake41 <TSnake@Outlook.fr>\n"
 "Language-Team: French <darkbatcher@dos9.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "X-Generator: Poedit 1.5.7\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:71
+#: ../dos9/lang/Dos9_ShowHelp.c:63
 msgid ""
 "Create an alias on a command.\n"
 "Usage: ALIAS [/f] alias=command\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Crée un alias sur une commande.\n"
 "Usage: ALIAS [/f] alias=command\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:75
+#: ../dos9/lang/Dos9_ShowHelp.c:67
 msgid ""
 "Change current working directory.\n"
 "Usage: CD  [[/d] path]\n"
@@ -37,7 +37,7 @@ msgstr ""
 "Usage: CD [[/d] chemin]\n"
 "       CHDIR [[/d] chemin]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:80
+#: ../dos9/lang/Dos9_ShowHelp.c:72
 msgid ""
 "Clear console's screen\n"
 "Usage: CLS\n"
@@ -45,7 +45,7 @@ msgstr ""
 "Efface le contenu de la console\n"
 "Usage: CLS\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:84
+#: ../dos9/lang/Dos9_ShowHelp.c:76
 msgid ""
 "Change console's color to the given code.\n"
 "Usage: COLOR [code]\n"
@@ -53,7 +53,7 @@ msgstr ""
 "Change la couleur de toute la console.\n"
 "Usage: COLOR [code]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:88
+#: ../dos9/lang/Dos9_ShowHelp.c:80
 msgid ""
 "Copy file(s) to another location.\n"
 "Usage: COPY [/R] [/-Y | /Y] [/A[:]attributes] source [+] ... destination\n"
@@ -61,7 +61,7 @@ msgstr ""
 "Copie des fichiers vers un autre répertoire.\n"
 "Usage: COPY [/R] [/-Y | /Y] [/A[:]attributs] source [+] ... destination\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:92
+#: ../dos9/lang/Dos9_ShowHelp.c:84
 msgid ""
 "Call a script or a label from the current context.\n"
 "Usage: CALL [/e] [file] [:label] [parameters ...]\n"
@@ -69,7 +69,7 @@ msgstr ""
 "Appelle un script ou un étiquette depuis le contexte courant.\n"
 "Usage: CALL [/e] [fichier] [:étiquette] [paramètres ...]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:97
+#: ../dos9/lang/Dos9_ShowHelp.c:89
 msgid ""
 "Delete file(s).\n"
 "Usage: DEL [/P] [/F] [/S] [/Q] [/A[:]attributes] name\n"
@@ -79,7 +79,7 @@ msgstr ""
 "Usage: DEL [/P] [/F] [/S] [/Q] [/A[:]attributs] nom\n"
 "       ERASE [/P] [/F] [/S] [/Q] [/A[:]attributes] nom\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:102
+#: ../dos9/lang/Dos9_ShowHelp.c:94
 msgid ""
 "List files in a directory and in subdirectories.\n"
 "Usage: DIR [/A[:]attributes] [/S] [/B] [path]\n"
@@ -87,7 +87,7 @@ msgstr ""
 "Liste les fichiers d'un répertoire et de ses sous-répertoires.\n"
 "Usage: DIR [/A[:]attributs] [/S] [/B] [chemin]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:106
+#: ../dos9/lang/Dos9_ShowHelp.c:98
 msgid ""
 "Print a message, or enable/disable commande echoing.\n"
 "Usage: ECHO [OFF|ON]\n"
@@ -99,7 +99,7 @@ msgstr ""
 "       ECHO texte\n"
 "       ECHO.texte\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:112
+#: ../dos9/lang/Dos9_ShowHelp.c:104
 #, c-format
 msgid ""
 "Perform commands against items (files, strings, command output).\n"
@@ -128,7 +128,7 @@ msgstr ""
 "          :: des commandes\n"
 "       )\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:124
+#: ../dos9/lang/Dos9_ShowHelp.c:116
 msgid ""
 "Go to a label in a command script.\n"
 "Usage: GOTO [/Q] [/F[:]file] [:]label\n"
@@ -136,7 +136,7 @@ msgstr ""
 "Saute vers une étiquette dans un script de commande.\n"
 "Usage: GOTO [/Q] [/F[:]file] étiquette\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:128
+#: ../dos9/lang/Dos9_ShowHelp.c:120
 msgid ""
 "Perform commands on some conditions.\n"
 "Usage: IF [/i] [NOT] string1==string2 (\n"
@@ -170,7 +170,7 @@ msgstr ""
 "          :: code à exécuter\n"
 "       )\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:143
+#: ../dos9/lang/Dos9_ShowHelp.c:135
 msgid ""
 "Create the given directory.\n"
 "Usage: MD directory\n"
@@ -180,7 +180,7 @@ msgstr ""
 "Usage: MD répertoire\n"
 "       MKDIR répertoire\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:149
+#: ../dos9/lang/Dos9_ShowHelp.c:141
 msgid ""
 "Wait for a keystroke from the user.\n"
 "Usage: PAUSE\n"
@@ -188,7 +188,7 @@ msgstr ""
 "Attend que l'utilisateur appuie sur une touche\n"
 "Usage: PAUSE\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:154
+#: ../dos9/lang/Dos9_ShowHelp.c:146
 msgid ""
 "Removes a directory.\n"
 "Usage: RMDIR [/S] [/Q] directory\n"
@@ -198,7 +198,7 @@ msgstr ""
 "Usage: RMDIR [/S] [/Q] répertoire\n"
 "       RD [/S] [/Q] répertoire\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:159
+#: ../dos9/lang/Dos9_ShowHelp.c:151
 msgid ""
 "Renames a file.\n"
 "Usage: REN file name.ext\n"
@@ -208,7 +208,7 @@ msgstr ""
 "Usage: REN fichier nom.ext\n"
 "       RENAME fichier nom.ext\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:164
+#: ../dos9/lang/Dos9_ShowHelp.c:156
 msgid ""
 "Introduce a comment.\n"
 "Usage: REM comment\n"
@@ -216,7 +216,7 @@ msgstr ""
 "Introduit un commentaire.\n"
 "Usage: REM comment\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:169
+#: ../dos9/lang/Dos9_ShowHelp.c:161
 msgid ""
 "Set an environment variable.\n"
 "Usage: SET variable=content\n"
@@ -228,7 +228,7 @@ msgstr ""
 "       SET /a[[:][i|f]] variable=expression\n"
 "       SET /p variable=question\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:175
+#: ../dos9/lang/Dos9_ShowHelp.c:167
 msgid ""
 "Set local environment and options of the Dos9 command prompt.\n"
 "Usage: SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] "
@@ -238,7 +238,7 @@ msgstr ""
 "Usage: SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] "
 "[ENABLEFLOATS | DISABLEFLOATS] [CMDLYCORRECT | CMDLYINCORRECT]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:179
+#: ../dos9/lang/Dos9_ShowHelp.c:171
 msgid ""
 "Reverts changes to environments and options made after a call to SETLOCAL.\n"
 "Usage: ENDLOCAL\n"
@@ -247,7 +247,7 @@ msgstr ""
 "SETLOCAL.\n"
 "Usage: ENDLOCAL\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:183
+#: ../dos9/lang/Dos9_ShowHelp.c:175
 msgid ""
 "Set console's title.\n"
 "Usage: TITLE title\n"
@@ -255,7 +255,7 @@ msgstr ""
 "Modifie le titre de la console.\n"
 "Usage: TITLE titre\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:187
+#: ../dos9/lang/Dos9_ShowHelp.c:179
 msgid ""
 "Print a file.\n"
 "Usage: TYPE [file ...]\n"
@@ -263,7 +263,7 @@ msgstr ""
 "Affiche le contenu d'un fichier.\n"
 "Usage: TYPE [fichier ...]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:191
+#: ../dos9/lang/Dos9_ShowHelp.c:183
 msgid ""
 "Exit from the command prompt.\n"
 "Usage: EXIT [/b] [code]\n"
@@ -271,7 +271,7 @@ msgstr ""
 "Quitte l'invité de commande.\n"
 "Usage: EXIT [/b] [code]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:195
+#: ../dos9/lang/Dos9_ShowHelp.c:187
 msgid ""
 "Change positions of command-line parameters.\n"
 "Usage: SHIFT [/start_number | /s[:]start_number] [/d[:]displacement]\n"
@@ -279,7 +279,7 @@ msgstr ""
 "Change les positions des paramètres de ligne de commande.\n"
 "Usage: SHIFT [/nombre_début | /s[:]nombre_début] [/d[:]déplacement\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:199
+#: ../dos9/lang/Dos9_ShowHelp.c:191
 msgid ""
 "Search occurence of string in a set of files.\n"
 "Usage: FIND [/N] [/C] [/V] [/I] [/E] string [file ...]\n"
@@ -287,7 +287,7 @@ msgstr ""
 "Recherche les occurences d'une chaîne dans un groupe de fichiers.\n"
 "Usage: FIND [/N] [/C] [/V] [/I] [/E] chaîne [fichier ...]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:203
+#: ../dos9/lang/Dos9_ShowHelp.c:195
 msgid ""
 "Display content of files.\n"
 "Usage: MORE [/E] [/P] [/S] [/C] [/T[:]n] [+n] [file ...]\n"
@@ -295,7 +295,7 @@ msgstr ""
 "Affiche le contenu d'un ou plusieur fichiers.\n"
 "Usage: MORE [/E] [/P] [/S] [/C] [/T[:]n] [+n] [fichier ...]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:207
+#: ../dos9/lang/Dos9_ShowHelp.c:199
 msgid ""
 "[Obsolete] Sets or Clears Extended CTRL+C checking on DOS system. (Do "
 "nothing)\n"
@@ -305,7 +305,7 @@ msgstr ""
 "(Ne fait rien)\n"
 "Usage: Break [ON | OFF]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:211
+#: ../dos9/lang/Dos9_ShowHelp.c:203
 msgid ""
 "Set Console codepage or encoding.\n"
 "Usage: CHCP [ codepage | encoding]\n"
@@ -313,7 +313,7 @@ msgstr ""
 "Modifie l'encodage ou la page de code de la console de la console\n"
 "Usage: CHCP [ page_code | encodage]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:215
+#: ../dos9/lang/Dos9_ShowHelp.c:207
 msgid ""
 "For each path, change current directory and pushd to stack\n"
 "the previous current directory.\n"
@@ -323,7 +323,7 @@ msgstr ""
 "sur la pile le répertoire courant précedent.\n"
 "Usage: PUSHD [chemin1] [chemin2] [cheminN] ...\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:220
+#: ../dos9/lang/Dos9_ShowHelp.c:212
 msgid ""
 "Pull a directory on the stack to change current directory.\n"
 "Usage: POPD\n"
@@ -331,7 +331,7 @@ msgstr ""
 "Tire un répertoire sur la pile pour changer le répertoire courant.Usage: "
 "POPD\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:224
+#: ../dos9/lang/Dos9_ShowHelp.c:216
 msgid ""
 "Display counts of a file or of stdin.\n"
 "Usage: WC [/L] [/C] [/M] [/W] [files ...]\n"
@@ -339,7 +339,7 @@ msgstr ""
 "Affiche les comptes d'un fichier ou de l'entrée standard.\n"
 "Usage: WC [/L] [/C] [/M] [/W] [fichiers ...]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:228
+#: ../dos9/lang/Dos9_ShowHelp.c:220
 msgid ""
 "Run a command with arguments from standard input file.\n"
 "Usage: XARGS [command ...]\n"
@@ -347,7 +347,7 @@ msgstr ""
 "Lance une commande en prenant les arguments sur l'entrée standard.\n"
 "Usage: XARGS [commande ...]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:232
+#: ../dos9/lang/Dos9_ShowHelp.c:224
 msgid ""
 "\n"
 "This help is voluntary limited to fit in the binary. If you need to\n"

@@ -22,12 +22,6 @@
 #include <stdlib.h>
 #include <errno.h>
 
-#ifdef WIN32
-#include <conio.h>
-#else
-#define getch() getchar()
-#endif
-
 #include <libDos9.h>
 #include <locale.h>
 #include "Dos9_Errors.h"
@@ -46,8 +40,6 @@ void Dos9_LoadErrors(void)
 	char lpPath[FILENAME_MAX];
 	char lpSharePath[FILENAME_MAX];
 	char lpEncoding[15]="ASCII";
-
-#ifdef WIN32
     /* On windows, the best is to suppose that *all* the read-only
        files are in the same folder as the binary. */
 
@@ -55,61 +47,52 @@ void Dos9_LoadErrors(void)
 	Dos9_GetConsoleEncoding(lpEncoding, sizeof(lpEncoding));
 
     snprintf(lpSharePath, FILENAME_MAX, "%s/share/locale", lpPath);
-#else
-    /* Under *nixes, get the po files from the ordinary read-only
-       directory */
-    snprintf(lpSharePath, FILENAME_MAX, DATA_PATH "/locale");
-#endif // WIN32
 
 	bindtextdomain("Dos9-errors", lpSharePath);
 
 #if defined(WIN32) && !defined(DOS9_USE_LIBCU8)
     /* This is not useful at all, libcu8 is able to convert utf-8 by
        itself */
-	bind_textdomain_codeset("Dos9-errors", lpEncoding);
+	bind_textdomain_codeset("Dos9-hlp", lpEncoding);
 #elif defined(DOS9_USE_LIBCU8)
-    bind_textdomain_codeset("Dos9-errors", "UTF8");
+    bind_textdomain_codeset("Dos9-hlp", "UTF8");
 #endif
+
 	textdomain("Dos9-errors");
+
+	lpErrorMsg[DOS9_NO_ERROR]=
+        gettext("No error: OK.\n");
 
 	lpErrorMsg[DOS9_FILE_ERROR]=
 	    gettext("Error : Unable to access file \"%s\".\n");
-	// TRANSLATORS : Don't remove the %s because the program needs it
 
 	lpErrorMsg[DOS9_DIRECTORY_ERROR]=
 	    gettext("Error : Unable to find folder \"%s\".\n");
-	// TRANSLATORS : Don't remove the %s because the program needs it
 
 	lpErrorMsg[DOS9_COMMAND_ERROR]=
 	    gettext("Error : \"%s\" is not recognized as an internal or"
 	            " external command, an operable program or a batch file.\n");
-	// TRANSLATORS : Don't remove the %s because the program needs it
 
 	lpErrorMsg[DOS9_UNEXPECTED_ELEMENT]=
 	    gettext("Error : \"%s\" was unexpected.\n");
-	// TRANSLATORS : Don't remove the %s because the program needs it
 
 	lpErrorMsg[DOS9_BAD_COMMAND_LINE]=
 	    gettext("Error : Invalid command line for %s.\n");
 
 	lpErrorMsg[DOS9_LABEL_ERROR]=
 	    gettext("Error : Unable to find label \"%s\".\n");
-	// TRANSLATORS : Don't remove the %s because the program needs it
 
 	lpErrorMsg[DOS9_EXTENSION_DISABLED_ERROR]=
 	    gettext("Warning : Using a Dos9 extension but the CMDLYCORRECT option is set.\n");
 
 	lpErrorMsg[DOS9_EXPECTED_MORE]=
 	    gettext("Error : \"%s\" expected more arguments.\n");
-	// TRANSLATORS : Don't remove the %s because the program needs it
 
 	lpErrorMsg[DOS9_INCOMPATIBLE_ARGS]=
-	    gettext("Error : Uncompatible arguments %s.\n");
-	// TRANSLATORS : Don't remove the %s because the program needs it
+	    gettext("Error : Incompatible arguments %s.\n");
 
 	lpErrorMsg[DOS9_UNABLE_RENAME]=
 	    gettext("Error : Unable to rename \"%s\".\n");
-	// TRANSLATORS : Don't remove the %s because the program needs it
 
 	lpErrorMsg[DOS9_MATH_OUT_OF_RANGE]=
 	    gettext("Error : Overflowed maximum value.\n");
@@ -119,22 +102,18 @@ void Dos9_LoadErrors(void)
 
 	lpErrorMsg[DOS9_MKDIR_ERROR]=
 	    gettext("Error : Unable to create folder \"%s\".\n");
-	// TRANSLATORS : Don't remove the %s because the program needs it
 
 	lpErrorMsg[DOS9_RMDIR_ERROR]=
 	    gettext("Error : Unable to delete folder \"%s\".\n");
-	// TRANSLATORS : Don't remove the %s because the program needs it
 
 	lpErrorMsg[DOS9_STREAM_MODULE_ERROR]=
 	    gettext("Error : Stream module : \"%s\".\n");
-	// TRANSLATORS : Don't remove the %s because the program needs it
 
 	lpErrorMsg[DOS9_SPECIAL_VAR_NON_ASCII]=
 	    gettext("Error : \"%c\" is an invalid character for special variables. "
 	            "Special variables require their name to be strict ascii "
 	            "characters, exluding controls characters and space "
 	            "(0x00 - 0x30).\n");
-	// TRANSLATORS : Don't remove the %s because the program needs it
 
 	lpErrorMsg[DOS9_ARGUMENT_NOT_BLOCK]=
 	    gettext("Error : \"%s\" is not a valid block (should at least be "
@@ -267,6 +246,9 @@ void Dos9_LoadErrors(void)
     lpErrorMsg[DOS9_RELEASE_MUTEX_ERROR] =
         gettext("Error : Unable to release mutex (%s).\n");
 
+    lpErrorMsg[DOS9_UNABLE_CAT] =
+        gettext("Error : Unable to catenate file \"%s\".\n");
+
 	lpQuitMessage=
 	    gettext("\nAborting current command, press any key to end Dos9.\n");
 
@@ -303,7 +285,7 @@ void Dos9_ShowErrorMessage(unsigned int iErrorNumber,
 
 		Dos9_Getch();
 
-		exit(iExitCode);
+		exit(iErrorNumber & (~DOS9_PRINT_C_ERROR));
 
 	} else {
 
