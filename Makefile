@@ -24,7 +24,7 @@ BINDIR ?= ./bin
 
 SUBDIRS_ADD ?=
 
-ifeq($(use_libcu8),1)
+ifeq ($(use_libcu8),1)
 	SUBDIRS_ADD = libcu8
 endif
 
