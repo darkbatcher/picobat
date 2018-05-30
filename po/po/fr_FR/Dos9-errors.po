@@ -21,7 +21,7 @@ msgstr ""
 
 #: ../dos9/errors/Dos9_Errors.c:64
 msgid "No error: OK.\n"
-msgstr "Aucune erreur: OK"
+msgstr "Aucune erreur: OK.\n"
 
 #: ../dos9/errors/Dos9_Errors.c:67
 #, c-format

@@ -149,7 +149,7 @@ void Dos9_InitLibDos9(void)
 
     DOS9_DBG("Setting locale ...\n");
 
-    setlocale(LC_ALL, "");
+	setlocale(LC_ALL, "");
 
     DOS9_DBG("Loading GETTEXT messages... \n");
     Dos9_LoadErrors();

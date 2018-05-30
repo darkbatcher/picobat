@@ -47,15 +47,14 @@ void Dos9_LoadErrors(void)
 	Dos9_GetConsoleEncoding(lpEncoding, sizeof(lpEncoding));
 
     snprintf(lpSharePath, FILENAME_MAX, "%s/share/locale", lpPath);
-
-	bindtextdomain("Dos9-errors", lpSharePath);
+    bindtextdomain("Dos9-errors", lpSharePath);
 
 #if defined(WIN32) && !defined(DOS9_USE_LIBCU8)
     /* This is not useful at all, libcu8 is able to convert utf-8 by
        itself */
-	bind_textdomain_codeset("Dos9-hlp", lpEncoding);
+	bind_textdomain_codeset("Dos9-errors", lpEncoding);
 #elif defined(DOS9_USE_LIBCU8)
-    bind_textdomain_codeset("Dos9-hlp", "UTF8");
+    bind_textdomain_codeset("Dos9-errors", "UTF8");
 #endif
 
 	textdomain("Dos9-errors");

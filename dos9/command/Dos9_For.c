@@ -637,9 +637,8 @@ int Dos9_ForMakeInfo(char* lpOptions, FORINFO* lpfiInfo)
 		/* switching to choose the appropriate parameter */
 
 		if (!(stricmp(Dos9_EsToChar(lpParam), "delims"))) {
-            printf("lpParam = %s\n", lpParam->str);
+
 			Dos9_ForAdjustParameter(lpOptions, lpParam);
-			printf("lpParam = %s\n", lpParam->str);
 			strncpy(lpfiInfo->lpDelims, lpToken, sizeof(lpfiInfo->lpDelims));
 			lpfiInfo->lpDelims[sizeof(lpfiInfo->lpDelims)-1] = '\0';
 
