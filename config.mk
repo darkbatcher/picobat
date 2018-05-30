@@ -73,6 +73,6 @@ ifeq ($(lib_pthread),1)
 endif
 
 ifeq ($(lib_m),1)
-	LM_LD = -lpthread
+	LM_LD = -lm
 endif
 
