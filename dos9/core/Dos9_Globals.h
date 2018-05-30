@@ -48,6 +48,11 @@ extern int fdStderr;
    thread */
 extern __thread int bAbortCommand; /* abort the command (0: no , 1: jump to next,
                                     -1 : move to upper execution level) */
+
+#define DOS9_ABORT_EXECUTION_LEVEL -1
+#define DOS9_ABORT_COMMAND_LINE 1
+#define DOS9_ABORT_COMMAND_BLOCK 2
+
 extern __thread int bIgnoreExit; /* ignore exit */
 extern __thread int bDelayedExpansion; /* state of the delayed expansion */
 extern __thread int bCmdlyCorrect; /* state of cmdly correct interface */

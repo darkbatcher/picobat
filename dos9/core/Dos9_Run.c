@@ -102,12 +102,14 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
 
 		Dos9_ReplaceVars(lpLine);
 
-		bAbortCommand=FALSE;
+
 
 		Dos9_RunLine(lpLine);
 
-		if (bAbortCommand == -1)
+		if (bAbortCommand == DOS9_ABORT_EXECUTION_LEVEL)
 			break;
+        else
+            bAbortCommand = 0;
 
 		DOS9_DBG("\t[*] Line run.\n");
 
@@ -499,9 +501,11 @@ int Dos9_RunBlock(BLOCKINFO* lpbkInfo)
 		Dos9_RunLine(lpEsLine);
 
 		/* if we are asked to abort the command */
-		if (bAbortCommand)
+		if (bAbortCommand == DOS9_ABORT_EXECUTION_LEVEL
+            || bAbortCommand == DOS9_ABORT_COMMAND_BLOCK)
 			break;
-
+        else
+            bAbortCommand = 0;
 
 	}
 

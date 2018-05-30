@@ -344,6 +344,13 @@ int Dos9_CmdIf(char* lpParam)
 
             }
 
+        } else {
+
+            /* If there is no else block and if the comparison is false,
+               then cancel all the content of the line (ie. do not exec
+               conditional operators following IF */
+            bAbortCommand = DOS9_ABORT_COMMAND_LINE;
+
         }
     }
 
@@ -559,7 +566,7 @@ next:
                 x1 = frexp(drhs, &iExp1);
                 x2 = frexp(dlhs, &iExp2);
 
-                /* majorate the error */
+                /* major the error */
                 return !(fabs(x1-x2*pow(2, iExp2-iExp1)) <= DOS9_FLOAT_EQUAL_PRECISION);
 
             }

@@ -89,7 +89,7 @@ int Dos9_CmdExit(char* lpLine)
             }
 
             Dos9_EsFree(param);
-            bAbortCommand = -1;
+            bAbortCommand = DOS9_ABORT_EXECUTION_LEVEL;
             return ret;
 
 		} else {

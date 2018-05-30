@@ -107,7 +107,7 @@ int Dos9_CmdGoto(char* lpLine)
 
     if (!stricmp(lpLabelName, ":EOF")) {
 
-        bAbortCommand = -1;
+        bAbortCommand = DOS9_ABORT_EXECUTION_LEVEL;
         goto next;
 
     }
@@ -122,7 +122,7 @@ int Dos9_CmdGoto(char* lpLine)
 
     }
 
-    bAbortCommand = 1;
+    bAbortCommand = DOS9_ABORT_COMMAND_BLOCK;
 
 next:
 err:
