@@ -1,7 +1,7 @@
 /* femto configuration header */
 
 #if @fn_bzero@
-#define HAVE_BZERO
+#define HAVE_BZERO 1
 #endif
 
 #if @fn_dlfcn.h@
