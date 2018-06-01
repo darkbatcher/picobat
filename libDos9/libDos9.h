@@ -227,7 +227,7 @@ LIBDOS9 int             Dos9_FreeCommandList(LPCOMMANDLIST lpclList);
 LIBDOS9 COMMANDFLAG     Dos9_GetCommandProc(char* lpCommandLine, LPCOMMANDLIST lpclCommandList,void** lpcpCommandProcedure);
 
 
-#define DOS9_CURSOR_SHOW 1
+#define DOS9_CURSOR_SHOW 0
 #define DOS9_CURSOR_HIDE 1
 
 #if defined WIN32
