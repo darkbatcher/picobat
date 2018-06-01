@@ -31,10 +31,7 @@ static __thread size_t path_count;
 
 bool Dos9_DirStackInit(void)
 {
-  paths = malloc(0);
-  if (paths == NULL)
-    return true;
-
+  paths = NULL;
   path_count = 0;
   return false;
 }
@@ -89,4 +86,9 @@ char *Dos9_PopDir(void)
 size_t Dos9_DirStackCount(void)
 {
   return path_count;
+}
+
+char **Dos9_GetDirStack(void)
+{
+  return paths;
 }

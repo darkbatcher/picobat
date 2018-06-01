@@ -31,6 +31,6 @@ bool Dos9_PushDir(const char *s);
 char *Dos9_PopDir(void);
 
 size_t Dos9_DirStackCount(void);
-
+char **Dos9_GetDirStack(void);
 
 #endif /* DOS9_DIRSTACK_H */

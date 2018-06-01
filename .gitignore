@@ -18,3 +18,12 @@ libmatheval/lib/parser.h
 libmatheval/lib/scanner.c
 po/pot/
 po/share/
+a.out
+dos9/dos9
+dos9ize/dos9ize
+dump/dump
+tea/tea
+
+build-dbg\.sh
+
+build-musl\.sh

@@ -25,6 +25,7 @@
 #include <libDos9.h>
 
 #include "../core/Dos9_Core.h"
+#include "../core/Dos9_DirStack.h"
 
 #include "Dos9_Pushd.h"
 #include "Dos9_Cd.h"
@@ -49,89 +50,76 @@
    On cmd.exe, pushd can mount UNC paths.
 */
 
-/* TODO: Use Dos9_DirStack. */
-
-LPSTACK lpStack;
-
-int Dos9_CmdPushd (char *lpLine)
+int Dos9_CmdPushd (char *line)
 {
-    int count = 1;
-    ESTR *lpEstr=Dos9_EsInit();
+  int count = 1;
+  ESTR *estr = Dos9_EsInit();
 
-    lpLine += 5;
+  line += 5;
 
-    if (!(lpLine = Dos9_GetNextParameterEs(lpLine, lpEstr))) {
+  if ((line = Dos9_GetNextParameterEs(line, estr)) == NULL) {
+    /* No argument specified */
+    size_t count = Dos9_DirStackCount();
+    char **paths = Dos9_GetDirStack();
 
-        ESTR *lpEsDir;
+    while (count--)
+      fprintf(fOutput, "%s" DOS9_NL, paths[count]);
 
-        if (!Dos9_GetStack(lpStack, (void **)&lpEsDir)) {
-            fputs(Dos9_EsToChar(lpEsDir), fOutput);
-            fputs(DOS9_NL, fOutput);
-        }
+    Dos9_EsFree(estr);
+    return 0;
+  }
 
-        goto free;
+  if (!strncmp(Dos9_EsToChar(estr), "/?", 2)) {
+    /* Show help */
+    Dos9_ShowInternalHelp(DOS9_HELP_PUSHD);
+    Dos9_EsFree(estr);
+    return 0;
+  }
+
+  do {
+    ESTR *current_dir = Dos9_EsInit();
+
+    Dos9_EsCat(current_dir, lpCurrentDir);
+
+    if (Dos9_SetCurrentDir(Dos9_EsToChar(estr)) == 0) {
+      Dos9_PushDir(Dos9_EsToChar(current_dir));
+    } else {
+      /* not a directory */
+      Dos9_ShowErrorMessage(DOS9_DIRECTORY_ERROR, Dos9_EsToChar(estr), FALSE);
+      Dos9_EsFree(current_dir);
+      Dos9_EsFree(estr);
+      return DOS9_DIRECTORY_ERROR;
     }
 
-    if (!strncmp(Dos9_EsToChar(lpEstr), "/?", 2)) {
-        Dos9_ShowInternalHelp(DOS9_HELP_PUSHD);
-        goto free;
-    }
+    count++;
+  } while((line = Dos9_GetNextParameterEs(line, estr)));
 
-    do {
-
-        ESTR *lpEscd=Dos9_EsInit();
-
-        Dos9_EsCat(lpEscd, lpCurrentDir);
-
-        if (!Dos9_SetCurrentDir(Dos9_EsToChar(lpEstr)))
-            lpStack = Dos9_PushStack(lpStack, lpEscd);
-        else {
-            /* not a directory */
-            Dos9_ShowErrorMessage(DOS9_DIRECTORY_ERROR, Dos9_EsToChar(lpEstr), FALSE);
-            Dos9_EsFree(lpEscd);
-            goto error;
-        }
-
-        count++;
-
-    } while((lpLine = Dos9_GetNextParameterEs(lpLine, lpEstr)));
-
-    free:
-        Dos9_EsFree(lpEstr);
-        return 0;
-
-    error:
-        Dos9_EsFree(lpEstr);
-
-        /* return the opposite of the count
-           successful directories as error code */
-        return count;
+  Dos9_EsFree(estr);
+  return 0;
 }
 
-int Dos9_CmdPopd (char *lpLine)
+int Dos9_CmdPopd (char *line)
 {
-    ESTR *lpEsDir;
-    /* char *lpDir; */
+  line += 4;
 
-    lpLine += 4;
+  line = Dos9_SkipBlanks(line);
 
-    lpLine = Dos9_SkipBlanks(lpLine);
-
-    if (!strncmp(lpLine, "/?", 2)) {
-        Dos9_ShowInternalHelp(DOS9_HELP_POPD);
-        return 0;
-    }
-
-    if (Dos9_GetStack(lpStack, (void **)&lpEsDir))
-        return -1;
-
-    lpStack = Dos9_PopStack(lpStack, NULL);
-
-    if (Dos9_SetCurrentDir(Dos9_EsToChar(lpEsDir))) {
-        Dos9_ShowErrorMessage(DOS9_DIRECTORY_ERROR, Dos9_EsToChar(lpEsDir), FALSE);
-        return DOS9_DIRECTORY_ERROR;
-    }
-
-    Dos9_EsFree(lpEsDir);
+  if (strncmp(line, "/?", 2) == 0) {
+    Dos9_ShowInternalHelp(DOS9_HELP_POPD);
     return 0;
+  }
+
+  char *path = Dos9_PopDir();
+
+  if (path == NULL)
+    return -1;
+
+  if (Dos9_SetCurrentDir(path)) {
+    Dos9_ShowErrorMessage(DOS9_DIRECTORY_ERROR, path, FALSE);
+    free(path);
+    return DOS9_DIRECTORY_ERROR;
+  }
+
+  free(path);
+  return 0;
 }
