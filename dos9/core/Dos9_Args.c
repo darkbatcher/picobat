@@ -286,29 +286,6 @@ struct PARAMLIST* Dos9_GetParamList(char* lpLine)
 
 		while (*lpLine=='\t' || *lpLine==' ') lpLine++;
 
-        #ifdef WIN32
-		if (*lpLine == '"') {
-
-			/* if the first character are '"', then
-			   report it back in the command arguments,
-			   since some microsoft commands would not
-			   work without these
-
-			   However, In Unix-like operating systems, the truth is the
-               absolute contradiction of this statement, ie. some
-               programs (say, GNU grep), will not work as expected using
-               quotation marks */
-
-			Dos9_EsCpy(lpTemp, "\"");
-			Dos9_EsCatE(lpTemp, lpParam);
-			Dos9_EsCat(lpTemp, "\"");
-
-			Dos9_EsCpyE(lpParam, lpTemp);
-
-
-        }
-        #endif
-
 		if ((next = malloc(sizeof(struct PARAMLIST))) == NULL)
             Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION,
                                     "Dos9_Args/Dos9_GetParamList()",

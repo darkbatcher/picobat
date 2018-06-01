@@ -381,7 +381,7 @@ RestartSearch:
                it was given a second chance... */
             if (tmp = strpbrk(lpCmdLine, " \t\n"))
                 *tmp = '\0'; /* do not fear to do trash with lpCmdLine, it
-                                won't be used after */
+                                won't be used afterwards */
             Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR, lpCmdLine, FALSE);
 
         default:;
@@ -814,6 +814,8 @@ struct batch_launch_data_t {
 void Dos9_LaunchExternalBatch(struct batch_launch_data_t* arg)
 {
     int i;
+    char* str;
+    ESTR* tmp;
 
     Dos9_FreeLocalBlock(lpvLocalVars);
     Dos9_FreeLocalBlock(lpvArguments);
@@ -835,7 +837,20 @@ void Dos9_LaunchExternalBatch(struct batch_launch_data_t* arg)
     for (;i <= 9;i++)
         Dos9_SetLocalVar(lpvArguments, '0'+i , "");
 
-    Dos9_SetLocalVar(lpvArguments, '*', arg->lpFullLine);
+    /* well skip the very first argument as it represents script
+       name */
+
+    tmp = Dos9_EsInit();
+
+    if (str = Dos9_GetNextParameterEs(arg->lpFullLine, tmp)) {
+
+        str = Dos9_SkipBlanks(str);
+        Dos9_SetLocalVar(lpvArguments, '*', str);
+
+    } else
+        Dos9_SetLocalVar(lpvArguments, '*', arg->lpFullLine);
+
+    Dos9_EsFree(tmp);
 
     Dos9_SetLocalVar(lpvArguments, '0', arg->lpFileName);
 
