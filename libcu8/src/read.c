@@ -37,6 +37,7 @@
 #include <errno.h>
 #include <windows.h>
 #include <assert.h>
+#include <string.h>
 
 #include "internals.h"
 #include "libcu8.h"
@@ -54,10 +55,6 @@ __LIBCU8__IMP __cdecl int libcu8_read(int fd, void* buf, unsigned int cnt)
         return -1;
 
     }
-
-    /* printf("libcu8 read() !\n"); */
-
-    //*((char*)NULL) = NULL;
 
     /* lock fd and call nolock version */
     EnterCriticalSection(&(info->lock));
@@ -247,7 +244,7 @@ int libcu8_readfile(int fd, char* buf, size_t size, size_t* written)
                 break;
 
             case -1:
-                /* came accross an invalid character sequence, skip it*/
+                /* came across an invalid character sequence, skip it*/
                 sansi = 0;
                 su8 = sizeof(utf8);
 
@@ -343,6 +340,11 @@ int libcu8_try_convert(iconv_t context, char* in, size_t* insize,
 
 }
 
+struct libcu8_history_entry_t
+                            libcu8_history[LIBCU8_HISTORY_SIZE];
+CRITICAL_SECTION libcu8_history_lock;
+int libcu8_history_count = 0;
+
 
 #define DEL 0x08
 #define TAB 0x09
@@ -350,17 +352,27 @@ int libcu8_try_convert(iconv_t context, char* in, size_t* insize,
 int libcu8_readconsole(int fd, char* buf, size_t size, size_t* written)
 {
     void *handle = osfhnd(fd), *conout = GetStdHandle(STD_OUTPUT_HANDLE);
-    char utf8[4]="", wcs[2*sizeof(wchar_t)],
+    char utf8[4]="", tutf8[4]="", wcs[2*sizeof(wchar_t)],
          *pin,
          *pout,
+         *pos = buf, /* the position of the cursor in buf */
+         *newpos,
          last = 0;
+
     wchar_t* wstr;
     const size_t orig = size;
+    const char* orig_buf = buf;
+
     size_t wlen, wlen_tmp,
             len;
     DWORD wrt;
+
     CONSOLE_SCREEN_BUFFER_INFO csbi;
-    int ret;
+    struct libcu8_line_t line;
+
+    int ret,
+        vk = 0, /* virtual key for handling stuff like arrows and SUPPR */
+        hid = 0; /* position on the history array */
 
     iconv_t context = libcu8_mode2context(LIBCU8_FROM_U16);
 
@@ -369,11 +381,22 @@ int libcu8_readconsole(int fd, char* buf, size_t size, size_t* written)
     if (context == (iconv_t)-1)
         return -1;
 
+    EnterCriticalSection(&libcu8_history_lock);
+
+    if (libcu8_history_count)
+        hid = libcu8_history_count - 1;
+
+    LeaveCriticalSection(&libcu8_history_lock);
+
     GetConsoleScreenBufferInfo(conout, &csbi);
+
+    line.orig = csbi.dwCursorPosition;
+    line.current = csbi.dwCursorPosition;
+    line.end = csbi.dwCursorPosition;
 
     while (size >= 1 && *utf8 != '\n') {
 
-        ret = libcu8_get_console_input(handle, wcs, &wlen);
+        ret = libcu8_get_console_input(handle, wcs, &wlen, &vk);
 
         switch (ret) {
             case -1: /* error */
@@ -382,6 +405,132 @@ int libcu8_readconsole(int fd, char* buf, size_t size, size_t* written)
             case 0: /* EOF */
                 osfile(fd) |= ATEOF;
                 goto next;
+
+        }
+
+        switch (vk) {
+        case 0:
+            break;
+
+        case VK_LEFT:
+            if (pos > orig_buf) {
+
+                pos --;
+                libcu8_coord_decrement(&(line.current), &csbi);
+                SetConsoleCursorPosition(conout, line.current);
+
+            }
+            continue;
+
+        case VK_RIGHT:
+            if (pos < buf) {
+
+                pos ++;
+                libcu8_coord_increment(&(line.current), &csbi);
+                SetConsoleCursorPosition(conout, line.current);
+
+            }
+            continue;
+
+        case VK_DELETE:
+
+            if (pos < buf) {
+
+                /* clear character on the right */
+                newpos = libcu8_next_character(pos, buf);
+                memmove(pos, newpos, buf - newpos);
+
+                buf -= newpos - pos;
+                size += newpos - pos;
+
+                libcu8_refresh_console_line(conout, orig_buf,
+                                        orig-size, &line, &csbi);
+
+                libcu8_clear_character(conout, &line);
+
+            }
+            continue;
+
+        case VK_UP:
+            EnterCriticalSection(&libcu8_history_lock);
+
+            if (hid)
+                hid --;
+
+            if ((libcu8_history_count > hid)
+                && (libcu8_history[hid].size <= orig)) {
+
+                memcpy(orig_buf, libcu8_history[hid].entry,
+                                        libcu8_history[hid].size);
+
+                ret = libcu8_count_characters(orig_buf, orig - size)
+                        - libcu8_count_characters(libcu8_history[hid].entry,
+                                              libcu8_history[hid].size);
+
+                buf = (pos = orig_buf) + libcu8_history[hid].size;
+                size = orig - libcu8_history[hid].size;
+
+                line.current.X = line.orig.X;
+                line.current.Y = line.orig.Y;
+
+                libcu8_refresh_console_line(conout, orig_buf, orig - size, &line, &csbi);
+
+                if (ret > 0)
+                    FillConsoleOutputCharacterW(conout, L' ', ret, line.end, &wrt);
+
+            }
+
+            LeaveCriticalSection(&libcu8_history_lock);
+            continue;
+
+        case VK_DOWN:
+            EnterCriticalSection(&libcu8_history_lock);
+
+            if (hid < (libcu8_history_count - 1))
+                hid ++;
+
+            if (libcu8_history_count > hid
+                && (libcu8_history[hid].size <= orig)) {
+
+                memcpy(orig_buf, libcu8_history[hid].entry,
+                                        libcu8_history[hid].size);
+
+                ret = libcu8_count_characters(orig_buf, orig - size)
+                        - libcu8_count_characters(libcu8_history[hid].entry,
+                                              libcu8_history[hid].size);
+
+
+                buf = (pos = orig_buf) + libcu8_history[hid].size;
+                size = orig - libcu8_history[hid].size;
+
+                line.current.X = line.orig.X;
+                line.current.Y = line.orig.Y;
+
+                libcu8_refresh_console_line(conout, orig_buf, orig - size, &line, &csbi);
+
+                if (ret > 0)
+                    FillConsoleOutputCharacterW(conout, L' ', ret, line.end, &wrt);
+
+            }
+
+            LeaveCriticalSection(&libcu8_history_lock);
+            continue;
+
+        case VK_END:
+            pos = buf;
+            line.current = line.end;
+            SetConsoleCursorPosition(conout, line.current);
+            continue;
+
+        case VK_HOME: /* yeah, apparently, VK_HOME is what we usually
+                         call begin ... */
+            pos = orig_buf;
+            line.current = line.orig;
+            SetConsoleCursorPosition(conout, line.current);
+            continue;
+
+        default:
+            continue;
 
         }
 
@@ -395,29 +544,34 @@ int libcu8_readconsole(int fd, char* buf, size_t size, size_t* written)
         switch (*utf8) {
 
             case DEL:
-                /* try to remove preceding character */
-                if (!libcu8_delete_character(&buf, &size, orig))
-                    continue; /* There wasn't any character in the buffer */
+                /* Do some tricks to remove a character without damaging
+                   the whole system. Shift characters to the left */
 
-                if (*buf == '\t') {
-                    /* Tabs are complicated to figure out, just redraw the
-                       text */
-                    SetConsoleCursorPosition(conout, csbi.dwCursorPosition);
+                if (pos > orig_buf) {
+                    /* if we have anything to delete on the left */
 
-                    if (!(wstr = libcu8_xconvert(LIBCU8_TO_U16,
-                                                    buf - orig + size,
-                                                    orig-size, &wlen_tmp)))
-                        return -1;
+                    /* clear character on the right */
+                    newpos = libcu8_previous_character(pos, orig_buf);
+                    memmove(newpos, pos, buf - pos);
 
-                    WriteConsoleW(conout, wstr,
-                                    wlen_tmp/sizeof(wchar_t), &wrt, NULL);
+                    buf -= pos - newpos;
+                    size += pos - newpos;
+                    pos = newpos;
 
-                    free(wstr);
-                    continue;
+                    /* decrement positions of cursor and end of line */
+                    libcu8_coord_decrement(&(line.current), &csbi);
+
+                    libcu8_refresh_console_line(conout, orig_buf,
+                                            orig-size, &line, &csbi);
+
+                    libcu8_clear_character(conout, &line);
+
                 }
 
-                libcu8_delete_console_character(conout);
+                continue;
 
+            case TAB:
+                /*something to do with autocompletion */
                 continue;
 
             case '\r':
@@ -425,13 +579,66 @@ int libcu8_readconsole(int fd, char* buf, size_t size, size_t* written)
                 *((wchar_t*)wcs) = L'\n';
                 *utf8 = '\n';
 
+                /* write character at the console */
+                WriteConsoleW(conout, wcs, wlen / sizeof(wchar_t), &wrt, NULL);
+                libcu8_write_buffered(fd, &buf, &size, utf8, sizeof(utf8) - len);
+
+                break;
+
+            default:
+                /* Let's do some clever tricks... move the
+                   content of utf-8 into buf and put the extra bytes inside
+                   utf-8 in order not break the buffered output system */
+
+                libcu8_coord_increment(&(line.current), &csbi);
+                libcu8_coord_increment(&(line.end), &csbi);
+
+                if (pos == buf) {
+
+                    /* Update pos. We don't risk anything as pos is never to be
+                       reused again if the size of the buffer is exceeded */
+                    pos += sizeof(utf8) - len;
+
+                    libcu8_write_buffered(fd, &buf, &size, utf8, sizeof(utf8) - len);
+                    libcu8_refresh_console_line(conout, orig_buf, orig-size, &line, &csbi);
+                    break; /* Nothing to do */
+
+                }
+
+                if ((buf - pos) < (sizeof(utf8) - len)) {
+
+                    /* Apparently, buf is too close to pos to make this simple
+                       just move the firsts bytes into the return buffer and
+                       let the remaining ones inside utf8 buffer.
+
+                       Use an intermediate tutf8 buffer to perform the modification
+
+                       */
+
+                    memcpy(tutf8, pos, buf - pos);
+                    memcpy(pos, utf8, buf - pos);
+                    memmove(utf8, utf8 + (buf - pos),
+                                (sizeof(utf8) - len) - (buf - pos));
+                    memcpy(utf8 + (sizeof(utf8) - len) - (buf - pos),
+                            tutf8, buf - pos);
+
+                } else {
+
+                    memcpy(tutf8, buf - (sizeof(utf8) - len), sizeof(utf8) - len);
+                    memmove(pos + sizeof(utf8) - len, pos,
+                                (buf - pos) - (sizeof(utf8) - len));
+                    memcpy(pos, utf8, sizeof(utf8) - len);
+                    memcpy(utf8, tutf8, sizeof(utf8) - len);
+
+                }
+
+                pos += sizeof(utf8) - len;
+
+                /* write to the buffer in with intermediate buffering function */
+                libcu8_write_buffered(fd, &buf, &size, utf8, sizeof(utf8) - len);
+                libcu8_refresh_console_line(conout, orig_buf, orig-size, &line, &csbi);
+
         }
-
-        /* write character at the console */
-        WriteConsoleW(conout, wcs, wlen / sizeof(wchar_t), &wrt, NULL);
-
-        /* write to the buffer in with intermediate buffering function */
-        libcu8_write_buffered(fd, &buf, &size, utf8, sizeof(utf8) - len);
 
     }
 next:
@@ -439,6 +646,9 @@ next:
     iconv_close (context);
 
     *written = orig - size;
+
+    libcu8_history_add_entry(orig_buf, *written);
+
     return 1;
 
 err:
@@ -446,12 +656,134 @@ err:
     return 0;
 }
 
+int libcu8_refresh_console_line(void* handle, char* buf, size_t size,
+                                    struct libcu8_line_t* line,
+                                    CONSOLE_SCREEN_BUFFER_INFO* csbi)
+{
+    wchar_t *wstr;
+    size_t wlen;
+    int wrt;
+    int dist;
+    CONSOLE_CURSOR_INFO info;
+
+    info.dwSize = 100;
+    info.bVisible = FALSE;
+
+    SetConsoleCursorInfo(handle, &info);
+    SetConsoleCursorPosition(handle, line->orig);
+
+    /* Update orig, just in case the windows has be resized */
+    GetConsoleScreenBufferInfo(handle, csbi);
+    line->orig.X = csbi->dwCursorPosition.X;
+    line->orig.Y = csbi->dwCursorPosition.Y;
+
+    if (!(wstr = libcu8_xconvert(LIBCU8_TO_U16,
+                                    buf,
+                                    size, &wlen)))
+        return -1;
+
+    WriteConsoleW(handle, wstr,
+                    wlen/sizeof(wchar_t), &wrt, NULL);
+
+    GetConsoleScreenBufferInfo(handle, csbi);
+    line->end.X = csbi->dwCursorPosition.X;
+    line->end.Y = csbi->dwCursorPosition.Y;
+
+    /* Check that cursors we store (line->end and line->orig)
+       are still coherent with size, so that we can detect
+       any kind of scroll */
+
+    dist = libcu8_count_characters(buf, size)
+            - libcu8_count_cells(line->orig, line->end, csbi);
+
+    while (dist) {
+
+        /* the content has probably been scrolled up */
+
+        if (line->orig.Y > 0)
+                line->orig.Y --;
+
+        if (line->current.Y > 0)
+                line->current.Y --;
+
+        dist = libcu8_count_characters(buf, size)
+            - libcu8_count_cells(line->orig, line->end, csbi);
+    }
+
+    SetConsoleCursorPosition(handle, line->current);
+
+    info.bVisible = TRUE;
+    SetConsoleCursorInfo(handle, &info);
+
+    free(wstr);
+}
+
+void libcu8_clear_character(void* handle, struct libcu8_line_t* line)
+{
+    int wrt;
+    CONSOLE_CURSOR_INFO info;
+
+    info.dwSize = 100;
+    info.bVisible = FALSE;
+
+    SetConsoleCursorInfo(handle, &info);
+    SetConsoleCursorPosition(handle, line->end);
+
+    WriteConsoleW(handle, L" ", 1, &wrt, NULL);
+
+    SetConsoleCursorPosition(handle, line->current);
+    info.bVisible = TRUE;
+    SetConsoleCursorInfo(handle, &info);
+
+}
+
+void libcu8_coord_decrement(COORD* coords, CONSOLE_SCREEN_BUFFER_INFO* csbi)
+{
+
+    if (coords->X == 0) {
+        coords->Y --;
+        coords->X = csbi->dwSize.X - 1;
+
+    } else
+       coords->X --;
+
+}
+
+void libcu8_coord_increment(COORD* coords, CONSOLE_SCREEN_BUFFER_INFO* csbi)
+{
+
+    if (coords->X == csbi->dwSize.X - 1) {
+        coords->Y ++;
+        coords->X = 0;
+
+    } else
+       coords->X ++;
+
+}
+
+#define COORDS_EQUAL(c1,c2) ((c1.X == c2.X) && (c1.Y == c2.Y))
+int libcu8_count_cells(COORD orig, COORD dest, CONSOLE_SCREEN_BUFFER_INFO* csbi)
+{
+    COORD destdec = dest;
+    int cells = 0;
+
+    while (!COORDS_EQUAL(orig, dest)
+           && !COORDS_EQUAL(orig, destdec)) {
+
+        libcu8_coord_increment(&dest, csbi);
+        libcu8_coord_decrement(&destdec, csbi);
+
+        cells ++;
+    }
+
+    return COORDS_EQUAL(orig, destdec) ? (cells) : (- cells);
+}
 
 /* Check if wc is surrogate */
 #define IS_SURROGATE(wc) ((wc) & 0xD800)
 #define IS_SURROGATE_HIGH(wc) (IS_SURROGATE(wc) && !((wc) & 0x0400))
 #define IS_SURROGATE_LOW(wc) (IS_SURROGATE(wc) && ((wc) & 0x0400))
-int libcu8_get_console_input(void* handle, char* buf, size_t* size)
+int libcu8_get_console_input(void* handle, char* buf, size_t* size, int* vk)
 {
     wchar_t* wcs= (wchar_t*)buf,
              wc;
@@ -460,7 +792,7 @@ int libcu8_get_console_input(void* handle, char* buf, size_t* size)
        low part of a surrogate pair) */
     do {
 
-        if (libcu8_get_console_wchar(handle, wcs))
+        if (libcu8_get_console_wchar(handle, wcs, vk))
             return -1;
 
     } while (IS_SURROGATE_LOW(*wcs));
@@ -478,7 +810,7 @@ retry:
     }
 
     /* this is surrogate, deal with it */
-    if (libcu8_get_console_wchar(handle, &wc))
+    if (libcu8_get_console_wchar(handle, &wc, NULL))
         return -1;
 
     if (IS_SURROGATE_LOW(wc)) {
@@ -497,7 +829,7 @@ retry:
     }
 }
 
-int libcu8_get_console_wchar(void* handle, wchar_t* wc)
+int libcu8_get_console_wchar(void* handle, wchar_t* wc, int* vk)
 {
     INPUT_RECORD rec;
     DWORD written;
@@ -512,6 +844,9 @@ int libcu8_get_console_wchar(void* handle, wchar_t* wc)
         return 0;
     }
 
+    if (vk)
+        *vk = 0; /* reset vk */
+
     while (1) {
 
         if (!ReadConsoleInputW(handle, &rec, 1, &written))
@@ -519,23 +854,73 @@ int libcu8_get_console_wchar(void* handle, wchar_t* wc)
 
         if (written != 0 && rec.EventType == KEY_EVENT
             && rec.Event.KeyEvent.bKeyDown == TRUE /* Key is pressed down */
-            && rec.Event.KeyEvent.uChar.UnicodeChar != 0 /* Key not NUL */
             ) {
 
-            if (rec.Event.KeyEvent.wRepeatCount > 1) {
-                /* cope with MS bad function design. Indeed I never asked for
-                   a multiple event. However, this doesn't seem to happen
-                   anyway */
-                swc = rec.Event.KeyEvent.uChar.UnicodeChar;
-                nb = rec.Event.KeyEvent.wRepeatCount - 1;
+            if  (rec.Event.KeyEvent.uChar.UnicodeChar != 0 /* Key not NUL */
+                    ) {
+
+                if (rec.Event.KeyEvent.wRepeatCount > 1) {
+                    /* cope with MS bad function design. Indeed I never asked for
+                       a multiple event. However, this doesn't seem to happen
+                       anyway */
+                    swc = rec.Event.KeyEvent.uChar.UnicodeChar;
+                    nb = rec.Event.KeyEvent.wRepeatCount - 1;
+                }
+
+                *wc = rec.Event.KeyEvent.uChar.UnicodeChar;
+
+                return 0;
+
+            } else if (rec.Event.KeyEvent.wVirtualKeyCode != 0 /* virtual key pressed */
+                        ) {
+
+                if (vk) {
+                    *vk = rec.Event.KeyEvent.wVirtualKeyCode;
+                    return 0;
+                }
+
             }
 
-            *wc = rec.Event.KeyEvent.uChar.UnicodeChar;
-            return 0;
-
         }
+    }
+}
+
+void libcu8_history_add_entry(char* orig_buf, size_t size)
+{
+    char* buf;
+    int id;
+
+    if (size && (orig_buf[size - 1] == '\n'))
+        size --;
+
+    if (!(buf = malloc(size * sizeof(char*))))
+        return;
+
+    memcpy(buf, orig_buf, size);
+
+    EnterCriticalSection(&libcu8_history_lock);
+
+    if (libcu8_history_count < LIBCU8_HISTORY_SIZE) {
+
+        /* this is the easy part, just increment the history count
+           to get a free entry */
+        id = libcu8_history_count ++;
+
+    } else {
+
+        /* No room left in the array, just shift the content up */
+        free(libcu8_history[0].entry);
+        memmove(libcu8_history, libcu8_history + 1,
+                                    LIBCU8_HISTORY_SIZE - 1);
+
+        id = LIBCU8_HISTORY_SIZE - 1;
 
     }
+
+    libcu8_history[id].entry = buf;
+    libcu8_history[id].size = size;
+
+    LeaveCriticalSection(&libcu8_history_lock);
 }
 
 /* Move buf pointer one character backwards */
@@ -546,59 +931,51 @@ int libcu8_get_console_wchar(void* handle, wchar_t* wc)
 #define IS_LEADING_4_BYTE(c) (((c) & 0xF8) == 0xF0) /* starts with 11110 */
 #define IS_LEADING_BYTE(c) (IS_LEADING_2_BYTE(c) || IS_LEADING_3_BYTE(c) || \
                             IS_LEADING_4_BYTE(c))
-int libcu8_delete_character(char** buf, size_t* size, const size_t orig)
+char* libcu8_previous_character(char* restrict pos, char* restrict orig_buf)
 {
-    char tmp;
+    if (pos == orig_buf)
+        return pos;
 
-    if (*size >= orig)
-        return 0;
+    pos --;
 
-    while (*size < orig) {
+    while ((pos > orig_buf)
+           && IS_FOLLOWING_BYTE(*pos))
+            pos --;
 
-        /* Get one byte back */
-        (*buf) --;
-        (*size) ++;
+    return pos;
+}
 
-        /* If not a following byte (ie. either ascii or leading byte), break
-           we are at beginning of preceding character  */
-        if (!IS_FOLLOWING_BYTE(**buf))
-            break;
+char* libcu8_next_character(char* restrict  pos, char* restrict buf)
+{
+    if (pos == buf)
+        return pos;
+
+    pos ++;
+
+    while ((pos < buf)
+           && IS_FOLLOWING_BYTE(*pos))
+            pos ++;
+
+    return pos;
+}
+
+int libcu8_count_characters(char* buf, size_t size)
+{
+    int ret = 0;
+
+    while (size) {
+
+        if (!IS_FOLLOWING_BYTE(*buf))
+            ret ++;
+
+        size --;
+        buf ++;
     }
 
-    return 1;
+    return ret;
 }
 
-void libcu8_delete_console_wchar(void* handle, char type)
-{
-    int i, max=1;
-    for (i=0;i < max; i ++)
-        libcu8_delete_console_character(handle);
-}
-
-void libcu8_delete_console_character(void* handle)
-{
-    wchar_t del_seq[] = {DEL, L' ', DEL};
-    DWORD wrt;
-    COORD pos, oldpos;
-    CONSOLE_SCREEN_BUFFER_INFO csbi;
-
-    /* Get cursor position prior to erasing character */
-    GetConsoleScreenBufferInfo(handle, &csbi);
-    oldpos = csbi.dwCursorPosition;
-
-    if (csbi.dwCursorPosition.X == 0) {
-        pos.Y = csbi.dwCursorPosition.Y - 1;
-        pos.X = csbi.dwSize.X - 1;
-        SetConsoleCursorPosition(handle, pos);
-        WriteConsoleW(handle, del_seq + 1, 1, &wrt, NULL);
-        SetConsoleCursorPosition(handle, pos);
-    } else {
-
-        WriteConsoleW(handle, del_seq, 3, &wrt, NULL);
-
-    }
-    /* Get new cursor position after erasing character */
-}
+/* Write buffered functions */
 
 void libcu8_write_buffered(int fd, char** buf, size_t* size,
                                             char* utf8, size_t len)

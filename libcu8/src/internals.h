@@ -186,14 +186,40 @@ int libcu8_try_convert(iconv_t context, char* in, size_t* insize,
 /* custom readfile-like function */
 int libcu8_readfile(int fd, char* buf, size_t size, size_t* written);
 
-/* character removal from u8 character buffer */
-int libcu8_delete_character(char** buf, size_t* size, const size_t orig);
+struct libcu8_line_t {
+    COORD orig;
+    COORD current;
+    COORD end;
+};
+
+#define LIBCU8_HISTORY_SIZE 50
+struct libcu8_history_entry_t {
+    char* entry;
+    size_t size;
+};
+
+extern struct libcu8_history_entry_t
+                            libcu8_history[LIBCU8_HISTORY_SIZE];
+extern CRITICAL_SECTION libcu8_history_lock;
+extern int libcu8_history_count;
 
 /* Console interaction function */
-int libcu8_get_console_wchar(void* handle, wchar_t* wc);
-int libcu8_get_console_input(void* handle, char* buf, size_t* size);
-void libcu8_delete_console_character(void* handle);
-void libcu8_delete_console_wchar(void* handle, char type);
+int libcu8_get_console_wchar(void* handle, wchar_t* wc, int* vk);
+int libcu8_get_console_input(void* handle, char* buf, size_t* size, int* vk);
+
+int libcu8_refresh_console_line(void* handle, char* buf, size_t size,
+                                    struct libcu8_line_t* line,
+                                    CONSOLE_SCREEN_BUFFER_INFO* csbi);
+void libcu8_clear_character(void* handle, struct libcu8_line_t* line);
+void libcu8_coord_decrement(COORD* coords, CONSOLE_SCREEN_BUFFER_INFO* csbi);
+void libcu8_coord_increment(COORD* coords, CONSOLE_SCREEN_BUFFER_INFO* csbi);
+int libcu8_count_cells(COORD orig, COORD dest,
+                                    CONSOLE_SCREEN_BUFFER_INFO* csbi);
+char* libcu8_previous_character(char* restrict pos, char* restrict orig_buf);
+char* libcu8_next_character(char* restrict  pos, char* restrict buf);
+void libcu8_history_add_entry(char* orig_buf, size_t size);
+int libcu8_count_characters(char* buf, size_t size);
+
 
 /*
 ****************************************************************************

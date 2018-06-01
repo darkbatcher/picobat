@@ -119,6 +119,7 @@ __LIBCU8__IMP __cdecl int libcu8_init(const char*** pargv)
 
     /* Initialize the lock for fencoding */
     InitializeCriticalSection(&libcu8_fencoding_lock);
+    InitializeCriticalSection(&libcu8_history_lock);
     EnterCriticalSection(&libcu8_fencoding_lock);
 
     sprintf(libcu8_fencoding, "UTF-8");

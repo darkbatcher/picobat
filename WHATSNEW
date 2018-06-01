@@ -2049,5 +2049,16 @@ TUESDAY 29TH, MAY
       - Modifyied all commands to provide more detailled errorlevel codes. 
         Allmost every command used to return -1 on error, this is not the case 
         anymore. Commands now return an %ERRORLEVEL% value equal to the error 
-        code associated with the message printed. 
+        code associated with the message printed.
+
+WEDNESDAY 30TH, MAY
+
+      - Fixed if behaviour to be more compatible with cmd.exe. It now supports 
+        the use of & and inside the if without specifying additional blocks.
+
+      - Fixed broken COLOR command.
+
+      - Fixed Makefile suite that erroneously linked with -lpthread when 
+        linking with -lm was necessary. Also fixed makefiles trying to build 
+        libcu8 even on linux
 
