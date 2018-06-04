@@ -149,6 +149,15 @@ static FILELIST* Dos9_AddMatch(char* name, FILELIST* files, struct match_args_t*
     return file;
 }
 
+static int inline Dos9_EndWithDirectoryMark(const char* dir)
+{
+    char* c;
+
+    while (*dir)
+        c = dir ++;
+
+    return TEST_SEPARATOR(c);
+}
 
 /* Fixme : This function is quite a lot unefficient under windows,
    its perfomances can be enhanced by using native winapi functions for
@@ -242,7 +251,7 @@ static FILELIST* Dos9_GetMatch(char* restrict base, char* restrict up, struct ma
                encountered, just set *base to be the empty string, as no file may
                bear an empty name anyway. */
 
-            base = ""; /* simple as hell */
+            base = "/"; /* simple as hell */
 
             if (up && *up)
                 up ++;
@@ -275,6 +284,8 @@ static FILELIST* Dos9_GetMatch(char* restrict base, char* restrict up, struct ma
 
     item = up;
 
+    printf("up = %s\nbase = %s\n", up, base);
+
     /* search for the next item in the search in up */
     if (up == NULL) {
 
@@ -295,7 +306,8 @@ static FILELIST* Dos9_GetMatch(char* restrict base, char* restrict up, struct ma
         if (base != NULL) {
 
             Dos9_EsCpy(path, base);
-            Dos9_EsCat(path, "/");
+            if (!Dos9_EndWithDirectoryMark(path->str))
+                Dos9_EsCat(path, DEF_DELIMITER);
             Dos9_EsCat(path, item);
 
         } else {
@@ -383,7 +395,8 @@ static FILELIST* Dos9_GetMatch(char* restrict base, char* restrict up, struct ma
             /* Compute the path of the current matching entity */
             if (base != NULL) {
                 Dos9_EsCpy(path, base);
-                Dos9_EsCat(path, "/");
+                if (!Dos9_EndWithDirectoryMark(path->str))
+                    Dos9_EsCat(path, DEF_DELIMITER);
                 Dos9_EsCat(path, ent->d_name);
             } else {
                 Dos9_EsCpy(path, ent->d_name);
@@ -470,7 +483,8 @@ static FILELIST* Dos9_GetMatch(char* restrict base, char* restrict up, struct ma
             /* Compute the path of the current matching entity */
             if (base != NULL) {
                 Dos9_EsCpy(path, base);
-                Dos9_EsCat(path, "/");
+                if (!Dos9_EndWithDirectoryMark(path->str))
+                    Dos9_EsCat(path, DEF_DELIMITER);
                 Dos9_EsCat(path, ent->d_name);
             } else {
                 Dos9_EsCpy(path, ent->d_name);

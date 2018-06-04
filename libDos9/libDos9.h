@@ -369,7 +369,7 @@ LIBDOS9 void            Dos9_GetMousePos(char on_move, CONSOLECOORD* coords, int
 
 #ifndef WIN32
 #define TEST_SEPARATOR(p) (*(p) == '/')
-#define TEST_ABSOLUTE_PATH(p) TEST_SEPARATOR(p)
+#define TEST_ABSOLUTE_PATH(p) TEST_ROOT_PATH(p)
 #define TEST_UNC_PATH(p)  0
 #define TEST_ROOT_PATH(p) (TEST_SEPARATOR(p) && !TEST_SEPARATOR(p+1))
 #define TEST_DRIVE_PATH(p) 0

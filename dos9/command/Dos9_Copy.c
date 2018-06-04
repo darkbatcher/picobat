@@ -92,12 +92,12 @@
 
 int Dos9__EndWithDirectoryMark(const char* dir)
 {
-    int c;
+    char* c;
 
     while (*dir)
-        c = *(dir ++);
+        c = dir ++;
 
-    return IS_DIR_DELIM(c);
+    return TEST_SEPARATOR(c);
 }
 
 int Dos9_CmdCopy(char* line)
