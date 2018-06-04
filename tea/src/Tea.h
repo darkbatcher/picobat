@@ -103,4 +103,8 @@ char*       Tea_OutputLineT(char* lpBegin, FILE* pFile, TEANODE* lpTeaNode, size
 
 char*       Tea_OutputLine(char* lpBegin, FILE* pFile, size_t* iLeft);
 
+#ifndef WIN32
+char* strupr(char*);
+#endif
+
 #endif // TEA_LIB_H
