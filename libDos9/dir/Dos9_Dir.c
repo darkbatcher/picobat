@@ -284,8 +284,6 @@ static FILELIST* Dos9_GetMatch(char* restrict base, char* restrict up, struct ma
 
     item = up;
 
-    printf("up = %s\nbase = %s\n", up, base);
-
     /* search for the next item in the search in up */
     if (up == NULL) {
 

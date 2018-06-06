@@ -216,7 +216,8 @@ int Dos9_CmdCd_nix(char* lpLine)
 {
 	char* lpNext;
 	ESTR* lpEsDir=Dos9_EsInit();
-	int status = DOS9_NO_ERROR;
+	int status = DOS9_NO_ERROR,
+	    quotes = 0;
 
 	if (!strnicmp(lpLine,"CD", 2)){
 		lpLine+=2;
@@ -241,32 +242,45 @@ int Dos9_CmdCd_nix(char* lpLine)
 
 		Dos9_GetEndOfLine(lpLine, lpEsDir);
 
-		lpLine=Dos9_EsToChar(lpEsDir);
+		lpLine=Dos9_SkipBlanks(Dos9_EsToChar(lpEsDir));
 
-		lpNext=NULL;
+        if (*lpLine == '"') {
 
-		while (*lpLine) {
+            quotes = 1;
+            lpLine ++;
 
-			switch(*lpLine) {
-				case '\t':
-				case ' ':
+        }
 
-					if (!lpNext) lpNext=lpLine;
-					break;
+        while (*lpLine) {
 
-				default:
-					lpNext=NULL;
-			}
+            switch(*lpLine) {
+                case '"':
+                    if (!quotes)
+                        goto def;
+                case '\t':
+                case ' ':
 
-			lpLine++;
+                    if (!lpNext) lpNext=lpLine;
+                    break;
+def:
+                default:
+                    lpNext=NULL;
+            }
 
-		}
+            lpLine++;
 
-		if (lpNext) *lpNext='\0';
+        }
+
+        if (lpNext)
+            *lpNext = '\0';
+
 
 		errno=0;
 
-		lpLine=Dos9_EsToChar(lpEsDir);
+		lpLine=Dos9_SkipBlanks(Dos9_EsToChar(lpEsDir));
+
+		if (quotes)
+            lpLine ++;
 
 		DOS9_DBG("Changing directory to : \"%s\"\n", lpLine);
 
@@ -310,6 +324,7 @@ int Dos9_CmdCd_win(char* lpLine)
 		*lpNext,
 		 current=*lpCurrentDir,
 		 passed=0;
+    int quotes = 0;
 
     ESTR* lpesStr=Dos9_EsInit();
 
@@ -342,7 +357,43 @@ int Dos9_CmdCd_win(char* lpLine)
 
     Dos9_GetEndOfLine(lpLine, lpesStr);
 
+    lpLine = Dos9_SkipBlanks(lpesStr->str);
+    lpNext = NULL;
+
+    if (*lpLine == '"') {
+
+        quotes = 1;
+        lpLine ++;
+
+    }
+
+    while (*lpLine) {
+
+        switch(*lpLine) {
+            case '"':
+                if (!quotes)
+                    goto def;
+            case '\t':
+            case ' ':
+
+                if (!lpNext) lpNext=lpLine;
+                break;
+def:
+            default:
+                lpNext=NULL;
+        }
+
+        lpLine++;
+
+    }
+
+    if (lpNext)
+        *lpNext = '\0';
+
     lpLine = Dos9_SkipBlanks(Dos9_EsToChar(lpesStr));
+
+    if (quotes)
+        lpLine ++;
 
     if (*lpLine && *(lpLine+1)==':') {
 

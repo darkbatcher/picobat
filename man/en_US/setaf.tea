@@ -50,7 +50,7 @@
 	The arithmetical expression has to be made of combination of the following
 	operators and operands.
    
-	Binary operators available with floating point arithmetics are:
+	Binary operators available with floating point arithmetic are:
 
 		 - {+} : Addition.
 
@@ -63,17 +63,30 @@
 		 - {^} : Exponentiation.
 
 		 - {%} : Modulo.
-
-	Multiplication and division have precedence over addition and subtration.
-	Precedence rules can be overridden using parenthesis.
 		 
-	Only one unary operator is available with floating point arithmetics:
+		 - {=} : Assignment.
+
+	Operators have the following precedence (from greatest to lowest):
+
+	- {unary operators}
+	
+	- {^}
+	
+	- {=}
+	
+	- {*}, {/}, {%}
+
+	- {+}, {-}
+
+	To avoid precedence issue, use the parenthesis {(} and {)}.
+		 
+	Only one unary operator is available with floating point arithmetic:
 	
 		- {-} : Minus sign.
 
 	Unary operators have highest precedence.
 
-{{Mathematical function}}
+{{Mathematical functions}}
 
 	In addition to operators, {expression} may contain mathematical function.
 	To use such a function use the name of it followed by its arguments enclosed

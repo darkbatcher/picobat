@@ -95,7 +95,7 @@ int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
 	             *lpNameCpy, /* a pointer used to duplicate lpName (because function should avoid bordering effect)*/
 	             *lpZeroPos=NULL;; /* a pointer to the zero put in the environment string */
 
-	char        lpBuf[12];
+	char        lpBuf[30];
 	int         iVarState=0, /* the status of the var interpreter 1 means replace, 2 means cut */
 	            iTotalLen,
 	            iBegin=0, /* the start position */
@@ -149,6 +149,21 @@ int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
 
         /* requested current dir */
         lpVarContent=lpCurrentDir;
+
+	} else if (!(stricmp(lpNameCpy, "ERRORLEVEL"))) {
+
+        lpVarContent=lpBuf;
+		sprintf(lpBuf, "%d", iErrorLevel);
+
+	}  else if (!(stricmp(lpNameCpy, "=EXITCODEASCII"))) {
+
+		lpVarContent=lpBuf;
+#if defined(DOS9_USE_LIBCU8)
+        snprintf(lpBuf, sizeof(iErrorLevel)+1, "%s", &iErrorLevel);
+#else
+        snprintf(lpBuf, 2, "%s", &iErrorLevel);
+#endif /* DOS9_USE_LIBCU8 */
+
 
 	} else if (!(stricmp(lpNameCpy, "RANDOM"))) {
 
@@ -215,6 +230,8 @@ int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
 			    indeed iBegin must not be negative and
 			    must not overflow the buffer */
 
+			    lpVarContent = "";
+
 		} else if (iLen > 0) {
 
 			if ((iBegin+iLen)<= iTotalLen) {
@@ -230,7 +247,9 @@ int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
 				cCharSave=*lpZeroPos;
 				*lpZeroPos='\0';
 
-			}
+			} else
+                lpVarContent = "";
+
 
 		} else if (iLen <= 0) {
 
@@ -253,7 +272,8 @@ int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
 				*lpZeroPos='\0';
 
 
-			}
+			} else
+                lpVarContent = "";
 
 		}
 	}

@@ -56,7 +56,8 @@ int Dos9_CmdCall(char* lpLine)
 	     *lpFile,
 	     *lpLabel,
 	     *lpFullLine,
-	     lpExt[_MAX_EXT];
+	     lpExt[_MAX_EXT],
+	     lpFullName[FILENAME_MAX];
 
 	int  bIsExtended=FALSE,
 	     iNbParam=0,
@@ -193,20 +194,29 @@ int Dos9_CmdCall(char* lpLine)
 		   determine ``file'' extension, to choose wether it should
 		   be executed inside or outside Dos9 */
 
-		Dos9_SplitPath(lpFile, NULL, NULL, NULL, lpExt);
+        if (Dos9_GetFilePath(lpFullName, lpFile, sizeof(lpFullName)) == -1) {
+
+            Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR, lpFile, 0);
+
+            status = DOS9_COMMAND_ERROR;
+            goto error;
+        }
+
+		Dos9_SplitPath(lpFullName, NULL, NULL, NULL, lpExt);
+
 
 		if (!stricmp(lpExt, ".bat")
 		    || !stricmp(lpExt,".cmd")) {
 
 			/* ``file'' is a batch file, indeed */
 
-			status = Dos9_CmdCallFile(lpFile, lpFullLine, NULL, lpLine);
+			status = Dos9_CmdCallFile(lpFullName, lpFullLine, NULL, lpLine);
 
 		} else {
 
 			/* this is an executable */
 			Dos9_GetEndOfLine(lpLine, lpEsParameter);
-			status = Dos9_CmdCallExternal(lpFile, Dos9_EsToChar(lpEsParameter));
+			status = Dos9_CmdCallExternal(lpFullName, Dos9_EsToChar(lpEsParameter));
 
 		}
 
@@ -291,8 +301,8 @@ int Dos9_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
     Dos9_SetLocalVar(lpvTmpArgs, '*', lpEsParam->str);
 
     /* Set scripts arguments */
-	while ((lpCmdLine=Dos9_GetNextParameterEs(lpCmdLine, lpEsParam))
-	       && (c <= '9')) {
+	while ((c <= '9')
+            && (lpCmdLine=Dos9_GetNextParameterEs(lpCmdLine, lpEsParam))) {
 
 		Dos9_SetLocalVar(lpvTmpArgs, c, Dos9_EsToChar(lpEsParam));
 

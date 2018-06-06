@@ -21,12 +21,31 @@
 	The {SET} command can display, set, or remove environment variables that
 	can be later retrieved through {spec/exp|variable expansion}.
 
-{{Synopsis}}
+{{Synopsis - Simple set}}
 
-	${SET variable=content}
+	${SET variable[=[content]]}
 
 	Assign {content} to variable {variable}. If {content} is not specified, the
 	the variable {variable} is removed from the environment.
+	
+	If neither the equal sign nor {content} are specified, {SET} will list
+	variables which name begin with {variable} and their content.
+	
+	The way {SET} deals with quotes and spaces is a bit special and inherited
+	from cmd's {SET} behaviour:
+	
+		- if {variable} is followed by trailing spaces before the equal sign,
+		theses spaces will be removed;
+		
+		- However if spaces or blanks follow the equal sign, they will be
+		kept.
+		
+		- Quotation marks on the right-hand-side of the assignment will not be
+		affected unless there is also a quotation mark preceding {variable}, in
+		which case, {content} will be trimmed at the last occurrence of a
+		quotation mark.
+	 
+{{Synopsis - Arithmetic evaluation}}
 
 	${SET /a[[:][i|f]] variable=expression}
 

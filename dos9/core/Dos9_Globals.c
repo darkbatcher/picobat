@@ -70,6 +70,7 @@ __thread FILE *fError, *_fError; /* current thread error stream */
    handle output substitution (eg. 2>&1) to be used as backup and
    so prevent unnecessary duplication of files */
 
+
 __thread ENVBUF* lpeEnv;
 __thread ENVSTACK* lpesEnv = NULL;
 __thread INPUT_FILE ifIn;

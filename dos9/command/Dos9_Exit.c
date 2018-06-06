@@ -99,11 +99,12 @@ int Dos9_CmdExit(char* lpLine)
 		}
 	}
 
+    Dos9_Exit();
+
     /* End thread or  the program */
 	if (bIgnoreExit)
         Dos9_EndThread((void*)ret);
     else {
-        Dos9_Exit();
         exit(ret);
     }
 

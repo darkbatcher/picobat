@@ -49,6 +49,7 @@
 #include "Dos9_EnvStack.h"
 #include "Dos9_Globals.h"
 #include "Dos9_ExitInt.h"
+#include "Dos9_Exec.h"
 #include "../console/Dos9_Console.h"
 
 #ifdef WIN32

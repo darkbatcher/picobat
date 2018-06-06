@@ -93,6 +93,7 @@ int Dos9_FileFind(char* restrict str, char* restrict name, int count, int flag, 
                                 name,
                                 FALSE
                                 );
+        i = 0;
 
         goto end;
 
@@ -154,7 +155,7 @@ end:
     else if (isatty(fileno(fInput)))
         clearerr(fInput);
 
-    return i;
+    return !i;
 
 }
 
@@ -314,11 +315,11 @@ int Dos9_CmdFind(char* lpLine)
 
     if (!pBegin) {
 
-        Dos9_FileFind(str, NULL, count, flag, reverse);
+        status = Dos9_FileFind(str, NULL, count, flag, reverse);
 
     } else if (pBegin == pEnd) {
 
-        Dos9_FileFind(str, pBegin->lpFileName, count, flag, reverse);
+        status = Dos9_FileFind(str, pBegin->lpFileName, count, flag, reverse);
 
     } else {
 
@@ -327,7 +328,7 @@ int Dos9_CmdFind(char* lpLine)
         while (pTmp) {
 
             fprintf(fOutput, "---------- %s" DOS9_NL, pTmp->lpFileName);
-            status |= !Dos9_FileFind(str, pTmp->lpFileName, count, flag, reverse);
+            status |= Dos9_FileFind(str, pTmp->lpFileName, count, flag, reverse);
 
             pTmp = pTmp->lpflNext;
 

@@ -41,7 +41,7 @@
 
 /*
 
-	start [/Wait] [/MIN] [/MAX] [/b] [/D dir] title cmd param
+	start [/W[ait]] [/MIN] [/MAX] [/b] [/D dir] title cmd param
 
 	Starts a command in a separate window. This is by far the
 	most incompatible command in the batch language. Indeed,
@@ -50,7 +50,7 @@
     variety of windows manager. To work around this issue, we are
     currently using the xdg-open script if available.
 
-    - /Wait : Waits for the process
+    - /W[ait] : Waits for the process
 
     - /Min : Minimized window (only under windows)
 
@@ -68,289 +68,10 @@
 
  */
 
-
-
-#if defined(WIN32)
-
-#include <windows.h>
-#include <shellapi.h>
-
-#define SEE_MASK_NOASYNC 0x00000100
-
-#if defined(DOS9_USE_LIBCU8)
-#include <libcu8.h>
-
-int Dos9_StartFile(const char* file, const char* args, const char* dir,
-					int mode, int wait)
-{
-	SHELLEXECUTEINFOW info;
-	wchar_t *chr;
-	size_t cvt;
-	int status;
-
-	memset(&info, 0, sizeof(info));
-	info.cbSize = sizeof(info);
-	info.fMask =  SEE_MASK_NOASYNC |
-        ((mode & START_MODE_BACKGROUND) ? (SEE_MASK_NO_CONSOLE) : (0));
-	info.lpVerb = NULL;
-	info.lpDirectory = NULL;
-	info.lpParameters = NULL;
-	info.nShow = mode & ~START_MODE_BACKGROUND;
-
-    if (!(info.lpFile = libcu8_xconvert(LIBCU8_TO_U16, file,
-                                        strlen(file) + 1, &cvt))
-        || !(info.lpParameters = libcu8_xconvert(LIBCU8_TO_U16, args,
-                                                    strlen(args)+1, &cvt))) {
-
-            if (info.lpFile)
-                free(info.lpFile);
-
-            if (info.lpParameters)
-                free(info.lpParameters);
-
-            if (info.lpDirectory)
-                free(info.lpDirectory);
-
-            Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION, "libcu8_xconvert()", FALSE);
-
-            return DOS9_FAILED_ALLOCATION;
-    }
-
-    if (dir) {
-
-        if  (!(info.lpDirectory = libcu8_xconvert(LIBCU8_TO_U16, dir,
-                                                    strlen(dir)+1, &cvt))) {
-
-            if (info.lpFile)
-                free(info.lpFile);
-
-            if (info.lpParameters)
-                free(info.lpParameters);
-
-            if (info.lpDirectory)
-                free(info.lpDirectory);
-
-            Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION, "libcu8_xconvert()", FALSE);
-
-            return DOS9_FAILED_ALLOCATION;
-
-        }
-
-        for (chr = info.lpDirectory;*chr;chr ++) {
-            if (*chr == L'/')
-                *chr = L'\\';
-        }
-
-    }
-
-    /* shellexecute seem to have trouble to handle forward slashes */
-    for (chr = info.lpFile;*chr;chr ++) {
-        if (*chr == L'/')
-            *chr = L'\\';
-    }
-
-
-    Dos9_ApplyEnv(lpeEnv);
-    Dos9_SetStdInheritance(1);
-	status = !ShellExecuteExW(&info);
-
-	if (wait)
-		WaitForSingleObject(info.hProcess, INFINITE);
-
-	CloseHandle(info.hProcess);
-
-    Dos9_UnApplyEnv(lpeEnv);
-
-    free(info.lpFile);
-    free(info.lpParameters);
-    free(info.lpDirectory);
-
-	return status;
-}
-
-
-#else
-int Dos9_StartFile(const char* file, const char* args, const char* dir,
-					int mode, int wait)
-{
-	SHELLEXECUTEINFO info;
-	char buf[FILENAME_MAX],
-         *chr;
-    int status;
-
-	memset(&info, 0, sizeof(info));
-	info.cbSize = sizeof(info);
-	info.fMask =  SEE_MASK_NOASYNC |
-        ((mode & START_MODE_BACKGROUND) ? (SEE_MASK_NO_CONSOLE) : (0));
-	info.lpVerb = NULL;
-	info.lpDirectory = dir;
-	info.nShow = mode & ~START_MODE_BACKGROUND;
-
-    snprintf(buf, sizeof(buf), "%s", file);
-
-
-
-    /* apply Dos9 internal environment variables */
-	Dos9_ApplyEnv(lpeEnv);
-	Dos9_SetStdInheritance(1);
-
-    /* shellexecute seem to have trouble to handle forward slashes */
-    for (chr = buf;*chr;chr ++) {
-        if (*chr == '/')
-            *chr = '\\';
-    }
-
-    info.lpParameters = args;
-    info.lpFile = buf;
-
-	status = !ShellExecuteExA(&info);
-
-    Dos9_UnApplyEnv(lpeEnv);
-
-	if (wait)
-		WaitForSingleObject(info.hProcess, INFINITE);
-
-	CloseHandle(info.hProcess);
-
-	return status;
-}
-#endif
-#else /* !defined(WIN32)  */
-
-#if defined(XDG_OPEN)
-#define Dos9_StartFile ((mode & START_MODE_BACKGROUND) ? Dos9_StartFile_S : Dos9_StartFile_X)
-#else
-#define Dos9_StartFile Dos9_StartFile_S
-#endif /* XDG_OPEN */
-
-
-#if defined(XDG_OPEN)
-int Dos9_StartFile_X(char* file, char* args, const char* dir, int mode, int wait)
-{
-    pid_t pid;
-
-    pid = fork();
-
-    ESTR* tmp;
-    char* arg[FILENAME_MAX];
-    int status, i;
-
-    if (pid == 0) {
-
-        /* we are in the son */
-        if (dir && chdir(dir) == -1) {
-            Dos9_ShowErrorMessage(DOS9_DIRECTORY_ERROR | DOS9_PRINT_C_ERROR,
-                                    dir,
-                                    -1);
-
-        }
-
-        arg[0] = XDG_OPEN;
-        arg[1] = file;
-
-        i=2;
-
-        while ((i < (FILENAME_MAX-1))
-               && (args = Dos9_GetNextParameterEs(args, tmp=Dos9_EsInit()))) {
-            arg[i++] = Dos9_EsToChar(tmp);
-        }
-
-        arg[i] = NULL;
-
-        Dos9_OpenOutput(lppsStreamStack, "NUL", DOS9_STDOUT | DOS9_STDERR, 0);
-
-        /* apply Dos9 internal environment variables */
-        Dos9_ApplyEnv(lpeEnv);
-        Dos9_SetStdInheritance(1);
-
-        if (execvp(XDG_OPEN, arg) == -1) {
-            Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR | DOS9_PRINT_C_ERROR,
-                                    XDG_OPEN,
-                                    -1);
-
-        }
-
-    } else if (pid == -1) {
-
-        Dos9_ShowErrorMessage(DOS9_FAILED_FORK | DOS9_PRINT_C_ERROR,
-                        __FILE__ "/Dos9_StartFile()",
-                        FALSE);
-        return DOS9_FAILED_FORK ;
-
-    } else {
-
-        if (wait)
-            waitpid(pid, &status, 0);
-
-    }
-
-    return 0;
-
-}
-#endif /* defined(XDG_OPEN) */
-
-int Dos9_StartFile_S(char* file, char* args, const char* dir, int mode, int wait)
-{
-    pid_t pid;
-
-    pid = fork();
-
-    ESTR* tmp;
-    char* arg[FILENAME_MAX];
-    int status, i;
-
-    if (pid == 0) {
-
-        Dos9_OpenOutput(lppsStreamStack, "NUL", DOS9_STDOUT | DOS9_STDERR, 0);
-
-        /* we are in the son */
-        if (dir && chdir(dir) == -1)
-            Dos9_ShowErrorMessage(DOS9_DIRECTORY_ERROR | DOS9_PRINT_C_ERROR,
-                                    dir,
-                                    1);
-
-        arg[0] = file;
-        i=1;
-
-        while ((i < (FILENAME_MAX-1))
-               && (args = Dos9_GetNextParameterEs(args, tmp=Dos9_EsInit()))) {
-            arg[i++] = Dos9_EsToChar(tmp);
-        }
-
-        arg[i] = NULL;
-
-        /* apply Dos9 internal environment variables */
-        Dos9_ApplyEnv(lpeEnv);
-        Dos9_SetStdInheritance(1);
-
-        if (execvp(file, arg) == -1)
-            Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR | DOS9_PRINT_C_ERROR,
-                                    file,
-                                    1);
-
-    } else if (pid == -1) {
-
-        Dos9_ShowErrorMessage(DOS9_FAILED_FORK | DOS9_PRINT_C_ERROR,
-                        __FILE__ "/Dos9_StartFile()",
-                        FALSE);
-        return DOS9_FAILED_FORK;
-
-    } else {
-
-        if (wait)
-            waitpid(pid, &status, 0);
-
-    }
-
-    return 0;
-
-}
-
-#endif // defined
-
 void Dos9_StartCommandExec(struct pipe_launch_data_t* data)
 {
     bIgnoreExit = TRUE;
+
 
     Dos9_RunLine(data->str);
 
@@ -361,7 +82,7 @@ void Dos9_StartCommandExec(struct pipe_launch_data_t* data)
 }
 
 
-int Dos9_StartCommandBackground(char* file, ESTR* params, int wait)
+int Dos9_StartCommandBackground(char* cmdline, int wait)
 {
     struct pipe_launch_data_t* data;
     THREAD handle;
@@ -373,10 +94,7 @@ int Dos9_StartCommandBackground(char* file, ESTR* params, int wait)
                                 -1);
 
     data->str = Dos9_EsInit();
-
-    Dos9_EsCpy(data->str, file);
-    Dos9_EsCat(data->str, " ");
-    Dos9_EsCatE(data->str, params);
+    Dos9_EsCat(data->str, cmdline);
 
     handle = Dos9_CloneInstance(Dos9_StartCommandExec, data);
 
@@ -387,196 +105,241 @@ int Dos9_StartCommandBackground(char* file, ESTR* params, int wait)
     return 0;
 }
 
-void Dos9_UseBackSlash(char* line)
-{
-    if (line == NULL)
-        return;
-
-	while ((line = strchr(line, '/'))) *(line ++) = '\\';
-}
-
 int Dos9_CmdStart(char* line)
 {
-	ESTR *param = Dos9_EsInit(),
-         *tmp;
+	PARAMLIST *list = NULL, *item;
+    EXECINFO info;
 
-	char wait = FALSE,
-		 mode = START_MODE_NONE;
+    char buf[FILENAME_MAX];
 
-	char dirbuf[FILENAME_MAX],
-		 file[FILENAME_MAX],
-		 *dir = NULL;
+    int n, status = 0,
+        quotes = 0,
+        command = 0;
 
-    int nok = 0, command = 0,
-        status = DOS9_NO_ERROR;
-    void* trash;
+    char **args = NULL,
+         *next,
+         *backtrack = NULL;
+    void* p;
 
-	line += 5;
+    ESTR *cmdline = Dos9_EsInit(),
+         *param = Dos9_EsInit(),
+         *dir = NULL,
+         *title = NULL;
 
-	while ((line = Dos9_GetNextParameterEs(line, param))) {
+    info.title = NULL;
+    info.dir = NULL;
+    info.file = NULL;
+    info.flags = DOS9_EXEC_SEPARATE_WINDOW;
 
-		if (!stricmp("/wait", Dos9_EsToChar(param))) {
+    line +=5;
 
-			wait = TRUE;
+    while (next = Dos9_GetNextParameterEs(line, param)) {
 
-		} else if (!stricmp("/min", Dos9_EsToChar(param))) {
+        if (!stricmp(param->str, "/WAIT")
+            || !stricmp(param->str, "/W")) {
 
-			mode = START_MODE_MIN | (mode & START_MODE_BACKGROUND);
+            info.flags |= DOS9_EXEC_WAIT;
 
-		} else if (!stricmp("/max", Dos9_EsToChar(param))) {
+        } else if (!stricmp(param->str, "/B")) {
 
-			mode = START_MODE_MAX | (mode & START_MODE_BACKGROUND);
+            info.flags &= ~DOS9_EXEC_SEPARATE_WINDOW;
 
-		} else if (!stricmp("/d", Dos9_EsToChar(param))) {
+        } else if (!stricmp(param->str, "/D")) {
 
-			if (((line = Dos9_GetNextParameterEs(line, param)) == NULL)
-				|| dir != NULL) {
+            line = next;
 
-				Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, "/d", 0);
-				status = DOS9_UNEXPECTED_ELEMENT;
+            if (info.dir) {
 
-				goto error;
+                Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, param->str, 0);
+                status = DOS9_UNEXPECTED_ELEMENT;
 
-			}
+                goto error;
+            }
 
-			strncpy(dirbuf, Dos9_EsToChar(param), sizeof(dirbuf));
-			dirbuf[FILENAME_MAX-1]='\0';
+            if ((next = Dos9_GetNextParameterEs(line, param)) == NULL) {
 
-			dir = dirbuf;
+                Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "START", 0);
+                status = DOS9_EXPECTED_MORE;
 
-		} else if (!stricmp("/b", Dos9_EsToChar(param))) {
+                goto error;
+            }
 
-		    mode |= START_MODE_BACKGROUND;
+            info.dir = Dos9_EsToFullPath(param);
+            dir = param;
+            param = Dos9_EsInit();
 
-		} else if (!stricmp("/normal", Dos9_EsToChar(param))) {
+        } else if (info.file == NULL) {
 
-		    /* Not implemented yet (shall we do so ? seems that it
-               does not affect anything anyway ...) */
+            /* WOW... this might as well be the title or the real file
+               to run ... Well try to guess using some tests */
 
-		} else {
+            if (*(Dos9_SkipBlanks(line)) == '"'
+                && (info.title == NULL))
+                quotes = 1;
+            else
+                quotes = 0;
 
-            /* Check that the file specified actually exists OR is an internal
-               command.
+            if (quotes) {
 
-               NOTE : The orignal CMD interpretor had a somehow confusing
-               behaviour about toward argument processing. Indeed depending
-               on switches given to the command, specifying _title_ parameter
-               (that is actually thrown to the bin by Dos9) was either optional
-               or mandatory. Dos9 suppress this behaviour by making it always
-               optional (anyway Dos9 takes no account of _title_) */
+                /* Starts with a quote... must be the title*/
 
-			if (Dos9_GetCommandProc(param->str, lpclCommands, &trash) != -1) {
-                /* this is an internal command */
+                if (info.title) {
+                    Dos9_MakeFullPath(buf, param->str, sizeof(buf));
+                    info.file = buf;
+                    Dos9_EsCpy(param, line);
+                    break;
+                }
 
-                command = 1;
-                nok = 1;
+                info.title = param->str;
+                backtrack = line;
+                title = param;
+                param = Dos9_EsInit();
 
-                strncpy(file, param->str, sizeof(file));
-                file[FILENAME_MAX-1]='\0';
-                break;
+            } else if ((Dos9_GetCommandProc(param->str,
+                                            lpclCommands, &p) != -1)) {
 
-            } else if (Dos9_GetFilePath(file, param->str, sizeof(file)) != -1) {
+                if (!(info.flags & DOS9_EXEC_SEPARATE_WINDOW)) {
 
-                /* this is an external command */
-                nok = 2;
+                    command = 1;
+
+                    snprintf(buf, sizeof(buf), "%s", param->str);
+                    info.file = buf;
+                    Dos9_EsCpy(param, line);
+
+                } else {
+
+                    Dos9_GetExeFilename(buf, sizeof(buf));
+                    info.file = buf;
+                    Dos9_EsCpy(param, buf);
+                    Dos9_EsCat(param, " /a:q");
+
+                    if (!bEchoOn)
+                        Dos9_EsCat(param, "e");
+
+                    if (bUseFloats)
+                        Dos9_EsCat(param, "f");
+
+                    if (bCmdlyCorrect)
+                        Dos9_EsCat(param, "c");
+
+                    Dos9_EsCat(param, " /C ");
+                    Dos9_EsCat(param, line);
+
+                }
+
                 break;
 
             } else {
 
-                /* store the what we read on file anyway, since we may
-                   probably want to backtrack */
-                strncpy(file, param->str, sizeof(file));
-                file[FILENAME_MAX-1]='\0';
+                /* this is apparently a file, set it as the file name */
 
-                nok ++;
+                if (Dos9_GetFilePath(buf, param->str, sizeof(buf)) == -1)
+                    Dos9_MakeFullPath(buf, param->str, sizeof(buf));
 
+                /* do something if its a *.bat */
+
+                info.file = buf;
+                Dos9_EsCpy(param, line);
+
+                break;
 
             }
 
-            if (nok == 2)
-                break;
+        }
+
+        line = next;
+
+    }
+
+    if (info.file == NULL) {
+
+        if (info.title == NULL) {
+
+            Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "START", 0);
+            status = DOS9_EXPECTED_MORE;
+            goto error;
 
         }
 
-	}
+        Dos9_GetExeFilename(buf, sizeof(buf));
+        info.file = buf;
+        Dos9_EsCpy(param, buf);
+        Dos9_EsCat(param, " /a:q");
 
-	if (nok == 0) {
-
-		Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "START", 0);
-		status = DOS9_EXPECTED_MORE;
-
-		goto error;
-
-	}
-
-    if (line != NULL) {
-        Dos9_GetEndOfLine(line, param);
-    } else {
-        Dos9_EsCpy(param, "");
-    }
-
-    if (command && (mode & START_MODE_BACKGROUND)) {
-
-        /* The same as below, but implemented as a thread */
-        status = Dos9_StartCommandBackground(file, param, wait);
-
-        goto error;
-
-    } else if (command) {
-
-        /* If the file specified was "", make the command line somehow
-           equivalent to :
-
-           start [switches] "%comspec%" /C "param"
-
-         */
-
-        tmp = Dos9_EsInit();
-
-        /* add optionnal attributes */
-        Dos9_EsCpy(tmp, "/a:q");
+        if (!bEchoOn)
+            Dos9_EsCat(param, "e");
 
         if (bUseFloats)
-            Dos9_EsCat(tmp, "f");
-        if (bDelayedExpansion)
-            Dos9_EsCat(tmp, "v");
-        if (!bEchoOn)
-            Dos9_EsCat(tmp, "e");
+            Dos9_EsCat(param, "f");
+
         if (bCmdlyCorrect)
-            Dos9_EsCat(tmp, "c");
-
-        Dos9_EsCat(tmp, " /K ");
-        Dos9_EsCat(tmp, file);
-        Dos9_EsCat(tmp, " ");
-        Dos9_EsCat(tmp, param->str);
-        Dos9_EsFree(param);
-
-        Dos9_GetExeFilename(file, FILENAME_MAX);
-
-        param = tmp;
+            Dos9_EsCat(param, "c");
 
     }
 
-#ifdef WIN32
-	Dos9_UseBackSlash(line);
-#endif // WIN32
+    Dos9_GetEndOfLine(param->str, cmdline);
+    info.cmdline = Dos9_SkipBlanks(cmdline->str);
 
-    if (Dos9_LockMutex(&mThreadLock))
-            Dos9_ShowErrorMessage(DOS9_RELEASE_MUTEX_ERROR,
-                                  __FILE__ "/Dos9_CmdStart()" , -1);
+    if ((list = Dos9_GetParamList(param->str)) == NULL) {
 
-	status = Dos9_StartFile(file,
-						param->str,
-						dir ? dir : lpCurrentDir,
-						mode,
-						wait);
+        Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "START", 0);
+        status = DOS9_EXPECTED_MORE;
+        goto error;
 
-    if (Dos9_ReleaseMutex(&mThreadLock))
-            Dos9_ShowErrorMessage(DOS9_RELEASE_MUTEX_ERROR,
-                                  __FILE__ "/Dos9_CmdStart()" , -1);
+    }
+
+    n = 0;
+    item = list;
+    while (item) {
+        n++;
+        item = item->next;
+    }
+
+    if ((args = malloc(sizeof(char*)*(n + 1))) == NULL) {
+
+        Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION,
+                                __FILE__ "/Dos9_CmdStart()",
+                                0);
+        status = DOS9_FAILED_ALLOCATION;
+        goto error;
+
+    }
+
+    item = list;
+    n = 0;
+    while (item) {
+        args[n ++] = item->param->str;
+        item = item->next;
+    }
+
+    args[n] = NULL;
+
+    info.args = args;
+    if (info.dir == NULL)
+        info.dir = lpCurrentDir;
+
+    if (command)
+        status = Dos9_StartCommandBackground(info.cmdline,
+                                             info.flags & DOS9_EXEC_WAIT);
+    else
+        status = Dos9_ExecuteFile(&info);
+
 
 error:
-	Dos9_EsFree(param);
-	return status;
+    Dos9_EsFree(cmdline);
+    Dos9_EsFree(param);
 
+    if (dir)
+        Dos9_EsFree(dir);
+
+    if (title)
+        Dos9_EsFree(title);
+
+    if (list)
+        Dos9_FreeParamList(list);
+
+    if (args)
+        free(args);
+
+    return status;
 }

@@ -119,7 +119,7 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
 
 	Dos9_EsFree(lpLine);
 
-	return 0;
+	return iErrorLevel;
 
 }
 
@@ -325,7 +325,7 @@ int Dos9_RunLine(ESTR* lpLine)
 
 	DOS9_DBG("*** Input ends here  ***\n");
 
-	return 0;
+	return iErrorLevel;
 }
 
 int Dos9_RunCommand(ESTR* lpCommand)
@@ -336,7 +336,6 @@ int Dos9_RunCommand(ESTR* lpCommand)
 	int (*lpProc)(char*);
 	char lpErrorlevel[sizeof(STR(INT_MIN))],
          lpTmpLine[]="CD X:";
-	static int lastErrorLevel=0;
 	char *lpCmdLine, *tmp;
 	int iFlag, error = 0;
 
@@ -363,7 +362,7 @@ RestartSearch:
 
 	case -1:
 
-		iErrorLevel=Dos9_RunExternalCommand(lpCmdLine, &error);
+		iErrorLevel = Dos9_RunExternalCommand(lpCmdLine, &error);
 
 		/* There is definitely an error that prevent the file
 		   from being found. Thus, try another time, but expanding
@@ -408,24 +407,7 @@ RestartSearch:
 
 	}
 
-	if (iErrorLevel!=lastErrorLevel) {
-
-		snprintf(lpErrorlevel, sizeof(lpErrorlevel), "%d", iErrorLevel);
-		Dos9_SetEnv(lpeEnv, "ERRORLEVEL", lpErrorlevel);
-
-		/* define exitcodeascii */
-#if defined(DOS9_USE_LIBCU8)
-        snprintf(lpErrorlevel, sizeof(iErrorLevel)+1, "%s", &iErrorLevel);
-#else
-        snprintf(lpErrorlevel, 2, "%s", &iErrorLevel);
-#endif /* DOS9_USE_LIBCU8 */
-
-        Dos9_SetEnv(lpeEnv, "=EXITCODEASCII", lpErrorlevel);
-
-		lastErrorLevel=iErrorLevel;
-	}
-
-	return 0;
+	return iErrorLevel;
 }
 
 
@@ -514,7 +496,7 @@ int Dos9_RunBlock(BLOCKINFO* lpbkInfo)
 
 	Dos9_EsFree(lpEsLine);
 
-	return 0;
+	return iErrorLevel;
 }
 
 int Dos9_RunExternalCommand(char* lpCommandLine, int* error)
@@ -527,6 +509,8 @@ int Dos9_RunExternalCommand(char* lpCommandLine, int* error)
 	ESTR *lpCmdLine = Dos9_EsInit();
 
 	PARAMLIST *list=NULL, *item;
+
+    EXECINFO info;
 
 	int i=0,
         status=0;
@@ -581,11 +565,18 @@ int Dos9_RunExternalCommand(char* lpCommandLine, int* error)
 	if (!stricmp(".bat", lpExt)
 	    || !stricmp(".cmd", lpExt)) {
 
-        status=Dos9_RunExternalBatch(lpFileName, lpCmdLine->str, lpArguments);
+        status = Dos9_RunExternalBatch(lpFileName, lpCmdLine->str, lpArguments);
 
 	} else {
 
-		status=Dos9_RunExternalFile(lpFileName, lpCmdLine->str, lpArguments);
+        info.file = lpFileName;
+        info.cmdline = lpCmdLine->str;
+        info.args = lpArguments;
+        info.dir = lpCurrentDir;
+        info.title = NULL;
+        info.flags = DOS9_EXEC_WAIT;
+
+		status = Dos9_ExecuteFile(&info);
 
     }
 
@@ -601,209 +592,6 @@ error:
 	return status;
 
 }
-
-
-#ifdef WIN32
-
-#ifndef DOS9_USE_LIBCU8
-int Dos9_RunExternalFile(char* lpFileName, char* lpFullLine, char** lpArguments)
-{
-    STARTUPINFO si;
-    PROCESS_INFORMATION pi;
-    void* envblock;
-    int status;
-    size_t size;
-
-    envblock = Dos9_GetEnvBlock(lpeEnv, &size);
-
-    ZeroMemory(&si, sizeof(si));
-
-    Dos9_SetFdInheritance(fileno(fInput), 1);
-    Dos9_SetFdInheritance(fileno(fOutput), 1);
-    Dos9_SetFdInheritance(fileno(fError), 1);
-
-    si.cb = sizeof(si);
-
-    si.dwFlags = STARTF_USESTDHANDLES;
-    si.hStdInput = _get_osfhandle(fileno(fInput));
-    si.hStdOutput = _get_osfhandle(fileno(fOutput));
-    si.hStdError = _get_osfhandle(fileno(fError));
-
-    if (!CreateProcessA(lpFileName,
-                        lpFullLine,
-                        NULL,
-                        NULL,
-                        TRUE,
-                        0,
-                        envblock,
-                        lpCurrentDir,
-                        &si,
-                        &pi))
-        Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR,
-                                lpFileName, 0);
-
-    Dos9_SetFdInheritance(fileno(fInput), 0);
-    Dos9_SetFdInheritance(fileno(fOutput), 0);
-    Dos9_SetFdInheritance(fileno(fError), 0);
-
-    WaitForSingleObject(pi.hProcess, INFINITE);
-
-    GetExitCodeProcess(pi.hProcess, &status);
-
-    CloseHandle(pi.hProcess);
-    CloseHandle(pi.hThread);
-
-    free(envblock);
-
-    return status;
-}
-
-#else
-
-int Dos9_RunExternalFile(char* lpFileName, char* lpFullLine, char** lpArguments)
-{
-    STARTUPINFOW si;
-    PROCESS_INFORMATION pi;
-    void* envblock;
-    int status;
-    size_t size;
-    size_t ret;
-
-    wchar_t *wfullline,
-            *wfilename,
-            *wcurrdir,
-            *wenvblock;
-
-    envblock = Dos9_GetEnvBlock(lpeEnv, &size);
-
-    if (!(wfullline = libcu8_xconvert(LIBCU8_TO_U16, lpFullLine,
-                                            strlen(lpFullLine) + 1, &ret))
-        || !(wfilename = libcu8_xconvert(LIBCU8_TO_U16, lpFileName,
-                                            strlen(lpFileName) + 1, &ret))
-        || !(wcurrdir = libcu8_xconvert(LIBCU8_TO_U16, lpCurrentDir,
-                                            strlen(lpCurrentDir) + 1, &ret))
-        || !(wenvblock = libcu8_xconvert(LIBCU8_TO_U16, envblock, size, &ret)))
-        Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION | DOS9_PRINT_C_ERROR,
-                                __FILE__ "/Dos9_RunExternalFile()", -1);
-
-
-    ZeroMemory(&si, sizeof(si));
-
-    Dos9_SetFdInheritance(fileno(fInput), 1);
-    Dos9_SetFdInheritance(fileno(fOutput), 1);
-    Dos9_SetFdInheritance(fileno(fError), 1);
-
-    si.cb = sizeof(si);
-
-    si.dwFlags = STARTF_USESTDHANDLES;
-    si.hStdInput = _get_osfhandle(fileno(fInput));
-    si.hStdOutput = _get_osfhandle(fileno(fOutput));
-    si.hStdError = _get_osfhandle(fileno(fError));
-
-    if (!CreateProcessW(wfilename,
-                        wfullline,
-                        NULL,
-                        NULL,
-                        TRUE,
-                        CREATE_UNICODE_ENVIRONMENT,
-                        wenvblock,
-                        wcurrdir,
-                        &si,
-                        &pi))
-        Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR,
-                                lpFileName, 0);
-
-    Dos9_SetFdInheritance(fileno(fInput), 0);
-    Dos9_SetFdInheritance(fileno(fOutput), 0);
-    Dos9_SetFdInheritance(fileno(fError), 0);
-
-    WaitForSingleObject(pi.hProcess, INFINITE);
-
-    GetExitCodeProcess(pi.hProcess, &status);
-
-    CloseHandle(pi.hProcess);
-    CloseHandle(pi.hThread);
-
-    free(envblock);
-    free(wfullline);
-    free(wfilename);
-    free(wcurrdir);
-    free(wenvblock);
-
-    return status;
-}
-#endif
-
-#elif !defined(WIN32)
-
-int Dos9_RunExternalFile(char* lpFileName, char* lpFullLine, char** lpArguments)
-{
-	pid_t iPid;
-
-	int iResult = 0;
-
-	iPid=fork();
-
-	if (iPid == 0 ) {
-		/* if we are in the son */
-        Dos9_SetStdInheritance(1); /* make std inheritable */
-        Dos9_ApplyEnv(lpeEnv); /* set internal variable */
-        Dos9_ApplyStreams(lppsStreamStack);
-        chdir(lpCurrentDir);
-
-		if ( execv(lpFileName, lpArguments) == -1) {
-
-			/* if we got here, we can't set ERRORLEVEL
-			   variable anymore, but print an error message anyway.
-
-			   This is problematic because if fork do not fail (that
-			   is the usual behaviour) command line such as
-
-			        batbox || goto error
-
-			   will not work as expected. However, during search in the
-			   path, command found exist, so the risk of such a
-			   dysfunction is limited.
-
-			   For more safety, we return -1, so that the given value will be
-			   reported anyway*/
-
-			Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR,
-			                      lpArguments[0],
-			                      FALSE
-			                     );
-
-			exit(-1);
-
-
-		}
-
-	} else {
-		/* if we are in the father */
-
-		if (iPid == (pid_t)-1) {
-			/* the execution failed */
-
-			Dos9_ShowErrorMessage(DOS9_FAILED_FORK | DOS9_PRINT_C_ERROR,
-                                    __FILE__ "/Dos9_RunExternalFile()",
-                                    -1
-                                    );
-
-			return -1;
-
-		} else {
-
-			waitpid(iPid, &iResult, 0);
-
-		}
-
-	}
-
-	return WEXITSTATUS(iResult);
-
-}
-
-#endif // WIN32 || _POSIX_C_SOURCE
 
 struct batch_launch_data_t {
     char* lpFileName;

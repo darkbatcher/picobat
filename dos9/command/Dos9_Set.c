@@ -154,8 +154,7 @@ int _Dos9_SetSetVarInt(char* lpName, int v)
 	Problems are introduced by the lack of standard precedence rules for
 	assignments. As an example, `set /a var=1+(var3=2)' evaluates to 3
 	whereas `set /a var=1+var3=2' evaluates to 2 (That does not make sense
-	anyway, can't figure how to get 2 out of this expression). Thus, these
-	features are not implemented yet.
+	anyway, can't figure how to get 2 out of this expression).
 
 	IMPLEMENTATION:
 	===============
@@ -163,18 +162,14 @@ int _Dos9_SetSetVarInt(char* lpName, int v)
 	Dos9 actually supports the following behaviours on simple set (without
 	any switches) :
 
-		* If CMDLYCORRECT is set and the command line is quoted like
-	`set "var=exp"', then it behaves *exactly* the same way as cmd does.
-
-		* If CMDLYCORRECT is not set and the command line is quoted
-	like `set "var1=exp1" "var2=exp2"', then dos9 assigns both 'var1' and
-	'var2'.
+    The set simple mode and behaves *exactly* the same way as cmd does.
 
 	Dos9 behaves exactly like cmd.exe when using the '/p' switch.
 
 	Dos9 behaves mostly like cmd.exe when using the '/a' switch, except
-	that inline assignment are not supported. (As stated above, it may
-	hard to parse)
+	that inline assignment are supported but is not guaranteed to be 100%
+	compatible as inline assignment are a bit complicated to understand
+	under cmd. (As stated above, it may hard to parse)
 
 */
 int Dos9_CmdSet(char *lpLine)
@@ -290,46 +285,19 @@ int Dos9_CmdSetS(char* lpLine)
 
 	while (lpLine) {
 
-
 		lpLine=Dos9_SkipBlanks(lpLine);
 
 		if (*lpLine=='\0'){
 
 			break;
 
-		} else if (*lpLine=='"' && bCmdlyCorrect) {
+		} else {
 
 			/* use the good old method of cmd.exe' set
 			   truncate the line at the last quote
 			*/
 
-			lpLine++;
-
 			Dos9_GetEndOfLine(lpLine, lpEsVar);
-
-			lpLine = NULL;
-
-			if ((lpCh = strrchr(Dos9_EsToChar(lpEsVar), '"')))
-				*lpCh='\0';
-
-            lpBegin = lpEsVar->str;
-
-		} else if (*lpLine == '"') {
-
-			/* use the new behaviour (get the next parameter
-			   and loop again */
-			lpLine = Dos9_GetNextParameterEsD(lpLine, lpEsVar,
-					"\t\" ");
-
-            lpBegin = lpEsVar->str;
-
-			DOS9_DBG("GOT Token => \"%s\"\n", Dos9_EsToChar(lpEsVar)
-					);
-
-		} else {
-
-			Dos9_GetEndOfLine(lpLine, lpEsVar);
-
 
             /* Strip any pair of '"' if encountered */
 			if (*(lpEsVar->str) == '"'
@@ -345,6 +313,7 @@ int Dos9_CmdSetS(char* lpLine)
             }
 
 			lpLine=NULL;
+
 
 		}
 

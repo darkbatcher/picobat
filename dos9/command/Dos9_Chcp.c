@@ -109,7 +109,8 @@ int Dos9_CmdChcp(char* line)
 
 #if defined(DOS9_USE_LIBCU8)
         if ((enc = Dos9_ConsoleCP2Encoding(cp)) == NULL
-            || libcu8_set_fencoding(enc) == -1)
+            || libcu8_set_fencoding(enc) == -1
+            || !SetConsoleCP(cp))
 #else
         if (!SetConsoleCP(cp))
 #endif

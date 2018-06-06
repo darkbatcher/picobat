@@ -58,7 +58,7 @@ THREAD Dos9_CloneInstance(void(*func)(void*), void* arg)
     return th;
 }
 
-void Dos9_CloneTrampoline(void* data)
+int Dos9_CloneTrampoline(void* data)
 {
     struct clone_data_t* cloned = data;
     void(*func)(void*);
@@ -98,6 +98,8 @@ void Dos9_CloneTrampoline(void* data)
     Dos9_Exit();
 
     Dos9_EndThread((void*)iErrorLevel);
+
+    return iErrorLevel;
 }
 
 /* Duplicate Dos9 internal structures */

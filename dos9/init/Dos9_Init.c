@@ -168,7 +168,6 @@ void Dos9_InitLibDos9(void)
 
     DOS9_DBG("Initializing variables ...\n");
     Dos9_InitVar(lpInitVar);
-    Dos9_SetEnv(lpeEnv, "ERRORLEVEL","0");
 
     lppsStreamStack=Dos9_InitStreamStack();
 }

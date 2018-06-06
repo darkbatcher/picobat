@@ -2069,5 +2069,9 @@ FRIDAY 1ST, JUNE
         insert characters in the middle of the input or use history.
 
       - Fixed a bug causing the %* variable to contain the script name if the 
-        script was launched as a separate thread inside an interpretor. 
+        script was launched as a separate thread inside an interpretor.
+
+      - Fixed Broken makefiles for linux.
+
+      - Fixed Broken console functions for linux. 
 

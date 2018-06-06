@@ -164,7 +164,8 @@ LIBDOS9 void     Dos9_EndThread(void* iReturn)
 
 LIBDOS9 int      Dos9_WaitForThread(THREAD* thId, void** lpRet)
 {
-    return WaitForSingleObject(*thId, INFINITE);;
+    return WaitForSingleObject(*thId, INFINITE)
+            || !GetExitCodeThread(*thId, lpRet);
 }
 
 LIBDOS9 int      Dos9_CreateMutex(MUTEX* lpMuId)

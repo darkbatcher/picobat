@@ -384,7 +384,7 @@ int libcu8_readconsole(int fd, char* buf, size_t size, size_t* written)
     EnterCriticalSection(&libcu8_history_lock);
 
     if (libcu8_history_count)
-        hid = libcu8_history_count - 1;
+        hid = libcu8_history_count;
 
     LeaveCriticalSection(&libcu8_history_lock);
 
@@ -454,7 +454,7 @@ int libcu8_readconsole(int fd, char* buf, size_t size, size_t* written)
         case VK_UP:
             EnterCriticalSection(&libcu8_history_lock);
 
-            if (hid)
+            if (hid > 0)
                 hid --;
 
             if ((libcu8_history_count > hid)
@@ -488,6 +488,8 @@ int libcu8_readconsole(int fd, char* buf, size_t size, size_t* written)
 
             if (hid < (libcu8_history_count - 1))
                 hid ++;
+            else
+                hid = libcu8_history_count - 1;
 
             if (libcu8_history_count > hid
                 && (libcu8_history[hid].size <= orig)) {

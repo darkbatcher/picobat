@@ -55,7 +55,7 @@ SRC_FILES := \
 	./command/Dos9_Break.c ./command/Dos9_IfExp.c ./command/Dos9_Chcp.c \
 	./command/Dos9_Pushd.c ./init/Dos9_Init.c ./command/Dos9_Wc.c \
 	./command/Dos9_Xargs.c ./core/Dos9_DirStack.c ./core/Dos9_EnvStack.c \
-	./console/Dos9_ConsoleANSI.c ./console/Dos9_ConsoleWin.c
+	./core/Dos9_Exec.c ./console/Dos9_ConsoleANSI.c ./console/Dos9_ConsoleWin.c
 
 OBJ_FILES := $(SRC_FILES:.c=.o)
 

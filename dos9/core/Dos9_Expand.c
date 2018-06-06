@@ -89,11 +89,11 @@ void Dos9_ExpandVar(ESTR* ptrCommandLine, char cDelimiter, ESTR** buf)
 
 		DEBUG(ptrToken);
 		*ptrNextToken='\0';
-		ptrNextToken++; // on passe au caract�re suivant
+		ptrNextToken++; // on passe au caractère suivant
 
 		if (*ptrNextToken==cDelimiter) {
 
-			// si un % est �chapp� via %%
+			// si un % est échappé via %%
 
 			/* on supprime le caract�re qui peut �ventuellement
 			   trainer dans ce buffer */
