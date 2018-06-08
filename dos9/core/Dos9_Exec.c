@@ -288,7 +288,7 @@ int Dos9_RunFile(EXECINFO* info, int* error)
 			   reported anyway*/
 
 			Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR,
-			                      lpArguments[0],
+			                      info->args[0],
 			                      FALSE
 			                     );
 
