@@ -110,7 +110,7 @@ int Dos9_CmdStart(char* line)
 	PARAMLIST *list = NULL, *item;
     EXECINFO info;
 
-    char buf[FILENAME_MAX];
+    char buf[FILENAME_MAX], ext[FILENAME_MAX];
 
     int n, status = 0,
         quotes = 0,
@@ -237,6 +237,29 @@ int Dos9_CmdStart(char* line)
                     Dos9_MakeFullPath(buf, param->str, sizeof(buf));
 
                 /* do something if its a *.bat */
+                Dos9_SplitPath(buf, NULL, NULL, NULL, ext);
+
+                if (!stricmp(ext, ".bat")
+                    || !stricmp(ext, ".cmd")) {
+
+                    Dos9_GetExeFilename(buf, sizeof(buf));
+                    info.file = buf;
+                    Dos9_EsCpy(param, buf);
+                    Dos9_EsCat(param, " /a:q");
+
+                    if (!bEchoOn)
+                        Dos9_EsCat(param, "e");
+
+                    if (bUseFloats)
+                        Dos9_EsCat(param, "f");
+
+                    if (bCmdlyCorrect)
+                        Dos9_EsCat(param, "c");
+
+                    Dos9_EsCat(param, " ");
+                    Dos9_EsCat(param, line);
+
+                }
 
                 info.file = buf;
                 Dos9_EsCpy(param, line);

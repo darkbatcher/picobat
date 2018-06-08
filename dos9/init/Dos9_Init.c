@@ -332,6 +332,7 @@ char* Dos9_GetParameters(char** argv, char** lpFileName, int* bExitAfterCmd, int
             c='1';
 
             Dos9_AssignCommandLine('*', argv + i + 1);
+            Dos9_SetLocalVar(lpvArguments, '+', "");
 
             bGetSwitch = FALSE;
         }

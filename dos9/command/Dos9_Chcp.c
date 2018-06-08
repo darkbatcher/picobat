@@ -91,7 +91,8 @@ int Dos9_CmdChcp(char* line)
 
         /* param->str is not a valid number */
 #if defined(DOS9_USE_LIBCU8)
-        if (libcu8_set_fencoding(param->str) == -1)
+        if (libcu8_set_fencoding(param->str) == -1
+            || !SetConsoleCP(cp))
 #else
         if (1)
 #endif

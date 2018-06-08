@@ -2,8 +2,8 @@
 
 This a list of fixed bugs and improvements made :
 
-{NOTE} : This list is not a complete list of improovements. The changes made before
-october 2012 were not included since the version started in this dates used almost
+{NOTE} : This list is not a complete list of improvements. The changes made before
+October 2012 were not included since the version started in this dates used almost
 new code.
 
 {{Friday 11th, October 2012}}
@@ -1934,3 +1934,47 @@ ${for %%a in (*.exe) do echo %%a}
     - Fixed Broken makefiles for linux.
 
     - Fixed Broken console functions for linux.
+	
+{{Wednesday 6th}}
+
+	- Fixed {%ERRORLEVEL%} variable which is now implemented as a read-only
+	variable to avoid polluting child processes environment (especially
+	cmd.exe which behaviour gets buggy when errorlevel is defined).
+
+	- Fixed {SET /A} command to be able to specify expression containing
+	spaces.
+	
+	- Fixed {SET} default behaviour that provided an extension breaking the
+	original command behaviour. The only behaviour used then is the old
+	cmd behaviour that truncate the input. Fixed the manual page also.
+	
+	- Fixed {Dos9_RunCommand()} and added {Dos9_Exec.c} to provide a more
+	reliable support for external command and the {START} command.
+	
+	- Fixed {FIND} command to provide ErrorLevels compatible with cmd.exe,
+	(ie. 0 means "match found").
+	
+	- Modified history behaviour of libcu8.
+	
+	- Fixed broken thread function preventing correct exit values from
+	being reported to parent threads.
+	
+	- Fixed {CALL} function to include search in {%PATH%} and {%pathext%}
+	if available on the system when calling file or batch. Also fixed a
+	bug that omitted the 10th parameter if more then 10 parameters were
+	given
+	
+	- Re coded {START} command.
+	
+	- Enabled version 218.2.
+
+{{Friday 8th}}
+
+	- Fixed segmentation fault happening when calling a batch file with no
+	arguments and calling the {SHIFT} command from within the script
+	subsequently. 
+	
+	- Fixed {START} command to detect batch files extension {.bat} and {.cmd}
+	and start the appropriate {Dos9} interpretor instead of {cmd.exe} by
+	default.
+	
