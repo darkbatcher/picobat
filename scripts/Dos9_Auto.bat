@@ -8,7 +8,7 @@
 :: Note : This code is usually wrapped in a @() block to make it quiet and
 :: quick. Nevertheless, you can still make it verbose using the ECHO command
 ::
-:: This file is not intended for direct modification. Do not modify it unless 
+:: This file is not intended for direct modification. Do not modify it unless
 :: you *really* pay attention to and know *exactly* what you are doing. Files
 :: intended for customisation should be :
 ::		- /etc/Dos9_Auto.bat or $HOME/.dos9/Dos9_Auto.bat
@@ -17,7 +17,7 @@ IF %DOS9_OS%==WINDOWS (
 
 	:: set special dos9 directories for commands
 	SET PATH=!DOS9_PATH!/cmd;!DOS9_PATH!;!PATH!
-	
+
 	:: Define additionnal path for sub-programs
 	SET DOS9_SHARE=!DOS9_PATH!/share
 	SET DOS9_ETC=!DOS9_PATH!/etc
@@ -25,19 +25,19 @@ IF %DOS9_OS%==WINDOWS (
 ) else (
 
 	:: well this is an unix system. Use the unix conventions
-	:: to expand the path and provide a little compatibility 
+	:: to expand the path and provide a little compatibility
 	:: over windows.
 	SET PATH=!PATH!:!DOS9_PATH!/cmd:!DOS9_PATH!
-	
+
 	:: set windows compatible variable
 	SET SYSTEMROOT=/bin
-	SET PROGRAMFILES=/desktop/dos9-code/bin
-	SET SYSTEMDRIVE=/desktop/dos9-code/bin
+	SET PROGRAMFILES=!DOS9_PATH!/bin
+	SET SYSTEMDRIVE=!DOS9_PATH!/bin
 	SET "USERPROFILE=%HOME%"
-	
+
 	:: Define additionnal paths for sub-programs
-	SET DOS9_SHARE=/desktop/dos9-code/bin/share
-	SET DOS9_ETC=/desktop/dos9-code/bin/etc
+	SET DOS9_SHARE=!DOS9_PATH!/share
+	SET DOS9_ETC=!DOS9_PATH!/etc
 
 )
 
@@ -48,6 +48,6 @@ IF exist !USERPROFILE!/.dos9/Dos9_Auto.bat CALL !USERPROFILE!/.dos9/Dos9_Auto.ba
 :: been set, so that, it might be something good to reset them by yourself.
 :: The following line is used to disable delayed expansion. Uncomment if
 :: you want to disable delayed expansion by default.
-:: 
+::
 :: SETLOCAL DisableDelayedExpansion
 )
