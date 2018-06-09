@@ -116,6 +116,13 @@ int main(int argc, char *argv[])
     /* Ignore the SIGFPS signal */
     signal(SIGFPE, SIG_IGN);
 
+#if defined(SIGPIPE)
+    /* If the OS provide some SIGPIPE, just ignore them, theses error are not
+     * relevant to us anyway as it refers to a somehow broken pipe that do not
+     * have a read end. That is, basically, the end does not care about any
+     * kind of input. */
+    signal(SIGPIPE, SIG_IGN);
+#endif /* SIGPIPE */
 
     /* Initialize libDos9 */
     Dos9_InitLibDos9();

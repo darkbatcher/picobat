@@ -10,6 +10,10 @@ still needed :
 	- GNU gettext
 	- GNU libiconv
 
+If you also want to enable START command support under non-windows platforms,
+either mimeopen or xdg-open are required, the early being the most
+recommended alternative.
+
 Building Dos9 is quite rapid, first configure the build using :
 
 	$ make config

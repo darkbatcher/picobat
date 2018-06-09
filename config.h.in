@@ -52,3 +52,15 @@
 #if @prg_xdg-open@
 	#define XDG_OPEN "@path_xdg-open@"
 #endif
+
+#if @prg_mimeopen@
+    #define MIMEOPEN "@path_mimeopen@"
+#endif
+
+#if defined(MIMEOPEN)
+#define START_SCRIPT MIMEOPEN
+#elif defined(XDG_OPEN)
+#define START_SCRIPT XDG_OPEN
+#else
+#define START_SCRIPT ""
+#endif

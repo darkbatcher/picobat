@@ -124,7 +124,7 @@ STREAMSTACK* Dos9_OpenOutput(STREAMSTACK* stack, char* name, int fd, int mode)
 
     case DOS9_STDIN:
         DOS9_XDUP(item->oldfd, fInput);
-        DOS9_DUP_STD(newfd, fInput);
+        DOS9_DUP_STDIN(newfd, fInput);
         close(newfd);
         break;
 

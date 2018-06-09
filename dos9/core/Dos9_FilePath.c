@@ -238,8 +238,6 @@ int Dos9_GetFilePath(char* lpFullPath, const char* lpPartial, size_t iBufSize)
 
 	}
 
-	DOS9_DBG("[Dos9_GetFilePath()]*** Start research of file : \"%s\"\n\n", lpPartial);
-
 /* next: */
 	do {
 
@@ -253,8 +251,6 @@ int Dos9_GetFilePath(char* lpFullPath, const char* lpPartial, size_t iBufSize)
 			Dos9_MakePath(lpEsTmp, 2, Dos9_EsToChar(lpEsPart), lpPartial);
 
 		}
-
-		DOS9_DBG("\t[*] trying \"%s\"\n", Dos9_EsToChar(lpEsTmp));
 
 #ifdef WIN32
 
@@ -305,7 +301,6 @@ int Dos9_GetFilePath(char* lpFullPath, const char* lpPartial, size_t iBufSize)
 	Dos9_EsFree(lpEsTmp);
 	Dos9_EsFree(lpEsFinalPath);
 
-	DOS9_DBG("[Dos9_GetFilePath()]*** Finished without match (-1)\n");
 
 	return -1;
 
@@ -316,8 +311,6 @@ file_found:
 	         "%s",
 	         Dos9_EsToChar(lpEsFinalPath)
 	        );
-
-	DOS9_DBG("[Dos9_GetFilePath()]*** Found \"%s\"\n", Dos9_EsToChar(lpEsFinalPath));
 
 	Dos9_EsFree(lpEsPart);
 	Dos9_EsFree(lpEsTmp);

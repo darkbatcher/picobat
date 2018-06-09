@@ -72,7 +72,7 @@ $(SUBDIRS_BIN): $(SUBDIRS)
 	$(MAKE) -C $(basename $@) bin || true
 	
 # stuff to check
-PROGRAMS = xdg-open
+PROGRAMS = mimeopen xdg-open
 FUNCTIONS =
 LIBS = iconv intl pthread m
 OPTIONS = libcu8 nls cmdlycorrect console

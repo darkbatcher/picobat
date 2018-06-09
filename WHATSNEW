@@ -2107,3 +2107,12 @@ WEDNESDAY 6TH
 
       - Enabled version 218.2.
 
+FRIDAY 8TH
+
+      - Fixed segmentation fault happening when calling a batch file with no 
+        arguments and calling the SHIFT command from within the script 
+        subsequently. 
+
+      - Fixed START command to detect batch files extension .bat and .cmd and 
+        start the appropriate Dos9 interpretor instead of cmd.exe by default.
+

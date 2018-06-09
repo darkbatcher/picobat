@@ -47,7 +47,7 @@ int Dos9_ExecuteFile(EXECINFO* info)
 
 
 
-    #if defined(WIN32) || defined(XDG_OPEN)
+    #if defined(WIN32)
     if (!error)
         return ret;
 
@@ -56,15 +56,32 @@ int Dos9_ExecuteFile(EXECINFO* info)
     ret = Dos9_StartFile(info, &error);
     #else
 
-    if (info->flags & DOS9_EXEC_SEPARATE_WINDOW) {
+
+    if (Dos9_GetEnv(lpeEnv, "DOS9_START_SCRIPT") == NULL) {
+
+        /* If we have neither windows nor a decent start script,
+         * well try to fallback and start the thing in the same console */
+
+        if (info->flags & DOS9_EXEC_SEPARATE_WINDOW) {
+
+            if (!error)
+                return ret;
+
+            error = 0;
+
+            info->flags &= ~DOS9_EXEC_SEPARATE_WINDOW;
+            ret = Dos9_RunFile(info, &error);
+        }
+
+    } else {
 
         if (!error)
             return ret;
 
         error = 0;
 
-        info->flags &= ~DOS9_EXEC_SEPARATE_WINDOW;
-        ret = Dos9_RunFile(info, &error);
+        ret = Dos9_StartFile(info, &error);
+
     }
 
     #endif
@@ -250,15 +267,26 @@ int Dos9_RunFile(EXECINFO* info, int* error)
 int Dos9_RunFile(EXECINFO* info, int* error)
 {
 	pid_t iPid;
+	int fds[2];
+	char c;
 
 	int iResult = 0;
 
 	if (info->flags & DOS9_EXEC_SEPARATE_WINDOW) {
 
-        *error = 0;
+        /* We do not support separate windows, just got to start */
+        *error = 1;
         return -1;
 
 	}
+
+	if (pipe(fds) == -1)
+        Dos9_ShowErrorMessage(DOS9_CREATE_PIPE | DOS9_PRINT_C_ERROR,
+                                __FILE__ "/Dos9_RunFile()",
+                                -1);
+
+    Dos9_SetFdInheritance(fds[1], 0);
+    Dos9_SetFdInheritance(fds[0], 0);
 
 	iPid=fork();
 
@@ -269,6 +297,8 @@ int Dos9_RunFile(EXECINFO* info, int* error)
         if (!(info->flags & DOS9_EXEC_SEPARATE_WINDOW))
             Dos9_ApplyStreams(lppsStreamStack);
         chdir(info->dir);
+
+        close(fds[0]); /* close read end */
 
 		if ( execv(info->file, info->args) == -1) {
 
@@ -284,13 +314,11 @@ int Dos9_RunFile(EXECINFO* info, int* error)
 			   path, command found exist, so the risk of such a
 			   dysfunction is limited.
 
-			   For more safety, we return -1, so that the given value will be
-			   reported anyway*/
+			   For more safety, we return -1, along with a pipe message 
+               so that the given value will be reported anyway*/
 
-			Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR,
-			                      info->args[0],
-			                      FALSE
-			                     );
+			write(fds[1], "x", 1);
+			close(fds[1]);
 
 			exit(-1);
 
@@ -299,15 +327,27 @@ int Dos9_RunFile(EXECINFO* info, int* error)
 
 	} else {
 		/* if we are in the father */
+		close(fds[1]);
 
 		if (iPid == (pid_t)-1) {
 			/* the execution failed */
 
 			*error = 1;
+			close(fds[0]);
 
 			return -1;
 
 		} else {
+
+            if (read(fds[0], &c, sizeof(c)) != 0) {
+
+                close(fds[0]);
+
+                *error = 1;
+                return -1;
+            }
+
+            close(fds[0]);
 
 			if (info->flags & DOS9_EXEC_WAIT)
                 waitpid(iPid, &iResult, 0);
@@ -485,7 +525,6 @@ int Dos9_StartFile(EXECINFO* info, int* error)
 #endif
 #else /* !defined(WIN32)  */
 
-#if defined(XDG_OPEN)
 int Dos9_StartFile(EXECINFO* info, int* error)
 {
     pid_t pid;
@@ -493,8 +532,15 @@ int Dos9_StartFile(EXECINFO* info, int* error)
     pid = fork();
 
     ESTR* tmp;
-    char* arg[FILENAME_MAX];
+    char **arg, *script;
     int status=0, i;
+
+    if ((script = Dos9_GetEnv(lpeEnv, "DOS9_START_SCRIPT")) == NULL) {
+
+        *error = 1;
+        return 0;
+
+    }
 
     if (pid == 0) {
 
@@ -506,19 +552,39 @@ int Dos9_StartFile(EXECINFO* info, int* error)
 
         }
 
-        arg[0] = XDG_OPEN;
+        i = 0;
+
+        while (info->args[i])
+            i ++;
+
+        if (!(arg = malloc(sizeof(char*)*(i+2))))
+            Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION | DOS9_PRINT_C_ERROR,
+                                    __FILE__ "/Dos9_StartFile()",
+                                    -1);
+
+        arg[0] = START_SCRIPT;
         arg[1] = info->file;
 
-        i=2;
+        i=1;
+
+        while (info->args[i] != NULL) {
+            arg[i + 1] = info->args[i];
+            i ++;
+        }
+
+        arg[i + 1] = NULL;
+
+        lppsStreamStack = Dos9_OpenOutput(lppsStreamStack, "/dev/null",
+                                                   DOS9_STDOUT, 0);
 
         /* apply Dos9 internal environment variables */
         Dos9_ApplyEnv(lpeEnv);
         Dos9_ApplyStreams(lppsStreamStack);
         Dos9_SetStdInheritance(1);
 
-        if (execvp(XDG_OPEN, info->args) == -1) {
+        if (execv(script, arg) == -1) {
             Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR | DOS9_PRINT_C_ERROR,
-                                    XDG_OPEN,
+                                    script,
                                     -1);
 
         }
@@ -528,11 +594,13 @@ int Dos9_StartFile(EXECINFO* info, int* error)
         Dos9_ShowErrorMessage(DOS9_FAILED_FORK | DOS9_PRINT_C_ERROR,
                         __FILE__ "/Dos9_StartFile()",
                         FALSE);
+        *error = 1;
         return DOS9_FAILED_FORK ;
 
     } else {
 
-        if (info->flags & DOS9_EXEC_WAIT)
+        if (1
+            && info->flags & DOS9_EXEC_WAIT)
             waitpid(pid, &status, 0);
 
     }
@@ -540,5 +608,5 @@ int Dos9_StartFile(EXECINFO* info, int* error)
     return status;
 
 }
-#endif /* defined(XDG_OPEN) */
+
 #endif /* !defined(win32) */

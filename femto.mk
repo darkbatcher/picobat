@@ -95,8 +95,13 @@ $(SUBCONF):
 config: localmk $(PROGRAMS) $(LIBS) $(FUNCTIONS) $(DEFAULTOPTIONSX) $(SUBCONF)
 	$(MAKE) config.h
 	
-config.h:
-	sed $(foreach v,$(CONFIGVARS),-e 's,[@]$(v)[@],$($(v)),g') < config.h.in > config.h
+config.h: femto-subst
+	./femto-subst < config.h.in > config.h
 
+femto-subst:
+	echo \#!/bin/sh > femto-subst
+	echo sed $(foreach v,$(CONFIGVARS),-e 's,[@]$(v)[@],$($(v)),g') >> femto-subst
+	chmod +x femto-subst
+	
 .PHONY: config config.h localmk $(SUBCONF) $(FUNCTIONS) $(PROGRAMS) $(LIBS) \
 	$(NOOPTIONS) $(NOOPTIONSX) $(USEOPTIONS) $(USEOPTIONSX)

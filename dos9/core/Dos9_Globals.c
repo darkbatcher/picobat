@@ -28,6 +28,7 @@ char* lpInitVar[]= {
 	"DOS9_OS", DOS9_OS,
 	NULL, NULL, /* DOS9_PATH is dinamically generated */
     "DOS9_OS_TYPE", DOS9_OS_TYPE,
+    "DOS9_START_SCRIPT", START_SCRIPT,
     "NUL", NUL,
     "CON", CON,
     "COM", COM,

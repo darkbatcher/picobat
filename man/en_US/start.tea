@@ -59,9 +59,15 @@ ${START [/d dir] [/b] [/min] [/max] [/wait] ["title"] [command [parameter ...]]}
 
 	Partially compatible with {cmd.exe}. Under UNIX-based operating systems,
 	some features are ignored:  {"title"}, {/max}, {/min}. The possibility
-	of launching a new window is requiring the support of {xdg-open} in your
-	platform, and obviously depends on the use of a graphical environment
-	such as {X}.
+	of launching a new window is requiring the support of {mimeopen} or 
+    {xdg-open} in your platform, and obviously depends on the use of a
+    graphical environment such as {X} to work.
+
+    Note that the implementation using {xdg-open} might be a bit buggy as
+    this script has plenty of defaults, but it is more widespread than
+    {mimeopen} as it is older. Dos9 gives priority to {mimeopen} thus installing
+    it is highly recommended to get the best experience of {dos9|Dos9} on
+    UNIX-based platforms
 	
 	Available since {218.2}.
 
