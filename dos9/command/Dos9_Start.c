@@ -231,34 +231,45 @@ int Dos9_CmdStart(char* line)
 
             } else {
 
-                /* this is apparently a file, set it as the file name */
+                if (*(param->str)
+                    && *(param->str + 1) != ':'
+                    && strchr(param->str, ':')) {
 
-                if (Dos9_GetFilePath(buf, param->str, sizeof(buf)) == -1)
-                    Dos9_MakeFullPath(buf, param->str, sizeof(buf));
+                    /* the path contains an URI */
+                    snprintf(buf, sizeof(buf), "%s", param->str);
 
-                /* do something if its a *.bat */
-                Dos9_SplitPath(buf, NULL, NULL, NULL, ext);
 
-                if (!stricmp(ext, ".bat")
-                    || !stricmp(ext, ".cmd")) {
+                } else {
 
-                    Dos9_GetExeFilename(buf, sizeof(buf));
-                    info.file = buf;
-                    Dos9_EsCpy(param, buf);
-                    Dos9_EsCat(param, " /a:q");
+                    /* this is apparently a file, set it as the file name */
 
-                    if (!bEchoOn)
-                        Dos9_EsCat(param, "e");
+                    if (Dos9_GetFilePath(buf, param->str, sizeof(buf)) == -1)
+                        Dos9_MakeFullPath(buf, param->str, sizeof(buf));
 
-                    if (bUseFloats)
-                        Dos9_EsCat(param, "f");
+                    /* do something if its a *.bat */
+                    Dos9_SplitPath(buf, NULL, NULL, NULL, ext);
 
-                    if (bCmdlyCorrect)
-                        Dos9_EsCat(param, "c");
+                    if (!stricmp(ext, ".bat")
+                        || !stricmp(ext, ".cmd")) {
 
-                    Dos9_EsCat(param, " ");
-                    Dos9_EsCat(param, line);
+                        Dos9_GetExeFilename(buf, sizeof(buf));
+                        info.file = buf;
+                        Dos9_EsCpy(param, buf);
+                        Dos9_EsCat(param, " /a:q");
 
+                        if (!bEchoOn)
+                            Dos9_EsCat(param, "e");
+
+                        if (bUseFloats)
+                            Dos9_EsCat(param, "f");
+
+                        if (bCmdlyCorrect)
+                            Dos9_EsCat(param, "c");
+
+                        Dos9_EsCat(param, " ");
+                        Dos9_EsCat(param, line);
+
+                    }
                 }
 
                 info.file = buf;

@@ -2116,3 +2116,17 @@ FRIDAY 8TH
       - Fixed START command to detect batch files extension .bat and .cmd and 
         start the appropriate Dos9 interpretor instead of cmd.exe by default.
 
+      - Fixed build errors under linux.
+
+      - Fixed Dos9_RunFile() command to be able to detect failures due to non 
+        existant file or no executable files under UNIX compatible operating 
+        systems.
+
+      - Introduced the %DOS9_START_SCRIPT% variable which must contain a path 
+        to a script or a program to handle mymetype associations on Unix 
+        compatible platform.
+
+      - Added URI support to START command.
+
+      - Fixed CTRC-C handling under UNIX compatible system. 
+

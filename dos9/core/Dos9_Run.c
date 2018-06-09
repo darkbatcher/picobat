@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2016 Romain GARBI
+ *   Copyright (C) 2010-2018 Romain GARBI
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -734,7 +734,8 @@ void Dos9_SigHandlerBreak(int sig)
 
     Dos9_GetExeFilename(lpExePath, sizeof(lpExePath));
 
-    Dos9_EsCat(attr, " /a:q");
+    Dos9_EsCpy(attr, lpExePath);
+    Dos9_EsCpy(attr, "/a:q");
 
     if (!bEchoOn)
         Dos9_EsCat(attr, "e");
@@ -745,7 +746,10 @@ void Dos9_SigHandlerBreak(int sig)
     if (bCmdlyCorrect)
         Dos9_EsCat(attr, "c");
 
-    execl(lpExePath, attr->str);
+    chdir(lpCurrentDir);
+    Dos9_ApplyEnv(lpeEnv);
+
+    execl(lpExePath, lpExePath, attr->str);
 }
 
 #elif defined WIN32
