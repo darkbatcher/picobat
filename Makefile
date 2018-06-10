@@ -73,7 +73,7 @@ $(SUBDIRS_BIN): $(SUBDIRS)
 	
 # stuff to check
 PROGRAMS = mimeopen xdg-open
-FUNCTIONS =
+FUNCTIONS = WIN32
 LIBS = iconv intl pthread m
 OPTIONS = libcu8 nls cmdlycorrect console
 DEFAULTOPTIONS = no-libcu8 use-nls no-cmdlycorrect use-console

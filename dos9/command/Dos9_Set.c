@@ -369,7 +369,7 @@ int Dos9_CmdSetP(char* lpLine)
 		lpEqual++;
 
 
-		printf("%s", lpEqual);
+		fprintf(fOutput, "%s", lpEqual);
 
 		Dos9_EsGet(lpEsInput, fInput);
 

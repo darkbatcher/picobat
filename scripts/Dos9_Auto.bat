@@ -28,6 +28,7 @@ IF %DOS9_OS%==WINDOWS (
 	:: to expand the path and provide a little compatibility
 	:: over windows.
 	SET PATH=!PATH!:!DOS9_PATH!/cmd:!DOS9_PATH!
+    SET PATHEXT=.bat:.cmd
 
 	:: set windows compatible variable
 	SET SYSTEMROOT=/bin
@@ -39,6 +40,7 @@ IF %DOS9_OS%==WINDOWS (
 	SET DOS9_SHARE=!DOS9_PATH!/share
 	SET DOS9_ETC=!DOS9_PATH!/etc
 
+    SET DOS9_START_SCRIPT=!DOS9_PATH!/cmd/dos9_start
 )
 
 IF exist !DOS9_ETC!/Dos9_Auto.bat CALL !DOS9_ETC!/Dos9_Auto.bat

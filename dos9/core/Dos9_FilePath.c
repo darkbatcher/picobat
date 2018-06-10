@@ -224,13 +224,12 @@ int Dos9_GetFilePath(char* lpFullPath, const char* lpPartial, size_t iBufSize)
 
 	int   bFirstLoop=TRUE, bLoop=TRUE;
 
-#ifdef WIN32
-
 	char *lpPathExtToken,
 	     *lpPathExtBegin=Dos9_GetEnv(lpeEnv, "PATHEXT");
 	int bFinalSubLoop;
 
-#endif // WIN32
+	if (lpPathExtBegin == NULL)
+        lpPathExtBegin="";
 
 	if (TEST_ABSOLUTE_PATH(lpPartial)) {
 		/* if the path is already absolute */
@@ -251,8 +250,6 @@ int Dos9_GetFilePath(char* lpFullPath, const char* lpPartial, size_t iBufSize)
 			Dos9_MakePath(lpEsTmp, 2, Dos9_EsToChar(lpEsPart), lpPartial);
 
 		}
-
-#ifdef WIN32
 
 		bFinalSubLoop=TRUE;
 		lpPathExtToken=lpPathExtBegin;
@@ -278,17 +275,6 @@ int Dos9_GetFilePath(char* lpFullPath, const char* lpPartial, size_t iBufSize)
 				goto file_found;
 
 		}
-
-#else
-
-		if (Dos9_FileExists(Dos9_EsToChar(lpEsTmp))) {
-
-			Dos9_EsCpyE(lpEsFinalPath, lpEsTmp);
-			goto file_found;
-
-		}
-
-#endif
 
 		if (lpPathToken == NULL)
 			break;

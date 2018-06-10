@@ -15,12 +15,15 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-
 ROOTDIR = ..
 include ../config.mk
 
 cmds = hlp.bat
 root_cmds = Dos9_Auto.bat
+
+ifeq ($(fn_WIN32),0)
+	cmds += dos9_start
+endif
 
 all:
 
@@ -35,4 +38,4 @@ hlp_man:
 	mkdir -p $(BINDIR)/share/dos9/
 	cp -rL $(ROOTDIR)/man $(BINDIR)/share/dos9/hlp
 
-.PHONY: all clean bin
+.PHONY: all clean bin hlp_man 

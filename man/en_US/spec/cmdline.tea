@@ -38,15 +38,31 @@
 	
 	@- Where :
 	
-	-- {COMMAND} is the name of the command.
+	-- {COMMAND} is the name of the command. {COMMAND} should refer to one of the
+    following possibilities, by order of precedance:
+
+    --- An {internal command} to be ran, that is, a command which is included
+    inside the {../dos9|Dos9} command interpreter.
+
+    --- A {path} or the name of an external command locating inside one of the directories
+    listed in {var|%PATH% variable} if {Dos9} fails to find an internal command matching
+    {COMMAND}.
+
+    --- If both preceding options fail, {Dos9} considers that {COMMAND} refers to a file
+    that is not executable and tries to find a program to handle {COMMAND} using
+    operating systems files associations. The script used to find operating system
+    associations under UNIX-derived OSes can be customized using {../dos9startscript|%DOS9_START_SCRIPT%}
+    environment variable.
+
+    @-- A list of commands shipped with {Dos9} (internal and external) can be obtained
+    through {../commands|command list} manual page.
 	
 	-- {madatory_argument} is an argument that must be specified for the command to run
-	properly. It can either be a word or a group of words surrounded by quotes ({'} or {"})
+	properly. It can either be a word or a group of words surrounded by quotes ({"})
 	or with spaces escaped with {^}. Thus, there is several ways of passing an argument:
 
-${COMMANDE "foo bar"
-COMMANDE 'foo bar'
-COMMANDE foo^ bar}
+${COMMAND "foo bar"
+COMMAND foo^ bar}
 
 	@-- All of theses syntaxes are valid and can be used interchangeably.
 	Note that no {condop|conditional operator} will be interpreted within quotes.

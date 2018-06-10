@@ -1,0 +1,38 @@
+#!/bin/sh
+# The Dos9 project
+# 
+# Copyright (c) 2010 - 2018 Romain Garbi, Teddy Astie
+# This is distributed under GNU GPLv3 (or any later version) license.
+
+# This wrapper handles differently URI (that mimeopen does not support) and
+# filenames
+
+xdg-open --help 2>&1 > /dev/null && have_xdg_open=1
+mimeopen --help 2>&1 > /dev/null && have_mimeopen=1
+
+if [ "x$1" = "x" ]; then
+  exit 0;
+fi
+
+case $1 in    
+    *://*)
+      # URI
+      if [ "x$have_xdg_open" = "x1" ]; then 
+        xdg-open $*;
+      else
+        echo "dos9_start: error: Nothing to start URI ($1)" 1>&2;
+        exit 1;
+      fi;;
+    
+    *)
+      # File 
+      if [ "x$have_mimeopen" = "x1" ]; then
+        mimeopen $*;
+      elif [ "x$have_xdg_open" = "x1" ]; then
+        xdg-open $1; # does not handle parameters
+      else
+        echo "dos9_start: error: Nothing to start file $1" 1>&2
+        exit 1;
+      fi;;
+esac
+exit 0;

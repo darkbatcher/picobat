@@ -98,13 +98,27 @@ int Dos9_CmdType(char* lpLine)
              *pEnd;
 
     int status=0, nSize;
-    char buf[8192];
+    char *buf;
 
 
     lpLine += 4;
 
     /* adjust buffering size to get maximum performances */
-    setvbuf(fOutput, buf, _IOFBF, sizeof(buf));
+    if (isatty(fileno(fOutput))) {
+
+        if ((buf = malloc(8192)) == NULL) {
+
+            Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION | DOS9_PRINT_C_ERROR,
+                                    __FILE__ "/Dos9_CmdType()",
+                                    0);
+            status = DOS9_FAILED_ALLOCATION;
+            goto end;
+
+        }
+
+        setvbuf(fOutput, buf, _IOFBF, 8192);
+
+    }
 
     while ((lpLine = Dos9_GetNextParameterEs(lpLine, lpEsParam))) {
 
@@ -193,10 +207,18 @@ int Dos9_CmdType(char* lpLine)
 
         }
     }
+
 end:
 
-    fflush(fOutput);
-    setvbuf(fOutput, NULL, _IONBF, 0);
+    if (isatty(fileno(fOutput))) {
+
+        fflush(fOutput);
+        setvbuf(fOutput, NULL, _IONBF, 0);
+
+        if (buf)
+            free(buf);
+
+    }
 
     if (pBegin)
         Dos9_FreeFileList(pBegin);

@@ -50,14 +50,15 @@ int Dos9_CmdDir(char* lpLine)
 	     *lpToken,
 	     lpFileName[FILENAME_MAX]= {0};
 
-    char buf[4096];
+    char *buf;
 
-	int iFlag=DOS9_SEARCH_DEFAULT | DOS9_SEARCH_DIR_MODE;
+	int iFlag=DOS9_SEARCH_DEFAULT | DOS9_SEARCH_DIR_MODE,
+        iDirNb, iFileNb,
+        status = 0;
 
 	ESTR* lpParam=Dos9_EsInit();
     FILELIST *files, *item, *others;
 
-    int iDirNb, iFileNb;
     short wAttr;
     char bSimple;
     size_t nSize;
@@ -72,7 +73,20 @@ int Dos9_CmdDir(char* lpLine)
 	wAttr=DOS9_CMD_ATTR_ALL;
 	bSimple=FALSE;
 
-	setvbuf(fOutput, buf, _IOFBF, sizeof(buf));
+    if (isatty(fileno(fOutput))) {
+
+        if (!(buf = malloc(8192))) {
+
+            Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION | DOS9_PRINT_C_ERROR,
+                                    __FILE__ "/Dos9_CmdType()",
+                                    0);
+            status = DOS9_FAILED_ALLOCATION;
+            goto end;
+
+        }
+
+        setvbuf(fOutput, buf, _IOFBF, 8192);
+    }
 
 	while ((lpNext=Dos9_GetNextParameterEs(lpNext, lpParam))) {
 
@@ -80,7 +94,7 @@ int Dos9_CmdDir(char* lpLine)
 		if (!strcmp(lpToken, "/?")) {
 
 			Dos9_ShowInternalHelp(DOS9_HELP_DIR);
-			return 0;
+			goto end;
 
 		} else if (!stricmp("/b", lpToken)) {
 
@@ -105,9 +119,11 @@ int Dos9_CmdDir(char* lpLine)
 		} else {
 
 			if (*lpFileName) {
+
 				Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpToken, FALSE);
-				Dos9_EsFree(lpParam);
-				return DOS9_UNEXPECTED_ELEMENT;
+				status = DOS9_UNEXPECTED_ELEMENT;
+				goto end;
+
 			}
 
 			if (!TEST_ABSOLUTE_PATH(lpToken))
@@ -223,10 +239,19 @@ int Dos9_CmdDir(char* lpLine)
 	}
 
 
+end:
 	Dos9_EsFree(lpParam);
 
-    fflush(fOutput);
-	setvbuf(fOutput, NULL, _IONBF, 0);
 
-	return DOS9_NO_ERROR;
+    if (isatty(fileno(fOutput))) {
+
+        fflush(fOutput);
+        setvbuf(fOutput, NULL, _IONBF, 0);
+
+        if (buf)
+            free(buf);
+
+    }
+
+	return status;
 }
