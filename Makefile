@@ -60,9 +60,7 @@ bindir: $(TEXTFILES)
 	cp -r ./po/share $(BINDIR)
 	cp README $(BINDIR)/
 	cp WHATSNEW $(BINDIR)/
-	cp COPYING $(BINDIR)/
-	cp COPYING.darkbox $(BINDIR)/
-	cp libmatheval/COPYING $(BINDIR)/COPYING.libmatheval
+	cp COPYING* $(BINDIR)/
 	cp THANKS $(BINDIR)/
 	
 $(TEXTFILES): $(TEAFILES)

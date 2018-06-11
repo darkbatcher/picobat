@@ -29,6 +29,7 @@
 
 #ifndef WIN32
 extern char** environ;
+extern MUTEX mLineNoise;
 #endif
 
 /* static variable for initialization */

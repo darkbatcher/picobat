@@ -77,7 +77,6 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
 
 		}
 
-		/* the line we red was a void line */
 		if (Dos9_GetLine(lpLine, pIn))
 			continue;
 

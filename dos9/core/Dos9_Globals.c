@@ -81,4 +81,5 @@ __thread char lpCurrentDir[FILENAME_MAX];
 #define environ _environ
 #else
 extern char** environ;
+MUTEX mLineNoise;
 #endif

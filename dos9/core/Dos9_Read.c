@@ -27,6 +27,10 @@
 
 #include "Dos9_Debug.h"
 
+#ifndef WIN32
+#include "../linenoise/Dos9_LineNoise.h"
+#endif
+
 int Dos9_GetLine(ESTR* lpesLine, INPUT_FILE* pIn)
 {
 
@@ -109,9 +113,17 @@ int Dos9_GetLine_Cmdly(ESTR* lpesLine, INPUT_FILE* pIn)
 	char* lpCh;
 	int   res;
 
+	int(*fn_getline)(ESTR*,FILE*) = Dos9_EsGet;
+
 	if (*(pIn->lpFileName) == '\0') {
 
 		pFile=fInput;
+
+#ifndef WIN32
+        /* If fInput is a tty, use Linenoise ! */
+        if (isatty(fileno(pFile)))
+            fn_getline = Dos9_LineNoise;
+#endif
 
 	} else if (!(pFile=fopen(pIn->lpFileName, "r"))) {
 
@@ -133,7 +145,7 @@ int Dos9_GetLine_Cmdly(ESTR* lpesLine, INPUT_FILE* pIn)
 
 	*(Dos9_EsToChar(lpesLine))='\0';
 
-	while (!(res=Dos9_EsGet(lpesTmp, pFile))) {
+	while (!(res=fn_getline(lpesTmp, pFile))) {
 
 		lpCh=Dos9_SkipAllBlanks(Dos9_EsToChar(lpesTmp));
 

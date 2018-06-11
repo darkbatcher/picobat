@@ -135,6 +135,9 @@ int main(int argc, char *argv[])
     Dos9_CreateMutex(&mThreadLock);
     Dos9_CreateMutex(&mSetFLock);
     Dos9_CreateMutex(&mSetILock);
+#ifndef WIN32
+    Dos9_CreateMutex(&mLineNoise);
+#endif
 
     /* Process the command line, and set the appropriate special variables for
      * special parameters. (note %0 is set when the absolute path of the script
