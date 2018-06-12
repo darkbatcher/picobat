@@ -82,6 +82,7 @@ int Dos9_CmdXargs(char* line)
     /* get input from stdin */
     while (!Dos9_EsGet(param, fInput)) {
 
+        /* fixme: escape spaces ...*/
         Dos9_RmTrailingNl(param->str);
         Dos9_EsCat(cmdline, " ");
         Dos9_EsCatE(cmdline, param);
@@ -95,7 +96,7 @@ int Dos9_CmdXargs(char* line)
 
     /* Run *a command* and not a line ! A line is somehow different
        since it may contain redirections or pipes. */
-    status = Dos9_RunCommand(cmdline);
+    status = Dos9_RunCommand(cmdline, NULL);
 
 end:
     Dos9_EsFree(cmdline);

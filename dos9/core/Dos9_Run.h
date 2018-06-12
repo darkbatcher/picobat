@@ -50,14 +50,26 @@ void Dos9_LaunchPipe(struct pipe_launch_data_t* infos);
 /* applies conditional operators */
 int Dos9_ExecOperators(PARSED_LINE** lppsStream);
 
-int Dos9_RunCommand(ESTR* lpCommand); // the function that run every command
+/* Run a command */
+int Dos9_RunCommand(ESTR* lpCommand, PARSED_LINE** lpplLine);
+
+/* Run a line */
 int Dos9_RunLine(ESTR* lpLine);
-int Dos9_RunBlock(BLOCKINFO* lpbkInfo); // the function that run blocks
-int Dos9_RunBatch(INPUT_FILE* pIn); // the function that runs the batch
+
+/* Run a line already parsed */
+void Dos9_RunParsedLine(PARSED_LINE* lppsLine);
+
+/* Run the content of a block */
+int Dos9_RunBlock(BLOCKINFO* lpbkInfo);
+
+/* Run a batch file */
+int Dos9_RunBatch(INPUT_FILE* pIn);
 int Dos9_RunExternalCommand(char* lpCommandLine, int* error);
 int Dos9_RunExternalFile(char* lpFileName, char* lpFullLine, char** lpArguments);
 
 int Dos9_RunExternalBatch(char* lpFileName, char* lpFullLine, char** lpArguments);
+
+PARSED_LINE* Dos9_LookAHeadMakeParsedLine(BLOCKINFO* block,PARSED_LINE* lookahead);
 
 #ifndef WIN32
 

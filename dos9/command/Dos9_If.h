@@ -21,6 +21,8 @@
 #ifndef DOS9_CMD_IF_H
 #define DOS9_CMD_IF_H
 
+#include "../core/Dos9_Core.h"
+
 #define DOS9_IF_CASE_UNSENSITIVE 1
 #define DOS9_IF_NEGATION 2
 #define DOS9_IF_EXIST 4
@@ -57,6 +59,6 @@
 
 int Dos9_PerformExtendedTest(const char* lpCmp, const char* lpParam1, const char* lpParam2, int iFlag);
 
-int Dos9_CmdIf(char* lpParam); // function to support if
+int Dos9_CmdIf(char* lpParam, PARSED_LINE** lpplLine); // function to support if
 
 #endif // DOS9_CMD_CONDITION_H

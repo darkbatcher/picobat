@@ -2128,5 +2128,12 @@ FRIDAY 8TH
 
       - Added URI support to START command.
 
-      - Fixed CTRC-C handling under UNIX compatible system. 
+      - Fixed CTRC-C handling under UNIX compatible system.
+
+MONDAY 11TH
+
+      - Added line editing capabilities under linux, through the use of a 
+        slightly modified version of linenoise. Linenoise is tiny library 
+        allowing console line editing. The license is shipped in 
+        COPYING.linenoise 
 

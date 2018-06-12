@@ -129,41 +129,52 @@ int Dos9_ExecOperators(PARSED_LINE** lpLine)
     THREAD res;
     struct pipe_launch_data_t* infos;
     PARSED_LINE* line=*lpLine;
+    char *pch;
 
 loop:
+    if (line->lppsNode) {
 
-    if (line->lppsNode
-        && line->lppsNode->cNodeType == PARSED_STREAM_NODE_PIPE) {
+        pch = line->lpCmdLine->str;
+        pch = Dos9_SkipAllBlanks(pch);
 
-        if (_Dos9_Pipe(pipedes, 4096, O_BINARY) == -1)
-            Dos9_ShowErrorMessage(DOS9_CREATE_PIPE | DOS9_PRINT_C_ERROR,
-                                    __FILE__ "/Dos9_ExecOperators()",
-                                    -1);
+        if ((!strnicmp(pch, "if", 2) && Dos9_IsDelim(*(pch +2)))
+            || (!strnicmp(pch, "for", 3) && Dos9_IsDelim(*(pch + 3)))) {
 
-        Dos9_SetFdInheritance(pipedes[0], 0);
-        Dos9_SetFdInheritance(pipedes[1], 0);
+            /* ignore lookahead commands */
 
-        if ((infos = malloc(sizeof(struct pipe_launch_data_t))) == NULL)
-            Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION | DOS9_PRINT_C_ERROR,
-                                    __FILE__ "/Dos9_ExecOperators()", -1);
+        } else if (line->lppsNode->cNodeType == PARSED_STREAM_NODE_PIPE) {
 
-        /* prepare data to launch threads */
-        infos->fd = pipedes[1];
-        infos->str = Dos9_EsInit();
-        Dos9_EsCpyE(infos->str, line->lpCmdLine);
+            if (_Dos9_Pipe(pipedes, 4096, O_BINARY) == -1)
+                Dos9_ShowErrorMessage(DOS9_CREATE_PIPE | DOS9_PRINT_C_ERROR,
+                                        __FILE__ "/Dos9_ExecOperators()",
+                                        -1);
 
-        res = Dos9_CloneInstance(Dos9_LaunchPipe, infos);
-        Dos9_CloseThread(&res);
+            Dos9_SetFdInheritance(pipedes[0], 0);
+            Dos9_SetFdInheritance(pipedes[1], 0);
 
-        /* Listen from the pipe */
-        lppsStreamStack = Dos9_OpenOutputD(lppsStreamStack, pipedes[0], DOS9_STDIN);
-        close(pipedes[0]);
+            if ((infos = malloc(sizeof(struct pipe_launch_data_t))) == NULL)
+                Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION | DOS9_PRINT_C_ERROR,
+                                        __FILE__ "/Dos9_ExecOperators()", -1);
 
-        if (line->lppsNode) {
+            /* prepare data to launch threads */
+            infos->fd = pipedes[1];
+            infos->str = Dos9_EsInit();
 
-            line = *lpLine = line->lppsNode;
-            goto loop;
+            Dos9_EsCpyE(infos->str, line->lpCmdLine);
 
+            res = Dos9_CloneInstance(Dos9_LaunchPipe, infos);
+            Dos9_CloseThread(&res);
+
+            /* Listen from the pipe */
+            lppsStreamStack = Dos9_OpenOutputD(lppsStreamStack, pipedes[0], DOS9_STDIN);
+            close(pipedes[0]);
+
+            if (line->lppsNode) {
+
+                line = *lpLine = line->lppsNode;
+                goto loop;
+
+            }
         }
     }
 
@@ -198,7 +209,7 @@ void Dos9_LaunchPipe(struct pipe_launch_data_t* infos)
 
     bIgnoreExit = TRUE;
 
-    Dos9_RunCommand(infos->str);
+    Dos9_RunCommand(infos->str, NULL);
 
     Dos9_EsFree(infos->str);
 
@@ -224,10 +235,11 @@ int Dos9_ExecOutput(PARSED_STREAM* lppssStart)
 	         STDOUT_FILENO
 	        );
 
-	if (!(lppssStart->lpInputFile)
+	if (!lppssStart
+        || (!(lppssStart->lpInputFile)
 	    && !(lppssStart->lpOutputFile)
         && !(lppssStart->lpErrorFile)
-        && !(lppssStart->cRedir)) {
+        && !(lppssStart->cRedir))) {
 
 		/* nothing to be done, just return, now */
 		return 0;
@@ -283,56 +295,60 @@ int Dos9_ExecOutput(PARSED_STREAM* lppssStart)
 
 int Dos9_RunLine(ESTR* lpLine)
 {
-	PARSED_LINE *line, *orig; /* the parsed line*/
+	PARSED_LINE *orig; /* the parsed line*/
 
-    int lock; /* lock for stream */
+	orig = Dos9_ParseLine(lpLine);
 
-    DOS9_DBG("\t[*] Parsing line \"%s\"\n", lpLine->str);
-
-	line = (orig = Dos9_ParseLine(lpLine));
-
-	if (line == NULL) {
+	if (orig == NULL) {
 
 		DOS9_DBG("!!! Can't parse line : \"%s\".\n", strerror(errno));
 		return -1;
 
 	}
 
-    /* lock current state */
-    lock = Dos9_GetStreamStackLockState(lppsStreamStack);
-	Dos9_SetStreamStackLockState(lppsStreamStack, 1);
-
-	do {
-
-		if (Dos9_ExecOperators(&line)==FALSE || bAbortCommand)
-			break;
-
-        /* open file streams (ie. those induced by '>' or '<') */
-        Dos9_ExecOutput(line->sStream);
-
-		Dos9_RunCommand(line->lpCmdLine);
-
-	} while ((line=line->lppsNode));
-
-    /* wipe stream stack changes */
-	lppsStreamStack = Dos9_PopStreamStackUntilLock(lppsStreamStack);
-    Dos9_SetStreamStackLockState(lppsStreamStack, lock);
+	Dos9_RunParsedLine(orig);
 
 	Dos9_FreeLine(orig);
-
-	DOS9_DBG("\t[*] Line run.\n");
-
-	DOS9_DBG("*** Input ends here  ***\n");
 
 	return iErrorLevel;
 }
 
-int Dos9_RunCommand(ESTR* lpCommand)
+void Dos9_RunParsedLine(PARSED_LINE* line)
+{
+	int lock;
+
+	do {
+
+		lock = Dos9_GetStreamStackLockState(lppsStreamStack);
+		Dos9_SetStreamStackLockState(lppsStreamStack, 1);
+
+		if (Dos9_ExecOperators(&line)==FALSE || bAbortCommand) {
+
+            lppsStreamStack = Dos9_PopStreamStackUntilLock(lppsStreamStack);
+            Dos9_SetStreamStackLockState(lppsStreamStack, lock);
+			break;
+
+        }
+
+		/* open file streams (ie. those induced by '>' or '<') */
+		Dos9_ExecOutput(line->sStream);
+
+		Dos9_RunCommand(line->lpCmdLine, &line);
+
+		lppsStreamStack = Dos9_PopStreamStackUntilLock(lppsStreamStack);
+		Dos9_SetStreamStackLockState(lppsStreamStack, lock);
+
+	} while (line && (line=line->lppsNode));
+
+}
+
+int Dos9_RunCommand(ESTR* lpCommand, PARSED_LINE** lpplLine)
 {
 #define XSTR(x) #x
 #define STR(x) XSTR(x)
 
 	int (*lpProc)(char*);
+
 	char lpErrorlevel[sizeof(STR(INT_MIN))],
          lpTmpLine[]="CD X:";
 	char *lpCmdLine, *tmp;
@@ -357,7 +373,9 @@ RestartSearch:
     }
 
 #endif
-	switch((iFlag=Dos9_GetCommandProc(lpCmdLine, lpclCommands, (void**)&lpProc))) {
+
+	switch((iFlag=Dos9_GetCommandProc(lpCmdLine, lpclCommands,
+														(void**)&lpProc))) {
 
 	case -1:
 
@@ -394,7 +412,7 @@ RestartSearch:
 			/* this is an alias, expand it */
 
 			Dos9_ExpandAlias(lpCommand,
-			                 lpCmdLine + (iFlag & ~DOS9_ALIAS_FLAG),
+			                 lpCmdLine + (iFlag & ~DOS9_COMMAND_FLAGS),
 			                 (char*)lpProc
 			                );
 
@@ -402,8 +420,16 @@ RestartSearch:
 
 		}
 
-		iErrorLevel=lpProc(lpCmdLine);
+		if (iFlag & DOS9_COMMAND_LOOKAHEAD) {
 
+            iErrorLevel=((int(*)(char*, PARSED_LINE**))lpProc)(lpCmdLine,
+																	lpplLine);
+
+        } else {
+
+            iErrorLevel=lpProc(lpCmdLine);
+
+        }
 	}
 
 	return iErrorLevel;
@@ -699,6 +725,47 @@ int Dos9_RunExternalBatch(char* lpFileName, char* lpFullLine, char** lpArguments
         Dos9_CloseThread(&th);
 
     return (int)ret;
+}
+
+PARSED_LINE* Dos9_LookAHeadMakeParsedLine(BLOCKINFO* block,PARSED_LINE* lookahead)
+{
+	ESTR* cmd = Dos9_EsInit();
+
+    if (!lookahead) {
+        if (!(lookahead = malloc(sizeof(PARSED_LINE)))) {
+
+            Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION | DOS9_PRINT_C_ERROR,
+                                    __FILE__ "/Dos9_LookAHeadMakeParsedLine()",
+                                    -1);
+            return NULL;
+
+        } else {
+
+            lookahead->sStream = NULL;
+            lookahead->lppsNode = NULL;
+            lookahead->cNodeType = 0;
+            lookahead->lpCmdLine = NULL;
+
+        }
+    } else {
+
+        /* Reuse the current struct in lookahead (clean it
+           carefully */
+        Dos9_FreeParsedStream(lookahead->sStream);
+        lookahead->sStream = NULL;
+
+    }
+
+    Dos9_EsCpy(cmd, "(");
+	Dos9_EsCatN(cmd, block->lpBegin, block->lpEnd - block->lpBegin);
+    Dos9_EsCat(cmd, ")");
+
+    if (lookahead->lpCmdLine)
+        Dos9_EsFree(lookahead->lpCmdLine);
+
+    lookahead->lpCmdLine = cmd;
+
+    return lookahead;
 }
 
 #ifndef WIN32

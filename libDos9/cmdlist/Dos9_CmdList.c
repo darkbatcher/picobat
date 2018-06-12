@@ -29,7 +29,8 @@
 #include "../libDos9.h"
 #include "../libDos9-int.h"
 
-LIBDOS9 int Dos9_AddCommandDynamic(LPCOMMANDINFO lpciCommandInfo, LPCOMMANDLIST* lpclListEntry)
+LIBDOS9 int Dos9_AddCommandDynamic(LPCOMMANDINFO lpciCommandInfo,
+                                                LPCOMMANDLIST* lpclListEntry)
 {
     int iRet;
     LPCOMMANDLIST lpclList;
@@ -59,7 +60,8 @@ LIBDOS9 int Dos9_AddCommandDynamic(LPCOMMANDINFO lpciCommandInfo, LPCOMMANDLIST*
 
     lpclList=*lpclListEntry;
 
-    while ((iRet=stricmp(lpciCommandInfo->ptrCommandName,lpclList->ptrCommandName))) {
+    while ((iRet=stricmp(lpciCommandInfo->ptrCommandName,
+                                            lpclList->ptrCommandName))) {
 
         if (iRet>0) {
 
@@ -70,7 +72,8 @@ LIBDOS9 int Dos9_AddCommandDynamic(LPCOMMANDINFO lpciCommandInfo, LPCOMMANDLIST*
                 if (!lpclList->lpclRightRoot)
                     return -1;
 
-                if ((_Dos9_FillCommandList(lpclList->lpclRightRoot, lpciCommandInfo))) {
+                if ((_Dos9_FillCommandList(lpclList->lpclRightRoot,
+                                                        lpciCommandInfo))) {
 
                     /* cleanup and exit */
 
@@ -160,12 +163,16 @@ int _Dos9_FillCommandList(LPCOMMANDLIST lpclList, LPCOMMANDINFO lpciCommandInfo)
 
 int _Dos9_Sort(const void* ptrS, const void* ptrD)
 {
-    return stricmp(((LPCOMMANDINFO)ptrS)->ptrCommandName,((LPCOMMANDINFO)ptrD)->ptrCommandName);
+    return stricmp(((LPCOMMANDINFO)ptrS)->ptrCommandName,
+                                    ((LPCOMMANDINFO)ptrD)->ptrCommandName);
 }
 
-int _Dos9_PutSeed(LPCOMMANDINFO lpciCommandInfo, int iSegBottom, int iSegTop, LPCOMMANDLIST* lpclList)
+int _Dos9_PutSeed(LPCOMMANDINFO lpciCommandInfo, int iSegBottom,
+                                        int iSegTop, LPCOMMANDLIST* lpclList)
 {
     int iMid=(iSegBottom+iSegTop)/2;
+
+
 
     if (iMid!=iSegBottom) {
 
@@ -192,7 +199,8 @@ LIBDOS9 LPCOMMANDLIST Dos9_MapCommandInfo(LPCOMMANDINFO lpciCommandInfo, int i)
     return lpclList;
 }
 
-LIBDOS9 COMMANDFLAG   Dos9_GetCommandProc(char* lpCommandLine, LPCOMMANDLIST lpclCommandList, void** lpcpCommandProcedure)
+LIBDOS9 COMMANDFLAG   Dos9_GetCommandProc(char* lpCommandLine,
+                LPCOMMANDLIST lpclCommandList, void** lpcpCommandProcedure)
 {
     int iRet;
 
@@ -215,7 +223,7 @@ LIBDOS9 COMMANDFLAG   Dos9_GetCommandProc(char* lpCommandLine, LPCOMMANDLIST lpc
 
         } else {
 
-            if ((lpclCommandList->cfFlag & ~DOS9_ALIAS_FLAG)) {
+            if ((lpclCommandList->cfFlag & ~DOS9_COMMAND_FLAGS)) {
 
                 /* if there is a limit, just check if next
                    character is a delimiter.
@@ -225,7 +233,7 @@ LIBDOS9 COMMANDFLAG   Dos9_GetCommandProc(char* lpCommandLine, LPCOMMANDLIST lpc
                    comparing string */
 
                 switch(lpCommandLine
-                       [lpclCommandList->cfFlag & ~DOS9_ALIAS_FLAG]) {
+                       [lpclCommandList->cfFlag & ~DOS9_COMMAND_FLAGS]) {
 
                     case ' ':
                     case ',':

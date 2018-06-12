@@ -32,12 +32,8 @@
 #endif
 
 #define DEFAULT_ESTR 256
-#define _Dos9_EsTotalLen(ptrChaine) ((strlen(ptrChaine)/DEFAULT_ESTR+1)*DEFAULT_ESTR)
-#define _Dos9_EsTotalLen2(ptrChaine, ptrString) (((strlen(ptrChaine)+strlen(ptrString))/DEFAULT_ESTR+1)*DEFAULT_ESTR)
-#define _Dos9_EsTotalLen3(ptrChaine,iSize) (((strlen(ptrChaine)+iSize)/DEFAULT_ESTR+1)*DEFAULT_ESTR)
 
-
-#define _Dos9_EsTotalLen4(iSize) ((iSize/DEFAULT_ESTR+1)*DEFAULT_ESTR)
+#define DOS9_ESTR_SIZE(s) ((s) / DEFAULT_ESTR + 1) * DEFAULT_ESTR
 
 int _Dos9_NewLine=DOS9_NEWLINE_LINUX;
 
@@ -288,7 +284,7 @@ LIBDOS9 int Dos9_EsGet(ESTR* ptrESTR, FILE* ptrFile)
 
 LIBDOS9 int Dos9_EsCpy(ESTR* ptrESTR, const char* ptrChaine)
 {
-    size_t iLen=_Dos9_EsTotalLen(ptrChaine);
+    size_t iLen=DOS9_ESTR_SIZE(strlen(ptrChaine) + 1);
     char* ptrBuf=ptrESTR->str;
     if (ptrESTR->len < iLen) {
 
@@ -306,7 +302,7 @@ LIBDOS9 int Dos9_EsCpy(ESTR* ptrESTR, const char* ptrChaine)
 
 LIBDOS9 int Dos9_EsCpyN(ESTR* ptrESTR, const char* ptrChaine, size_t iSize)
 {
-    size_t iLen=_Dos9_EsTotalLen4(iSize);
+    size_t iLen=DOS9_ESTR_SIZE(iSize + 1);
     char* ptrBuf=ptrESTR->str;
     if (ptrESTR->len < iLen)
     {
@@ -333,7 +329,7 @@ LIBDOS9 int Dos9_EsCpyN(ESTR* ptrESTR, const char* ptrChaine, size_t iSize)
 
 LIBDOS9 int Dos9_EsCat(ESTR* ptrESTR, const char* ptrChaine)
 {
-   int iLen=_Dos9_EsTotalLen2(ptrESTR->str,ptrChaine);
+   int iLen= DOS9_ESTR_SIZE(strlen(ptrESTR->str) + strlen(ptrChaine) + 1);
    char *lpBuf=ptrESTR->str;
 
    if ((ptrESTR->len<iLen)) {
@@ -352,7 +348,7 @@ LIBDOS9 int Dos9_EsCat(ESTR* ptrESTR, const char* ptrChaine)
 
 LIBDOS9 int Dos9_EsCatN(ESTR* ptrESTR, const char* ptrChaine, size_t iSize)
 {
-   int iLen=_Dos9_EsTotalLen3(ptrESTR->str,iSize+1);
+   int iLen=DOS9_ESTR_SIZE(strlen(ptrESTR->str) + iSize + 1);
    char *lpBuf=ptrESTR->str;
    if (ptrESTR->len<iLen) {
 
@@ -370,7 +366,7 @@ LIBDOS9 int Dos9_EsCatN(ESTR* ptrESTR, const char* ptrChaine, size_t iSize)
 
 LIBDOS9 int Dos9_EsCpyE(ESTR* ptrDest, const ESTR* ptrSource)
 {
-    int iLen=_Dos9_EsTotalLen(ptrSource->str);
+    int iLen=DOS9_ESTR_SIZE(strlen(ptrSource->str) + 1);
     char* ptrBuf=ptrDest->str;
 
     if (iLen > ptrDest->len)
@@ -389,7 +385,7 @@ LIBDOS9 int Dos9_EsCpyE(ESTR* ptrDest, const ESTR* ptrSource)
 
 LIBDOS9 int Dos9_EsCatE(ESTR* ptrDest, const ESTR* ptrSource)
 {
-    int iLen=_Dos9_EsTotalLen2(ptrDest->str, ptrSource->str);
+    int iLen=DOS9_ESTR_SIZE(strlen(ptrDest->str) + strlen(ptrSource->str) + 1);
     char* lpBuf=ptrDest->str;
 
     if (ptrDest->len<iLen) {

@@ -33,11 +33,12 @@
 #include "../errors/Dos9_Errors.h"
 #include "../core/Dos9_Core.h"
 
-int Dos9_CmdIf(char* lpParam)
+int Dos9_CmdIf(char* lpParam, PARSED_LINE** lpplLine)
 {
 	char lpArgument[FILENAME_MAX], *lpNext, *lpToken, *lpToken2 /*, *lpEnd */;
 	int iFlag=0,
 	    iResult;
+    PARSED_LINE* line;
 
 	ESTR *lpComparison, *lpOtherPart;
 	LPFILELIST lpflFileList;
@@ -71,6 +72,10 @@ int Dos9_CmdIf(char* lpParam)
 			if (!(lpNext=Dos9_GetNextParameter(lpNext, lpArgument, 11))) {
 
 				Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
+
+                if (lpplLine)
+                    *lpplLine = NULL;
+
 				return DOS9_EXPECTED_MORE;
 
 			}
@@ -86,6 +91,10 @@ int Dos9_CmdIf(char* lpParam)
 			if (!(lpNext=Dos9_GetNextParameter(lpNext, lpArgument, 11))) {
 
 				Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
+
+                if (lpplLine)
+                    *lpplLine = NULL;
+
 				return DOS9_EXPECTED_MORE;
 
 			}
@@ -113,6 +122,9 @@ int Dos9_CmdIf(char* lpParam)
 			Dos9_ShowErrorMessage(DOS9_INCOMPATIBLE_ARGS,
                                      "'/i' (DEFINED, EXIST, ERRORLEVEL)",
                                      FALSE);
+            if (lpplLine)
+                    *lpplLine = NULL;
+
 			return DOS9_INCOMPATIBLE_ARGS;
 
 		}
@@ -128,6 +140,10 @@ int Dos9_CmdIf(char* lpParam)
 		if (!(lpNext=Dos9_GetNextParameter(lpParam, lpArgument, FILENAME_MAX))) {
 
 			Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
+
+            if (lpplLine)
+                    *lpplLine = NULL;
+
 			return DOS9_EXPECTED_MORE;
 
 		}
@@ -146,6 +162,10 @@ int Dos9_CmdIf(char* lpParam)
 		if (!(lpNext=Dos9_GetNextParameter(lpParam, lpArgument, FILENAME_MAX))) {
 
 			Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
+
+            if (lpplLine)
+                *lpplLine = NULL;
+
 			return DOS9_EXPECTED_MORE;
 
 		}
@@ -163,6 +183,10 @@ int Dos9_CmdIf(char* lpParam)
 		if (!(lpNext=Dos9_GetNextParameter(lpParam, lpArgument, FILENAME_MAX))) {
 
 			Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
+
+            if (lpplLine)
+                    *lpplLine = NULL;
+
 			return DOS9_EXPECTED_MORE;
 
 		}
@@ -191,6 +215,10 @@ int Dos9_CmdIf(char* lpParam)
 
                 Dos9_EsFree(lpComparison);
                 Dos9_ShowErrorMessage(DOS9_INVALID_IF_EXPRESSION, lpParam, FALSE);
+
+                if (lpplLine)
+                        *lpplLine = NULL;
+
                 return DOS9_INVALID_IF_EXPRESSION;
 
             }
@@ -235,6 +263,10 @@ int Dos9_CmdIf(char* lpParam)
 
 					Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
 					Dos9_EsFree(lpComparison);
+
+                    if (lpplLine)
+                        *lpplLine = NULL;
+
 					return DOS9_EXPECTED_MORE;
 
 				}
@@ -246,6 +278,10 @@ int Dos9_CmdIf(char* lpParam)
 					Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
 					Dos9_EsFree(lpOtherPart);
 					Dos9_EsFree(lpComparison);
+
+                    if (lpplLine)
+                        *lpplLine = NULL;
+
 					return DOS9_EXPECTED_MORE;
 
 				}
@@ -270,6 +306,10 @@ int Dos9_CmdIf(char* lpParam)
 
 			Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "IF", FALSE);
 			Dos9_EsFree(lpComparison);
+
+            if (lpplLine)
+                *lpplLine = NULL;
+
 			return DOS9_EXPECTED_MORE;
 
 		}
@@ -293,7 +333,23 @@ int Dos9_CmdIf(char* lpParam)
             lpNext = Dos9_GetNextBlock(lpNext, &bkInfo);
         }
 
-        Dos9_RunBlock(&bkInfo);
+        fprintf(fError, "lpEnd=%s\n", bkInfo.lpEnd);
+
+        lpToken2 = bkInfo.lpEnd;
+        if (*lpToken2 == ')')
+            lpToken2 ++;
+
+        lpToken2 = Dos9_SkipBlanks(lpToken2);
+
+        if (lpplLine && !*lpToken2)
+            line = Dos9_LookAHeadMakeParsedLine(&bkInfo, *lpplLine);
+        else
+            line = Dos9_LookAHeadMakeParsedLine(&bkInfo, NULL);
+
+        Dos9_RunParsedLine(line);
+
+        if (!lpplLine)
+            Dos9_FreeParsedLine(line);
 
     } else {
 
@@ -321,8 +377,6 @@ int Dos9_CmdIf(char* lpParam)
                     lpNext = Dos9_GetNextBlock(lpNext, &bkInfo);
                 }
 
-                Dos9_RunBlock(&bkInfo);
-
                 if (*lpNext==')')
                     lpNext++;
 
@@ -330,9 +384,25 @@ int Dos9_CmdIf(char* lpParam)
 
                 if (*lpNext && *lpNext != '\n') {
 
-                    /* there's something trailing that is not an else here*/
+                    /* there's something trailing here*/
                     Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpNext, FALSE);
+
+                    if (lpplLine)
+                        *lpplLine = NULL;
+
                     return DOS9_UNEXPECTED_ELEMENT;
+
+                } else {
+
+                    if (lpplLine)
+                        line = Dos9_LookAHeadMakeParsedLine(&bkInfo, *lpplLine);
+                    else
+                        line = Dos9_LookAHeadMakeParsedLine(&bkInfo, NULL);
+
+                    Dos9_RunParsedLine(line);
+
+                    if (!lpplLine)
+                        Dos9_FreeParsedLine(line);
 
                 }
 
@@ -340,6 +410,10 @@ int Dos9_CmdIf(char* lpParam)
 
                     /* there's something trailing that is not an else here*/
                     Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpNext, FALSE);
+
+                    if (lpplLine)
+                        *lpplLine = NULL;
+
                     return DOS9_UNEXPECTED_ELEMENT;
 
             }
@@ -348,11 +422,16 @@ int Dos9_CmdIf(char* lpParam)
 
             /* If there is no else block and if the comparison is false,
                then cancel all the content of the line (ie. do not exec
-               conditional operators following IF */
-            bAbortCommand = DOS9_ABORT_COMMAND_LINE;
+               conditional operators following IF
+
+			   Here We cancel the following operators but we do not try to
+			   execute them before */
 
         }
     }
+
+    if (lpplLine)
+        *lpplLine = NULL;
 
 	return 0;
 }
@@ -370,7 +449,8 @@ int Dos9_CmdIf(char* lpParam)
    0 only, so that we can not have confusion between errors.
 
  */
-int Dos9_PerformExtendedTest(const char* lpCmp, const char* lpParam1, const char* lpParam2, int iFlag)
+int Dos9_PerformExtendedTest(const char* lpCmp, const char* lpParam1,
+											const char* lpParam2, int iFlag)
 {
 
     int comp_type=0,
@@ -544,7 +624,8 @@ next:
                 x2 = frexp(dlhs, &iExp2);
 
                 /* majorate the error */
-                return (fabs(x1-x2*pow(2, iExp2-iExp1)) <= DOS9_FLOAT_EQUAL_PRECISION);
+                return (fabs(x1-x2*pow(2, iExp2-iExp1))
+									<= DOS9_FLOAT_EQUAL_PRECISION);
 
             }
 
@@ -567,7 +648,8 @@ next:
                 x2 = frexp(dlhs, &iExp2);
 
                 /* major the error */
-                return !(fabs(x1-x2*pow(2, iExp2-iExp1)) <= DOS9_FLOAT_EQUAL_PRECISION);
+                return !(fabs(x1-x2*pow(2, iExp2-iExp1))
+									<= DOS9_FLOAT_EQUAL_PRECISION);
 
             }
 

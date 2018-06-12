@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2016 Romain GARBI
+ *   Copyright (C) 2010-2018 Romain GARBI
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -82,11 +82,12 @@
 #include <libcu8.h>
 #endif /* libcu8 */
 
-int Dos9_CmdFor(char* lpLine)
+int Dos9_CmdFor(char* lpLine, PARSED_LINE** lpplLine)
 {
 	ESTR* lpParam=Dos9_EsInit();
 	ESTR* lpDirectory=Dos9_EsInit();
 	ESTR* lpInputBlock=Dos9_EsInit();
+	PARSED_LINE* line;
 
 	BLOCKINFO bkCode;
 
@@ -210,7 +211,8 @@ int Dos9_CmdFor(char* lpLine)
 					   the tokens that contains for-loop parameter.
 					   This parameter can be dispatched in many different
 					   parameter, as long are they're in a row */
-					if ((status = Dos9_ForMakeInfo(Dos9_EsToChar(lpParam), &forInfo)))
+					if ((status = Dos9_ForMakeInfo(Dos9_EsToChar(lpParam),
+					 												&forInfo)))
                         goto error;
 			}
 
@@ -281,7 +283,8 @@ int Dos9_CmdFor(char* lpLine)
 	if ((stricmp(Dos9_EsToChar(lpParam), "DO"))) {
 
 		/* if ``DO'' is not used */
-		Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, Dos9_EsToChar(lpParam), FALSE);
+		Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, Dos9_EsToChar(lpParam),
+																		FALSE);
 		status = DOS9_UNEXPECTED_ELEMENT;
 		goto error;
 
@@ -309,29 +312,41 @@ int Dos9_CmdFor(char* lpLine)
 
     }
 
+
+    /* Beware after this line ! There is a quite high probability that lpLine
+       will get somehow freed */
+    if (lpplLine) {
+        line = Dos9_LookAHeadMakeParsedLine(&bkCode, *lpplLine);
+    } else {
+        line = Dos9_LookAHeadMakeParsedLine(&bkCode, NULL);
+    }
+
 	switch(iForType) {
 
 		case FOR_LOOP_SIMPLE:
 
 			/* this handles simple for */
-			status = Dos9_CmdForSimple(lpInputBlock, &bkCode, cVarName, " ,:;\n\t\"");
+			status = Dos9_CmdForSimple(lpInputBlock, line,
+											cVarName, " ,:;\n\t\"");
 
 			break;
 
 		case FOR_LOOP_R:
-			status = Dos9_CmdForDeprecatedWrapper(lpInputBlock, lpDirectory, "/A:-D",&bkCode, cVarName);
+			status = Dos9_CmdForDeprecatedWrapper(lpInputBlock, lpDirectory,
+													"/A:-D", line, cVarName);
 			break;
 
 		case FOR_LOOP_D:
-			status = Dos9_CmdForDeprecatedWrapper(lpInputBlock, lpDirectory, "/A:D",&bkCode, cVarName);
+			status = Dos9_CmdForDeprecatedWrapper(lpInputBlock, lpDirectory,
+													"/A:D", line, cVarName);
 			break;
 
 		case FOR_LOOP_F:
-			status = Dos9_CmdForF(lpInputBlock, &bkCode, &forInfo);
+			status = Dos9_CmdForF(lpInputBlock, line, &forInfo);
 			break;
 
 		case FOR_LOOP_L:
-			status = Dos9_CmdForL(lpInputBlock, &bkCode, cVarName);
+			status = Dos9_CmdForL(lpInputBlock, line, cVarName);
 	}
 
 error:
@@ -339,10 +354,18 @@ error:
 	Dos9_EsFree(lpDirectory);
 	Dos9_EsFree(lpInputBlock);
 
+	/* we already swallowed everything */
+    if (lpplLine)
+        *lpplLine = NULL;
+
+	if (!lpplLine)
+        Dos9_FreeParsedStream(line);
+
 	return status;
 }
 
-int Dos9_CmdForSimple(ESTR* lpInput, BLOCKINFO* lpbkCommand, char cVarName, char* lpDelimiters)
+int Dos9_CmdForSimple(ESTR* lpInput, PARSED_LINE* lpplLine, char cVarName,
+								char* lpDelimiters)
 {
 
 	char *lpToken=lpInput->str,
@@ -444,7 +467,7 @@ int Dos9_CmdForSimple(ESTR* lpInput, BLOCKINFO* lpbkCommand, char cVarName, char
 		Dos9_SetLocalVar(lpvLocalVars, cVarName, Dos9_EsToChar(lpesStr));
 
 		/* run the block */
-		Dos9_RunBlock(lpbkCommand);
+		Dos9_RunParsedLine(lpplLine);
 
 		/* if a goto as been executed while the for-loop
 		   was ran */
@@ -464,7 +487,7 @@ int Dos9_CmdForSimple(ESTR* lpInput, BLOCKINFO* lpbkCommand, char cVarName, char
 #define XSTR(x) #x
 #define STR(x) XSTR(x)
 
-int Dos9_CmdForL(ESTR* lpInput, BLOCKINFO* lpbkCommand, char cVarName)
+int Dos9_CmdForL(ESTR* lpInput, PARSED_LINE* lpplLine, char cVarName)
 {
 	int iLoopInfo[3]= {0,0,0}, /* loop information */
         i=0,
@@ -523,7 +546,7 @@ int Dos9_CmdForL(ESTR* lpInput, BLOCKINFO* lpbkCommand, char cVarName)
 
 		/* execute the code */
 
-		Dos9_RunBlock(lpbkCommand);
+		Dos9_RunParsedLine(lpplLine);
 
 
 		/* if a goto as been executed while the for-loop
@@ -541,7 +564,7 @@ error:
 
 }
 
-int Dos9_CmdForF(ESTR* lpInput, BLOCKINFO* lpbkInfo, FORINFO* lpfrInfo)
+int Dos9_CmdForF(ESTR* lpInput, PARSED_LINE* lpplLine, FORINFO* lpfrInfo)
 {
 	int iSkip=lpfrInfo->iSkip,
         status = DOS9_NO_ERROR;
@@ -569,7 +592,7 @@ int Dos9_CmdForF(ESTR* lpInput, BLOCKINFO* lpbkInfo, FORINFO* lpfrInfo)
 			Dos9_ForSplitTokens(lpInputToP, lpfrInfo);
 			/* split the block on subtokens */
 
-			Dos9_RunBlock(lpbkInfo);
+			Dos9_RunParsedLine(lpplLine);
 			/* split the input into tokens and then run the
 			    block */
 		}
@@ -1504,7 +1527,7 @@ void Dos9_ForCloseInputInfo(INPUTINFO* lpipInfo)
 }
 
 /* Wrapper for deprecated old FOR /R */
-int  Dos9_CmdForDeprecatedWrapper(ESTR* lpMask, ESTR* lpDir, char* lpAttribute, BLOCKINFO* lpbkCode, char cVarName)
+int  Dos9_CmdForDeprecatedWrapper(ESTR* lpMask, ESTR* lpDir, char* lpAttribute, PARSED_LINE* lpplLine, char cVarName)
 {
 	FORINFO forInfo= {
 		" ", /* no tokens delimiters, since only one
@@ -1532,7 +1555,7 @@ int  Dos9_CmdForDeprecatedWrapper(ESTR* lpMask, ESTR* lpDir, char* lpAttribute, 
 	Dos9_EsCatE(lpCommandLine, lpMask);
 	Dos9_EsCat(lpCommandLine, "'");
 
-	if (Dos9_CmdForF(lpCommandLine, lpbkCode, &forInfo))
+	if (Dos9_CmdForF(lpCommandLine, lpplLine, &forInfo))
 		goto error;
 
 	Dos9_EsFree(lpCommandLine);

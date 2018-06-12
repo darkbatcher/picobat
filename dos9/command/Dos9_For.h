@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2016 Romain GARBI
+ *   Copyright (C) 2010-2018 Romain GARBI
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 #ifndef DOS9_FOR_H
 #define DOS9_FOR_H
 
-/* ERRORS: Undeclared identifiers (FILENAME_MAX, FILE, ESTR, THREAD, BLOCKINFO) */
+#include "../core/Dos9_Core.h"
 
 #define TOKENINFO_NB_MAX 128-32
 #define MAX_UNICODE_CHAR 5
@@ -105,15 +105,16 @@ typedef struct INPUTINFO {
 } INPUTINFO;
 
 
-int Dos9_CmdFor(char* lpCommand);
+int Dos9_CmdFor(char* lpCommand, PARSED_LINE** lpplLine);
 /* This is the function used for running
    ``for'' loops */
 
-int Dos9_CmdForSimple(ESTR* lpInput, BLOCKINFO* lpbkCommand, char cVarName, char* lpDelimiters);
+int Dos9_CmdForSimple(ESTR* lpInput, PARSED_LINE* lpplLine, char cVarName,
+						char* lpDelimiters);
 /* this handles simple ``for'' loops */
 
-int Dos9_CmdForF(ESTR* lpInput, BLOCKINFO* lpbkCommand, FORINFO* lpfrInfo);
-/* this handles more comple ``for'' loops
+int Dos9_CmdForF(ESTR* lpInput, PARSED_LINE* lpplLine, FORINFO* lpfrInfo);
+/* this handles more complete ``for'' loops
    ie. For /F
 */
 
@@ -121,7 +122,7 @@ int Dos9_CmdForF(ESTR* lpInput, BLOCKINFO* lpbkCommand, FORINFO* lpfrInfo);
 #define DOS9_FORL_INC   1
 #define DOS9_FORL_END   2
 
-int Dos9_CmdForL(ESTR* lpInput, BLOCKINFO* lpbkCommand, char cVarName);
+int Dos9_CmdForL(ESTR* lpInput, PARSED_LINE* lpplLine, char cVarName);
 /* this handle the ``for /L'' loop */
 
 
@@ -174,10 +175,11 @@ void Dos9_ForVarUnassign(FORINFO* lpfrInfo);
 /* Unassign all local variable that have been set by the for loop */
 
 int  Dos9_ForVarCheckAssignment(FORINFO* lpfrInfo);
-/* Check wether variables or ranges of variables are already assigned in order
+/* Check whether variables or ranges of variables are already assigned in order
    to prevent overlaping variables in for loop */
 
-int  Dos9_CmdForDeprecatedWrapper(ESTR* lpMask, ESTR* lpDir, char* lpAttribute, BLOCKINFO* lpbkCode, char cVarName);
+int  Dos9_CmdForDeprecatedWrapper(ESTR* lpMask, ESTR* lpDir, char* lpAttribute,
+											PARSED_LINE* lpplLine, char cVarName);
 
 
 #endif /* DOS9_FOR_H */
