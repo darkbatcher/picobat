@@ -26,6 +26,7 @@
 #ifndef WIN32
 
 #include "linenoise.h"
+#include "utf8.h"
 
 /* something similar to Dos9_EsGet() (ie. return 1 at eof) */
 int Dos9_LineNoise(ESTR* estr, FILE* pFile)
@@ -35,6 +36,11 @@ int Dos9_LineNoise(ESTR* estr, FILE* pFile)
         Dos9_ShowErrorMessage(DOS9_LOCK_MUTEX_ERROR,
                               __FILE__ "/Dos9_LineNoise()" , -1);
 
+
+    linenoiseSetEncodingFunctions(
+        linenoiseUtf8PrevCharLen,
+        linenoiseUtf8NextCharLen,
+        linenoiseUtf8ReadCode);
     linenoiseSetMultiLine(1);
 
     line = linenoise(NULL);

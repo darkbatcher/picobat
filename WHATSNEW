@@ -2135,5 +2135,22 @@ MONDAY 11TH
       - Added line editing capabilities under linux, through the use of a 
         slightly modified version of linenoise. Linenoise is tiny library 
         allowing console line editing. The license is shipped in 
-        COPYING.linenoise 
+        COPYING.linenoise.
+
+      - Added a big change in the way blocks and FOR and IF commands are 
+        handled. Now IF and FOR look ahead in the command line to see if 
+        anything is to be executed using conditional operators. By default, 
+        IF and FOR swallow everything to the left of the command. That is:
+
+            for %%a in (foo bar) do echo %%a & echo loop
+
+        is now equivalent to:
+
+    $(for %%a in (foo bar) do (echo %%a & echo loop)}*
+
+        This behaviour is more compatible with cmd.exe. To override the 
+        default behaviour, please enclose the FOR command inside a command 
+        block as follows:
+
+            (for %%a in (foo bar) do echo %%a) & echo loop
 
