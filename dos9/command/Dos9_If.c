@@ -333,8 +333,6 @@ int Dos9_CmdIf(char* lpParam, PARSED_LINE** lpplLine)
             lpNext = Dos9_GetNextBlock(lpNext, &bkInfo);
         }
 
-        fprintf(fError, "lpEnd=%s\n", bkInfo.lpEnd);
-
         lpToken2 = bkInfo.lpEnd;
         if (*lpToken2 == ')')
             lpToken2 ++;
