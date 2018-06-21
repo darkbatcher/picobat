@@ -297,6 +297,12 @@ int Dos9_RunLine(ESTR* lpLine)
 {
 	PARSED_LINE *orig; /* the parsed line*/
 
+	/* skip the line anyway if it start with a ':'. Note that
+	   such a line is by no means a label since ':' are filtered by script
+       reading functions. this is thus a ':' obtained through expansion.... */
+	if (*(Dos9_SkipBlanks(lpLine->str)) == ':')
+        return 0;
+
 	orig = Dos9_ParseLine(lpLine);
 
 	if (orig == NULL) {

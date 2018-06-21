@@ -2154,3 +2154,5 @@ MONDAY 11TH
 
             (for %%a in (foo bar) do echo %%a) & echo loop
 
+      - Incorporated some utf-8 fixes to the linenoise library. 
+

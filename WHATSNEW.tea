@@ -2007,7 +2007,7 @@ ${for %%a in (foo bar) do echo %%a & echo loop}
 
     @- is now equivalent to:
 
-$(for %%a in (foo bar) do (echo %%a & echo loop)}*
+${for %%a in (foo bar) do (echo %%a & echo loop)}
 
     @- This behaviour is more compatible with {cmd.exe}. To override the default
     behaviour, please enclose the {FOR} command inside a command block as
@@ -2016,3 +2016,10 @@ $(for %%a in (foo bar) do (echo %%a & echo loop)}*
 ${(for %%a in (foo bar) do echo %%a) & echo loop} 
 
     - Incorporated some utf-8 fixes to the linenoise library.
+
+{{Wednesday 21st}}
+
+    - Added a little fix to prevent dos9 from executing line starting with a
+    column after delayed expansion.
+
+    - Do not exit when a label is encountered inside a block.

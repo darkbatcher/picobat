@@ -207,10 +207,10 @@ int Dos9_LoadBatchScript(struct batch_script_t* script)
                    displayed */
 
                 /* If this is actually inside a block, treat it seriously,
-                   this is a chiefly important error */
+                   this is a highly important errro, but, anyway just ignore
+                   the line */
                 if (checkres == FALSE)
-                    /* TODO: What is nb ? */
-                    Dos9_ShowErrorMessage(DOS9_INVALID_LABEL, nb, -1);
+                    Dos9_ShowErrorMessage(DOS9_INVALID_LABEL, nb, 0);
 
                 /* This one is apparently ok, do nothing and let the command
                    part treat it as a command. */
