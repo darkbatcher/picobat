@@ -182,14 +182,6 @@ int Dos9_CmdStart(char* line)
             if (quotes) {
 
                 /* Starts with a quote... must be the title*/
-
-                if (info.title) {
-                    Dos9_MakeFullPath(buf, param->str, sizeof(buf));
-                    info.file = buf;
-                    Dos9_EsCpy(param, line);
-                    break;
-                }
-
                 info.title = param->str;
                 backtrack = line;
                 title = param;
@@ -229,54 +221,55 @@ int Dos9_CmdStart(char* line)
 
                 break;
 
-            } else {
+            } else if (*(param->str)
+                        && *(param->str + 1) != ':'
+                        && strchr(param->str, ':')) {
 
-                if (*(param->str)
-                    && *(param->str + 1) != ':'
-                    && strchr(param->str, ':')) {
-
-                    /* the path contains an URI */
-                    snprintf(buf, sizeof(buf), "%s", param->str);
-
-
-                } else {
-
-                    /* this is apparently a file, set it as the file name */
-
-                    if (Dos9_GetFilePath(buf, param->str, sizeof(buf)) == -1)
-                        Dos9_MakeFullPath(buf, param->str, sizeof(buf));
-
-                    /* do something if its a *.bat */
-                    Dos9_SplitPath(buf, NULL, NULL, NULL, ext);
-
-                    if (!stricmp(ext, ".bat")
-                        || !stricmp(ext, ".cmd")) {
-
-                        Dos9_GetExeFilename(buf, sizeof(buf));
-                        info.file = buf;
-                        Dos9_EsCpy(param, buf);
-                        Dos9_EsCat(param, " /a:q");
-
-                        if (!bEchoOn)
-                            Dos9_EsCat(param, "e");
-
-                        if (bUseFloats)
-                            Dos9_EsCat(param, "f");
-
-                        if (bCmdlyCorrect)
-                            Dos9_EsCat(param, "c");
-
-                        Dos9_EsCat(param, " ");
-                        Dos9_EsCat(param, line);
-
-                    }
-                }
+                /* the path contains an URI */
+                snprintf(buf, sizeof(buf), "%s", param->str);
 
                 info.file = buf;
                 Dos9_EsCpy(param, line);
-
                 break;
 
+            } else {
+
+                /* this is apparently a file, set it as the file name */
+
+                if (Dos9_GetFilePath(buf, param->str, sizeof(buf)) == -1)
+                    Dos9_MakeFullPath(buf, param->str, sizeof(buf));
+
+                /* do something if its a *.bat */
+                Dos9_SplitPath(buf, NULL, NULL, NULL, ext);
+
+                if (!stricmp(ext, ".bat")
+                    || !stricmp(ext, ".cmd")) {
+
+                    Dos9_GetExeFilename(buf, sizeof(buf));
+                    info.file = buf;
+                    Dos9_EsCpy(param, buf);
+                    Dos9_EsCat(param, " /a:q");
+
+                    if (!bEchoOn)
+                        Dos9_EsCat(param, "e");
+
+                    if (bUseFloats)
+                        Dos9_EsCat(param, "f");
+
+                    if (bCmdlyCorrect)
+                        Dos9_EsCat(param, "c");
+
+                    Dos9_EsCat(param, " ");
+                    Dos9_EsCat(param, line);
+
+                } else {
+
+                    info.file = buf;
+                    Dos9_EsCpy(param, line);
+
+                }
+
+                break;
             }
 
         }
