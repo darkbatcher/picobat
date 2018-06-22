@@ -98,7 +98,7 @@ config: localmk $(PROGRAMS) $(LIBS) $(FUNCTIONS) $(DEFAULTOPTIONSX) $(SUBCONF)
 config.h: femto-subst
 	./femto-subst < config.h.in > config.h
 
-femto-subst:
+femto-subst: femto-config.mk
 	echo \#!/bin/sh > femto-subst
 	echo sed $(foreach v,$(CONFIGVARS),-e 's,[@]$(v)[@],$($(v)),g') >> femto-subst
 	chmod +x femto-subst

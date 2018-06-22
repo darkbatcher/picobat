@@ -2146,7 +2146,7 @@ MONDAY 11TH
 
         is now equivalent to:
 
-    $(for %%a in (foo bar) do (echo %%a & echo loop)}*
+            for %%a in (foo bar) do (echo %%a & echo loop)
 
         This behaviour is more compatible with cmd.exe. To override the 
         default behaviour, please enclose the FOR command inside a command 
@@ -2154,5 +2154,12 @@ MONDAY 11TH
 
             (for %%a in (foo bar) do echo %%a) & echo loop
 
-      - Incorporated some utf-8 fixes to the linenoise library. 
+      - Incorporated some utf-8 fixes to the linenoise library.
+
+WEDNESDAY 21ST
+
+      - Added a little fix to prevent dos9 from executing line starting with a 
+        column after delayed expansion.
+
+      - Do not exit when a label is encountered inside a block. 
 
