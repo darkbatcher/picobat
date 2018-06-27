@@ -92,6 +92,26 @@
 	
 {{FOR and IF behaviour}}
 
+	The {../for|FOR} and {../if|IF} are two special command because they
+	change the precedence of {conditional operator}. By default, if there
+	is no block encountered, then all the operator have the same priority.
+	
+	This is not true using {IF} or {FOR} as they swallow all the commands
+	on theirs right-side, acting as if a block was surrounding the command
+	up to the end of the line.
+	
+	This also means that the scope of the {IF} or the {FOR} commands
+	start from the command up to the end of the command-line. For example,
+	the following code will loop over {command1&command2} instead of
+	looping over {command1} and then executing {command2}:
+	
+${for %%A in (1 2 3 4 5 6 7 8 9 10) do command1&command2}
+
+	To prevent {IF} or {FOR} from swallowing every command up to the end
+	of the command-line, enclose the command in a block, as follows:
+	
+${(for %%A in (1 2 3 4 5 6 7 8 9 10) do command1) & command2}
+	
 {{Compatibility}}
 
 	Available since {0.5.0.0}.

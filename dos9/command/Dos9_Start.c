@@ -145,6 +145,13 @@ int Dos9_CmdStart(char* line)
             info.flags &= ~DOS9_EXEC_SEPARATE_WINDOW;
 
         } else if (!stricmp(param->str, "/NORMAL")) {
+        } else if (!stricmp(param->str, "/HIGH")) {
+        } else if (!stricmp(param->str, "/LOW")) {
+        } else if (!stricmp(param->str, "/REALTIME")) {
+        } else if (!stricmp(param->str, "/ABOVENORMAL")) {
+        } else if (!stricmp(param->str, "/BELOWNORMAL")) {
+
+        /* ignore all that shit */
 
         } else if (!stricmp(param->str, "/D")) {
 

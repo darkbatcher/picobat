@@ -22,7 +22,7 @@
 
 {{Interpreter's input and outputs}}
 
-	Traditionally, every console programe is given three files that a referred to
+	Traditionally, every console program is given three files that a referred to
 	as standard output and inputs.
 
 	- {Standard input} (stdin) : The default input of console programs. Usually this
@@ -44,11 +44,11 @@
 
 {{Redirecting input and outputs}}
 
-	{../dos9|Dos9} uses {<} and {>} characaters to set redirections. {>} character is used to redirect
+	{../dos9|Dos9} uses {<} and {>} characters to set redirections. {>} character is used to redirect
 	{stdout} and {stderr}, whereas the {<} is used to specify {stdin} redirections.
 
 	When {../dos9|dos9} encounters either a {>} or a {<}, then Dos9 uses the very first
-	paramater to the right of the same an use it as the name of a file to which the input
+	parameter to the right of the same an use it as the name of a file to which the input
 	or output will be redirected. The name of the file and the sign do not have to be
 	separated by any blank character. Then Dos9 removes the file name from the
 	command line. The {>} or {<} signs can be used anywhere in the command line, 
@@ -61,7 +61,7 @@ echo redirection test > file}
 	Any of the previous syntax are valid. However, some of them give the code more
 	readability, as such, using the third syntax is highly recommended.
 	
-	Altough the is only one syntax using {<}, redirections using {>} are provided
+	Although the is only one syntax using {<}, redirections using {>} are provided
 	with a bunch of different syntaxes, which are the following.
 
 		- The default behaviour if you use only the {>} sign, is to redirect the
@@ -85,13 +85,7 @@ echo redirection test > file}
 			-- {1} : standard output.
 		
 			-- {2} : standard error.
-			
-		- Il est possible de faire précéder {>} par les nombres {1} ou {2}. Cela a pour effet de changer la sortie
-		qui est redirigée vers {fichier}. En fonction du nombre, la sortie redirigée est :
-
-			-- {1} : La sortie standard.
-
-			-- {2} : La sortie d'erreur standard.
+	
 			
 		@- As an example, {stderr} can be redirected to {file} using:
 
