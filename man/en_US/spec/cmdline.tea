@@ -1,6 +1,6 @@
 #
 #   Dos9 Manual pages, The Dos9 project
-#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#   Copyright (C) 2012-2018  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -15,110 +15,106 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-{{Command line}}
+{{The command-line}}
 
+	The {command-line} is probably one of the most important concepts
+	of batch programming. It describes a set of command and blocks
+	(possibly nested) separated by {condop|conditional operators}.
+
+{{Block}}
+
+	A {block} is a construct that allows grouping several command-lines
+	separated by a new line.
+	inside a single execution context, enabling them to share the
+	same output or to be executed together. Such a block can be
+	specified by enclosing several {command-lines} in parenthesis,
+	such as:
 	
-	The {command line} is one of the central concepts of batch programming.
-	It is used to describe command behaviours and to parse scripts.
+${(echo command line 1
+echo command line 2)}
 	
-	The conventions presented here are used a {Dos9} standard.
+	One of the most important features provided by block is to
+	group output and input of commands so that they can share
+	input or output through {condop|pipes} or {red|redirections},
+	as shown in the following examples
+
+${(echo command1
+echo command2 ) > file}
+
+	Blocks can also be used to affect precedence of {condop|conditional operators}.
+	By default, there is no precedence for conditional operators and
+	the commands are executed from left to right. Adding blocks can
+	modify the control flow:
 	
-{{Commands and Blocks}}
-
-	The is two kinds of structures within batch scripts. The first are {commands}, the
-	most important part of code and the second are {blocks} that form a group of
-	{commands}.
+${command1 && command2 || command3}
 	
-	- {Commands} are the simplest structure of batch programming. Every action is done
-	using a {command}. Commands are lines (or a part of line, if {condop|conditonnal operators}
-	are used), that denote an action to be done. Typically, {commands} are described using
-	the following syntax :
+	In this example, there is no precedence rules and the operators are
+	executed from left to right, that is:
+		
+		- {command1} is run, then depending on the return state of {command1}:
+		
+			-- Upon successful return of {command1}, {command2} is run:
+			
+				--- Upon failure of {command2}, {command3} is run.
+				
+			-- Upon failure of {command1}, then {command2} is skipped and
+			{command3} gets executed.
+			
+	However, precedence can be modified using blocks as follows:
 	
-	${COMMAND mandatory_argument [optional_argument] [choice1 | choice2]}
+${command1 && (command2 || command3)}
+
+	In this case, {command3} only gets executed upon a failure of {command2}
+	which is ran only if {command1} succeeds.
+
+{{Command-line}}
+
+	A command-line is the most general construct existing in batch programming.
+	It refers to a well-constructed code line that can contain a combination of 
+	blocks (possibly nested), {command|commands} and {condop|conditional operators},
+	and that is executed within a single pass by {Dos9} (that is, only one reading 
+	operation and only one {var|conventional expansion} takes place).
 	
-	@- Where :
+	To match command-lines, Dos9 uses the following rules for associating and nesting
+	command, command-lines and blocks:
 	
-	-- {COMMAND} is the name of the command. {COMMAND} should refer to one of the
-    following possibilities, by order of precedance:
-
-    --- An {internal command} to be ran, that is, a command which is included
-    inside the {../dos9|Dos9} command interpreter.
-
-    --- A {path} or the name of an external command locating inside one of the directories
-    listed in {var|%PATH% variable} if {Dos9} fails to find an internal command matching
-    {COMMAND}.
-
-    --- If both preceding options fail, {Dos9} considers that {COMMAND} refers to a file
-    that is not executable and tries to find a program to handle {COMMAND} using
-    operating systems files associations. The script used to find operating system
-    associations under UNIX-derived OSes can be customized using {../dos9startscript|%DOS9_START_SCRIPT%}
-    environment variable.
-
-    @-- A list of commands shipped with {Dos9} (internal and external) can be obtained
-    through {../commands|command list} manual page.
+	- A {command-line} is made of at least one {command} or block.
 	
-	-- {madatory_argument} is an argument that must be specified for the command to run
-	properly. It can either be a word or a group of words surrounded by quotes ({"})
-	or with spaces escaped with {^}. Thus, there is several ways of passing an argument:
-
-${COMMAND "foo bar"
-COMMAND foo^ bar}
-
-	@-- All of theses syntaxes are valid and can be used interchangeably.
-	Note that no {condop|conditional operator} will be interpreted within quotes.
-
-	-- {Optional_argument} is an argument that is not required by the command
-	and is optional. These arguments only affect the behaviours of the command.
-	Two arguments can be simultaneously optional is specified as:
+	- {condop|Conditional operators} delimit {commands} or {blocks} inside a 
+	{command-line}.
 	
-	${COMMAND [arg1 arg2]}
+	- A {block} can contain several {command-lines} separated by newlines.
 	
-	@-- In this case, {arg1} and {arg2} have to be both specified for the command
-	to be executed. Obviously, when specifying optional parameters you should not
-	use the square brackets ({[} and {]}), theses are just a way to depict
-	optionality.
-
-	-- {[choice1\|choice2]} specify a choice that have to be made between {choice1} and {choice2}.
-	Usually, specifying one of them is not mandatory as square brackets depict optionality. Some
-	can consider this syntax ambiguous and depict the necessity of making a choice not using
-	brackets, like:
-
-	${COMMANDE {choix1|choix2}}
+	- A {command} can contain some blocks its {../if|IF} or {../for|FOR}. Dos9
+	does no syntax check to verify whether the syntax of the command is
+	correct.
 	
-	@-- No {Dos9} command is supposed to use this syntax as it not required
-	for well designed command to require the user to make a mandatory
-
-	- {Command blocs} are groups of commands that need to be
-	executed together. They are obtained by the use of parenthesis:
+	A more formal description of this behaviour is the following using Backus-Naur
+	form for describing grammars.
 	
-${(COMMAND_1
-COMMAND_2
-...
-COMMAND_N
-)}
+${
+conditional-operator = "&" | "&&" | "||" | "|"
+command-line = block
+               | command
+			   | command-line conditional-operator command
+			   | command-line conditional-operator block
 
-	@- {condop|Conditional operators} and {red|redirections} are not active
-	within blocs by default, this means that neither {\|}, {^}, {&}, {<} nor
-	{>} have to be escaped using {^} within blocs. However, if you
-	set {../setlocal} {CMDLYCORRECT} setting, then it will be possible to
-	have theses symbols escaped.
+block = "(" block-expression ")"
 
-	@- Within a block, every command share the same output and input
-	with other commands (unless if the output is redirected within the
-	block). This enables grouped output as :
-	
-${(ECHO first line
-ECHO second line) > file}
-	
-	@- Command blocks are sometimes used by some commands as arguments.
-	The only commands that can do so are {../for|FOR} and {../if|IF} commands.
-	For instance :
-
-${IF 1==1 (
-ECHO une ligne
-ECHO une autre ligne
-)}
+block-expression = command-line
+				  | block-expression "\n" command-line
+				  
+command = "for" command-line
+         | "if" command-line
+         | "if" command-line "else" command-line
+		 | normal-command
+}
 
 {{See also}}
 
-	{condop|Conditional operators}, {red|Redirections}
+	{command|Commands}, {condop|Conditional operators}
+	
+	
+	
+	
+

@@ -191,61 +191,32 @@ int Dos9_LoadBatchScript(struct batch_script_t* script)
 
             /* This line is a label */
 
-            /* Wait a minute... Double check that this is *really* a label,
-               for, it might not be one either. Do not make assumptions to
-               early, for it to be a real label, the following condition
-               must be met : cmd *must* be empty, for labels are not allowed
-               within blocks of any kind (no top-level, if, nor for blocks).
+            if ((newlbl = malloc(sizeof(struct labels_t))) == NULL)
+                Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION
+                                      | DOS9_PRINT_C_ERROR,
+                                      __FILE__ "/Dos9_LoadBatchScript", -1);
 
-               However, this line might be valid anyhow if cmd is not empty
-               and if we are at top level within cmd */
+            if (last == NULL) {
 
-            if (*(cmd->str) != '\0') {
-
-                /* mmmh this is apparently not a label or, somehow one of the
-                   invalid kind. Decide whether a error message should be
-                   displayed */
-
-                /* If this is actually inside a block, treat it seriously,
-                   this is a highly important errro, but, anyway just ignore
-                   the line */
-                if (checkres == FALSE)
-                    Dos9_ShowErrorMessage(DOS9_INVALID_LABEL, nb, 0);
-
-                /* This one is apparently ok, do nothing and let the command
-                   part treat it as a command. */
+                script->lbls = newlbl;
 
             } else {
 
-                /* Now, we are pretty sure this is a valid label */
+                last->next = newlbl;
 
-                if ((newlbl = malloc(sizeof(struct labels_t))) == NULL)
-                    Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION
-                                          | DOS9_PRINT_C_ERROR,
-                                          __FILE__ "/Dos9_LoadBatchScript", -1);
-
-                if (last == NULL) {
-
-                    script->lbls = newlbl;
-
-                } else {
-
-                    last->next = newlbl;
-
-                }
-
-                last = newlbl;
-                newlbl->next = NULL;
-                newlbl->following = script->curr;
-
-                Dos9_RmTrailingNl(line->str);
-
-                /* Remove the useless delims set at the end of the label */
-                Dos9_StripEndDelims(pch);
-                newlbl->label = xstrdup(pch);
-
-                continue;
             }
+
+            last = newlbl;
+            newlbl->next = NULL;
+            newlbl->following = script->curr;
+
+            Dos9_RmTrailingNl(line->str);
+
+            /* Remove the useless delims set at the end of the label */
+            Dos9_StripEndDelims(pch);
+            newlbl->label = xstrdup(pch);
+
+            continue;
 
         } else if (*pch == '\0') {
 
@@ -262,40 +233,8 @@ int Dos9_LoadBatchScript(struct batch_script_t* script)
         /* This is a command */
         Dos9_EsCat(cmd, pch);
 
-        if ((checkres = Dos9_CheckBlocks(cmd)) == TRUE) {
-            /* We reached a line end since blocks appear to be complete.
-               Allocate a new cmdlines_t instance to store the line */
-
-            *(line->str) = '\0'; /* clear line */
-
-            if ((newcmd = malloc(sizeof(struct cmdlines_t))) == NULL)
-                Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION
-                                      | DOS9_PRINT_C_ERROR,
-                                            __FILE__ "/Dos9_LoadBatchScript", -1);
-
-            Dos9_RmTrailingNl(cmd->str);
-
-            newcmd->line = xstrdup(cmd->str);
-            newcmd->next = NULL;
-
-            if (script->curr) /* add the new line to the linked list */
-                script->curr->next = newcmd;
-
-            script->curr = newcmd; /* change the current command */
-
-            if (script->cmds == NULL) /* set the first command */
-                script->cmds = newcmd;
-
-            *(cmd->str) = '\0';
-        }
-
-    }
-
-    if (*(cmd->str) != '\0') {
-
-        /* There is some trailing part of cmd at the end of bloc...
-           Store it anyway as if we had succeeded in parsing it.
-        */
+        /* We reached a line end since blocks appear to be complete.
+           Allocate a new cmdlines_t instance to store the line */
 
         *(line->str) = '\0'; /* clear line */
 
@@ -303,8 +242,6 @@ int Dos9_LoadBatchScript(struct batch_script_t* script)
             Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION
                                   | DOS9_PRINT_C_ERROR,
                                         __FILE__ "/Dos9_LoadBatchScript", -1);
-
-        Dos9_RmTrailingNl(cmd->str);
 
         newcmd->line = xstrdup(cmd->str);
         newcmd->next = NULL;
@@ -316,6 +253,9 @@ int Dos9_LoadBatchScript(struct batch_script_t* script)
 
         if (script->cmds == NULL) /* set the first command */
             script->cmds = newcmd;
+
+        *(cmd->str) = '\0';
+
 
     }
 

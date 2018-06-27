@@ -2023,3 +2023,20 @@ ${(for %%a in (foo bar) do echo %%a) & echo loop}
     column after delayed expansion.
 
     - Do not exit when a label is encountered inside a block.
+	
+	- Fixed {START} command error when trying to launch an external batch script.
+	
+	
+{{Wednesday 27th}}
+
+	- Fixes to the start command.
+	
+	- Removed used of {setlocale()} function under windows that create a bug with threads.
+	
+	- Added lots of manual pages.
+	
+	- Changed the way script are loaded and line executed to be more compatible with cmd.exe.
+	
+	- Fixes to the thread library.
+	
+	

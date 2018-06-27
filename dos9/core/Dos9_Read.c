@@ -33,6 +33,9 @@
 
 int Dos9_GetLine(ESTR* lpesLine, INPUT_FILE* pIn)
 {
+    int  ok;
+    struct cmdlines_t* cmdlines;
+    ESTR* tmp;
 
     /* If either cmdly correct is defined or if we are running interactive
        mode, use the cmdly correct function */
@@ -92,10 +95,32 @@ int Dos9_GetLine(ESTR* lpesLine, INPUT_FILE* pIn)
 
     }
 
-    /* Get the next line */
-    Dos9_EsCpy(lpesLine, pIn->batch.curr->line);
+    Dos9_EsCpy(lpesLine, "");
+    cmdlines = pIn->batch.curr;
+    tmp = Dos9_EsInit();
 
-    pIn->batch.curr = pIn->batch.curr-> next;
+    /* Get the next line */
+    do {
+
+        Dos9_EsCpy(tmp, cmdlines->line);
+        Dos9_ReplaceVars(tmp);
+
+        Dos9_EsCat(lpesLine, tmp->str);
+
+        cmdlines = cmdlines->next;
+
+    } while (!(ok = Dos9_CheckBlocks(lpesLine)) && cmdlines);
+
+    Dos9_EsFree(tmp);
+    pIn->batch.curr = cmdlines;
+    Dos9_RmTrailingNl(lpesLine->str);
+
+    if (ok == -1 || !ok) {
+
+		Dos9_ShowErrorMessage(DOS9_NONCLOSED_BLOCKS, NULL, FALSE);
+		goto error;
+
+    }
 
     return 0;
 
@@ -148,6 +173,8 @@ int Dos9_GetLine_Cmdly(ESTR* lpesLine, INPUT_FILE* pIn)
 	while (!(res=fn_getline(lpesTmp, pFile))) {
 
 		lpCh=Dos9_SkipAllBlanks(Dos9_EsToChar(lpesTmp));
+
+        Dos9_ReplaceVars(lpesTmp);
 
 		/* split comments label and void lines from input */
 		if (*lpCh==':' || *lpCh=='\0' || *lpCh=='\n') {

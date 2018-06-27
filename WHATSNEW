@@ -2161,5 +2161,8 @@ WEDNESDAY 21ST
       - Added a little fix to prevent dos9 from executing line starting with a 
         column after delayed expansion.
 
-      - Do not exit when a label is encountered inside a block. 
+      - Do not exit when a label is encountered inside a block.
+
+      - Fixed START command error when trying to launch an external batch 
+        script.
 

@@ -15,7 +15,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-{{Le parsage}}
+{{Parsing}}
 
 	The command line {parsing} is done by {../dos9|Dos9} in a precise order.
 	Knowing the order of different parsing step is really useful to a batch
@@ -25,12 +25,12 @@
 
 	During parsing, Dos9 execute steps in the following order:
 
-	- {Line reading} : During this step {../dos9|Dos9} reads a {cmdline|command line}, either from 
+	- {Line reading}: During this step {../dos9|Dos9} reads text lines, either from 
 	commands typed in the prompt or from a file. The line reading can occur in two different ways,
 	depending on the {CMDLYCORRECT} setting of {../setlocal|SETLOCAL command}:
 	
-	-- If {CMDLYCORRECT} is disabled, the file is read entirely at startup, pre-parsing commands
-	lines. This behaviour is specific to {../dos9|Dos9}, this enables saving up execution time
+	-- If {CMDLYCORRECT} is disabled, the file is read entirely at start-up, pre-parsing lines.
+	and labels. This behaviour is specific to {../dos9|Dos9}, this enables saving up execution time
 	compared to the historical reading method of batch files. Before every new line execution, {Dos9}
 	checks that the source file has not been modified, it is, it loads it again and continues execution
 	at same line number.
@@ -42,26 +42,30 @@
 	Thus this method is not the default any more for {Dos9}
 
 	@- A change of {CMDLYCORRECT} setting during script execution leads to a restart of the script
-	from the beginning. Thus, any {CMDLYCORRECT} change is discourage during a script execution.
+	from the beginning. Thus, any {CMDLYCORRECT} change is discouraged during a script execution.
 	
-	- {Conventional expansion} : During this step Dos9 expands variables according to
-	{exp|expansion process}.
-
-	- {red|Redirections} {parsing} : During this step redirections are detected and applied.	
-
-	- {condop|Conditional operators} parsing : During this step, conditional operators are
-	detected
-
-	- {Argument parsing} : During this step, Dos9 detects {cmdline|command line} argument.
+	- {Conventional expansion}: When lines are read from a file or the prompt, {Dos9}
+	perform the very first step of variable expansion, following rules
+	described in {var|variables expansion}.
 	
-	- {xvar|Special variables} {expansion} : During this step, Dos9 expands special variables.
+	- {cmdline|Command line} and {condop|conditional operators} parsing: Once variable are expanded,
+	{Dos9} does two tasks simultaneously. Conditional operators are parsed while blocks are
+	matched to check there is the same number of block opening and closing.
 
-	- {Delayed expansion} : During this step Dos9 performs {exp|delayed expansion}.
+	- {red|Redirections} parsing: Dos9 tries to detect active redirections of the standard streams
+	on the command-line and applies it.
 	
-{{Note}}
+	- {command|Command} detection and parsing: After redirections parsing, {Dos9} searches command
+	boundaries, and tries to extract command arguments according to argument parsing policies.
+	
+	- {xvar|Special variables} expansion: In each of the detected argument, {Dos9} then performs 
+	special variable expansion.
 
-	When the line contains command using some command blocks argument like {../if|if} or
-	{../for|for}, this behaviour is applied recursively on each block.
+	- {var|Delayed expansion}: Once special variable expanded, the delayed expansion takes finally
+	places. This is the final step before {execution}.
+	
+	- {Execution}: After all the preceding step, the command is finally executed by the 
+	appropriate command. 
 	
 {{See also}}
 

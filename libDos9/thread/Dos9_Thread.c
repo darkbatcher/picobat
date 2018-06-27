@@ -44,7 +44,7 @@ void _Dos9_Thread_Close(void) {
 /*
     begins a thread
  */
-int Dos9_BeginThread(THREAD* lpThId, void(*lpFunction)(void*) , int iMemAmount, void* lpArgList)
+int Dos9_BeginThread(THREAD* lpThId, void*(*lpFunction)(void*) , int iMemAmount, void* lpArgList)
 {
     int            iRet;
     pthread_attr_t attr;
@@ -53,7 +53,7 @@ int Dos9_BeginThread(THREAD* lpThId, void(*lpFunction)(void*) , int iMemAmount, 
 
     iRet=pthread_create(&(lpThId->thread),
                         &attr,
-                        (void* (*)(void*))lpFunction,
+                        lpFunction,
                         (void*)lpArgList);
 
 
@@ -136,12 +136,37 @@ void _Dos9_Thread_Close(void)
 {
 }
 
-LIBDOS9 int  Dos9_BeginThread(THREAD* lpThId, void(*pFunc)(void*), int iMemAmount, void* arg)
+struct _dos9_beginthread_t {
+    void* (*func)(void *);
+    void* arg;
+};
+
+LIBDOS9 WINAPI DWORD _Dos9_BeginThreadTrampoline(LPVOID data)
 {
+    struct _dos9_beginthread_t *s = data;
+    void* ret;
+
+    ret = s->func(s->arg);
+
+    free(s);
+
+    return (DWORD)ret;
+}
+
+LIBDOS9 int  Dos9_BeginThread(THREAD* lpThId, void*(*pFunc)(void*), int iMemAmount, void* arg)
+{
+    struct _dos9_beginthread_t *s;
+
+    if(!(s = malloc(sizeof(struct _dos9_beginthread_t))))
+        return -1;
+
+    s->func = pFunc;
+    s->arg = arg;
+
     *lpThId=CreateThread(NULL,
                          0,
-                         (LPTHREAD_START_ROUTINE)pFunc,
-                         (PVOID)arg,
+                         (LPTHREAD_START_ROUTINE)_Dos9_BeginThreadTrampoline,
+                         (PVOID)s,
                          0,
                          NULL
                          );

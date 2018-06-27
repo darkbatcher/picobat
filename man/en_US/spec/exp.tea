@@ -144,7 +144,7 @@ ${rien}
 
 {{Delayed expansion}}
 
-	Delayed expansion takes place juste before line execution. This step
+	Delayed expansion takes place just before line execution. This step
 	can be discarded via the {../setlocal|SETLOCAL} command using the
 	{ENABLEDELAYEDEXPANSION} or {DISABLEDELAYEDEXPANSION} options.
 
@@ -167,7 +167,7 @@ IF %var% equ 1 (
 	echo 2: %var%
 )}
 
-		@- The output is quite surprise as it seems that {%var%} does not get modified.
+		@- The output is quite surprising as it seems that {%var%} does not get modified.
 		However, in fact, it is but only when the line was read from the file. 
 
 		@- To get the expected result, using delayed expansion is necessary, that is
@@ -204,8 +204,8 @@ IF !var! equ test (
 
 {{Special var expansion}}
 
-	{xvar|Special variables} are replaced during the command line
-	execution. This topic is discussed on the associated page.
+	{xvar|Special variables} just before delayed expansion.
+	This topic is discussed on the associated page.
 
 {{Compatibility}}
 

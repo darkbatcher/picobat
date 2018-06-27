@@ -144,6 +144,8 @@ int Dos9_CmdStart(char* line)
 
             info.flags &= ~DOS9_EXEC_SEPARATE_WINDOW;
 
+        } else if (!stricmp(param->str, "/NORMAL")) {
+
         } else if (!stricmp(param->str, "/D")) {
 
             line = next;

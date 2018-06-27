@@ -42,16 +42,23 @@
 	the use of parenthesis for {../for|FOR} and {../if|IF} commands),
 	achieving also a higher readability.
 
-	- {&&} : Run {command2} if {command1} does not return any error.
+	- {&&} : Run {command2} if the last executed command returned
+	on success.
 	To determine if an error occured, {../dos9|Dos9} uses the value
-	of the {%ERRORLEVEL%} variable fixed by {command1} and :
+	of the {%ERRORLEVEL%} variable fixed by the last executed command :
 	
 		-- if {%ERRORLEVEL%} is zero, then the command completed
 		successfully.
 		
 		-- else the command returned on error.
 		
-	- {\|\|} : Run {command2} if {command1} fails.
+	@- if the last executed command returned upon a failure, 
+	{command2} is ignored and
+	{Dos9} tries to run any of the subsequent commands following rules
+	associated with each of the conditional operators.
+	
+	- {\|\|} : Run {command2} if the last executed command returned upon a
+	failure.
 	
 	- {\|} : Connects {command1} standard output to {command2} standard
 	input and run both simultaneously.
@@ -62,13 +69,13 @@
 	exits, the child interpreter dies and the script execution continues on
 	the parent intepreter.
 	
-	@- Thus, if a {command1} modifies {Dos9} environement variable, the
-	changes will not affect the parent interpretor, and the environement of
+	@- Thus, if a {command1} modifies {Dos9} environment variable, the
+	changes will not affect the parent interpretor, and the environment of
 	the parent will be left unchanged. As an example:
 	
 	${set example=1 | more test.txt}
 	
-	@- will not assign the {%exemple%} variable. However, {command2} can
+	@- will not assign the {%example%} variable. However, {command2} can
 	actually change environment variables of the parent interpreter. As an
 	example:
 
@@ -78,10 +85,12 @@
 	
 	@- This behaviour is the opposite of {cmd.exe}, but it seem more
 	worthwhile to keep the current behaviour as it make possible to assign
-	easily the outpout of a command to a variable.
+	easily the output of a command to a variable.
 
-	Obviously, there is no limation in the number of conditional operators
+	Obviously, there is no limitation in the number of conditional operators
 	that can be used in a single line.
+	
+{{FOR and IF behaviour}}
 
 {{Compatibility}}
 

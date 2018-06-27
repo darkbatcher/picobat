@@ -137,7 +137,7 @@ typedef pid_t           PROCESS;
 
 #endif
 
-LIBDOS9 int      Dos9_BeginThread(THREAD* lpThId, void(*pFunc)(void*),
+LIBDOS9 int      Dos9_BeginThread(THREAD* lpThId, void*(*pFunc)(void*),
 					int iMemAmount, void* arg);
 LIBDOS9 void     Dos9_EndThread(void* iReturn);
 LIBDOS9 void     Dos9_AbortThread(THREAD* lpThId);

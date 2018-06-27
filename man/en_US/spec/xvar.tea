@@ -45,6 +45,10 @@
 	Any ASCII character except the 33 first (ie. from 0x20) can be
 	used. However, for readability purposes it is better to use
 	only letters.
+	
+	Special variable expansion is performed between {command|command argument}
+	detection and {var|delayed expansion}, allowing them to affect
+	expansion of variables.
 
 	Special variable names need to be preceded by two {%0}, (except for
 	{%0} up to {%9}, {%*} and {%+}) to be developed. Some option can be
@@ -78,7 +82,7 @@
 
 		- If {%%I} is defined, then {%%~aI} will be expanded. 
 		
-		- If {%%I} is defined and {%%a} is, then {%%~a} will be expanded.
+		- If {%%I} is not defined and {%%a} is, then {%%~a} will be expanded.
 
 		- Otherwise, no expansion takes place.
 

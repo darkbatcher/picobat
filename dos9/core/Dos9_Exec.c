@@ -183,8 +183,7 @@ int Dos9_RunFile(EXECINFO* info, int* error)
     wchar_t *wfullline,
             *wfilename,
             *wcurrdir,
-            *wenvblock,
-            *wtitle;
+            *wenvblock;
 
     envblock = Dos9_GetEnvBlock(lpeEnv, &size);
 
@@ -256,7 +255,9 @@ int Dos9_RunFile(EXECINFO* info, int* error)
     free(wfilename);
     free(wcurrdir);
     free(wenvblock);
-    free(wtitle);
+
+    if (si.lpTitle)
+        free(si.lpTitle);
 
     return status;
 }
@@ -314,7 +315,7 @@ int Dos9_RunFile(EXECINFO* info, int* error)
 			   path, command found exist, so the risk of such a
 			   dysfunction is limited.
 
-			   For more safety, we return -1, along with a pipe message 
+			   For more safety, we return -1, along with a pipe message
                so that the given value will be reported anyway*/
 
 			write(fds[1], "x", 1);

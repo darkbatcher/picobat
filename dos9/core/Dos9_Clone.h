@@ -51,5 +51,5 @@ struct clone_data_t {
 THREAD Dos9_CloneInstance(void(*func)(void*), void* data);
 int Dos9_DuplicateData(struct clone_data_t* data);
 
-int Dos9_CloneTrampoline(void* data);
+void* Dos9_CloneTrampoline(void* data);
 #endif
