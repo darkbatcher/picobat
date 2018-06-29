@@ -215,8 +215,7 @@ end:
         fflush(fOutput);
         setvbuf(fOutput, NULL, _IONBF, 0);
 
-        if (buf)
-            free(buf);
+        free(buf);
 
     }
 

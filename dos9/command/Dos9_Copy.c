@@ -92,7 +92,7 @@
 
 int Dos9__EndWithDirectoryMark(const char* dir)
 {
-    char* c;
+    char* c="";
 
     while (*dir)
         c = dir ++;

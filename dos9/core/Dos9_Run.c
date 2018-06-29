@@ -804,7 +804,7 @@ void Dos9_SigHandlerBreak(int sig)
        call to Dos9_CloneInstance() */
     if (bIsScript) {
 
-        Dos9_AskConfirmation(DOS9_ASK_YN
+        choice = Dos9_AskConfirmation(DOS9_ASK_YN
                                 | DOS9_ASK_INVALID_REASK
                                 | DOS9_ASK_DEFAULT_N,
                                 lpBreakConfirm);

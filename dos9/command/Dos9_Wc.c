@@ -200,7 +200,7 @@ int Dos9_CmdWc(char* line)
         nb = 0,
         size,
         status = DOS9_NO_ERROR,
-        r;
+        r = 0;
 
     struct wc_count_t total = {0, 0, 0, 0}, cnt;
 

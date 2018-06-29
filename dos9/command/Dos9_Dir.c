@@ -50,7 +50,7 @@ int Dos9_CmdDir(char* lpLine)
 	     *lpToken,
 	     lpFileName[FILENAME_MAX]= {0};
 
-    char *buf;
+    char *buf = NULL;
 
 	int iFlag=DOS9_SEARCH_DEFAULT | DOS9_SEARCH_DIR_MODE,
         iDirNb, iFileNb,
@@ -61,7 +61,7 @@ int Dos9_CmdDir(char* lpLine)
 
     short wAttr;
     char bSimple;
-    size_t nSize;
+    size_t nSize = 0;
 
     char lpType[]="D RHSA ",
 	              lpSize[16];

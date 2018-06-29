@@ -87,7 +87,7 @@ int Dos9_CmdFor(char* lpLine, PARSED_LINE** lpplLine)
 	ESTR* lpParam=Dos9_EsInit();
 	ESTR* lpDirectory=Dos9_EsInit();
 	ESTR* lpInputBlock=Dos9_EsInit();
-	PARSED_LINE* line;
+	PARSED_LINE* line=NULL;
 
 	BLOCKINFO bkCode;
 
@@ -358,7 +358,7 @@ error:
     if (lpplLine)
         *lpplLine = NULL;
 
-	if (!lpplLine)
+	if (!lpplLine && line)
         Dos9_FreeParsedStream(line);
 
 	return status;
@@ -412,7 +412,7 @@ int Dos9_CmdForSimple(ESTR* lpInput, PARSED_LINE* lpplLine, char cVarName,
 
             if (strpbrk(lpesStr->str, "*?")) {
 
-                /* Remove extra parenthesis */
+                /* Remove extra quotes */
                 if (*lpBegin == '"') {
                     lpBegin ++;
 
