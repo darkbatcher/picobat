@@ -2180,3 +2180,8 @@ WEDNESDAY 27TH
 
       - Fixes to the thread library.
 
+FRIDAY, 29TH
+
+      - Fixed bug involving pipes and wrongly inherited file descriptors 
+        created after a call to dup(). 
+

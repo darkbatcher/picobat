@@ -253,6 +253,10 @@ void Dos9_ApplyStreams(STREAMSTACK* stack)
     DOS9_DUP_STDIN(fileno(fInput), stdin);
     DOS9_DUP_STD(fileno(fOutput), stdout);
     DOS9_DUP_STD(fileno(fError), stderr);
+
+    Dos9_SetFdInheritance(STDIN_FILENO, 1);
+    Dos9_SetFdInheritance(STDOUT_FILENO, 1);
+    Dos9_SetFdInheritance(STDERR_FILENO, 1);
 }
 
 void Dos9_UnApplyStreams(STREAMSTACK* stack)
@@ -261,7 +265,11 @@ void Dos9_UnApplyStreams(STREAMSTACK* stack)
     DOS9_DUP_STD(fdStdout, stdout);
     DOS9_DUP_STD(fdStderr, stderr);
 
-    close(fdStderr);
+    Dos9_SetFdInheritance(STDIN_FILENO, 0);
+    Dos9_SetFdInheritance(STDOUT_FILENO, 0);
+    Dos9_SetFdInheritance(STDERR_FILENO, 0);
+
+    close(fdStdout);
     close(fdStdin);
     close(fdStderr);
 }

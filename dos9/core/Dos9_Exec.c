@@ -294,10 +294,8 @@ int Dos9_RunFile(EXECINFO* info, int* error)
 
 	if (iPid == 0 ) {
 		/* if we are in the son */
-        Dos9_SetStdInheritance(1); /* make std inheritable */
         Dos9_ApplyEnv(lpeEnv); /* set internal variable */
-        if (!(info->flags & DOS9_EXEC_SEPARATE_WINDOW))
-            Dos9_ApplyStreams(lppsStreamStack);
+        Dos9_ApplyStreams(lppsStreamStack);
         chdir(info->dir);
 
         close(fds[0]); /* close read end */
@@ -433,7 +431,6 @@ int Dos9_StartFile(EXECINFO* info, int* error)
                                     -1);
     Dos9_ApplyEnv(lpeEnv);
     Dos9_ApplyStreams(lppsStreamStack);
-    Dos9_SetStdInheritance(1);
 	status = !ShellExecuteExW(&shinfo);
 	Dos9_UnApplyStreams(lppsStreamStack);
     Dos9_UnApplyEnv(lpeEnv);
@@ -504,7 +501,6 @@ int Dos9_StartFile(EXECINFO* info, int* error)
     /* apply Dos9 internal environment variables */
 	Dos9_ApplyEnv(lpeEnv);
 	Dos9_ApplyStreams(lppsStreamStack);
-	Dos9_SetStdInheritance(1);
 	status = !ShellExecuteExA(&shinfo);
 	Dos9_UnApplyStreams(lppsStreamStack);
     Dos9_UnApplyEnv(lpeEnv);
@@ -582,7 +578,6 @@ int Dos9_StartFile(EXECINFO* info, int* error)
         /* apply Dos9 internal environment variables */
         Dos9_ApplyEnv(lpeEnv);
         Dos9_ApplyStreams(lppsStreamStack);
-        Dos9_SetStdInheritance(1);
 
         if (execv(script, arg) == -1) {
             Dos9_ShowErrorMessage(DOS9_COMMAND_ERROR | DOS9_PRINT_C_ERROR,

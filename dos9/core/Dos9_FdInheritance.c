@@ -72,12 +72,3 @@ void Dos9_SetFdInheritance(int fd, int mode)
 }
 
 #endif /* WIN32 */
-
-#include "Dos9_Core.h"
-
-void Dos9_SetStdInheritance(int mode)
-{
-    Dos9_SetFdInheritance(fileno(fOutput), mode);
-    Dos9_SetFdInheritance(fileno(fInput), mode);
-    Dos9_SetFdInheritance(fileno(fError), mode);
-}
