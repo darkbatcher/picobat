@@ -2039,4 +2039,7 @@ ${(for %%a in (foo bar) do echo %%a) & echo loop}
 	
 	- Fixes to the thread library.
 	
-	
+{{Friday, 29th}}
+
+	- Fixed bug involving pipes and wrongly inherited file descriptors
+	created after a call to {dup()}.	

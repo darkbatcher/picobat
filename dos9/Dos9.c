@@ -46,9 +46,6 @@
 #include <libcu8.h>
 #endif
 
-
-/* those are codes of internal commands */
-
 #include "command/Dos9_Commands.h"
 #include "command/Dos9_CommandInfo.h"
 

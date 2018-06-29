@@ -61,6 +61,7 @@ void Dos9_FreeStreamStack(STREAMSTACK* stack)
     /* Here, speed is not critical at all, so do things
        consciously, hopefully, it is simple, normally no
        file redirection is on, so just close descriptors */
+
     while (stack) {
 
         if (Dos9_GetStreamStackLockState(stack))
@@ -116,7 +117,6 @@ STREAMSTACK* Dos9_OpenOutput(STREAMSTACK* stack, char* name, int fd, int mode)
 
     item->lock = 0;
     item->fd = fd;
-    item->newfd = -1;
     item->subst = DOS9_GET_SUBST();
 
     /* do not forget to update the standard thread specific streams */
@@ -171,7 +171,6 @@ STREAMSTACK* Dos9_OpenOutputD(STREAMSTACK* stack, int newfd, int fd)
 
     item->lock = 0;
     item->fd = fd;
-    item->newfd = -1;
     item->subst = DOS9_GET_SUBST();
 
     /* do not forget to update the standard thread specific streams */
@@ -261,4 +260,8 @@ void Dos9_UnApplyStreams(STREAMSTACK* stack)
     DOS9_DUP_STDIN(fdStdin, stdin);
     DOS9_DUP_STD(fdStdout, stdout);
     DOS9_DUP_STD(fdStderr, stderr);
+
+    close(fdStderr);
+    close(fdStdin);
+    close(fdStderr);
 }

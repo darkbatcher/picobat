@@ -242,7 +242,7 @@ int Dos9_MoreFile(int flags, int tabsize, int begin, char* filename)
 
      }
 
-     if (!isatty(DOS9_STDOUT)) {
+     if (!isatty(fileno(fOutput))) {
 
         /* if we do not output in a tty, do not perform user interaction */
 

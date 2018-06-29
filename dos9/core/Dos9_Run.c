@@ -211,9 +211,8 @@ void Dos9_LaunchPipe(struct pipe_launch_data_t* infos)
 
     Dos9_RunCommand(infos->str, NULL);
 
-    Dos9_EsFree(infos->str);
-
     /* don't forget to free unneeded memory */
+    Dos9_EsFree(infos->str);
     free(infos);
 
 }

@@ -129,6 +129,7 @@ int Dos9_RunFile(EXECINFO* info, int* error)
         si.hStdInput = _get_osfhandle(fileno(fInput));
         si.hStdOutput = _get_osfhandle(fileno(fOutput));
         si.hStdError = _get_osfhandle(fileno(fError));
+
     }
 
     si.lpTitle = info->title;

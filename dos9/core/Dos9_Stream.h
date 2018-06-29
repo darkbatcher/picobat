@@ -66,7 +66,8 @@
             if (dup2(fd, fileno(s)) == -1) \
                 Dos9_ShowErrorMessage(DOS9_UNABLE_DUPLICATE_FD \
                                         | DOS9_PRINT_C_ERROR, \
-                                            __FILE__ "/DOS9_DUP_STD()", -1);
+                                            __FILE__ "/DOS9_DUP_STD()", -1); \
+            Dos9_SetFdInheritance(fileno(s), 0);
 
 #define DOS9_DUP_STD(fd, s) \
             __DOS9_DUP_STD(fd, s) \
@@ -79,7 +80,8 @@
             if (((fd) = dup(fileno(s))) == -1) \
                 Dos9_ShowErrorMessage(DOS9_UNABLE_DUPLICATE_FD \
                                         | DOS9_PRINT_C_ERROR, \
-                                            __FILE__ "/DOS9_DUP_STD()", -1);
+                                            __FILE__ "/DOS9_DUP_STD()", -1); \
+            Dos9_SetFdInheritance(fd, 0);
 
 #define Dos9_SetStreamStackLockState(stack, state) \
                                 ((stack) ? (stack->lock = state) : 0)
@@ -90,8 +92,6 @@
 /* structure used to store the state of stream redirections */
 typedef struct STREAMSTACK {
     int fd; /* the file descriptor that has been redirected */
-    int newfd; /* the new file descriptor (ie. the descriptor to be destroyed
-                  when popping element of the stack) */
     int oldfd; /* a duplicate of the previous fd associated with fd */
     int subst; /* a operation of file substitution if either 2>&1 or 1>&2 is used */
     int lock; /* a lock to prevent element from being popped */

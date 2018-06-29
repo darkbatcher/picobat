@@ -2166,3 +2166,17 @@ WEDNESDAY 21ST
       - Fixed START command error when trying to launch an external batch 
         script.
 
+WEDNESDAY 27TH
+
+      - Fixes to the start command.
+
+      - Removed used of setlocale() function under windows that create a bug 
+        with threads.
+
+      - Added lots of manual pages.
+
+      - Changed the way script are loaded and line executed to be more 
+        compatible with cmd.exe.
+
+      - Fixes to the thread library.
+
