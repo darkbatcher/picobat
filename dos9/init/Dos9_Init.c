@@ -122,6 +122,31 @@ void Dos9_DuplicateStdStreams(void)
         setvbuf(fError, NULL, _IONBF, 0);
 }
 
+void Dos9_GettextInit(void)
+{
+    char lpPath[FILENAME_MAX];
+	char lpSharePath[FILENAME_MAX];
+	char lpEncoding[15]="ASCII";
+    /* On windows, the best is to suppose that *all* the read-only
+       files are in the same folder as the binary. */
+
+    Dos9_GetExePath(lpPath, FILENAME_MAX);
+	Dos9_GetConsoleEncoding(lpEncoding, sizeof(lpEncoding));
+
+    snprintf(lpSharePath, FILENAME_MAX, "%s/share/locale", lpPath);
+    bindtextdomain("dos9", lpSharePath);
+
+#if defined(WIN32) && !defined(DOS9_USE_LIBCU8)
+    /* This is not useful at all, libcu8 is able to convert utf-8 by
+       itself */
+	bind_textdomain_codeset("Dos9-errors", lpEncoding);
+#elif defined(DOS9_USE_LIBCU8)
+    bind_textdomain_codeset("Dos9-errors", "UTF8");
+#endif
+
+	textdomain("dos9");
+}
+
 void Dos9_InitLibDos9(void)
 {
     char lpExePath[FILENAME_MAX];
@@ -156,6 +181,8 @@ void Dos9_InitLibDos9(void)
 #endif // WIN32
 
     DOS9_DBG("Loading GETTEXT messages... \n");
+
+    Dos9_GettextInit();
     Dos9_LoadErrors();
     Dos9_LoadStrings();
     Dos9_LoadInternalHelp();
@@ -223,7 +250,7 @@ void Dos9_InitHelp(void)
        oriented when this portion of code is to be executed */
 
     puts("DOS9 [" DOS9_VERSION "] (" DOS9_HOST ") - " DOS9_BUILDDATE "\n"
-         "Copyright (c) 2010-" DOS9_BUILDYEAR " " DOS9_AUTHORS "\n\n" );
+         "Copyright (c) 2010-" DOS9_BUILDYEAR " " DOS9_AUTHORS "\n" );
 
     puts(lpHlpMain);
 

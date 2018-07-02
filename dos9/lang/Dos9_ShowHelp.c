@@ -39,27 +39,6 @@ static const char* lpExternalMsg;
 
 void Dos9_LoadInternalHelp(void)
 {
-	char lpPath[FILENAME_MAX];
-	char lpEncoding[15]="ASCII";
-	char lpSharePath[FILENAME_MAX];
-
-    Dos9_GetExePath(lpPath, FILENAME_MAX);
-	Dos9_GetConsoleEncoding(lpEncoding, sizeof(lpEncoding));
-
-    snprintf(lpSharePath, FILENAME_MAX, "%s/share/locale", lpPath);
-
-	bindtextdomain("Dos9-hlp", lpSharePath);
-
-#if defined(WIN32) && !defined(DOS9_USE_LIBCU8)
-    /* This is not useful at all, libcu8 is able to convert utf-8 by
-       itself */
-	bind_textdomain_codeset("Dos9-hlp", lpEncoding);
-#elif defined(DOS9_USE_LIBCU8)
-    bind_textdomain_codeset("Dos9-hlp", "UTF8");
-#endif
-
-	textdomain("Dos9-hlp");
-
 	lpInternalHelp[DOS9_HELP_ALIAS]
 	    =gettext("Create an alias on a command.\n"
 	             "Usage: ALIAS [/f] alias=command\n");
@@ -96,7 +75,7 @@ void Dos9_LoadInternalHelp(void)
 	             "Usage: DIR [/A[:]attributes] [/S] [/B] [path]\n");
 
 	lpInternalHelp[DOS9_HELP_ECHO]
-	    =gettext("Print a message, or enable/disable commande echoing.\n"
+	    =gettext("Print a message, or enable/disable command echoing.\n"
 	             "Usage: ECHO [OFF|ON]\n"
 	             "       ECHO text\n"
 	             "       ECHO.text\n");
@@ -163,7 +142,7 @@ void Dos9_LoadInternalHelp(void)
 	             "Usage: SET variable=content\n"
 	             "       SET /a[[:][i|f]] variable=expression\n"
 	             "       SET /p variable=question\n"
-	             "       SET var");
+	             "       SET var\n");
 
 	lpInternalHelp[DOS9_HELP_SETLOCAL]
 	    =gettext("Set local environment and options of the Dos9 command prompt.\n"

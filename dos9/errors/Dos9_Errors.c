@@ -37,27 +37,6 @@ const char* lpQuitMessage;
 
 void Dos9_LoadErrors(void)
 {
-	char lpPath[FILENAME_MAX];
-	char lpSharePath[FILENAME_MAX];
-	char lpEncoding[15]="ASCII";
-    /* On windows, the best is to suppose that *all* the read-only
-       files are in the same folder as the binary. */
-
-    Dos9_GetExePath(lpPath, FILENAME_MAX);
-	Dos9_GetConsoleEncoding(lpEncoding, sizeof(lpEncoding));
-
-    snprintf(lpSharePath, FILENAME_MAX, "%s/share/locale", lpPath);
-    bindtextdomain("Dos9-errors", lpSharePath);
-
-#if defined(WIN32) && !defined(DOS9_USE_LIBCU8)
-    /* This is not useful at all, libcu8 is able to convert utf-8 by
-       itself */
-	bind_textdomain_codeset("Dos9-errors", lpEncoding);
-#elif defined(DOS9_USE_LIBCU8)
-    bind_textdomain_codeset("Dos9-errors", "UTF8");
-#endif
-
-	textdomain("Dos9-errors");
 
 	lpErrorMsg[DOS9_NO_ERROR]=
         gettext("No error: OK.\n");

@@ -71,26 +71,6 @@ const char* lpAskInvalid;
 
 void Dos9_LoadStrings(void)
 {
-	/* this loads strings */
-	char lpPath[FILENAME_MAX];
-	char lpEncoding[15];
-	char lpSharePath[FILENAME_MAX];
-
-    Dos9_GetExePath(lpPath, FILENAME_MAX);
-	Dos9_GetConsoleEncoding(lpEncoding, sizeof(lpEncoding));
-
-    snprintf(lpSharePath, FILENAME_MAX, "%s/share/locale", lpPath);
-
-	bindtextdomain("Dos9-msg", lpSharePath);
-#if defined(WIN32) && !(defined(DOS9_USE_LIBCU8))
-    /* This is not useful at all, libcu8 is able to convert utf-8 by
-       itself */
-	bind_textdomain_codeset("Dos9-msg", lpEncoding);
-#elif defined(DOS9_USE_LIBCU8)
-    bind_textdomain_codeset("Dos9-msg", "UTF8");
-#endif
-	textdomain("Dos9-msg");
-
 	/* texte des commandes ECHO et PAUSE */
 	lpMsgEchoOn=gettext("Echo command enabled");
 	lpMsgEchoOff=gettext("Echo command disabled");
