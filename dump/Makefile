@@ -23,8 +23,12 @@ SRC_FILES=dump.c
 
 all: dump
 
-dump:
+dump: $(SRC_FILES) dump_h_gen
+	dump_h_gen > dump.h
 	$(CC) -o dump$(EXEC_SUFFIX) $(LDFLAGS) $(CFLAGS) $(SRC_FILES)
+
+dump_h_gen:	dump_h_gen.c
+	$(CC) -o dump_h_gen $(LDFLAGS) $(CFLAGS) dump_h_gen.c
 
 clean:
 	rm -f dump$(EXEC_SUFFIX)

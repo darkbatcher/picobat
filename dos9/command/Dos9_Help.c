@@ -50,9 +50,33 @@
 
 int Dos9_CmdHelp(char* lpLine)
 {
+    ESTR *param = Dos9_EsInit();
+    int n = 0, status = 0;
 
-	fputs(lpHlpDeprecated, fOutput);
-	fputs(DOS9_NL, fOutput);
-	return 0;
+    lpLine += 4;
 
+    while (lpLine = Dos9_GetNextParameterEs(lpLine, param))
+        n++;
+
+    if (n == 0) {
+
+        Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "HELP", 0);
+        status = DOS9_EXPECTED_MORE;
+        goto error;
+
+    } else if (n > 1) {
+
+        Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, param->str, 0);
+        status = DOS9_UNEXPECTED_ELEMENT;
+        goto error;
+
+    }
+
+    Dos9_EsCat(param, " /?");
+
+    Dos9_RunCommand(param, NULL);
+
+error:
+    Dos9_EsFree(param);
+	return status;
 }

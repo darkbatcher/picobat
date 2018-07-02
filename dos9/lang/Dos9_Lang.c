@@ -129,7 +129,9 @@ void Dos9_LoadStrings(void)
 
 	lpAskInvalid=gettext("Please enter a correct choice (or type enter to choose default) !\n");
 
-	lpHlpMain=gettext("Usage:\tDOS9 [/A[:]attr] [/I in] [/O out] [file ... | /K cmd ...|/C cmd ...]\n\n\
+	lpHlpMain=gettext("This is free software, you can modify and/or redistribute it under\
+the terms of the GNU Genaral Public License v3 (or any later version).\n\n\
+Usage:\tDOS9 [/A[:]attr] [/I in] [/O out] [file ... | /K cmd ...|/C cmd ...]\n\n\
 \t/A:attr\tA list of attributes for Dos9\n\
 \t\tC\tEnable CMDLYCORRECT option to enable more compatibility\n\
 \t\t\twith cmd.exe.\n\
@@ -140,5 +142,7 @@ void Dos9_LoadStrings(void)
 \t/O out\tFile descriptor to be used as output.\n\
 \tfile\tA batch file to be executed.\n\
 \t/C cmd\tRun cmd command and exit.\n\
-\t/K cmd\tRun cmd command and stay active.\n");
+\t/K cmd\tRun cmd command and stay active.\n\n\
+Feel free to report bugs and submit suggestions at : <darkbatcher@dos9.org>\n\
+For more informations see : <http://dos9.org>");
 }

@@ -57,6 +57,7 @@ void Dos9_LoadInternalHelp(void)
 #elif defined(DOS9_USE_LIBCU8)
     bind_textdomain_codeset("Dos9-hlp", "UTF8");
 #endif
+
 	textdomain("Dos9-hlp");
 
 	lpInternalHelp[DOS9_HELP_ALIAS]
@@ -69,11 +70,11 @@ void Dos9_LoadInternalHelp(void)
 	             "       CHDIR [[/d] path]\n");
 
 	lpInternalHelp[DOS9_HELP_CLS]
-	    =gettext("Clear console's screen\n"
+	    =gettext("Clear console screen\n"
 	             "Usage: CLS\n");
 
 	lpInternalHelp[DOS9_HELP_COLOR]
-	    =gettext("Change console's color to the given code.\n"
+	    =gettext("Change console color to the given code.\n"
 	             "Usage: COLOR [code]\n");
 
 	lpInternalHelp[DOS9_HELP_COPY]
@@ -158,10 +159,11 @@ void Dos9_LoadInternalHelp(void)
 
 
 	lpInternalHelp[DOS9_HELP_SET]
-	    =gettext("Set an environment variable.\n"
+	    =gettext("Set or list environment variables.\n"
 	             "Usage: SET variable=content\n"
 	             "       SET /a[[:][i|f]] variable=expression\n"
-	             "       SET /p variable=question\n");
+	             "       SET /p variable=question\n"
+	             "       SET var");
 
 	lpInternalHelp[DOS9_HELP_SETLOCAL]
 	    =gettext("Set local environment and options of the Dos9 command prompt.\n"
@@ -172,7 +174,7 @@ void Dos9_LoadInternalHelp(void)
                  "Usage: ENDLOCAL\n");
 
 	lpInternalHelp[DOS9_HELP_TITLE]
-	    =gettext("Set console's title.\n"
+	    =gettext("Set console title.\n"
 	             "Usage: TITLE title\n");
 
 	lpInternalHelp[DOS9_HELP_TYPE]
@@ -188,7 +190,7 @@ void Dos9_LoadInternalHelp(void)
 	             "Usage: SHIFT [/start_number | /s[:]start_number] [/d[:]displacement]\n");
 
     lpInternalHelp[DOS9_HELP_FIND]
-        =gettext("Search occurence of string in a set of files.\n"
+        =gettext("Search occurrence of string in a set of files.\n"
                  "Usage: FIND [/N] [/C] [/V] [/I] [/E] string [file ...]\n");
 
     lpInternalHelp[DOS9_HELP_MORE]
@@ -220,12 +222,6 @@ void Dos9_LoadInternalHelp(void)
         =gettext("Run a command with arguments from standard input file.\n"
                  "Usage: XARGS [command ...]\n");
 
-	lpExternalMsg
-	    =gettext("\nThis help is voluntary limited to fit in the binary. If you need to\n"
-	             "see the full documentation, please type:\n"
-	             "\n"
-	             "\tHELP command\n");
-
 }
 
 
@@ -236,7 +232,6 @@ void Dos9_ShowInternalHelp(int cmdId)
 	    && (cmdId < DOS9_HELP_ARRAY_SIZE)) {
 
 		fputs(lpInternalHelp[cmdId], fError);
-		fputs(lpExternalMsg, fError);
 
 	}
 

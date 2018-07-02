@@ -39,7 +39,7 @@ COMMANDINFO lpCmdInfo[]= {
 	{"SET", Dos9_CmdSet, STRLEN("SET")},
 	{"SETLOCAL", Dos9_CmdSetLocal, STRLEN("SETLOCAL")},
 	{"ENDLOCAL", Dos9_CmdEndLocal, STRLEN("ENDLOCAL")},
-	{"HELP", "hlp.bat", STRLEN("HELP") | DOS9_ALIAS_FLAG},
+	{"HELP", Dos9_CmdHelp, STRLEN("HELP")},
 	{"REM", Dos9_CmdRem, STRLEN("REM")},
 	{"CLS", Dos9_CmdCls, STRLEN("CLS")},
 	{"COLOR", Dos9_CmdColor, STRLEN("COLOR")},

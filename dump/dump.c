@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 DUMP, a free file binary dumper, The Dos9 Project
- *   Copyright (C) 2010-2016 Romain GARBI
+ *   Copyright (C) 2013-2018 Romain GARBI
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -17,422 +17,400 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
-#include <unistd.h>
-
-#ifdef WIN32
+#include <limits.h>
+#include <math.h>
+#include <float.h>
 #include <io.h>
-#endif
 #include <fcntl.h>
 
-#include "dump.h"
+/* #include <libcu8.h> */
 
 #ifndef WIN32
-#include <strings.h>
-
 #define stricmp(a, b) strcasecmp(a, b)
 #define strnicmp(a , b, c) strncasecmp(a, b, c)
+#define O_BINARY 0
+#define set_bin_mode(f) _setmode(f, O_BINARY)
+#else
+#define set_bin_mode(f) _setmode(f, O_BINARY)
 #endif
 
-int main(int argc, char* argv[])
+#define DUMP_CHAR 0
+#define DUMP_UCHAR 1
+#define DUMP_SHORT 2
+#define DUMP_USHORT 3
+#define DUMP_INT 4
+#define DUMP_UINT 5
+#define DUMP_LONGLONG 5
+#define DUMP_ULONGLONG 6
+#define DUMP_FLOAT 7
+#define DUMP_DOUBLE 8
+
+#define DUMP_ADDRESS 0x1
+#define DUMP_TITLE 0x2
+#define DUMP_CHARS 0x4
+#define DUMP_QUIET 0x8
+#define DUMP_HEX 0x10
+#define DUMP_DEFAULT (DUMP_ADDRESS | DUMP_CHARS | DUMP_TITLE)
+
+#define FORMAT_SIZE 10
+
+#define DEFAULT_WIDTH 80
+
+#define GET_CAST_9(type, p, fn, ...) (type == DUMP_DOUBLE) ? (fn ( __VA_ARGS__ , *((double*)p ))) : \
+                                            (0)
+#define GET_CAST_8(type, p, fn, ...) (type == DUMP_FLOAT) ? (fn ( __VA_ARGS__ , *((float*)p ))) : \
+                                            (GET_CAST_9(type, p, fn, __VA_ARGS__))
+#define GET_CAST_7(type, p, fn, ...) (type == DUMP_ULONGLONG) ? (fn ( __VA_ARGS__ , *((unsigned long long*)p ))) : \
+                                            (GET_CAST_8(type, p, fn, __VA_ARGS__))
+#define GET_CAST_6(type, p, fn, ...) (type == DUMP_LONGLONG) ? (fn ( __VA_ARGS__ , *((long long*)p ))) : \
+                                            (GET_CAST_7(type, p, fn, __VA_ARGS__))
+#define GET_CAST_5(type, p, fn, ...) (type == DUMP_UINT) ? (fn ( __VA_ARGS__ , *((unsigned int*)p ))) : \
+                                            (GET_CAST_6(type, p, fn, __VA_ARGS__))
+#define GET_CAST_4(type, p, fn, ...) (type == DUMP_INT) ? (fn ( __VA_ARGS__ , *((int*)p ))) : \
+                                            (GET_CAST_5(type, p, fn, __VA_ARGS__))
+#define GET_CAST_3(type, p, fn, ...) (type == DUMP_USHORT) ? (fn ( __VA_ARGS__ , *((unsigned short*)p ))) : \
+                                            (GET_CAST_4(type, p, fn, __VA_ARGS__))
+#define GET_CAST_2(type, p, fn, ...) (type == DUMP_SHORT) ? (fn ( __VA_ARGS__ , *((short*)p ))) : \
+                                            (GET_CAST_3(type, p, fn, __VA_ARGS__))
+#define GET_CAST_1(type, p, fn, ...) (type == DUMP_UCHAR) ? (fn ( __VA_ARGS__ , *((unsigned char*)p))) : \
+                                            (GET_CAST_2(type, p, fn, __VA_ARGS__))
+#define GET_CAST_0(type, p, fn, ...) (type == DUMP_CHAR) ? (fn ( __VA_ARGS__ , *((char*)p))) : \
+                                            (GET_CAST_1(type, p, fn, __VA_ARGS__))
+#define GET_CAST(type, p, fn, ...) GET_CAST_0(type, p, fn, __VA_ARGS__)
+
+struct dump_t {
+    char flags;
+    size_t size;
+    int type;
+    unsigned int n;
+    unsigned int width;
+    char format[FORMAT_SIZE];
+};
+
+struct dump_types_t {
+    const char* name;
+    int size;
+    const char* max;
+    const char* min;
+    const char* hexfmt;
+    const char* decfmt;
+};
+
+
+#include "dump.h"
+#include "../config.h"
+
+#define XSTR(x) #x
+#define STR(x) XSTR(x)
+
+#ifndef DBL_DECIMAL_DIG
+#define DBL_DECIMAL_DIG 17
+#endif // DBL_DECIMAL_DIG
+
+#ifndef FLT_DECIMAL_DIG
+#define FLT_DECIMAL_DIG 9
+#endif // DBL_DECIMAL_DIG
+
+struct dump_types_t types[] = {
+    {"c", sizeof(char), DUMP_CHAR_MAX, DUMP_CHAR_MIN, "x", "d"},
+    {"uc", sizeof(char), DUMP_UCHAR_MAX, DUMP_UCHAR_MIN, "x",  "u"},
+    {"s", sizeof(short), DUMP_SHRT_MAX, DUMP_SHRT_MIN, "x", "d"},
+    {"us", sizeof(short), DUMP_USHRT_MAX, DUMP_USHRT_MIN, "x", "u"},
+    {"i", sizeof(int), DUMP_INT_MAX, DUMP_INT_MIN, "x", "d"},
+    {"ui", sizeof(int), DUMP_UINT_MAX, DUMP_UINT_MIN, "x", "u"},
+    {"ll", sizeof(long long), DUMP_LLONG_MAX, DUMP_LLONG_MIN, "llx", "lld"},
+    {"ull", sizeof(long long), DUMP_LLONG_MAX, DUMP_LLONG_MIN, "llx", "llu"},
+    {"f", sizeof(float), DUMP_FLT_MAX, DUMP_FLT_MIN, "x","." STR(FLT_DECIMAL_DIG) "g"},
+    {"d", sizeof(double), DUMP_DBL_MAX, DUMP_DBL_MIN, "llx", "." STR(DBL_DECIMAL_DIG) "g"},
+    {NULL, 0, NULL, NULL, NULL, NULL},
+};
+
+void help(void)
 {
-    int i = 1,
-        mode = ADDRESSES_ON | CHARS_ON | TITLE_ON | HEX_ON,
-        fd,
-        endianess,
-        ret,
-        nfiles = 0,
-        nbytes = 16;
+    puts("Dos9 dump [2.0] (" HOST ") - " __DATE__ "\n"
+            "Copyright (c) 2013-2018 Romain Garbi\n");
 
-    char  buf[8192];
+    puts("Usage: dump [/H] [/B[:]format] [/T[:]type] [files ...]\n"
+         "Dump content of files.\n\n"
+         "\t- files ... : A list of files to be dumped.\n"
+         "\t- /h : Hexadecimal dump.\n"
+         "\t- /b:format : Set display format. Combination of:\n"
+         "\t\t- A : display addresses.\n"
+         "\t\t- T : display title.\n"
+         "\t\t- C : display chars.\n"
+         "\t\t- Q : display no spaces\n"
+         "\t- /T[:]type : Set dumped elements types. One of:\n"
+         "\t\t- c : char\n"
+         "\t\t- uc : unsigned char\n"
+         "\t\t- s : short\n"
+         "\t\t- us : unsigned short\n"
+         "\t\t- i : int\n"
+         "\t\t- ui : unsigned int\n"
+         "\t\t- ll : long long\n"
+         "\t\t- ull : unsigned long long\n"
+         "\t\t- f : float\n"
+         "\t\t- d : double"
+         );
+}
 
-    char* file[FILENAME_MAX];
+int get_max(int i, int j)
+{
+    return (j > i) ? j : i;
+}
 
-    struct dump_data_t data;
+void fill_context(int type, int flags, struct dump_t* context)
+{
+    unsigned int size, s, a, c;
+    char* fmt;
 
-    setvbuf(stdout, buf, _IOFBF, sizeof(buf));
+    if (flags & DUMP_HEX) {
+        size = types[type].size * 2;
+    } else {
+        size = get_max(strlen(types[type].min),
+                               strlen(types[type].max));
+    }
 
-    data.type = DATA_CHAR;
-    data.rev = 0;
+    snprintf(context->format, FORMAT_SIZE,
+                "%%0%d%s", size, (flags & DUMP_HEX) ?
+                                  (types[type].hexfmt) : (types[type].decfmt));
 
-    if (!argv[0] || !argv[1])
-        dump_help();
+    context->size = types[type].size;
 
-    endianess = dump_get_endianess();
-    dump_make_hfmts();
+    s = (flags & DUMP_QUIET) ? 0 : 1 ;
+    a = (flags & DUMP_ADDRESS) ? 2*sizeof(void*) + s : 0;
+    c = (flags & DUMP_CHARS) ? types[type].size + s : 0;
+    context->n = (DEFAULT_WIDTH - a)
+                                / (size + c);
+    context->width = size;
+    context->flags = flags;
+    context->type = type;
+}
+
+int get_type(const char* type)
+{
+    int i=0;
+
+    while (types[i].name) {
+
+        if (!stricmp(type, types[i].name))
+            return i;
+
+        i++;
+
+    }
+
+    return -1;
+}
+
+int dump_fd(int fd, struct dump_t* context)
+{
+    char *chars, *data, *p, *addr = NULL, *spaces;
+    int count, i;
+    size_t size = context->n * context->size;
+
+    if (!(chars = malloc(size + 1))
+        || !(data = malloc(size))) {
+
+        fprintf(stderr, "dump: not enough memory.\n");
+        return -1;
+
+    }
+
+    spaces = (context->flags & DUMP_QUIET) ? "" : " ";
+
+    printf("dumping %d using %d & %s, %x\n", fd, size, context->format, context->flags);
+
+    while (count = read(fd, data, size)) {
+
+        if (count < size) {
+             /* we reached eof and count is not a multiple of the
+                size we set just pad with 0 until the next
+                multiple ... */
+
+            memset(data + count, 0, size - count);
+
+            if (count % context->size)
+                count += context->size - (count % context->size);
+
+        }
+
+        p = data;
+
+        if (context->flags & DUMP_ADDRESS)
+            printf("%p%s", addr, spaces);
+
+        /* loop over elements of the buffer */
+        while (p < data + count) {
+
+            GET_CAST(context->type, p, printf, context->format);
+            printf("%s", spaces);
+            p += context->size;
+
+        }
+
+        /* Add some spaces to the output in order to addresses vertically
+           aligned */
+        if (context->flags & DUMP_CHARS) {
+            while (p < data + size) {
+
+                for (i=0; i < context->width; i ++)
+                    printf(" ");
+
+                printf("%s", spaces);
+
+                p += context->size;
+            }
+        }
+
+        if (context->flags & DUMP_CHARS) {
+
+            memcpy(chars, data, count);
+            *(chars + count) = '\0';
+
+            p = chars;
+
+            while (p < chars + size) {
+
+                if (*p < 0x20)
+                    *p = '.';
+
+                p ++;
+
+            }
+
+            printf("%s", chars);
+
+        }
+
+        printf("\n");
+
+        addr += size;
+    }
+
+    free(chars);
+    free(data);
+
+    return 0;
+
+}
+
+int dump_file(const char* file, struct dump_t* context)
+{
+    int fd, ret;
+
+    if ((fd = open(file, O_RDONLY | O_BINARY)) == -1) {
+
+        fprintf(stderr, "dump: unable to open %s.\n", file);
+        return -1;
+
+    }
+
+    if (context->flags & DUMP_TITLE)
+        printf("%s -----------------\n", file);
+
+    ret = dump_fd(fd, context);
+    close(fd);
+
+    return ret;
+}
+
+int main(int argc, char** argv)
+{
+    char* p;
+    int type = 0, flags = DUMP_DEFAULT,
+        n = 0;
+
+    struct dump_t context;
+
+    if (*argv)
+        argv ++;
+
+    while(*argv) {
+
+        if (!strnicmp(*argv, "/T", 2)) {
+            *argv += 2;
+
+            if (*(*argv) == ':')
+                (*argv) ++;
+
+            if ((type = get_type(*argv)) == -1) {
+
+                fprintf(stderr, "dump: %s is not a valid type.\n", *argv);
+                exit(1);
+
+            }
 
 
-    while (argv[i]) {
+        } else if (!stricmp(*argv, "/H")) {
 
-        if (!stricmp(argv[i], "/B"))
-            mode &= ~ (ADDRESSES_ON | CHARS_ON | TITLE_ON);
-        else if (!stricmp(argv[i], "/L"))
-            dump_license();
-        else if (!strcmp(argv[i], "/?"))
-            dump_help();
-        else if (!stricmp(argv[i], "/H"))
-            mode |= HEX_ON;
-        else if (!stricmp(argv[i], "/-H"))
-            mode &= ~ HEX_ON;
-        else if (!strnicmp(argv[i], "/T", 2)) {
+            flags |= DUMP_HEX;
 
-            argv[i] += 2;
-            if (*argv[i] == ':')
-                argv[i] ++;
+        } else if (!strnicmp(*argv, "/B", 2)) {
 
-            if (!stricmp(argv[i], "c"))
-                data.type = DATA_CHAR;
-            else if (!stricmp(argv[i], "s"))
-                data.type = DATA_SHORT;
-            else if (!stricmp(argv[i], "i"))
-                data.type = DATA_INT;
-            else if (!stricmp(argv[i], "l"))
-                data.type = DATA_LONG;
-            else if (!stricmp(argv[i], "ll"))
-                data.type = DATA_LONGLONG;
-            else if (!stricmp(argv[i], "f"))
-                data.type = DATA_FLOAT;
-            else if (!stricmp(argv[i], "d"))
-                data.type = DATA_DOUBLE;
-            else if (!stricmp(argv[i], "v"))
-                data.type = DATA_VOID;
+            *argv += 2;
 
-        } else if (!strnicmp(argv[i], "/E", 2)) {
+            if (*(*argv) == ':')
+                (*argv) ++;
 
-            argv[i] += 2;
-            if (*argv[i] == ':')
-                argv[i] ++;
+            flags &= ~ DUMP_DEFAULT;
 
-            if (!stricmp(argv[i], "b"))
-                data.rev = endianess != DUMP_BIG_ENDIAN;
-            else if (!stricmp(argv[i], "v"))
-                data.rev = endianess != DUMP_BIG_ENDIAN;
+            while (*argv) {
+                switch (**argv) {
 
-        } else if (!strnicmp(argv[i], "/P", 2)) {
+                case 'a':
+                case 'A':
+                    flags |= DUMP_ADDRESS;
+                    break;
 
-            argv[i] += 2;
-            if (*argv[i] == ':')
-                argv[i] ++;
+                case 'c':
+                case 'C':
+                    flags |= DUMP_CHARS;
+                    break;
 
-            nbytes = atoi(argv[i]);
+                case 'T':
+                case 't':
+                    flags |= DUMP_TITLE;
+                    break;
+
+                case 'Q':
+                case 'q':
+                    flags |= DUMP_QUIET;
+
+                }
+
+                (*argv) ++;
+            }
+
+        } else if (!stricmp(*argv, "/?")) {
+
+            help();
+            exit(0);
 
         } else {
 
-            if (nfiles >= FILENAME_MAX)
-                ERROR(3, "dump : Can't process more than %d files.\n", nfiles);
+            fill_context(type, flags, &context);
 
-            file[nfiles ++] = argv[i];
+            if (dump_file(*argv, &context) == -1)
+                exit(2);
+
+            n ++;
 
         }
 
-        i ++;
-    }
-
-    for (i=0; i < nfiles; i++) {
-
-        #ifndef WIN32
-        #define O_BINARY 0
-        #endif // WIN32
-
-        memset(&data, 0, sizeof(data));
-
-        if ((fd = open(file[i], O_BINARY | O_RDONLY)) == -1)
-            ERROR(1, "dump : unable to open file \"%s\".\n", file[i]);
-
-        if (mode & TITLE_ON)
-            printf("Dumping %s\n\n", argv[i]);
-
-        ret = dump_file(fd, &data, mode, nbytes);
-
-        close(fd);
-
-        if (ret)
-            break;
+        argv ++;
 
     }
 
-
-    return ret;
-}
-
-char c_hfmt[10], s_hfmt[10], i_hfmt[10], l_hfmt[10], ll_hfmt[10], v_hfmt[10];
-
-int dump_file(int fd, struct dump_data_t* data, int mode, int nbytes)
-{
-    int i = 0, period;
-    char* addr = NULL;
-    char line[81], chars[81], *pch = chars;
-    size_t size = dump_item_sizeof(data);
-
-    if (nbytes < size)
-        ERROR(2, "dump : error, type too long for maximum line bytes number");
-
-    period = nbytes / size ;
-
-    if (mode & ADDRESSES_ON) {
-        printf(v_hfmt, addr);
-        printf(" ");
-    }
-
-    while (dump_read_data(fd, data) == 0) {
-
-        dump_get_string(line, sizeof(line), data, mode);
-
-        if (data->rev)
-            dump_rev_bytes(data, size);
-
-        if (mode & CHARS_ON)
-            pch = dump_get_chars(pch, data, size);
-
-        printf("%s", line);
-
-        if (mode & (CHARS_ON | ADDRESSES_ON))
-            printf(" ");
-
-        addr += size;
-        i ++;
-
-        if (i == period) {
-
-            if (mode & CHARS_ON) {
-                *pch ='\0';
-                printf(" %s", chars);
-                pch = chars;
-            }
-
-            printf("\n");
-            i = 0;
-
-            if (mode & ADDRESSES_ON) {
-                printf(v_hfmt, addr);
-                printf(" ");
-            }
-        }
+    if (!n) {
+        fill_context(type, flags, &context);
+        set_bin_mode(STDIN_FILENO);
+        if ((dump_fd(STDIN_FILENO, &context) == -1))
+            exit(2);
     }
 
     return 0;
-}
-
-void  dump_rev_bytes(struct dump_data_t* data, size_t size)
-{
-    char *bytes = &(data->data.c),
-         tmp;
-    int i = 0;
-
-    while (i < size / 2) {
-        tmp = bytes[i];
-        bytes[i] = bytes[size - 1 - i];
-        bytes[size - 1 - i] = tmp;
-    }
-}
-
-char* dump_get_chars(char* pch, struct dump_data_t* data, size_t size)
-{
-    char* chars = &(data->data.c);
-    int i;
-
-    if (data->rev) {
-        /* data as already been reversed, read it from the end */
-        i = size - 1;
-        while (i >= 0) {
-            *pch = chars[i--];
-            *pch = iscntrl(*pch) ? '.' : *pch;
-            pch++;
-        }
-        return pch;
-
-    } else {
-
-        i = 0;
-        while (i < size) {
-            *pch = chars[i++];
-            *pch = iscntrl(*pch) ? '.' : *pch;
-            pch++;
-        }
-        return pch;
-
-    }
-}
-
-void dump_get_string(char* str, size_t size, struct dump_data_t* data, int mode)
-{
-    switch (data->type | (mode & HEX_ON)) {
-
-        case DATA_CHAR | HEX_ON:
-            snprintf(str, size, c_hfmt, data->data.c);
-            return;
-        case DATA_CHAR:
-            snprintf(str, size, "%d", data->data.c);
-            return;
-
-        case DATA_SHORT | HEX_ON:
-            snprintf(str, size, s_hfmt, data->data.s);
-            return;
-        case DATA_SHORT:
-            snprintf(str, size, "%d", data->data.s);
-            return;
-
-        case DATA_INT | HEX_ON:
-            snprintf(str, size, i_hfmt, data->data.i);
-            return;
-        case DATA_INT:
-            snprintf(str, size, "%d", data->data.i);
-            return;
-
-        case DATA_LONG | HEX_ON:
-            snprintf(str, size, l_hfmt, data->data.l);
-            return;
-        case DATA_LONG:
-            snprintf(str, size, "%ld", data->data.l);
-            return;
-
-        case DATA_LONGLONG | HEX_ON:
-            snprintf(str, size, ll_hfmt, data->data.ll);
-            return;
-        case DATA_LONGLONG:
-            snprintf(str, size, "%lld", data->data.ll);
-            return;
-
-        case DATA_FLOAT| HEX_ON:
-        case DATA_FLOAT:
-            snprintf(str, size, "%g", data->data.f);
-            return;
-
-        case DATA_DOUBLE | HEX_ON:
-        case DATA_DOUBLE:
-            snprintf(str, size, "%g", data->data.d);
-            return;
-
-        case DATA_VOID| HEX_ON:
-        case DATA_VOID:
-            snprintf(str, size, v_hfmt, data->data.v);
-            return;
-    }
-}
-
-void dump_make_hfmts(void)
-{
-    sprintf(c_hfmt, "%%0%dx", 2*sizeof(char));
-    sprintf(s_hfmt, "%%0%dx", 2*sizeof(short));
-    sprintf(i_hfmt, "%%0%dx", 2*sizeof(int));
-    sprintf(l_hfmt, "%%0%dlx", 2*sizeof(long));
-    sprintf(ll_hfmt, "%%0%dllx", 2*sizeof(long long));
-    sprintf(v_hfmt, "%%0%dp", 2*sizeof(void*));
-}
-
-#define SWITCH_CASE( def, item ) \
-            case def: \
-                ret = read(fd, &(item), sizeof(item)); \
-                ret = (ret == -1) ? ( -1 ) : ( sizeof(item) - ret); \
-                break;
-int dump_read_data(int fd, struct dump_data_t* data)
-{
-    int ret;
-
-    switch (data->type) {
-        SWITCH_CASE(DATA_CHAR, data->data.c)
-        SWITCH_CASE(DATA_SHORT, data->data.s)
-        SWITCH_CASE(DATA_INT, data->data.i)
-        SWITCH_CASE(DATA_LONG, data->data.l)
-        SWITCH_CASE(DATA_LONGLONG, data->data.ll)
-        SWITCH_CASE(DATA_FLOAT, data->data.f)
-        SWITCH_CASE(DATA_DOUBLE, data->data.d)
-        SWITCH_CASE(DATA_VOID, data->data.v)
-    }
-
-    return ret;
-}
-
-#define SIZEOF_CASE(def, item) \
-    case def: \
-        return sizeof(item);
-size_t dump_item_sizeof(struct dump_data_t* data)
-{
-    switch(data->type) {
-        SIZEOF_CASE(DATA_CHAR, data->data.c)
-        SIZEOF_CASE(DATA_SHORT, data->data.s)
-        SIZEOF_CASE(DATA_INT, data->data.i)
-        SIZEOF_CASE(DATA_LONG, data->data.l)
-        SIZEOF_CASE(DATA_LONGLONG, data->data.ll)
-        SIZEOF_CASE(DATA_FLOAT, data->data.f)
-        SIZEOF_CASE(DATA_DOUBLE, data->data.d)
-        SIZEOF_CASE(DATA_VOID, data->data.v)
-    }
-}
-
-int dump_get_endianess(void)
-{
-    int test=1;
-    char val;
-
-    val = *((char*)&test);
-
-    return (val) ? (DUMP_LITTLE_ENDIAN) : (DUMP_BIG_ENDIAN);
-}
-
-void dump_help(void)
-{
-    char* help_fr="Dump.exe [version 1.0] - copyright (c) 2013-2016 Romain Garbi\n\
-Cette commande fait partie du set de commandes Dos9\n\
-Ce programme est un logiciel Libre, pour plus d'information, tapez ``dump /l''\n\
-\n\
-\tDUMP fichier [/P] [/H] [/T[:]type] [/B] [/E:endianess] [/L]\n\
-\n\
-\tAffiche le contenu d'un fichier sous forme binaire.\n\n\
-\t   - fichier : Le chemin du fichier dont le contenu doit etre affiche\n\n\
-\t     specifie, alors la sortie est l'ecran de la console\n\n\
-\t   - /H : Active le mode hexadecimal. Ne marche que pour les types\n\
-\t     entiers (``int'', ``short'', ``char'')\n\n\
-\t   - /P[:]nb : Choisi le nombre maximal d'octect � afficher par ligne\n\n\
-\t   - /T[:]type : Choisi le type de donn�es a afficher, parmi les\n\
-\t      suivants :\n\n\
-\t      C : octet                   S : mot (2 octets)\n\
-\t      I : double-mot (4 octets)   L : long\n\
-\t      LL: double long             V : pointeur\n\
-        F : nombre flotant simple   D : nombre flotant double\n\n\
-\t   - /B : Desactive le titre, les en-tetes de tableau, les addresses et\n\
-\t     le char dump. Utile pour cr�er des fichier pour en generer des\n\
-\t     copies portables via un script\n\n\
-\t   - /E:endianess : Corrige les problemes d'endianess, marche pour les\n\
-\t     types d'endianness suivants :\n\n\
-\t     B : gros-boutant (Big Endian)\n\
-\t     L : petit-boutant (Little Endian)\n\n\
-\t   - /L : Affiche un extrait de licence\n\n\
-\n\
-\tPar defaut, la presentation activee est equivalente a :\n\n\
-\tDUMP fichier /T:C /H\n\n\
-\tPar defaut, la presentation activee est equivalente a :\n\n\
-\tDUMP fichier /T:C /H\n\n\
-Pour plus d'information ou d'autres commandes, visitez le site internet du\n\
-projet Dos9, a <http://www.dos9.org/>\n\
-Page d'aide de DUMP : <http://www.dos9.org/man/dump>\n\n";
-
-	puts(help_fr);
-    exit(0);
-}
-
-void dump_license(void)
-{
-	char license[]="\n\n    Dos9 DUMP, a free file binary dumper, The Dos9 Project                 \n\
-    Copyright (C) 2013-2016 Romain Garbi\n\
-\n\
-This program is free software: you can redistribute it and/or modify\n\
-it under the terms of the GNU General Public License as published by\n\
-the Free Software Foundation, either version 3 of the License, or\n\
-(at your option) any later version.\n\
-\n\
-This program is distributed in the hope that it will be useful,\n\
-but WITHOUT ANY WARRANTY; without even the implied warranty of\n\
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n\
-GNU General Public License for more details.\n\
-\n\
-You should have received a copy of the GNU General Public License\n\
-along with this program.  If not, see <http://www.gnu.org/licenses/>.\n\n";
-
-	puts(license);
-	exit(0);
 }

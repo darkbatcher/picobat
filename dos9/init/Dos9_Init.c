@@ -151,6 +151,8 @@ void Dos9_InitLibDos9(void)
 
 #ifdef WIN32
     setlocale(LC_ALL, "");
+#else
+    BOOL SetThreadLocale(LOCALE_USER_DEFAULT);
 #endif // WIN32
 
     DOS9_DBG("Loading GETTEXT messages... \n");
@@ -221,14 +223,9 @@ void Dos9_InitHelp(void)
        oriented when this portion of code is to be executed */
 
     puts("DOS9 [" DOS9_VERSION "] (" DOS9_HOST ") - " DOS9_BUILDDATE "\n"
-         "Copyright (c) 2010-" DOS9_BUILDYEAR " " DOS9_AUTHORS "\n\n"
-         "This is free software, you can modify and/or redistribute it under "
-         "the terms of the GNU Genaral Public License v3 (or any later version).\n");
+         "Copyright (c) 2010-" DOS9_BUILDYEAR " " DOS9_AUTHORS "\n\n" );
 
     puts(lpHlpMain);
-
-    puts("Feel free to report bugs and submit suggestions at : <" DOS9_BUGREPORT ">\n"
-         "For more informations see : <" DOS9_URL ">");
 
     exit(0);
 }

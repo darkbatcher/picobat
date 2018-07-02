@@ -7,12 +7,6 @@
 ::
 :: Note : This code is usually wrapped in a @() block to make it quiet and
 :: quick. Nevertheless, you can still make it verbose using the ECHO command
-::
-:: This file is not intended for direct modification. Do not modify it unless
-:: you *really* pay attention to and know *exactly* what you are doing. Files
-:: intended for customisation should be :
-::		- /etc/Dos9_Auto.bat or $HOME/.dos9/Dos9_Auto.bat
-::		- %APPDATA%/Dos9_Auto.bat
 IF %DOS9_OS%==WINDOWS (
 
 	:: set special dos9 directories for commands
@@ -42,6 +36,8 @@ IF %DOS9_OS%==WINDOWS (
 
     SET DOS9_START_SCRIPT=!DOS9_PATH!/cmd/dos9_start
 )
+
+ALIAS /f help=hlp.bat
 
 IF exist !DOS9_ETC!/Dos9_Auto.bat CALL !DOS9_ETC!/Dos9_Auto.bat
 IF exist !USERPROFILE!/.dos9/Dos9_Auto.bat CALL !USERPROFILE!/.dos9/Dos9_Auto.bat

@@ -101,8 +101,8 @@ int Dos9_CmdAlias(char* lpLine)
 	if (iReplace && (iRet!=-1)) {
 
 		/* it is possible to reassign Dos9 internal commands. I decided
-		   to allow this because it may be a funny trick to hack arround for
-		   example, if some batch requires some uncompatible features it
+		   to allow this because it may be a funny trick to hack around for
+		   example, if some batch requires some incompatible features it
 		   allows to redefine those commands in order to get compatibility */
 
 		if ((Dos9_ReplaceCommand(&ciCommand, lpclCommands))) {
