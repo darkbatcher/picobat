@@ -460,7 +460,7 @@ PARSED_STREAM* Dos9_AllocParsedStream(void)
 void Dos9_FreeParsedStream(PARSED_STREAM* stream)
 {
     if (!stream)
-        return 0;
+        return;
 
     if (stream->lpInputFile)
         free(stream->lpInputFile);

@@ -810,7 +810,7 @@ void Dos9_SigHandlerBreak(int sig)
                                 lpBreakConfirm);
 
         if (choice == DOS9_ASK_NO)
-            return 0;
+            return;
 
     }
 
