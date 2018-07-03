@@ -5,8 +5,11 @@
 #include <limits.h>
 #include <math.h>
 #include <float.h>
-#include <io.h>
 #include <fcntl.h>
+
+#ifdef WIN32
+#include <io.h>
+#endif
 
 #define XSTR(x) #x
 #define STR(x) XSTR(x)

@@ -25,7 +25,7 @@ LDFLAGS += $(LIBDOS9_LD) $(LPTHREAD_LD)
 SRC_FILES := \
 	src/Tea_Load.c src/Tea_Node.c src/Tea_Output.c \
 	src/out/tea_ansi_out.c src/out/tea_html_out.c src/out/tea_text_out.c \
-	src/tea.c src/tea_strupr.c
+    src/out/tea_md_out.c src/tea.c src/tea_strupr.c
 
 OBJ_FILES = $(SRC_FILES:.c=.o)
 

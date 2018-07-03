@@ -24,8 +24,14 @@
 #include <limits.h>
 #include <math.h>
 #include <float.h>
-#include <io.h>
 #include <fcntl.h>
+
+#ifdef WIN32
+#include <io.h>
+#else
+#include <unistd.h>
+#endif
+
 
 /* #include <libcu8.h> */
 
@@ -33,7 +39,7 @@
 #define stricmp(a, b) strcasecmp(a, b)
 #define strnicmp(a , b, c) strncasecmp(a, b, c)
 #define O_BINARY 0
-#define set_bin_mode(f) _setmode(f, O_BINARY)
+#define set_bin_mode(f)
 #else
 #define set_bin_mode(f) _setmode(f, O_BINARY)
 #endif

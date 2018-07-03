@@ -90,6 +90,11 @@ int main(int argc, char *argv[])
 				pOutputHandler=Tea_TextAnsiOutputHandler;
 				pParseHandler=Tea_TextAnsiParseHandler;
 
+            } else if(!stricmp("MD", argv[i])) {
+
+                pOutputHandler = Tea_MDOutputHandler;
+                pParseHandler = Tea_MDParseHandler;
+
 			} else {
 
 				fprintf(stderr, "TEA :: Error : ``%s'' is not a valid output format.\n",  argv[i]);

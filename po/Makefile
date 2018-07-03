@@ -17,14 +17,15 @@ MSGFMT = msgfmt
 XGETTEXT = xgettext
 MSGMERGE = msgmerge
 MSGCAT = msgcat
+MSGINIT = msginit
 
 LOCALES = $(shell cat locales.list) 
 DOMAINS = $(shell awk '{print $$1}' < domains.list)
 SOURCES = $(shell awk '{$$1 = ""; print $$0}' < domains.list)
 POTS = $(SOURCES:.c=.pot)
-POS = $(join $(addsuffix /,$(LOCALES)),$(addsuffix .po,$(DOMAINS)))
-MOS = $(join $(addsuffix /,$(LOCALES)),$(addsuffix .mo,$(DOMAINS)))
-DOMAIN_POTS = $(join $(addsuffix /,$(LOCALES)),$(addsuffix .pot,$(DOMAINS)))
+POS = $(shell for i in $(LOCALES); do for j in $(DOMAINS); do echo $$i/$$j.po; done; done)
+MOS = $(POS:.po=.mo)
+DOMAIN_POTS = $(POS:.po=.pot)
 BIN_LOCALES = $(addsuffix .bin,$(LOCALES))
 LOCALE_DIR = $(ROOTDIR)/$(BINDIR)/share/locale
 
@@ -44,10 +45,10 @@ clean:
 	
 $(LOCALES):
 	mkdir $@	
+	echo $(POS) $(MOS)
 
 $(POS): $(DOMAIN_POTS)
-	touch $@
-	$(MSGMERGE) -U $@ $<
+	[ -f $@ ] && $(MSGMERGE) -U $@ $(basename $@).pot || $(MSGINIT) -o $@ -i $(basename $@).pot
 	
 $(DOMAIN_POTS): $(POTS)
 	$(MSGCAT) -t UTF-8 $(shell grep -e "^$(shell basename $(basename $@))"  < domains.list | awk '{$$1 = ""; print $$0}' | sed -e s,\.c,\.pot,g ) > $@ || true

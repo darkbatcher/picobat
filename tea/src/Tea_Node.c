@@ -120,6 +120,9 @@ TEANODE*    Tea_ParseStringNode(char* lpContent, LP_PARSE_HANDLER pHandler)
 
 		/* on finit de stocker la ligne */
 		*lpNextToken='\0';
+
+		pHandler(TEA_MSG_MAKE_NODE, lpTeaNode);
+
 		lpTeaNode->lpTeaNodeNext=Tea_AllocTeaNode();
 		lpTeaNode=lpTeaNode->lpTeaNodeNext;
 
@@ -179,6 +182,8 @@ TEANODE*    Tea_ParseStringNode(char* lpContent, LP_PARSE_HANDLER pHandler)
 		exit(-1);
 
 	}
+
+    pHandler(TEA_MSG_MAKE_NODE, lpTeaNode);
 
 	return lpTeaNodeBegin;
 }

@@ -109,7 +109,7 @@ void Dos9_LoadStrings(void)
 
 	lpAskInvalid=gettext("Please enter a correct choice (or type enter to choose default) !\n");
 
-	lpHlpMain=gettext("This is free software, you can modify and/or redistribute it under\
+	lpHlpMain=gettext("This is free software, you can modify and/or redistribute it under \
 the terms of the GNU Genaral Public License v3 (or any later version).\n\n\
 Usage:\tDOS9 [/A[:]attr] [/I in] [/O out] [file ... | /K cmd ...|/C cmd ...]\n\n\
 \t/A:attr\tA list of attributes for Dos9\n\

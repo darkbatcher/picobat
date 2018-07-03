@@ -62,4 +62,8 @@ void Tea_HtmlEscapeChar(ESTR* lpEsStr);
 void Tea_HtmlGetTitle(TEAPAGE* lpTeaPage, ESTR* lpEsStr);
 void Tea_HtmlLoadFile(ESTR* lpEsReturn, char* lpFileName);
 
+/* md output functions */
+void Tea_MDOutputHandler(TEAPAGE* lpTeaPage, FILE* pFile, int i, char** argv);
+void Tea_MDParseHandler(int iMsg, void* data);
+
 #endif // TEA_MODIFIERS_H

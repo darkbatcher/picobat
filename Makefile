@@ -30,7 +30,8 @@ endif
 
 SUBDIRS = libDos9 libinteval libmatheval $(SUBDIRS_ADD) dos9 dos9ize dump tea scripts po
 TEAFILES = README.tea WHATSNEW.tea GUIDELINES.tea THANKS.tea
-TEXTFILES = $(TEAFILES:.tea=)
+TEXTFILES = $(TEAFILES:.tea=.txt)
+MDFILES = $(TEAFILES:.tea=.md)
 
 SUBDIRS_CLEAN := $(addsuffix .clean,$(SUBDIRS))
 SUBDIRS_BIN := $(addsuffix .bin,$(SUBDIRS))
@@ -38,16 +39,14 @@ SUBDIRS_BIN := $(addsuffix .bin,$(SUBDIRS))
 HOST = $(shell $(CC) -dumpmachine)
 YEAR = $(shell date +%Y)
 			
-all: $(SUBDIRS)
+all: $(SUBDIRS) $(MDFILES)
 
 $(SUBDIRS):
 	$(MAKE) -C $@
-	
-po-merge:
-	$(MAKE) -C po po-merge
 
 clean: $(SUBDIRS_CLEAN)
 	rm -f $(TEXTFILES)
+	rm -rf $(BINDIR)
 
 $(SUBDIRS_CLEAN):
 	$(MAKE) -C $(basename $@) clean
@@ -57,14 +56,18 @@ bin: bindir $(SUBDIRS_BIN)
 bindir: $(TEXTFILES)
 	mkdir -p $(BINDIR)
 	mkdir -p $(BINDIR)/cmd
-	cp -r ./po/share $(BINDIR)
-	cp README $(BINDIR)/
-	cp WHATSNEW $(BINDIR)/
+	cp $(TEXTFILES) $(BINDIR)/
 	cp COPYING* $(BINDIR)/
-	cp THANKS $(BINDIR)/
-	
-$(TEXTFILES): $(TEAFILES)
-	tea/tea -e:utf-8 -o:text-plain $@.tea $@
+
+textfiles: $(TEXTFILES)
+
+# TEXT files are only generated when building bin or textfiles
+.tea.txt:
+	tea/tea -e:utf-8 -o:text-plain $< $@
+
+# MD files are allways generated when building
+.tea.md:
+	tea/tea -e:utf-8 -o:md $< $@
 	
 $(SUBDIRS_BIN): $(SUBDIRS)
 	$(MAKE) -C $(basename $@) bin || true
@@ -80,4 +83,5 @@ ADDITIONALVARS = HOST BINDIR YEAR
 
 include femto.mk
 
-.PHONY: all bin clean $(SUBDIRS) $(SUBDIRS_CLEAN) po-merge
+.PHONY: all bin clean $(SUBDIRS) $(SUBDIRS_CLEAN) textfiles 
+.SUFFIXES: .tea .txt .md

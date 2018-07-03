@@ -1913,7 +1913,7 @@ ${for %%a in (*.exe) do echo %%a}
 {{Wednesday 30th, May}}
 
 	- Fixed if behaviour to be more compatible with {cmd.exe}. It now
-	supports the use of {&} and {|} inside the if without specifying
+	supports the use of {&} and {\|} inside the if without specifying
 	additional blocks.
 	
 	- Fixed broken {COLOR} command.
@@ -2050,4 +2050,15 @@ ${(for %%a in (foo bar) do echo %%a) & echo loop}
 	
 	- New implementation of the {dump} command.	
 
-	- New makefiles for gettext files
+	- New makefiles for gettext files.
+
+{{Tuesday 3rd}}
+
+    - Added new target {/O:MD} for {TEA} that output markdown files. This is
+    very usefull as it helps providing more readable documentations on git
+    repositories.
+
+    - Fixed build errors for {DUMP}.
+
+    - Added {en} locale to the {po} directory and added a few fixes to make
+    the translation system easier to handle.

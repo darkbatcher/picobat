@@ -23,9 +23,11 @@ SRC_FILES=dump.c
 
 all: dump
 
-dump: $(SRC_FILES) dump_h_gen
-	dump_h_gen > dump.h
+dump: $(SRC_FILES) dump.h
 	$(CC) -o dump$(EXEC_SUFFIX) $(LDFLAGS) $(CFLAGS) $(SRC_FILES)
+
+dump.h: dump_h_gen
+	./dump_h_gen > dump.h
 
 dump_h_gen:	dump_h_gen.c
 	$(CC) -o dump_h_gen $(LDFLAGS) $(CFLAGS) dump_h_gen.c
