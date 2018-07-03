@@ -61,6 +61,10 @@ bindir: $(TEXTFILES)
 
 textfiles: $(TEXTFILES)
 
+.tpl.tea:
+	cat $< | sed -e s,\{doc[^}]*\|,\{,g > $@
+	
+
 # TEXT files are only generated when building bin or textfiles
 .tea.txt:
 	tea/tea -e:utf-8 -o:text-plain $< $@
@@ -84,4 +88,4 @@ ADDITIONALVARS = HOST BINDIR YEAR
 include femto.mk
 
 .PHONY: all bin clean $(SUBDIRS) $(SUBDIRS_CLEAN) textfiles 
-.SUFFIXES: .tea .txt .md
+.SUFFIXES: .tea .txt .md .tpl

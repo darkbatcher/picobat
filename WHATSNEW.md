@@ -123,7 +123,7 @@ used almost new code.
 
 ## Tuesday 17th, September ##
 
-* Fixed bug with the message ``Error : "..." is not recognized as ...'' 
+* Fixed bug with the message **Error : "..." is not recognized as ...** 
   message in linux version.
 
 * Fixed bug with the wait\(\) function in that made the program hold 
@@ -151,7 +151,7 @@ used almost new code.
 
 ## Sunday 27th, October ##
 
-* Some bug fixes, including a bug that appeared with ``%~A''.
+* Some bug fixes, including a bug that appeared with **%~A**.
 
 * Added primary support of **FOR** loops \(ie. simple for loop without 
   options\).
@@ -221,9 +221,9 @@ used almost new code.
 ## Friday 17th, January ##
 
 * Fixed a bug that caused some particular redirections to be misinterpreted, 
-  particularly, in blocks ``\(echo test>NUL\)'' triggered an error, because 
-  the output was interpreted to be a redirection to file ``NUL\)''. This has 
-  been solved, and both '\(' , '|' and '&' operators are no prioritary.
+  particularly, in blocks **\(echo test>NUL\)** triggered an error, because 
+  the output was interpreted to be a redirection to file **NUL\)**. This has 
+  been solved, and both '\(' , '|' and '&' operators are know prioritary.
 
 * Modified version information management. Now version are numbered in the 
   following way: **YYYY.major.minor\[tag\]**. Where :
@@ -248,8 +248,8 @@ used almost new code.
 
 ## Monday 20th, January ##
 
-* Corrected a but that cause line like ``:: comment & command'' to execute the 
-  command **command**, unlike **cmd.exe**'s behaviour.
+* Corrected a but that caused line like **:: comment & command** to execute 
+  the command **command**, unlike **cmd.exe**'s behaviour.
 
 * Added **REM** command and comments manual page.
 
@@ -362,21 +362,21 @@ used almost new code.
   decided the only way to denote a special var \(ie. like **%%A**\) is to 
   prefix it with two percent. Except for variables like **%0, %1** and so on, 
   which can be accessed with a single **%** for compatibility purposes. This 
-  new conventions provides more stylished script and prevent ``name crashes'', 
+  new conventions provides more stylished script and prevent name clashes, 
   \(ie. unexpected behaviour caused for exemple by the following code\) :
 
         ECHO %1 test%
         :: since spaces in variables names are valid, the result can 
-        :: be unexpected depending whether ``%1'' or ``%1 test%'' are
+        :: be unexpected depending whether "%1" or "%1 test%" are
         :: expanded first.
         
 
   On the other, the only way to specify environment variables is the 
-  conventionnal way, with single ``%''. Note that this behaviour has also 
+  conventionnal way, with single **%**. Note that this behaviour has also 
   changed, undefined variables will be replaced by a void string \(they'll be 
   just stripped from the output\).
 
-  Finally, in some cases, using ``%a'' to specify the special variable will 
+  Finally, in some cases, using **%a** to specify the special variable will 
   work either, but well, it can just happen on a very few cases, so that it is 
   preferable not to use this notation.
 
@@ -477,7 +477,7 @@ used almost new code.
   implementations are much more safe and elegant. Lots of repetitions in the 
   code have be gathered into singles function to make it more maintainable.
 
-* Silenced `Dos9\_Jump.c', but hoping to get it works within a short time.
+* Silenced **Dos9\_Jump.c**, but hoping to get it works within a short time.
 
 * Added new string search based that take account of escaped-characters \(ie. 
   Characters preceded by '^'\).
@@ -2144,5 +2144,11 @@ is a list of improvements I made during from 24th June to today.
 * Fixed build errors for **DUMP**.
 
 * Added **en** locale to the **po** directory and added a few fixes to make 
-  the translation system easier to handle. 
+  the translation system easier to handle.
+
+* Updated **README** file. It is now generated from a template used by the git 
+  repository and the website so that information can be easily synced. However 
+  some preprocessing is required in order to remove unnecessary broken links 
+  from **README.tea**. **README.tea** is generated through a template 
+  **README.tpl**. 
 
