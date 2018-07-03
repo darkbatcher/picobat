@@ -104,7 +104,7 @@ On the other hand, Dos9 also provides you with with a bunch of extensions:
 
 * An extension to the **FIND** command to use simple regular expressions:
 
-$\(echo match my regular expression | FIND /e "match \* regular expression"\)
+        echo match my regular expression | FIND /e "match * regular expression"
 
 * The **FIND** and **MORE** commands are provided as internal commands.
 

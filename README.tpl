@@ -109,7 +109,7 @@ ${ALIAS dbs=dir /b /s}
 
 - An extension to the {doc/find|FIND} command to use simple regular expressions:
 
-$(echo match my regular expression | FIND /e "match * regular expression")
+${echo match my regular expression | FIND /e "match * regular expression"}
 
 - The {doc/find|FIND} and {doc/more|MORE} commands are provided as internal commands.
 
