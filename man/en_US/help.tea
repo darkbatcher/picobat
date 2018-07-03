@@ -1,6 +1,6 @@
 #
 #   Dos9 Manual pages, The Dos9 project
-#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#   Copyright (C) 2012-2018  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -21,23 +21,27 @@
 	Print a list of {Dos9} commands accompaigned by a short description
 	of these commands. It is also possible to print manual pages.
 
-	In fact, the {HELP} command is a alias pointing to {hlp|HLP command}
+	By default, the {HELP} command is a alias pointing to {hlp|HLP command}
 
 {{Synopsis}}
 
 ${HELP [command]}
 
-	Print either a list of commands or a manual page:
+	Prints either a list of commands or a manual page:
 
 		- {command} : The command name associated to the manual page to
 		print.
 
+	By default, {HELP} is overriden by an {alias|ALIAS} command in
+	{dos9_auto|Dos9_Auto.bat} that associate {HELP} with {hlp|HLP}.
+	This alias can be removed by removing the following line from
+	your {Dos9_Auto.bat}:
+
+${ALIAS /b HELP=hlp.bat}
+
 {{Compatibility}}
 
-	Compatible with {cmd.exe}. Much more arguments can be given to
-	{Dos9} {HELP} command, since it is an alias of {hlp|HLP}.
-
-	{HELP} is an alias of {hlp|HLP} since version {2014.0.9b}.
+	Compatible with {cmd.exe}.
 
 	Available since version {0.0.0.42}
 
