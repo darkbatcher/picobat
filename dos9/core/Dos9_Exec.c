@@ -527,18 +527,16 @@ int Dos9_StartFile(EXECINFO* info, int* error)
 {
     pid_t pid;
 
-    pid = fork();
-
     ESTR* tmp;
     char **arg, *script;
     int status=0, i;
 
-    if ((script = Dos9_GetEnv(lpeEnv, "DOS9_START_SCRIPT")) == NULL) {
+    script = Dos9_GetEnv(lpeEnv, "DOS9_START_SCRIPT");
 
-        *error = 1;
-        return 0;
+    if (!script)
+        script = START_SCRIPT;
 
-    }
+    pid = fork();
 
     if (pid == 0) {
 
@@ -560,7 +558,7 @@ int Dos9_StartFile(EXECINFO* info, int* error)
                                     __FILE__ "/Dos9_StartFile()",
                                     -1);
 
-        arg[0] = START_SCRIPT;
+        arg[0] = script;
         arg[1] = info->file;
 
         i=1;
@@ -572,8 +570,8 @@ int Dos9_StartFile(EXECINFO* info, int* error)
 
         arg[i + 1] = NULL;
 
-        lppsStreamStack = Dos9_OpenOutput(lppsStreamStack, "/dev/null",
-                                                   DOS9_STDOUT, 0);
+        /* lppsStreamStack = Dos9_OpenOutput(lppsStreamStack, "/dev/null",
+                                                   DOS9_STDOUT, 0); */
 
         /* apply Dos9 internal environment variables */
         Dos9_ApplyEnv(lpeEnv);
@@ -596,9 +594,7 @@ int Dos9_StartFile(EXECINFO* info, int* error)
 
     } else {
 
-        if (1
-            && info->flags & DOS9_EXEC_WAIT)
-            waitpid(pid, &status, 0);
+        waitpid(pid, &status, 0);
 
     }
 

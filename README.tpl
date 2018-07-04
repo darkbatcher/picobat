@@ -138,7 +138,7 @@ If you have some questions about or need some help with Dos9, please feel free
 to join {Dos9}'s official discord at: 
 {https://discord.gg/w4KtdCv|https://discord.gg/w4KtdCv}
 
-## What's in this folder ? ##
+{{What's in this folder ?}}
 
 There is a few interesting things in this directory that you might need:
 

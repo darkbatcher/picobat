@@ -31,9 +31,9 @@
 	passed to the script using the command line. As a convention,
 	{%0} is always the script name.
 	
-	The {%%*} (or {%*}) contains a line containing the parameters
+	The {%%*} (or {%*}) variable contains a line containing the parameters
 	that have been passed to the script, that is it is the content
-	of {%0} trough {%9} inside a single variable plus all the
+	of {%1} trough {%9} inside a single variable plus all the
 	parameters beyond the ninth if any has been passed. On UNIX-based
 	operating systems, it is not possible to retrieve the exact syntax
 	of the command line. Thus {%*} is created using the parameters
@@ -50,11 +50,13 @@
 	detection and {var|delayed expansion}, allowing them to affect
 	expansion of variables.
 
-	Special variable names need to be preceded by two {%0}, (except for
+	Special variable names need to be preceded by two {%}, (except for
 	{%0} up to {%9}, {%*} and {%+}) to be developed. Some option can be
 	enabled by using the {~} sign. These options are the following:
 	
 		- {%%~I} : Remove quotes around {%%I}.
+
+		- {%%~fI} : Expands to fully qualified path.
 
 		- {%%~dI} : Expands to {%%I} disk letter.
 
@@ -85,6 +87,18 @@
 		- If {%%I} is not defined and {%%a} is, then {%%~a} will be expanded.
 
 		- Otherwise, no expansion takes place.
+
+	When the {%0} variable gets expanded, {Dos9} has a slightly different
+	behaviour:
+
+		- if {%0} or {%~0} is specified, the variable will be replaced by
+		the content of {%0}, stripped of its quote or not.
+
+		- if one ore more options is specified then the variable will be
+		replaced by the effects of the options if they where processing
+		the file name of the currently run batch. That is, {%~f0}
+		refers to the path of the script being executed, {%~dp0} to its
+		directory, and so on and so forth. 
 
 {{Note}}
 

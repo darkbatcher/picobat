@@ -347,7 +347,8 @@ void Dos9_SetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char cVarName, char* cVarConten
 char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 {
 	char *lpPos, *lpNext;
-	char lpDrive[_MAX_DRIVE], lpDir[_MAX_DIR], lpFileName[_MAX_FNAME], lpExt[_MAX_EXT];
+	char lpDrive[_MAX_DRIVE], lpDir[_MAX_DIR], lpFileName[_MAX_FNAME], lpExt[_MAX_EXT],
+         lpFullPath[FILENAME_MAX];
 	char cFlag[DOS9_VAR_MAX_OPTION+1]= {DOS9_ALL_PATH};
 	char lpBuffer[FILENAME_MAX];
 	char bSeekFile=FALSE, bSplitPath=FALSE;
@@ -382,9 +383,16 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 
 	if (!*lpName) return NULL;
 
-	for (; *(lpName) && strchr("dnpxzta", *(lpName)) && i<DOS9_VAR_MAX_OPTION; lpName++) {
+	for (; *(lpName) && strchr("dnpxztaf", *(lpName)) && i<DOS9_VAR_MAX_OPTION; lpName++) {
 
 		switch(*lpName) {
+
+		case 'f':
+            cFlag[i]='f';
+            i++;
+            bSplitPath=TRUE;
+            break;
+
 		case 'd':
 
 			cFlag[i]='d';
@@ -529,16 +537,7 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
         lpPos=Dos9_EsToFullPath(lpRecieve);
 
 		Dos9_SplitPath(lpPos, lpDrive, lpDir, lpFileName, lpExt);
-
-		/* printf("lpDrive=`%s`\n"
-		       "lpDir=`%s`\n"
-		       "lpFileName=`%s`\n"
-		       "lpExt=`%s`\n",
-		       lpDrive,
-		       lpDir,
-		       lpFileName,
-		       lpExt
-		       ); */
+		snprintf(lpFullPath, sizeof(lpFullPath), "%s", lpPos);
 
 	}
 
@@ -548,6 +547,12 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 
 		for (i=0; cFlag[i]!=0; i++) {
 			switch (cFlag[i]) {
+
+			case 'f':
+                Dos9_EsCat(lpRecieve, lpFullPath);
+				if (cFlag[i+1]!=0) Dos9_EsCat(lpRecieve, "\t");
+				break;
+
 
 			case 'd':
 				Dos9_EsCat(lpRecieve, lpDrive);

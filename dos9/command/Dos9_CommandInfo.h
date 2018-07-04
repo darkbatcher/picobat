@@ -78,4 +78,6 @@ COMMANDINFO lpCmdInfo[]= {
 	{"XARGS", Dos9_CmdXargs, STRLEN("XARGS")}
 };
 
+const int iCmdInfoNb = sizeof(lpCmdInfo)/sizeof(lpCmdInfo[0]);
+
 #endif

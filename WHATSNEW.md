@@ -2150,5 +2150,19 @@ is a list of improvements I made during from 24th June to today.
   repository and the website so that information can be easily synced. However 
   some preprocessing is required in order to remove unnecessary broken links 
   from **README.tea**. **README.tea** is generated through a template 
-  **README.tpl**. 
+  **README.tpl**.
+
+## Wednesday 4th ##
+
+* Added the **%~f** options to special variables.
+
+* Updated the local variables man pages.
+
+* Fixed a bug with **START** command. Since the output of **dos9\_start** was 
+  redirected to **NUL**, and the process was not awaited, it caused problem 
+  when either **mimeopen** or **xdg-open** was trying to interract with user. 
+  To fix the problem, the output is no longer redirected and dos9 waits for 
+  **dos9\_start** completion. This might cause little inconveniences as both 
+  **xdg-open** and **mimeopen** produce some output even when run without 
+  errors, but this is the only workaround found yet. 
 

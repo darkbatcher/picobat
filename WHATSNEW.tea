@@ -2068,3 +2068,17 @@ ${(for %%a in (foo bar) do echo %%a) & echo loop}
 	synced. However some preprocessing is required in order to remove
 	unnecessary broken links from {README.tea}. {README.tea} is generated
 	through a template {README.tpl}.
+
+{{Wednesday 4th}}
+
+    - Added the {%~f} options to special variables.
+
+    - Updated the local variables man pages.
+
+    - Fixed a bug with {START} command. Since the output of {dos9_start} was
+    redirected to {NUL}, and the process was not awaited, it caused problem
+    when either {mimeopen} or {xdg-open} was trying to interract with user.
+    To fix the problem, the output is no longer redirected and dos9 waits
+    for {dos9_start} completion. This might cause little inconveniences as
+    both {xdg-open} and {mimeopen} produce some output even when run
+    without errors, but this is the only workaround found yet. 

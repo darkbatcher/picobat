@@ -43,6 +43,9 @@
 
 #include "../errors/Dos9_Errors.h"
 
+extern COMMANDINFO lpCmdInfo[];
+extern const int iCmdInfoNb;
+
 /* Ok, this is a wrapper for the help command. In fact, the usual 'Help'
    command is handled through an alias to hlp.bat, thus, this function is never
    effectively called by the executable. Some may argue that it is not safe to
@@ -60,8 +63,17 @@ int Dos9_CmdHelp(char* lpLine)
 
     if (n == 0) {
 
-        Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "HELP", 0);
-        status = DOS9_EXPECTED_MORE;
+        /* loop through commands */
+        while (n < iCmdInfoNb) {
+
+
+            /* skip top level block */
+            if (*(lpCmdInfo[n].ptrCommandName) != '(')
+                fprintf(fError, "%s" DOS9_NL, lpCmdInfo[n].ptrCommandName);
+
+            n++;
+        }
+
         goto error;
 
     } else if (n > 1) {
