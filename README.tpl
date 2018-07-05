@@ -148,7 +148,7 @@ There is a few interesting things in this directory that you might need:
 
 - {THANKS.md|THANKS} : A list of all the contributors to the project.
 
-- {GUIDELINES.md|Guidelines} : A text files giving guidelines on how to 
+- {GUIDELINES.md|GUIDELINES} : A text files giving guidelines on how to 
   modify Dos9.
 
 - {COPYING.*} : The license of the project and of projects used by Dos9.
