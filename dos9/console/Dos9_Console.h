@@ -26,7 +26,7 @@
    from libDos9 use the tls files */
 
 #define Dos9_ClearConsoleScreen internal_Dos9_ClearConsoleScreen
-#define ClearConsoleLine internal_Dos9_ClearConsoleLine
+#define Dos9_ClearConsoleLine internal_Dos9_ClearConsoleLine
 #define Dos9_SetConsoleColor internal_Dos9_SetConsoleColor
 #define Dos9_SetConsoleTextColor internal_Dos9_SetConsoleTextColor
 #define Dos9_SetConsoleCursorPosition internal_Dos9_SetConsoleCursorPosition
