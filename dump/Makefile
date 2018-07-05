@@ -23,17 +23,17 @@ SRC_FILES=dump.c
 
 all: dump
 
-dump: $(SRC_FILES) dump.h
+dump$(EXEC_SUFFIX): $(SRC_FILES) dump.h
 	$(CC) -o dump$(EXEC_SUFFIX) $(LDFLAGS) $(CFLAGS) $(SRC_FILES)
 
 dump.h: dump_h_gen
 	./dump_h_gen > dump.h
 
-dump_h_gen:	dump_h_gen.c
+dump_h_gen$(EXEC_SUFFIX):	dump_h_gen.c
 	$(CC) -o dump_h_gen $(LDFLAGS) $(CFLAGS) dump_h_gen.c
 
 clean:
-	rm -f dump$(EXEC_SUFFIX)
+	rm -f dump$(EXEC_SUFFIX) dump_h_gen$(EXEC_SUFFIX)
 
 bin: dump
 	cp dump$(EXEC_SUFFIX) $(BINDIR)/cmd/

@@ -47,6 +47,10 @@
 #include "../core/Dos9_Core.h"
 #include "../core/Dos9_Debug.h"
 
+#include "../../config.h"
+
+#include "../gettext.h"
+
 void Dos9_AssignCommandLine(int c, char** argv)
 {
     ESTR *lpEsStr=Dos9_EsInit(),
@@ -139,9 +143,9 @@ void Dos9_GettextInit(void)
 #if defined(WIN32) && !defined(DOS9_USE_LIBCU8)
     /* This is not useful at all, libcu8 is able to convert utf-8 by
        itself */
-	bind_textdomain_codeset("Dos9-errors", lpEncoding);
+	bind_textdomain_codeset("dos9", lpEncoding);
 #elif defined(DOS9_USE_LIBCU8)
-    bind_textdomain_codeset("Dos9-errors", "UTF8");
+    bind_textdomain_codeset("dos9", "UTF-8");
 #endif
 
 	textdomain("dos9");

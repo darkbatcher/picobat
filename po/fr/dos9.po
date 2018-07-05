@@ -304,7 +304,7 @@ msgstr "Erreur : Impossible de suprimmer le dossier \"%s\"\n"
 #: ../dos9/errors/Dos9_Errors.c:208
 #, c-format
 msgid "Error : \"%s\" is not a valid codepage on your system.\n"
-msgstr "Erreur :   \"%s\" n'est pas une page valide sur votre systême.\n"
+msgstr "Erreur : \"%s\" n'est pas une page valide sur votre système.\n"
 
 #: ../dos9/errors/Dos9_Errors.c:211
 #, c-format
