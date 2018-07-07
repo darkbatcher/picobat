@@ -29,7 +29,7 @@
 
 #if defined(DOS9_USE_LIBCU8)
 #include <windows.h>
-#include <Shlwapi.h>
+#include <shlwapi.h>
 #include <libcu8.h>
 
 #define XSIZE(a) sizeof(a)/sizeof(a [0])

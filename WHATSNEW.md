@@ -2168,5 +2168,8 @@ is a list of improvements I made during from 24th June to today.
 
 ## Saturday, 7th ##
 
-* Fixed few errors with the **DUMP** command. 
+* Fixed few errors with the **DUMP** command.
+
+* Fixed capitalised letters used inside a **#include** statement in 
+  **Dos9\_UnicodeDir.c** 
 
