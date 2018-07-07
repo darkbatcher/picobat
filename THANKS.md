@@ -23,5 +23,11 @@ advanced today.
 
   * Lots of bugs submitted
 
-  * Created designs for the new html man pages and Dos9 website 
+  * Created designs for the new html man pages and Dos9 website
+
+* Karanveer Chouhan \(aka KVC\)
+
+  * Help reviewing of Dos9
+
+  * Provided the translations for Hindi. 
 
