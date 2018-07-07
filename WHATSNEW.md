@@ -2166,3 +2166,7 @@ is a list of improvements I made during from 24th June to today.
   **xdg-open** and **mimeopen** produce some output even when run without 
   errors, but this is the only workaround found yet. 
 
+## Saturday, 7th ##
+
+* Fixed few errors with the **DUMP** command. 
+

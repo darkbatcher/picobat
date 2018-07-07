@@ -188,9 +188,9 @@ void fill_context(int type, int flags, struct dump_t* context)
 
     s = (flags & DUMP_QUIET) ? 0 : 1 ;
     a = (flags & DUMP_ADDRESS) ? 2*sizeof(void*) + s : 0;
-    c = (flags & DUMP_CHARS) ? types[type].size + s : 0;
+    c = (flags & DUMP_CHARS) ? types[type].size : 0;
     context->n = (DEFAULT_WIDTH - a)
-                                / (size + c);
+                                / (size + s + c);
     context->width = size;
     context->flags = flags;
     context->type = type;
@@ -227,8 +227,6 @@ int dump_fd(int fd, struct dump_t* context)
     }
 
     spaces = (context->flags & DUMP_QUIET) ? "" : " ";
-
-    printf("dumping %d using %d & %s, %x\n", fd, size, context->format, context->flags);
 
     while (count = read(fd, data, size)) {
 
