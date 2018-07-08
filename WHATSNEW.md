@@ -2173,5 +2173,7 @@ is a list of improvements I made during from 24th June to today.
 * Fixed capitalised letters used inside a **#include** statement in 
   **Dos9\_UnicodeDir.c** 
 
-* Added translation for Hindi thanks to **Karanveer Chouhan \(aka kvc\)**. 
+* Added translation for Hindi thanks to **Karanveer Chouhan \(aka kvc\)**.
+
+* Added a tiny test suite system. 
 
