@@ -504,6 +504,7 @@ int Dos9_CmdSetEvalFloat(ESTR* lpExpression)
 		case '-':
 			*(lpEqual-1)='\0';
 			/* get the value of the variable */
+			Dos9_AdjustVarName(lpVarName);
 			dVal=_Dos9_SetGetVarFloat(lpVarName);
 
 			switch(cLeftAssign) {
@@ -535,7 +536,7 @@ int Dos9_CmdSetEvalFloat(ESTR* lpExpression)
 	snprintf(lpResult, sizeof(lpResult), "%.16g", dVal);
 
     if (!bIsScript)
-        fprintf(fOutput, "\t\t\t\t%.16g", dVal);
+        fprintf(fOutput, "%.16g", dVal);
 
 	Dos9_SetEnv(lpeEnv, Dos9_EsToChar(lpExpression), lpResult);
 
@@ -614,6 +615,8 @@ int Dos9_CmdSetEvalInt(ESTR* lpExpression)
 		case '^':
 
 			*(lpEqual-1)='\0';
+
+			Dos9_AdjustVarName(lpVarName);
 			iVal=_Dos9_SetGetVarInt(lpVarName);
 
 			switch(cLeftAssign) {
@@ -631,7 +634,7 @@ int Dos9_CmdSetEvalInt(ESTR* lpExpression)
 					break;
 
 				case '-':
-					iVal/=iResult;
+					iVal-=iResult;
 					break;
 
 				case '^':
@@ -649,6 +652,8 @@ int Dos9_CmdSetEvalInt(ESTR* lpExpression)
 			   resolved */
 
 			*(lpEqual-1)='\0';
+
+			Dos9_AdjustVarName(lpVarName);
 			iVal=_Dos9_SetGetVarInt(lpVarName);
 
 			if (lpVarName != (lpEqual-1)) {
@@ -700,7 +705,7 @@ int Dos9_CmdSetEvalInt(ESTR* lpExpression)
 	snprintf(lpResult, sizeof(lpResult), "%d", iVal);
 
     if (!bIsScript)
-        fprintf(fOutput, "\t\t\t\t\t\t%d", iVal);
+        fprintf(fOutput, "%d", iVal);
 
 	Dos9_SetEnv(lpeEnv, Dos9_EsToChar(lpExpression), lpResult);
 

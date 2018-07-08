@@ -2175,5 +2175,15 @@ is a list of improvements I made during from 24th June to today.
 
 * Added translation for Hindi thanks to **Karanveer Chouhan \(aka kvc\)**.
 
-* Added a tiny test suite system. 
+* Added a tiny test suite system.
+
+* Fixed **SET /a** bugs reported by DrNuget on the discord conversation. There 
+  was essentially two bugs:
+
+* the **-=** operator was mistakenly handled by **Dos9** as the **/=** which 
+  obviously led to unexpected behaviours.
+
+* Additional spaces between the variable name and the assignment operator were 
+  not ignored whenever an assignment other than **=** was specified, leading 
+  to errors computing the result. 
 
