@@ -104,4 +104,4 @@ femto-subst: femto-config.mk
 	chmod +x femto-subst
 	
 .PHONY: config config.h localmk $(SUBCONF) $(FUNCTIONS) $(PROGRAMS) $(LIBS) \
-	$(NOOPTIONS) $(NOOPTIONSX) $(USEOPTIONS) $(USEOPTIONSX)
+	$(NOOPTIONS) $(NOOPTIONSX) $(USEOPTIONS) $(USEOPTIONSX) femto-subst

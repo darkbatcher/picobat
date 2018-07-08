@@ -2180,10 +2180,13 @@ is a list of improvements I made during from 24th June to today.
 * Fixed **SET /a** bugs reported by DrNuget on the discord conversation. There 
   was essentially two bugs:
 
-* the **-=** operator was mistakenly handled by **Dos9** as the **/=** which 
-  obviously led to unexpected behaviours.
+  * the **-=** operator was mistakenly handled by **Dos9** as the **/=** which 
+    obviously led to unexpected behaviours.
 
-* Additional spaces between the variable name and the assignment operator were 
-  not ignored whenever an assignment other than **=** was specified, leading 
-  to errors computing the result. 
+  * Additional spaces between the variable name and the assignment operator 
+    were not ignored whenever an assignment other than **=** was specified, 
+    leading to errors computing the result.
+
+* Fixed a tiny error with **femto** so that configuration target can be 
+  specified in a single line.
 
