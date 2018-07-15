@@ -64,9 +64,10 @@ int Dos9_CmdDir(char* lpLine)
     size_t nSize = 0;
 
     char lpType[]="D RHSA ",
-	              lpSize[16];
+	              lpSize[16],
+	              lpTime[30];
 
-	struct tm* lTime;
+	struct tm lTime;
 
 	lpNext=lpLine+3;
 
@@ -204,14 +205,12 @@ int Dos9_CmdDir(char* lpLine)
 
                 /* !! Recyclage de la variable lpFilename pour afficher la taille du fichier */
 
-
-                lTime=localtime(&Dos9_GetModifTime(item));
-
-                fprintf(fOutput, "%02d/%02d/%02d %02d:%02d %s\t%s\t%s" DOS9_NL, lTime->tm_mday,
-                                                                lTime->tm_mon+1,
-                                                                1900+lTime->tm_year,
-                                                                lTime->tm_hour,
-                                                                lTime->tm_min,
+#ifdef WIN32
+#define localtime_r(t, lt) memcpy(lt, localtime(t), sizeof(struct tm));
+#endif // WIN32
+                localtime_r(&Dos9_GetModifTime(item), &lTime);
+                strftime(lpTime, sizeof(lpTime), "%x %X", &lTime);
+                fprintf(fOutput, "%s %s\t%s\t%s" DOS9_NL, lpTime,
                                                                 lpSize,
                                                                 lpType,
                                                                 item->lpFileName + nSize

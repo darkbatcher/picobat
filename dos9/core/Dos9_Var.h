@@ -59,4 +59,6 @@ void             Dos9_FreeLocalBlock(LOCAL_VAR_BLOCK* local);
 char* Dos9_SkipU8Chars(char* ch, size_t cnt);
 size_t Dos9_CountU8Chars(const char* ch);
 
+void Dos9_GetTimeBasedVar(char type, char* buf, size_t size);
+
 #endif

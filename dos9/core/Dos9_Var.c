@@ -87,6 +87,40 @@ size_t __inline__ Dos9_CountU8Chars(const char* ch)
 }
 #endif // DOS9_USE_LIBCU8
 
+void Dos9_GetTimeBasedVar(char type, char* buf, size_t size)
+{
+    struct tm lt;
+    time_t t;
+    size_t s;
+
+#ifdef WIN32
+#define localtime_r(t, lt) memcpy(lt, localtime(t), sizeof(struct tm));
+
+    SYSTEMTIME st;
+    GetSystemTime(&st);
+#endif // WIN32
+
+    t = time(NULL);
+    localtime_r(&t, &lt);
+
+    strftime(buf, size, (type == 'T' || type == 't') ? "%X" : "%x", &lt);
+
+    if (type == 'T' || type == 't') {
+        /* still cs to write */
+
+        s = strlen(buf);
+
+        buf += s;
+        size -= s;
+
+#ifdef WIN32
+        snprintf(buf, size, ",%d", st.wMilliseconds / 10);
+#else
+        snprintf(buf, size, "%d", 0);
+#endif // WIN32
+    }
+}
+
 int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
 {
 	char        *lpVarContent, /* a pointer to the environment var string */
@@ -102,8 +136,6 @@ int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
 	            iLen=0; /* the lenght to be cut */
 
 	char        cCharSave=0; /* the backup of the character replaced by '\0' */;
-	struct tm* lTime;
-	time_t iTime;
 
 	/* empty the line */
 	*Dos9_EsToChar(lpRecieve) = '\0';
@@ -171,19 +203,11 @@ int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
 		lpVarContent=lpBuf;
 		sprintf(lpBuf, "%d", rand());
 
-	} else if (!(stricmp(lpNameCpy, "DATE"))) {
+	} else if (!(stricmp(lpNameCpy, "DATE"))
+                || !(stricmp(lpNameCpy, "TIME"))) {
 
-		iTime=time(NULL);
-		lTime=localtime(&iTime);
 		lpVarContent=lpBuf;
-		sprintf(lpBuf, "%02d/%02d/%02d", lTime->tm_mday, lTime->tm_mon+1, lTime->tm_year+1900);
-
-	} else if (!(stricmp(lpNameCpy, "TIME"))) {
-
-		iTime=time(NULL);
-		lTime=localtime(&iTime);
-		lpVarContent=lpBuf;
-		sprintf(lpBuf, "%02d:%02d:%02d,00", lTime->tm_hour, lTime->tm_min, lTime->tm_sec);
+		Dos9_GetTimeBasedVar(*lpNameCpy, lpBuf, sizeof(lpBuf));
 
 	} else if (!(lpVarContent=Dos9_GetEnv(lpeEnv, lpNameCpy))) {
 
@@ -355,7 +379,7 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 	char cVarName,
 	     cValidName=TRUE;
 
-	struct tm* lTime;
+	struct tm lTime;
 	struct stat stFileInfo;
 
 	int i=0;
@@ -591,19 +615,12 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 				break;
 
 			case 't':
-				lTime=localtime(&stFileInfo.st_atime);
+				localtime_r(&stFileInfo.st_atime, &lTime);
 
-				sprintf(lpBuffer,
-				        "%02d/%02d/%02d %02d:%02d%c",
-				        lTime->tm_mday ,
-				        lTime->tm_mon+1,
-				        1900+lTime->tm_year,
-				        lTime->tm_hour,
-				        lTime->tm_min,
-				        (cFlag[i+1]!=0 ? '\t' : '\0')
-				       );
+				strftime(lpBuffer, sizeof(lpBuffer), "%x %X", &lTime);
 
 				Dos9_EsCat(lpRecieve, lpBuffer);
+				if (cFlag[i+1]!=0) Dos9_EsCat(lpRecieve, "\t");
 				break;
 
 			case 'a':

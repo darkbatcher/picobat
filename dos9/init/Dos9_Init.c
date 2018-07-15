@@ -178,8 +178,13 @@ void Dos9_InitLibDos9(void)
 
     DOS9_DBG("Setting locale ...\n");
 
+
+
+
 #ifndef WIN32
     setlocale(LC_ALL, "");
+#else
+    setlocale(LC_ALL, ".OCP"); /* windows ... */
 #endif // WIN32
 
     DOS9_DBG("Loading GETTEXT messages... \n");
