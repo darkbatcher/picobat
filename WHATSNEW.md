@@ -2190,3 +2190,7 @@ is a list of improvements I made during from 24th June to today.
 * Fixed a tiny error with **femto** so that configuration target can be 
   specified in a single line.
 
+## Sunday 15th ##
+
+* Modified po Makefiles to stop auto-rebuild problems. 
+

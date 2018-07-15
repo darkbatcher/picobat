@@ -46,18 +46,17 @@ clean:
 $(LOCALES):
 	mkdir $@	
 	echo $(POS) $(MOS)
-
-$(POS): $(DOMAIN_POTS)
-	[ -f $@ ] && $(MSGMERGE) -U $@ $(basename $@).pot || $(MSGINIT) -o $@ -i $(basename $@).pot
 	
 $(DOMAIN_POTS): $(POTS)
+	echo $(DOMAIN_POTS)
 	$(MSGCAT) -t UTF-8 $(shell grep -e "^$(shell basename $(basename $@))"  < domains.list | awk '{$$1 = ""; print $$0}' | sed -e s,\.c,\.pot,g ) > $@ || true
 	
 .c.pot:
 	$(XGETTEXT) -o $@ $<
-	
-.po.mo:
-	$(MSGFMT) -c -v -o $@ $<
+		
+.pot.mo:
+	[ -f $(basename $@).po ] && $(MSGMERGE) -U $(basename $@).po $< || $(MSGINIT) -o $(basename $@).po -i $<
+	$(MSGFMT) -c -v -o $@ $(basename $@).po
 	
 .PHONY: all clean bin $(BIN_LOCALES)
 .SUFFIXES: .c .pot .mo .po
