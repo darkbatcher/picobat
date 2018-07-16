@@ -475,6 +475,10 @@ int libcu8_readconsole(int fd, char* buf, size_t size, size_t* written)
 
                 libcu8_refresh_console_line(conout, orig_buf, orig - size, &line, &csbi);
 
+                line.current = line.end;
+                pos = buf;
+                SetConsoleCursorPosition(conout, line.current);
+
                 if (ret > 0)
                     FillConsoleOutputCharacterW(conout, L' ', ret, line.end, &wrt);
 
@@ -509,6 +513,10 @@ int libcu8_readconsole(int fd, char* buf, size_t size, size_t* written)
                 line.current.Y = line.orig.Y;
 
                 libcu8_refresh_console_line(conout, orig_buf, orig - size, &line, &csbi);
+
+                line.current = line.end;
+                pos = buf;
+                SetConsoleCursorPosition(conout, line.current);
 
                 if (ret > 0)
                     FillConsoleOutputCharacterW(conout, L' ', ret, line.end, &wrt);

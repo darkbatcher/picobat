@@ -2211,5 +2211,7 @@ is a list of improvements I made during from 24th June to today.
 * Fixes to **dos9 variables** manual pages.
 
 * Modified **COLOR** to handle new **.** extension, which refer to the current 
-  default color. 
+  default color.
+
+* Modified the behaviour of libcu8 history. 
 
