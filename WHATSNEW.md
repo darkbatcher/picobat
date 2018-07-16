@@ -2195,5 +2195,9 @@ is a list of improvements I made during from 24th June to today.
 * Modified po Makefiles to stop auto-rebuild problems.
 
 * Modified dir and variables to fix locale date formatting problems and added 
-  proper setlocale. 
+  proper setlocale.
+
+## Monday 16th ##
+
+* Fixed a little bug in the **Dos9\_GetNextBlockBeginEx\(\)** function. 
 

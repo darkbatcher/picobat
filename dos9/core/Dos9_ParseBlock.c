@@ -196,10 +196,55 @@ char* Dos9_GetNextBlockEnd(char* pch)
    return NULL if no block is encountered in the current block */
 char* Dos9_GetNextBlockBeginEx(char* pch, int bIsBlockCmd)
 {
-    pch = Dos9_SearchToken_Hybrid(pch, "", "()");
+    char *next;
 
-    if ((pch != NULL) && (*pch == '('))
+    /* try to find a valid block opening */
+    if (bIsBlockCmd) {
+
+        pch = Dos9_SearchToken_Hybrid(pch, "", "()");
+
+        if ((pch != NULL) && (*pch == '('))
             return pch;
 
-    return NULL;
+        return NULL;
+
+    }
+
+    while (1) {
+
+        if ((strnicmp(pch, "if", 2) || !Dos9_IsDelim(*(pch+2)))
+               && (strnicmp(pch, "for", 3) ||  !Dos9_IsDelim(*(pch+3)))) {
+
+            if ((next = Dos9_SearchToken_Hybrid(pch, "\n", "&|")) == NULL)
+                    return NULL;
+
+
+        } else {
+
+            if ((next = Dos9_SearchToken_Hybrid(pch, "\n", "(&|")) == NULL)
+                    return NULL;
+
+        }
+
+        switch(*next) {
+        case '\n':
+            next ++;
+            break;
+
+        case '&':
+        case '|':
+            if (*next == *(next + 1))
+                next ++;
+            next ++;
+            break;
+
+        case '(':
+            return next;
+
+        }
+
+        pch = next;
+
+    }
+
 }
