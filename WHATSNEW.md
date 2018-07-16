@@ -2199,5 +2199,17 @@ is a list of improvements I made during from 24th June to today.
 
 ## Monday 16th ##
 
-* Fixed a little bug in the **Dos9\_GetNextBlockBeginEx\(\)** function. 
+* Fixed a little bug in the **Dos9\_GetNextBlockBeginEx\(\)** function.
+
+* Added **PROMPT** command and **%PROMPT%** variable.
+
+* Added the **PECHO** command which consists of an echo command using prompt 
+  formats.
+
+* Moved the introduction message to **Dos9\_Auto.bat**.
+
+* Fixes to **dos9 variables** manual pages.
+
+* Modified **COLOR** to handle new **.** extension, which refer to the current 
+  default color. 
 

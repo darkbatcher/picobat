@@ -1,4 +1,4 @@
- /*
+/*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
  *   Copyright (C) 2010-2016 Romain GARBI
@@ -18,12 +18,10 @@
  *
  */
 
-#ifndef DOS9_COMMANDINFO_H
-#define DOS9_COMMANDINFO_H
+#ifndef DOS9_CMD_PECHO_H
+#define DOS9_CMD_PECHO_H
 
+int Dos9_CmdPecho(char* lpLine);
+int Dos9_CmdPrompt(char* lpLine);
 
-extern COMMANDINFO lpCmdInfo[];
-
-extern const int iCmdInfoNb;
-
-#endif
+#endif // DOS9_CMD_ECHO_H

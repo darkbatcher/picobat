@@ -2117,3 +2117,15 @@ ${(for %%a in (foo bar) do echo %%a) & echo loop}
 {{Monday 16th}}
 
 	- Fixed a little bug in the {Dos9_GetNextBlockBeginEx()} function.
+	
+	- Added {PROMPT} command and {%PROMPT%} variable.
+	
+	- Added the {PECHO} command which consists of an echo command using
+	prompt formats.
+	
+	- Moved the introduction message to {Dos9_Auto.bat}.
+	
+	- Fixes to {dos9 variables} manual pages.
+
+	- Modified {COLOR} to handle new {.} extension, which refer to the
+	current default color.

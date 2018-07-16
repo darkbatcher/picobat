@@ -1,0 +1,91 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2018  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+{{PROMPT Command and %PROMPT% Variable}}
+
+	The {PROMPT} command and the {%PROMPT%} enable changing the 
+	text of the command prompt.
+	
+{{Synopsis}}
+
+${PROMPT prompt_format
+SET PROMPT=prompt_format}
+
+	The {PROMPT} command is equivalent to a call to {set|SET} modifying
+	the {%PROMPT%} variable. The new format is specified through {prompt_format},
+	that can be any sequence of characters where the following sub
+	strings will be expanded:
+	
+	- {$a} : Expands to {&}.
+	
+	- {$b} : Expands to {|}.
+	
+	- {$c} : Expands to {(}.
+	
+	- {$d} : Expands to the content of {time|%DATE% variable}.
+	
+	- {$e} : Expands to an escape character (code 27).
+	
+	- {$f} : Expands to {)}.
+	
+	- {$g} : Expands to {>}.
+	
+	- {$h} : Expands to a backspace character.
+	
+	- {$l} : Expands to {<}.
+	
+	- {$n} : Expands to current drive (root, if the OS running {dos9|Dos9}
+	does not provide an equivalent for the windows concept).
+	
+	- {$p} : Expands to the current working directory.
+	
+	- {$q} : Expands to {=}.
+	
+	- {$s} : Expands to a space.
+	
+	- {$t} : Expands to the content of {time|%TIME% variable}.
+	
+	- {$u} : Expands to the content of {dos9var|%USERNAME% variable}.
+	That is, if not modified, the current user name.
+	
+	- {$w} : Expands to the content of {dos9var|%USERDOMAIN% variable}.
+	That is, if not modified, the current user domain name.
+	
+	- {$xCODE;} : Changes locally the color of the text displayed according
+	to {CODE}, where {CODE} is a code that can be accepted by the
+	{color|COLOR command}. Changes of color using this method will not affect
+	the {.} specifiers values. The original color of text is not restored
+	after displaying the prompt, but you can restore default values using
+	{$x..;}.
+	
+	- {$_} : Expands to a new line.
+	
+	- {$$} : Expands to {$}.
+	
+	- {$+} : Prints as many {+} as pushed directories inside 
+	the {spec/dirstack|directory stack}.
+	
+{{Compatibility}}
+
+	Mostly compatible with {cmd.exe}. However, the {$m} specifier is unsupported.
+	In addition, {$xCODE;} specifier is a {dos9|Dos9} extension.
+	
+	Available since {218.2}.
+	
+{{See also}}
+	
+	{commands|Commands list}

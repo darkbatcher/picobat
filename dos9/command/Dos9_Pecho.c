@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2016 Romain GARBI
+ *   Copyright (C) 2010-2018 Romain GARBI
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -26,31 +26,25 @@
 #include <string.h>
 #include <errno.h>
 
-#include <matheval.h>
-#include <inteval.h>
-
 #include <libDos9.h>
 
 #include "../core/Dos9_Core.h"
 
-#include "Dos9_Echo.h"
+#include "Dos9_Color.h"
 
 #include "../lang/Dos9_Lang.h"
 #include "../lang/Dos9_ShowHelp.h"
 
 // #define DOS9_DBG_MODE
 #include "../core/Dos9_Debug.h"
-
 #include "../errors/Dos9_Errors.h"
 
-int Dos9_CmdEcho(char* lpLine)
+int Dos9_CmdPecho(char* lpLine)
 {
 
 	ESTR* lpEsParameter;
-	char* tmp,
-		 	buf[1];
 
-	lpLine += 4;
+	lpLine += 5;
 
 	if (*lpLine!=' '
 		&& *lpLine!='\t'
@@ -64,47 +58,38 @@ int Dos9_CmdEcho(char* lpLine)
 
 	lpEsParameter=Dos9_EsInit();
 
-	if (ispunct(*lpLine)) {
+    Dos9_GetEndOfLine(lpLine+1, lpEsParameter);
 
-		Dos9_GetEndOfLine(lpLine+1, lpEsParameter);
-		fputs(Dos9_EsToChar(lpEsParameter), fOutput);
+    if (!ispunct(*lpLine) &&
+        !strcmp(lpEsParameter->str, "/?")) {
+
+        Dos9_ShowInternalHelp(DOS9_HELP_PECHO);
+
+    } else {
+
+        Dos9_OutputPromptString(lpEsParameter->str);
         fputs(DOS9_NL, fOutput);
 
-
-	} else if ((tmp = Dos9_GetNextParameterEs(lpLine, lpEsParameter))) {
-
-		tmp = Dos9_GetNextParameter(tmp, buf, sizeof(buf));
-
-		if (!stricmp(Dos9_EsToChar(lpEsParameter), "OFF") && tmp == NULL) {
-
-			bEchoOn=FALSE;
-
-		} else if (!stricmp(Dos9_EsToChar(lpEsParameter) , "ON") && tmp == NULL) {
-
-			bEchoOn=TRUE;
-
-		} else if (!strcmp(Dos9_EsToChar(lpEsParameter), "/?") && tmp == NULL) {
-
-			Dos9_ShowInternalHelp(DOS9_HELP_ECHO);
-
-		} else {
-
-			Dos9_GetEndOfLine(lpLine+1, lpEsParameter);
-			fputs(lpEsParameter->str, fOutput);
-            fputs(DOS9_NL, fOutput);
-
-		}
-
-	} else {
-
-		if (bEchoOn) fputs(lpMsgEchoOn, fOutput);
-		else fputs(lpMsgEchoOff, fOutput);
-
-        fputs(DOS9_NL, fOutput);
-
-	}
+    }
 
 	Dos9_EsFree(lpEsParameter);
 
 	return 0;
 }
+
+int Dos9_CmdPrompt(char* lpLine)
+{
+    ESTR* prompt = Dos9_EsInit();
+
+    Dos9_GetEndOfLine(Dos9_SkipBlanks(lpLine + 6), prompt);
+
+    if (!strcmp(prompt->str, "/?"))
+        Dos9_ShowInternalHelp(DOS9_HELP_PROMPT);
+    else
+        Dos9_SetEnv(lpeEnv, "PROMPT", prompt->str);
+
+    Dos9_EsFree(prompt);
+
+    return 0;
+}
+

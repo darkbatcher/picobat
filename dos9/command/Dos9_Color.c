@@ -43,6 +43,91 @@
 #define HWORD(a) ((0xF0 & (a)) >> 4)
 #define LWORD(a) (0xF & (a))
 
+int Dos9_GetColorCode(char* lpArg)
+{
+    int back=DOS9_GET_BACKGROUND_(colColor),
+        fore; /* back and foreground */
+    int i=strlen(lpArg);
+
+    if (i > 2
+        || i <= 0)
+        return -1;
+
+    if (i > 1) {
+
+        switch (tolower(*lpArg)) {
+
+        case '0':
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+            back = *lpArg - '0';
+            break;
+
+        case 'a':
+        case 'b':
+        case 'c':
+        case 'd':
+        case 'e':
+        case 'f':
+            back = 10 + tolower(*lpArg) - 'a';
+            break;
+
+        case '.':
+            back = DOS9_GET_BACKGROUND_(colColor);
+            break;
+
+        default:
+            return -1;
+
+        }
+
+        lpArg ++;
+    }
+
+    switch (tolower(*lpArg)) {
+
+    case '0':
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+    case '6':
+    case '7':
+    case '8':
+    case '9':
+        fore = *lpArg - '0';
+        break;
+
+    case 'a':
+    case 'b':
+    case 'c':
+    case 'd':
+    case 'e':
+    case 'f':
+        fore = 10 + tolower(*lpArg) - 'a';
+        break;
+
+    case '.':
+        fore = DOS9_GET_FOREGROUND_(colColor);
+        break;
+
+    default:
+        return -1;
+
+    }
+
+    return fore | (back << 4);
+
+}
+
 int Dos9_CmdColor(char* lpLine)
 {
 	char lpArg[4];
@@ -56,9 +141,7 @@ int Dos9_CmdColor(char* lpLine)
 
 		} else {
 
-			code = strtol(lpArg, NULL, 16);
-
-			if ((TO_CHAR(code) != code)
+			if ((code = Dos9_GetColorCode(lpArg)) == -1
                 || (HWORD(code) == LWORD(code))) {
 
                 Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, lpArg, 0);

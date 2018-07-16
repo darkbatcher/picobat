@@ -387,10 +387,11 @@ void Dos9_InitConsoleTitles(char *lpFileName, int bQuiet)
     if (*lpFileName=='\0') {
 
         if (!bQuiet)
-            Dos9_PrintIntroduction();
+            Dos9_SetEnv(lpeEnv, "DOS9_IS_SCRIPT", "false");
+        else
+            Dos9_SetEnv(lpeEnv, "DOS9_IS_SCRIPT", "true");
 
         strcat(lpTitle, "Command prompt");
-        Dos9_SetEnv(lpeEnv, "DOS9_IS_SCRIPT", "false");
         bIsScript = 0;
 
     } else {

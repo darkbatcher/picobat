@@ -57,7 +57,8 @@ SRC_FILES := \
 	./command/Dos9_Xargs.c ./core/Dos9_DirStack.c ./core/Dos9_EnvStack.c \
 	./core/Dos9_Exec.c ./console/Dos9_ConsoleANSI.c \
 	./console/Dos9_ConsoleWin.c ./linenoise/Dos9_LineNoise.c \
-	./linenoise/utf8.c
+	./linenoise/utf8.c ./core/Dos9_Prompt.c ./command/Dos9_Pecho.c \
+	./command/Dos9_CommandInfo.c
 
 OBJ_FILES := $(SRC_FILES:.c=.o)
 

@@ -201,6 +201,15 @@ void Dos9_LoadInternalHelp(void)
         =gettext("Run a command with arguments from standard input file.\n"
                  "Usage: XARGS [command ...]\n");
 
+    lpInternalHelp[DOS9_HELP_PROMPT]
+        =gettext("Changes dos9 command prompt.\n"
+                 "Usage: PROMPT prompt-format\n");
+
+    lpInternalHelp[DOS9_HELP_PECHO]
+        =gettext("Print a message using prompt format.\n"
+                 "Usage: PECHO prompt-format\n"
+                 "       PECHO.prompt-format\n");
+
 }
 
 

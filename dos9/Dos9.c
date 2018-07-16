@@ -167,7 +167,7 @@ int main(int argc, char *argv[])
 
     /* Map the commandinfo */
     lpclCommands = Dos9_MapCommandInfo(lpCmdInfo,
-                                sizeof(lpCmdInfo)/sizeof(COMMANDINFO));
+                                iCmdInfoNb);
 
     /* running auto batch initialisation */
     Dos9_RunAutoBat();

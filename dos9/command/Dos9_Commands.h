@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2016 Romain GARBI
+ *   Copyright (C) 2010-2018 Romain GARBI
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -56,5 +56,6 @@
 #include "Dos9_Pushd.h"
 #include "Dos9_Wc.h"
 #include "Dos9_Xargs.h"
+#include "Dos9_Pecho.h"
 
 #endif // DOS9_CMD_ECHO_H

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dos9 218.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-03 09:51+0200\n"
+"POT-Creation-Date: 2018-07-13 10:55+0200\n"
 "PO-Revision-Date: 2018-07-07 22:13+0530\n"
 "Last-Translator: darkounet <darkbatcher@dos9.org>\n"
 "Language-Team: TheBATeam (www.thebateam.org)\n"
@@ -34,8 +34,12 @@ msgstr "ग़लत : \"% s\" फ़ाइल खोजने में अस�
 
 #: ../dos9/errors/Dos9_Errors.c:51
 #, c-format
-msgid "Error : \"%s\" is not recognized as an internal or external command, an operable program or a batch file.\n"
-msgstr "ग़लत : \"%s\" कोई आंतरिक या बाहरी कमांड, अथवा कोई प्रोग्राम या बैच फ़ाइल के रूप में पहचाना नहीं जाता है।\n"
+msgid ""
+"Error : \"%s\" is not recognized as an internal or external command, an "
+"operable program or a batch file.\n"
+msgstr ""
+"ग़लत : \"%s\" कोई आंतरिक या बाहरी कमांड, अथवा कोई प्रोग्राम या बैच फ़ाइल के रूप में "
+"पहचाना नहीं जाता है।\n"
 
 #: ../dos9/errors/Dos9_Errors.c:55
 #, c-format
@@ -54,7 +58,8 @@ msgstr "ग़लत : लेबल \"%s\" ढूंढने में अस�
 
 #: ../dos9/errors/Dos9_Errors.c:64
 msgid "Warning : Using a Dos9 extension but the CMDLYCORRECT option is set.\n"
-msgstr "चेतावनी: आप एक डॉस 9 एक्सटेंशन का उपयोग कर रहे हैं लेकिन CMDLYCORRECT विकल्प सेट है।\n"
+msgstr ""
+"चेतावनी: आप एक डॉस 9 एक्सटेंशन का उपयोग कर रहे हैं लेकिन CMDLYCORRECT विकल्प सेट है।\n"
 
 #: ../dos9/errors/Dos9_Errors.c:67
 #, c-format
@@ -97,14 +102,21 @@ msgstr "ग़लत: स्ट्रीम मॉड्यूल: \"%s\"।\n"
 #: ../dos9/errors/Dos9_Errors.c:91
 #, c-format
 msgid ""
-"Error : \"%c\" is an invalid character for special variables. Special variables require their name to be strict ascii characters, exluding controls characters and space (0x00 - "
+"Error : \"%c\" is an invalid character for special variables. Special "
+"variables require their name to be strict ascii characters, exluding "
+"controls characters and space (0x00 - 0x30).\n"
+msgstr ""
+"ग़लत: \"%c\" विशेष प्रकार के चर के लिए उपयुक्त नाम नहीं है. विशेष चर के लिए उनके नामों को "
+"सख्त ASCII वर्ण होने की आवश्यकता होती है, नियंत्रण वर्णों को छोड़कर, और स्थान (0x00 - "
 "0x30).\n"
-msgstr "ग़लत: \"%c\" विशेष प्रकार के चर के लिए उपयुक्त नाम नहीं है. विशेष चर के लिए उनके नामों को सख्त ASCII वर्ण होने की आवश्यकता होती है, नियंत्रण वर्णों को छोड़कर, और स्थान (0x00 - 0x30).\n"
 
 #: ../dos9/errors/Dos9_Errors.c:97
 #, c-format
-msgid "Error : \"%s\" is not a valid block (should at least be enclosed within parenthesis).\n"
-msgstr "ग़लत: \"%s\" एक मान्य ब्लॉक नहीं है (कम से कम कोष्ठक के भीतर संलग्न किया जाना चाहिए)\n"
+msgid ""
+"Error : \"%s\" is not a valid block (should at least be enclosed within "
+"parenthesis).\n"
+msgstr ""
+"ग़लत: \"%s\" एक मान्य ब्लॉक नहीं है (कम से कम कोष्ठक के भीतर संलग्न किया जाना चाहिए)\n"
 
 #: ../dos9/errors/Dos9_Errors.c:101
 #, c-format
@@ -113,8 +125,10 @@ msgstr "ग़लत: \"%s\" मान्य टोकन विनिर्द�
 
 #: ../dos9/errors/Dos9_Errors.c:104
 #, c-format
-msgid "Error : Attempted to specify more than TOKEN_NB_MAX (%d) different tokens.\n"
-msgstr "ग़लत: TOKEN_NB_MAX (% d) अलग टोकन से अधिक निर्दिष्ट करने का प्रयास किया गया।\n"
+msgid ""
+"Error : Attempted to specify more than TOKEN_NB_MAX (%d) different tokens.\n"
+msgstr ""
+"ग़लत: TOKEN_NB_MAX (% d) अलग टोकन से अधिक निर्दिष्ट करने का प्रयास किया गया।\n"
 
 #: ../dos9/errors/Dos9_Errors.c:108
 #, c-format
@@ -133,12 +147,15 @@ msgstr "ग़लत : \"%s\" में पाइप नहीं बना स�
 
 #: ../dos9/errors/Dos9_Errors.c:117
 #, c-format
-msgid "Error : unable to run a subprocess of Dos9 to process the given input (\"%s\").\n"
+msgid ""
+"Error : unable to run a subprocess of Dos9 to process the given input (\"%s"
+"\").\n"
 msgstr "ग़लत : दिए गए इनपुट (\"% s\") को संसाधित करने के लिए DOS9 असमर्थ.\n"
 
 #: ../dos9/errors/Dos9_Errors.c:121
 #, c-format
-msgid "Error : Invalid token specifier. \"%s\" breaks input specifying rules.\n"
+msgid ""
+"Error : Invalid token specifier. \"%s\" breaks input specifying rules.\n"
 msgstr "ग़लत: अमान्य टोकन विनिर्देशक। \"% s\" इनपुट निर्दिष्ट नियमों को तोड़ देता है।\n"
 
 #: ../dos9/errors/Dos9_Errors.c:125
@@ -203,7 +220,8 @@ msgstr "ग़लत: आदेश remap करने में असमर्�
 #: ../dos9/errors/Dos9_Errors.c:162
 #, c-format
 msgid "Error : Trying to redefine already used \"%s\" command.\n"
-msgstr "ग़लत: \"%s\" आदेश का पहले से ही उपयोग फिर से परिभाषित करने का प्रयास कर रहा है ।\n"
+msgstr ""
+"ग़लत: \"%s\" आदेश का पहले से ही उपयोग फिर से परिभाषित करने का प्रयास कर रहा है ।\n"
 
 #: ../dos9/errors/Dos9_Errors.c:165
 #, c-format
@@ -212,8 +230,12 @@ msgstr "ग़लत: \"%s\" कमांड को फिर से परि�
 
 #: ../dos9/errors/Dos9_Errors.c:168
 #, c-format
-msgid "Error : Unable to set option \"%s\", it is built statically inside your version of Dos9.\n"
-msgstr "ग़लत: \"%s\" विकल्प सेट करने में असमर्थ, यह स्थिर रूप से Dos9 के अपने संस्करण के अंदर बनाया गया है ।\n"
+msgid ""
+"Error : Unable to set option \"%s\", it is built statically inside your "
+"version of Dos9.\n"
+msgstr ""
+"ग़लत: \"%s\" विकल्प सेट करने में असमर्थ, यह स्थिर रूप से Dos9 के अपने संस्करण के अंदर बनाया "
+"गया है ।\n"
 
 #: ../dos9/errors/Dos9_Errors.c:172
 #, c-format
@@ -282,9 +304,14 @@ msgstr "ग़लत: \"%s\" आपके सिस्टम पर मान्
 
 #: ../dos9/errors/Dos9_Errors.c:211
 #, c-format
-msgid "Error : \"%s\" is a relative path, RENAME (or REN) do not handles relative path. If you want to move the file and rename it at the same time, you should use MOVE command.\n"
+msgid ""
+"Error : \"%s\" is a relative path, RENAME (or REN) do not handles relative "
+"path. If you want to move the file and rename it at the same time, you "
+"should use MOVE command.\n"
 msgstr ""
-"ग़लत: \"%s\" एक सापेक्ष पथ है, RENAME (या REN) सापेक्ष पथ को नहीं समझता है। यदि आप फ़ाइल को स्थानांतरित करना चाहते हैं और एक ही समय में इसका नाम बदलना चाहते हैं, तो आपको MOVE कमांड का उपयोग करना चाहिए।\n"
+"ग़लत: \"%s\" एक सापेक्ष पथ है, RENAME (या REN) सापेक्ष पथ को नहीं समझता है। यदि आप "
+"फ़ाइल को स्थानांतरित करना चाहते हैं और एक ही समय में इसका नाम बदलना चाहते हैं, तो आपको "
+"MOVE कमांड का उपयोग करना चाहिए।\n"
 
 #: ../dos9/errors/Dos9_Errors.c:216
 msgid "Error : Unable to access Dos9 main thread to perform break.\n"
@@ -423,9 +450,11 @@ msgstr "कृपया सही विकल्प दर्ज करें (
 
 #: ../dos9/lang/Dos9_Lang.c:112
 msgid ""
-"This is free software, you can modify and/or redistribute it under the terms of the GNU Genaral Public License v3 (or any later version).\n"
+"This is free software, you can modify and/or redistribute it under the terms "
+"of the GNU Genaral Public License v3 (or any later version).\n"
 "\n"
-"Usage:\tDOS9 [/A[:]attr] [/I in] [/O out] [file ... | /K cmd ...|/C cmd ...]\n"
+"Usage:\tDOS9 [/A[:]attr] [/I in] [/O out] [file ... | /K cmd ...|/C "
+"cmd ...]\n"
 "\n"
 "\t/A:attr\tA list of attributes for Dos9\n"
 "\t\tC\tEnable CMDLYCORRECT option to enable more compatibility\n"
@@ -442,9 +471,11 @@ msgid ""
 "Feel free to report bugs and submit suggestions at : <darkbatcher@dos9.org>\n"
 "For more informations see : <http://dos9.org>"
 msgstr ""
-"यह एक मुफ्त सॉफ्टवेयर है, आप इसे जीएनयू जेनरल पब्लिक लाइसेंस (GNU GPL) v3 (या बाद के संस्करण) के तहत संशोधित और / या पुनर्वितरण कर सकते हैं।\n"
+"यह एक मुफ्त सॉफ्टवेयर है, आप इसे जीएनयू जेनरल पब्लिक लाइसेंस (GNU GPL) v3 (या बाद के "
+"संस्करण) के तहत संशोधित और / या पुनर्वितरण कर सकते हैं।\n"
 "\n"
-"उपयोग:\tDOS9 [/A[:]attr] [/I in] [/O out] [file ... | /K cmd ...|/C cmd ...]\n"
+"उपयोग:\tDOS9 [/A[:]attr] [/I in] [/O out] [file ... | /K cmd ...|/C "
+"cmd ...]\n"
 "\n"
 "\t/A:attr\tDOS9 के लिए विशेषताओं की एक सूची\n"
 "\t\tC\tअधिक अनुकूलता सक्षम करने के लिए CMDLYCORRECT विकल्प सक्षम करें\n"
@@ -458,7 +489,8 @@ msgstr ""
 "/C cmd रन cmd कमांड और बाहर निकलें।\n"
 "/k cmd रन cmd कमांड और सक्रिय रहें।\n"
 "\n"
-"बग की रिपोर्ट करने के लिए स्वतंत्र महसूस करें और यहां पर सुझाव सबमिट करें: <darkbatcher@dos9.org>\n"
+"बग की रिपोर्ट करने के लिए स्वतंत्र महसूस करें और यहां पर सुझाव सबमिट करें: "
+"<darkbatcher@dos9.org>\n"
 "अधिक जानकारी के लिए देखें: <http://dos9.org>"
 
 #: ../dos9/lang/Dos9_ShowHelp.c:43
@@ -675,10 +707,12 @@ msgstr ""
 #: ../dos9/lang/Dos9_ShowHelp.c:148
 msgid ""
 "Set local environment and options of the Dos9 command prompt.\n"
-"Usage: SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] [ENABLEFLOATS | DISABLEFLOATS] [CMDLYCORRECT | CMDLYINCORRECT]\n"
+"Usage: SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] "
+"[ENABLEFLOATS | DISABLEFLOATS] [CMDLYCORRECT | CMDLYINCORRECT]\n"
 msgstr ""
 "स्थानीय वातावरण और Dos9 कमांड प्रॉंप्ट के विकल्प सेट करें ।\n"
-"उपयोग: SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] [ENABLEFLOATS | DISABLEFLOATS] [CMDLYCORRECT | CMDLYINCORRECT]\n"
+"उपयोग: SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] "
+"[ENABLEFLOATS | DISABLEFLOATS] [CMDLYCORRECT | CMDLYINCORRECT]\n"
 
 #: ../dos9/lang/Dos9_ShowHelp.c:152
 msgid ""
@@ -738,7 +772,8 @@ msgstr ""
 
 #: ../dos9/lang/Dos9_ShowHelp.c:180
 msgid ""
-"[Obsolete] Sets or Clears Extended CTRL+C checking on DOS system. (Do nothing)\n"
+"[Obsolete] Sets or Clears Extended CTRL+C checking on DOS system. (Do "
+"nothing)\n"
 "Usage: BREAK [ON | OFF]\n"
 msgstr ""
 "[अप्रचलित] डॉस सिस्टम पर विस्तारित CTRL + C जांच सेट या साफ़ करता है। (कुछ भी नहीं)\n"
@@ -785,3 +820,16 @@ msgid ""
 msgstr ""
 "मानक इनपुट फ़ाइल से तर्क के साथ कोई आदेश चलाएं ।\n"
 "उपयोग: XARGS [आदेश...]\n"
+
+#: ../dos9/lang/Dos9_ShowHelp.c:205
+msgid ""
+"Changes dos9 command prompt.\n"
+"Usage: PROMPT prompt-format\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_ShowHelp.c:209
+msgid ""
+"Print a message using prompt format.\n"
+"Usage: PECHO prompt-format\n"
+"       PECHO.prompt-format\n"
+msgstr ""

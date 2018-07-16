@@ -68,14 +68,10 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
 		if (*(pIn->lpFileName)=='\0'
 		    && bEchoOn ) {
 
-			Dos9_SetConsoleTextColor(DOS9_FOREGROUND_IGREEN | DOS9_GET_BACKGROUND(colColor));
-			fprintf(fOutput, DOS9_NL "DOS9 ");
+            fputs(DOS9_NL, fOutput);
+		    Dos9_OutputPrompt();
 
-			Dos9_SetConsoleTextColor(colColor);
-
-			fprintf(fOutput, "%s>" , lpCurrentDir);
-
-		}
+        }
 
 		if (Dos9_GetLine(lpLine, pIn))
 			continue;
@@ -91,11 +87,8 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
 		    && bEchoOn
 		    && *lpCh!='@') {
 
-			Dos9_SetConsoleTextColor(DOS9_FOREGROUND_IGREEN | DOS9_GET_BACKGROUND(colColor));
-			fprintf(fOutput, DOS9_NL "DOS9 ");
-			Dos9_SetConsoleTextColor(colColor);
-
-			fprintf(fOutput, "%s>%s" DOS9_NL, lpCurrentDir, Dos9_EsToChar(lpLine));
+            Dos9_OutputPrompt();
+			fprintf(fOutput, "%s" DOS9_NL, Dos9_EsToChar(lpLine));
 
 		}
 
@@ -687,6 +680,7 @@ void Dos9_LaunchExternalBatch(struct batch_launch_data_t* arg)
 
     bIgnoreExit = TRUE;
     bIsScript = 1; /* this is obviously a script */
+    Dos9_SetEnv(lpeEnv, "DOS9_IS_SCRIPT", "true");
 
     strncpy(ifIn.lpFileName, arg->lpFileName, sizeof(ifIn.lpFileName));
     ifIn.lpFileName[sizeof(ifIn.lpFileName)-1] = '\0';

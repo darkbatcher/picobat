@@ -1,6 +1,6 @@
 @(
 :: Dos9 global initialization script
-:: copyright (c) 2010-2016 Romain GARBI
+:: copyright (c) 2010-2018 Romain GARBI
 ::
 :: This is free software. You can redistribute it and/or modify under the terms
 :: of the GNU General Public Licence V3
@@ -12,7 +12,7 @@ IF %DOS9_OS%==WINDOWS (
 	:: set special dos9 directories for commands
 	SET PATH=!DOS9_PATH!/cmd;!DOS9_PATH!;!PATH!
 
-	:: Define additionnal path for sub-programs
+	:: Define additional path for sub-programs
 	SET DOS9_SHARE=!DOS9_PATH!/share
 	SET DOS9_ETC=!DOS9_PATH!/etc
 
@@ -26,10 +26,14 @@ IF %DOS9_OS%==WINDOWS (
 
 	:: set windows compatible variable
 	SET SYSTEMROOT=/bin
+	SET SYSTEMDRIVE=/
+	
+	
 	SET PROGRAMFILES=!DOS9_PATH!/bin
-	SET SYSTEMDRIVE=!DOS9_PATH!/bin
-	SET "USERPROFILE=%HOME%"
-
+	SET USERPROFILE=%HOME%
+	id -un | SET /p USERNAME=
+	uname -n | SET /p USERDOMAIN=
+	
 	:: Define additionnal paths for sub-programs
 	SET DOS9_SHARE=!DOS9_PATH!/share
 	SET DOS9_ETC=!DOS9_PATH!/etc
@@ -38,9 +42,22 @@ IF %DOS9_OS%==WINDOWS (
 )
 
 ALIAS /f help=hlp.bat
+SET PROMPT=$x.a;DOS9$x..; $P$G
 
 IF exist !DOS9_ETC!/Dos9_Auto.bat CALL !DOS9_ETC!/Dos9_Auto.bat
 IF exist !USERPROFILE!/.dos9/Dos9_Auto.bat CALL !USERPROFILE!/.dos9/Dos9_Auto.bat
+
+IF %DOS9_IS_SCRIPT%==false (
+PECHO $x9E;  ______   _______  _______   _____                                          
+ECHO  (  __  \ (  ___  ^)(  ____ \ / ___ \  Dos9 [%DOS9_VERSION%] - Beta release            
+ECHO  ^| (  \  ^)^| (   ^) ^|^| (    \/( (   ^) ^) Copyright (c^) 2010-@YEAR@                
+ECHO  ^| ^|   ^) ^|^| ^|   ^| ^|^| (_____ ( (___^) ^|    Romain Garbi, Teddy Astie           
+ECHO  ^| ^|   ^| ^|^| ^|   ^| ^|(_____  ^) \____  ^|                                        
+ECHO  ^| ^|   ^) ^|^| ^|   ^| ^|      ^) ^|      ^) ^| This is free software, you can modify  
+ECHO  ^| (__/  ^)^| (___^) ^|/\____^) ^|/\____^) ^) and/or redistribute it under the terms 
+ECHO  (______/ (_______^)\_______^)\______/  of the GNU Genaral Public License V3   
+PECHO                                                                              $x..;
+)
 
 :: At this state, dos9 will reset neither options or variables that have
 :: been set, so that, it might be something good to reset them by yourself.

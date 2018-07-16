@@ -1,7 +1,7 @@
- /*
+/*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2016 Romain GARBI
+ *   Copyright (C) 2010-2016 Romain GARBI, Teddy ASTIE
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -17,13 +17,10 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#ifndef DOS9_PROMPT_H
+#define DOS9_PROMPT_H 1
 
-#ifndef DOS9_COMMANDINFO_H
-#define DOS9_COMMANDINFO_H
-
-
-extern COMMANDINFO lpCmdInfo[];
-
-extern const int iCmdInfoNb;
+void Dos9_OutputPrompt(void);
+void Dos9_OutputPromptString(const char* prompt);
 
 #endif

@@ -1,6 +1,6 @@
 #
 #   Dos9 Manual pages, The Dos9 project
-#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#   Copyright (C) 2012-2018  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -21,46 +21,31 @@
 
 {{Synopsis}}
 
-${	COLOR [code]}
+${COLOR [code]}
 
-	Change console's both background and text colours. The code {code} should be constitued of
-	two character. The first should represent the text color and the second should represent the
-	console background color. These characters must be one of the folowing values :
+	Change console both background and text colours. The code {code} should be constituted of
+	two character. The rightmost hexadecimal digit should represent the text colour 
+	and the leftmost should represent the console background colour. These characters must 
+	be one of the following values :
 
-		- 0 : Black
+${0 : Black        8 : Grey
+1 : Dark blue    9 : Bright blue
+2 : Green        A : Bright green
+3 : Grey-Blue    B : Cyan
+4 : Maroon       C : Red
+5 : Dark red     D : Pink
+6 : Khaki        E : Yellow
+7 : Bright grey  F : White
 
-			- 1 : Dark blue
+. : Current default color}
 
-			- 2 : Green
+	If you don't specify {code}, then the {color} command will reset the colours to default
+	(That is {07} on windows platforms and depends of the terminal settings on unix platforms).
 
-			- 3 : Grey-Blue
-
-			- 4 : Marroon
-
-            - 5 : Dark red
-
-			- 6 : Kaki
-
-			- 7 : Bright grey
-
-			- 8 : Grey
-
-			- 9 : Bright blue
-
-			- A : Bright green
-
-			- B : Cyan
-
-			- C : Red
-
-			- D : Pink
-
-			- E : Yellow
-
-			- F : White
-
-	If you don't specify {code}, then the {color} command will reset the colours to default.
-
+	The {.} specifier refers to the current default color, either background or foreground color.
+	Note that a call to {COLOR} changes the default color, as such, the color referred to by
+	{.} is not fixed across numerous calls to {COLOR}, as it is across {prompt|PROMPT} calls.
+	
 {{Compatibility}}
 
 	Fully compatible with {cmd.exe}.

@@ -293,8 +293,8 @@ int more_void(int c, FILE* p) { return 0; }
 
 int more_fputc_u8_wrapper (int c, FILE* p)
 {
-    static char chrs[5];
-    static int i = 0;
+    static __thread char chrs[5];
+    static __thread int i = 0;
 
     //fprintf (p, "more_fputc_u8_wrapper %X %X\n", c & 0x40, c & 0x80);
 

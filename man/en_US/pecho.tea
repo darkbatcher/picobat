@@ -1,6 +1,6 @@
 #
-#   Dos9 Makefiles, The Dos9 project
-#   Copyright (C) 2012-2018  Romain Garbi, Teddy Astie
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2018  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -15,31 +15,24 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-ROOTDIR = ..
-include ../config.mk
+{{PECHO command}}
 
-cmds = hlp.bat
-root_cmds = Dos9_Auto.bat
-
-ifeq ($(fn_WIN32),0)
-	cmds += dos9_start
-endif
-
-all: Dos9_Auto.bat
-
-clean:
-
-bin: hlp_man 
-	mkdir -p $(BINDIR)/cmd
-	cp -f $(root_cmds) $(BINDIR)
-	cp -f $(cmds) $(BINDIR)/cmd
-
-hlp_man:
-	mkdir -p $(BINDIR)/share/dos9/
-	cp -rL $(ROOTDIR)/man $(BINDIR)/share/dos9/hlp
-
-.in.bat:
-	../femto-subst < $< > $@
+	The {PECHO} command outputs message formatted following rules
+	defined by {prompt|PROMPT}. This enables for example to change temporarily
+	the text colour.
 	
-.PHONY: all clean bin hlp_man 
-.SUFFIXES: .in .bat
+{{Synopsis}}
+
+${PECHO format
+PECHO.format}
+
+	Output {format} according to rules defined by {prompt|PROMPT}.
+	
+{{Compatibility}}
+
+	{PECHO} is a {dos9|Dos9} extension.
+	Available since {218.2}.
+	
+{{See also}}
+	
+	{commands|Commands list}

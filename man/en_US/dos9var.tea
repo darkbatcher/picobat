@@ -16,18 +16,25 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-{{%DOS9_VER%, %DOS9_OS%, %DOS9_OS_TYPE%, %DOS9_PATH%, %DOS9_SHARE%, %DOS9_ETC% variables}}
+{{%DOS9_VERSION%, %DOS9_OS%, %DOS9_OS_TYPE%, %DOS9_PATH%, %DOS9_SHARE%, %DOS9_ETC%, %DOS9_IS_SCRIPT% variables}}
 
-	{%DOS9_VER%} contains the version number of {dos9|Dos9}.
-
-	{%DOS9_OS%} contains the name of the os on which {dos9|Dos9} is runing.
+	The {%DOS9_VERSION%} variable expands to the current version of
+	{dos9|Dos9}.
 	
-	{%DOS9_OS_TYPE%} contains the name of the type of os on which {dos9|Dos9}
-	is running.
-
-	{%DOS9_PATH%} contains the path to the {dos9|Dos9} executable.
-
-	All these variables are directly defined by {Dos9}.
+	The {%DOS9_OS%} variable expands to the name of the current {OS} running
+	{dos9|Dos9}.
+	
+	The {%DOS9_OS_TYPE%} variable expands to the type of the current {OS} running
+	{dos9|Dos9}.
+	
+	The {%DOS9_PATH%} variables expands to the path to {dos9|Dos9} directory.
+	
+	The {%DOS9_IS_SCRIPT%} variable is used to detect whether the execution
+	flow comes from a script or from the prompt.
+	
+	{%DOS9_SHARE%} and {%DOS9_ETC%} expands to the locations of various
+	{dos9|Dos9} files.
+	
 
 {{Synopsis}}
 
@@ -71,6 +78,14 @@ ${%DOS9_OS_TYPE%}
 	- {*NIX} : For Unix-based operating systems.
 
 	- {WINDOWS} : For windows based operating systems.
+	
+${%DOS9_IS_SCRIPT%}
+
+	Expands to {false} if {dos9|Dos9} has been launched in interactive mode
+	(that is, with no script to execute) or {true} else. This value is useful
+	inside configuration scripts such as {dos9auto|Dos9_Auto.bat}. The value
+	of {%DOS9_IS_SCRIPT%} is inherited when a script is {call|CALL}ed, however,
+	the value is overwritten in any other case.
 	
 ${%DOS9_SHARE%}
 	

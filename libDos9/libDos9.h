@@ -247,6 +247,7 @@ LIBDOS9 COMMANDFLAG     Dos9_GetCommandProc(char* lpCommandLine, LPCOMMANDLIST l
     #define DOS9_FOREGROUND_DEFAULT DOS9_FOREGROUND_GREEN | DOS9_FOREGROUND_RED | DOS9_FOREGROUND_BLUE
 
     #define DOS9_GET_FOREGROUND(a) (a & 0x0F)
+    #define DOS9_GET_FOREGROUND_(a) (a & 0x0F)
     #define DOS9_GET_BACKGROUND(a) (a & 0xF0)
     #define DOS9_GET_BACKGROUND_(a) ((a & 0xF0)>>4)
 

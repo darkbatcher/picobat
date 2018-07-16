@@ -15,28 +15,57 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-{{%TIME% and %DATE% Variables}}
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2018  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 
-	Generate date and time within a batch script.
+{{%DATE% and %TIME% variables}}
+
+	The {%DATE%} and {%TIME%} environment variable expand to current date
+	and time.
 
 {{Synopsis}}
 
 ${%TIME%}
 
-	Gets expanded into the current computer time, using {HH:MM:SS,00} as
-	format. Milliseconds are set to 0 for compatibility.
+	Expands to the current hour, using appropriate locale format.
+	(usually {HH:MM:SS,cc}). The support of centiseconds depends on the
+	platform. Since version {218.2} centiseconds are supported using
+	windows, though this is still not the case for *nixes. Note that the {%TIME%}
+	variable includes leading {0} for hours also. 
 
 ${%DATE%}
 
-	Gets expanded into the current computer date, using {DD/MM/YYYY} as
-	format.
+	Expand to current date, using appropriate locale format. Leading zeros are
+	also added between fields.
 	
+{{Note}}
+
+	{%TIME%} and {%DATE%} are dynamic variables, meaning that they are generated
+	during the {spec/exp|variable expansion}. Thus these variables can not be
+	modified using {set|SET}.
+
 {{Compatiblity}}
 
 	Compatible with {cmd.exe}.
 
-	Available since {0.7}.
+	Available since {0.7}
 
 {{See also}}
 
-	{spec/var|Environment variables}, {spec/index|Specifications index}
+	{spec/var|Environment variable}, {spec/index|Specification index}
+
