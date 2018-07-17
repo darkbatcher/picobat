@@ -345,6 +345,8 @@ struct libcu8_history_entry_t
 CRITICAL_SECTION libcu8_history_lock;
 int libcu8_history_count = 0;
 
+__cdecl void (*libcu8_completion_handler)(const char*, char**) = NULL;
+__cdecl void (*libcu8_completion_handler_free)(char*);
 
 #define DEL 0x08
 #define TAB 0x09
@@ -357,6 +359,7 @@ int libcu8_readconsole(int fd, char* buf, size_t size, size_t* written)
          *pout,
          *pos = buf, /* the position of the cursor in buf */
          *newpos,
+         *completion,
          last = 0;
 
     wchar_t* wstr;
@@ -443,8 +446,8 @@ int libcu8_readconsole(int fd, char* buf, size_t size, size_t* written)
                 buf -= newpos - pos;
                 size += newpos - pos;
 
-                libcu8_refresh_console_line(conout, orig_buf,
-                                        orig-size, &line, &csbi);
+                libcu8_refresh_console_line(conout, orig_buf, orig-size,
+                                                    pos - orig_buf, &line, &csbi);
 
                 libcu8_clear_character(conout, &line);
 
@@ -467,17 +470,11 @@ int libcu8_readconsole(int fd, char* buf, size_t size, size_t* written)
                         - libcu8_count_characters(libcu8_history[hid].entry,
                                               libcu8_history[hid].size);
 
-                buf = (pos = orig_buf) + libcu8_history[hid].size;
+                pos = (buf = orig_buf + libcu8_history[hid].size);
                 size = orig - libcu8_history[hid].size;
 
-                line.current.X = line.orig.X;
-                line.current.Y = line.orig.Y;
-
-                libcu8_refresh_console_line(conout, orig_buf, orig - size, &line, &csbi);
-
-                line.current = line.end;
-                pos = buf;
-                SetConsoleCursorPosition(conout, line.current);
+                libcu8_refresh_console_line(conout, orig_buf, orig-size,
+                                                        pos - orig_buf, &line, &csbi);
 
                 if (ret > 0)
                     FillConsoleOutputCharacterW(conout, L' ', ret, line.end, &wrt);
@@ -506,17 +503,11 @@ int libcu8_readconsole(int fd, char* buf, size_t size, size_t* written)
                                               libcu8_history[hid].size);
 
 
-                buf = (pos = orig_buf) + libcu8_history[hid].size;
+                pos = (buf = orig_buf + libcu8_history[hid].size);
                 size = orig - libcu8_history[hid].size;
 
-                line.current.X = line.orig.X;
-                line.current.Y = line.orig.Y;
-
-                libcu8_refresh_console_line(conout, orig_buf, orig - size, &line, &csbi);
-
-                line.current = line.end;
-                pos = buf;
-                SetConsoleCursorPosition(conout, line.current);
+                libcu8_refresh_console_line(conout, orig_buf, orig-size,
+                                                        pos - orig_buf, &line, &csbi);
 
                 if (ret > 0)
                     FillConsoleOutputCharacterW(conout, L' ', ret, line.end, &wrt);
@@ -568,11 +559,8 @@ int libcu8_readconsole(int fd, char* buf, size_t size, size_t* written)
                     size += pos - newpos;
                     pos = newpos;
 
-                    /* decrement positions of cursor and end of line */
-                    libcu8_coord_decrement(&(line.current), &csbi);
-
-                    libcu8_refresh_console_line(conout, orig_buf,
-                                            orig-size, &line, &csbi);
+                    libcu8_refresh_console_line(conout, orig_buf, orig-size,
+                                                        pos - orig_buf, &line, &csbi);
 
                     libcu8_clear_character(conout, &line);
 
@@ -581,7 +569,39 @@ int libcu8_readconsole(int fd, char* buf, size_t size, size_t* written)
                 continue;
 
             case TAB:
-                /*something to do with autocompletion */
+                if (libcu8_completion_handler) {
+                    /*something to do with autocompletion */
+                    newpos = libcu8_completion_get_item(pos, orig_buf, buf);
+
+                    if (newpos) {
+
+                        libcu8_completion_handler(newpos, &completion);
+
+                        if (completion == (char*)-1) {
+                            /* Well, apparently a list has been printed make a simple
+                               assertion : The prompt is the same length as the
+                               previous one ... */
+
+                            SetConsoleCursorPosition(conout, line.end);
+                            libcu8_completion_handler(newpos, NULL);
+
+                            GetConsoleScreenBufferInfo(conout, &csbi);
+                            line.orig = csbi.dwCursorPosition;
+
+                        } else if (completion != NULL) {
+
+                            libcu8_completion_insert(completion, &pos, &buf, &size);
+                            libcu8_completion_handler_free(completion);
+
+                        }
+
+                        libcu8_refresh_console_line(conout, orig_buf, orig-size,
+                                    pos - orig_buf, &line, &csbi);
+
+                        free(newpos);
+
+                    }
+                }
                 continue;
 
             case '\r':
@@ -591,6 +611,7 @@ int libcu8_readconsole(int fd, char* buf, size_t size, size_t* written)
 
                 /* write character at the console */
                 WriteConsoleW(conout, wcs, wlen / sizeof(wchar_t), &wrt, NULL);
+
                 libcu8_write_buffered(fd, &buf, &size, utf8, sizeof(utf8) - len);
 
                 break;
@@ -600,9 +621,6 @@ int libcu8_readconsole(int fd, char* buf, size_t size, size_t* written)
                    content of utf-8 into buf and put the extra bytes inside
                    utf-8 in order not break the buffered output system */
 
-                libcu8_coord_increment(&(line.current), &csbi);
-                libcu8_coord_increment(&(line.end), &csbi);
-
                 if (pos == buf) {
 
                     /* Update pos. We don't risk anything as pos is never to be
@@ -610,7 +628,8 @@ int libcu8_readconsole(int fd, char* buf, size_t size, size_t* written)
                     pos += sizeof(utf8) - len;
 
                     libcu8_write_buffered(fd, &buf, &size, utf8, sizeof(utf8) - len);
-                    libcu8_refresh_console_line(conout, orig_buf, orig-size, &line, &csbi);
+                    libcu8_refresh_console_line(conout, orig_buf, orig-size,
+                                                        pos - orig_buf, &line, &csbi);
                     break; /* Nothing to do */
 
                 }
@@ -646,7 +665,8 @@ int libcu8_readconsole(int fd, char* buf, size_t size, size_t* written)
 
                 /* write to the buffer in with intermediate buffering function */
                 libcu8_write_buffered(fd, &buf, &size, utf8, sizeof(utf8) - len);
-                libcu8_refresh_console_line(conout, orig_buf, orig-size, &line, &csbi);
+                libcu8_refresh_console_line(conout, orig_buf, orig-size,
+                                                        pos - orig_buf, &line, &csbi);
 
         }
 
@@ -667,6 +687,7 @@ err:
 }
 
 int libcu8_refresh_console_line(void* handle, char* buf, size_t size,
+                                    size_t cursor,
                                     struct libcu8_line_t* line,
                                     CONSOLE_SCREEN_BUFFER_INFO* csbi)
 {
@@ -679,25 +700,62 @@ int libcu8_refresh_console_line(void* handle, char* buf, size_t size,
     info.dwSize = 100;
     info.bVisible = FALSE;
 
+    assert(cursor <= size);
+
     SetConsoleCursorInfo(handle, &info);
     SetConsoleCursorPosition(handle, line->orig);
 
-    /* Update orig, just in case the windows has be resized */
+    /* Update orig, just in case the windows has been resized */
     GetConsoleScreenBufferInfo(handle, csbi);
     line->orig.X = csbi->dwCursorPosition.X;
     line->orig.Y = csbi->dwCursorPosition.Y;
 
-    if (!(wstr = libcu8_xconvert(LIBCU8_TO_U16,
+    if (cursor) {
+
+        if (!(wstr = libcu8_xconvert(LIBCU8_TO_U16,
                                     buf,
-                                    size, &wlen)))
-        return -1;
+                                    cursor, &wlen)))
+            return -1;
 
-    WriteConsoleW(handle, wstr,
-                    wlen/sizeof(wchar_t), &wrt, NULL);
+        WriteConsoleW(handle, wstr,
+                        wlen/sizeof(wchar_t), &wrt, NULL);
 
-    GetConsoleScreenBufferInfo(handle, csbi);
-    line->end.X = csbi->dwCursorPosition.X;
-    line->end.Y = csbi->dwCursorPosition.Y;
+        GetConsoleScreenBufferInfo(handle, csbi);
+        line->current.X = csbi->dwCursorPosition.X;
+        line->current.Y = csbi->dwCursorPosition.Y;
+
+        free(wstr);
+
+    } else {
+
+        line->current.X = line->orig.X;
+        line->current.Y = line->orig.Y;
+
+    }
+
+    if (size - cursor) {
+
+        if (!(wstr = libcu8_xconvert(LIBCU8_TO_U16,
+                                        buf + cursor,
+                                        size - cursor, &wlen)))
+            return -1;
+
+        WriteConsoleW(handle, wstr,
+                        wlen/sizeof(wchar_t), &wrt, NULL);
+
+        GetConsoleScreenBufferInfo(handle, csbi);
+
+        line->end.X = csbi->dwCursorPosition.X;
+        line->end.Y = csbi->dwCursorPosition.Y;
+
+        free(wstr);
+
+    } else {
+
+        line->end.X = line->current.X;
+        line->end.Y = line->current.Y;
+
+    }
 
     /* Check that cursors we store (line->end and line->orig)
        are still coherent with size, so that we can detect
@@ -725,7 +783,6 @@ int libcu8_refresh_console_line(void* handle, char* buf, size_t size,
     info.bVisible = TRUE;
     SetConsoleCursorInfo(handle, &info);
 
-    free(wstr);
 }
 
 void libcu8_clear_character(void* handle, struct libcu8_line_t* line)
@@ -983,6 +1040,71 @@ int libcu8_count_characters(char* buf, size_t size)
     }
 
     return ret;
+}
+
+char* libcu8_completion_get_item(const char* restrict pos,
+                                 const char* restrict orig,
+                                 const char* restrict buf)
+{
+    size_t size = 0;
+    char quotes = 0;
+    char* ret;
+
+    if (buf > pos
+        && *pos == '"')
+        quotes = 1;
+
+    while (pos > orig) {
+
+        if (*(pos - 1) == '"') {
+
+            quotes = !quotes;
+
+        } else if (!quotes &&
+                   (*(pos - 1) == '\t' || *(pos - 1) == ' '
+                    || *(pos - 1) == '&' || *(pos - 1) == '|')) {
+
+            break;
+
+        }
+
+
+        pos --;
+        size ++;
+
+    }
+
+    if (size) {
+
+        if (*pos == '"') {
+            pos ++;
+            size --;
+        }
+
+        if (ret = malloc(size + 1))
+            snprintf(ret, size + 1, "%s", pos);
+
+    } else if (ret = malloc(1))
+        *ret = '\0';
+
+    return ret;
+}
+
+void libcu8_completion_insert(const char* completion,
+                                char** pos, char** buf, size_t* size)
+{
+    size_t len = strlen(completion);
+
+    if (*size < len)
+        return; /* no room left, just ignore */
+
+    *size -= len;
+
+    memcpy(*pos + len, *pos, *buf - *pos);
+    memcpy(*pos, completion, len);
+
+    *pos += len;
+    *buf += len;
 }
 
 /* Write buffered functions */

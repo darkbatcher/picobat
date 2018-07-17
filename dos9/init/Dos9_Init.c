@@ -175,11 +175,9 @@ void Dos9_InitLibDos9(void)
 
     DOS9_DBG("Initializing console ...\n");
     Dos9_InitConsole();
+    Dos9_InitCompletion();
 
     DOS9_DBG("Setting locale ...\n");
-
-
-
 
 #ifndef WIN32
     setlocale(LC_ALL, "");

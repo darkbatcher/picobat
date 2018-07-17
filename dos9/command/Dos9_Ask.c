@@ -35,9 +35,10 @@ int Dos9_AskConfirmation(int iFlags, const char* lpMsg, ...)
 	const char *lpChoices=NULL;
 	char *lpLf;
 
-	int iRet;
+	int iRet, i;
+	char c;
 
-	ESTR* lpInput=Dos9_EsInit();
+	char lpInput[30];
 
 	if (iFlags & DOS9_ASK_YNA) {
 
@@ -103,32 +104,51 @@ int Dos9_AskConfirmation(int iFlags, const char* lpMsg, ...)
 
 		fputs(lpChoices, fError);
 
-		Dos9_EsGet(lpInput, fInput);
+        i = 0;
 
-		Dos9_RmTrailingNl(Dos9_EsToChar(lpInput));
+        while (1) {
 
-		if (!stricmp(Dos9_EsToChar(lpInput), lpAskYes)
-		    || !stricmp(Dos9_EsToChar(lpInput), lpAskYesA)) {
+            read(STDIN_FILENO, &c, 1);
+
+            if (c == '\r')
+                continue;
+
+            if (c == '\n')
+                break;
+
+            if (i < sizeof(lpInput))
+                lpInput[i] = c;
+
+            i ++;
+        }
+
+        if (i < sizeof(lpInput))
+            lpInput[i] = '\0';
+        else
+            lpInput[sizeof(lpInput) - 1] = '\0';
+
+		if (!stricmp(lpInput, lpAskYes)
+		    || !stricmp(lpInput, lpAskYesA)) {
 
 			iRet=DOS9_ASK_YES;
 
-		} else if (!stricmp(Dos9_EsToChar(lpInput), lpAskNo)
-		           || !stricmp(Dos9_EsToChar(lpInput), lpAskNoA)) {
+		} else if (!stricmp(lpInput, lpAskNo)
+		           || !stricmp(lpInput, lpAskNoA)) {
 
 			iRet=DOS9_ASK_NO;
 
 		} else {
 
 			if ((iFlags & DOS9_ASK_YNA) && (
-			        !stricmp(Dos9_EsToChar(lpInput), lpAskAll)
-			        || !stricmp(Dos9_EsToChar(lpInput), lpAskAllA))) {
+			        !stricmp(lpInput, lpAskAll)
+			        || !stricmp(lpInput, lpAskAllA))) {
 
 
 				iRet=DOS9_ASK_ALL;
 
 			} else if ((iFlags & (DOS9_ASK_DEFAULT_Y | DOS9_ASK_DEFAULT_N
 			                      | DOS9_ASK_DEFAULT_A))
-			           && *Dos9_EsToChar(lpInput)=='\0') {
+			           && *lpInput=='\0') {
 
 				iRet=iFlags & (DOS9_ASK_DEFAULT_Y | DOS9_ASK_DEFAULT_N
 				               | DOS9_ASK_DEFAULT_A);
@@ -149,6 +169,5 @@ int Dos9_AskConfirmation(int iFlags, const char* lpMsg, ...)
 
 	va_end(vaArgs);
 
-	Dos9_EsFree(lpInput);
 	return iRet;
 }

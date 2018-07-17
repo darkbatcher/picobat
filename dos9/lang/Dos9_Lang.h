@@ -62,6 +62,8 @@ extern const char* lpAskAllA;
 
 extern const char* lpAskInvalid;
 
+extern const char* lpManyCompletionOptions;
+
 
 void Dos9_LoadStrings(void); /* a function that loads differents
                                languages traductions */

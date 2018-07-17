@@ -208,6 +208,7 @@ int libcu8_get_console_wchar(void* handle, wchar_t* wc, int* vk);
 int libcu8_get_console_input(void* handle, char* buf, size_t* size, int* vk);
 
 int libcu8_refresh_console_line(void* handle, char* buf, size_t size,
+                                    size_t cursor,
                                     struct libcu8_line_t* line,
                                     CONSOLE_SCREEN_BUFFER_INFO* csbi);
 void libcu8_clear_character(void* handle, struct libcu8_line_t* line);
@@ -219,6 +220,12 @@ char* libcu8_previous_character(char* restrict pos, char* restrict orig_buf);
 char* libcu8_next_character(char* restrict  pos, char* restrict buf);
 void libcu8_history_add_entry(char* orig_buf, size_t size);
 int libcu8_count_characters(char* buf, size_t size);
+
+char* libcu8_completion_get_item(const char* restrict pos,
+                                 const char* restrict orig,
+                                 const char* restrict buf);
+void libcu8_completion_insert(const char* completion,
+                                char** pos, char** buf, size_t* size);
 
 
 /*

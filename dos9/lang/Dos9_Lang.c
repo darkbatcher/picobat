@@ -69,14 +69,14 @@ const char* lpAskAllA;
 
 const char* lpAskInvalid;
 
+const char* lpManyCompletionOptions;
+
 void Dos9_LoadStrings(void)
 {
-	/* texte des commandes ECHO et PAUSE */
 	lpMsgEchoOn=gettext("Echo command enabled");
 	lpMsgEchoOff=gettext("Echo command disabled");
 	lpMsgPause=gettext("Press any key to continue...");
 
-	/* texte de la commande DIR */
 	lpDirNoFileFound=gettext("\tNo files found");
 	lpDirListTitle=gettext("Last change\t\tSize\tAttr.\tName");
 	lpDirFile=gettext("Files");
@@ -125,4 +125,7 @@ Usage:\tDOS9 [/A[:]attr] [/I in] [/O out] [file ... | /K cmd ...|/C cmd ...]\n\n
 \t/K cmd\tRun cmd command and stay active.\n\n\
 Feel free to report bugs and submit suggestions at : <darkbatcher@dos9.org>\n\
 For more informations see : <http://dos9.org>");
+
+    lpManyCompletionOptions=gettext("%d files matching, print anyway ?");
+
 }

@@ -2221,5 +2221,8 @@ is a list of improvements I made during from 24th June to today.
   of generated files.
 
 * Changed **Dos9\_Ask\(\)** input source to avoid potential conflicts with 
-  buffering. 
+  buffering.
+
+* Added bash-like auto-complete features for windows platforms, still 
+  experimental though. 
 

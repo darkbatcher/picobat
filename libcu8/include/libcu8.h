@@ -121,6 +121,10 @@ __LIBCU8__IMP __cdecl int libcu8_rmdir(const char* dir);
 __LIBCU8__IMP __cdecl int libcu8_mkdir(const char* dir);
 __LIBCU8__IMP __cdecl int libcu8_fd_set_inheritance(int fd, int mode);
 
+__LIBCU8__IMP __cdecl void (*libcu8_completion_handler)(const char*, char**);
+__LIBCU8__IMP __cdecl void (*libcu8_completion_handler_free)(char*);
+
+
 #ifdef dirent
 #undef dirent
 #endif

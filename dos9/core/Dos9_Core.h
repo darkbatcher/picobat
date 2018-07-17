@@ -51,6 +51,7 @@
 #include "Dos9_ExitInt.h"
 #include "Dos9_Exec.h"
 #include "Dos9_Prompt.h"
+#include "Dos9_Completion.h"
 #include "../console/Dos9_Console.h"
 
 #ifdef WIN32
