@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dos9 218.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-13 10:55+0200\n"
+"POT-Creation-Date: 2018-07-16 13:39+0200\n"
 "PO-Revision-Date: 2013-12-14 20:24+0100\n"
 "Last-Translator: DarkBatcher <darkbatcher@gmail.com>\n"
 "Language-Team: French <darkbatcher@gmail.com>\n"
@@ -351,15 +351,15 @@ msgstr ""
 "\n"
 "Abandon de l'opération courrante, appuyez sur un touche pour terminer Dos9.\n"
 
-#: ../dos9/lang/Dos9_Lang.c:75
+#: ../dos9/lang/Dos9_Lang.c:76
 msgid "Echo command enabled"
 msgstr "Commande echo activée"
 
-#: ../dos9/lang/Dos9_Lang.c:76
+#: ../dos9/lang/Dos9_Lang.c:77
 msgid "Echo command disabled"
 msgstr "Commande echo désactivée"
 
-#: ../dos9/lang/Dos9_Lang.c:77
+#: ../dos9/lang/Dos9_Lang.c:78
 msgid "Press any key to continue..."
 msgstr "Appuyez sur une touche pour continuer..."
 
@@ -499,6 +499,11 @@ msgstr ""
 "\n"
 "Signalez les bogues à : <darkbatcher@dos9>\n"
 "Plus d'informations sur : <http://dos9.org>"
+
+#: ../dos9/lang/Dos9_Lang.c:129
+#, c-format
+msgid "%d files matching, print anyway ?"
+msgstr "%d fichiers correspondant, afficher quand même ?"
 
 #: ../dos9/lang/Dos9_ShowHelp.c:43
 msgid ""
@@ -836,7 +841,7 @@ msgid ""
 "Usage: PROMPT prompt-format\n"
 msgstr ""
 "Change la ligne de commande de Dos9.\n"
-"Usage: PROMPT format-prompt"
+"Usage: PROMPT format-prompt\n"
 
 #: ../dos9/lang/Dos9_ShowHelp.c:209
 msgid ""
@@ -844,6 +849,6 @@ msgid ""
 "Usage: PECHO prompt-format\n"
 "       PECHO.prompt-format\n"
 msgstr ""
-"Affiche un message formaté comme pour la commande PROMPT."
-"Usage: PECHO format-prompt"
-"       PECHO.format-prompt"
+"Affiche un message formaté comme pour la commande PROMPT.\n"
+"Usage: PECHO format-prompt\n"
+"       PECHO.format-prompt\n"

@@ -2213,5 +2213,10 @@ is a list of improvements I made during from 24th June to today.
 * Modified **COLOR** to handle new **.** extension, which refer to the current 
   default color.
 
-* Modified the behaviour of libcu8 history. 
+* Modified the behaviour of libcu8 history.
+
+## Tuesday 17th ##
+
+* Fixed remaining with msgmerge that was not properly updating the timestanp 
+  of generated files. 
 

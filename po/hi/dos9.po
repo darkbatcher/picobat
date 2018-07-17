@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dos9 218.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-13 10:55+0200\n"
+"POT-Creation-Date: 2018-07-16 13:39+0200\n"
 "PO-Revision-Date: 2018-07-07 22:13+0530\n"
 "Last-Translator: darkounet <darkbatcher@dos9.org>\n"
 "Language-Team: TheBATeam (www.thebateam.org)\n"
@@ -345,15 +345,15 @@ msgstr ""
 "\n"
 "वर्तमान कमांड को निरस्त करना, DOS9 को बंद करने के लिए कोई भी कुंजी दबाएं।\n"
 
-#: ../dos9/lang/Dos9_Lang.c:75
+#: ../dos9/lang/Dos9_Lang.c:76
 msgid "Echo command enabled"
 msgstr "इको कमांड चालू"
 
-#: ../dos9/lang/Dos9_Lang.c:76
+#: ../dos9/lang/Dos9_Lang.c:77
 msgid "Echo command disabled"
 msgstr "इको कमांड बंद कर दिया"
 
-#: ../dos9/lang/Dos9_Lang.c:77
+#: ../dos9/lang/Dos9_Lang.c:78
 msgid "Press any key to continue..."
 msgstr "आगे बढ़ने के लिए कोई कुंजी दबाएं..."
 
@@ -492,6 +492,11 @@ msgstr ""
 "बग की रिपोर्ट करने के लिए स्वतंत्र महसूस करें और यहां पर सुझाव सबमिट करें: "
 "<darkbatcher@dos9.org>\n"
 "अधिक जानकारी के लिए देखें: <http://dos9.org>"
+
+#: ../dos9/lang/Dos9_Lang.c:129
+#, c-format
+msgid "%d files matching, print anyway ?"
+msgstr ""
 
 #: ../dos9/lang/Dos9_ShowHelp.c:43
 msgid ""

@@ -38,25 +38,25 @@ $(BIN_LOCALES):
 	[ -f $(LOCALE_DIR)/$(basename $@)/LC_MESSAGES ] || mkdir -p $(LOCALE_DIR)/$(basename $@)/LC_MESSAGES
 	cp $(addprefix $(basename $@)/,$(addsuffix .mo,$(DOMAINS))) $(LOCALE_DIR)/$(basename $@)/LC_MESSAGES
 	
-	
 clean:
 	rm -rf $(DOMAIN_POTS)
 	rm -rf $(POTS)
 	
 $(LOCALES):
 	mkdir $@	
-	echo $(POS) $(MOS)
 	
 $(DOMAIN_POTS): $(POTS)
-	echo $(DOMAIN_POTS)
 	$(MSGCAT) -t UTF-8 $(shell grep -e "^$(shell basename $(basename $@))"  < domains.list | awk '{$$1 = ""; print $$0}' | sed -e s,\.c,\.pot,g ) > $@ || true
 	
 .c.pot:
 	$(XGETTEXT) -o $@ $<
 		
-.pot.mo:
-	[ -f $(basename $@).po ] && $(MSGMERGE) -U $(basename $@).po $< || $(MSGINIT) -o $(basename $@).po -i $<
-	$(MSGFMT) -c -v -o $@ $(basename $@).po
+.pot.po:
+	[ -f $@ ] && $(MSGMERGE) -U  $@ $< || $(MSGINIT) -o $@ -i $<
+	touch $@
+
+.po.mo:
+	$(MSGFMT) -c -v -o $@ $<
 	
 .PHONY: all clean bin $(BIN_LOCALES)
-.SUFFIXES: .c .pot .mo .po
+.SUFFIXES: .c .pot .mo .po .pot
