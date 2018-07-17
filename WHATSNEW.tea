@@ -2136,3 +2136,6 @@ ${(for %%a in (foo bar) do echo %%a) & echo loop}
 
 	- Fixed remaining with msgmerge that was not properly updating the
 	timestanp of generated files.
+	
+	- Changed {Dos9_Ask()} input source to avoid potential conflicts
+	with buffering.

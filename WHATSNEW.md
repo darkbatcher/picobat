@@ -2218,5 +2218,8 @@ is a list of improvements I made during from 24th June to today.
 ## Tuesday 17th ##
 
 * Fixed remaining with msgmerge that was not properly updating the timestanp 
-  of generated files. 
+  of generated files.
+
+* Changed **Dos9\_Ask\(\)** input source to avoid potential conflicts with 
+  buffering. 
 
