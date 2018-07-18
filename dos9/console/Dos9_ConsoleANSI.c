@@ -53,17 +53,21 @@ void Dos9_SetConsoleColor(COLOR cColor)
 
 void Dos9_SetConsoleTextColor(COLOR cColor)
 {
+    int fore = 30, back = 40;
+
     if (cColor & DOS9_FOREGROUND_INT) {
 
         /* set foreground intensity */
-        fprintf(fOutput, "\033[1m");
-        fprintf(fError, "\033[1m");
         cColor^=DOS9_FOREGROUND_INT;
+        fore = 90;
 
-    } else {
+    }
 
-        fprintf(fOutput, "\033[0m");
-        fprintf(fError, "\033[0m");
+    if (cColor & DOS9_BACKGROUND_INT) {
+
+        /* set foreground intensity */
+        cColor^=DOS9_BACKGROUND_INT;
+        back = 100;
 
     }
 
@@ -82,13 +86,13 @@ void Dos9_SetConsoleTextColor(COLOR cColor)
             return;
 
     if (!(cColor & DOS9_BACKGROUND_DEFAULT)) {
-        fprintf(fOutput, "\033[%dm",DOS9_GET_BACKGROUND_(cColor)+40);
-        fprintf(fError, "\033[%dm",DOS9_GET_BACKGROUND_(cColor)+40);
+        fprintf(fOutput, "\033[%dm",DOS9_GET_BACKGROUND_(cColor)+back);
+        fprintf(fError, "\033[%dm",DOS9_GET_BACKGROUND_(cColor)+back);
     }
 
     if (!(cColor & DOS9_FOREGROUND_DEFAULT)) {
-        fprintf(fOutput, "\033[%dm", DOS9_GET_FOREGROUND_(cColor)+30);
-        fprintf(fError, "\033[%dm", DOS9_GET_FOREGROUND_(cColor)+30);
+        fprintf(fOutput, "\033[%dm", DOS9_GET_FOREGROUND_(cColor)+fore);
+        fprintf(fError, "\033[%dm", DOS9_GET_FOREGROUND_(cColor)+fore);
     }
 }
 

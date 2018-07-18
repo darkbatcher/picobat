@@ -2224,5 +2224,8 @@ is a list of improvements I made during from 24th June to today.
   buffering.
 
 * Added bash-like auto-complete features for windows platforms, still 
-  experimental though. 
+  experimental though.
+
+* Fixed errors on colors associations to code when using Unix-based operating 
+  systems. Sadly this means this feature has been broken for quit a long time. 
 
