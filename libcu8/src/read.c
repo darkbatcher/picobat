@@ -578,7 +578,7 @@ int libcu8_readconsole(int fd, char* buf, size_t size, size_t* written)
                         libcu8_completion_handler(newpos, &completion);
 
                         if (completion == (char*)-1) {
-                            /* Well, apparently a list has been printed make a simple
+                            /* Well, apparently a list is to be printed. Make a simple
                                assertion : The prompt is the same length as the
                                previous one ... */
 
