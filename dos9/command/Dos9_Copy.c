@@ -358,7 +358,7 @@ int Dos9_CmdCopyFile(char* file, const char* dest, int* flags)
         && !(*flags & DOS9_COPY_SILENCE)) {
 
         ok = Dos9_AskConfirmation(DOS9_ASK_YNA | DOS9_ASK_DEFAULT_N
-                                    | DOS9_ASK_INVALID_REASK,
+                                    | DOS9_ASK_INVALID_REASK, NULL,
                                     lpCopyConfirm,
                                     Dos9_EsToChar(dest_real),
                                     file

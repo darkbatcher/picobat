@@ -117,6 +117,40 @@
 #include <unistd.h>
 #include "linenoise.h"
 
+
+#include "../core/Dos9_Core.h"
+
+#ifdef stdin
+#undef stdin
+#endif
+
+#ifdef stdout
+#undef stdout
+#endif
+
+#ifdef stderr
+#undef stderr
+#endif
+
+#ifdef STDIN_FILENO
+#undef STDIN_FILENO
+#endif
+
+#ifdef STDOUT_FILENO
+#undef STDOUT_FILENO
+#endif
+
+#ifdef STDERR_FILENO
+#undef STDERR_FILENO
+#endif
+
+#define stdin fInput
+#define stdout fOutput
+#define stderr fError
+#define STDIN_FILENO fileno(fInput)
+#define STDOUT_FILENO fileno(fOutput)
+#define STDERR_FILENO fileno(fError)
+
 #define LINENOISE_DEFAULT_HISTORY_MAX_LEN 100
 #define LINENOISE_MAX_LINE 4096
 #define UNUSED(x) (void)(x)
@@ -422,6 +456,72 @@ static void freeCompletions(linenoiseCompletions *lc) {
         free(lc->cvec);
 }
 
+
+char* xlibcu8_completion_get_item(const char* restrict pos,
+                                 const char* restrict orig,
+                                 const char* restrict buf)
+{
+    size_t size = 0;
+    char quotes = 0;
+    char* ret;
+
+    if (buf > pos
+        && *pos == '"')
+        quotes = 1;
+
+    while (pos > orig) {
+
+        if (*(pos - 1) == '"') {
+
+            quotes = !quotes;
+
+        } else if (!quotes &&
+                   (*(pos - 1) == '\t' || *(pos - 1) == ' '
+                    || *(pos - 1) == '&' || *(pos - 1) == '|')) {
+
+            break;
+
+        }
+
+
+        pos --;
+        size ++;
+
+    }
+
+    if (size) {
+
+        if (*pos == '"') {
+            pos ++;
+            size --;
+        }
+
+        if (ret = malloc(size + 1))
+            snprintf(ret, size + 1, "%s", pos);
+
+    } else if (ret = malloc(1))
+        *ret = '\0';
+
+    return ret;
+}
+
+void xlibcu8_completion_insert(const char* completion,
+                                char** pos, char** buf, size_t* size)
+{
+    size_t len = strlen(completion);
+
+    if (*size < len)
+        return; /* no room left, just ignore */
+
+    *size -= len;
+
+    memcpy(*pos + len, *pos, *buf - *pos);
+    memcpy(*pos, completion, len);
+
+    *pos += len;
+    *buf += len;
+}
+
 /* This is an helper function for linenoiseEdit() and is called when the
  * user types the <tab> key in order to complete the string currently in the
  * input.
@@ -429,62 +529,53 @@ static void freeCompletions(linenoiseCompletions *lc) {
  * The state of the editing is encapsulated into the pointed linenoiseState
  * structure as described in the structure definition. */
 static int completeLine(struct linenoiseState *ls, char *cbuf, size_t cbuf_len, int *c) {
-    linenoiseCompletions lc = { 0, NULL };
-    int nread = 0, nwritten;
+
+
+    char *item, *completion,
+         *orig_buf = ls->buf,
+         *pos = orig_buf + ls->pos,
+         *buf = orig_buf + ls->len;
+
+    size_t size = ls->buflen - ls->len;
+
     *c = 0;
 
-    completionCallback(ls->buf,&lc);
-    if (lc.len == 0) {
-        linenoiseBeep();
-    } else {
-        size_t stop = 0, i = 0;
+    item = xlibcu8_completion_get_item(pos, orig_buf, buf);
 
-        while(!stop) {
-            /* Show completion or original buffer */
-            if (i < lc.len) {
-                struct linenoiseState saved = *ls;
+    if (item) {
 
-                ls->len = ls->pos = strlen(lc.cvec[i]);
-                ls->buf = lc.cvec[i];
-                refreshLine(ls);
-                ls->len = saved.len;
-                ls->pos = saved.pos;
-                ls->buf = saved.buf;
-            } else {
-                refreshLine(ls);
-            }
+        completionCallback(item, &completion);
 
-            nread = readCode(ls->ifd,cbuf,cbuf_len,c);
-            if (nread <= 0) {
-                freeCompletions(&lc);
-                *c = -1;
-                return nread;
-            }
+        if (completion == (char*)-1) {
+            /* Well, apparently a list is to be printed. Make a simple
+               assertion : The prompt is the same length as the
+               previous one ... */
 
-            switch(*c) {
-                case 9: /* tab */
-                    i = (i+1) % (lc.len+1);
-                    if (i == lc.len) linenoiseBeep();
-                    break;
-                case 27: /* escape */
-                    /* Re-show original buffer */
-                    if (i < lc.len) refreshLine(ls);
-                    stop = 1;
-                    break;
-                default:
-                    /* Update buffer and return */
-                    if (i < lc.len) {
-                        nwritten = snprintf(ls->buf,ls->buflen,"%s",lc.cvec[i]);
-                        ls->len = ls->pos = nwritten;
-                    }
-                    stop = 1;
-                    break;
-            }
+            ls->pos = ls->len;
+            refreshLine(ls);
+
+            completionCallback(item, NULL);
+
+            ls->pos = pos - orig_buf;
+
+        } else if (completion != NULL) {
+
+            xlibcu8_completion_insert(completion, &pos, &buf, &size);
+
+            ls->pos = pos - orig_buf;
+            ls->len = ls->buflen - size;
+
+            free(completion);
+
         }
+
+        refreshLine(ls);
+
+        free(item);
+
     }
 
-    freeCompletions(&lc);
-    return nread;
+    return 1;
 }
 
 /* Register a callback function to be called for tab-completion. */

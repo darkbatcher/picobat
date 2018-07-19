@@ -22,65 +22,9 @@
 #include <libcu8.h>
 #endif /* DOS9_USE_LIBCU8*/
 
-
-void Dos9_PrintCompletionList(FILELIST* files);
-int Dos9_GetLongestCommonMatch(FILELIST* files, int min);
-
 #ifndef WIN32
 #include "../linenoise/linenoise.h"
-
-void Dos9_LinenoiseCompletionHandler(const char *buf, linenoiseCompletions *lc)
-{
-    FILELIST* files;
-    ESTR* name = Dos9_EsInit();
-    int len, match;
-
-    Dos9_EsCpy(name, in);
-    Dos9_EsToFullPath(name);
-    len = strlen(name->str);
-    Dos9_EsCat(name, "*");
-
-    if ((files = Dos9_GetMatchFileList(name->str,
-                                    DOS9_SEARCH_DEFAULT
-                                    | DOS9_SEARCH_NO_PSEUDO_DIR)) == NULL) {
-
-        *subst = NULL;
-        goto end;
-
-    }
-
-    match = Dos9_GetLongestCommonMatch(files, len);
-
-    if (subst == NULL) {
-
-        Dos9_PrintCompletionList(files);
-        Dos9_OutputPrompt();
-
-    } else if (match == -1) {
-        /* only one match */
-        *subst = strdup(files->lpFileName + len);
-
-    } else if (match > len) {
-        /* a partial match ! */
-
-        *subst = malloc(match - len + 1);
-        if (*subst)
-            snprintf(*subst, match - len + 1, "%s",  files->lpFileName + len);
-
-    } else
-        *subst = (char*)-1;
-
-end:
-    Dos9_EsFree(name);
-    Dos9_FreeFileList(files);
-}
-
-
-#endif // WIN32
-
-
-
-
+#endif /* WIN32 */
 
 void Dos9_InitCompletion(void)
 {
@@ -88,7 +32,7 @@ void Dos9_InitCompletion(void)
     libcu8_completion_handler = Dos9_CompletionHandler;
     libcu8_completion_handler_free = Dos9_CompletionHandlerFree;
 #else
-    /* linenoiseSetCompletionCallBack(Dos9_CompletionHandler); */
+    linenoiseSetCompletionCallback(Dos9_CompletionHandler);
 #endif /* WIN32 */
 }
 
@@ -102,8 +46,42 @@ int Dos9_CompletionGetCols(void)
 
     return csbi.dwSize.X - 1;
 }
-#endif /* WIN32 */
 
+#define COMPLETION_READ NULL
+#else
+
+void Dos9_CompleteReadRaw(char* buffer, size_t size)
+{
+
+    int i = 0;
+    char c;
+
+    while (1) {
+
+        read(fileno(fInput), &c, 1);
+
+        if (c == '\r'
+            || c == '\n')
+            break;
+
+        if (i < size)
+            buffer[i] = c;
+
+        fputc(c, fError);
+
+        i ++;
+    }
+
+    fputs("\r\n", fError);
+
+    if (i < size)
+        buffer[i] = '\0';
+    else
+        buffer[size - 1] = '\0';
+}
+
+#define COMPLETION_READ Dos9_CompleteReadRaw
+#endif /* WIN32 */
 
 void Dos9_PrintCompletionList(FILELIST* files)
 {
@@ -116,7 +94,7 @@ void Dos9_PrintCompletionList(FILELIST* files)
     cols = Dos9_CompletionGetCols();
 #endif /* WIN32 */
 
-    fputs(DOS9_NL, fOutput);
+    fputs("\r\n", fOutput);
 
     count = 0;
     while (item) {
@@ -144,7 +122,7 @@ void Dos9_PrintCompletionList(FILELIST* files)
     if (count > 20) {
 
         ok = Dos9_AskConfirmation(DOS9_ASK_YN | DOS9_ASK_DEFAULT_N
-                                  | DOS9_ASK_INVALID_REASK,
+                                  | DOS9_ASK_INVALID_REASK, COMPLETION_READ,
                                   lpManyCompletionOptions, count);
 
         if (ok == DOS9_ASK_NO) {
@@ -183,15 +161,15 @@ void Dos9_PrintCompletionList(FILELIST* files)
         count ++;
 
         if (!(count % (cols/(max + 1))))
-            fputs(DOS9_NL, fOutput);
+            fputs("\r\n", fOutput);
 
         item = item->lpflNext;
     }
 
     if ((count % (cols/(max + 1))))
-        fputs(DOS9_NL, fOutput);
+        fputs("\r\n", fOutput);
 
-    fputs(DOS9_NL, fOutput);
+    fputs("\r\n", fOutput);
 }
 
 int Dos9_GetLongestCommonMatch(FILELIST* files, int min)
@@ -224,7 +202,7 @@ int Dos9_GetLongestCommonMatch(FILELIST* files, int min)
     return longest;
 }
 
-__cdecl void Dos9_CompletionHandler(const char* in, const char** subst)
+void Dos9_CompletionHandler(const char* in, const char** subst)
 {
     FILELIST* files;
     ESTR* name = Dos9_EsInit();
@@ -249,7 +227,9 @@ __cdecl void Dos9_CompletionHandler(const char* in, const char** subst)
     if (subst == NULL) {
 
         Dos9_PrintCompletionList(files);
-        Dos9_OutputPrompt();
+
+        if (bEchoOn)
+            Dos9_OutputPrompt();
 
     } else if (match == -1) {
         /* only one match */
@@ -270,7 +250,7 @@ end:
     Dos9_FreeFileList(files);
 }
 
-__cdecl void Dos9_CompletionHandlerFree(char* p)
+void Dos9_CompletionHandlerFree(char* p)
 {
     free(p);
 }

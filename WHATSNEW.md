@@ -2227,5 +2227,13 @@ is a list of improvements I made during from 24th June to today.
   experimental though.
 
 * Fixed errors on colors associations to code when using Unix-based operating 
-  systems. Sadly this means this feature has been broken for quit a long time. 
+  systems. Sadly this means this feature has been broken for quit a long time.
+
+* Added bash-like auto-complete features for Unix-based operating system based 
+  on linenoise. There is still some concerns that this might be broken on 
+  platforms with console interraction dissabled.
+
+* Slightly modified **Dos9\_AskConfirmation\(\)** function to be able to 
+  specify some special input function in order to avoid conflicts with 
+  standard buffering or raw mode. 
 

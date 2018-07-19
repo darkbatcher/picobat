@@ -22,11 +22,7 @@
 
 void Dos9_InitCompletion(void);
 
-#ifdef WIN32
-__cdecl void Dos9_CompletionHandler(const char* in, const char** subst);
-__cdecl void Dos9_CompletionHandlerFree(char* p);
-#else
-
-#endif
+void Dos9_CompletionHandler(const char* in, const char** subst);
+void Dos9_CompletionHandlerFree(char* p);
 
 #endif /* DOS9_COMPLETION_H */

@@ -47,6 +47,6 @@ return DOS9_ASK_ALL */
 #define DOS9_ASK_ALL            (4)
 #define DOS9_ASK_INVALID        (-1)
 
-int Dos9_AskConfirmation(int iFlags, const char* lpMsg, ...);
+int Dos9_AskConfirmation(int iFlags, void(*lpFn)(char*,size_t), const char* lpMsg, ...);
 
 #endif // DOS9_ASK_H

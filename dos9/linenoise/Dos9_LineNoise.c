@@ -61,36 +61,4 @@ int Dos9_LineNoise(ESTR* estr, FILE* pFile)
     return 0;
 }
 
-#ifdef stdin
-#undef stdin
-#endif
-
-#ifdef stdout
-#undef stdout
-#endif
-
-#ifdef stderr
-#undef stderr
-#endif
-
-#ifdef STDIN_FILENO
-#undef STDIN_FILENO
-#endif
-
-#ifdef STDOUT_FILENO
-#undef STDOUT_FILENO
-#endif
-
-#ifdef STDERR_FILENO
-#undef STDERR_FILENO
-#endif
-
-#define stdin fInput
-#define stdout fOutput
-#define stderr fError
-#define STDIN_FILENO fileno(fInput)
-#define STDOUT_FILENO fileno(fOutput)
-#define STDERR_FILENO fileno(fError)
-#include "linenoise.c"
-
 #endif /* !WIN32 */

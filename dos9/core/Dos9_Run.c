@@ -800,7 +800,7 @@ void Dos9_SigHandlerBreak(int sig)
 
         choice = Dos9_AskConfirmation(DOS9_ASK_YN
                                 | DOS9_ASK_INVALID_REASK
-                                | DOS9_ASK_DEFAULT_N,
+                                | DOS9_ASK_DEFAULT_N, NULL,
                                 lpBreakConfirm);
 
         if (choice == DOS9_ASK_NO)

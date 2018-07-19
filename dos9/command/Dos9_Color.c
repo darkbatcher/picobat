@@ -43,9 +43,32 @@
 #define HWORD(a) ((0xF0 & (a)) >> 4)
 #define LWORD(a) (0xF & (a))
 
+#ifdef WIN32
+#define BACKGROUND_COLOR(x) ((x) << 4)
+#define FOREGROUND_COLOR(x) (x)
+#else
+/* On windows, colors are shuffled versus unix :
+
+    win32           UNIX
+
+    1 = blue        1 = red
+    2 = green       2 = green
+    4 = red         4 = blue
+
+ */
+#define BACKGROUND_COLOR(x) ((((x) >= 8) ? DOS9_BACKGROUND_INT : 0) \
+                           | (((x) % 8) & 1 ? DOS9_BACKGROUND_BLUE : 0) \
+                           | (((x) % 8) & 2 ? DOS9_BACKGROUND_GREEN : 0) \
+                           | (((x) % 8) & 4 ? DOS9_BACKGROUND_RED : 0))
+#define FOREGROUND_COLOR(x) ((((x) >= 8) ? DOS9_FOREGROUND_INT : 0) \
+                           | (((x) % 8) & 1 ? DOS9_FOREGROUND_BLUE : 0) \
+                           | (((x) % 8) & 2 ? DOS9_FOREGROUND_GREEN : 0) \
+                           | (((x) % 8) & 4 ? DOS9_FOREGROUND_RED : 0))
+#endif
+
 int Dos9_GetColorCode(char* lpArg)
 {
-    int back=DOS9_GET_BACKGROUND_(colColor),
+    int back=DOS9_GET_BACKGROUND(colColor) << 4,
         fore; /* back and foreground */
     int i=strlen(lpArg);
 
@@ -67,7 +90,7 @@ int Dos9_GetColorCode(char* lpArg)
         case '7':
         case '8':
         case '9':
-            back = *lpArg - '0';
+            back = BACKGROUND_COLOR(*lpArg - '0');
             break;
 
         case 'a':
@@ -76,11 +99,11 @@ int Dos9_GetColorCode(char* lpArg)
         case 'd':
         case 'e':
         case 'f':
-            back = 10 + tolower(*lpArg) - 'a';
+            back = BACKGROUND_COLOR(10 + tolower(*lpArg) - 'a');
             break;
 
         case '.':
-            back = DOS9_GET_BACKGROUND_(colColor);
+            back = DOS9_GET_BACKGROUND(colColor);
             break;
 
         default:
@@ -103,7 +126,7 @@ int Dos9_GetColorCode(char* lpArg)
     case '7':
     case '8':
     case '9':
-        fore = *lpArg - '0';
+        fore = FOREGROUND_COLOR(*lpArg - '0');
         break;
 
     case 'a':
@@ -112,11 +135,11 @@ int Dos9_GetColorCode(char* lpArg)
     case 'd':
     case 'e':
     case 'f':
-        fore = 10 + tolower(*lpArg) - 'a';
+        fore = FOREGROUND_COLOR(10 + tolower(*lpArg) - 'a');
         break;
 
     case '.':
-        fore = DOS9_GET_FOREGROUND_(colColor);
+        fore = DOS9_GET_FOREGROUND(colColor);
         break;
 
     default:
@@ -124,7 +147,7 @@ int Dos9_GetColorCode(char* lpArg)
 
     }
 
-    return fore | (back << 4);
+    return fore | back;
 
 }
 

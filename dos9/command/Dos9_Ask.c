@@ -29,15 +29,42 @@
 #include "../core/Dos9_Core.h"
 #include "../lang/Dos9_Lang.h"
 
-int Dos9_AskConfirmation(int iFlags, const char* lpMsg, ...)
+void Dos9_AskConfirmationRead(char* buffer, size_t size)
+{
+
+    int i, c;
+        i = 0;
+
+    while (1) {
+
+        read(fileno(fInput), &c, 1);
+
+        if (c == '\r')
+            continue;
+
+        if (c == '\n')
+            break;
+
+        if (i < size)
+            buffer[i] = c;
+
+        i ++;
+    }
+
+
+    if (i < size)
+        buffer[i] = '\0';
+    else
+        buffer[size - 1] = '\0';
+}
+
+int Dos9_AskConfirmation(int iFlags, void(*lpFn)(char*,size_t),  const char* lpMsg, ...)
 {
 	va_list vaArgs;
 	const char *lpChoices=NULL;
 	char *lpLf;
 
-	int iRet, i;
-	char c;
-
+	int iRet;
 	char lpInput[30];
 
 	if (iFlags & DOS9_ASK_YNA) {
@@ -104,28 +131,10 @@ int Dos9_AskConfirmation(int iFlags, const char* lpMsg, ...)
 
 		fputs(lpChoices, fError);
 
-        i = 0;
-
-        while (1) {
-
-            read(STDIN_FILENO, &c, 1);
-
-            if (c == '\r')
-                continue;
-
-            if (c == '\n')
-                break;
-
-            if (i < sizeof(lpInput))
-                lpInput[i] = c;
-
-            i ++;
-        }
-
-        if (i < sizeof(lpInput))
-            lpInput[i] = '\0';
+        if (lpFn)
+            lpFn(lpInput, sizeof(lpInput));
         else
-            lpInput[sizeof(lpInput) - 1] = '\0';
+            Dos9_AskConfirmationRead(lpInput, sizeof(lpInput));
 
 		if (!stricmp(lpInput, lpAskYes)
 		    || !stricmp(lpInput, lpAskYesA)) {

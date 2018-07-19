@@ -280,7 +280,7 @@ int Dos9_CmdDelFile(char* file, int fmode, int param, int* choice)
 
 				res=Dos9_AskConfirmation(DOS9_ASK_YNA
 				                             | DOS9_ASK_INVALID_REASK
-				                             | DOS9_ASK_DEFAULT_N,
+				                             | DOS9_ASK_DEFAULT_N, NULL,
 				                             lpDelConfirm,
 				                             file
 				                            );

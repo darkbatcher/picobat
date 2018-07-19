@@ -2146,3 +2146,11 @@ ${(for %%a in (foo bar) do echo %%a) & echo loop}
     - Fixed errors on colors associations to code when using Unix-based
     operating systems. Sadly this means this feature has been broken for
     quit a long time.
+
+    - Added bash-like auto-complete features for Unix-based operating system
+    based on linenoise. There is still some concerns that this might be broken
+    on platforms with console interraction dissabled.
+
+    - Slightly modified {Dos9_AskConfirmation()} function to be able to
+    specify some special input function in order to avoid conflicts with
+    standard buffering or raw mode.
