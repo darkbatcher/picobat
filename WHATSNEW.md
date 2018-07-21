@@ -2250,3 +2250,6 @@ is a list of improvements I made during from 24th June to today.
 
 * Added an alternate prompt for multi-line input.
 
+* Fixed missing preprocessor directives inside **linenoise/linenoise.c** today 
+  exclude **windows** targets. 
+
