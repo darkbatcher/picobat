@@ -228,8 +228,12 @@ void Dos9_CompletionHandler(const char* in, const char** subst)
 
         Dos9_PrintCompletionList(files);
 
-        if (bEchoOn)
-            Dos9_OutputPrompt();
+        if (bEchoOn) {
+            if (lpAltPromptString)
+                Dos9_OutputPromptString(lpAltPromptString);
+            else
+                Dos9_OutputPrompt();
+        }
 
     } else if (match == -1) {
         /* only one match */

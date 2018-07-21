@@ -29,6 +29,7 @@ char* lpInitVar[]= {
 	NULL, NULL, /* DOS9_PATH is dinamically generated */
     "DOS9_OS_TYPE", DOS9_OS_TYPE,
     "DOS9_START_SCRIPT", START_SCRIPT,
+    "PROMPT","$P$G",
     "NUL", NUL,
     "CON", CON,
     "COM", COM,
@@ -76,6 +77,8 @@ __thread ENVBUF* lpeEnv;
 __thread ENVSTACK* lpesEnv = NULL;
 __thread INPUT_FILE ifIn;
 __thread char lpCurrentDir[FILENAME_MAX];
+
+__thread char* lpAltPromptString = NULL;
 
 #ifdef WIN32
 #define environ _environ

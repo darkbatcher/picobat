@@ -2162,3 +2162,8 @@ ${(for %%a in (foo bar) do echo %%a) & echo loop}
 	- Fixed {libcu8_read()} function problem handling some characters that
 	consume more than one monospaced width. Such characters can be found using
 	{NSimSum} font on windows systems (for example, the {§}).
+	
+	- Added {$P$G} as default {%PROMPT%} value, just in case there is no
+	{Dos9_Auto.bat} script available.
+	
+	- Added an alternate prompt for multi-line input.

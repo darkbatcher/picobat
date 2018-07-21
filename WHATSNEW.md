@@ -2245,3 +2245,8 @@ is a list of improvements I made during from 24th June to today.
   consume more than one monospaced width. Such characters can be found using 
   **NSimSum** font on windows systems \(for example, the **§**\).
 
+* Added **$P$G** as default **%PROMPT%** value, just in case there is no 
+  **Dos9\_Auto.bat** script available.
+
+* Added an alternate prompt for multi-line input.
+

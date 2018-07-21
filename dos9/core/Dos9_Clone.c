@@ -88,6 +88,8 @@ void* Dos9_CloneTrampoline(void* data)
     _fError = fError;
     _fOutput = fOutput;
 
+    lpAltPromptString = NULL;
+
     func = cloned->fn;
     arg = cloned->arg;
 

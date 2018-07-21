@@ -74,4 +74,6 @@ extern __thread FILE *fError, *_fError; /* current thread error stream */
 extern __thread ENVSTACK* lpesEnv;
 extern __thread char lpCurrentDir[FILENAME_MAX]; /* current path */
 
+extern __thread char* lpAltPromptString; /* possible alternate prompt string for completion */
+
 #endif
