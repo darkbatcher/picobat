@@ -2235,5 +2235,9 @@ is a list of improvements I made during from 24th June to today.
 
 * Slightly modified **Dos9\_AskConfirmation\(\)** function to be able to 
   specify some special input function in order to avoid conflicts with 
-  standard buffering or raw mode. 
+  standard buffering or raw mode.
+
+## Saturday 21th ##
+
+* Fixed missing inclusion of <stddef.h> in **Dos9\_Ask.h**. 
 

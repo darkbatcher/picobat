@@ -21,6 +21,9 @@
 #ifndef DOS9_ASK_H
 #define DOS9_ASK_H
 
+#include <stdio.h>
+#include <stddef.h>
+
 #define DOS9_ASK_YN             (0x00)
 /* The use can choose either YES or NO */
 
