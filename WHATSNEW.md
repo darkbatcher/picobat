@@ -2239,5 +2239,9 @@ is a list of improvements I made during from 24th June to today.
 
 ## Saturday 21th ##
 
-* Fixed missing inclusion of <stddef.h> in **Dos9\_Ask.h**. 
+* Fixed missing inclusion of <stddef.h> in **Dos9\_Ask.h**.
+
+* Fixed **libcu8\_read\(\)** function problem handling some characters that 
+  consume more than one monospaced width. Such characters can be found using 
+  **NSimSum** font on windows systems \(for example, the **§**\).
 

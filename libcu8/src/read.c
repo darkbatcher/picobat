@@ -694,7 +694,7 @@ int libcu8_refresh_console_line(void* handle, char* buf, size_t size,
     wchar_t *wstr;
     size_t wlen;
     int wrt;
-    int dist;
+    unsigned int i;
     CONSOLE_CURSOR_INFO info;
 
     info.dwSize = 100;
@@ -709,6 +709,8 @@ int libcu8_refresh_console_line(void* handle, char* buf, size_t size,
     GetConsoleScreenBufferInfo(handle, csbi);
     line->orig.X = csbi->dwCursorPosition.X;
     line->orig.Y = csbi->dwCursorPosition.Y;
+    line->current.X = line->orig.X;
+    line->current.Y = line->orig.Y;
 
     if (cursor) {
 
@@ -717,21 +719,33 @@ int libcu8_refresh_console_line(void* handle, char* buf, size_t size,
                                     cursor, &wlen)))
             return -1;
 
-        WriteConsoleW(handle, wstr,
-                        wlen/sizeof(wchar_t), &wrt, NULL);
+        i = 0;
+        while (i < wlen/sizeof(wchar_t)) {
 
-        GetConsoleScreenBufferInfo(handle, csbi);
-        line->current.X = csbi->dwCursorPosition.X;
-        line->current.Y = csbi->dwCursorPosition.Y;
+            WriteConsoleW(handle, wstr + i, 1, &wrt, NULL);
+
+            GetConsoleScreenBufferInfo(handle, csbi);
+
+            if (line->current.Y == csbi->dwCursorPosition.Y
+                && line->current.X > csbi->dwCursorPosition.X) {
+                /* the console scrolled */
+                if (line->orig.Y > 0)
+                    line->orig.Y --;
+            }
+
+            line->current.X = csbi->dwCursorPosition.X;
+            line->current.Y = csbi->dwCursorPosition.Y;
+
+            i ++;
+
+        }
 
         free(wstr);
 
-    } else {
-
-        line->current.X = line->orig.X;
-        line->current.Y = line->orig.Y;
-
     }
+
+    line->end.X = line->current.X;
+    line->end.Y = line->current.Y;
 
     if (size - cursor) {
 
@@ -740,42 +754,32 @@ int libcu8_refresh_console_line(void* handle, char* buf, size_t size,
                                         size - cursor, &wlen)))
             return -1;
 
-        WriteConsoleW(handle, wstr,
-                        wlen/sizeof(wchar_t), &wrt, NULL);
+        i = 0;
+        while (i < wlen/sizeof(wchar_t)) {
 
-        GetConsoleScreenBufferInfo(handle, csbi);
+            WriteConsoleW(handle, wstr + i, 1, &wrt, NULL);
 
-        line->end.X = csbi->dwCursorPosition.X;
-        line->end.Y = csbi->dwCursorPosition.Y;
+            GetConsoleScreenBufferInfo(handle, csbi);
+
+            if (line->end.Y == csbi->dwCursorPosition.Y
+                && line->end.X > csbi->dwCursorPosition.X) {
+                /* the console scrolled */
+                if (line->orig.Y > 0)
+                    line->orig.Y --;
+
+                if (line->current.Y > 0)
+                    line->current.Y --;
+            }
+
+            line->end.X = csbi->dwCursorPosition.X;
+            line->end.Y = csbi->dwCursorPosition.Y;
+
+            i ++;
+
+        }
 
         free(wstr);
 
-    } else {
-
-        line->end.X = line->current.X;
-        line->end.Y = line->current.Y;
-
-    }
-
-    /* Check that cursors we store (line->end and line->orig)
-       are still coherent with size, so that we can detect
-       any kind of scroll */
-
-    dist = libcu8_count_characters(buf, size)
-            - libcu8_count_cells(line->orig, line->end, csbi);
-
-    while (dist) {
-
-        /* the content has probably been scrolled up */
-
-        if (line->orig.Y > 0)
-                line->orig.Y --;
-
-        if (line->current.Y > 0)
-                line->current.Y --;
-
-        dist = libcu8_count_characters(buf, size)
-            - libcu8_count_cells(line->orig, line->end, csbi);
     }
 
     SetConsoleCursorPosition(handle, line->current);

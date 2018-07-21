@@ -2158,3 +2158,7 @@ ${(for %%a in (foo bar) do echo %%a) & echo loop}
 {{Saturday 21th}}
 
 	- Fixed missing inclusion of <stddef.h> in {Dos9_Ask.h}.
+
+	- Fixed {libcu8_read()} function problem handling some characters that
+	consume more than one monospaced width. Such characters can be found using
+	{NSimSum} font on windows systems (for example, the {§}).
