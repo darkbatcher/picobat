@@ -36,13 +36,12 @@
 	#define LIBDOS9_NO_CONSOLE 1
 #endif 
 
-#define PACKAGE "Dos9"
-#define PACKAGE_BUGREPORT "darkbatcher@dos9.org"
-#define PACKAGE_NAME "Dos9"
-#define PACKAGE_STRING "Dos9 218.2"
-#define PACKAGE_TARNAME "Dos9"
-#define PACKAGE_URL "http://www.dos9.org/"
-#define PACKAGE_VERSION "218.2"
+#define PACKAGE  "@PACKAGE@"
+#define PACKAGE_BUGREPORT "@PACKAGE_BUGREPORT@"
+#define PACKAGE_NAME "@PACKAGE@"
+#define PACKAGE_STRING "@PACKAGE@ @VERSION@"
+#define PACKAGE_URL "@PACKAGE_URL@"
+#define PACKAGE_VERSION "@VERSION@"
 #define STDC_HEADERS 1
 #define HOST "@HOST@"
 #define __YEAR__ "@YEAR@"

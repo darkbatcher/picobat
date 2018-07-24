@@ -20,7 +20,7 @@ ifneq (,$(wildcard ./femto-config.mk))
     include femto-config.mk
 endif
 
-BINDIR ?= ./bin
+BINDIR ?= bin
 
 SUBDIRS_ADD ?=
 
@@ -38,6 +38,11 @@ SUBDIRS_BIN := $(addsuffix .bin,$(SUBDIRS))
 
 HOST = $(shell $(CC) -dumpmachine)
 YEAR = $(shell date +%Y)
+
+PACKAGE = dos9
+PACKAGE_URL = http://dos9.org
+PACKAGE_BUGREPORT = darkbatcher@dos9.org
+VERSION = 218.2
 			
 all: $(SUBDIRS) $(MDFILES)
 
@@ -52,6 +57,12 @@ $(SUBDIRS_CLEAN):
 	$(MAKE) -C $(basename $@) clean
 	
 bin: bindir $(SUBDIRS_BIN)
+
+dist: bin
+	tar zcf dos9-$(VERSION).tar.gz $(BINDIR)
+
+git-dist: bin
+	tar zcf dos9-$(VERSION)-`git rev-parse --short HEAD`.tar.gz $(BINDIR)
 
 bindir: $(TEXTFILES)
 	mkdir -p $(BINDIR)
@@ -69,7 +80,7 @@ textfiles: $(TEXTFILES)
 .tea.txt:
 	tea/tea -e:utf-8 -o:text-plain $< $@
 
-# MD files are allways generated when building
+# MD files are always generated when building
 .tea.md:
 	tea/tea -e:utf-8 -o:md $< $@
 	
@@ -83,9 +94,9 @@ LIBS = iconv intl pthread m
 OPTIONS = libcu8 nls cmdlycorrect console
 DEFAULTOPTIONS = no-libcu8 use-nls no-cmdlycorrect use-console
 SUBCONFIG = libcu8 libmatheval
-ADDITIONALVARS = HOST BINDIR YEAR
+ADDITIONALVARS = HOST BINDIR YEAR VERSION PACKAGE PACKAGE_URL PACKAGE_BUGREPORT
 
 include femto.mk
 
-.PHONY: all bin clean $(SUBDIRS) $(SUBDIRS_CLEAN) textfiles 
+.PHONY: all bin bindir clean $(SUBDIRS) $(SUBDIRS_CLEAN) textfiles dist
 .SUFFIXES: .tea .txt .md .tpl

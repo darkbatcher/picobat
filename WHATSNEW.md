@@ -2257,3 +2257,6 @@ is a list of improvements I made during from 24th June to today.
 
 * Added the ESC key shortcut to clear the command under windows platforms.
 
+* Added **dist** makefile target to make a zip of the **bin** folder when 
+  called.
+
