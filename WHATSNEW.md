@@ -2237,7 +2237,7 @@ is a list of improvements I made during from 24th June to today.
   specify some special input function in order to avoid conflicts with 
   standard buffering or raw mode.
 
-## Saturday 21th ##
+## Saturday 21st ##
 
 * Fixed missing inclusion of <stddef.h> in **Dos9\_Ask.h**.
 
@@ -2251,5 +2251,9 @@ is a list of improvements I made during from 24th June to today.
 * Added an alternate prompt for multi-line input.
 
 * Fixed missing preprocessor directives inside **linenoise/linenoise.c** today 
-  exclude **windows** targets. 
+  exclude **windows** targets.
+
+## Thursday 24th ##
+
+* Added the ESC key shortcut to clear the command under windows platforms.
 

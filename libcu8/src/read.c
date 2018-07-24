@@ -350,7 +350,7 @@ __cdecl void (*libcu8_completion_handler_free)(char*);
 
 #define DEL 0x08
 #define TAB 0x09
-#define TAB_LEN 8
+#define ESC 0x1b
 int libcu8_readconsole(int fd, char* buf, size_t size, size_t* written)
 {
     void *handle = osfhnd(fd), *conout = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -498,6 +498,9 @@ int libcu8_readconsole(int fd, char* buf, size_t size, size_t* written)
                 memcpy(orig_buf, libcu8_history[hid].entry,
                                         libcu8_history[hid].size);
 
+
+                /* Not a 100% accurate but, anyhow, it is still
+                   good enough */
                 ret = libcu8_count_characters(orig_buf, orig - size)
                         - libcu8_count_characters(libcu8_history[hid].entry,
                                               libcu8_history[hid].size);
@@ -543,6 +546,22 @@ int libcu8_readconsole(int fd, char* buf, size_t size, size_t* written)
             goto err;
 
         switch (*utf8) {
+
+            case ESC:
+                ret = libcu8_count_cells(line.orig, line.end, &csbi);
+
+                if (ret > 0)
+                    FillConsoleOutputCharacterW(conout, L' ', ret, line.orig, &wrt);
+
+                SetConsoleCursorPosition(conout, line.orig);
+
+                pos = orig_buf;
+                buf = orig_buf;
+                size = orig;
+                line.current = line.orig;
+                line.end = line.orig;
+
+                continue;
 
             case DEL:
                 /* Do some tricks to remove a character without damaging
