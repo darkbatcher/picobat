@@ -25,7 +25,6 @@
 #include <libDos9.h>
 
 #include "../core/Dos9_Core.h"
-#include "../core/Dos9_DirStack.h"
 
 #include "Dos9_Pushd.h"
 #include "Dos9_Cd.h"
