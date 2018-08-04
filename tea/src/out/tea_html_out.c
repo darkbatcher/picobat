@@ -20,6 +20,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <string.h>
+
+#ifndef WIN32
+#include <strings.h>
+#endif
+
 #include <libDos9.h>
 #include "tea_out.h"
 #include "../Tea.h"

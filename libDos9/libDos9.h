@@ -367,7 +367,7 @@ LIBDOS9 void            Dos9_GetMousePos(char on_move, CONSOLECOORD* coords, int
 #define DOS9_SEARCH_NO_STAT 0x04
 /* Do not list pseudo dirs '.' and '..' */
 #define DOS9_SEARCH_NO_PSEUDO_DIR 0x08
-/* Search mode equivalent DIR (ie "dir" is equivalent to "dir/*" */
+// Search mode equivalent DIR (ie "dir" is equivalent to "dir/*
 #define DOS9_SEARCH_DIR_MODE 0x10
 
 #ifndef WIN32

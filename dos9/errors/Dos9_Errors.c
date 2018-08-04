@@ -258,8 +258,7 @@ void Dos9_ShowErrorMessage(unsigned int iErrorNumber,
 
 		Dos9_SetConsoleTextColor(colColor);
 
-        fputs(DOS9_NL, fError);
-		fprintf(fError, lpQuitMessage);
+    fprintf(fError, "%s" DOS9_NL, lpQuitMessage);
 
 		Dos9_Getch();
 

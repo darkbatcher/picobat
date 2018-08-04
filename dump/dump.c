@@ -36,6 +36,7 @@
 /* #include <libcu8.h> */
 
 #ifndef WIN32
+#include <strings.h>
 #define stricmp(a, b) strcasecmp(a, b)
 #define strnicmp(a , b, c) strncasecmp(a, b, c)
 #define O_BINARY 0
@@ -171,7 +172,7 @@ int get_max(int i, int j)
 void fill_context(int type, int flags, struct dump_t* context)
 {
     unsigned int size, s, a, c;
-    char* fmt;
+    /* char* fmt; */
 
     if (flags & DUMP_HEX) {
         size = types[type].size * 2;
@@ -228,7 +229,7 @@ int dump_fd(int fd, struct dump_t* context)
 
     spaces = (context->flags & DUMP_QUIET) ? "" : " ";
 
-    while (count = read(fd, data, size)) {
+    while ((count = read(fd, data, size))) {
 
         if (count < size) {
              /* we reached eof and count is not a multiple of the
@@ -324,7 +325,7 @@ int dump_file(const char* file, struct dump_t* context)
 
 int main(int argc, char** argv)
 {
-    char* p;
+    /* char* p; */
     int type = 0, flags = DUMP_DEFAULT,
         n = 0;
 

@@ -19,6 +19,8 @@
 #ifndef DOS9_LINENOISE_H
 #define DOS9_LINENOISE_H
 
+#include <libDos9.h>
+
 /* something similar to Dos9_EsGet() (ie. return 1 at eof) */
 int Dos9_LineNoise(ESTR* estr, FILE* pFile);
 

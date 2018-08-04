@@ -149,14 +149,12 @@ static FILELIST* Dos9_AddMatch(char* name, FILELIST* files, struct match_args_t*
     return file;
 }
 
-static int inline Dos9_EndWithDirectoryMark(const char* dir)
+static int inline Dos9_EndWithDirectoryMark(const char *dir)
 {
-    char* c;
-
     while (*dir)
-        c = dir ++;
+        dir++;
 
-    return TEST_SEPARATOR(c);
+    return TEST_SEPARATOR(dir);
 }
 
 /* Fixme : This function is quite a lot unefficient under windows,
@@ -172,7 +170,7 @@ static FILELIST* Dos9_GetMatch(char* restrict base, char* restrict up, struct ma
     DIR* dir = NULL;
     struct dirent* ent;
 
-    int joker;
+    int joker = 0;
 
     /* if something has already been found ... */
     if ((ret != (FILELIST*)-1) && (ret != NULL)
@@ -694,7 +692,6 @@ LIBDOS9 int Dos9_RegExpMatch(const char* restrict regexp, const char* restrict m
 
 LIBDOS9 char* Dos9_SeekCasePattern(const char* restrict match, const char* restrict pattern, size_t len)
 {
-    const char* tok;
     int   i = 0;
 
     //printf("Looking for pattern \"%s\"[%d] in\"%s\"\n", pattern, len, match);

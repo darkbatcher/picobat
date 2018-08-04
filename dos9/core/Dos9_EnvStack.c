@@ -23,7 +23,7 @@
 
 void Dos9_PushEnvStack(void)
 {
-    ENVBUF* new;
+    /* ENVBUF* new; */
     ENVSTACK* item;
 
     if ((item = malloc(sizeof(ENVSTACK))) == NULL)

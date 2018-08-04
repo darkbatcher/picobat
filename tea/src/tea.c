@@ -23,6 +23,10 @@
 #include <errno.h>
 #include <string.h>
 
+#ifndef WIN32
+#include <strings.h>
+#endif
+
 #include <libDos9.h>
 
 #include "Tea.h"

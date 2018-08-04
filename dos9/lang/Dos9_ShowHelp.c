@@ -35,7 +35,7 @@
    installation */
 
 static const char* lpInternalHelp[DOS9_HELP_ARRAY_SIZE];
-static const char* lpExternalMsg;
+/* static const char* lpExternalMsg; */
 
 void Dos9_LoadInternalHelp(void)
 {

@@ -59,7 +59,7 @@ char*       Tea_SeekNodeDelim(const char* line, char delim)
     char *ret,
          delims[3]={'\\', delim, 0};
 
-    while (ret = strpbrk(line, delims)) {
+    while ((ret = strpbrk(line, delims))) {
 
         if (*ret == '\\') {
 
@@ -87,30 +87,30 @@ TEANODE*    Tea_ParseStringNode(char* lpContent, LP_PARSE_HANDLER pHandler)
 	     *lpSearchBegin=lpContent,
 	      *lpContentSave;
 
-	int iTokenPos;
+	/* int iTokenPos; */
 
-	/* on prépare le noeud pour le parsage */
+	/* on prï¿½pare le noeud pour le parsage */
 	lpTeaNode=Tea_AllocTeaNode();
 	lpTeaNodeBegin=lpTeaNode;
 
 	while ((lpNextToken=Tea_SeekNodeDelim(lpSearchBegin, '{'))) {
 
-		/* on découpe la ligne */
+		/* on dï¿½coupe la ligne */
 		*lpNextToken='\0';
 		if (!(lpTeaNode->lpContent=strdup(lpContent))) {
 
-			perror("TEA :: impossible d'allouer de la mémoire ");
+			perror("TEA :: impossible d'allouer de la mï¿½moire ");
 			exit(-1);
 
 		}
 
-		/* on passe à l'inline suivant */
+		/* on passe ï¿½ l'inline suivant */
 		lpContent=lpNextToken+1;
 		lpSearchBegin=lpContent;
 
 		lpNextToken = Tea_SeekNodeDelim(lpSearchBegin, '}');
 
-		/* si le bloc n'est pas fermé */
+		/* si le bloc n'est pas fermï¿½ */
 		if (lpNextToken==NULL) {
 
 			fprintf(stderr, "Erreur : Inline non termine : `%s'\n", lpContent);
@@ -128,7 +128,7 @@ TEANODE*    Tea_ParseStringNode(char* lpContent, LP_PARSE_HANDLER pHandler)
 
 		lpContentSave=lpContent;
 
-		/* on détermine si c'est un lien ou si c'est  juste une emphese */
+		/* on dï¿½termine si c'est un lien ou si c'est  juste une emphese */
 		lpSearchBegin=lpContent;
 		lpContent=lpNextToken+1;
 
@@ -140,7 +140,7 @@ TEANODE*    Tea_ParseStringNode(char* lpContent, LP_PARSE_HANDLER pHandler)
 
 			if (!(lpTeaNode->lpContent=strdup(lpContentSave))) {
 
-				perror("TEA :: impossible d'allouer de la mémoire ");
+				perror("TEA :: impossible d'allouer de la mï¿½moire ");
 				exit(-1);
 
 			}
@@ -152,14 +152,14 @@ TEANODE*    Tea_ParseStringNode(char* lpContent, LP_PARSE_HANDLER pHandler)
 
 			if (!(lpTeaNode->lpTarget=strdup(lpContentSave))) {
 
-				perror("TEA :: impossible d'allouer de la mémoire ");
+				perror("TEA :: impossible d'allouer de la mï¿½moire ");
 				exit(-1);
 
 			}
 
 			if (!(lpTeaNode->lpContent=strdup(lpNextToken+1))) {
 
-				perror("TEA :: impossible d'allouer de la mémoire ");
+				perror("TEA :: impossible d'allouer de la mï¿½moire ");
 				exit(-1);
 
 			}
@@ -169,7 +169,7 @@ TEANODE*    Tea_ParseStringNode(char* lpContent, LP_PARSE_HANDLER pHandler)
 		pHandler(TEA_MSG_MAKE_NODE, lpTeaNode);
 
 
-		/* on prépare la ligne suivante */
+		/* on prï¿½pare la ligne suivante */
 		lpSearchBegin=lpContent;
 
 		lpTeaNode->lpTeaNodeNext=Tea_AllocTeaNode();
@@ -178,7 +178,7 @@ TEANODE*    Tea_ParseStringNode(char* lpContent, LP_PARSE_HANDLER pHandler)
 
 	if (!(lpTeaNode->lpContent=strdup(lpContent))) {
 
-		perror("TEA :: impossible d'allouer de la mémoire ");
+		perror("TEA :: impossible d'allouer de la mï¿½moire ");
 		exit(-1);
 
 	}
@@ -258,7 +258,7 @@ TEANODE*    Tea_RemoveVoidNode(TEANODE* lpTeaNode)
 				lpTeaBegin=lpTeaNode->lpTeaNodeNext;
 				Tea_FreeTeaNode(lpTeaNode);
 
-				/* on reprend la boucle au début */
+				/* on reprend la boucle au dï¿½but */
 				lpTeaNode=lpTeaBegin;
 				continue;
 

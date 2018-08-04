@@ -17,11 +17,18 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
+#ifndef _XOPEN_SOURCE
+#define _XOPEN_SOURCE 700
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <stdarg.h>
 #include <string.h>
+
+
 
 #include <libDos9.h>
 
@@ -62,7 +69,7 @@ int Dos9_AskConfirmation(int iFlags, void(*lpFn)(char*,size_t),  const char* lpM
 {
 	va_list vaArgs;
 	const char *lpChoices=NULL;
-	char *lpLf;
+	/* char *lpLf; */
 
 	int iRet;
 	char lpInput[30];

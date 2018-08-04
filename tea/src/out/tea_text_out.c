@@ -254,7 +254,7 @@ void Tea_TextParseHandler(int iMsg ,void* lpData)
 
 		if (!(lpTeaNode->lpContent=strdup(Dos9_EsToChar(lpEsStr)))) {
 
-			perror("TEA :: impossible d'allouer de la mémoire ");
+			perror("TEA :: Unable to allocate memory ");
 			exit(-1);
 		}
 

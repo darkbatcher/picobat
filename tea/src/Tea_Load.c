@@ -42,7 +42,7 @@ TEAPAGE*    Tea_PageLoad(const char* lpFilename, LP_PARSE_HANDLER pHandler)
 	/* ouverture du fichier */
 	if (!(pFile=fopen(lpFilename, "r"))) return NULL;
 
-	/* récupération de tout le contenu du fichier */
+	/* rï¿½cupï¿½ration de tout le contenu du fichier */
 	while (!(Dos9_EsGet(lpEstr, pFile))) {
 
 		if ((_Dos9_TextMode==DOS9_UTF8_ENCODING)
@@ -70,7 +70,7 @@ TEAPAGE*    Tea_PageLoad(const char* lpFilename, LP_PARSE_HANDLER pHandler)
 	/* on parse le fichier */
 	lpTeaPage=Tea_ParseStringBlock(Dos9_EsToChar(lpTotalFile));
 
-	/* on nettoie la page des espaces inutiles et on re-découpe les paragraphes */
+	/* on nettoie la page des espaces inutiles et on re-dï¿½coupe les paragraphes */
 	Tea_PurifyPage(lpTeaPage);
 
 	Tea_MakeLevels(lpTeaPage);
@@ -98,16 +98,16 @@ TEAPAGE*    Tea_ParseStringBlock(char* lpContent)
 
 	while ((lpNextToken=Tea_SeekNextDelimiter(lpContent, lpTeaOpenDelimiters, &iTokenFound))) {
 
-		/* a chaque nouveau block trouvé, on effectue un parsage sur ce block */
-		/* on stocke la chaine précédente dans un bloc de type paragraphe */
+		/* a chaque nouveau block trouvï¿½, on effectue un parsage sur ce block */
+		/* on stocke la chaine prï¿½cï¿½dente dans un bloc de type paragraphe */
 		*lpNextToken='\0';
 
 		if (!(lpTeaPage->lpBlockContent=strdup(lpContent))) {
-			perror("TEA :: impossible d'allouer de la mémoire ");
+			perror("TEA :: impossible d'allouer de la mï¿½moire ");
 			exit(-1);
 		}
 
-		/* on alloue un nouveau block pour stocker le block trouvé */
+		/* on alloue un nouveau block pour stocker le block trouvï¿½ */
 		lpTeaPage->lpTeaNext=Tea_AllocTeaPage();
 		lpTeaPage=lpTeaPage->lpTeaNext;
 
@@ -116,12 +116,12 @@ TEAPAGE*    Tea_ParseStringBlock(char* lpContent)
 
 		switch (iTokenFound) {
 		case 0:
-			/* le block est forcément un titre */
+			/* le block est forcï¿½ment un titre */
 			lpTeaPage->iBlockType=TEA_BLOCK_HEADING;
 
-			/* la fermeture du block est forcément '}}' */
+			/* la fermeture du block est forcï¿½ment '}}' */
 			if (!(lpNextToken=Tea_SeekNextDelimiter(lpContent, lpTeaCloseDelimiters, &iTokenFound))) {
-				fprintf(stderr ,"TEA :: Bloc non terminé :\n%s\n", lpContent);
+				fprintf(stderr ,"TEA :: Bloc non terminï¿½ :\n%s\n", lpContent);
 				exit(-1);
 			}
 
@@ -131,22 +131,22 @@ TEAPAGE*    Tea_ParseStringBlock(char* lpContent)
 			/* on fini de remplir la structure du bloc */
 
 			if (!(lpTeaPage->lpBlockContent=strdup(lpContent))) {
-				perror("TEA :: impossible d'allouer de la mémoire ");
+				perror("TEA :: impossible d'allouer de la mï¿½moire ");
 				exit(-1);
 			}
 
-			/* on prépare lpCotent pour la prochaine boucle */
+			/* on prï¿½pare lpCotent pour la prochaine boucle */
 			lpContent=lpNextToken+2;
 
 			break;
 
 		case 1:
-			/* le block est focément un bloc de code */
+			/* le block est focï¿½ment un bloc de code */
 			lpTeaPage->iBlockType=TEA_BLOCK_CODE;
 
-			/* la fermeture du block est forcément '}}' */
+			/* la fermeture du block est forcï¿½ment '}}' */
 			if (!(lpNextToken=Tea_SeekNextClosingBrace(lpContent))) {
-				fprintf(stderr ,"TEA :: Bloc non terminé :\n%s\n", lpContent);
+				fprintf(stderr ,"TEA :: Bloc non terminï¿½ :\n%s\n", lpContent);
 				exit(-1);
 			}
 
@@ -155,16 +155,16 @@ TEAPAGE*    Tea_ParseStringBlock(char* lpContent)
 
 			/* on fini de remplir la structure du bloc */
 			if (!(lpTeaPage->lpBlockContent=strdup(lpContent))) {
-				perror("TEA :: impossible d'allouer de la mémoire ");
+				perror("TEA :: impossible d'allouer de la mï¿½moire ");
 				exit(-1);
 			}
 
-			/* on prépare lpCotent pour la prochaine boucle */
+			/* on prï¿½pare lpCotent pour la prochaine boucle */
 			lpContent=lpNextToken+1;
 
 		}
 
-		/* on prépare lpTeaPage pour la prochaine boucle */
+		/* on prï¿½pare lpTeaPage pour la prochaine boucle */
 		lpTeaPage->lpTeaNext=Tea_AllocTeaPage();
 		lpTeaPage=lpTeaPage->lpTeaNext;
 
@@ -300,7 +300,7 @@ int         Tea_PurifyPage(TEAPAGE* lpTeaPage)
 
 		if (lpTeaPage->iBlockType==TEA_BLOCK_PARAGRAPH) {
 
-			/* découpe le paragraphe en sous paragraphe s'il y a lieu */
+			/* dï¿½coupe le paragraphe en sous paragraphe s'il y a lieu */
 			Tea_BreakParagraph(lpTeaPage);
 
 		} else if (lpTeaPage->iBlockType==TEA_BLOCK_HEADING) {
@@ -357,7 +357,7 @@ int         Tea_BreakParagraph(TEAPAGE* lpTeaPage)
 	while ((lpNextToken=Tea_SeekNextDelimiter(lpBeginSearch, lpNewParagraphMark, &iTokenNb))) {
 
 
-		/* on vérifie si le token correspond */
+		/* on vï¿½rifie si le token correspond */
 		lpToken=lpNextToken+1;
 		while (*lpToken==' ' || *lpToken=='\t') lpToken++;
 
@@ -369,14 +369,14 @@ int         Tea_BreakParagraph(TEAPAGE* lpTeaPage)
 		/* on isole le token */
 		*lpNextToken='\0';
 
-		/* on crée un nouveau paragraphe */
+		/* on crï¿½e un nouveau paragraphe */
 		lpTeaTemp=Tea_AllocTeaPage();
 		lpTeaTemp->lpTeaNext=lpTeaPage->lpTeaNext;
 
-		/* on stocke le contenu du nouveau paragraphe dans le nouveau paragraphe alloué */
+		/* on stocke le contenu du nouveau paragraphe dans le nouveau paragraphe allouï¿½ */
 		lpContent=lpNextToken+2;
 		if (!(lpTeaTemp->lpBlockContent=strdup(lpContent))) {
-			perror("Erreur : impossible d'allouer de la mémoire : %s");
+			perror("Erreur : impossible d'allouer de la mï¿½moire : %s");
 			exit(-1);
 		}
 
@@ -413,7 +413,7 @@ TEAPAGE*    Tea_RemoveVoidBlocks(TEAPAGE* lpTeaPage)
 				lpTeaBegin=lpTeaPage->lpTeaNext;
 				Tea_FreeTeaPage(lpTeaPage);
 
-				/* on reprend la boucle au début */
+				/* on reprend la boucle au dï¿½but */
 				lpTeaPage=lpTeaBegin;
 				continue;
 
@@ -556,7 +556,7 @@ int Tea_MakeLevels(TEAPAGE* lpTeaPage)
 					if (!(lpTeaPage->lpBlockContent
 					      =strdup(lpCh))) {
 
-						perror("TEA :: impossible d'allouer de la mémoire ");
+						perror("TEA :: impossible d'allouer de la mï¿½moire ");
 						exit(-1);
 
 					}

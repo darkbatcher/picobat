@@ -22,6 +22,10 @@
 #include <string.h>
 #include <errno.h>
 
+#ifndef WIN32
+#include <strings.h>
+#endif
+
 #include <libDos9.h>
 #include "../Tea.h"
 #include "tea_out.h"
@@ -89,7 +93,7 @@ void Tea_MDEscape(char** pp)
     Dos9_EsReplace(estr, "(", "\\\\(");
     Dos9_EsReplace(estr, ")", "\\\\)");
 
-    if (new = strdup(estr->str)) {
+    if ((new = strdup(estr->str))) {
         free(*pp);
         *pp = new;
     }
@@ -144,7 +148,7 @@ void Tea_MDParseHandler(int iMsg ,void* lpData)
 
 		if (!(lpTeaNode->lpContent=strdup(Dos9_EsToChar(lpEsStr)))) {
 
-			perror("TEA :: impossible d'allouer de la mémoire ");
+			perror("TEA :: impossible d'allouer de la mï¿½moire ");
 			exit(-1);
 		}
 
@@ -157,4 +161,3 @@ void Tea_MDParseHandler(int iMsg ,void* lpData)
 
 	Dos9_EsFree(lpEsStr);
 }
-
