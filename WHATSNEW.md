@@ -2260,3 +2260,8 @@ is a list of improvements I made during from 24th June to today.
 * Added **dist** makefile target to make a zip of the **bin** folder when 
   called.
 
+## Monday 6th, August ##
+
+* Fixed Makefile bug that triggered the build of **po** sub directory even 
+  when **no-nls** was used to configure the femto build suite.
+

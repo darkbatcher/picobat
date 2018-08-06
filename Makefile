@@ -17,18 +17,23 @@
 #
 
 ifneq (,$(wildcard ./femto-config.mk))
-    include femto-config.mk
+	include femto-config.mk
 endif
 
 BINDIR ?= bin
-
 SUBDIRS_ADD ?=
+SUBDIR_PO =
 
 ifeq ($(use_libcu8),1)
 	SUBDIRS_ADD = libcu8
 endif
 
-SUBDIRS = libDos9 libinteval libmatheval $(SUBDIRS_ADD) dos9 dos9ize dump tea scripts po
+ifeq ($(use_nls),1)
+	SUBDIR_PO = po
+endif
+
+SUBDIRS = libDos9 libinteval libmatheval $(SUBDIRS_ADD) dos9 dos9ize dump tea \
+			scripts $(SUBDIR_PO)
 TEAFILES = README.tea WHATSNEW.tea GUIDELINES.tea THANKS.tea
 TEXTFILES = $(TEAFILES:.tea=.txt)
 MDFILES = $(TEAFILES:.tea=.md)
@@ -43,7 +48,7 @@ PACKAGE = dos9
 PACKAGE_URL = http://dos9.org
 PACKAGE_BUGREPORT = darkbatcher@dos9.org
 VERSION = 218.2
-			
+		
 all: $(SUBDIRS) $(MDFILES)
 
 $(SUBDIRS):
@@ -75,12 +80,9 @@ textfiles: $(TEXTFILES)
 .tpl.tea:
 	cat $< | sed -e s,\{doc[^}]*\|,\{,g > $@
 	
-
-# TEXT files are only generated when building bin or textfiles
 .tea.txt:
 	tea/tea -e:utf-8 -o:text-plain $< $@
 
-# MD files are always generated when building
 .tea.md:
 	tea/tea -e:utf-8 -o:md $< $@
 	

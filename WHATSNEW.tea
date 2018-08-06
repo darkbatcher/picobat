@@ -2179,6 +2179,11 @@ ${(for %%a in (foo bar) do echo %%a) & echo loop}
 
 {{Saturday 4th, August}}
 
- - Fixed few warnings.
+	- Fixed few warnings.
 
- - Include Dos9_DirStack.h to Dos9_Core.h.
+	- Include Dos9_DirStack.h to Dos9_Core.h.
+	
+{{Monday 6th, August}}
+
+	- Fixed Makefile bug that triggered the build of {po} sub directory even
+	when {no-nls} was used to configure the femto build suite.
