@@ -2260,8 +2260,16 @@ is a list of improvements I made during from 24th June to today.
 * Added **dist** makefile target to make a zip of the **bin** folder when 
   called.
 
+## Saturday 4th, August ##
+
+* Fixed few warnings.
+
+* Include Dos9\_DirStack.h to Dos9\_Core.h.
+
 ## Monday 6th, August ##
 
 * Fixed Makefile bug that triggered the build of **po** sub directory even 
   when **no-nls** was used to configure the femto build suite.
+
+* Fixed **CD** outdated manual page. 
 
