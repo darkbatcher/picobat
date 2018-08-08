@@ -206,9 +206,9 @@ int Dos9_CmdDir(char* lpLine)
                 /* !! Recyclage de la variable lpFilename pour afficher la taille du fichier */
 
 #ifdef WIN32
-#define localtime_r(t, lt) memcpy(lt, localtime(t), sizeof(struct tm));
+#define localtime_r(t, lt) memcpy(lt, localtime(t), sizeof(struct tm))
 #endif // WIN32
-                localtime_r(&Dos9_GetModifTime(item), &lTime);
+                localtime_r(&(Dos9_GetModifTime(item)), &lTime);
                 strftime(lpTime, sizeof(lpTime), "%x %X", &lTime);
                 fprintf(fOutput, "%s %s\t%s\t%s" DOS9_NL, lpTime,
                                                                 lpSize,

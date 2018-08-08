@@ -2160,7 +2160,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed a bug with **START** command. Since the output of **dos9\_start** was 
   redirected to **NUL**, and the process was not awaited, it caused problem 
-  when either **mimeopen** or **xdg-open** was trying to interract with user. 
+  when either **mimeopen** or **xdg-open** was trying to interact with user. 
   To fix the problem, the output is no longer redirected and dos9 waits for 
   **dos9\_start** completion. This might cause little inconveniences as both 
   **xdg-open** and **mimeopen** produce some output even when run without 
@@ -2271,5 +2271,9 @@ is a list of improvements I made during from 24th June to today.
 * Fixed Makefile bug that triggered the build of **po** sub directory even 
   when **no-nls** was used to configure the femto build suite.
 
-* Fixed **CD** outdated manual page. 
+* Fixed **CD** outdated manual page.
+
+## Wednesday 8th ##
+
+* Fixed a bug causing a segfault when using the **DIR** command. 
 

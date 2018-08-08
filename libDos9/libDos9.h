@@ -351,11 +351,11 @@ LIBDOS9 int             Dos9_Kbhit(void);
 LIBDOS9 int             Dos9_Getch(void);
 LIBDOS9 void            Dos9_GetMousePos(char on_move, CONSOLECOORD* coords, int* type);
 
-#define Dos9_GetAccessTime(lpList) lpList->stFileStats.st_atime
-#define Dos9_GetCreateTime(lpList) lpList->stFileStats.st_ctime
-#define Dos9_GetModifTime(lpList) lpList->stFileStats.st_mtime
-#define Dos9_GetFileSize(lpList) lpList->stFileStats.st_size
-#define Dos9_GetFileMode(lpList) lpList->stFileStats.st_mode
+#define Dos9_GetAccessTime(lpList) (lpList->stFileStats.st_atime)
+#define Dos9_GetCreateTime(lpList) (lpList->stFileStats.st_ctime)
+#define Dos9_GetModifTime(lpList) (lpList->stFileStats.st_mtime)
+#define Dos9_GetFileSize(lpList) (lpList->stFileStats.st_size)
+#define Dos9_GetFileMode(lpList) (lpList->stFileStats.st_mode)
 
 /* Match everything in the directory */
 #define DOS9_SEARCH_DEFAULT 0x00

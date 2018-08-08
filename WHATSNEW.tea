@@ -2077,7 +2077,7 @@ ${(for %%a in (foo bar) do echo %%a) & echo loop}
 
     - Fixed a bug with {START} command. Since the output of {dos9_start} was
     redirected to {NUL}, and the process was not awaited, it caused problem
-    when either {mimeopen} or {xdg-open} was trying to interract with user.
+    when either {mimeopen} or {xdg-open} was trying to interact with user.
     To fix the problem, the output is no longer redirected and dos9 waits
     for {dos9_start} completion. This might cause little inconveniences as
     both {xdg-open} and {mimeopen} produce some output even when run
@@ -2189,3 +2189,7 @@ ${(for %%a in (foo bar) do echo %%a) & echo loop}
 	when {no-nls} was used to configure the femto build suite.
 	
 	- Fixed {CD} outdated manual page.
+	
+{{Wednesday 8th}}
+
+	- Fixed a bug causing a segfault when using the {DIR} command.

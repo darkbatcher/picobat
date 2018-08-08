@@ -90,6 +90,8 @@ int Dos9_CmdMakeDirs(char* str)
     char c,
          *dir = str;
 
+    int status = DOS9_NO_ERROR;
+
     while (*str) {
 
         if (IS_DIR_DELIM(*str) && str != dir) {
@@ -100,15 +102,18 @@ int Dos9_CmdMakeDirs(char* str)
             c = *str;
             *str = '\0';
 
-            if (!Dos9_DirExists(dir)
-                && MKDIR_MACRO(dir, 0777)) {
 
-                Dos9_ShowErrorMessage(DOS9_UNABLE_MKDIR | DOS9_PRINT_C_ERROR,
-                                      dir,
-                                      FALSE);
-                return DOS9_UNABLE_MKDIR;
+            /* You know... it's not really that important to report
+               errors yet, since if any of the folder fail to create,
+               any subsequent will fail too and so eventually creating
+               the last directory will fail.
 
-            }
+               Anyway, its saves us the worry of checking whether it is
+               legitimate to create the said dir, which might happen
+               processing unc paths (\\?\) ...  */
+
+            if (!Dos9_DirExists(dir))
+                MKDIR_MACRO(dir, 0777);
 
             *str = c;
 
@@ -124,9 +129,9 @@ int Dos9_CmdMakeDirs(char* str)
         Dos9_ShowErrorMessage(DOS9_MKDIR_ERROR | DOS9_PRINT_C_ERROR,
                               dir,
                               FALSE);
-        return DOS9_MKDIR_ERROR;
+        status = DOS9_MKDIR_ERROR;
 
     }
 
-    return 0;
+    return status;
 }

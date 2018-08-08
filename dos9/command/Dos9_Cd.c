@@ -73,7 +73,7 @@
 
 
 
-int /*__inline__ */ Dos9_Canonicalize(char* path)
+int __inline__ Dos9_Canonicalize(char* path)
 {
     char *previous = NULL, *next, *orig = path;
     size_t size = strlen(path) + 1;
