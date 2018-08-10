@@ -58,12 +58,17 @@ static void xwcsncat(wchar_t* restrict dest, wchar_t* restrict source, size_t si
     *dest = '\0';
 }
 
-wchar_t* Dos9_GetNextLevel(wchar_t* up, int* jok)
+wchar_t* Dos9_GetNextLevel(wchar_t* up, wchar_t* base, int* jok)
 {
     int joker = 0;
     wchar_t* prev = NULL;
 
     *jok = 0;
+
+    if (base == NULL
+        && !wcsncmp(up, L"\\\\?", 3)
+        && (*(up + 3)  == L'\\' ))
+        up += 3;
 
     while (*up) {
 
@@ -75,6 +80,7 @@ wchar_t* Dos9_GetNextLevel(wchar_t* up, int* jok)
             if (prev)
                 return prev;
             *jok = 1;
+
             break;
 
         case L'/':
@@ -115,9 +121,8 @@ static int __inline__ Dos9_IsRegExpTrivial(wchar_t* exp)
 {
     if (wcspbrk(exp, L"*?")) {
         return 0;
-    } else {
+    } else
         return 1;
-    }
 }
 
 static time_t __inline__  Dos9_ToTime_t(FILETIME* ft)
@@ -308,7 +313,7 @@ static FILELIST* Dos9_GetMatch(wchar_t* restrict base, wchar_t* restrict up, str
        item = L"*";
        joker = 1;
 
-    } else if ((up = Dos9_GetNextLevel(up, &joker))) {
+    } else if ((up = Dos9_GetNextLevel(up, base, &joker))) {
 
         cleanup = up;
         *cleanup = L'\0';

@@ -67,7 +67,7 @@ int Dos9_CmdDir(char* lpLine)
 	              lpSize[16],
 	              lpTime[30];
 
-	struct tm lTime;
+	struct tm lTime, *t;
 
 	lpNext=lpLine+3;
 
@@ -208,6 +208,7 @@ int Dos9_CmdDir(char* lpLine)
 #ifdef WIN32
 #define localtime_r(t, lt) memcpy(lt, localtime(t), sizeof(struct tm))
 #endif // WIN32
+
                 localtime_r(&(Dos9_GetModifTime(item)), &lTime);
                 strftime(lpTime, sizeof(lpTime), "%x %X", &lTime);
                 fprintf(fOutput, "%s %s\t%s\t%s" DOS9_NL, lpTime,

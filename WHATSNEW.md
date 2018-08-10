@@ -2275,5 +2275,10 @@ is a list of improvements I made during from 24th June to today.
 
 ## Wednesday 8th ##
 
-* Fixed a bug causing a segfault when using the **DIR** command. 
+* Fixed a bug causing a segfault when using the **DIR** command.
+
+## Friday 10th ##
+
+* Implemented a better support to **UNC** paths. Such paths can not be used by 
+  **CD** for now.
 
