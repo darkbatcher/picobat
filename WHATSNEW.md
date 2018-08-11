@@ -2282,3 +2282,10 @@ is a list of improvements I made during from 24th June to today.
 * Implemented a better support to **UNC** paths. Such paths can not be used by 
   **CD** for now.
 
+## Saturday 11th ##
+
+* Implement a new behaviour for **XARGS** command. Each line of the input is 
+  interpreted as a single parameter. Thus whenever a line containing 
+  delimiters and not surrounded by quotes is encountered, quotes are 
+  automatically added.
+

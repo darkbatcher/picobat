@@ -30,7 +30,9 @@ ${XARGS [command ...]}
 	encountered in command or in the command input (| et &) will have no effect.
 	
 	As {Dos9} reads through the standard input, only newlines will be removed from
-	final parameters.
+	final parameters. If a line read from the standard contains spaces or delimiters
+	(ie. tabs, comma, semicolon) then the line will automatically be quoted by
+	{xargs} to create a single parameter.
 
 {{Compatibility}}
 

@@ -2198,3 +2198,10 @@ ${(for %%a in (foo bar) do echo %%a) & echo loop}
 
 	- Implemented a better support to {UNC} paths. Such paths can not
 	be used by {CD} for now.
+	
+{{Saturday 11th}}
+
+	- Implement a new behaviour for {XARGS} command. Each line of the
+	input is interpreted as a single parameter. Thus whenever a line
+	containing delimiters and not surrounded by quotes is encountered,
+	quotes are automatically added.

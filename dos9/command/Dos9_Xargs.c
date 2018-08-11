@@ -82,10 +82,19 @@ int Dos9_CmdXargs(char* line)
     /* get input from stdin */
     while (!Dos9_EsGet(param, fInput)) {
 
-        /* fixme: escape spaces ...*/
         Dos9_RmTrailingNl(param->str);
-        Dos9_EsCat(cmdline, " ");
-        Dos9_EsCatE(cmdline, param);
+
+        if (strpbrk(param->str, " ;,\t")
+            && *(Dos9_SkipAllBlanks(param->str)) != '"') {
+
+            Dos9_EsCat(cmdline, " \"");
+            Dos9_EsCatE(cmdline, param);
+            Dos9_EsCat(cmdline, "\"");
+
+        } else {
+            Dos9_EsCat(cmdline, " ");
+            Dos9_EsCatE(cmdline, param);
+        }
 
     }
 
@@ -101,6 +110,6 @@ int Dos9_CmdXargs(char* line)
 end:
     Dos9_EsFree(cmdline);
     Dos9_EsFree(param);
-    return status;
 
+    return status;
 }
