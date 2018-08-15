@@ -2289,3 +2289,7 @@ is a list of improvements I made during from 24th June to today.
   delimiters and not surrounded by quotes is encountered, quotes are 
   automatically added.
 
+## Wednesday 15th ##
+
+* Fixed documentation errors on **Special variable** expansions. 
+

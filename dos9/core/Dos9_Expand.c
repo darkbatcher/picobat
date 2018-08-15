@@ -45,7 +45,7 @@ void Dos9_ExpandSpecialVar(ESTR* ptrCommandLine, ESTR** buf)
 
 		if ((lpTokenBegin=Dos9_GetLocalVar(lpvLocalVars, lpTokenBegin, lpVarContent))) {
 
-			/* si la variable est bien définie */
+			/* If we have a defined variable */
 			*lpNextToken='\0';
 
 			Dos9_EsCat(lpExpanded, lpPreviousToken);
@@ -56,7 +56,7 @@ void Dos9_ExpandSpecialVar(ESTR* ptrCommandLine, ESTR** buf)
 
 		} else {
 
-			/* si la variable n'est pas d�finie */
+			/* If the variable is not defined */
 			lpToken=lpNextToken+1;
 
 		}
@@ -89,14 +89,11 @@ void Dos9_ExpandVar(ESTR* ptrCommandLine, char cDelimiter, ESTR** buf)
 
 		DEBUG(ptrToken);
 		*ptrNextToken='\0';
-		ptrNextToken++; // on passe au caractère suivant
+		ptrNextToken++;
 
 		if (*ptrNextToken==cDelimiter) {
 
-			// si un % est échappé via %%
-
-			/* on supprime le caract�re qui peut �ventuellement
-			   trainer dans ce buffer */
+            /* a delimiter is escaped using double delimiter */
 
 			Dos9_EsCat(lpExpanded, ptrToken);
 			Dos9_EsCat(lpExpanded, lpDelimiter);
@@ -151,7 +148,7 @@ void Dos9_ExpandVar(ESTR* ptrCommandLine, char cDelimiter, ESTR** buf)
 		}
 	}
 
-	Dos9_EsCat(lpExpanded, ptrToken); // si pas de s�quence d�tect�e
+	Dos9_EsCat(lpExpanded, ptrToken);
 	Dos9_EsCpy(ptrCommandLine, Dos9_EsToChar(lpExpanded));
 
 	DOS9_DBG("[ExpandVar] : '%s'\n",

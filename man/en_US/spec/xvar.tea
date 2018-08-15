@@ -24,20 +24,39 @@
 {{Special variable use}}
 
 	Special variables can not be modified, the can only be defined
-	by {../dos9|Dos9} or the {../for|FOR command}.
+	by {../dos9|Dos9}, the {../call|CALL command} or the
+    {../for|FOR command}.
 
-	Special variables {%%0} through {%%9} (as a special exception
-	{%0} through {%9} is also a valid syntax) are set to arguments
+    There is basically two types of special variables:
+
+        - Special variables prefixed by a single {%} (per cent)
+        character which denotes a special variable reffering to
+        an argument of the script.
+
+        - Special variables prefixed by two {%} characters which
+        denote a special variable set within a loop by the
+        {../for|FOR} command.
+
+    Those two types of variables have a slightly different
+    {exp|expansion} precedence. Argument variables are expanded
+    simultaneously with conventionnal expansion while FOR-generated
+    variables are expanded before the delayed expansion and the
+    tokenization of the command line.
+
+	Argument variables {%0} through {%9} are set to arguments
 	passed to the script using the command line. As a convention,
-	{%0} is always the script name.
+	{%0} is always the script name when the script starts. However,
+    when using {../call|CALL} to execute a label, {%0} contain the
+    name of that label.
 	
-	The {%%*} (or {%*}) variable contains a line containing the parameters
+	The {%*} variable contains a line containing the parameters
 	that have been passed to the script, that is it is the content
 	of {%1} trough {%9} inside a single variable plus all the
-	parameters beyond the ninth if any has been passed. On UNIX-based
-	operating systems, it is not possible to retrieve the exact syntax
-	of the command line. Thus {%*} is created using the parameters
-	and some added quotation if necessary.
+	parameters beyond the ninth if any has been passed. The parameters
+    beyond the ninth one ({%9}) can also be retrieved using the {%+}
+    variable. On UNIX-based operating systems, it is not possible to
+    retrieve the exact syntax of the command line. Thus {%*} is created
+    using the parameters and some added quotation if necessary.
 	
 {{Special variable expansion}}
 
