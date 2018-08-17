@@ -74,7 +74,7 @@ int Dos9_CmdTimeout(char* lpLine)
 {
     int status = DOS9_NO_ERROR,
         nobreak = 0;
-    double seconds;
+    double seconds = 0.0;
     char* p;
 
     ESTR* param = Dos9_EsInit();
@@ -98,10 +98,17 @@ int Dos9_CmdTimeout(char* lpLine)
 
         } else {
 
+            if (seconds) {
+
+                Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, param->str, 0);
+                status = DOS9_UNEXPECTED_ELEMENT;
+                goto end;
+
+            }
+
             seconds = strtod(param->str, &p);
 
-            if ((p != NULL && *p)
-                || seconds < 0) {
+            if (p != NULL && *p) {
 
                 Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT, param->str, 0);
                 status = DOS9_UNEXPECTED_ELEMENT;
@@ -113,31 +120,41 @@ int Dos9_CmdTimeout(char* lpLine)
 
     }
 
-    fprintf(fError, nobreak ? lpTimeoutMessageNoBreak : lpTimeoutMessage,
+    if (seconds < 0) {
+
+        fprintf(fError, nobreak ? lpMsgTimeoutBreak : lpMsgTimeoutKeyPress);
+
+        while(nobreak || !Dos9_Kbhit())
+            Dos9_Sleep((unsigned int)(SLEEP_GRANULARITY * 1000));
+
+    } else {
+
+        fprintf(fError, nobreak ? lpMsgTimeoutNoBreak : lpMsgTimeout,
                     seconds);
 
-    while (seconds > 0) {
+        while (seconds > 0) {
 
-        if (seconds > SLEEP_GRANULARITY) {
+            if (seconds > SLEEP_GRANULARITY) {
 
-            Dos9_Sleep((unsigned int)(SLEEP_GRANULARITY * 1000));
-            seconds -= SLEEP_GRANULARITY;
+                Dos9_Sleep((unsigned int)(SLEEP_GRANULARITY * 1000));
+                seconds -= SLEEP_GRANULARITY;
 
 #if !defined(LIBDOS9_NO_CONSOLE)
-            Dos9_ClearConsoleLine();
-            fprintf(fError, nobreak ? lpTimeoutMessageNoBreak : lpTimeoutMessage,
-                    seconds);
+                Dos9_ClearConsoleLine();
+                fprintf(fError, nobreak ? lpMsgTimeoutNoBreak : lpMsgTimeout,
+                        seconds);
 #endif
 
-        } else {
+            } else {
 
-            Dos9_Sleep((unsigned int)(seconds * 1000));
-            seconds = -1;
+                Dos9_Sleep((unsigned int)(seconds * 1000));
+                seconds = -1;
+            }
+
+            if (!nobreak && Dos9_Kbhit())
+                break;
+
         }
-
-        if (!nobreak && Dos9_Kbhit())
-            break;
-
     }
 
     fputs(DOS9_NL, fError);

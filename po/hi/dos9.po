@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dos9 218.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-15 14:06+0200\n"
+"POT-Creation-Date: 2018-08-09 10:18+0200\n"
 "PO-Revision-Date: 2018-07-07 22:13+0530\n"
 "Last-Translator: darkounet <darkbatcher@dos9.org>\n"
 "Language-Team: TheBATeam (www.thebateam.org)\n"
@@ -345,110 +345,110 @@ msgstr ""
 "\n"
 "वर्तमान कमांड को निरस्त करना, DOS9 को बंद करने के लिए कोई भी कुंजी दबाएं।\n"
 
-#: ../dos9/lang/Dos9_Lang.c:79
+#: ../dos9/lang/Dos9_Lang.c:81
 msgid "Echo command enabled"
 msgstr "इको कमांड चालू"
 
-#: ../dos9/lang/Dos9_Lang.c:80
+#: ../dos9/lang/Dos9_Lang.c:82
 msgid "Echo command disabled"
 msgstr "इको कमांड बंद कर दिया"
 
-#: ../dos9/lang/Dos9_Lang.c:81
+#: ../dos9/lang/Dos9_Lang.c:83
 msgid "Press any key to continue..."
 msgstr "आगे बढ़ने के लिए कोई कुंजी दबाएं..."
 
-#: ../dos9/lang/Dos9_Lang.c:83
+#: ../dos9/lang/Dos9_Lang.c:85
 msgid "\tNo files found"
 msgstr "कोई फाइल नहीं मिली"
 
-#: ../dos9/lang/Dos9_Lang.c:84
+#: ../dos9/lang/Dos9_Lang.c:86
 msgid "Last change\t\tSize\tAttr.\tName"
 msgstr "अंतिम change\t\tSize\tAttr.\tName"
 
-#: ../dos9/lang/Dos9_Lang.c:85
+#: ../dos9/lang/Dos9_Lang.c:87
 msgid "Files"
 msgstr "फ़ाइलें: (i)"
 
-#: ../dos9/lang/Dos9_Lang.c:86
+#: ../dos9/lang/Dos9_Lang.c:88
 msgid "Folders"
 msgstr "फ़ोल्डर"
 
-#: ../dos9/lang/Dos9_Lang.c:88
+#: ../dos9/lang/Dos9_Lang.c:90
 #, c-format
 msgid "Are you sure you want to delete file \"%s\" ?"
 msgstr "क्या आप सचमुच \"%s\" को मिटाना चाहते हैं?"
 
-#: ../dos9/lang/Dos9_Lang.c:89
+#: ../dos9/lang/Dos9_Lang.c:91
 #, c-format
 msgid "Are you sure you want to remove \"%s\" directory ?"
 msgstr "क्या आप वाकई \"%s\" फ़ोल्डर को हटाना चाहते हैं?"
 
-#: ../dos9/lang/Dos9_Lang.c:91
+#: ../dos9/lang/Dos9_Lang.c:93
 #, c-format
 msgid "File \"%s\" already exists, replace it by \"%s\" ?"
 msgstr "फ़ाइल \"%s\" पहले से मौजूद है, इसे \"%s\" से प्रतिस्थापित करें?"
 
-#: ../dos9/lang/Dos9_Lang.c:93
+#: ../dos9/lang/Dos9_Lang.c:95
 msgid "Do you really want to exit command script ?"
 msgstr "क्या आप वास्तव में ऐप से बाहर निकलना चाहते हैं?"
 
-#: ../dos9/lang/Dos9_Lang.c:95
+#: ../dos9/lang/Dos9_Lang.c:97
 msgid " (Yes/no) "
 msgstr "हाँ/ नहीं"
 
-#: ../dos9/lang/Dos9_Lang.c:96
+#: ../dos9/lang/Dos9_Lang.c:98
 msgid " (yes/No) "
 msgstr "हाँ/ नहीं"
 
-#: ../dos9/lang/Dos9_Lang.c:97
+#: ../dos9/lang/Dos9_Lang.c:99
 msgid " (yes/no) "
 msgstr "हाँ/ नहीं"
 
-#: ../dos9/lang/Dos9_Lang.c:99
+#: ../dos9/lang/Dos9_Lang.c:101
 msgid " (Yes/no/all) "
 msgstr "(हां / नहीं / सब)"
 
-#: ../dos9/lang/Dos9_Lang.c:100
+#: ../dos9/lang/Dos9_Lang.c:102
 msgid " (yes/No/all) "
 msgstr "(हाँ / नहीं / सब)"
 
-#: ../dos9/lang/Dos9_Lang.c:101
+#: ../dos9/lang/Dos9_Lang.c:103
 msgid " (yes/no/All) "
 msgstr "(हाँ / नहीं / सब)"
 
-#: ../dos9/lang/Dos9_Lang.c:102
+#: ../dos9/lang/Dos9_Lang.c:104
 msgid " (yes/no/all) "
 msgstr "(हाँ / नहीं / सब)"
 
-#: ../dos9/lang/Dos9_Lang.c:104
+#: ../dos9/lang/Dos9_Lang.c:106
 msgid "YES"
 msgstr "हां"
 
-#: ../dos9/lang/Dos9_Lang.c:105
+#: ../dos9/lang/Dos9_Lang.c:107
 msgid "Y"
 msgstr "Y"
 
-#: ../dos9/lang/Dos9_Lang.c:107
+#: ../dos9/lang/Dos9_Lang.c:109
 msgid "NO"
 msgstr "नही"
 
-#: ../dos9/lang/Dos9_Lang.c:108
+#: ../dos9/lang/Dos9_Lang.c:110
 msgid "N"
 msgstr "N"
 
-#: ../dos9/lang/Dos9_Lang.c:110
+#: ../dos9/lang/Dos9_Lang.c:112
 msgid "ALL"
 msgstr "इनमें से सभी"
 
-#: ../dos9/lang/Dos9_Lang.c:111
+#: ../dos9/lang/Dos9_Lang.c:113
 msgid "A"
 msgstr "A"
 
-#: ../dos9/lang/Dos9_Lang.c:113
+#: ../dos9/lang/Dos9_Lang.c:115
 msgid "Please enter a correct choice (or type enter to choose default) !\n"
 msgstr "कृपया सही विकल्प दर्ज करें (या डिफ़ॉल्ट चुनने के लिए एंटर टाइप करें)!\n"
 
-#: ../dos9/lang/Dos9_Lang.c:115
+#: ../dos9/lang/Dos9_Lang.c:117
 msgid ""
 "This is free software, you can modify and/or redistribute it under the terms "
 "of the GNU Genaral Public License v3 (or any later version).\n"
@@ -493,20 +493,30 @@ msgstr ""
 "<darkbatcher@dos9.org>\n"
 "अधिक जानकारी के लिए देखें: <http://dos9.org>"
 
-#: ../dos9/lang/Dos9_Lang.c:132
+#: ../dos9/lang/Dos9_Lang.c:134
 #, c-format
 msgid "%d files matching, print anyway ?"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:134
-#, c-format
-msgid "Waiting for %f seconds, press a key to continue"
-msgstr ""
+#: ../dos9/lang/Dos9_Lang.c:136
+#, fuzzy, c-format
+msgid "Waiting for %f seconds, press a key to continue ..."
+msgstr "आगे बढ़ने के लिए कोई कुंजी दबाएं..."
 
-#: ../dos9/lang/Dos9_Lang.c:135
-#, c-format
-msgid "Waiting for %f seconds, press CTRL-C to continue"
-msgstr ""
+#: ../dos9/lang/Dos9_Lang.c:137
+#, fuzzy, c-format
+msgid "Waiting for %f seconds, press CTRL-C to continue ..."
+msgstr "आगे बढ़ने के लिए कोई कुंजी दबाएं..."
+
+#: ../dos9/lang/Dos9_Lang.c:138
+#, fuzzy
+msgid "Press a key to continue ..."
+msgstr "आगे बढ़ने के लिए कोई कुंजी दबाएं..."
+
+#: ../dos9/lang/Dos9_Lang.c:139
+#, fuzzy
+msgid "Press CTRL-C to continue ..."
+msgstr "आगे बढ़ने के लिए कोई कुंजी दबाएं..."
 
 #: ../dos9/lang/Dos9_ShowHelp.c:43
 msgid ""
@@ -855,3 +865,7 @@ msgid ""
 "Sleep for a delay in seconds.\n"
 "Usage: TIMEOUT [/T] [/NOBREAK] seconds[.milliseconds]\n"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Press a key to continue"
+#~ msgstr "आगे बढ़ने के लिए कोई कुंजी दबाएं..."

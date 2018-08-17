@@ -64,8 +64,10 @@ extern const char* lpAskInvalid;
 
 extern const char* lpManyCompletionOptions;
 
-extern const char* lpTimeoutMessage;
-extern const char* lpTimeoutMessageNoBreak;
+extern const char* lpMsgTimeout;
+extern const char* lpMsgTimeoutNoBreak;
+extern const char* lpMsgTimeoutBreak;
+extern const char* lpMsgTimeoutKeyPress;
 
 
 void Dos9_LoadStrings(void); /* a function that loads differents

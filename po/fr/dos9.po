@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dos9 218.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-15 14:06+0200\n"
+"POT-Creation-Date: 2018-08-09 10:18+0200\n"
 "PO-Revision-Date: 2013-12-14 20:24+0100\n"
 "Last-Translator: DarkBatcher <darkbatcher@gmail.com>\n"
 "Language-Team: French <darkbatcher@gmail.com>\n"
@@ -351,112 +351,112 @@ msgstr ""
 "\n"
 "Abandon de l'opération courrante, appuyez sur un touche pour terminer Dos9.\n"
 
-#: ../dos9/lang/Dos9_Lang.c:79
+#: ../dos9/lang/Dos9_Lang.c:81
 msgid "Echo command enabled"
 msgstr "Commande echo activée"
 
-#: ../dos9/lang/Dos9_Lang.c:80
+#: ../dos9/lang/Dos9_Lang.c:82
 msgid "Echo command disabled"
 msgstr "Commande echo désactivée"
 
-#: ../dos9/lang/Dos9_Lang.c:81
+#: ../dos9/lang/Dos9_Lang.c:83
 msgid "Press any key to continue..."
 msgstr "Appuyez sur une touche pour continuer..."
 
-#: ../dos9/lang/Dos9_Lang.c:83
+#: ../dos9/lang/Dos9_Lang.c:85
 msgid "\tNo files found"
 msgstr "\tAucun fichier trouvé"
 
-#: ../dos9/lang/Dos9_Lang.c:84
+#: ../dos9/lang/Dos9_Lang.c:86
 msgid "Last change\t\tSize\tAttr.\tName"
 msgstr "Dernière modif.\t\t Taille\t Attr.\tNom"
 
-#: ../dos9/lang/Dos9_Lang.c:85
+#: ../dos9/lang/Dos9_Lang.c:87
 msgid "Files"
 msgstr "Fichiers"
 
-#: ../dos9/lang/Dos9_Lang.c:86
+#: ../dos9/lang/Dos9_Lang.c:88
 msgid "Folders"
 msgstr "Dossiers"
 
-#: ../dos9/lang/Dos9_Lang.c:88
+#: ../dos9/lang/Dos9_Lang.c:90
 #, c-format
 msgid "Are you sure you want to delete file \"%s\" ?"
 msgstr "Êtes-vous sûr  de vouloir supprimer le fichier \"%s\" ?"
 
-#: ../dos9/lang/Dos9_Lang.c:89
+#: ../dos9/lang/Dos9_Lang.c:91
 #, c-format
 msgid "Are you sure you want to remove \"%s\" directory ?"
 msgstr "Êtes-vous sûr  de vouloir supprimer le dossier \"%s\" ?"
 
-#: ../dos9/lang/Dos9_Lang.c:91
+#: ../dos9/lang/Dos9_Lang.c:93
 #, c-format
 msgid "File \"%s\" already exists, replace it by \"%s\" ?"
 msgstr "Le fichier \"%s\" existe déjà, voulez vous le remplacer par \"%s\" ?"
 
-#: ../dos9/lang/Dos9_Lang.c:93
+#: ../dos9/lang/Dos9_Lang.c:95
 msgid "Do you really want to exit command script ?"
 msgstr "Voulez vous vraiment quitter le script de commande ?"
 
-#: ../dos9/lang/Dos9_Lang.c:95
+#: ../dos9/lang/Dos9_Lang.c:97
 msgid " (Yes/no) "
 msgstr " (Oui/non) "
 
-#: ../dos9/lang/Dos9_Lang.c:96
+#: ../dos9/lang/Dos9_Lang.c:98
 msgid " (yes/No) "
 msgstr " (oui/Non)"
 
-#: ../dos9/lang/Dos9_Lang.c:97
+#: ../dos9/lang/Dos9_Lang.c:99
 msgid " (yes/no) "
 msgstr " (oui/non) "
 
-#: ../dos9/lang/Dos9_Lang.c:99
+#: ../dos9/lang/Dos9_Lang.c:101
 msgid " (Yes/no/all) "
 msgstr " (Oui/non/tous) "
 
-#: ../dos9/lang/Dos9_Lang.c:100
+#: ../dos9/lang/Dos9_Lang.c:102
 msgid " (yes/No/all) "
 msgstr " (oui/Non/tous) "
 
-#: ../dos9/lang/Dos9_Lang.c:101
+#: ../dos9/lang/Dos9_Lang.c:103
 msgid " (yes/no/All) "
 msgstr " (oui/non/Tous) "
 
-#: ../dos9/lang/Dos9_Lang.c:102
+#: ../dos9/lang/Dos9_Lang.c:104
 msgid " (yes/no/all) "
 msgstr " (oui/non/tous) "
 
-#: ../dos9/lang/Dos9_Lang.c:104
+#: ../dos9/lang/Dos9_Lang.c:106
 msgid "YES"
 msgstr "OUI"
 
-#: ../dos9/lang/Dos9_Lang.c:105
+#: ../dos9/lang/Dos9_Lang.c:107
 msgid "Y"
 msgstr "O"
 
-#: ../dos9/lang/Dos9_Lang.c:107
+#: ../dos9/lang/Dos9_Lang.c:109
 msgid "NO"
 msgstr "NON"
 
-#: ../dos9/lang/Dos9_Lang.c:108
+#: ../dos9/lang/Dos9_Lang.c:110
 msgid "N"
 msgstr "N"
 
-#: ../dos9/lang/Dos9_Lang.c:110
+#: ../dos9/lang/Dos9_Lang.c:112
 msgid "ALL"
 msgstr "TOUS"
 
-#: ../dos9/lang/Dos9_Lang.c:111
+#: ../dos9/lang/Dos9_Lang.c:113
 msgid "A"
 msgstr "T"
 
-#: ../dos9/lang/Dos9_Lang.c:113
+#: ../dos9/lang/Dos9_Lang.c:115
 msgid "Please enter a correct choice (or type enter to choose default) !\n"
 msgstr ""
 "Merci d'entrer un choix correct (ou appuyez sur entrée pour le choix par "
 "défaut) ! \n"
 
-#: ../dos9/lang/Dos9_Lang.c:115
+#: ../dos9/lang/Dos9_Lang.c:117
 msgid ""
 "This is free software, you can modify and/or redistribute it under the terms "
 "of the GNU Genaral Public License v3 (or any later version).\n"
@@ -500,20 +500,28 @@ msgstr ""
 "Signalez les bogues à : <darkbatcher@dos9>\n"
 "Plus d'informations sur : <http://dos9.org>"
 
-#: ../dos9/lang/Dos9_Lang.c:132
+#: ../dos9/lang/Dos9_Lang.c:134
 #, c-format
 msgid "%d files matching, print anyway ?"
 msgstr "%d fichiers correspondant, afficher quand même ?"
 
-#: ../dos9/lang/Dos9_Lang.c:134
+#: ../dos9/lang/Dos9_Lang.c:136
 #, c-format
-msgid "Waiting for %f seconds, press a key to continue"
-msgstr "En attente pour %f secondes, appuyez sur une touche pour continuer"
+msgid "Waiting for %f seconds, press a key to continue ..."
+msgstr "En attente pour %f secondes, appuyez sur une touche pour continuer ..."
 
-#: ../dos9/lang/Dos9_Lang.c:135
+#: ../dos9/lang/Dos9_Lang.c:137
 #, c-format
-msgid "Waiting for %f seconds, press CTRL-C to continue"
-msgstr "En attente pour %f secondes, appuyez sur CTRL-C pour continuer"
+msgid "Waiting for %f seconds, press CTRL-C to continue ..."
+msgstr "En attente pour %f secondes, appuyez sur CTRL-C pour continuer .."
+
+#: ../dos9/lang/Dos9_Lang.c:138
+msgid "Press a key to continue ..."
+msgstr "Appuyez sur une touche pour continuer ..."
+
+#: ../dos9/lang/Dos9_Lang.c:139
+msgid "Press CTRL-C to continue ..."
+msgstr "Appuyez sur CTRL-C pour continuer ..."
 
 #: ../dos9/lang/Dos9_ShowHelp.c:43
 msgid ""
@@ -871,3 +879,6 @@ msgstr ""
 "Attend un délai en secondes.\n"
 "Sleep for a delay in seconds.\n"
 "Usage: TIMEOUT [/T] [/NOBREAK] secondes[.millisecondes]\n"
+
+#~ msgid "Press a key to continue"
+#~ msgstr "Appuyez sur une touche pour continuer"
