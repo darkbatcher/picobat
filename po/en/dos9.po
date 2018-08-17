@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dos9 218.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-16 13:39+0200\n"
+"POT-Creation-Date: 2018-08-15 14:06+0200\n"
 "PO-Revision-Date: 2018-07-03 10:30+0200\n"
 "Last-Translator: darkounet <darkbatcher@dos9.org>\n"
 "Language-Team: English\n"
@@ -346,110 +346,110 @@ msgstr ""
 "\n"
 "Aborting current command, press any key to end Dos9.\n"
 
-#: ../dos9/lang/Dos9_Lang.c:76
+#: ../dos9/lang/Dos9_Lang.c:79
 msgid "Echo command enabled"
 msgstr "Echo command enabled"
 
-#: ../dos9/lang/Dos9_Lang.c:77
+#: ../dos9/lang/Dos9_Lang.c:80
 msgid "Echo command disabled"
 msgstr "Echo command disabled"
 
-#: ../dos9/lang/Dos9_Lang.c:78
+#: ../dos9/lang/Dos9_Lang.c:81
 msgid "Press any key to continue..."
 msgstr "Press any key to continue..."
 
-#: ../dos9/lang/Dos9_Lang.c:80
+#: ../dos9/lang/Dos9_Lang.c:83
 msgid "\tNo files found"
 msgstr "\tNo files found"
 
-#: ../dos9/lang/Dos9_Lang.c:81
+#: ../dos9/lang/Dos9_Lang.c:84
 msgid "Last change\t\tSize\tAttr.\tName"
 msgstr "Last change\t\tSize\tAttr.\tName"
 
-#: ../dos9/lang/Dos9_Lang.c:82
+#: ../dos9/lang/Dos9_Lang.c:85
 msgid "Files"
 msgstr "Files"
 
-#: ../dos9/lang/Dos9_Lang.c:83
+#: ../dos9/lang/Dos9_Lang.c:86
 msgid "Folders"
 msgstr "Folders"
 
-#: ../dos9/lang/Dos9_Lang.c:85
+#: ../dos9/lang/Dos9_Lang.c:88
 #, c-format
 msgid "Are you sure you want to delete file \"%s\" ?"
 msgstr "Are you sure you want to delete file \"%s\" ?"
 
-#: ../dos9/lang/Dos9_Lang.c:86
+#: ../dos9/lang/Dos9_Lang.c:89
 #, c-format
 msgid "Are you sure you want to remove \"%s\" directory ?"
 msgstr "Are you sure you want to remove \"%s\" directory ?"
 
-#: ../dos9/lang/Dos9_Lang.c:88
+#: ../dos9/lang/Dos9_Lang.c:91
 #, c-format
 msgid "File \"%s\" already exists, replace it by \"%s\" ?"
 msgstr "File \"%s\" already exists, replace it by \"%s\" ?"
 
-#: ../dos9/lang/Dos9_Lang.c:90
+#: ../dos9/lang/Dos9_Lang.c:93
 msgid "Do you really want to exit command script ?"
 msgstr "Do you really want to exit command script ?"
 
-#: ../dos9/lang/Dos9_Lang.c:92
+#: ../dos9/lang/Dos9_Lang.c:95
 msgid " (Yes/no) "
 msgstr " (Yes/no) "
 
-#: ../dos9/lang/Dos9_Lang.c:93
+#: ../dos9/lang/Dos9_Lang.c:96
 msgid " (yes/No) "
 msgstr " (yes/No) "
 
-#: ../dos9/lang/Dos9_Lang.c:94
+#: ../dos9/lang/Dos9_Lang.c:97
 msgid " (yes/no) "
 msgstr " (yes/no) "
 
-#: ../dos9/lang/Dos9_Lang.c:96
+#: ../dos9/lang/Dos9_Lang.c:99
 msgid " (Yes/no/all) "
 msgstr " (Yes/no/all) "
 
-#: ../dos9/lang/Dos9_Lang.c:97
+#: ../dos9/lang/Dos9_Lang.c:100
 msgid " (yes/No/all) "
 msgstr " (yes/No/all) "
 
-#: ../dos9/lang/Dos9_Lang.c:98
+#: ../dos9/lang/Dos9_Lang.c:101
 msgid " (yes/no/All) "
 msgstr " (yes/no/All) "
 
-#: ../dos9/lang/Dos9_Lang.c:99
+#: ../dos9/lang/Dos9_Lang.c:102
 msgid " (yes/no/all) "
 msgstr " (yes/no/all) "
 
-#: ../dos9/lang/Dos9_Lang.c:101
+#: ../dos9/lang/Dos9_Lang.c:104
 msgid "YES"
 msgstr "YES"
 
-#: ../dos9/lang/Dos9_Lang.c:102
+#: ../dos9/lang/Dos9_Lang.c:105
 msgid "Y"
 msgstr "Y"
 
-#: ../dos9/lang/Dos9_Lang.c:104
+#: ../dos9/lang/Dos9_Lang.c:107
 msgid "NO"
 msgstr "NO"
 
-#: ../dos9/lang/Dos9_Lang.c:105
+#: ../dos9/lang/Dos9_Lang.c:108
 msgid "N"
 msgstr "N"
 
-#: ../dos9/lang/Dos9_Lang.c:107
+#: ../dos9/lang/Dos9_Lang.c:110
 msgid "ALL"
 msgstr "ALL"
 
-#: ../dos9/lang/Dos9_Lang.c:108
+#: ../dos9/lang/Dos9_Lang.c:111
 msgid "A"
 msgstr "A"
 
-#: ../dos9/lang/Dos9_Lang.c:110
+#: ../dos9/lang/Dos9_Lang.c:113
 msgid "Please enter a correct choice (or type enter to choose default) !\n"
 msgstr "Please enter a correct choice (or type enter to choose default) !\n"
 
-#: ../dos9/lang/Dos9_Lang.c:112
+#: ../dos9/lang/Dos9_Lang.c:115
 msgid ""
 "This is free software, you can modify and/or redistribute it under the terms "
 "of the GNU Genaral Public License v3 (or any later version).\n"
@@ -493,10 +493,20 @@ msgstr ""
 "Feel free to report bugs and submit suggestions at : <darkbatcher@dos9.org>\n"
 "For more informations see : <http://dos9.org>"
 
-#: ../dos9/lang/Dos9_Lang.c:129
+#: ../dos9/lang/Dos9_Lang.c:132
 #, c-format
 msgid "%d files matching, print anyway ?"
 msgstr "%d files matching, print anyway ?"
+
+#: ../dos9/lang/Dos9_Lang.c:134
+#, c-format
+msgid "Waiting for %f seconds, press a key to continue"
+msgstr "Waiting for %f seconds, press a key to continue"
+
+#: ../dos9/lang/Dos9_Lang.c:135
+#, c-format
+msgid "Waiting for %f seconds, press CTRL-C to continue"
+msgstr "Waiting for %f seconds, press CTRL-C to continue"
 
 #: ../dos9/lang/Dos9_ShowHelp.c:43
 msgid ""
@@ -669,11 +679,11 @@ msgstr ""
 
 #: ../dos9/lang/Dos9_ShowHelp.c:126
 msgid ""
-"Removes a directory.\n"
+"Remove a directory.\n"
 "Usage: RMDIR [/S] [/Q] directory\n"
 "       RD [/S] [/Q] directory\n"
 msgstr ""
-"Removes a directory.\n"
+"Remove a directory.\n"
 "Usage: RMDIR [/S] [/Q] directory\n"
 "       RD [/S] [/Q] directory\n"
 
@@ -844,3 +854,11 @@ msgstr ""
 "Print a message using prompt format.\n"
 "Usage: PECHO prompt-format\n"
 "       PECHO.prompt-format\n"
+
+#: ../dos9/lang/Dos9_ShowHelp.c:214
+msgid ""
+"Sleep for a delay in seconds.\n"
+"Usage: TIMEOUT [/T] [/NOBREAK] seconds[.milliseconds]\n"
+msgstr ""
+"Sleep for a delay in seconds.\n"
+"Usage: TIMEOUT [/T] [/NOBREAK] seconds[.milliseconds]\n"

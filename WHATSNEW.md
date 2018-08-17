@@ -2291,5 +2291,9 @@ is a list of improvements I made during from 24th June to today.
 
 ## Wednesday 15th ##
 
-* Fixed documentation errors on **Special variable** expansions. 
+* Fixed documentation errors on **Special variable** expansions.
+
+## Friday 17th ##
+
+* Added the **TIMEOUT** command. 
 

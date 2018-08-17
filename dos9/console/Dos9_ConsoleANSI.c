@@ -38,17 +38,20 @@
 void Dos9_ClearConsoleLine(void)
 {
     fprintf(fOutput, "\033[1K\033[1G");
+    fprintf(fError, "\033[1K\033[1G");
 }
 
 void Dos9_ClearConsoleScreen(void)
 {
     fprintf(fOutput, "\033[H\033[2J");
+    fprintf(fError, "\033[H\033[2J");
 }
 
 void Dos9_SetConsoleColor(COLOR cColor)
 {
     Dos9_SetConsoleTextColor(cColor);
     fprintf(fOutput, "\033[H\033[2J");
+    fprintf(fError, "\033[H\033[2J");
 }
 
 void Dos9_SetConsoleTextColor(COLOR cColor)

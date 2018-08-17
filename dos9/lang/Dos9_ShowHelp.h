@@ -55,8 +55,9 @@
 #define DOS9_HELP_ENDLOCAL  33
 #define DOS9_HELP_PROMPT    34
 #define DOS9_HELP_PECHO     35
+#define DOS9_HELP_TIMEOUT   36
 
-#define DOS9_HELP_ARRAY_SIZE 36
+#define DOS9_HELP_ARRAY_SIZE 37
 
 
 /* this is to instanciate a little embedded command

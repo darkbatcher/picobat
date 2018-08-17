@@ -345,7 +345,7 @@ LIBDOS9 int Dos9_Getch(void)
 
 
 /* Morgan McGuire, morgan@cs.brown.edu */
-int kbhit(void)
+int Dos9_Kbhit(void)
 {
     static char initialized = 0;
 

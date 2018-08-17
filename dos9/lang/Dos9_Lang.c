@@ -71,6 +71,9 @@ const char* lpAskInvalid;
 
 const char* lpManyCompletionOptions;
 
+const char* lpTimeoutMessage;
+const char* lpTimeoutMessageNoBreak;
+
 void Dos9_LoadStrings(void)
 {
 	lpMsgEchoOn=gettext("Echo command enabled");
@@ -127,5 +130,8 @@ Feel free to report bugs and submit suggestions at : <darkbatcher@dos9.org>\n\
 For more informations see : <http://dos9.org>");
 
     lpManyCompletionOptions=gettext("%d files matching, print anyway ?");
+
+    lpTimeoutMessage=gettext("Waiting for %f seconds, press a key to continue");
+    lpTimeoutMessageNoBreak=gettext("Waiting for %f seconds, press CTRL-C to continue");
 
 }

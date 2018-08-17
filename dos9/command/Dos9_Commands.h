@@ -57,5 +57,6 @@
 #include "Dos9_Wc.h"
 #include "Dos9_Xargs.h"
 #include "Dos9_Pecho.h"
+#include "Dos9_Timeout.h"
 
 #endif // DOS9_CMD_ECHO_H

@@ -123,7 +123,7 @@ void Dos9_LoadInternalHelp(void)
 
 
 	lpInternalHelp[DOS9_HELP_RD]
-	    =gettext("Removes a directory.\n"
+	    =gettext("Remove a directory.\n"
 	             "Usage: RMDIR [/S] [/Q] directory\n"
 	             "       RD [/S] [/Q] directory\n");
 
@@ -210,6 +210,9 @@ void Dos9_LoadInternalHelp(void)
                  "Usage: PECHO prompt-format\n"
                  "       PECHO.prompt-format\n");
 
+    lpInternalHelp[DOS9_HELP_TIMEOUT]
+        =gettext("Sleep for a delay in seconds.\n"
+                 "Usage: TIMEOUT [/T] [/NOBREAK] seconds[.milliseconds]\n");
 }
 
 

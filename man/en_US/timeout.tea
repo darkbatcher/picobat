@@ -1,6 +1,6 @@
 #
 #   Dos9 Manual pages, The Dos9 project
-#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#   Copyright (C) 2012-2018  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -33,39 +33,35 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-{{%DATE% and %TIME% variables}}
+{{Timeout command}}
 
-	The {%DATE%} and {%TIME%} environment variable expand to current date
-	and time.
+	The {TIMEOUT} command sleeps for a delay specified in seconds, or
+	until the user presses a key.
 
 {{Synopsis}}
 
-${%TIME%}
+${TIMEOUT [/T] [/NOBREAK] seconds[.milliseconds]}
 
-	Expands to the current hour, using appropriate locale format.
-	(usually {HH:MM:SS,cc}). The support of centiseconds depends on the
-	platform. Since version {218.2} centiseconds are supported using
-	windows, though this is still not the case for *nixes. Note that the {%TIME%}
-	variable includes leading {0} for hours also. 
+	Wait for {seconds.millisecond} or for a keystroke to resume the
+	execution.
 
-${%DATE%}
+	- {/T} : Has no effect. provided for compatiblity only.
 
-	Expands to current date, using appropriate locale format. Leading zeros are
-	also added between fields.
-	
-{{Note}}
+	- {/NOBREAK} : Do not stop the delay when a keystroke is detected.
 
-	{%TIME%} and {%DATE%} are dynamic variables, meaning that they are generated
-	during the {spec/exp|variable expansion}. Thus these variables can not be
-	modified using {set|SET}.
+	- {seconds} : The duration to wait specified in seconds.
+
+	- {.milliseconds} : An optional supplement to {seconds} specifying
+	extra milliseconds duration. This feature is a {dos9|Dos9}
+	extension. 
 
 {{Compatiblity}}
 
 	Compatible with {cmd.exe}.
 
-	Available since {0.7}
+	Available since {218.2}.
 
 {{See also}}
 
-	{spec/var|Environment variable}, {spec/index|Specification index}
+	{commands|List of Dos9 command}
 
