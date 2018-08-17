@@ -2295,5 +2295,8 @@ is a list of improvements I made during from 24th June to today.
 
 ## Friday 17th ##
 
-* Added the **TIMEOUT** command. 
+* Added the **TIMEOUT** command.
+
+* Modified the way **Dos9** set locale so that the subject LC\_NUMERIC \(that 
+  is, everything refering to numbers\) are not affected by the change. 
 

@@ -2213,3 +2213,7 @@ ${(for %%a in (foo bar) do echo %%a) & echo loop}
 {{Friday 17th}}
 
     - Added the {TIMEOUT} command.
+	
+	- Modified the way {Dos9} set locale so that the subject LC_NUMERIC
+	(that is, everything refering to numbers) are not affected by the
+	change.

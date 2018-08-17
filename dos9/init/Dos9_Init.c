@@ -181,8 +181,10 @@ void Dos9_InitLibDos9(void)
 
 #ifndef WIN32
     setlocale(LC_ALL, "");
+    setlocale(LC_NUMERIC, "C");
 #else
     setlocale(LC_ALL, ".OCP"); /* windows ... */
+    setlocale(LC_NUMERIC, "C");
 #endif // WIN32
 
     DOS9_DBG("Loading GETTEXT messages... \n");
