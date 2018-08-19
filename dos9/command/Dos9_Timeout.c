@@ -55,7 +55,7 @@
 #define Dos9_Sleep(ms) Sleep(ms)
 #else
 
-void __inline__ Dos9_Sleep(unsigned int ms)
+void Dos9_Sleep(unsigned int ms)
 {
     struct timespec ts;
 
