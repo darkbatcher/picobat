@@ -566,6 +566,8 @@ static int completeLine(struct linenoiseState *ls, char *cbuf, size_t cbuf_len, 
             ls->pos = pos - orig_buf;
             ls->len = ls->buflen - size;
 
+            ls->buf[ls->len] = '\0';
+
             free(completion);
 
         }
