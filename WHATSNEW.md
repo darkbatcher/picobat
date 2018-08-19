@@ -2297,6 +2297,13 @@ is a list of improvements I made during from 24th June to today.
 
 * Added the **TIMEOUT** command.
 
+<<<<<<< HEAD
 * Modified the way **Dos9** set locale so that the subject LC\_NUMERIC \(that 
   is, everything refering to numbers\) are not affected by the change. 
+=======
+## Sunday 19th ##
+
+* Fixed an error introduced some commit ago that caused file search functions 
+  that caused a '/' to be added before the '/' root sign when using linux. 
+>>>>>>> Fixes to file search function
 

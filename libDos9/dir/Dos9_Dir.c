@@ -149,12 +149,14 @@ static FILELIST* Dos9_AddMatch(char* name, FILELIST* files, struct match_args_t*
     return file;
 }
 
-static int inline Dos9_EndWithDirectoryMark(const char *dir)
+static int /* inline */ Dos9_EndWithDirectoryMark(const char *dir)
 {
-    while (*dir)
-        dir++;
+    char *c = NULL;
 
-    return TEST_SEPARATOR(dir);
+    while (*dir)
+        c = dir++;
+
+    return c ? TEST_SEPARATOR(c) : 0;;
 }
 
 /* Fixme : This function is quite a lot unefficient under windows,
