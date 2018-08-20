@@ -36,7 +36,7 @@ bin: hlp_man
 
 hlp_man:
 	mkdir -p $(BINDIR)/share/dos9/
-	cp -rL $(ROOTDIR)/man $(BINDIR)/share/dos9/hlp
+	cp -rL $(ROOTDIR)/man/* $(BINDIR)/share/dos9/hlp
 
 .in.bat:
 	../femto-subst < $< > $@

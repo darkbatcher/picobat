@@ -2297,13 +2297,20 @@ is a list of improvements I made during from 24th June to today.
 
 * Added the **TIMEOUT** command.
 
-<<<<<<< HEAD
 * Modified the way **Dos9** set locale so that the subject LC\_NUMERIC \(that 
-  is, everything refering to numbers\) are not affected by the change. 
-=======
+  is, everything refering to numbers\) are not affected by the change.
+
 ## Sunday 19th ##
 
 * Fixed an error introduced some commit ago that caused file search functions 
-  that caused a '/' to be added before the '/' root sign when using linux. 
->>>>>>> Fixes to file search function
+  that caused a '/' to be added before the '/' root sign when using linux.
+
+* Fixed an error with linenoise custom autocompletion mecanism not adding a 
+  final '0' character to the line, resulting in buffer overflows.
+
+* Fixes to manual pages.
+
+* Fixes to non-unicode windows version.
+
+* Fixes to manual pages generation systems. 
 

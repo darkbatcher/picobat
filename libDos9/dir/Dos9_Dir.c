@@ -66,6 +66,13 @@ char* Dos9_GetNextLevel(char* up, int* jok)
 
     *jok = 0;
 
+#ifdef WIN32
+    if (base == NULL
+        && !strncmp(up, "\\\\?", 3)
+        && (*(up + 3)  == '\\' ))
+        up += 3;
+#endif
+
     while (*up) {
 
         switch (*up) {
