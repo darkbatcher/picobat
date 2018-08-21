@@ -59,7 +59,7 @@ static int __inline__ Dos9_IsRegExpTrivial(char* exp)
    if *jok is non-zero, then the return value refers to the end of a
    string of exactly one expression level that contains at least one
    question mark or joker */
-char* Dos9_GetNextLevel(char* up, int* jok)
+char* Dos9_GetNextLevel(char* up, char* base, int* jok)
 {
     int joker = 0;
     char* prev = NULL;
@@ -296,7 +296,7 @@ static FILELIST* Dos9_GetMatch(char* restrict base, char* restrict up, struct ma
 
        item = "*";
 
-    } else if ((up = Dos9_GetNextLevel(up, &joker))) {
+    } else if ((up = Dos9_GetNextLevel(up, base, &joker))) {
 
         cleanup = up;
         *cleanup = '\0';
