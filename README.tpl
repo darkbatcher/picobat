@@ -10,7 +10,7 @@
 designed to be as simple to use as possible, reliable, portable and 
 lightweight.
 
-{{Getting started with dos9}}
+{{Getting started with Dos9}}
 
 Firstly, if you have never used cmd or an equivalent interpreter before, you 
 should definitely consider reading a tutorial about batch programming. On the 

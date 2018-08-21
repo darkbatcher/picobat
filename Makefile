@@ -77,6 +77,10 @@ bindir: $(TEXTFILES)
 
 textfiles: $(TEXTFILES)
 
+doc.md: README.tpl
+	tea/tea -e:utf-8 -o:md README.tpl doc.md 
+
+
 .tpl.tea:
 	cat $< | sed -e s,\{doc[^}]*\|,\{,g > $@
 	
