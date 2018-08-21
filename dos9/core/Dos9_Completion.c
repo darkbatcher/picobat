@@ -31,7 +31,7 @@ void Dos9_InitCompletion(void)
 #if defined(WIN32) && defined(DOS9_USE_LIBCU8)
     libcu8_completion_handler = Dos9_CompletionHandler;
     libcu8_completion_handler_free = Dos9_CompletionHandlerFree;
-#else
+#elif !defined(WIN32)
     linenoiseSetCompletionCallback(Dos9_CompletionHandler);
 #endif /* WIN32 */
 }
