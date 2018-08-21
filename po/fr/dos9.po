@@ -877,7 +877,6 @@ msgid ""
 "Usage: TIMEOUT [/T] [/NOBREAK] seconds[.milliseconds]\n"
 msgstr ""
 "Attend un délai en secondes.\n"
-"Sleep for a delay in seconds.\n"
 "Usage: TIMEOUT [/T] [/NOBREAK] secondes[.millisecondes]\n"
 
 #~ msgid "Press a key to continue"
