@@ -35,7 +35,7 @@ bin: hlp_man
 	cp -f $(cmds) $(BINDIR)/cmd
 
 hlp_man:
-	mkdir -p $(BINDIR)/share/dos9/
+	mkdir -p $(BINDIR)/share/dos9/hlp
 	cp -rL $(ROOTDIR)/man/* $(BINDIR)/share/dos9/hlp
 
 .in.bat:

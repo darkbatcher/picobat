@@ -5,7 +5,7 @@
 designed to be as simple to use as possible, reliable, portable and 
 lightweight.
 
-## Getting started with dos9 ##
+## Getting started with Dos9 ##
 
 Firstly, if you have never used cmd or an equivalent interpreter before, you 
 should definitely consider reading a tutorial about batch programming. On the 
@@ -143,7 +143,7 @@ There is a few interesting things in this directory that you might need:
 
 * [THANKS](THANKS.md) : A list of all the contributors to the project.
 
-* [Guidelines](GUIDELINES.md) : A text files giving guidelines on how to 
+* [GUIDELINES](GUIDELINES.md) : A text files giving guidelines on how to 
   modify Dos9.
 
 * **COPYING.\*** : The license of the project and of projects used by Dos9.

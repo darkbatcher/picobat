@@ -39,8 +39,8 @@
 void Dos9_AskConfirmationRead(char* buffer, size_t size)
 {
 
-    int i, c;
-        i = 0;
+    int i = 0;
+    char c;
 
     while (1) {
 

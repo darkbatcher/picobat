@@ -2312,5 +2312,11 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixes to non-unicode windows version.
 
-* Fixes to manual pages generation systems. 
+* Fixes to manual pages generation systems.
+
+## Wednesday 22nd ##
+
+* Fixed scripts makefiles.
+
+* Fixed a bug with Dos9\_AskConfirmation keyboard routine. 
 
