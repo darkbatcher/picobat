@@ -2324,5 +2324,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed a bug with serialisation of sub process creation. Indeed, as Dos9 is 
   multi-threaded, many different process can be creating at nearly the same 
-  time, causing file inheritance issues with pipes. 
+  time, causing file inheritance issues with pipes.
+
+* Fixed a bug with history completion. 
 

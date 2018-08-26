@@ -463,12 +463,12 @@ int libcu8_readconsole(int fd, char* buf, size_t size, size_t* written)
             if ((libcu8_history_count > hid)
                 && (libcu8_history[hid].size <= orig)) {
 
-                memcpy(orig_buf, libcu8_history[hid].entry,
-                                        libcu8_history[hid].size);
-
                 ret = libcu8_count_characters(orig_buf, orig - size)
                         - libcu8_count_characters(libcu8_history[hid].entry,
                                               libcu8_history[hid].size);
+
+                memcpy(orig_buf, libcu8_history[hid].entry,
+                                        libcu8_history[hid].size);
 
                 pos = (buf = orig_buf + libcu8_history[hid].size);
                 size = orig - libcu8_history[hid].size;
@@ -936,6 +936,9 @@ int libcu8_get_console_wchar(void* handle, wchar_t* wc, int* vk)
 
     if (vk)
         *vk = 0; /* reset vk */
+
+    if (wc)
+        *wc = 0;
 
     while (1) {
 
