@@ -2326,5 +2326,7 @@ is a list of improvements I made during from 24th June to today.
   multi-threaded, many different process can be creating at nearly the same 
   time, causing file inheritance issues with pipes.
 
-* Fixed a bug with history completion. 
+* Fixed a bug with history completion.
+
+* Fixed an error with the disk parameter **%~d** with special variables. 
 

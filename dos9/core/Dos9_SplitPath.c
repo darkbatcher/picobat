@@ -37,7 +37,7 @@ void Dos9_SplitPath(char* lpPath,
 			DOS9_DBG("Found disk_name=\"%c\"\n", *lpToken);
 
 			if (lpDisk)
-				snprintf(lpDisk, _MAX_DRIVE, "%c:\\", *lpToken);
+				snprintf(lpDisk, FILENAME_MAX, "%c:", *lpToken);
 
 			lpToken+=3;
 
