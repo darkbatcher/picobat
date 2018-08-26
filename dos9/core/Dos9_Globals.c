@@ -45,6 +45,7 @@ int fdStderr;
 MUTEX mThreadLock;
 MUTEX mSetILock;
 MUTEX mSetFLock;
+MUTEX mRunFile;
 
 __thread int bDelayedExpansion=TRUE;
 __thread int bUseFloats=FALSE;

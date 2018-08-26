@@ -45,15 +45,15 @@ int Dos9_ExecuteFile(EXECINFO* info)
     /* first try RunFile() */
     ret = Dos9_RunFile(info, &error);
 
-
-
     #if defined(WIN32)
-    if (!error)
-        return ret;
 
-    error = 0;
+    if (error) {
 
-    ret = Dos9_StartFile(info, &error);
+        error = 0;
+        ret = Dos9_StartFile(info, &error);
+
+    }
+
     #else
 
 
@@ -64,23 +64,24 @@ int Dos9_ExecuteFile(EXECINFO* info)
 
         if (info->flags & DOS9_EXEC_SEPARATE_WINDOW) {
 
-            if (!error)
-                return ret;
+            if (error) {
 
-            error = 0;
+                error = 0;
 
-            info->flags &= ~DOS9_EXEC_SEPARATE_WINDOW;
-            ret = Dos9_RunFile(info, &error);
+                info->flags &= ~DOS9_EXEC_SEPARATE_WINDOW;
+                ret = Dos9_RunFile(info, &error);
+
+            }
         }
 
     } else {
 
-        if (!error)
-            return ret;
+        if (error) {
 
-        error = 0;
+            error = 0;
+            ret = Dos9_StartFile(info, &error);
 
-        ret = Dos9_StartFile(info, &error);
+        }
 
     }
 
@@ -92,6 +93,8 @@ int Dos9_ExecuteFile(EXECINFO* info)
         ret = DOS9_COMMAND_ERROR;
 
     }
+
+
 
     return ret;
 }
@@ -116,6 +119,13 @@ int Dos9_RunFile(EXECINFO* info, int* error)
     ZeroMemory(&si, sizeof(si));
 
     si.cb = sizeof(si);
+
+    /* It is very important to serialize calls to Dos9_ExecuteFile() since
+       several process may call it at once, and since fds might simultaneously
+       be set to inheritable, interference can appear between processes */
+    if (Dos9_LockMutex(&mRunFile))
+        Dos9_ShowErrorMessage(DOS9_LOCK_MUTEX_ERROR,
+                              __FILE__ ":Dos9_ExecuteFile()" , -1);
 
     if (!(info->flags & DOS9_EXEC_SEPARATE_WINDOW)) {
 
@@ -153,6 +163,10 @@ int Dos9_RunFile(EXECINFO* info, int* error)
     Dos9_SetFdInheritance(fileno(fInput), 0);
     Dos9_SetFdInheritance(fileno(fOutput), 0);
     Dos9_SetFdInheritance(fileno(fError), 0);
+
+    if (Dos9_ReleaseMutex(&mRunFile))
+        Dos9_ShowErrorMessage(DOS9_RELEASE_MUTEX_ERROR,
+                              __FILE__ ":Dos9_ExecuteFile()" , -1);
 
     if (info->flags & DOS9_EXEC_WAIT) {
 
@@ -207,6 +221,13 @@ int Dos9_RunFile(EXECINFO* info, int* error)
         Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION | DOS9_PRINT_C_ERROR,
                                 __FILE__ "/Dos9_RunExternalFile()", -1);
 
+    /* It is very important to serialize calls to Dos9_ExecuteFile() since
+       several process may call it at once, and since fds might simultaneously
+       be set to inheritable, interference can appear between processes */
+    if (Dos9_LockMutex(&mRunFile))
+        Dos9_ShowErrorMessage(DOS9_LOCK_MUTEX_ERROR,
+                              __FILE__ ":Dos9_ExecuteFile()" , -1);
+
 
     if (!(info->flags & DOS9_EXEC_SEPARATE_WINDOW)) {
 
@@ -242,6 +263,10 @@ int Dos9_RunFile(EXECINFO* info, int* error)
     Dos9_SetFdInheritance(fileno(fInput), 0);
     Dos9_SetFdInheritance(fileno(fOutput), 0);
     Dos9_SetFdInheritance(fileno(fError), 0);
+
+    if (Dos9_ReleaseMutex(&mRunFile))
+        Dos9_ShowErrorMessage(DOS9_RELEASE_MUTEX_ERROR,
+                              __FILE__ ":Dos9_ExecuteFile()" , -1);
 
     if (info->flags & DOS9_EXEC_WAIT) {
         WaitForSingleObject(pi.hProcess, INFINITE);

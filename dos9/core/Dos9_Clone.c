@@ -146,5 +146,9 @@ int Dos9_DuplicateData(struct clone_data_t* data)
     DUPLICATE_STREAM(data->fOutput, fOutput, "w");
     DUPLICATE_STREAM(data->fError, fError, "w");
 
+    Dos9_SetFdInheritance(fileno(data->fInput), 0);
+    Dos9_SetFdInheritance(fileno(data->fOutput), 0);
+    Dos9_SetFdInheritance(fileno(data->fError), 0);
+
     return 0;
 }

@@ -2318,5 +2318,11 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed scripts makefiles.
 
-* Fixed a bug with Dos9\_AskConfirmation keyboard routine. 
+* Fixed a bug with Dos9\_AskConfirmation keyboard routine.
+
+## Sunday 26th ##
+
+* Fixed a bug with serialisation of sub process creation. Indeed, as Dos9 is 
+  multi-threaded, many different process can be creating at nearly the same 
+  time, causing file inheritance issues with pipes. 
 

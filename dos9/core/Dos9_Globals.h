@@ -37,6 +37,7 @@ extern int iMainThreadId; /* thread id of the main thread */
 extern void(*pErrorHandler)(void); /* error handler */
 extern char* lpInitVar[]; /* list of variable for initialization */
 extern MUTEX mThreadLock; /* a mutex for single threaded parts */
+extern MUTEX mRunFile; /* a mutex to serialise call to fork() / CreatreProcess() */
 extern MUTEX mSetILock; /* a mutex for set (integers) */
 extern MUTEX mSetFLock; /* a mutex for set (floats) */
 
