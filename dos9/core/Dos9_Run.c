@@ -238,8 +238,6 @@ int Dos9_ExecOutput(PARSED_STREAM* lppssStart)
 
 	}
 
-
-
 	/* open the redirections */
 	if (lppssStart->lpInputFile)
 		lppsStreamStack = Dos9_OpenOutput(lppsStreamStack,

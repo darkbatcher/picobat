@@ -2328,5 +2328,10 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed a bug with history completion.
 
-* Fixed an error with the disk parameter **%~d** with special variables. 
+* Fixed an error with the disk parameter **%~d** with special variables.
+
+## Monday 1st, October ##
+
+* Fixed a bug where the closing parenthesis was not recognised as a delimiter 
+  for files names when using redirections. 
 

@@ -202,7 +202,7 @@ PARSED_STREAM* Dos9_ParseOutput(ESTR* lpesLine)
 			}
 
 			if (!(lpCh=Dos9_GetNextParameterEsD(lpNextToken, lpesParam,
-                                                    DOS9_DELIMITERS "&|><"))) {
+                                                    DOS9_DELIMITERS "&|><)"))) {
 
 				Dos9_FreeParsedStream(lppssStart);
 
@@ -244,7 +244,7 @@ PARSED_STREAM* Dos9_ParseOutput(ESTR* lpesLine)
 			}
 
 			if (!(lpCh=Dos9_GetNextParameterEsD(lpNextToken, lpesParam,
-                                                 DOS9_DELIMITERS "&|><"))) {
+                                                 DOS9_DELIMITERS "&|><)"))) {
 
 				Dos9_FreeParsedStream(lppssStart);
 
