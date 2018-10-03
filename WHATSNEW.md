@@ -2341,3 +2341,7 @@ is a list of improvements I made during from 24th June to today.
   prompting the user a question, resulting sometimes on unconvienient nested 
   user prompts.
 
+* Added a mutex to serialize calls to the ECHO command between subthreads. 
+  Indeed before this, several simultaneous calls to ECHO resulted in 
+  interlaced messages, and garbage-like text. 
+

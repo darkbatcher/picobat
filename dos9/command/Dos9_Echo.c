@@ -64,6 +64,10 @@ int Dos9_CmdEcho(char* lpLine)
 
 	lpEsParameter=Dos9_EsInit();
 
+	if (Dos9_LockMutex(&mEchoLock))
+        Dos9_ShowErrorMessage(DOS9_LOCK_MUTEX_ERROR,
+                                        "Dos9_Echo.c/Dos9_CmdEcho()", -1);
+
 	if (ispunct(*lpLine)) {
 
 		Dos9_GetEndOfLine(lpLine+1, lpEsParameter);
@@ -103,6 +107,10 @@ int Dos9_CmdEcho(char* lpLine)
         fputs(DOS9_NL, fOutput);
 
 	}
+
+	if (Dos9_ReleaseMutex(&mEchoLock))
+        Dos9_ShowErrorMessage(DOS9_RELEASE_MUTEX_ERROR,
+                                        "Dos9_Echo.c/Dos9_CmdEcho()", -1);
 
 	Dos9_EsFree(lpEsParameter);
 

@@ -44,8 +44,9 @@ int fdStdout;
 int fdStderr;
 MUTEX mThreadLock;
 MUTEX mSetILock;
-MUTEX mSetFLock;
-MUTEX mRunFile;
+MUTEX mSetFLock; /* a lock to serialize calls to yacc-generated parsers */
+MUTEX mRunFile; /* a lock to serialize calls to create process */
+MUTEX mEchoLock; /* a lock to serialize calls to echo */
 
 __thread int bDelayedExpansion=TRUE;
 __thread int bUseFloats=FALSE;

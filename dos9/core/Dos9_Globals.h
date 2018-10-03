@@ -40,6 +40,7 @@ extern MUTEX mThreadLock; /* a mutex for single threaded parts */
 extern MUTEX mRunFile; /* a mutex to serialise call to fork() / CreatreProcess() */
 extern MUTEX mSetILock; /* a mutex for set (integers) */
 extern MUTEX mSetFLock; /* a mutex for set (floats) */
+extern MUTEX mEchoLock; /* a mutex for serializing calls to ECHO */
 
 extern int fdStdin; /* temporary storage for streams */
 extern int fdStdout;
