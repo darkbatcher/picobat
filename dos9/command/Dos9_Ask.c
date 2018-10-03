@@ -28,13 +28,32 @@
 #include <stdarg.h>
 #include <string.h>
 
-
-
 #include <libDos9.h>
 
 #include "Dos9_Ask.h"
 #include "../core/Dos9_Core.h"
 #include "../lang/Dos9_Lang.h"
+#include "../../config.h"
+
+#if defined(WIN32) && defined(DOS9_USE_LIBCU8)
+
+/* A function to override the hook that libcu8 adds on read()
+   that automatically enable autocompletion, which can get
+   quite problematic when asking question to the user */
+void xread(int fd, void* p, size_t sz)
+{
+    size_t cnt;
+
+    do {
+
+        ReadFile(_get_osfhandle(fd), p, sz, &cnt, NULL);
+
+    } while (!cnt);
+
+}
+#else
+#define xread(fd, p, n) read(fd, p, n)
+#endif // defined
 
 void Dos9_AskConfirmationRead(char* buffer, size_t size)
 {
@@ -44,7 +63,7 @@ void Dos9_AskConfirmationRead(char* buffer, size_t size)
 
     while (1) {
 
-        read(fileno(fInput), &c, 1);
+        xread(fileno(fInput), &c, 1);
 
         if (c == '\r')
             continue;
@@ -138,10 +157,7 @@ int Dos9_AskConfirmation(int iFlags, void(*lpFn)(char*,size_t),  const char* lpM
 
 		fputs(lpChoices, fError);
 
-        if (lpFn)
-            lpFn(lpInput, sizeof(lpInput));
-        else
-            Dos9_AskConfirmationRead(lpInput, sizeof(lpInput));
+        Dos9_AskConfirmationRead(lpInput, sizeof(lpInput));
 
 		if (!stricmp(lpInput, lpAskYes)
 		    || !stricmp(lpInput, lpAskYesA)) {

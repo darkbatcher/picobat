@@ -2335,3 +2335,9 @@ is a list of improvements I made during from 24th June to today.
 * Fixed a bug where the closing parenthesis was not recognised as a delimiter 
   for files names when using redirections. 
 
+## Wednesday 3rd ##
+
+* Fixed an annoying bug of the windows version that used autocompletion when 
+  prompting the user a question, resulting sometimes on unconvienient nested 
+  user prompts.
+

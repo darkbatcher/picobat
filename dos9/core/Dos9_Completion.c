@@ -50,6 +50,10 @@ int Dos9_CompletionGetCols(void)
 #define COMPLETION_READ NULL
 #else
 
+/* A read function that takes into account the fact that
+   when using linenoise, the terminal is in raw mode,
+   requiring read characters to be printed explicitly in
+   the terminal */
 void Dos9_CompleteReadRaw(char* buffer, size_t size)
 {
 
