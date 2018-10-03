@@ -2263,3 +2263,5 @@ ${(for %%a in (foo bar) do echo %%a) & echo loop}
     - Added a mutex to serialize calls to the ECHO command between subthreads.
     Indeed before this, several simultaneous calls to ECHO resulted in
     interlaced messages, and garbage-like text.
+
+    - Fixed an unitialized variable bug in the RMDIR command code.

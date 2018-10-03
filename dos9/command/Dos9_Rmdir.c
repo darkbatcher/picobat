@@ -63,7 +63,7 @@ int Dos9_CmdRmdir(char* lpLine)
 
 	int	mode=DOS9_SEARCH_DEFAULT | DOS9_SEARCH_NO_PSEUDO_DIR,
 		param=DOS9_ASK_CONFIRMATION,
-		choice,
+		choice=0,
 		n=0,
 		status = 0,
 		i;
@@ -79,11 +79,11 @@ int Dos9_CmdRmdir(char* lpLine)
 
     if (!strnicmp(lpLine, "RD", 2)) {
 
-        lpLine +=2;
+        lpLine +=2; /* RD */
 
     } else {
 
-        lpLine +=5;
+        lpLine +=5; /* RMDIR */
     }
 
     if ((name = malloc(namesize * sizeof(char*))) == NULL) {

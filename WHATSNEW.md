@@ -2343,5 +2343,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Added a mutex to serialize calls to the ECHO command between subthreads. 
   Indeed before this, several simultaneous calls to ECHO resulted in 
-  interlaced messages, and garbage-like text. 
+  interlaced messages, and garbage-like text.
+
+* Fixed an unitialized variable bug in the RMDIR command code. 
 
