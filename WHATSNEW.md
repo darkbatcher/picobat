@@ -2345,5 +2345,9 @@ is a list of improvements I made during from 24th June to today.
   Indeed before this, several simultaneous calls to ECHO resulted in 
   interlaced messages, and garbage-like text.
 
-* Fixed an unitialized variable bug in the RMDIR command code. 
+* Fixed an unitialized variable bug in the RMDIR command code.
+
+## Thursday 4th ##
+
+* Fixed redirections not being handled when combined with pipes. 
 

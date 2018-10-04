@@ -497,3 +497,34 @@ void Dos9_FreeParsedLine(PARSED_LINE* line)
 	if (last)
         free(last);
 }
+
+PARSED_STREAM* Dos9_DuplicateParsedStream(PARSED_STREAM* stream)
+{
+    PARSED_STREAM* ret;
+
+    if (!(ret = malloc(sizeof(PARSED_STREAM))))
+        goto err;
+
+    ret->cErrorMode = stream->cErrorMode;
+    ret->cRedir = stream->cRedir;
+    ret->cOutputMode = stream->cOutputMode;
+
+    ret->lpErrorFile = NULL;
+    ret->lpInputFile = NULL;
+    ret->lpOutputFile = NULL;
+
+    if ((stream->lpErrorFile
+            && !(ret->lpErrorFile = strdup(stream->lpErrorFile)))
+        || (stream->lpOutputFile
+            && !(ret->lpOutputFile = strdup(stream->lpOutputFile)))
+        || (stream->lpInputFile
+            && !(ret->lpInputFile = strdup(stream->lpInputFile))))
+        goto err;
+
+    return ret;
+
+err:
+    Dos9_FreeParsedStream(ret);
+
+    return NULL;
+}

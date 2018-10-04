@@ -125,6 +125,9 @@ int Dos9_ExecOperators(PARSED_LINE** lpLine)
     pch = line->lpCmdLine->str;
     pch = Dos9_SkipAllBlanks(pch);
 
+    /* if we encounter a lookahead command, end processing the line,
+       indeed if and for automatically swallow every operators on the
+       right hand side of the line */
     if ((!strnicmp(pch, "if", 2) && Dos9_IsDelim(*(pch +2)))
         || (!strnicmp(pch, "for", 3) && Dos9_IsDelim(*(pch + 3))))
         status |= EXECOPERATORS_END;
@@ -173,6 +176,11 @@ loop:
         infos->fd = pipedes[1];
         infos->str = Dos9_EsInit();
 
+        if ((infos->stream = Dos9_DuplicateParsedStream(line->sStream)) == NULL)
+            Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION | DOS9_PRINT_C_ERROR,
+                                    __FILE__ "/Dos9_ExecOperators()", -1);
+
+
         Dos9_EsCpyE(infos->str, line->lpCmdLine);
 
         res = Dos9_CloneInstance(Dos9_LaunchPipe, infos);
@@ -202,9 +210,25 @@ void Dos9_LaunchPipe(struct pipe_launch_data_t* infos)
 
     bIgnoreExit = TRUE;
 
+    /* We can do this since lookahead command can not be processed using this
+       function unless they are wrapped inside a command block due to operators
+       precedence rules ie
+
+            if 1==1 if 1==1 echo test | find test
+
+       is equivalent to
+
+            if 1==1 (if 1==1 (echo test | find test))
+
+       as this function executes the left hand side of a pipe
+
+       */
+    Dos9_ExecOutput(infos->stream);
+
     Dos9_RunCommand(infos->str, NULL);
 
     /* don't forget to free unneeded memory */
+    Dos9_FreeParsedStream(infos->stream);
     Dos9_EsFree(infos->str);
     free(infos);
 

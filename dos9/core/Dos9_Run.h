@@ -40,6 +40,7 @@
 struct pipe_launch_data_t {
     int fd;
     ESTR* str;
+    PARSED_STREAM* stream;
 };
 
 /* applies redirections */

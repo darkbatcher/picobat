@@ -67,6 +67,7 @@ PARSED_STREAM* Dos9_AllocParsedStream(void);
 
 void Dos9_FreeParsedLine(PARSED_LINE* lppsStream);
 void Dos9_FreeParsedStream(PARSED_STREAM* lppssStart);
+PARSED_STREAM* Dos9_DuplicateParsedStream(PARSED_STREAM* stream);
 
 #define Dos9_FreeLine(lpssStreamStart) Dos9_FreeParsedLine(lpssStreamStart)
 
