@@ -28,3 +28,6 @@ dump/dump
 tea/tea
 build-dbg\.sh
 build-musl\.sh
+
+dump/dump_h_gen
+scripts/Dos9_Auto\.bat
