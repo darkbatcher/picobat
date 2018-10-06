@@ -213,6 +213,10 @@ void Dos9_LoadInternalHelp(void)
     lpInternalHelp[DOS9_HELP_TIMEOUT]
         =gettext("Sleep for a delay in seconds.\n"
                  "Usage: TIMEOUT [/T] [/NOBREAK] seconds[.milliseconds]\n");
+	
+	lpInternalHelp[DOS9_HELP_VER]
+		=gettext("Print the OS type and version\n\n"
+				 "Usage: VER\n");
 }
 
 
