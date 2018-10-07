@@ -58,16 +58,16 @@ int Dos9_CmdVer(char* lpArg)
 	Dos9_CmdVerCheckWinVer(CurrentWindowsVersion,
 							(int) DATA.dwMajorVersion,
 							(int) DATA.dwMinorVersion);
-	printf("\nMicrosoft Windows %s %s [version %d.%d.%d]\n", CurrentWindowsVersion, (char*) DATA.szCSDVersion ,(int) DATA.dwMajorVersion, (int) DATA.dwMinorVersion, (int) DATA.dwBuildNumber);
+	fprintf(fOutput, "\nMicrosoft Windows %s %s [version %d.%d.%d]\n", CurrentWindowsVersion, (char*) DATA.szCSDVersion, (int) DATA.dwMajorVersion, (int) DATA.dwMinorVersion, (int) DATA.dwBuildNumber);
 	#else
 	struct utsname DATA;
 	uname(&DATA);
-	printf("%s [Version %s]\n", DATA.sysname, DATA.release);
+	fprintf(fOutput, "\n%s [version %s]\n", DATA.sysname, DATA.release);
 	#endif
 	return 0;
 }
 
-void Dos9_CmdVerCheckWinVer(char* WindowsVersion ,int MajorVersion, int MinorVersion)
+void Dos9_CmdVerCheckWinVer(char* WindowsVersion, int MajorVersion, int MinorVersion)
 {
 switch(MajorVersion)
 	{
