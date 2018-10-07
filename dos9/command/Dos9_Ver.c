@@ -21,14 +21,16 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <libdos9.h>
+#include <libDos9.h>
 
 #include "Dos9_Ver.h"
 #include "../core/Dos9_Core.h"
 #include "../lang/Dos9_ShowHelp.h"
 
-#if defined (__linux__)
+#ifndef WIN32
 #include <sys/utsname.h>
+#else
+#include <windows.h>
 #endif
 
 int Dos9_CmdVer(char* lpArg)
@@ -40,7 +42,7 @@ int Dos9_CmdVer(char* lpArg)
 		
 		Dos9_GetNextParameter(lpArg, BuffChar, 4);
 		
-		if (!strcmpi(BuffChar, "/?"))
+		if (!stricmp(BuffChar, "/?"))
 		{
 			Dos9_ShowInternalHelp(DOS9_HELP_VER);
 			return 0;
@@ -49,13 +51,71 @@ int Dos9_CmdVer(char* lpArg)
 	
 	
 	#ifdef WIN32
-	system("ver");
-	#elif defined (__linux__)
+	OSVERSIONINFOA DATA;
+	char CurrentWindowsVersion[16];
+	DATA.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+	GetVersionEx(&DATA);
+	Dos9_CmdVerCheckWinVer(CurrentWindowsVersion,
+							(int) DATA.dwMajorVersion,
+							(int) DATA.dwMinorVersion);
+	printf("\nMicrosoft Windows %s %s [version %d.%d.%d]\n", CurrentWindowsVersion, (char*) DATA.szCSDVersion ,(int) DATA.dwMajorVersion, (int) DATA.dwMinorVersion, (int) DATA.dwBuildNumber);
+	#else
 	struct utsname DATA;
 	uname(&DATA);
-	printf("%s [Version %s]\n", DATA.sysname, DATA.version);
-	#else
-	printf("%s [Version : unknown]\n", DOS9_OS);
+	printf("%s [Version %s]\n", DATA.sysname, DATA.release);
 	#endif
 	return 0;
+}
+
+void Dos9_CmdVerCheckWinVer(char* WindowsVersion ,int MajorVersion, int MinorVersion)
+{
+switch(MajorVersion)
+	{
+		case 10:
+			strcpy(WindowsVersion, "10");
+			break;
+
+		case 6:
+			switch(MinorVersion)
+			{
+				case 3:
+					strcpy(WindowsVersion, "8.1");
+					break;
+
+				case 2:
+					strcpy(WindowsVersion, "8 or greater");
+					break;
+				
+				case 1:
+					strcpy(WindowsVersion, "7");
+					break;
+				
+				default:
+					strcpy(WindowsVersion, "Vista");
+					break;
+			}
+			break;
+
+		case 5:
+			switch(MinorVersion)
+			{
+				case 2:
+					strcpy(WindowsVersion, "Server 2003");
+					break;
+
+				case 1:
+					strcpy(WindowsVersion, "XP");
+					break;
+				
+				default:
+					strcpy(WindowsVersion, "2000");
+					break;
+			}
+			break;
+
+		default:
+			strcpy(WindowsVersion, "Unknown");
+			break;
+	}
+	return;
 }
