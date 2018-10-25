@@ -382,7 +382,7 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 	struct tm lTime;
 	struct stat stFileInfo;
 
-	int i=0;
+	int i=0, j=0;
 
     *Dos9_EsToChar(lpRecieve) = '\0';
 
@@ -407,68 +407,24 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 
 	if (!*lpName) return NULL;
 
-	for (; *(lpName) && strchr("dnpxztaf", *(lpName)) && i<DOS9_VAR_MAX_OPTION; lpName++) {
+	for (; *(lpName) && strchr("fdnpxzta", *(lpName)) && i<DOS9_VAR_MAX_OPTION; lpName++) {
 
 		switch(*lpName) {
 
 		case 'f':
-            cFlag[i]='f';
-            i++;
-            bSplitPath=TRUE;
-            break;
-
 		case 'd':
-
-			cFlag[i]='d';
-			i++;
-			bSplitPath=TRUE;
-			break;
-
 		case 'n':
-
-			cFlag[i]='n';
-			i++;
-			bSplitPath=TRUE;
-			break;
-
 		case 'p':
-
-			cFlag[i]='p';
-			i++;
-			bSplitPath=TRUE;
-			break;
-
 		case 'x':
-
-			cFlag[i]='x';
-			i++;
-			bSplitPath=TRUE;
-			break;
-
 		case 'z':
-
-			cFlag[i]='z';
-			i++;
-			bSeekFile=TRUE;
-			break;
-
 		case 't':
-
-			cFlag[i]='t';
-			i++;
-			bSeekFile=TRUE;
-			break;
-
 		case 'a':
 
-			cFlag[i]='a';
+			cFlag[i] = *lpName;
 			i++;
-			bSeekFile=TRUE;
-			break;
 
 		}
 	}
-
 
 	if ((*lpName & 0x80) || (*lpName <= 0x20)) {
 
@@ -518,7 +474,23 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 
 	}
 
-    /* Copy the content of the varialble */
+    for (j = 0; cFlag[j]; j++)
+        switch (cFlag[j]) {
+            case 'a':
+            case 'z':
+            case 't':
+                bSeekFile = TRUE;
+                break;
+
+            case 'f':
+            case 'd':
+            case 'n':
+            case 'p':
+            case 'x':
+                bSplitPath = TRUE;
+        }
+
+    /* Copy the content of the variable */
 	Dos9_EsCpy(lpRecieve, lpvBlock[(int)cVarName]);
 	lpPos=Dos9_EsToChar(lpRecieve);
 

@@ -211,7 +211,7 @@ int Dos9_CmdShift(char* lpLine)
         lpToken = lpvArguments[(int)'+'];
 
         /* if there is some remaining arguments */
-        if (*lpToken != '\0') {
+        if (lpToken && *lpToken != '\0') {
 
             /* fill arguments with arguments remaining in "%+" */
             while (iBegin < 10

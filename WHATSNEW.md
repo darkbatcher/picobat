@@ -2349,5 +2349,9 @@ is a list of improvements I made during from 24th June to today.
 
 ## Thursday 4th ##
 
-* Fixed redirections not being handled when combined with pipes. 
+* Fixed redirections not being handled when combined with pipes.
+
+* Fixed shift command bug.
+
+* Fixed an error with special variable expansion. 
 
