@@ -98,7 +98,10 @@ void Dos9_LoadErrors(void);
 #define DOS9_LOCK_MUTEX_ERROR               56
 #define DOS9_RELEASE_MUTEX_ERROR            57
 #define DOS9_UNABLE_CAT                     58
-#define DOS9_ERROR_MESSAGE_NUMBER           59
+#define DOS9_UNABLE_LOAD_MODULE             59
+#define DOS9_INCOMPATIBLE_MODULE            60
+#define DOS9_MODULE_LOADED                  61
+#define DOS9_ERROR_MESSAGE_NUMBER           62
 
 #define DOS9_PRINT_C_ERROR 0x80
 

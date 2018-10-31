@@ -41,6 +41,7 @@ extern MUTEX mRunFile; /* a mutex to serialise call to fork() / CreatreProcess()
 extern MUTEX mSetILock; /* a mutex for set (integers) */
 extern MUTEX mSetFLock; /* a mutex for set (floats) */
 extern MUTEX mEchoLock; /* a mutex for serializing calls to ECHO */
+extern MUTEX mModLock; /* a lock to serialize calls to mod */
 
 extern int fdStdin; /* temporary storage for streams */
 extern int fdStdout;

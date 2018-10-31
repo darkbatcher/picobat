@@ -47,6 +47,7 @@ MUTEX mSetILock;
 MUTEX mSetFLock; /* a lock to serialize calls to yacc-generated parsers */
 MUTEX mRunFile; /* a lock to serialize calls to create process */
 MUTEX mEchoLock; /* a lock to serialize calls to echo */
+MUTEX mModLock; /* a lock to serialize calls to mod */
 
 __thread int bDelayedExpansion=TRUE;
 __thread int bUseFloats=FALSE;

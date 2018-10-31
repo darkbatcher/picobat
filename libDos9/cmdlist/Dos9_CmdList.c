@@ -414,11 +414,10 @@ err:
 LIBDOS9 LPCOMMANDLIST   Dos9_ReMapCommandInfo(LPCOMMANDLIST lpclCommandList)
 {
     /* trying to re-balance an unbalanced tree is
-       to much difficult for me, thus, create a new
+       too difficult for me, thus, create a new
        commandinfo structure and Map it again */
 
     size_t iNewSize;
-    /* size_t i; */
     COMMANDINFO* lpciCmdInfo;
     COMMANDLIST* lpclList;
 

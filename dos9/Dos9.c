@@ -134,6 +134,7 @@ int main(int argc, char *argv[])
     Dos9_CreateMutex(&mSetILock);
     Dos9_CreateMutex(&mRunFile);
     Dos9_CreateMutex(&mEchoLock);
+    Dos9_CreateMutex(&mModLock);
 
 #ifndef WIN32
     Dos9_CreateMutex(&mLineNoise);

@@ -106,6 +106,22 @@
 
 #endif // WIN32
 
+#ifdef WIN32
+
+#include <conio.h>
+#define DOS9_NL "\r\n"
+
+#elif !defined(WIN32)
+
+#include <strings.h>
+
+#define stricmp strcasecmp
+#define strnicmp strncasecmp
+
+#define DOS9_NL "\n"
+
+#endif
+
 /* define TRUE and FALSE CONSTANTS if they are not
    defined yet */
 

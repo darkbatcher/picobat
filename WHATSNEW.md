@@ -2353,5 +2353,11 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed shift command bug.
 
-* Fixed an error with special variable expansion. 
+* Fixed an error with special variable expansion.
+
+## Thursday 31st ##
+
+* Added the MOD command and a module toolkit to create simple dynamic link 
+  modules for Dos9. The object files to build modules can be found in 
+  modules/lib and a very simple sample module is available in modules/sample. 
 

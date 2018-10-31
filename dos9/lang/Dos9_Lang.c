@@ -76,6 +76,8 @@ const char* lpMsgTimeoutNoBreak;
 const char* lpMsgTimeoutBreak;
 const char* lpMsgTimeoutKeyPress;
 
+const char* lpModuleList;
+
 void Dos9_LoadStrings(void)
 {
 	lpMsgEchoOn=gettext("Echo command enabled");
@@ -137,5 +139,7 @@ For more informations see : <http://dos9.org>");
     lpMsgTimeoutNoBreak=gettext("Waiting for %f seconds, press CTRL-C to continue ...");
     lpMsgTimeoutKeyPress=gettext("Press a key to continue ...");
     lpMsgTimeoutBreak=gettext("Press CTRL-C to continue ...");
+
+    lpModuleList=gettext("Loaded modules :\n");
 
 }

@@ -69,6 +69,8 @@ extern const char* lpMsgTimeoutNoBreak;
 extern const char* lpMsgTimeoutBreak;
 extern const char* lpMsgTimeoutKeyPress;
 
+extern const char* lpModuleList;
+
 
 void Dos9_LoadStrings(void); /* a function that loads differents
                                languages traductions */

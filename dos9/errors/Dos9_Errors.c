@@ -227,6 +227,15 @@ void Dos9_LoadErrors(void)
     lpErrorMsg[DOS9_UNABLE_CAT] =
         gettext("Error : Unable to catenate file \"%s\".\n");
 
+    lpErrorMsg[DOS9_UNABLE_LOAD_MODULE] =
+        gettext("Error : Unable to load module \"%s\".\n");
+
+    lpErrorMsg[DOS9_INCOMPATIBLE_MODULE] =
+        gettext("Error : Incompatible module \"%s\".\n");
+
+    lpErrorMsg[DOS9_MODULE_LOADED] =
+        gettext("Error : Module \"%s\" is already loaded.\n");
+
 	lpQuitMessage=
 	    gettext("\nAborting current command, press any key to end Dos9.\n");
 

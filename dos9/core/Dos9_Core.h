@@ -55,20 +55,4 @@
 #include "Dos9_DirStack.h"
 #include "../console/Dos9_Console.h"
 
-#ifdef WIN32
-
-#include <conio.h>
-#define DOS9_NL "\r\n"
-
-#elif !defined(WIN32)
-
-#include <strings.h>
-
-#define stricmp strcasecmp
-#define strnicmp strncasecmp
-
-#define DOS9_NL "\n"
-
-#endif
-
 #endif // DOS9_CORE_H_INCLUDED
