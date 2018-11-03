@@ -246,7 +246,7 @@ void Dos9_ShowErrorMessage(unsigned int iErrorNumber,
                            int iExitCode)
 {
 
-	Dos9_SetConsoleTextColor( DOS9_GET_BACKGROUND(colColor) | DOS9_FOREGROUND_IRED);
+	Dos9_SetConsoleTextColor(fError, DOS9_GET_BACKGROUND(colColor) | DOS9_FOREGROUND_IRED);
 
 	if ((iErrorNumber & ~DOS9_PRINT_C_ERROR) < sizeof(lpErrorMsg))
 		fprintf(fError,
@@ -265,17 +265,17 @@ void Dos9_ShowErrorMessage(unsigned int iErrorNumber,
 
 	if (iExitCode) {
 
-		Dos9_SetConsoleTextColor(colColor);
+		Dos9_SetConsoleTextColor(fError, colColor);
 
         fprintf(fError, "%s" DOS9_NL, lpQuitMessage);
 
-		Dos9_Getch();
+		Dos9_Getch(fInput);
 
 		exit(iErrorNumber & (~DOS9_PRINT_C_ERROR));
 
 	} else {
 
-		Dos9_SetConsoleTextColor(colColor);
+		Dos9_SetConsoleTextColor(fError, colColor);
 
 	}
 

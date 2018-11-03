@@ -160,9 +160,6 @@ LIBDOS9 void     Dos9_AbortThread(THREAD* lpThId);
 LIBDOS9 int      Dos9_WaitForThread(THREAD* thId, void** pRet);
 LIBDOS9 void     Dos9_CloseThread(THREAD* thId);
 
-LIBDOS9 int      Dos9_WaitForAllThreads(void);
-LIBDOS9 void     Dos9_AbortAllThreads(void);
-
 LIBDOS9 int      Dos9_CreateMutex(MUTEX* lpMuId);
 LIBDOS9 int      Dos9_CloseMutex(MUTEX* lpMuId);
 LIBDOS9 int      Dos9_LockMutex(MUTEX* lpMuId);
@@ -355,17 +352,17 @@ enum {
 	 */
 };
 
-LIBDOS9 void            Dos9_ClearConsoleScreen(void);
-LIBDOS9 void            Dos9_ClearConsoleLine(void);
-LIBDOS9 void            Dos9_SetConsoleColor(COLOR cColor);
-LIBDOS9 void            Dos9_SetConsoleTextColor(COLOR cColor);
-LIBDOS9 void            Dos9_SetConsoleCursorPosition(CONSOLECOORD iCoord);
-LIBDOS9 CONSOLECOORD    Dos9_GetConsoleCursorPosition(void);
-LIBDOS9 void            Dos9_SetConsoleCursorState(int bVisible, int iSize);
-LIBDOS9 void            Dos9_SetConsoleTitle(char* lpTitle);
-LIBDOS9 int             Dos9_Kbhit(void);
-LIBDOS9 int             Dos9_Getch(void);
-LIBDOS9 void            Dos9_GetMousePos(char on_move, CONSOLECOORD* coords, int* type);
+LIBDOS9 void            Dos9_ClearConsoleScreen(FILE* f);
+LIBDOS9 void            Dos9_ClearConsoleLine(FILE* f);
+LIBDOS9 void            Dos9_SetConsoleColor(FILE* f, COLOR cColor);
+LIBDOS9 void            Dos9_SetConsoleTextColor(FILE* f, COLOR cColor);
+LIBDOS9 void            Dos9_SetConsoleCursorPosition(FILE* f, CONSOLECOORD iCoord);
+LIBDOS9 CONSOLECOORD    Dos9_GetConsoleCursorPosition(FILE* f);
+LIBDOS9 void            Dos9_SetConsoleCursorState(FILE* f, int bVisible, int iSize);
+LIBDOS9 void            Dos9_SetConsoleTitle(FILE* f, char* lpTitle);
+LIBDOS9 int             Dos9_Kbhit(FILE* f);
+LIBDOS9 int             Dos9_Getch(FILE* f);
+LIBDOS9 void            Dos9_GetMousePos(FILE* f, char on_move, CONSOLECOORD* coords, int* type);
 
 #define Dos9_GetAccessTime(lpList) (lpList->stFileStats.st_atime)
 #define Dos9_GetCreateTime(lpList) (lpList->stFileStats.st_ctime)
@@ -469,6 +466,12 @@ EXTERN LIBDOS9 int _Dos9_TextMode;
 #define DOS9_BYTE_ENCODING 0
 #define DOS9_UTF8_ENCODING 1
 #define Dos9_SetEncoding(encoding) _Dos9_TextMode=encoding
+
+#if defined(WIN32)
+#define Dos9_Sleep(ms) Sleep(ms)
+#else
+void Dos9_Sleep(unsigned int ms);
+#endif
 
 LIBDOS9 char* Dos9_GetNextChar(const char* lpContent);
 LIBDOS9 int Dos9_GetConsoleEncoding(char* lpEnc, size_t iSize);

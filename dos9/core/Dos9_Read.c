@@ -31,16 +31,10 @@
 #include "../linenoise/Dos9_LineNoise.h"
 #endif
 
-int Dos9_GetLine(ESTR* lpesLine, INPUT_FILE* pIn)
+int Dos9_UpdateScript(INPUT_FILE* pIn)
 {
-    int  ok;
-    struct cmdlines_t* cmdlines;
-    ESTR* tmp;
-
-    /* If either cmdly correct is defined or if we are running interactive
-       mode, use the cmdly correct function */
-    if (bCmdlyCorrect || (*(pIn->lpFileName) == '\0'))
-        return Dos9_GetLine_Cmdly(lpesLine, pIn);
+    if (*(pIn->lpFileName) == '\0')
+        return 0;
 
     if (*(pIn->batch.name) == '\0') {
 
@@ -84,6 +78,28 @@ int Dos9_GetLine(ESTR* lpesLine, INPUT_FILE* pIn)
         }
 
     }
+
+    return 0;
+
+error:
+    return -1;
+
+}
+
+int Dos9_GetLine(ESTR* lpesLine, INPUT_FILE* pIn)
+{
+    int  ok;
+    struct cmdlines_t* cmdlines;
+    ESTR* tmp;
+
+    /* If either cmdly correct is defined or if we are running interactive
+       mode, use the cmdly correct function */
+    if (bCmdlyCorrect || (*(pIn->lpFileName) == '\0'))
+        return Dos9_GetLine_Cmdly(lpesLine, pIn);
+
+
+    if (Dos9_UpdateScript(pIn) == -1)
+        goto error;
 
     /* We have an appropriate batch script structure */
 

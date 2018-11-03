@@ -133,7 +133,7 @@ void Dos9_OutputPromptString(const char* prompt)
                 pch ++;
 
                 if ((code = Dos9_GetColorCode(buf)) != -1)
-                    Dos9_SetConsoleTextColor(code);
+                    Dos9_SetConsoleTextColor(fOutput, code);
 
             } else if (*pch && *(pch + 1) && *(pch + 2) == ';') {
                 buf[0] = *pch;
@@ -142,7 +142,7 @@ void Dos9_OutputPromptString(const char* prompt)
                 pch +=2;
 
                 if ((code = Dos9_GetColorCode(buf)) != -1)
-                    Dos9_SetConsoleTextColor(code);
+                    Dos9_SetConsoleTextColor(fOutput, code);
 
             }
             break;

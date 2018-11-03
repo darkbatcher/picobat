@@ -26,20 +26,12 @@
 #include "../libDos9.h"
 #include "../libDos9-int.h"
 
-int _Dos9_Thread_Init(void) {
-	return 0;
-}
-
 #ifndef WIN32
 
 #include <pthread.h>
 
 /* the system provide posix compliant
    interfaces, then, use it */
-
-void _Dos9_Thread_Close(void) {
-}
-
 
 /*
     begins a thread
@@ -132,9 +124,6 @@ LIBDOS9 void     Dos9_CloseThread(THREAD* thId)
 
     #include <windows.h>
 
-void _Dos9_Thread_Close(void)
-{
-}
 
 struct _dos9_beginthread_t {
     void* (*func)(void *);
@@ -222,12 +211,3 @@ LIBDOS9 void     Dos9_CloseThread(THREAD* thId)
 }
 
 #endif
-
-LIBDOS9 int      Dos9_WaitForAllThreads(void)
-{
-    return 0;
-}
-
-LIBDOS9 void     Dos9_AbortAllThreads(void)
-{
-}

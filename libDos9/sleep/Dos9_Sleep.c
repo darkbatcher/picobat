@@ -1,7 +1,7 @@
 /*
  *
  *   libDos9 - The Dos9 project
- *   Copyright (C) 2010-2016 Romain GARBI
+ *   Copyright (C) 2010-2018 Romain GARBI
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -17,19 +17,23 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "../libDos9.h"
-#include "../libDos9-int.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <math.h>
+#include <ctype.h>
+#include <string.h>
+#include <errno.h>
 
-LIBDOS9 int Dos9_LibInit(void)
+#ifndef WIN32
+void Dos9_Sleep(unsigned int ms)
 {
+    struct timespec ts;
 
-    return 0;
+    ts.tv_sec = ms / 1000;
+    ts.tv_nsec = (ms % 1000) * 1000000;
+
+    nanosleep(&ts, NULL);
 }
-
-LIBDOS9 void Dos9_LibClose(void)
-{
-
-
-    return 0;
-}
+#endif

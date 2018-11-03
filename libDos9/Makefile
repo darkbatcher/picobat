@@ -25,7 +25,8 @@ SRC_FILES := \
 	./dir/Dos9_UnicodeDir.c \
 	./enc/Dos9_Enc.c ./estr/Dos9_Estr.c stack/Dos9_Stack.c \
 	./thread/Dos9_Thread.c ./file/Dos9_StdFile.c \
-	./file/Dos9_Win32File.c ./init/Dos9_Init.c ./cmdlib/Dos9_String.c
+	./file/Dos9_Win32File.c ./init/Dos9_Init.c ./cmdlib/Dos9_String.c \
+	./sleep/Dos9_Sleep.c
 
 CFLAGS += $(LIBCU8_INC) $(LIBDOS9_INC)
 	

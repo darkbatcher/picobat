@@ -125,12 +125,8 @@ int Dos9_AskConfirmation(int iFlags, void(*lpFn)(char*,size_t),  const char* lpM
 
 		/* if the user chose to display only YES and NO */
 
-		if (iFlags & DOS9_ASK_DEFAULT_A) {
-
-			Dos9_EsFree(lpInput);
+		if (iFlags & DOS9_ASK_DEFAULT_A)
 			return DOS9_ASK_INVALID;
-
-		}
 
 		switch (iFlags & (DOS9_ASK_DEFAULT_Y | DOS9_ASK_DEFAULT_N)) {
 

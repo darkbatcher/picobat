@@ -63,7 +63,7 @@ int Dos9_CmdCls(char* lpLine)
 
 	}
 
-	Dos9_ClearConsoleScreen();
+	Dos9_ClearConsoleScreen(fOutput);
 
 	return DOS9_NO_ERROR;
 }

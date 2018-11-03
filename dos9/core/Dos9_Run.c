@@ -981,15 +981,15 @@ BOOL WINAPI Dos9_SigHandler(DWORD dwCtrlType)
                    unmaintainability's sake, but, not to refer to all this
                    thread local defined stuff */
 
-                Dos9_SetConsoleTextColor(DOS9_BACKGROUND_DEFAULT | DOS9_FOREGROUND_IRED);
+                Dos9_SetConsoleTextColor(stderr, DOS9_BACKGROUND_DEFAULT | DOS9_FOREGROUND_IRED);
 
                 fprintf(stderr, lpErrorMsg[DOS9_BREAK_ERROR]);
 
-                Dos9_SetConsoleTextColor(DOS9_COLOR_DEFAULT);
+                Dos9_SetConsoleTextColor(stderr, DOS9_COLOR_DEFAULT);
 
                 fputs(DOS9_NL, stderr);
                 fprintf(stderr, lpQuitMessage);
-                Dos9_Getch();
+                Dos9_Getch(stderr);
 
 
                 exit(-1);

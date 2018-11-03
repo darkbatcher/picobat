@@ -51,21 +51,7 @@
    - /NOBREAK : do not end waiting uppon keystroke
 */
 
-#if defined(WIN32)
-#define Dos9_Sleep(ms) Sleep(ms)
-#else
 
-void Dos9_Sleep(unsigned int ms)
-{
-    struct timespec ts;
-
-    ts.tv_sec = ms / 1000;
-    ts.tv_nsec = (ms % 1000) * 1000000;
-
-    nanosleep(&ts, NULL);
-}
-
-#endif
 
 
 #define SLEEP_GRANULARITY 0.100
@@ -124,7 +110,7 @@ int Dos9_CmdTimeout(char* lpLine)
 
         fprintf(fError, nobreak ? lpMsgTimeoutBreak : lpMsgTimeoutKeyPress);
 
-        while(nobreak || !Dos9_Kbhit())
+        while(nobreak || !Dos9_Kbhit(fInput))
             Dos9_Sleep((unsigned int)(SLEEP_GRANULARITY * 1000));
 
     } else {
@@ -140,7 +126,7 @@ int Dos9_CmdTimeout(char* lpLine)
                 seconds -= SLEEP_GRANULARITY;
 
 #if !defined(LIBDOS9_NO_CONSOLE)
-                Dos9_ClearConsoleLine();
+                Dos9_ClearConsoleLine(fOutput);
                 fprintf(fError, nobreak ? lpMsgTimeoutNoBreak : lpMsgTimeout,
                         seconds);
 #endif
@@ -151,7 +137,7 @@ int Dos9_CmdTimeout(char* lpLine)
                 seconds = -1;
             }
 
-            if (!nobreak && Dos9_Kbhit())
+            if (!nobreak && Dos9_Kbhit(fInput))
                 break;
 
         }

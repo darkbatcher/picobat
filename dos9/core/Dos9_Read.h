@@ -37,4 +37,5 @@ int Dos9_GetLine_Cmdly(ESTR* lpesLine, INPUT_FILE* pIn);
 int Dos9_CheckBlocks(ESTR* lpesLine);
 void Dos9_RmTrailingNl(char* lpLine);
 
+int Dos9_UpdateScript(INPUT_FILE* pIn);
 #endif

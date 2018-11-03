@@ -30,28 +30,136 @@
 #include "../../config.h"
 
 
+#ifndef WIN32
+
+#if !defined(_XOPEN_SOURCE)
+#define _XOPEN_SOURCE 700
+#endif
+
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/ioctl.h>
+#include <termios.h>
+
+/*
+ Dos9_Getch : Derived from darkbox getch by Teddy ASTIE
+
+ Darkbox - A Fast and Portable Console IO Server
+ Copyright (c) 2016 Teddy ASTIE (TSnake41)
+
+*/
+
+LIBDOS9 int Dos9_Getch(FILE *f)
+{
+    struct termios oldattr, newattr;
+    int ch;
+    tcgetattr(fileno(f), &oldattr);
+    newattr = oldattr;
+    newattr.c_lflag &= ~( ICANON | ECHO );
+    tcsetattr(fileno(f), TCSANOW, &newattr);
+    ch = fgetc(f);
+    tcsetattr(fileno(f), TCSANOW, &oldattr);
+
+    /* Handle special chracters */
+    if (ch == '\033' && Dos9_Getch(f) == '[')
+            switch (Dos9_Getch(f)) {
+                case 'A': /* up arrow */
+                    return 72;
+                    break;
+                case 'B': /* down arrow */
+                    return 80;
+                    break;
+                case 'C': /* right arrow */
+                    return 77;
+                    break;
+                case 'D': /* left arrow */
+                    return 75;
+                    break;
+                case 'F': /* end */
+                    return 79;
+                    break;
+                case 'H': /* begin */
+                    return 71;
+                    break;
+
+                case '2': /* insert */
+                    Dos9_Getch(f); /* ignore the next character */
+                    return 82;
+                    break;
+                case '3': /* delete */
+                    Dos9_Getch(f);
+                    return 83;
+                    break;
+                case '5': /* page up */
+                    Dos9_Getch(f);
+                    return 73;
+                    break;
+                case '6': /* page down */
+                    Dos9_Getch(f);
+                    return 81;
+                    break;
+
+                default:
+                    return -1; /* unmanaged/unknown key */
+                    break;
+            }
+
+    else return ch;
+}
+
+
+/* Morgan McGuire, morgan@cs.brown.edu */
+int Dos9_Kbhit()
+{
+    int bytesWaiting;
+    struct termios term;
+
+    tcgetattr(fileno(f), &term);
+    term.c_lflag &= ~ICANON;
+    tcsetattr(fileno(f), TCSANOW, &term);
+    setbuf(f, NULL);
+
+    ioctl(fileno(f), FIONREAD, &bytesWaiting);
+    return bytesWaiting;
+
+}
+
+#endif
+
 
 #if !defined(WIN32) && !defined(LIBDOS9_NO_CONSOLE)
 
-void Dos9_ClearConsoleLine(void)
+void Dos9_ClearConsoleLine(FILE* f)
 {
-    printf("\033[1K\033[1G");
+    if (!isatty(fileno(f)))
+        return;
+
+    fputs("\033[1K\033[1G", f);
 }
 
-void Dos9_ClearConsoleScreen(void)
+void Dos9_ClearConsoleScreen(FILE* f)
 {
-    printf("\033[H\033[2J");
+    if (!isatty(fileno(f)))
+        return;
+
+    fputs("\033[H\033[2J", f);
 }
 
-void Dos9_SetConsoleColor(COLOR cColor)
+void Dos9_SetConsoleColor(FILE* f, COLOR cColor)
 {
-    Dos9_SetConsoleTextColor(cColor);
-    printf("\033[H\033[2J");
+    if (!isatty(fileno(f)))
+        return;
+
+    Dos9_SetConsoleTextColor(f, cColor);
+    fputs("\033[H\033[2J", f);
 }
 
-void Dos9_SetConsoleTextColor(COLOR cColor)
+void Dos9_SetConsoleTextColor(FILE* f, COLOR cColor)
 {
     int fore = 30, back = 40;
+
+    if (!isatty(fileno(f)))
+        return;
 
     if (cColor & DOS9_FOREGROUND_INT) {
 
@@ -80,20 +188,26 @@ void Dos9_SetConsoleTextColor(COLOR cColor)
             return;
 
     if (!(cColor & DOS9_BACKGROUND_DEFAULT))
-        printf("\033[%dm",DOS9_GET_BACKGROUND_(cColor)+back);
+        fprintf(f, "\033[%dm",DOS9_GET_BACKGROUND_(cColor)+back);
 
     if (!(cColor & DOS9_FOREGROUND_DEFAULT))
-        printf("\033[%dm", DOS9_GET_FOREGROUND_(cColor)+fore);
+        fprintf(f, "\033[%dm", DOS9_GET_FOREGROUND_(cColor)+fore);
 }
 
-void Dos9_SetConsoleTitle(char* lpTitle)
+void Dos9_SetConsoleTitle(FILE* f, char* lpTitle)
 {
-    printf("\033]0;%s\007", lpTitle);
+    if (!isatty(fileno(f)))
+        return;
+
+    fprintf(f, "\033]0;%s\007", lpTitle);
 }
 
-LIBDOS9 void Dos9_SetConsoleCursorPosition(CONSOLECOORD iCoord)
+LIBDOS9 void Dos9_SetConsoleCursorPosition(FILE* f, CONSOLECOORD iCoord)
 {
-    printf("\033[%d;%dH", iCoord.Y+1, iCoord.X+1);
+    if (!isatty(fileno(f)))
+        return;
+
+    fprintf(f, "\033[%d;%dH", iCoord.Y+1, iCoord.X+1);
 }
 
 
@@ -102,12 +216,15 @@ LIBDOS9 CONSOLECOORD Dos9_GetConsoleCursorPosition(void)
     return (CONSOLECOORD){0,0};
 }
 
-LIBDOS9 void Dos9_SetConsoleCursorState(int bVisible, int iSize )
+LIBDOS9 void Dos9_SetConsoleCursorState(FILE* f, int bVisible, int iSize )
 {
+    if (!isatty(fileno(f)))
+        return;
+
     if (bVisible) {
-        printf("\033[25h");
+        fputs("\033[25h", f);
     } else {
-        printf("\033[25l");
+        fputs("\033[25l", f);
     }
 }
 
@@ -179,31 +296,38 @@ static char tomouse_b(int mouse_char)
 	}
 }
 
-static void core_input_initialize(unsigned int mode)
+
+
+static void core_input_initialize(FILE* f, unsigned int mode)
 {
-    fprintf(stderr, "\033[?%dh", mode ? 1003 : 1000);
+    fprintf(f, "\033[?%dh", mode ? 1003 : 1000);
 }
 
-static void core_input_terminate(unsigned int mode)
+static void core_input_terminate(FILE* f, unsigned int mode)
 {
-    fprintf(stderr, "\033[?%dl", mode ? 1003 : 1000);
+    fprintf(f, "\033[?%dl", mode ? 1003 : 1000);
 }
 
-LIBDOS9 void Dos9_GetMousePos(char on_move, CONSOLECOORD* coords, int *mouse_b)
+LIBDOS9 void Dos9_GetMousePos(FILE* f, char on_move, CONSOLECOORD* coords, int *mouse_b)
 {
-	core_input_initialize(on_move);
+    if (!isatty(fileno(f))) {
+        *mouse_b = -1;
+        return;
+    }
+
+	core_input_initialize(f, on_move);
 
     int c;
     do /* Wait CSI mouse  start (-1) */
-        c = Dos9_Getch();
+        c = Dos9_Getch(f);
     while(c != -1);
 
-    *mouse_b = tomouse_b(Dos9_Getch());
+    *mouse_b = tomouse_b(Dos9_Getch(f));
 
-    coords->X = Dos9_Getch() - 33;
-    coords->Y = Dos9_Getch() - 33;
+    coords->X = Dos9_Getch(f) - 33;
+    coords->Y = Dos9_Getch(f) - 33;
 
-	core_input_terminate(on_move);
+	core_input_terminate(f, on_move);
 }
 
 

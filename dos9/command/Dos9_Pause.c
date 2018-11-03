@@ -55,7 +55,7 @@ int Dos9_CmdPause(char* lpLine)
 
 	fputs(lpMsgPause, fOutput);
 	fputs(DOS9_NL, fOutput);
-	Dos9_Getch();
+	Dos9_Getch(fOutput);
 
 	return 0;
 }

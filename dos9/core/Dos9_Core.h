@@ -53,6 +53,5 @@
 #include "Dos9_Prompt.h"
 #include "Dos9_Completion.h"
 #include "Dos9_DirStack.h"
-#include "../console/Dos9_Console.h"
 
 #endif // DOS9_CORE_H_INCLUDED

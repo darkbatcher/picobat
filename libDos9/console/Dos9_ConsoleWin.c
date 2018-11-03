@@ -29,41 +29,55 @@
 #include "../libDos9.h"
 #include "../../config.h"
 
+#if defined(WIN32)
+HANDLE __inline__ _Dos9_GetHandle(FILE* f)
+{
+    HANDLE h = (HANDLE)_get_osfhandle(fileno(f));
+    DWORD mode;
+
+    if (GetConsoleMode(h, &mode) == 0 &&
+            GetLastError() == ERROR_INVALID_HANDLE)
+        return (HANDLE)-1;
+
+    return h;
+}
+#endif // defined
+
 #if defined(LIBDOS9_NO_CONSOLE)
 
-void Dos9_ClearConsoleScreen(void)
+void Dos9_ClearConsoleScreen(FILE *f)
 {
 }
 
 
-void Dos9_SetConsoleColor(COLOR cColor)
+void Dos9_SetConsoleColor(FILE *f, COLOR cColor)
 {
 }
 
-void Dos9_SetConsoleTextColor(COLOR cColor) {
+void Dos9_SetConsoleTextColor(FILE* f, COLOR cColor) {
 }
 
-LIBDOS9 void Dos9_SetConsoleCursorPosition(CONSOLECOORD iCoord)
+LIBDOS9 void Dos9_SetConsoleCursorPosition(FILE* f, CONSOLECOORD iCoord)
 {
 }
 
-LIBDOS9 CONSOLECOORD Dos9_GetConsoleCursorPosition(void)
+LIBDOS9 CONSOLECOORD Dos9_GetConsoleCursorPosition(FILE* f)
 {
     return (CONSOLECOORD){0,0};
 }
 
-LIBDOS9 void Dos9_SetConsoleCursorState(int bVisible, int iSize)
+LIBDOS9 void Dos9_SetConsoleCursorState(FILE* f, int bVisible, int iSize)
 {
 }
 
-void Dos9_SetConsoleTitle(char* lpTitle)
+void Dos9_SetConsoleTitle(FILE* f, char* lpTitle)
 {
 }
-void Dos9_ClearConsoleLine(void)
+void Dos9_ClearConsoleLine(FILE* f)
 {
 }
 
-void Dos9_GetMousePos(char* move, CONSOLECOORD* coords, int* type)
+void Dos9_GetMousePos(FILE* f, FILE* o, char* move, CONSOLECOORD* coords, int* type)
 {
     type = 0;
     coords->X = 0;
@@ -73,13 +87,15 @@ void Dos9_GetMousePos(char* move, CONSOLECOORD* coords, int* type)
 #elif defined(WIN32)
 #include <conio.h>
 
-void Dos9_ClearConsoleLine(void)
+void Dos9_ClearConsoleLine(FILE* f)
 {
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    HANDLE hConsole;
     CONSOLE_SCREEN_BUFFER_INFO info;
     COORD pt;
     DWORD written, x;
 
+    if ((hConsole = _Dos9_GetHandle(f)) == (HANDLE)-1)
+        return;
 
     GetConsoleScreenBufferInfo(hConsole, &info);
 
@@ -107,15 +123,18 @@ void Dos9_ClearConsoleLine(void)
     SetConsoleCursorPosition(hConsole, pt);
 }
 
-void Dos9_ClearConsoleScreen(void)
+void Dos9_ClearConsoleScreen(FILE* f)
 {
     COORD coordScreen = { 0, 0 };    /* here's where we'll home the
                                         cursor */
-    HANDLE hConsole=GetStdHandle(STD_OUTPUT_HANDLE);
+    HANDLE hConsole;
     DWORD cCharsWritten;
     CONSOLE_SCREEN_BUFFER_INFO csbi; /* to get buffer info */
     DWORD dwConSize;                 /* number of character cells in
                                         the current buffer */
+
+    if ((hConsole = _Dos9_GetHandle(f)) == (HANDLE)-1)
+        return;
 
     /* get the number of character cells in the current buffer */
     GetConsoleScreenBufferInfo( hConsole, &csbi );
@@ -140,48 +159,71 @@ void Dos9_ClearConsoleScreen(void)
  }
 
 
-void Dos9_SetConsoleColor(COLOR cColor)
+void Dos9_SetConsoleColor(FILE* f, COLOR cColor)
 {
     CONSOLE_SCREEN_BUFFER_INFO csbiScreenInfo;
-    HANDLE hOutput=GetStdHandle(STD_OUTPUT_HANDLE);
+    HANDLE hOutput;
     int iSize;
     const COORD cBegin={0,0};
+
+    if ((hOutput = _Dos9_GetHandle(f)) == (HANDLE)-1)
+        return;
+
     GetConsoleScreenBufferInfo(hOutput, &csbiScreenInfo);
     iSize=csbiScreenInfo.dwSize.X * csbiScreenInfo.dwSize.Y;
     FillConsoleOutputAttribute(hOutput, cColor, iSize, cBegin, (PDWORD)&iSize);
     SetConsoleTextAttribute(hOutput, cColor);
 }
 
-void Dos9_SetConsoleTextColor(COLOR cColor)
+void Dos9_SetConsoleTextColor(FILE* f, COLOR cColor)
 {
-    HANDLE hOutput=GetStdHandle(STD_OUTPUT_HANDLE);
+    HANDLE hOutput;
+
+    if ((hOutput = _Dos9_GetHandle(f)) == (HANDLE)-1)
+        return;
+
     SetConsoleTextAttribute(hOutput, cColor);
 }
 
-LIBDOS9 void Dos9_SetConsoleCursorPosition(CONSOLECOORD iCoord)
+LIBDOS9 void Dos9_SetConsoleCursorPosition(FILE* f, CONSOLECOORD iCoord)
 {
-    HANDLE hOutput=GetStdHandle(STD_OUTPUT_HANDLE);
+    HANDLE hOutput;
+
+    if ((hOutput = _Dos9_GetHandle(f)) == (HANDLE)-1)
+        return;
+
     SetConsoleCursorPosition(hOutput, (COORD)iCoord);
 }
 
-LIBDOS9 CONSOLECOORD Dos9_GetConsoleCursorPosition(void)
+LIBDOS9 CONSOLECOORD Dos9_GetConsoleCursorPosition(FILE* f)
 {
-    HANDLE hOutput=GetStdHandle(STD_OUTPUT_HANDLE);
+    HANDLE hOutput;
     CONSOLE_SCREEN_BUFFER_INFO csbi;
+
+    csbi.dwCursorPosition.X = 0;
+    csbi.dwCursorPosition.Y = 0;
+
+    if ((hOutput = _Dos9_GetHandle(f)) == (HANDLE)-1)
+        return  csbi.dwCursorPosition;
+
     GetConsoleScreenBufferInfo(hOutput, &csbi);
     return csbi.dwCursorPosition;
 }
 
-LIBDOS9 void Dos9_SetConsoleCursorState(int bVisible, int iSize)
+LIBDOS9 void Dos9_SetConsoleCursorState(FILE* f, int bVisible, int iSize)
 {
-    HANDLE hOutput=GetStdHandle(STD_OUTPUT_HANDLE);
+    HANDLE hOutput;
     CONSOLE_CURSOR_INFO cciInfo;
+
+    if ((hOutput = _Dos9_GetHandle(f)) == (HANDLE)-1)
+        return;
+
     cciInfo.bVisible=(BOOL)bVisible;
     cciInfo.dwSize=iSize;
     SetConsoleCursorInfo(hOutput, &cciInfo);
 }
 
-void Dos9_SetConsoleTitle(char* lpTitle)
+void Dos9_SetConsoleTitle(FILE* f, char* lpTitle)
 {
     SetConsoleTitle(lpTitle);
 }
@@ -237,9 +279,16 @@ static char tomouse_b(DWORD m_bs, DWORD m_ef)
 		return NOTHING;
 }
 
-LIBDOS9 void Dos9_GetMousePos(char on_move, CONSOLECOORD* coords, int *b)
+LIBDOS9 void Dos9_GetMousePos(FILE* f, char on_move, CONSOLECOORD* coords, int *b)
 {
-	HANDLE hin = GetStdHandle(STD_INPUT_HANDLE);
+
+    HANDLE hin;
+
+    if ((hin = _Dos9_GetHandle(f)) == (HANDLE)-1) {
+        *b = -1;
+        return;
+    }
+
     SetConsoleMode(hin, ENABLE_PROCESSED_INPUT | ENABLE_MOUSE_INPUT);
 
 	DWORD e;
@@ -264,114 +313,22 @@ LIBDOS9 void Dos9_GetMousePos(char on_move, CONSOLECOORD* coords, int *b)
 
 #endif
 
-#ifndef WIN32
 
-#if !defined(_XOPEN_SOURCE)
-#define _XOPEN_SOURCE 700
-#endif
+#if defined(WIN32)
 
-#include <stdio.h>
-#include <unistd.h>
-#include <sys/ioctl.h>
-#include <termios.h>
-
-/*
- Dos9_Getch : Derived from darkbox getch by Teddy ASTIE
-
- Darkbox - A Fast and Portable Console IO Server
- Copyright (c) 2016 Teddy ASTIE (TSnake41)
-
-*/
-
-LIBDOS9 int Dos9_Getch(void)
+int Dos9_Getch(FILE* f)
 {
-    struct termios oldattr, newattr;
-    int ch;
-    tcgetattr(fileno(stdin), &oldattr);
-    newattr = oldattr;
-    newattr.c_lflag &= ~( ICANON | ECHO );
-    tcsetattr(fileno(stdin), TCSANOW, &newattr);
-    ch = getchar();
-    tcsetattr(fileno(stdin), TCSANOW, &oldattr);
+    if (_Dos9_GetHandle(f) == (HANDLE)-1)
+        return fgetc(f);
 
-    /* Handle special chracters */
-    if (ch == '\033' && Dos9_Getch() == '[')
-            switch (Dos9_Getch()) {
-                case 'A': /* up arrow */
-                    return 72;
-                    break;
-                case 'B': /* down arrow */
-                    return 80;
-                    break;
-                case 'C': /* right arrow */
-                    return 77;
-                    break;
-                case 'D': /* left arrow */
-                    return 75;
-                    break;
-                case 'F': /* end */
-                    return 79;
-                    break;
-                case 'H': /* begin */
-                    return 71;
-                    break;
-
-                case '2': /* insert */
-                    Dos9_Getch(); /* ignore the next character */
-                    return 82;
-                    break;
-                case '3': /* delete */
-                    Dos9_Getch();
-                    return 83;
-                    break;
-                case '5': /* page up */
-                    Dos9_Getch();
-                    return 73;
-                    break;
-                case '6': /* page down */
-                    Dos9_Getch();
-                    return 81;
-                    break;
-
-                default:
-                    return -1; /* unmanaged/unknown key */
-                    break;
-            }
-
-    else return ch;
-}
-
-
-/* Morgan McGuire, morgan@cs.brown.edu */
-int Dos9_Kbhit(void)
-{
-    static char initialized = 0;
-
-    if (! initialized) {
-        // Use termios to turn off line buffering
-        struct termios term;
-        tcgetattr(fileno(stdin), &term);
-        term.c_lflag &= ~ICANON;
-        tcsetattr(fileno(stdin), TCSANOW, &term);
-        setbuf(stdin, NULL);
-        initialized = 1;
-    }
-
-    int bytesWaiting;
-    ioctl(fileno(stdin), FIONREAD, &bytesWaiting);
-    return bytesWaiting;
-
-}
-
-#elif defined(WIN32)
-
-int Dos9_Getch(void)
-{
     return getch();
 }
 
-int Dos9_Kbhit(void)
+int Dos9_Kbhit(FILE* f)
 {
+    if (_Dos9_GetHandle(f) == (HANDLE)-1)
+        return !feof(f);
+
     return kbhit();
 }
 

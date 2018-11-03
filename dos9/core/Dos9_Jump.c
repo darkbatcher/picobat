@@ -61,6 +61,10 @@ int Dos9_JumpToLabel(char* lpLabelName, char* lpFileName)
 
 	} else {
 
+        /* Update the file first */
+        if (Dos9_UpdateScript(&ifIn) == -1)
+            return -1;
+
         lbl = ifIn.batch.lbls;
         new = 0;
 

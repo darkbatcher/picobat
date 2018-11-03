@@ -406,8 +406,8 @@ void Dos9_InitConsoleTitles(char *lpFileName, int bQuiet)
 
     if (!bQuiet) {
 
-        Dos9_SetConsoleTextColor(DOS9_COLOR_DEFAULT);
-        Dos9_SetConsoleTitle(lpTitle);
+        Dos9_SetConsoleTextColor(fOutput, DOS9_COLOR_DEFAULT);
+        Dos9_SetConsoleTitle(fOutput, lpTitle);
 
     }
 }

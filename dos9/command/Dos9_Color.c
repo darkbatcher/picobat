@@ -173,7 +173,7 @@ int Dos9_CmdColor(char* lpLine)
             }
 
             colColor = code;
-			Dos9_SetConsoleColor(colColor);
+			Dos9_SetConsoleColor(fOutput, colColor);
 
 		}
 
@@ -182,7 +182,7 @@ int Dos9_CmdColor(char* lpLine)
 	}
 
 	colColor=DOS9_COLOR_DEFAULT;
-	Dos9_SetConsoleColor(DOS9_COLOR_DEFAULT);
+	Dos9_SetConsoleColor(fOutput, DOS9_COLOR_DEFAULT);
 
 	return DOS9_NO_ERROR;
 }

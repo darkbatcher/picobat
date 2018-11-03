@@ -63,16 +63,13 @@ int Dos9_CmdTitle(char* lpLine)
 		} else {
 
 			Dos9_GetEndOfLine(lpLine, lpEsTitle);
-			Dos9_SetConsoleTitle(Dos9_EsToChar(lpEsTitle));
+			Dos9_SetConsoleTitle(fOutput, lpEsTitle->str);
 
 		}
 
-		Dos9_EsFree(lpEsTitle);
-
-		return 0;
 	}
 
 	Dos9_EsFree(lpEsTitle);
 
-	return -1;
+	return 0;
 }
