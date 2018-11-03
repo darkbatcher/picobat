@@ -1,4 +1,4 @@
-MODULES = sample
+MODULES = sample batbox
 MODULES_BIN = $(addsuffix .bin,$(MODULES))
 MODULES_CLEAN = $(addsuffix .clean,$(MODULES))
 

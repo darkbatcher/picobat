@@ -2364,5 +2364,7 @@ is a list of improvements I made during from 24th June to today.
 ## Sunday 3rd, November ##
 
 * Fixed a bug of block parsing preventing proper handling of redirections when 
-  mixed with top-level blocks. 
+  mixed with top-level blocks.
+
+* Slight fixes to MOD and module apis. 
 

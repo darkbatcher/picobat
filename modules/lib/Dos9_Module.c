@@ -27,6 +27,8 @@ char*(*Dos9_EsToFullPath)(ESTR*);
 int(*Dos9_RegisterCommand)(const char*, int(*handler)(char*));
 #define DOS9_MOD_SHOWERRORMESSAGE 11
 void(*Dos9_ShowErrorMessage)(int,const char*,int);
+#define DOS9_MOD_RUNLINE 12
+int (*Dos9_RunLine)(ESTR*);
 
 
 /* On Unices, please compile with -fvisibility=hidden */
@@ -59,6 +61,7 @@ int Dos9_ModuleHandler(void*(*fn)(int), int api)
     Dos9_EsToFullPath = Dos9_GetSymbol(DOS9_MOD_ESTOFULLPATH);
     Dos9_RegisterCommand = Dos9_GetSymbol(DOS9_MOD_REGISTERCOMMAND);
     Dos9_ShowErrorMessage = Dos9_GetSymbol(DOS9_MOD_SHOWERRORMESSAGE);
+    Dos9_RunLine = Dos9_GetSymbol(DOS9_MOD_RUNLINE);
     Dos9_ModuleAttach();
 
     return 0;

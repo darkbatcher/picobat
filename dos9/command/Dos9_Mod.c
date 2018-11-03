@@ -170,6 +170,8 @@ void* Dos9_GetSymbol(int id)
         return Dos9_ModRegisterCommand;
     case DOS9_MOD_SHOWERRORMESSAGE:
         return Dos9_ShowErrorMessage;
+    case DOS9_MOD_RUNLINE:
+        return Dos9_RunLine;
     default:
         return NULL;
 
@@ -287,7 +289,7 @@ int Dos9_CmdMod(char* line)
         Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION,
                                 __FILE__ "/Dos9_CmdMod", 0);
         status = DOS9_FAILED_ALLOCATION;
-        goto err;
+        goto end;
 
     }
 
@@ -296,11 +298,12 @@ int Dos9_CmdMod(char* line)
         if (!stricmp(param->str, "/l")) {
 
             Dos9_ListMods();
+            goto end;
 
         } else if (!strcmp(param->str, "/?")) {
 
             Dos9_ShowInternalHelp(DOS9_HELP_MOD);
-            goto err;
+            goto end;
 
         } else if (!stricmp(param->str, "/q"))
             mode = QUIET;
@@ -311,7 +314,7 @@ int Dos9_CmdMod(char* line)
                 Dos9_ShowErrorMessage(DOS9_FILE_ERROR, param->str, 0);
                 status = DOS9_FILE_ERROR;
 
-                goto err;
+                goto end;
 
             }
 
@@ -320,17 +323,17 @@ int Dos9_CmdMod(char* line)
 
                     Dos9_ShowErrorMessage(DOS9_MODULE_LOADED, path, 0);
                     status = DOS9_MODULE_LOADED;
-                    goto err;
+                    goto end;
 
                 } else
                     continue;
 
             if (status = Dos9_LoadMod(path))
-                goto err;
+                goto end;
         }
     }
 
-err:
+end:
 
     if (Dos9_ReleaseMutex(&mModLock))
         Dos9_ShowErrorMessage(DOS9_RELEASE_MUTEX_ERROR,

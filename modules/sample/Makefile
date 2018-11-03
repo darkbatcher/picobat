@@ -10,7 +10,7 @@ CFLAGS += $(LIBDOS9_INC) -I../lib/
 
 all: sample
 bin: sample
-	cp sample$(EXEEXT) $(ROOTDIR)/bin
+	cp sample$(EXEEXT) $(BINDIR)/modules/
 
 clean:
 	rm -rf $(OBJ_FILES)	
