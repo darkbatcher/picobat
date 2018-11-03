@@ -2359,5 +2359,10 @@ is a list of improvements I made during from 24th June to today.
 
 * Added the MOD command and a module toolkit to create simple dynamic link 
   modules for Dos9. The object files to build modules can be found in 
-  modules/lib and a very simple sample module is available in modules/sample. 
+  modules/lib and a very simple sample module is available in modules/sample.
+
+## Sunday 3rd, November ##
+
+* Fixed a bug of block parsing preventing proper handling of redirections when 
+  mixed with top-level blocks. 
 

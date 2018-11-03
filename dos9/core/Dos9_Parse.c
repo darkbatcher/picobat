@@ -86,6 +86,7 @@ PARSED_STREAM* Dos9_ParseOutput(ESTR* lpesLine)
 		    && (lpNextBlock!=NULL)) {
 
 			lpSearchBegin=Dos9_GetNextBlockEnd(lpNextBlock);
+
             if (lpSearchBegin==NULL) {
 
 				Dos9_FreeParsedStream(lppssStart);

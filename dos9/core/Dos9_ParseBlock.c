@@ -212,8 +212,11 @@ char* Dos9_GetNextBlockBeginEx(char* pch, int bIsBlockCmd)
 
     while (1) {
 
+        pch = Dos9_SkipAllBlanks(pch);
+
         if ((strnicmp(pch, "if", 2) || !Dos9_IsDelim(*(pch+2)))
-               && (strnicmp(pch, "for", 3) ||  !Dos9_IsDelim(*(pch+3)))) {
+               && (strnicmp(pch, "for", 3) ||  !Dos9_IsDelim(*(pch+3)))
+               && *pch != '(' ) {
 
             if ((next = Dos9_SearchToken_Hybrid(pch, "\n", "&|")) == NULL)
                     return NULL;
