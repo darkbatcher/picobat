@@ -2370,5 +2370,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Lots of changes to the console apis of libDos9, changed functions to require 
   stream as argument and got rid of the duplicated functions inside Dos9 and 
-  initialisation functions. 
+  initialisation functions
+
+* Added an experimental batbox module. 
 
