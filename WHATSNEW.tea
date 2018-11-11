@@ -2294,7 +2294,7 @@ ${(for %%a in (foo bar) do echo %%a) & echo loop}
 	
 	- Added an experimental batbox module.
 	
-{{Sunday 11st}}
+{{Sunday 11th}}
 
 	- Fixed PAUSE command misuse of Dos9_Getch().
 	
@@ -2302,3 +2302,5 @@ ${(for %%a in (foo bar) do echo %%a) & echo loop}
 	
 	- Fixed Dos9_GetVar() and Dos9_UnEscape() functions which happenned
 	to be very slow on very large inputs.
+	
+	- Modified ESTR* lib to extend buffer exponentially rather linearly.

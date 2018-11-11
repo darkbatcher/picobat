@@ -2374,7 +2374,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Added an experimental batbox module.
 
-## Sunday 11st ##
+## Sunday 11th ##
 
 * Fixed PAUSE command misuse of Dos9\_Getch\(\).
 
@@ -2382,4 +2382,6 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed Dos9\_GetVar\(\) and Dos9\_UnEscape\(\) functions which happenned to 
   be very slow on very large inputs.
+
+* Modified ESTR\* lib to extend buffer exponentially rather linearly.
 

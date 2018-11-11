@@ -33,7 +33,16 @@
 
 #define DEFAULT_ESTR 256
 
-#define DOS9_ESTR_SIZE(s) ((s) / DEFAULT_ESTR + 1) * DEFAULT_ESTR
+//#define DOS9_ESTR_SIZE(s) ((s) / DEFAULT_ESTR + 1) * DEFAULT_ESTR
+#define DOS9_ESTR_SIZE(s) __fast_compute_size(s)
+
+int __inline__ __fast_compute_size(size_t s)
+{
+    size_t r = DEFAULT_ESTR;
+    while (r < s)
+        r <<= 1;
+    return r;
+}
 
 int _Dos9_NewLine=DOS9_NEWLINE_LINUX;
 
