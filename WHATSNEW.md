@@ -2372,5 +2372,9 @@ is a list of improvements I made during from 24th June to today.
   stream as argument and got rid of the duplicated functions inside Dos9 and 
   initialisation functions
 
-* Added an experimental batbox module. 
+* Added an experimental batbox module.
+
+## Sunday 11st ##
+
+* Fixed PAUSE command misuse of Dos9\_Getch\(\).
 
