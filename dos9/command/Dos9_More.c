@@ -343,7 +343,7 @@ static int Dos9_MoreWriteLine(int* begin, int flags, int tabsize, FILE* file)
         col=0,
         ncol;
 
-    static int blank=0,
+    static __thread int blank=0,
                 cr=0; /* a carriot return was included at the end of
                          the preceding line */
 

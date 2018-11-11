@@ -2378,3 +2378,5 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed PAUSE command misuse of Dos9\_Getch\(\).
 
+* Fixed omitted thread locale attribute within MORE command code.
+
