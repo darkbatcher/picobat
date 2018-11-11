@@ -2380,3 +2380,6 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed omitted thread locale attribute within MORE command code.
 
+* Fixed Dos9\_GetVar\(\) and Dos9\_UnEscape\(\) functions which happenned to 
+  be very slow on very large inputs.
+

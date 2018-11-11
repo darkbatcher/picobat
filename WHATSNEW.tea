@@ -2299,3 +2299,6 @@ ${(for %%a in (foo bar) do echo %%a) & echo loop}
 	- Fixed PAUSE command misuse of Dos9_Getch().
 	
 	- Fixed omitted thread locale attribute within MORE command code.
+	
+	- Fixed Dos9_GetVar() and Dos9_UnEscape() functions which happenned
+	to be very slow on very large inputs.

@@ -120,36 +120,29 @@ LIBDOS9 char* Dos9_SearchLastChar(const char* lpCh, int cChar)
 
 LIBDOS9 void Dos9_UnEscape(char* lpCh)
 {
-    char *lpUnEscapeCh=lpCh;
+    char *un = lpCh, *ch, *next;
 
-    while (TRUE) {
+    if ((ch = strchr(un, '^')) == NULL)
+        return;
 
-        if (*lpCh=='^') {
+    un = ch ++;
 
-            /* this should be un escaped */
+    do {
 
-            lpCh++;
+        if (*ch == '\0'
+            || (next = strchr(ch + 1, '^')) == NULL) {
 
-
-            /* if the caracter escaped is a line-feed,
-               don't copy the line feed */
-
-            if (*lpCh=='\n')
-                lpCh++;
+            memmove(un, ch, strlen(ch) + 1);
+            return;
 
         }
 
-        if (lpUnEscapeCh!=lpCh)
-            *lpUnEscapeCh=*lpCh;
+        memmove(un, ch, next-ch);
 
-        if (*lpCh=='\0')
-            return;
+        un += next-ch;
+        ch = next + 1;
 
-        lpUnEscapeCh++;
-        lpCh++;
-
-    }
-
+    } while(1);
 }
 
 LIBDOS9 char* Dos9_GetNextNonEscaped(const char* lpCh)

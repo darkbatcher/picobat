@@ -222,14 +222,13 @@ int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
 
 	}
 
-#ifdef DOS9_USE_LIBCU8
-    /* prevent strings from being cut in the middle of an u8 character */
-    iTotalLen = Dos9_CountU8Chars(lpVarContent);
-#else
-    iTotalLen=strlen(lpVarContent);
-#endif // DOS9_USE_LIBCU8
-
 	if (iVarState==2) {
+#ifdef DOS9_USE_LIBCU8
+        /* prevent strings from being cut in the middle of an u8 character */
+        iTotalLen = Dos9_CountU8Chars(lpVarContent);
+#else
+        iTotalLen=strlen(lpVarContent);
+#endif // DOS9_USE_LIBCU8
 
 		if (iBegin < 0) {
 
