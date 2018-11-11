@@ -7,7 +7,7 @@ bin: $(MODULES_BIN)
 clean: $(MODULES_CLEAN)
 
 $(MODULES):
-	$(MAKE) -C $@
+	$(MAKE) -C $@ all 
 	
 $(MODULES_BIN):
 	$(MAKE) -C $(basename $@) bin

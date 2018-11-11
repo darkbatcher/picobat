@@ -2385,3 +2385,5 @@ is a list of improvements I made during from 24th June to today.
 
 * Modified ESTR\* lib to extend buffer exponentially rather linearly.
 
+* Added functions to the batbox module.
+

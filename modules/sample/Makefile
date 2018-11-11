@@ -10,6 +10,7 @@ CFLAGS += $(LIBDOS9_INC) -I../lib/
 
 all: sample
 bin: sample
+	mkdir -p $(BINDIR)/modules
 	cp sample$(EXEEXT) $(BINDIR)/modules/
 
 clean:

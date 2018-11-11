@@ -1,32 +1,22 @@
-/* Batbox module for Dos9
-   Copyright (C) 2018 Romain GARBI
+/*
+ *   Batbox module for Dos9
+ *   Copyright (C) 2018 Romain GARBI
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions are met:
-
-      1. Redistributions of source code must retain the above copyright notice,
-         this list of conditions and the following disclaimer.
-
-      2. Redistributions in binary form must reproduce the above copyright
-         notice, this list of conditions and the following disclaimer in the
-         documentation and/or other materials provided with the distribution.
-
-      3. Neither the name of the copyright holder nor the names of its
-         contributors may be used to endorse or promote products derived from
-         this software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-   AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-   IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-   ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
-   LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-   CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-   SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-   INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-   CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-   POSSIBILITY OF SUCH DAMAGE.
-*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <libDos9.h>
@@ -48,14 +38,14 @@ void Dos9_ModuleAttach(void)
 {
     if (!tty
         && (tty = fopen(TTY_PATH, TTY_MODE)) == NULL )
-        Dos9_ShowErrorMessage(DOS9_FILE_ERROR, TTY_PATH, -1)
+        Dos9_ShowErrorMessage(DOS9_FILE_ERROR, TTY_PATH, -1);
 
     Dos9_RegisterCommand("BATBOX", batbox);
 }
 
 /* usage: batbox [/a chr] [/b] [/k[_] [name] | /l[_] [name]]
                  [/w duration] [/c color] [/g X Y] [/d string]
-                 [/j] [/h show]...
+                 [/j] [/h show] [/n]...
 
     - /a chr : display a character associated with the character
                 code.
@@ -71,11 +61,17 @@ void Dos9_ModuleAttach(void)
     - /l[_] : Gets a keystroke and return a character through %name% if
                 specified and return it through %ERRORLEVEL% if not
                 specified.
-    - /g X Y : change cursor position
+
+    - /g X Y : change cursor position.
+
+    - /o X Y : Set console cursor coordinates offset.
 
     - /h show : show or hide cursor.
 
-    - /m[_] [X Y type] or /y [X Y type] : mouse
+    - /n : display a new line;
+
+    - /m[_] [X Y type] or /y [X Y type] :  Get mouse input with or without
+    waiting for a click.
 
     - /w duration : wait for duration milliseconds if duration is a number
                     or for %duration% to be defined.
@@ -116,6 +112,7 @@ int batbox(char* cmd)
 {
     ESTR* param = Dos9_EsInit();
     int status = 0;
+    static __thread CONSOLECOORD orig = {0, 0}, last = {0,0};
     cmd += 6;
 
     /* loop through arguments */
@@ -133,15 +130,32 @@ int batbox(char* cmd)
             if (cmd = Dos9_GetNextParameterEs(cmd, param))
                 fputs(param->str, Dos9_GetfOutput());
 
+        } else if (fast_switch_cmp(param->str, 'n')) {
+
+            last.Y ++;
+            Dos9_SetConsoleCursorPosition(Dos9_GetfOutput(), last);
+
+        } else if (fast_switch_cmp(param->str, 'o')) {
+
+            if (cmd = Dos9_GetNextParameterEs(cmd, param)) {
+
+                orig.X = args_get_number(param->str);
+                if (cmd = Dos9_GetNextParameterEs(cmd, param))
+                    orig.Y = args_get_number(param->str);
+
+            }
+
+
         } else if (fast_switch_cmp(param->str, 'g')) {
 
             CONSOLECOORD coord;
 
             if (cmd = Dos9_GetNextParameterEs(cmd, param)) {
 
-                coord.X = args_get_number(param->str);
+                coord.X = orig.X + args_get_number(param->str);
                 if (cmd = Dos9_GetNextParameterEs(cmd, param)) {
-                    coord.Y = args_get_number(param->str);
+                    coord.Y = orig.Y + args_get_number(param->str);
+                    last = coord;
                     Dos9_SetConsoleCursorPosition(Dos9_GetfOutput(), coord);
                 }
 
@@ -276,5 +290,5 @@ int batbox(char* cmd)
 
 end:
     Dos9_EsFree(param);
-    return  status; /* DOS9_NO_ERROR */
+    return status; /* DOS9_NO_ERROR */
 }
