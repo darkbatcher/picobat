@@ -35,27 +35,27 @@
 
 int Dos9_CmdVer(char* lpArg)
 {
-	char BuffChar[4];
+	char BuffChar[3];
 	lpArg +=3;
-	
-	if ((int) strlen(lpArg) > 0) {
-		
-		Dos9_GetNextParameter(lpArg, BuffChar, 4);
-		
+
+	if (strlen(lpArg) > 0) {
+
+		Dos9_GetNextParameter(lpArg, BuffChar, 3);
+
 		if (!stricmp(BuffChar, "/?"))
 		{
 			Dos9_ShowInternalHelp(DOS9_HELP_VER);
 			return 0;
 		}
 	}
-	
-	
+
+
 	#ifdef WIN32
 	OSVERSIONINFOA DATA;
-	char CurrentWindowsVersion[16];
+	const char *CurrentWindowsVersion;
 	DATA.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 	GetVersionEx(&DATA);
-	Dos9_CmdVerCheckWinVer(CurrentWindowsVersion,
+	Dos9_CmdVerCheckWinVer(&CurrentWindowsVersion,
 							(int) DATA.dwMajorVersion,
 							(int) DATA.dwMinorVersion);
 	fprintf(fOutput, "\nMicrosoft Windows %s %s [version %d.%d.%d]\n", CurrentWindowsVersion, (char*) DATA.szCSDVersion, (int) DATA.dwMajorVersion, (int) DATA.dwMinorVersion, (int) DATA.dwBuildNumber);
@@ -67,55 +67,54 @@ int Dos9_CmdVer(char* lpArg)
 	return 0;
 }
 
-void Dos9_CmdVerCheckWinVer(char* WindowsVersion, int MajorVersion, int MinorVersion)
+#ifdef WIN32
+void Dos9_CmdVerCheckWinVer(char **WindowsVersion, int MajorVersion, int MinorVersion)
 {
-switch(MajorVersion)
-	{
+  switch(MajorVersion) {
 		case 10:
-			strcpy(WindowsVersion, "10");
+			*WindowsVersion = "10";
 			break;
 
 		case 6:
-			switch(MinorVersion)
-			{
+			switch(MinorVersion) {
 				case 3:
-					strcpy(WindowsVersion, "8.1");
+					*WindowsVersion = "8.1";
 					break;
 
 				case 2:
-					strcpy(WindowsVersion, "8 or greater");
+					*WindowsVersion = "8 or greater";
 					break;
-				
+
 				case 1:
-					strcpy(WindowsVersion, "7");
+					*WindowsVersion = "7";
 					break;
-				
+
 				default:
-					strcpy(WindowsVersion, "Vista");
+					*WindowsVersion = "Vista";
 					break;
 			}
 			break;
 
 		case 5:
-			switch(MinorVersion)
-			{
+			switch(MinorVersion) {
 				case 2:
-					strcpy(WindowsVersion, "Server 2003");
+					*WindowsVersion = "Server 2003";
 					break;
 
 				case 1:
-					strcpy(WindowsVersion, "XP");
+					*WindowsVersion = "XP";
 					break;
-				
+
 				default:
-					strcpy(WindowsVersion, "2000");
+					*WindowsVersion = "2000";
 					break;
 			}
 			break;
 
 		default:
-			strcpy(WindowsVersion, "Unknown");
+			*WindowsVersion = "Unknown";
 			break;
-	}
-	return;
+  }
+  return;
 }
+#endif

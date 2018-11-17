@@ -22,6 +22,6 @@
 
 
 int Dos9_CmdVer(char* lpArg);
-void Dos9_CmdVerCheckWinVer(char* Buffer, int MajorVersion, int MinorVersion);
+void Dos9_CmdVerCheckWinVer(char **ptr, int MajorVersion, int MinorVersion);
 
 #endif
