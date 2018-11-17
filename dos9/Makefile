@@ -26,11 +26,11 @@ CFLAGS += $(LIBDOS9_INC) $(LIBINTEVAL_INC) $(LIBMATHEVAL_INC) \
 LDFLAGS += $(LIBDOS9_LD) $(LIBINTEVAL_LD) $(LIBMATHEVAL_LD) \
 		   $(LIBCU8_LD) $(LICONV_LD)  $(LINTL_LD) $(LPTHREAD_LD)  \
 		   $(LM_LD)
-		   
+
 ifeq ($(use_libcu8),1)
 	LDFLAGS += -lshlwapi
 endif
-		  
+
 
 SRC_FILES := \
 	./Dos9.c ./core/Dos9_Args.c ./core/Dos9_Expand.c \
@@ -58,7 +58,8 @@ SRC_FILES := \
 	./core/Dos9_Exec.c ./linenoise/Dos9_LineNoise.c \
 	./linenoise/utf8.c ./core/Dos9_Prompt.c ./command/Dos9_Pecho.c \
 	./command/Dos9_CommandInfo.c ./core/Dos9_Completion.c \
-	./linenoise/linenoise.c ./command/Dos9_Timeout.c ./command/Dos9_Mod.c
+	./linenoise/linenoise.c ./command/Dos9_Timeout.c ./command/Dos9_Mod.c \
+	./command/Dos9_Ver.c
 
 OBJ_FILES := $(SRC_FILES:.c=.o)
 

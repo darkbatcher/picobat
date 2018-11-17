@@ -217,6 +217,10 @@ void Dos9_LoadInternalHelp(void)
     lpInternalHelp[DOS9_HELP_MOD]
         =gettext("Load or list modules.\n"
                  "Usage: MOD [/L] [/Q] module\n");
+	
+	lpInternalHelp[DOS9_HELP_VER]
+		=gettext("Print the OS type and version\n\n"
+				 "Usage: VER\n");
 }
 
 

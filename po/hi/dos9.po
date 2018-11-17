@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dos9 218.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-31 20:36+0100\n"
+"POT-Creation-Date: 2018-11-15 22:30+0100\n"
 "PO-Revision-Date: 2018-07-07 22:13+0530\n"
 "Last-Translator: darkounet <darkbatcher@dos9.org>\n"
 "Language-Team: TheBATeam (www.thebateam.org)\n"
@@ -889,6 +889,13 @@ msgstr ""
 msgid ""
 "Load or list modules.\n"
 "Usage: MOD [/L] [/Q] module\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_ShowHelp.c:222
+msgid ""
+"Print the OS type and version\n"
+"\n"
+"Usage: VER\n"
 msgstr ""
 
 #, fuzzy

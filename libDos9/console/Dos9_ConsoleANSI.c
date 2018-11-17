@@ -109,7 +109,7 @@ LIBDOS9 int Dos9_Getch(FILE *f)
 
 
 /* Morgan McGuire, morgan@cs.brown.edu */
-int Dos9_Kbhit()
+int Dos9_Kbhit(FILE *f)
 {
     int bytesWaiting;
     struct termios term;
@@ -211,7 +211,7 @@ LIBDOS9 void Dos9_SetConsoleCursorPosition(FILE* f, CONSOLECOORD iCoord)
 }
 
 
-LIBDOS9 CONSOLECOORD Dos9_GetConsoleCursorPosition(void)
+LIBDOS9 CONSOLECOORD Dos9_GetConsoleCursorPosition(FILE *f)
 {
     return (CONSOLECOORD){0,0};
 }

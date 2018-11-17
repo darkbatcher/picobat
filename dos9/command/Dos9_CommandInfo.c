@@ -76,7 +76,8 @@ COMMANDINFO lpCmdInfo[]= {
 	{"PROMPT", Dos9_CmdPrompt, STRLEN("PROMPT")},
 	{"PECHO", Dos9_CmdPecho, STRLEN("PECHO")},
 	{"TIMEOUT", Dos9_CmdTimeout, STRLEN("TIMEOUT")},
-	{"MOD", Dos9_CmdMod, STRLEN("MOD")}
+	{"MOD", Dos9_CmdMod, STRLEN("MOD")},
+	{"VER", Dos9_CmdVer, STRLEN("VER")}
 };
 
 const int iCmdInfoNb = sizeof(lpCmdInfo)/sizeof(lpCmdInfo[0]);

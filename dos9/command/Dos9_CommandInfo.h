@@ -21,6 +21,7 @@
 #ifndef DOS9_COMMANDINFO_H
 #define DOS9_COMMANDINFO_H
 
+#include "../core/Dos9_Core.h"
 
 extern COMMANDINFO lpCmdInfo[];
 
