@@ -261,23 +261,41 @@ void Dos9_SetConsoleTitle(FILE* f, char* lpTitle)
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-static char tomouse_b(DWORD m_bs, DWORD m_ef)
+static __thread int latest = CORE_NOTHING;
+
+static int tomouse_b(DWORD m_bs, DWORD m_ef)
 {
-	if (m_bs & FROM_LEFT_1ST_BUTTON_PRESSED) /* left clic */
-		return (m_ef & DOUBLE_CLICK) ? D_LEFT_BUTTON : LEFT_BUTTON;
+  /* Redefine latest and return button. */
+  #define return_button(button) return (latest = (button))
 
-	else if (m_bs & RIGHTMOST_BUTTON_PRESSED) /* right clic */
-		return (m_ef & DOUBLE_CLICK) ? D_RIGHT_BUTTON : RIGHT_BUTTON;
+  if (m_bs & FROM_LEFT_1ST_BUTTON_PRESSED) /* left clic */
+    return_button((m_ef & DOUBLE_CLICK)
+      ? CORE_D_LEFT_BUTTON
+      : CORE_LEFT_BUTTON);
 
-	else if (m_bs & FROM_LEFT_2ND_BUTTON_PRESSED) /* middle clic */
-		return MIDDLE_BUTTON;
+  else if (m_bs & RIGHTMOST_BUTTON_PRESSED) /* right clic */
+    return_button((m_ef & DOUBLE_CLICK)
+      ? CORE_D_RIGHT_BUTTON
+      : CORE_RIGHT_BUTTON);
 
-	else if (m_ef & MOUSE_WHEELED) /* mouse scrolling */
-		return HIWORD(m_bs) > 0 ? SCROLL_UP : SCROLL_DOWN;
+  else if (m_bs & FROM_LEFT_2ND_BUTTON_PRESSED) /* middle clic */
+      return_button(CORE_MIDDLE_BUTTON);
 
-	else /* mouse moved */
-		return NOTHING;
+  else if (m_ef & MOUSE_WHEELED) /* mouse scrolling */
+      return (int)m_bs < 0 ? CORE_SCROLL_UP : CORE_SCROLL_DOWN;
+
+  else {
+    /* mouse moved */
+    if (latest != CORE_NOTHING) {
+      /* Button release */
+      latest = CORE_NOTHING;
+      return CORE_RELEASE;
+    }
+
+    return CORE_NOTHING;
+  }
 }
+
 
 LIBDOS9 void Dos9_GetMousePos(FILE* f, char on_move, CONSOLECOORD* coords, int *b)
 {
@@ -294,7 +312,7 @@ LIBDOS9 void Dos9_GetMousePos(FILE* f, char on_move, CONSOLECOORD* coords, int *
 	DWORD e;
 	INPUT_RECORD ir;
 
-	*b = NOTHING;
+	*b = CORE_NOTHING;
 
 	do {
 
@@ -308,7 +326,7 @@ LIBDOS9 void Dos9_GetMousePos(FILE* f, char on_move, CONSOLECOORD* coords, int *
 
 		*b = tomouse_b(ir.Event.MouseEvent.dwButtonState, ir.Event.MouseEvent.dwEventFlags);
 
-	} while (!on_move && *b == NOTHING);
+	} while (!on_move && *b == CORE_NOTHING);
 }
 
 #endif

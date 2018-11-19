@@ -332,24 +332,22 @@ typedef int COLOR;
 #endif
 
 enum {
-	NOTHING = 0,
-    LEFT_BUTTON,
-    RIGHT_BUTTON,
-    D_LEFT_BUTTON,
-    D_RIGHT_BUTTON,
-    MIDDLE_BUTTON,
-    SCROLL_UP,
-    SCROLL_DOWN,
-    RELEASE
+  CORE_NOTHING = 0,
+  CORE_LEFT_BUTTON,
+  CORE_RIGHT_BUTTON,
+  CORE_D_LEFT_BUTTON,
+  CORE_D_RIGHT_BUTTON,
+  CORE_MIDDLE_BUTTON,
+  CORE_SCROLL_UP,
+  CORE_SCROLL_DOWN,
+  CORE_RELEASE
+};
 
-	/* Planned :
-
-		Grabbing :
-		  - G_LEFT_BUTTON
-		  - G_RIGHT_BUTTON
-		  - G_MIDDLE_BUTTON
-
-	 */
+/* core_i special keys */
+enum {
+  CORE_KEY_ERROR = -1,
+  CORE_KEY_UNKNOWN = -1, /* same as CORE_KEY_ERROR */
+  CORE_KEY_MOUSE = -2, /* *NIX only */
 };
 
 LIBDOS9 void            Dos9_ClearConsoleScreen(FILE* f);

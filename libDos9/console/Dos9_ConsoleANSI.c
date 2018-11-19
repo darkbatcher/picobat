@@ -51,60 +51,64 @@
 
 LIBDOS9 int Dos9_Getch(FILE *f)
 {
-    struct termios oldattr, newattr;
-    int ch;
-    tcgetattr(fileno(f), &oldattr);
-    newattr = oldattr;
-    newattr.c_lflag &= ~( ICANON | ECHO );
+  struct termios oldattr, newattr;
+  int ch;
+  tcgetattr(fileno(f), &oldattr);
+  newattr = oldattr;
+  newattr.c_lflag &= ~( ICANON | ECHO );
     tcsetattr(fileno(f), TCSANOW, &newattr);
     ch = fgetc(f);
-    tcsetattr(fileno(f), TCSANOW, &oldattr);
+  tcsetattr(fileno(f), TCSANOW, &oldattr);
 
-    /* Handle special chracters */
-    if (ch == '\033' && Dos9_Getch(f) == '[')
-            switch (Dos9_Getch(f)) {
-                case 'A': /* up arrow */
-                    return 72;
-                    break;
-                case 'B': /* down arrow */
-                    return 80;
-                    break;
-                case 'C': /* right arrow */
-                    return 77;
-                    break;
-                case 'D': /* left arrow */
-                    return 75;
-                    break;
-                case 'F': /* end */
-                    return 79;
-                    break;
-                case 'H': /* begin */
-                    return 71;
-                    break;
+  /* Handle special chracters */
+  if (ch == '\033' && Dos9_Getch(f) == '[') {
+    switch (Dos9_Getch(f)) {
+      case 'A': /* up arrow */
+        return 72;
+        break;
+      case 'B': /* down arrow */
+        return 80;
+        break;
+      case 'C': /* right arrow */
+        return 77;
+        break;
+      case 'D': /* left arrow */
+        return 75;
+        break;
+      case 'F': /* end */
+        return 79;
+        break;
+      case 'H': /* begin */
+        return 71;
+        break;
 
-                case '2': /* insert */
-                    Dos9_Getch(f); /* ignore the next character */
-                    return 82;
-                    break;
-                case '3': /* delete */
-                    Dos9_Getch(f);
-                    return 83;
-                    break;
-                case '5': /* page up */
-                    Dos9_Getch(f);
-                    return 73;
-                    break;
-                case '6': /* page down */
-                    Dos9_Getch(f);
-                    return 81;
-                    break;
+      case '2': /* insert */
+        Dos9_Getch(f); /* ignore the next character */
+        return 82;
+        break;
+      case '3': /* delete */
+        Dos9_Getch(f);
+        return 83;
+        break;
+      case '5': /* page up */
+        Dos9_Getch(f);
+        return 73;
+        break;
+      case '6': /* page down */
+        Dos9_Getch(f);
+        return 81;
+        break;
 
-                default:
-                    return -1; /* unmanaged/unknown key */
-                    break;
-            }
+      case 'M':
+        /* Mouse input beginning sequence. */
+        return -2;
+        break;
 
-    else return ch;
+      default:
+        return -1; /* unmanaged/unknown key */
+        break;
+    }
+  } else return ch;
 }
 
 
@@ -262,45 +266,73 @@ LIBDOS9 void Dos9_SetConsoleCursorState(FILE* f, int bVisible, int iSize )
 
 */
 
-static char tomouse_b(int mouse_char)
+static __thread int latest;
+
+static int tomouse_b(int b)
 {
-	switch (mouse_char) {
-		case ' ': /* Left button */
-		case '@':
-			return LEFT_BUTTON;
+  /* Update latest if needed and return button. */
+  #define return_button(button, redefine_latest) do { \
+    if (redefine_latest) latest = CORE_##button; \
+    return CORE_##button; \
+  } while (0)
 
-		case '"': /* Right button */
-		case 'B':
-		 return RIGHT_BUTTON;
+  /* The same with D_ (double click) support. */
+  #define return_button_dc(button, redefine_latest) do { \
+    int temp_btn = (latest == CORE_##button) ? CORE_D_##button : CORE_##button; \
+    if (redefine_latest) latest = temp_btn; \
+    return temp_btn; \
+  } while (0)
 
-		case '!': /* Middle button */
-		case 'A':
-			return MIDDLE_BUTTON;
+  /* See extras/doc/xterm-mouse-tracking-analysis.ods for more informations. */
+  b -= 32;
 
-		/* TODO: Add double clics. */
+  int btn = b & 0x3;
 
-		case '`': /* Scroll up */
-			return SCROLL_UP;
+  /* Check scrolling flag */
+  if (b & (1 << 6)) {
+    /* Reset latest with a neutral/non-significant value. */
+    latest = CORE_NOTHING;
+    /* Currently scrolling, but up or down ? */
+    /* NOTE: No idea if there is another value for the btn flag. */
+    return (btn == 1) ? CORE_SCROLL_DOWN : CORE_SCROLL_UP;
+  }
 
-		case 'a': /* Scroll down */
-			return SCROLL_DOWN;
+  /* Check movement flag */
+  int moving = b & (1 << 5);
 
-		case '#': /* Mouse release */
-			return RELEASE;
+  if (moving)
+    /* Reset latest */
+    latest = CORE_RELEASE;
 
-		case 'C': /* Nothing (1003 mode only) */
-			return NOTHING;
+  switch (btn) {
+    case 0:
+      return_button_dc(LEFT_BUTTON, !moving);
+      break;
 
-		default:
-			return -1;
-	}
+    case 1:
+      return_button(MIDDLE_BUTTON, !moving);
+      break;
+
+    case 2:
+      return_button_dc(RIGHT_BUTTON, !moving);
+      break;
+
+    case 3:
+      if (moving)
+        return_button(NOTHING, 0);
+      else
+        return_button(RELEASE, 0);
+      break;
+  }
+
+  /* Should not be achieved. */
+  return -1;
 }
-
-
 
 static void core_input_initialize(FILE* f, unsigned int mode)
 {
     fprintf(f, "\033[?%dh", mode ? 1003 : 1000);
+    latest = CORE_RELEASE;
 }
 
 static void core_input_terminate(FILE* f, unsigned int mode)
@@ -318,9 +350,9 @@ LIBDOS9 void Dos9_GetMousePos(FILE* f, char on_move, CONSOLECOORD* coords, int *
 	core_input_initialize(f, on_move);
 
     int c;
-    do /* Wait CSI mouse  start (-1) */
+    do /* Wait CSI mouse start (-2, see posix_conio.c) */
         c = Dos9_Getch(f);
-    while(c != -1);
+    while(c != CORE_KEY_MOUSE);
 
     *mouse_b = tomouse_b(Dos9_Getch(f));
 
