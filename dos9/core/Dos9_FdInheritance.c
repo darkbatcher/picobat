@@ -20,9 +20,10 @@
 /* This source contains a bit of code derived from libcu8. The objective
    of the function is to set the fd inheritance reliably */
 
+#include <stdio.h>
+
 #ifdef WIN32
 #include <stdlib.h>
-#include <stdio.h>
 #include <windows.h>
 
 struct ioinfo {
@@ -72,3 +73,8 @@ void Dos9_SetFdInheritance(int fd, int mode)
 }
 
 #endif /* WIN32 */
+
+void Dos9_SetStdInheritance(FILE *file, int mode)
+{
+  Dos9_SetFdInheritance(fileno(file), mode);
+}
