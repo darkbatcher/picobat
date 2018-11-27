@@ -21,7 +21,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <fcntl.h>
+
+#ifdef DOS9_USE_MODULES
 #include <dlfcn.h>
+#endif
 
 #include <libDos9.h>
 #include "Dos9_Commands.h"
@@ -221,6 +224,7 @@ int Dos9_LoadMod(const char* mod)
     int(*handler)(void*(*)(int), int);
     struct mod_list_t* item;
 
+    #if DOS9_USE_MODULES
     if ((handle = dlopen(mod, RTLD_LAZY)) == NULL
         || (handler = dlsym(handle, "Dos9_ModuleHandler")) == NULL) {
 
@@ -255,6 +259,10 @@ int Dos9_LoadMod(const char* mod)
 
     item->next = modules;
     modules = item;
+    #else
+    fprintf(fOutput, lpModulesNotSupported);
+    return DOS9_UNABLE_LOAD_MODULE;
+    #endif
 
     return DOS9_NO_ERROR;
 }
@@ -273,7 +281,6 @@ int Dos9_LoadMod(const char* mod)
 #define QUIET 1
 int Dos9_CmdMod(char* line)
 {
-
     ESTR* param = Dos9_EsInit();
     char *path;
     int mode = LOUD, status = DOS9_NO_ERROR;
@@ -346,4 +353,3 @@ end:
 
     return status;
 }
-

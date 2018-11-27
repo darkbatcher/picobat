@@ -1,4 +1,4 @@
-/* 
+/*
    Dos9 Makefiles, The Dos9 project
    Copyright (C) 2012-2018  Romain Garbi (DarkBatcher)
 
@@ -15,7 +15,7 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #define BINARY_PATH "@BINDIR@"
 
 #define DATA_PATH "@BINDIR@/share"
@@ -34,7 +34,11 @@
 
 #if !@use_console@
 	#define LIBDOS9_NO_CONSOLE 1
-#endif 
+#endif
+
+#if @use_modules@
+  #define DOS9_USE_MODULES 1
+#endif
 
 #define PACKAGE  "@PACKAGE@"
 #define PACKAGE_BUGREPORT "@PACKAGE_BUGREPORT@"

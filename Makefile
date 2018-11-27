@@ -48,7 +48,7 @@ PACKAGE = dos9
 PACKAGE_URL = http://dos9.org
 PACKAGE_BUGREPORT = darkbatcher@dos9.org
 VERSION = 218.2
-		
+
 all: $(SUBDIRS) $(MDFILES)
 
 $(SUBDIRS):
@@ -60,7 +60,7 @@ clean: $(SUBDIRS_CLEAN)
 
 $(SUBDIRS_CLEAN):
 	$(MAKE) -C $(basename $@) clean
-	
+
 bin: bindir $(SUBDIRS_BIN)
 
 dist: bin
@@ -78,27 +78,27 @@ bindir: $(TEXTFILES)
 textfiles: $(TEXTFILES)
 
 doc.md: README.tpl
-	tea/tea -e:utf-8 -o:md README.tpl doc.md 
+	./tea/tea$(EXEC_SUFFIX) -e:utf-8 -o:md README.tpl doc.md
 
 
 .tpl.tea:
 	cat $< | sed -e s,\{doc[^}]*\|,\{,g > $@
-	
+
 .tea.txt:
-	tea/tea -e:utf-8 -o:text-plain $< $@
+	./tea/tea$(EXEC_SUFFIX) -e:utf-8 -o:text-plain $< $@
 
 .tea.md:
-	tea/tea -e:utf-8 -o:md $< $@
-	
+	./tea/tea$(EXEC_SUFFIX) -e:utf-8 -o:md $< $@
+
 $(SUBDIRS_BIN): $(SUBDIRS)
 	$(MAKE) -C $(basename $@) bin || true
-	
+
 # stuff to check
 PROGRAMS = mimeopen xdg-open
 FUNCTIONS = WIN32
-LIBS = iconv intl pthread m
-OPTIONS = libcu8 nls cmdlycorrect console
-DEFAULTOPTIONS = no-libcu8 use-nls no-cmdlycorrect use-console
+LIBS = iconv intl pthread m dl
+OPTIONS = libcu8 nls cmdlycorrect console modules
+DEFAULTOPTIONS = no-libcu8 use-nls no-cmdlycorrect use-console use-modules
 SUBCONFIG = libcu8 libmatheval
 ADDITIONALVARS = HOST BINDIR YEAR VERSION PACKAGE PACKAGE_URL PACKAGE_BUGREPORT
 

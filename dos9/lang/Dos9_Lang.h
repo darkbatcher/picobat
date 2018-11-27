@@ -70,6 +70,7 @@ extern const char* lpMsgTimeoutBreak;
 extern const char* lpMsgTimeoutKeyPress;
 
 extern const char* lpModuleList;
+extern const char *lpModulesNotSupported;
 
 
 void Dos9_LoadStrings(void); /* a function that loads differents

@@ -77,6 +77,7 @@ const char* lpMsgTimeoutBreak;
 const char* lpMsgTimeoutKeyPress;
 
 const char* lpModuleList;
+const char *lpModulesNotSupported;
 
 void Dos9_LoadStrings(void)
 {
@@ -141,5 +142,6 @@ For more informations see : <http://dos9.org>");
     lpMsgTimeoutBreak=gettext("Press CTRL-C to continue ...");
 
     lpModuleList=gettext("Loaded modules :\n");
+    lpModulesNotSupported=gettext("Module loading not supported.");
 
 }
