@@ -97,6 +97,7 @@ $(SUBDIRS_BIN): $(SUBDIRS)
 PROGRAMS = mimeopen xdg-open
 FUNCTIONS = WIN32
 LIBS = iconv intl pthread m dl
+FLAGS = PIC
 OPTIONS = libcu8 nls cmdlycorrect console modules
 DEFAULTOPTIONS = no-libcu8 use-nls no-cmdlycorrect use-console use-modules
 SUBCONFIG = libcu8 libmatheval

@@ -22,10 +22,6 @@
 #include <string.h>
 #include <fcntl.h>
 
-#ifdef DOS9_USE_MODULES
-#include <dlfcn.h>
-#endif
-
 #include <libDos9.h>
 #include "Dos9_Commands.h"
 #include "../core/Dos9_Core.h"
@@ -35,7 +31,9 @@
 
 #include "Dos9_Mod.h"
 
-
+#ifdef DOS9_USE_MODULES
+#include <dlfcn.h>
+#endif
 
 void Dos9_ModSetEnv(const char* name, const char* content)
 {
@@ -224,7 +222,7 @@ int Dos9_LoadMod(const char* mod)
     int(*handler)(void*(*)(int), int);
     struct mod_list_t* item;
 
-    #if DOS9_USE_MODULES
+    #ifdef DOS9_USE_MODULES
     if ((handle = dlopen(mod, RTLD_LAZY)) == NULL
         || (handler = dlsym(handle, "Dos9_ModuleHandler")) == NULL) {
 

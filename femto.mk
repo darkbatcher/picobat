@@ -1,16 +1,16 @@
 # Femto - FEmto's a Makefile TOol
 # Copyright (C) 2018 Romain GARBI
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished  to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in all
 # copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -35,7 +35,7 @@ CONFIGVARS = $(addprefix prg_,$(PROGRAMS)) \
 			  $(addprefix lib_,$(LIBS)) \
 			  $(addprefix use_,$(OPTIONS)) \
 			  $(ADDITIONALVARS)
-	
+
 
 $(PROGRAMS):
 	@echo "Looking for program : $@ ..."
@@ -48,7 +48,7 @@ $(PROGRAMS):
 		echo prg_$@=0 >> femto-config.mk; \
 		echo path_$@=0 >> femto-config.mk; \
 	fi;
-	
+
 $(LIBS):
 	@echo "Looking for lib : $@ ..."
 	@echo "int main() { return 0;}" > config.c
@@ -59,7 +59,7 @@ $(LIBS):
 		echo "	none"; \
 		echo "lib_$@ = 0" >>  femto-config.mk; \
 	fi;
-	
+
 $(FUNCTIONS):
 	@echo "Looking for : $@ ..."
 	@sed -e 's,[@]fn[@],$@,g' -e 's,[@]fnp[@],$(shell echo $@ | sed -e 's,/,_,g' -e 's,[.],_,g'),g'< config.c.in > config.c
@@ -69,32 +69,43 @@ $(FUNCTIONS):
 	else \
 		echo "fn_$@ = 0" >>  femto-config.mk; \
 		echo "	none"; \
-	fi; 
+	fi;
+
+$(FLAGS):
+	@echo "Looking for flag $@ ..."
+	@sed -e 's,[@]fn[@],$@,g' -e 's,[@]fnp[@],$(shell echo $@ | sed -e 's,/,_,g' -e 's,[.],_,g'),g'< config.c.in > config.c
+	@if $(CC) config.c $(CFLAGS) $(LDFLAGS) -f$@ -O0 2> /dev/null; then \
+		echo "flag_$@ = 0" >>  femto-config.mk; \
+		echo "	not supported"; \
+	else \
+		echo "flag_$@ = 1" >>  femto-config.mk; \
+		echo "	supported"; \
+	fi;
 
 $(USEOPTIONS):
 	@echo "$(subst use-,use_,$@)=1" >> femto-config.mk
 	$(MAKE) config.h
-	
-$(NOOPTIONS): 
+
+$(NOOPTIONS):
 	@echo "$(subst no-,use_,$@)=0" >> femto-config.mk
 	$(MAKE) config.h
-	
+
 $(USEOPTIONSX):
 	@echo "$(subst use-,use_,$(basename $@))=1" >> femto-config.mk
-	
+
 $(NOOPTIONSX):
 	@echo "$(subst no-,use_,$(basename $@))=0" >> femto-config.mk
 
 localmk:
 	@echo Removing femto-config.mk
-	@echo "" > femto-config.mk;	
-	
+	@echo "" > femto-config.mk;
+
 $(SUBCONF):
 	$(MAKE) -C $(basename $@) config
-	
-config: localmk $(PROGRAMS) $(LIBS) $(FUNCTIONS) $(DEFAULTOPTIONSX) $(SUBCONF)
+
+config: localmk $(PROGRAMS) $(LIBS) $(FUNCTIONS) $(FLAGS) $(DEFAULTOPTIONSX) $(SUBCONF)
 	$(MAKE) config.h
-	
+
 config.h: femto-subst
 	./femto-subst < config.h.in > config.h
 
@@ -102,6 +113,6 @@ femto-subst: femto-config.mk
 	echo \#!/bin/sh > femto-subst
 	echo sed $(foreach v,$(CONFIGVARS),-e 's,[@]$(v)[@],$($(v)),g') >> femto-subst
 	chmod +x femto-subst
-	
+
 .PHONY: config config.h localmk $(SUBCONF) $(FUNCTIONS) $(PROGRAMS) $(LIBS) \
-	$(NOOPTIONS) $(NOOPTIONSX) $(USEOPTIONS) $(USEOPTIONSX) femto-subst
+	$(FLAGS) $(NOOPTIONS) $(NOOPTIONSX) $(USEOPTIONS) $(USEOPTIONSX) femto-subst

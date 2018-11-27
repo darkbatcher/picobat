@@ -76,3 +76,11 @@ ifeq ($(lib_m),1)
 	LM_LD = -lm
 endif
 
+ifeq ($(lib_dl),1)
+	LDL_LD = -ldl
+endif
+
+ifeq ($(use_modules)$(flag_PIC),11)
+	CFLAGS += -fPIC
+	LDFLAGS += -fPIC
+endif
