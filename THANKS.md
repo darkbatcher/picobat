@@ -25,6 +25,8 @@ advanced today.
 
   * Created designs for the new html man pages and Dos9 website
 
+  * Programmed the VER command.
+
 * Karanveer Chouhan \(aka KVC\)
 
   * Help reviewing of Dos9
