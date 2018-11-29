@@ -2392,3 +2392,15 @@ is a list of improvements I made during from 24th June to today.
 * Fixed THANKS file to thank Xenoxis for his contribution to the codebase with 
   the **VER** command.
 
+* Slightly modified the internationalization semantics used by Dos9 in order 
+  to fix slight Windows issue related to some message containing '\n' that 
+  were not translated to '\r\n'. The semantics have been changed, in order to 
+  fix this issue, as follows \(this is further disscussed in GUIDELINES\):
+
+  * Help messages have '\n' translated to the appropriate sequences on the 
+    fly, so these may still contain newlines.
+
+  * On the other hand, both normal and error message must not contain any 
+    newline. Furthermore, it up to the command to print approriate sequences 
+    using DOS9\_NL when displaying a normal message.
+

@@ -289,7 +289,7 @@ are in **po/LOCALE** a simple text editor or poedit can be used to update
 messages. Please try no to leave untranslated or fuzzy messages.
 
 A new locale can be added by adding a new line to the **po/locales.list** and 
-building dos9 again. The resulting locale will automatically built \(but not 
+building dos9 again. The resulting locale will automatically build \(but not 
 automatically translated though\) and integrated to the **bin** target.
 
 The default domain used by **Dos9** is **dos9**. To add a new domain, edit the 
@@ -302,5 +302,15 @@ Where **domain-name** is the name of the text domain to be created and
 messages will be exctracted. 
 
 Dos9 only extracts messages where **gettext\(\)** is explicitely called, that 
-is, no macro expansion. No comment message is extracted neither. 
+is, no macro expansion. No comment message is extracted neither.
+
+Translatable messages defined in both **dos9/errors/Dos9\_Errors.c** and 
+**dos9/lang/Dos9\_Lang.c** should not contain any newline character \(e.g 
+'\n'\) in order to prevent incompatibilities between platforms since windows 
+uses '\r\n' instead of '\n' \(and similarly, macOS uses '\r'\). However, 
+messages defined in **dos9/lang/Dos9\_ShowHelp.c** can contain '\n' characters 
+that will be translated at runtime to the appropriate end-of-line characters.
+
+When adding new messages, please avoid to break the standard message format 
+used by already defined messages. 
 

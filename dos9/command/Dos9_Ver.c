@@ -51,18 +51,27 @@ int Dos9_CmdVer(char* lpArg)
 
 
 	#ifdef WIN32
-	OSVERSIONINFOA DATA;
-	const char *CurrentWindowsVersion;
-	DATA.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-	GetVersionEx(&DATA);
-	Dos9_CmdVerCheckWinVer(&CurrentWindowsVersion,
-							(int) DATA.dwMajorVersion,
-							(int) DATA.dwMinorVersion);
-	fprintf(fOutput, "\nMicrosoft Windows %s %s [version %d.%d.%d]\n", CurrentWindowsVersion, (char*) DATA.szCSDVersion, (int) DATA.dwMajorVersion, (int) DATA.dwMinorVersion, (int) DATA.dwBuildNumber);
+
+        OSVERSIONINFOA DATA;
+        const char *CurrentWindowsVersion;
+        DATA.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+
+        GetVersionEx(&DATA);
+        Dos9_CmdVerCheckWinVer(&CurrentWindowsVersion,
+                                (int) DATA.dwMajorVersion,
+                                (int) DATA.dwMinorVersion);
+
+        fprintf(fOutput, DOS9_NL "Microsoft Windows %s %s [version %d.%d.%d]" DOS9_NL,
+                    CurrentWindowsVersion, (char*) DATA.szCSDVersion,
+                    (int) DATA.dwMajorVersion, (int) DATA.dwMinorVersion,
+                    (int) DATA.dwBuildNumber);
+
 	#else
-	struct utsname DATA;
-	uname(&DATA);
-	fprintf(fOutput, "\n%s [version %s]\n", DATA.sysname, DATA.release);
+        struct utsname DATA;
+
+        uname(&DATA);
+        fprintf(fOutput, DOS9_NL "%s [version %s]" DOS9_NL, DATA.sysname, DATA.release);
+
 	#endif
 	return 0;
 }

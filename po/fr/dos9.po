@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dos9 218.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-15 22:30+0100\n"
+"POT-Creation-Date: 2018-11-26 09:20+0100\n"
 "PO-Revision-Date: 2013-12-14 20:24+0100\n"
 "Last-Translator: DarkBatcher <darkbatcher@gmail.com>\n"
 "Language-Team: French <darkbatcher@gmail.com>\n"
@@ -15,463 +15,459 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: ../dos9/errors/Dos9_Errors.c:42
-msgid "No error: OK.\n"
-msgstr "Aucune erreur: OK.\n"
+msgid "No error: OK."
+msgstr "Aucune erreur: OK."
 
 #: ../dos9/errors/Dos9_Errors.c:45
 #, c-format
-msgid "Error : Unable to access file \"%s\".\n"
-msgstr "Erreur : Impossible d'accéder au fichier \"%s\".\n"
+msgid "Error : Unable to access file \"%s\"."
+msgstr "Erreur : Impossible d'accéder au fichier \"%s\"."
 
 #: ../dos9/errors/Dos9_Errors.c:48
 #, c-format
-msgid "Error : Unable to find folder \"%s\".\n"
-msgstr "Erreur : Impossible de trouver le dossier \"%s\".\n"
+msgid "Error : Unable to find folder \"%s\"."
+msgstr "Erreur : Impossible de trouver le dossier \"%s\"."
 
 #: ../dos9/errors/Dos9_Errors.c:51
 #, c-format
 msgid ""
 "Error : \"%s\" is not recognized as an internal or external command, an "
-"operable program or a batch file.\n"
+"operable program or a batch file."
 msgstr ""
 "Erreur : \"%s\" n'est pas reconnu en tant que commande interne ou externe, "
-"programme exécutable ou fichier batch.\n"
+"programme exécutable ou fichier batch."
 
 #: ../dos9/errors/Dos9_Errors.c:55
 #, c-format
-msgid "Error : \"%s\" was unexpected.\n"
-msgstr "Erreur : \"%s\" était inatendu.\n"
+msgid "Error : \"%s\" was unexpected."
+msgstr "Erreur : \"%s\" était inatendu."
 
 #: ../dos9/errors/Dos9_Errors.c:58
 #, c-format
-msgid "Error : Invalid command line for %s.\n"
-msgstr "Erreur : Ligne de commande invalide \"%s\".\n"
+msgid "Error : Invalid command line for %s."
+msgstr "Erreur : Ligne de commande invalide \"%s\"."
 
 #: ../dos9/errors/Dos9_Errors.c:61
 #, c-format
-msgid "Error : Unable to find label \"%s\".\n"
-msgstr "Erreur : Impossible de trouver l'étiquette \"%s\".\n"
+msgid "Error : Unable to find label \"%s\"."
+msgstr "Erreur : Impossible de trouver l'étiquette \"%s\"."
 
 #: ../dos9/errors/Dos9_Errors.c:64
-msgid "Warning : Using a Dos9 extension but the CMDLYCORRECT option is set.\n"
+msgid "Warning : Using a Dos9 extension but the CMDLYCORRECT option is set."
 msgstr ""
 "Attention : il faut désactiver l'option CMDLYCORRECT pour utiliser les "
-"extensions de Dos9.\n"
+"extensions de Dos9."
 
 #: ../dos9/errors/Dos9_Errors.c:67
 #, c-format
-msgid "Error : \"%s\" expected more arguments.\n"
-msgstr "Erreur : \"%s\" attendait plus d'arguments.\n"
+msgid "Error : \"%s\" expected more arguments."
+msgstr "Erreur : \"%s\" attendait plus d'arguments."
 
 #: ../dos9/errors/Dos9_Errors.c:70
 #, c-format
-msgid "Error : Incompatible arguments %s.\n"
-msgstr "Erreur : Arguments incompatibles %s.\n"
+msgid "Error : Incompatible arguments %s."
+msgstr "Erreur : Arguments incompatibles %s."
 
 #: ../dos9/errors/Dos9_Errors.c:73
 #, c-format
-msgid "Error : Unable to rename \"%s\".\n"
-msgstr "Erreur : Impossible de renommer \"%s\".\n"
+msgid "Error : Unable to rename \"%s\"."
+msgstr "Erreur : Impossible de renommer \"%s\"."
 
 #: ../dos9/errors/Dos9_Errors.c:76
-msgid "Error : Overflowed maximum value.\n"
-msgstr "Erreur : Dépassement de valeur maximale.\n"
+msgid "Error : Overflown maximum value."
+msgstr "Erreur : Dépassement de valeur maximale."
 
 #: ../dos9/errors/Dos9_Errors.c:79
-msgid "Error : Divide by 0.\n"
-msgstr "Erreur : Division par 0\n"
+msgid "Error : Divide by 0."
+msgstr "Erreur : Division par 0."
 
 #: ../dos9/errors/Dos9_Errors.c:82
 #, c-format
-msgid "Error : Unable to create folder \"%s\".\n"
-msgstr "Erreur : Impossible de créer le dossier \"%s\".\n"
+msgid "Error : Unable to create folder \"%s\"."
+msgstr "Erreur : Impossible de créer le dossier \"%s\"."
 
 #: ../dos9/errors/Dos9_Errors.c:85
 #, c-format
-msgid "Error : Unable to delete folder \"%s\".\n"
-msgstr "Erreur : Impossible de suprimmer le dossier \"%s\"\n"
+msgid "Error : Unable to delete folder \"%s\"."
+msgstr "Erreur : Impossible de suprimmer le dossier \"%s\"."
 
 #: ../dos9/errors/Dos9_Errors.c:88
 #, c-format
-msgid "Error : Stream module : \"%s\".\n"
-msgstr "Erreur : Module de flux : \"%s\".\n"
+msgid "Error : Stream module : \"%s\"."
+msgstr "Erreur : Module de flux : \"%s\"."
 
 #: ../dos9/errors/Dos9_Errors.c:91
 #, c-format
 msgid ""
 "Error : \"%c\" is an invalid character for special variables. Special "
-"variables require their name to be strict ascii characters, exluding "
-"controls characters and space (0x00 - 0x30).\n"
+"variables require their name to be strict ascii characters, excluding "
+"controls characters and space (0x00 - 0x30)."
 msgstr ""
 "Erreur : \"%c\" est un caractère invalide pour les variable spéciales. Le "
 "nom variables spécial doit être un caractère ASCII strict, à l'exception des "
-"caractères de contrôle et de l'espace (0x00-0x30).\n"
+"caractères de contrôle et de l'espace (0x00-0x30)."
 
 #: ../dos9/errors/Dos9_Errors.c:97
 #, c-format
 msgid ""
 "Error : \"%s\" is not a valid block (should at least be enclosed within "
-"parenthesis).\n"
+"parenthesis)."
 msgstr ""
 "Errur : \"%s\" n'est pas un bloc valable (devrait être entouré de "
-"parenthèses).\n"
+"parenthèses)."
 
 #: ../dos9/errors/Dos9_Errors.c:101
 #, c-format
-msgid "Error : \"%s\" is not a valid token specifier.\n"
-msgstr "Erreur :   \"%s\" n'est pas une description de token valide.\n"
+msgid "Error : \"%s\" is not a valid token specifier."
+msgstr "Erreur :   \"%s\" n'est pas une description de token valide."
 
 #: ../dos9/errors/Dos9_Errors.c:104
 #, c-format
 msgid ""
-"Error : Attempted to specify more than TOKEN_NB_MAX (%d) different tokens.\n"
+"Error : Attempted to specify more than TOKEN_NB_MAX (%d) different tokens."
 msgstr ""
 "Erreur : La commande a tenté de spécifier plus de TOKEN_NB_MAX(%d) tokens "
-"différent.\n"
+"différent."
 
 #: ../dos9/errors/Dos9_Errors.c:108
 #, c-format
-msgid "Error : \"%s\" violates the ``Usebackq'' syntax.\n"
-msgstr "Erreur : \"%s\" viole la syntaxe ``Usebackq''.\n"
+msgid "Error : \"%s\" violates the ``Usebackq'' syntax."
+msgstr "Erreur : \"%s\" viole la syntaxe ``Usebackq''."
 
 #: ../dos9/errors/Dos9_Errors.c:111
 #, c-format
-msgid "Error : Unable to allocate memory (in %s).\n"
-msgstr "Erreur : Impossible d'allouer de la mémoire (dans %s).\n"
+msgid "Error : Unable to allocate memory (in %s)."
+msgstr "Erreur : Impossible d'allouer de la mémoire (dans %s)."
 
 #: ../dos9/errors/Dos9_Errors.c:114
 #, c-format
-msgid "Error : Can't create pipe (in %s).\n"
-msgstr "Erreur : Impossible de créer un pipe (dans %s).\n"
+msgid "Error : Can't create pipe (in %s)."
+msgstr "Erreur : Impossible de créer un pipe (dans %s)."
 
 #: ../dos9/errors/Dos9_Errors.c:117
 #, c-format
 msgid ""
 "Error : unable to run a subprocess of Dos9 to process the given input (\"%s"
-"\").\n"
+"\")."
 msgstr ""
 "Error : Impossible de lancer une seconde instance de Dos9 pour exécuter "
-"l'entée spécifiée (\"%s\").\n"
+"l'entée spécifiée (\"%s\")."
 
 #: ../dos9/errors/Dos9_Errors.c:121
 #, c-format
-msgid ""
-"Error : Invalid token specifier. \"%s\" breaks input specifying rules.\n"
-msgstr "Erreur : \"%s\" brise les règles de spécification de tokens.\n"
+msgid "Error : Invalid token specifier. \"%s\" breaks input specifying rules."
+msgstr "Erreur : \"%s\" brise les règles de spécification de tokens."
 
 #: ../dos9/errors/Dos9_Errors.c:125
 #, c-format
-msgid "Error : FOR loop is trying to reassign already used %%%%%c variable.\n"
+msgid "Error : FOR loop is trying to reassign already used %%%%%c variable."
 msgstr ""
 "Erreur : La boucle FOR a essayé de réassigner la variable %%%%%c qui est "
-"déjà utilisée.\n"
+"déjà utilisée."
 
 #: ../dos9/errors/Dos9_Errors.c:129
 #, c-format
-msgid "Error : \"%s\" is not a valid mathematical expression.\n"
-msgstr "Erreur : \"%s\" n'est pas une expression mathématique valide.\n"
+msgid "Error : \"%s\" is not a valid mathematical expression."
+msgstr "Erreur : \"%s\" n'est pas une expression mathématique valide."
 
 #: ../dos9/errors/Dos9_Errors.c:132
 #, c-format
-msgid "Error : \"%s\" is not a valid top-level block.\n"
-msgstr "Erreur :   \"%s\" n'est pas un block de niveau supérieur valide.\n"
+msgid "Error : \"%s\" is not a valid top-level block."
+msgstr "Erreur :   \"%s\" n'est pas un block de niveau supérieur valide."
 
 #: ../dos9/errors/Dos9_Errors.c:135
 #, c-format
-msgid "Error : Unable to duplicate file descriptor (%d).\n"
-msgstr "Erreur : Impossible de duppliquer le descripteur de fichier  (%d).\n"
+msgid "Error : Unable to duplicate file descriptor (%d)."
+msgstr "Erreur : Impossible de duppliquer le descripteur de fichier  (%d)."
 
 #: ../dos9/errors/Dos9_Errors.c:138
 #, c-format
-msgid "Error : Unable to create pipe at function (%s).\n"
-msgstr "Erreur : Impossible de créer un pipe (dans %s).\n"
+msgid "Error : Unable to create pipe at function (%s)."
+msgstr "Erreur : Impossible de créer un pipe (dans %s)."
 
 #: ../dos9/errors/Dos9_Errors.c:141
 #, c-format
-msgid "Error : Unable to set environment string (%s).\n"
+msgid "Error : Unable to set environment string (%s)."
 msgstr ""
-"Erreur : Impossible de modifier la variable d'environement (dans %s).\n"
+"Erreur : Impossible de modifier la variable d'environement (dans %s)."
 
 #: ../dos9/errors/Dos9_Errors.c:144
 #, c-format
-msgid "Error : \"%s\" is an invalid stream redirection.\n"
-msgstr "Erreur :   \"%s\" n'est pas une redirection valide.\n"
+msgid "Error : \"%s\" is an invalid stream redirection."
+msgstr "Erreur :   \"%s\" n'est pas une redirection valide."
 
 #: ../dos9/errors/Dos9_Errors.c:147
 #, c-format
-msgid "Error : Redirection for \"%s\" was already specified.\n"
-msgstr "Erreur : Une redirection pour \"%s\" était déjà spécifiée.\n"
+msgid "Error : Redirection for \"%s\" was already specified."
+msgstr "Erreur : Une redirection pour \"%s\" était déjà spécifiée."
 
 #: ../dos9/errors/Dos9_Errors.c:150
 #, c-format
-msgid "Error : Encountered malformed blocks (\"%s\").\n"
-msgstr "Erreur : Mauvais bloc (\"%s\").\n"
+msgid "Error : Encountered malformed blocks (\"%s\")."
+msgstr "Erreur : Mauvais bloc (\"%s\")."
 
 #: ../dos9/errors/Dos9_Errors.c:153
-msgid "Error : Blocks left unclosed at end-of-file.\n"
-msgstr "Erreur : Bloc non fermé à la fin du fichier.\n"
+msgid "Error : Blocks left unclosed at end-of-file."
+msgstr "Erreur : Bloc non fermé à la fin du fichier."
 
 #: ../dos9/errors/Dos9_Errors.c:156
 #, c-format
-msgid "Error : Unable to add command \"%s\".\n"
-msgstr "Erreur : Impossible de renommer \"%s\".\n"
+msgid "Error : Unable to add command \"%s\"."
+msgstr "Erreur : Impossible de renommer \"%s\"."
 
 #: ../dos9/errors/Dos9_Errors.c:159
 #, c-format
-msgid "Error : Unable to remap commands (in function %s).\n"
-msgstr "Erreur : Impossible de remaper les commandes (dans %s).\n"
+msgid "Error : Unable to remap commands (in function %s)."
+msgstr "Erreur : Impossible de remaper les commandes (dans %s)."
 
 #: ../dos9/errors/Dos9_Errors.c:162
 #, c-format
-msgid "Error : Trying to redefine already used \"%s\" command.\n"
+msgid "Error : Trying to redefine already used \"%s\" command."
 msgstr ""
-"Erreur : Tentative de réassignement de la commande déjà utilisée \"%s\".\n"
+"Erreur : Tentative de réassignement de la commande déjà utilisée \"%s\"."
 
 #: ../dos9/errors/Dos9_Errors.c:165
 #, c-format
-msgid "Error : Unable to redefine \"%s\" command.\n"
-msgstr "Erreur : Impossible de redéfinir la commande \"%s\".\n"
+msgid "Error : Unable to redefine \"%s\" command."
+msgstr "Erreur : Impossible de redéfinir la commande \"%s\"."
 
 #: ../dos9/errors/Dos9_Errors.c:168
 #, c-format
 msgid ""
 "Error : Unable to set option \"%s\", it is built statically inside your "
-"version of Dos9.\n"
+"version of Dos9."
 msgstr ""
 "Erreur : Impossible d'activer l'option \"%s\" qui est compilée à l'intérieur "
-"de Dos9.\n"
+"de Dos9."
 
 #: ../dos9/errors/Dos9_Errors.c:172
 #, c-format
-msgid "Error : The \"%s\" comparison forbids use of strings.\n"
-msgstr "Erreur : Le comparant \"%s\" interdit l'usage de chaines.\n"
+msgid "Error : The \"%s\" comparison forbids use of strings."
+msgstr "Erreur : Le comparant \"%s\" interdit l'usage de chaines."
 
 #: ../dos9/errors/Dos9_Errors.c:175
 #, c-format
-msgid "Error : Unable to fork the current process (in function %s).\n"
-msgstr "Erreur : Impossible de forker le processus courant (dans %s).\n"
+msgid "Error : Unable to fork the current process (in function %s)."
+msgstr "Erreur : Impossible de forker le processus courant (dans %s)."
 
 #: ../dos9/errors/Dos9_Errors.c:178
 #, c-format
-msgid "Error : Pathspec \"%s\" does not match any file.\n"
-msgstr "Erreur : L'expression \"%s\" ne correspond à aucun fichier.\n"
+msgid "Error : Pathspec \"%s\" does not match any file."
+msgstr "Erreur : L'expression \"%s\" ne correspond à aucun fichier."
 
 #: ../dos9/errors/Dos9_Errors.c:181
 #, c-format
-msgid "Error : %s does not recieved any valid file to process.\n"
-msgstr "Erreur : %s n'a reçu aucun fichier valide à traiter.\n"
+msgid "Error : %s does not recieved any valid file to process."
+msgstr "Erreur : %s n'a reçu aucun fichier valide à traiter."
 
 #: ../dos9/errors/Dos9_Errors.c:184
 #, c-format
-msgid "Error : \"%s\" is not a valid number.\n"
-msgstr "Erreur :   \"%s\" n'est pas un nombre valide.\n"
+msgid "Error : \"%s\" is not a valid number."
+msgstr "Erreur :   \"%s\" n'est pas un nombre valide."
 
 #: ../dos9/errors/Dos9_Errors.c:187
 #, c-format
-msgid "Error : Too many arguments for %s command\n"
-msgstr "Erreur : Trop d'arguments pour la commande %s.\n"
+msgid "Error : Too many arguments for %s command"
+msgstr "Erreur : Trop d'arguments pour la commande %s."
 
 #: ../dos9/errors/Dos9_Errors.c:190
 #, c-format
-msgid "Error : \"%s\" is not a valid expression for IF command.\n"
-msgstr "Erreur : \"%s\" n'est pas une expression valide pour la commandeIF.\n"
+msgid "Error : \"%s\" is not a valid expression for IF command."
+msgstr "Erreur : \"%s\" n'est pas une expression valide pour la commande IF."
 
 #: ../dos9/errors/Dos9_Errors.c:193
 #, c-format
-msgid "Error : Unable to copy file \"%s\".\n"
-msgstr "Erreur : Impossible de copier le fichier\"%s\".\n"
+msgid "Error : Unable to copy file \"%s\"."
+msgstr "Erreur : Impossible de copier le fichier\"%s\"."
 
 #: ../dos9/errors/Dos9_Errors.c:196
 #, c-format
-msgid "Error : Unable to move file \"%s\".\n"
-msgstr "Erreur : Impossible de déplacer le fichier \"%s\".\n"
+msgid "Error : Unable to move file \"%s\"."
+msgstr "Erreur : Impossible de déplacer le fichier \"%s\"."
 
 #: ../dos9/errors/Dos9_Errors.c:199
 #, c-format
-msgid "Error : Unable to create directory \"%s\".\n"
-msgstr "Erreur : Impossible de créer le dossier \"%s\".\n"
+msgid "Error : Unable to create directory \"%s\"."
+msgstr "Erreur : Impossible de créer le dossier \"%s\"."
 
 #: ../dos9/errors/Dos9_Errors.c:202
 #, c-format
-msgid "Error : Unable to delete file \"%s\".\n"
-msgstr "Erreur : Impossible de suprimmer le fichier \"%s\"\n"
+msgid "Error : Unable to delete file \"%s\"."
+msgstr "Erreur : Impossible de suprimmer le fichier \"%s\"."
 
 #: ../dos9/errors/Dos9_Errors.c:205
 #, c-format
-msgid "Error : Unable to delete directory \"%s\".\n"
-msgstr "Erreur : Impossible de suprimmer le dossier \"%s\"\n"
+msgid "Error : Unable to delete directory \"%s\"."
+msgstr "Erreur : Impossible de suprimmer le dossier \"%s\"."
 
 #: ../dos9/errors/Dos9_Errors.c:208
 #, c-format
-msgid "Error : \"%s\" is not a valid codepage on your system.\n"
-msgstr "Erreur : \"%s\" n'est pas une page valide sur votre système.\n"
+msgid "Error : \"%s\" is not a valid codepage on your system."
+msgstr "Erreur : \"%s\" n'est pas une page valide sur votre système."
 
 #: ../dos9/errors/Dos9_Errors.c:211
 #, c-format
 msgid ""
 "Error : \"%s\" is a relative path, RENAME (or REN) do not handles relative "
 "path. If you want to move the file and rename it at the same time, you "
-"should use MOVE command.\n"
+"should use MOVE command."
 msgstr ""
 "Erreur : \"%s\" est un chemin relatif. Les commandes RENAME et REN ne "
 "supportent pas les chemins relatifs. Pour déplacer et renommer un fichier de "
-"façon simultanée, utilisez la commande MOVE.\n"
+"façon simultanée, utilisez la commande MOVE."
 
 #: ../dos9/errors/Dos9_Errors.c:216
-msgid "Error : Unable to access Dos9 main thread to perform break.\n"
+msgid "Error : Unable to access Dos9 main thread to perform break."
 msgstr ""
-"Erreur : Impossible d'accéder au thread principal de Dos9 pourexécuter "
-"break.\n"
+"Erreur : Impossible d'accéder au thread principal de Dos9 pour exécuter "
+"break."
 
 #: ../dos9/errors/Dos9_Errors.c:219
 #, c-format
-msgid "Error : Invalid label encountered within a block (at line %d).\n"
-msgstr "Erreur : étiquette rencontrée à l'intérieur d'un block (ligne %d).\n"
+msgid "Error : Invalid label encountered within a block (at line %d)."
+msgstr "Erreur : étiquette rencontrée à l'intérieur d'un block (ligne %d)."
 
 #: ../dos9/errors/Dos9_Errors.c:222
 #, c-format
-msgid "Error : Unable to lock mutex (%s).\n"
-msgstr "Erreur : Impossible de saisir le mutex (%s).\n"
+msgid "Error : Unable to lock mutex (%s)."
+msgstr "Erreur : Impossible de saisir le mutex (%s)."
 
 #: ../dos9/errors/Dos9_Errors.c:225
 #, c-format
-msgid "Error : Unable to release mutex (%s).\n"
-msgstr "Erreur : Impossible de libérer le mutex (%s).\n"
+msgid "Error : Unable to release mutex (%s)."
+msgstr "Erreur : Impossible de libérer le mutex (%s)."
 
 #: ../dos9/errors/Dos9_Errors.c:228
 #, c-format
-msgid "Error : Unable to catenate file \"%s\".\n"
-msgstr "Erreur : Impossible de concaténer \"%s\".\n"
+msgid "Error : Unable to catenate file \"%s\"."
+msgstr "Erreur : Impossible de concaténer \"%s\"."
 
 #: ../dos9/errors/Dos9_Errors.c:231
 #, c-format
-msgid "Error : Unable to load module \"%s\".\n"
-msgstr "Erreur : Impossible de charger le module \"%s\".\n"
+msgid "Error : Unable to load module \"%s\"."
+msgstr "Erreur : Impossible de charger le module \"%s\"."
 
 #: ../dos9/errors/Dos9_Errors.c:234
 #, c-format
-msgid "Error : Incompatible module \"%s\".\n"
-msgstr "Erreur : Module \"%s\" incompatible.\n"
+msgid "Error : Incompatible module \"%s\"."
+msgstr "Erreur : Module \"%s\" incompatible."
 
 #: ../dos9/errors/Dos9_Errors.c:237
 #, c-format
-msgid "Error : Module \"%s\" is already loaded.\n"
-msgstr "Erreur : Le module \"%s\" est déjà chargé.\n"
+msgid "Error : Module \"%s\" is already loaded."
+msgstr "Erreur : Le module \"%s\" est déjà chargé."
 
 #: ../dos9/errors/Dos9_Errors.c:240
-msgid ""
-"\n"
-"Aborting current command, press any key to end Dos9.\n"
+msgid "Aborting current command, press any key to end Dos9."
 msgstr ""
-"\n"
-"Abandon de l'opération courrante, appuyez sur un touche pour terminer Dos9.\n"
+"Abandon de l'opération courrante, appuyez sur un touche pour terminer Dos9."
 
-#: ../dos9/lang/Dos9_Lang.c:83
+#: ../dos9/lang/Dos9_Lang.c:96
 msgid "Echo command enabled"
 msgstr "Commande echo activée"
 
-#: ../dos9/lang/Dos9_Lang.c:84
+#: ../dos9/lang/Dos9_Lang.c:97
 msgid "Echo command disabled"
 msgstr "Commande echo désactivée"
 
-#: ../dos9/lang/Dos9_Lang.c:85
+#: ../dos9/lang/Dos9_Lang.c:98
 msgid "Press any key to continue..."
 msgstr "Appuyez sur une touche pour continuer..."
 
-#: ../dos9/lang/Dos9_Lang.c:87
+#: ../dos9/lang/Dos9_Lang.c:100
 msgid "\tNo files found"
 msgstr "\tAucun fichier trouvé"
 
-#: ../dos9/lang/Dos9_Lang.c:88
+#: ../dos9/lang/Dos9_Lang.c:101
 msgid "Last change\t\tSize\tAttr.\tName"
 msgstr "Dernière modif.\t\t Taille\t Attr.\tNom"
 
-#: ../dos9/lang/Dos9_Lang.c:89
+#: ../dos9/lang/Dos9_Lang.c:102
 msgid "Files"
 msgstr "Fichiers"
 
-#: ../dos9/lang/Dos9_Lang.c:90
+#: ../dos9/lang/Dos9_Lang.c:103
 msgid "Folders"
 msgstr "Dossiers"
 
-#: ../dos9/lang/Dos9_Lang.c:92
+#: ../dos9/lang/Dos9_Lang.c:105
 #, c-format
 msgid "Are you sure you want to delete file \"%s\" ?"
 msgstr "Êtes-vous sûr  de vouloir supprimer le fichier \"%s\" ?"
 
-#: ../dos9/lang/Dos9_Lang.c:93
+#: ../dos9/lang/Dos9_Lang.c:106
 #, c-format
 msgid "Are you sure you want to remove \"%s\" directory ?"
 msgstr "Êtes-vous sûr  de vouloir supprimer le dossier \"%s\" ?"
 
-#: ../dos9/lang/Dos9_Lang.c:95
+#: ../dos9/lang/Dos9_Lang.c:108
 #, c-format
 msgid "File \"%s\" already exists, replace it by \"%s\" ?"
 msgstr "Le fichier \"%s\" existe déjà, voulez vous le remplacer par \"%s\" ?"
 
-#: ../dos9/lang/Dos9_Lang.c:97
+#: ../dos9/lang/Dos9_Lang.c:110
 msgid "Do you really want to exit command script ?"
 msgstr "Voulez vous vraiment quitter le script de commande ?"
 
-#: ../dos9/lang/Dos9_Lang.c:99
+#: ../dos9/lang/Dos9_Lang.c:112
 msgid " (Yes/no) "
 msgstr " (Oui/non) "
 
-#: ../dos9/lang/Dos9_Lang.c:100
+#: ../dos9/lang/Dos9_Lang.c:113
 msgid " (yes/No) "
 msgstr " (oui/Non)"
 
-#: ../dos9/lang/Dos9_Lang.c:101
+#: ../dos9/lang/Dos9_Lang.c:114
 msgid " (yes/no) "
 msgstr " (oui/non) "
 
-#: ../dos9/lang/Dos9_Lang.c:103
+#: ../dos9/lang/Dos9_Lang.c:116
 msgid " (Yes/no/all) "
 msgstr " (Oui/non/tous) "
 
-#: ../dos9/lang/Dos9_Lang.c:104
+#: ../dos9/lang/Dos9_Lang.c:117
 msgid " (yes/No/all) "
 msgstr " (oui/Non/tous) "
 
-#: ../dos9/lang/Dos9_Lang.c:105
+#: ../dos9/lang/Dos9_Lang.c:118
 msgid " (yes/no/All) "
 msgstr " (oui/non/Tous) "
 
-#: ../dos9/lang/Dos9_Lang.c:106
+#: ../dos9/lang/Dos9_Lang.c:119
 msgid " (yes/no/all) "
 msgstr " (oui/non/tous) "
 
-#: ../dos9/lang/Dos9_Lang.c:108
+#: ../dos9/lang/Dos9_Lang.c:121
 msgid "YES"
 msgstr "OUI"
 
-#: ../dos9/lang/Dos9_Lang.c:109
+#: ../dos9/lang/Dos9_Lang.c:122
 msgid "Y"
 msgstr "O"
 
-#: ../dos9/lang/Dos9_Lang.c:111
+#: ../dos9/lang/Dos9_Lang.c:124
 msgid "NO"
 msgstr "NON"
 
-#: ../dos9/lang/Dos9_Lang.c:112
+#: ../dos9/lang/Dos9_Lang.c:125
 msgid "N"
 msgstr "N"
 
-#: ../dos9/lang/Dos9_Lang.c:114
+#: ../dos9/lang/Dos9_Lang.c:127
 msgid "ALL"
 msgstr "TOUS"
 
-#: ../dos9/lang/Dos9_Lang.c:115
+#: ../dos9/lang/Dos9_Lang.c:128
 msgid "A"
 msgstr "T"
 
-#: ../dos9/lang/Dos9_Lang.c:117
+#: ../dos9/lang/Dos9_Lang.c:130
 msgid "Please enter a correct choice (or type enter to choose default) !\n"
 msgstr ""
 "Merci d'entrer un choix correct (ou appuyez sur entrée pour le choix par "
 "défaut) ! \n"
 
-#: ../dos9/lang/Dos9_Lang.c:119
+#: ../dos9/lang/Dos9_Lang.c:132
 msgid ""
 "This is free software, you can modify and/or redistribute it under the terms "
 "of the GNU Genaral Public License v3 (or any later version).\n"
@@ -515,34 +511,34 @@ msgstr ""
 "Signalez les bogues à : <darkbatcher@dos9>\n"
 "Plus d'informations sur : <http://dos9.org>"
 
-#: ../dos9/lang/Dos9_Lang.c:136
+#: ../dos9/lang/Dos9_Lang.c:149
 #, c-format
 msgid "%d files matching, print anyway ?"
 msgstr "%d fichiers correspondant, afficher quand même ?"
 
-#: ../dos9/lang/Dos9_Lang.c:138
+#: ../dos9/lang/Dos9_Lang.c:151
 #, c-format
 msgid "Waiting for %f seconds, press a key to continue ..."
 msgstr "En attente pour %f secondes, appuyez sur une touche pour continuer ..."
 
-#: ../dos9/lang/Dos9_Lang.c:139
+#: ../dos9/lang/Dos9_Lang.c:152
 #, c-format
 msgid "Waiting for %f seconds, press CTRL-C to continue ..."
 msgstr "En attente pour %f secondes, appuyez sur CTRL-C pour continuer .."
 
-#: ../dos9/lang/Dos9_Lang.c:140
+#: ../dos9/lang/Dos9_Lang.c:153
 msgid "Press a key to continue ..."
 msgstr "Appuyez sur une touche pour continuer ..."
 
-#: ../dos9/lang/Dos9_Lang.c:141
+#: ../dos9/lang/Dos9_Lang.c:154
 msgid "Press CTRL-C to continue ..."
 msgstr "Appuyez sur CTRL-C pour continuer ..."
 
-#: ../dos9/lang/Dos9_Lang.c:143
-msgid "Loaded modules :\n"
-msgstr "Modules chargés\n"
+#: ../dos9/lang/Dos9_Lang.c:156
+msgid "Loaded modules :"
+msgstr "Modules chargés :"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:43
+#: ../dos9/lang/Dos9_ShowHelp.c:48
 msgid ""
 "Create an alias on a command.\n"
 "Usage: ALIAS [/f] alias=command\n"
@@ -550,7 +546,7 @@ msgstr ""
 "Crée un alias sur une commande.\n"
 "Usage: ALIAS [/f] alias=command\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:47
+#: ../dos9/lang/Dos9_ShowHelp.c:52
 msgid ""
 "Change current working directory.\n"
 "Usage: CD  [[/d] path]\n"
@@ -560,7 +556,7 @@ msgstr ""
 "Usage: CD [[/d] chemin]\n"
 "       CHDIR [[/d] chemin]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:52
+#: ../dos9/lang/Dos9_ShowHelp.c:57
 msgid ""
 "Clear console screen\n"
 "Usage: CLS\n"
@@ -568,7 +564,7 @@ msgstr ""
 "Efface le contenu de la console\n"
 "Usage: CLS\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:56
+#: ../dos9/lang/Dos9_ShowHelp.c:61
 msgid ""
 "Change console color to the given code.\n"
 "Usage: COLOR [code]\n"
@@ -576,7 +572,7 @@ msgstr ""
 "Change la couleur de toute la console.\n"
 "Usage: COLOR [code]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:60
+#: ../dos9/lang/Dos9_ShowHelp.c:65
 msgid ""
 "Copy file(s) to another location.\n"
 "Usage: COPY [/R] [/-Y | /Y] [/A[:]attributes] source [+] ... destination\n"
@@ -584,7 +580,7 @@ msgstr ""
 "Copie des fichiers vers un autre répertoire.\n"
 "Usage: COPY [/R] [/-Y | /Y] [/A[:]attributs] source [+] ... destination\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:64
+#: ../dos9/lang/Dos9_ShowHelp.c:69
 msgid ""
 "Call a script or a label from the current context.\n"
 "Usage: CALL [/e] [file] [:label] [parameters ...]\n"
@@ -592,7 +588,7 @@ msgstr ""
 "Appelle un script ou un étiquette depuis le contexte courant.\n"
 "Usage: CALL [/e] [fichier] [:étiquette] [paramètres ...]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:69
+#: ../dos9/lang/Dos9_ShowHelp.c:74
 msgid ""
 "Delete file(s).\n"
 "Usage: DEL [/P] [/F] [/S] [/Q] [/A[:]attributes] name\n"
@@ -602,7 +598,7 @@ msgstr ""
 "Usage: DEL [/P] [/F] [/S] [/Q] [/A[:]attributs] nom\n"
 "       ERASE [/P] [/F] [/S] [/Q] [/A[:]attributes] nom\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:74
+#: ../dos9/lang/Dos9_ShowHelp.c:79
 msgid ""
 "List files in a directory and in subdirectories.\n"
 "Usage: DIR [/A[:]attributes] [/S] [/B] [path]\n"
@@ -610,7 +606,7 @@ msgstr ""
 "Liste les fichiers d'un répertoire et de ses sous-répertoires.\n"
 "Usage: DIR [/A[:]attributs] [/S] [/B] [chemin]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:78
+#: ../dos9/lang/Dos9_ShowHelp.c:83
 msgid ""
 "Print a message, or enable/disable command echoing.\n"
 "Usage: ECHO [OFF|ON]\n"
@@ -622,7 +618,7 @@ msgstr ""
 "       ECHO texte\n"
 "       ECHO.texte\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:84
+#: ../dos9/lang/Dos9_ShowHelp.c:89
 #, c-format
 msgid ""
 "Perform commands against items (files, strings, command output).\n"
@@ -651,7 +647,7 @@ msgstr ""
 "          :: des commandes\n"
 "       )\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:96
+#: ../dos9/lang/Dos9_ShowHelp.c:101
 msgid ""
 "Go to a label in a command script.\n"
 "Usage: GOTO [/Q] [/F[:]file] [:]label\n"
@@ -659,7 +655,7 @@ msgstr ""
 "Saute vers une étiquette dans un script de commande.\n"
 "Usage: GOTO [/Q] [/F[:]file] étiquette\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:100
+#: ../dos9/lang/Dos9_ShowHelp.c:105
 msgid ""
 "Perform commands on some conditions.\n"
 "Usage: IF [/i] [NOT] string1==string2 (\n"
@@ -693,7 +689,7 @@ msgstr ""
 "          :: code à exécuter\n"
 "       )\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:115
+#: ../dos9/lang/Dos9_ShowHelp.c:120
 msgid ""
 "Create the given directory.\n"
 "Usage: MD directory\n"
@@ -703,7 +699,7 @@ msgstr ""
 "Usage: MD répertoire\n"
 "       MKDIR répertoire\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:121
+#: ../dos9/lang/Dos9_ShowHelp.c:126
 msgid ""
 "Wait for a keystroke from the user.\n"
 "Usage: PAUSE\n"
@@ -711,7 +707,7 @@ msgstr ""
 "Attend que l'utilisateur appuie sur une touche\n"
 "Usage: PAUSE\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:126
+#: ../dos9/lang/Dos9_ShowHelp.c:131
 msgid ""
 "Remove a directory.\n"
 "Usage: RMDIR [/S] [/Q] directory\n"
@@ -721,7 +717,7 @@ msgstr ""
 "Usage: RMDIR [/S] [/Q] répertoire\n"
 "       RD [/S] [/Q] répertoire\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:131
+#: ../dos9/lang/Dos9_ShowHelp.c:136
 msgid ""
 "Renames a file.\n"
 "Usage: REN file name.ext\n"
@@ -731,7 +727,7 @@ msgstr ""
 "Usage: REN fichier nom.ext\n"
 "       RENAME fichier nom.ext\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:136
+#: ../dos9/lang/Dos9_ShowHelp.c:141
 msgid ""
 "Introduce a comment.\n"
 "Usage: REM comment\n"
@@ -739,7 +735,7 @@ msgstr ""
 "Introduit un commentaire.\n"
 "Usage: REM commentaire\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:141
+#: ../dos9/lang/Dos9_ShowHelp.c:146
 msgid ""
 "Set or list environment variables.\n"
 "Usage: SET variable=content\n"
@@ -753,7 +749,7 @@ msgstr ""
 "       SET /p variable=question\n"
 "\t\tSET var\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:148
+#: ../dos9/lang/Dos9_ShowHelp.c:153
 msgid ""
 "Set local environment and options of the Dos9 command prompt.\n"
 "Usage: SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] "
@@ -763,7 +759,7 @@ msgstr ""
 "Usage: SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] "
 "[ENABLEFLOATS | DISABLEFLOATS] [CMDLYCORRECT | CMDLYINCORRECT]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:152
+#: ../dos9/lang/Dos9_ShowHelp.c:157
 msgid ""
 "Reverts changes to environments and options made after a call to SETLOCAL.\n"
 "Usage: ENDLOCAL\n"
@@ -772,7 +768,7 @@ msgstr ""
 "SETLOCAL.\n"
 "Usage: ENDLOCAL\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:156
+#: ../dos9/lang/Dos9_ShowHelp.c:161
 msgid ""
 "Set console title.\n"
 "Usage: TITLE title\n"
@@ -780,7 +776,7 @@ msgstr ""
 "Modifie le titre de la console.\n"
 "Usage: TITLE titre\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:160
+#: ../dos9/lang/Dos9_ShowHelp.c:165
 msgid ""
 "Print a file.\n"
 "Usage: TYPE [file ...]\n"
@@ -788,7 +784,7 @@ msgstr ""
 "Affiche le contenu d'un fichier.\n"
 "Usage: TYPE [fichier ...]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:164
+#: ../dos9/lang/Dos9_ShowHelp.c:169
 msgid ""
 "Exit from the command prompt.\n"
 "Usage: EXIT [/b] [code]\n"
@@ -796,7 +792,7 @@ msgstr ""
 "Quitte l'invité de commande.\n"
 "Usage: EXIT [/b] [code]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:168
+#: ../dos9/lang/Dos9_ShowHelp.c:173
 msgid ""
 "Change positions of command-line parameters.\n"
 "Usage: SHIFT [/start_number | /s[:]start_number] [/d[:]displacement]\n"
@@ -804,7 +800,7 @@ msgstr ""
 "Change les positions des paramètres de ligne de commande.\n"
 "Usage: SHIFT [/nombre_début | /s[:]nombre_début] [/d[:]déplacement\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:172
+#: ../dos9/lang/Dos9_ShowHelp.c:177
 msgid ""
 "Search occurrence of string in a set of files.\n"
 "Usage: FIND [/N] [/C] [/V] [/I] [/E] string [file ...]\n"
@@ -812,7 +808,7 @@ msgstr ""
 "Recherche les occurences d'une chaîne dans un groupe de fichiers.\n"
 "Usage: FIND [/N] [/C] [/V] [/I] [/E] chaîne [fichier ...]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:176
+#: ../dos9/lang/Dos9_ShowHelp.c:181
 msgid ""
 "Display content of files.\n"
 "Usage: MORE [/E] [/P] [/S] [/C] [/T[:]n] [+n] [file ...]\n"
@@ -820,7 +816,7 @@ msgstr ""
 "Affiche le contenu d'un ou plusieur fichiers.\n"
 "Usage: MORE [/E] [/P] [/S] [/C] [/T[:]n] [+n] [fichier ...]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:180
+#: ../dos9/lang/Dos9_ShowHelp.c:185
 msgid ""
 "[Obsolete] Sets or Clears Extended CTRL+C checking on DOS system. (Do "
 "nothing)\n"
@@ -830,7 +826,7 @@ msgstr ""
 "(Ne fait rien)\n"
 "Usage: Break [ON | OFF]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:184
+#: ../dos9/lang/Dos9_ShowHelp.c:189
 msgid ""
 "Set Console codepage or encoding.\n"
 "Usage: CHCP [ codepage | encoding]\n"
@@ -838,7 +834,7 @@ msgstr ""
 "Modifie l'encodage ou la page de code de la console de la console\n"
 "Usage: CHCP [ page_code | encodage]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:188
+#: ../dos9/lang/Dos9_ShowHelp.c:193
 msgid ""
 "For each path, change current directory and pushd to stack\n"
 "the previous current directory.\n"
@@ -848,7 +844,7 @@ msgstr ""
 "sur la pile le répertoire courant précedent.\n"
 "Usage: PUSHD [chemin1] [chemin2] [cheminN] ...\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:193
+#: ../dos9/lang/Dos9_ShowHelp.c:198
 msgid ""
 "Pull a directory on the stack to change current directory.\n"
 "Usage: POPD\n"
@@ -856,7 +852,7 @@ msgstr ""
 "Tire un répertoire sur la pile pour changer le répertoire courant.Usage: "
 "POPD\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:197
+#: ../dos9/lang/Dos9_ShowHelp.c:202
 msgid ""
 "Display counts of a file or of stdin.\n"
 "Usage: WC [/L] [/C] [/M] [/W] [files ...]\n"
@@ -864,7 +860,7 @@ msgstr ""
 "Affiche les comptes d'un fichier ou de l'entrée standard.\n"
 "Usage: WC [/L] [/C] [/M] [/W] [fichiers ...]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:201
+#: ../dos9/lang/Dos9_ShowHelp.c:206
 msgid ""
 "Run a command with arguments from standard input file.\n"
 "Usage: XARGS [command ...]\n"
@@ -872,7 +868,7 @@ msgstr ""
 "Lance une commande en prenant les arguments sur l'entrée standard.\n"
 "Usage: XARGS [commande ...]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:205
+#: ../dos9/lang/Dos9_ShowHelp.c:210
 msgid ""
 "Changes dos9 command prompt.\n"
 "Usage: PROMPT prompt-format\n"
@@ -880,7 +876,7 @@ msgstr ""
 "Change la ligne de commande de Dos9.\n"
 "Usage: PROMPT format-prompt\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:209
+#: ../dos9/lang/Dos9_ShowHelp.c:214
 msgid ""
 "Print a message using prompt format.\n"
 "Usage: PECHO prompt-format\n"
@@ -890,7 +886,7 @@ msgstr ""
 "Usage: PECHO format-prompt\n"
 "       PECHO.format-prompt\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:214
+#: ../dos9/lang/Dos9_ShowHelp.c:219
 msgid ""
 "Sleep for a delay in seconds.\n"
 "Usage: TIMEOUT [/T] [/NOBREAK] seconds[.milliseconds]\n"
@@ -898,7 +894,7 @@ msgstr ""
 "Attend un délai en secondes.\n"
 "Usage: TIMEOUT [/T] [/NOBREAK] secondes[.millisecondes]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:218
+#: ../dos9/lang/Dos9_ShowHelp.c:223
 msgid ""
 "Load or list modules.\n"
 "Usage: MOD [/L] [/Q] module\n"
@@ -906,14 +902,12 @@ msgstr ""
 "Charge ou liste les modules chargés.\n"
 "Usage: MOD [/L] [/Q] module\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:222
+#: ../dos9/lang/Dos9_ShowHelp.c:227
 msgid ""
 "Print the OS type and version\n"
-"\n"
 "Usage: VER\n"
 msgstr ""
 "Affiche la type de système d'exploitation et sa version.\n"
-"\n"
 "Usage: VER\n"
 
 #~ msgid "Press a key to continue"

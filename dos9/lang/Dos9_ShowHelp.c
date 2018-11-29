@@ -32,7 +32,12 @@
    help embedded inside the binary, so that user can use
    this little help, even if they have no 'HLP' no
    documentation installed right there with their Dos9
-   installation */
+   installation.
+
+   Note that help message may contain '\n' characters, as
+   those are translated at runtime, in contrary to messages
+   designed to be used directly in commands, that are in
+   dos9/lang/Dos9_Lang.c */
 
 static const char* lpInternalHelp[DOS9_HELP_ARRAY_SIZE];
 /* static const char* lpExternalMsg; */
@@ -217,20 +222,33 @@ void Dos9_LoadInternalHelp(void)
     lpInternalHelp[DOS9_HELP_MOD]
         =gettext("Load or list modules.\n"
                  "Usage: MOD [/L] [/Q] module\n");
-	
+
 	lpInternalHelp[DOS9_HELP_VER]
-		=gettext("Print the OS type and version\n\n"
+		=gettext("Print the OS type and version\n"
 				 "Usage: VER\n");
 }
 
 
 void Dos9_ShowInternalHelp(int cmdId)
 {
+    const char *nl, *p;
 
 	if ((cmdId >= 0)
 	    && (cmdId < DOS9_HELP_ARRAY_SIZE)) {
 
-		fputs(lpInternalHelp[cmdId], fError);
+        p = lpInternalHelp[cmdId];
+
+        /* Translate '\n' to DOS9_NL */
+        while (nl = strchr(p, '\n')) {
+
+            fwrite(p, 1, (size_t)(nl - p), fError);
+            fputs(DOS9_NL, fError);
+
+            p = nl + 1;
+        }
+
+        if (*p)
+            fputs(p, fError);
 
 	}
 

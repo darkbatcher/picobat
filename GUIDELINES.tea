@@ -296,7 +296,7 @@ ${void Dos9_ShowErrorMessage(unsigned int iErrorNumber, const char* lpComplement
 	or fuzzy messages.
 
 	A new locale can be added by adding a new line to the {po/locales.list}
-	and building dos9 again. The resulting locale will automatically built
+	and building dos9 again. The resulting locale will automatically build
 	(but not automatically translated though) and integrated to the {bin}
 	target.
 
@@ -312,3 +312,14 @@ ${domain-name source1 source2 ... sourceN}
 
 	Dos9 only extracts messages where {gettext()} is explicitely called, that
 	is, no macro expansion. No comment message is extracted neither.
+	
+	Translatable messages defined in both {dos9/errors/Dos9_Errors.c} and
+	{dos9/lang/Dos9_Lang.c} should not contain any newline character (e.g '\\n')
+	in order to prevent incompatibilities between platforms since windows
+	uses '\\r\\n' instead of '\\n' (and similarly, macOS uses '\\r'). However,
+	messages defined in {dos9/lang/Dos9_ShowHelp.c} can contain '\\n' characters
+	that will be translated at runtime to the appropriate end-of-line characters.
+	
+	When adding new messages, please avoid to break the standard message format
+	used by already defined messages.
+	

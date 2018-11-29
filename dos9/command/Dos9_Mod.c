@@ -192,7 +192,7 @@ void Dos9_ListMods(void)
 {
     struct mod_list_t* item = modules;
 
-    fprintf(fOutput, lpModuleList);
+    fprintf(fOutput, "%s" DOS9_NL, lpModuleList);
 
     while (item) {
 
