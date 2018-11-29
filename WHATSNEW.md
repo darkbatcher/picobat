@@ -2389,6 +2389,9 @@ is a list of improvements I made during from 24th June to today.
 
 ## Thursday, 29th ##
 
+* Added 'no-modules' options to build Dos9 without module support on platforms 
+  that do not provide it.
+
 * Fixed THANKS file to thank Xenoxis for his contribution to the codebase with 
   the **VER** command.
 

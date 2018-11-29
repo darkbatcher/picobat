@@ -31,8 +31,10 @@ Dos9 currently provides 4 options :
 	- cmdlycorrect : Be the most compatible to cmd as possible (disabled
 	  by default).
 	- console : Add visual console features like colours (enabled by
-	default). On some exotic systems (I'm thinking of NetBSD), the
-	terminal does not support such features, so this must be disabled.
+	  default). On some exotic systems (I'm thinking of NetBSD), the
+	  terminal does not support such features, so this must be disabled.
+	- modules : Add support for Dos9 modules (enabled by default). Disabling
+	  it might be required if your are building using all static files.
 	
 Once you have configured your options, just compile using :
 
