@@ -2410,5 +2410,7 @@ is a list of improvements I made during from 24th June to today.
 ## Sunday 1st, December ##
 
 * Fixed a bug preventing DOS9\_COLOR\_DEFAULT to work on unix-compatible 
-  operating systems. 
+  operating systems.
+
+* Fixed omitted libdl link flag inside Dos9's makefile. 
 
