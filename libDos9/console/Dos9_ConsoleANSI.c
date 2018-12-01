@@ -182,10 +182,10 @@ void Dos9_SetConsoleTextColor(FILE* f, COLOR cColor)
     }
 
     if (cColor & DOS9_BACKGROUND_DEFAULT)
-        printf("\033[49m");
+        fprintf(f, "\033[49m");
 
     if (cColor & DOS9_FOREGROUND_DEFAULT)
-        printf("\033[39m");
+        fprintf(f, "\033[39m");
 
     if ((cColor & DOS9_FOREGROUND_DEFAULT)
         && (cColor & DOS9_BACKGROUND_DEFAULT))

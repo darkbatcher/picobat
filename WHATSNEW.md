@@ -6,7 +6,7 @@ This a list of fixed bugs and improvements made :
 before October 2012 were not included since the version started in this dates 
 used almost new code.
 
-## Friday 11th, October 2012 ##
+## Friday 11st, October 2012 ##
 
 * Added welcome screen \(Two versions\).
 
@@ -2398,12 +2398,17 @@ is a list of improvements I made during from 24th June to today.
 * Slightly modified the internationalization semantics used by Dos9 in order 
   to fix slight Windows issue related to some message containing '\n' that 
   were not translated to '\r\n'. The semantics have been changed, in order to 
-  fix this issue, as follows \(this is further disscussed in GUIDELINES\):
+  fix this issue, as follows \(this is further discussed in GUIDELINES\):
 
   * Help messages have '\n' translated to the appropriate sequences on the 
     fly, so these may still contain newlines.
 
   * On the other hand, both normal and error message must not contain any 
-    newline. Furthermore, it up to the command to print approriate sequences 
+    newline. Furthermore, it up to the command to print appropriate sequences 
     using DOS9\_NL when displaying a normal message.
+
+## Sunday 1st, December ##
+
+* Fixed a bug preventing DOS9\_COLOR\_DEFAULT to work on unix-compatible 
+  operating systems. 
 
