@@ -19,7 +19,9 @@
 #ifndef DOS9_FDINHERITANCE_H
 #define DOS9_FDINHERITANCE_H
 
+#include <stdio.h>
+
 void Dos9_SetFdInheritance(int fd, int mode);
-void Dos9_SetStdInheritance(int mode);
+void Dos9_SetStdInheritance(FILE *file, int mode);
 
 #endif // DOS9_FDINHERITANCE_H
