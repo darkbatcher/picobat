@@ -21,19 +21,19 @@ include ../config.mk
 
 SRC_FILES=dump.c
 
-all: dump
-
-dump$(EXEC_SUFFIX): $(SRC_FILES) dump.h
-	$(CC) -o dump$(EXEC_SUFFIX) $(LDFLAGS) $(CFLAGS) $(SRC_FILES)
-
-dump.h: dump_h_gen
-	./dump_h_gen > dump.h
+all: dump$(EXEC_SUFFIX)
 
 dump_h_gen$(EXEC_SUFFIX):	dump_h_gen.c
-	$(CC) -o dump_h_gen $(LDFLAGS) $(CFLAGS) dump_h_gen.c
+	$(CC) -o dump_h_gen$(EXEC_SUFFIX) $(LDFLAGS) $(CFLAGS) dump_h_gen.c
+
+dump.h: dump_h_gen
+	./dump_h_gen$(EXEC_SUFFIX) > dump.h
+
+dump$(EXEC_SUFFIX): dump.h $(SRC_FILES)
+	$(CC) -o dump$(EXEC_SUFFIX) $(LDFLAGS) $(CFLAGS) $(SRC_FILES)
 
 clean:
-	rm -f dump$(EXEC_SUFFIX) dump_h_gen$(EXEC_SUFFIX)
+	rm -f dump$(EXEC_SUFFIX) dump_h_gen$(EXEC_SUFFIX) dump.h
 
 bin: dump
 	cp dump$(EXEC_SUFFIX) $(BINDIR)/cmd/

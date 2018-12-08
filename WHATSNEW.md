@@ -41,7 +41,7 @@ used almost new code.
 
 * added function for cross-platform console management.
 
-* added function to extended strings. 
+* added function to extended strings.
 
 ## Wednesday 20th, February ##
 
@@ -141,7 +141,7 @@ used almost new code.
   following script:
 
         IF 1==1 (
-         ECHO This goes to file2 
+         ECHO This goes to file2
          ECHO This goes to file1 > file 1
          ECHO This goes to file2, again
         ) > file 2
@@ -366,7 +366,7 @@ used almost new code.
   \(ie. unexpected behaviour caused for exemple by the following code\) :
 
         ECHO %1 test%
-        :: since spaces in variables names are valid, the result can 
+        :: since spaces in variables names are valid, the result can
         :: be unexpected depending whether "%1" or "%1 test%" are
         :: expanded first.
         
@@ -504,7 +504,7 @@ used almost new code.
   Using, **Dos9**, the code will output **YES**. However, **cmd.exe** will 
   not. It as been chosen to promote the first syntax since it is more easy to 
   handle and far less tricky than escaping characters with **cmd.exe**, which 
-  require an almost random number of '^' to escape some character. 
+  require an almost random number of '^' to escape some character.
 
 * Optimised **Dos9\_RunBlock\(\)** function.
 
@@ -790,7 +790,7 @@ used almost new code.
     the code that have been made are:
 
     * Make wrapper around undefined symbols coming from windows like 
-      **stricmp** \(**strcasecmp** is used instead\). 
+      **stricmp** \(**strcasecmp** is used instead\).
 
     * Fixed bugs from **libDos9/threads**, It caused double free exception for 
       some errors.
@@ -861,7 +861,7 @@ used almost new code.
 
 * Added some corrections that make the pipe function quite well on both 
   **GNU/Linux** and **Windows** architectures \(I also tested on **NetBSD** 
-  and it worked pretty well, without further tests however\). 
+  and it worked pretty well, without further tests however\).
 
 * Added a few fixes on languages, and I'm starting adding new messages for the 
   **file** commands.
@@ -1209,7 +1209,7 @@ is a list of improvements I made during from 24th June to today.
 * Fixed the broken pipe system introduced by the change of pipe system on 
   GNU/Linux \(and most of \*nices\). This is not fully tested though. But the 
   new way of handling pipes permits infinite length for both input and output 
-  of commands. 
+  of commands.
 
 ## Tuesday 13th, January 2015 ##
 
@@ -1264,7 +1264,7 @@ is a list of improvements I made during from 24th June to today.
   * \[ expression \] : Denotes a higher precedence.
 
   As you can see, the syntax is clear but efficient. You can use test that are 
-  provided by the **IF** command : 
+  provided by the **IF** command :
 
   * **not**
 
@@ -1404,7 +1404,7 @@ is a list of improvements I made during from 24th June to today.
 
 * still develloping dos9ize
 
-* Fixed errors with folders containing spaces for Dos9. 
+* Fixed errors with folders containing spaces for Dos9.
 
 ## Friday 15th, July ##
 
@@ -1524,7 +1524,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed little errors with **SET** and **/a:i** switches.
 
-* Fixed delimiters errors for parsing input and conditional operators. 
+* Fixed delimiters errors for parsing input and conditional operators.
 
 * Fixed errors with gotos, basically omit spaces before labels.
 
@@ -1854,7 +1854,7 @@ is a list of improvements I made during from 24th June to today.
 
 ## Sunday 3rd, December ##
 
-* Fixes for path name handling in Dos9\_GetMatchFileList 
+* Fixes for path name handling in Dos9\_GetMatchFileList
 
 * Added semaphores to fix SET command.
 
@@ -1949,7 +1949,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed the **CD** command that without argument displayed an error message.
 
-* Fixed an error with file redirection inside the **FOR** command input. 
+* Fixed an error with file redirection inside the **FOR** command input.
 
 * Fixed set command SEGFAULT error when listing variables. Fixed typos in the 
   manual page.
@@ -2053,7 +2053,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed segmentation fault happening when calling a batch file with no 
   arguments and calling the **SHIFT** command from within the script 
-  subsequently. 
+  subsequently.
 
 * Fixed **START** command to detect batch files extension **.bat** and 
   **.cmd** and start the appropriate **Dos9** interpretor instead of 
@@ -2131,7 +2131,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Implemented **hlp**'s **help** alias as a part of **Dos9\_Auto.bat**.
 
-* New implementation of the **dump** command. 
+* New implementation of the **dump** command.
 
 * New makefiles for gettext files.
 
@@ -2164,14 +2164,14 @@ is a list of improvements I made during from 24th June to today.
   To fix the problem, the output is no longer redirected and dos9 waits for 
   **dos9\_start** completion. This might cause little inconveniences as both 
   **xdg-open** and **mimeopen** produce some output even when run without 
-  errors, but this is the only workaround found yet. 
+  errors, but this is the only workaround found yet.
 
 ## Saturday, 7th ##
 
 * Fixed few errors with the **DUMP** command.
 
 * Fixed capitalised letters used inside a **#include** statement in 
-  **Dos9\_UnicodeDir.c** 
+  **Dos9\_UnicodeDir.c**
 
 * Added translation for Hindi thanks to **Karanveer Chouhan \(aka kvc\)**.
 
@@ -2333,7 +2333,7 @@ is a list of improvements I made during from 24th June to today.
 ## Monday 1st, October ##
 
 * Fixed a bug where the closing parenthesis was not recognised as a delimiter 
-  for files names when using redirections. 
+  for files names when using redirections.
 
 ## Wednesday 3rd ##
 
@@ -2412,5 +2412,23 @@ is a list of improvements I made during from 24th June to today.
 * Fixed a bug preventing DOS9\_COLOR\_DEFAULT to work on unix-compatible 
   operating systems.
 
-* Fixed omitted libdl link flag inside Dos9's makefile. 
+* Fixed omitted libdl link flag inside Dos9's makefile.
+
+## Saturday 8th, December ##
+
+* Improved femto by adding femto-clean and by using femto-test.out to avoid 
+  using compiler-default file output \(such as a.exe or a.out\).
+
+* Removed dump.h from git repository \(which is useless since it is 
+  automatically generated with platform-specific values\).
+
+* Fixed 
+
+        make bin
+
+build without prior 
+
+    make all
+
+. 
 

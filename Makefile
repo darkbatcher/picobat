@@ -61,7 +61,7 @@ clean: $(SUBDIRS_CLEAN)
 $(SUBDIRS_CLEAN):
 	$(MAKE) -C $(basename $@) clean
 
-bin: bindir $(SUBDIRS_BIN)
+bin: all bindir $(SUBDIRS_BIN)
 
 dist: bin
 	tar zcf dos9-$(VERSION).tar.gz $(BINDIR)

@@ -29,6 +29,7 @@ NOOPTIONS =$(addprefix no-,$(OPTIONS))
 NOOPTIONSX = $(addsuffix .no-gen,$(NOOPTIONS))
 DEFAULTOPTIONSX = $(addsuffix .no-gen,$(DEFAULTOPTIONS))
 SUBCONF =$(addsuffix .config,$(SUBCONFIG))
+SUBCLEAN =$(addsuffix .femto-clean,$(SUBCONFIG))
 CONFIGVARS = $(addprefix prg_,$(PROGRAMS)) \
 			  $(addprefix path_,$(PROGRAMS)) \
 			  $(addprefix fn_,$(FUNCTIONS)) \
@@ -52,7 +53,7 @@ $(PROGRAMS):
 $(LIBS):
 	@echo "Looking for lib : $@ ..."
 	@echo "int main() { return 0;}" > config.c
-	@if $(CC) config.c $(CFLAGS) $(LDFLAGS) -l$@ -O0 2> /dev/null;	then \
+	@if $(CC) -o femto-test.out config.c $(CFLAGS) $(LDFLAGS) -l$@ -O0 -s 2> /dev/null;	then \
 		echo "lib_$@ = 1" >>  femto-config.mk; \
 		echo "	found"; \
 	else \
@@ -63,7 +64,7 @@ $(LIBS):
 $(FUNCTIONS):
 	@echo "Looking for : $@ ..."
 	@sed -e 's,[@]fn[@],$@,g' -e 's,[@]fnp[@],$(shell echo $@ | sed -e 's,/,_,g' -e 's,[.],_,g'),g'< config.c.in > config.c
-	@if $(CC) config.c $(CFLAGS) $(LDFLAGS) -O0 2> /dev/null; then \
+	@if $(CC) -o femto-test.out config.c $(CFLAGS) $(LDFLAGS) -O0 -s 2> /dev/null; then \
 		echo "fn_$@ = 1" >>  femto-config.mk; \
 		echo "	found"; \
 	else \
@@ -74,7 +75,7 @@ $(FUNCTIONS):
 $(FLAGS):
 	@echo "Looking for flag $@ ..."
 	@sed -e 's,[@]fn[@],$@,g' -e 's,[@]fnp[@],$(shell echo $@ | sed -e 's,/,_,g' -e 's,[.],_,g'),g'< config.c.in > config.c
-	@if $(CC) config.c $(CFLAGS) $(LDFLAGS) -f$@ -O0 2> /dev/null; then \
+	@if $(CC) -o femto-test.out config.c $(CFLAGS) $(LDFLAGS) -f$@ -O0 -s 2> /dev/null; then \
 		echo "flag_$@ = 0" >>  femto-config.mk; \
 		echo "	not supported"; \
 	else \
@@ -109,10 +110,16 @@ config: localmk $(PROGRAMS) $(LIBS) $(FUNCTIONS) $(FLAGS) $(DEFAULTOPTIONSX) $(S
 config.h: femto-subst
 	./femto-subst < config.h.in > config.h
 
+$(SUBCLEAN):
+	$(MAKE) -C $(basename $@) femto-clean
+
+femto-clean: $(SUBCLEAN)
+	rm -f femto-test.out femto-subst femto-config.mk config.h config.c
+
 femto-subst: femto-config.mk
 	echo \#!/bin/sh > femto-subst
 	echo sed $(foreach v,$(CONFIGVARS),-e 's,[@]$(v)[@],$($(v)),g') >> femto-subst
 	chmod +x femto-subst
 
-.PHONY: config config.h localmk $(SUBCONF) $(FUNCTIONS) $(PROGRAMS) $(LIBS) \
+.PHONY: config config.h femto-clean localmk $(SUBCONF) $(FUNCTIONS) $(PROGRAMS) $(LIBS) \
 	$(FLAGS) $(NOOPTIONS) $(NOOPTIONSX) $(USEOPTIONS) $(USEOPTIONSX) femto-subst
