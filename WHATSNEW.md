@@ -2430,5 +2430,10 @@ build without prior
 
     make all
 
-. 
+.
+
+## Thursday 13rd ##
+
+* Changed name of **TEST\_\*\_PATH\(\)** macro families to 
+  **DOS9\_TEST\_\*\_PATH\(\)** to add more consistency to the source code.
 

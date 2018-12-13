@@ -97,7 +97,7 @@ int Dos9__EndWithDirectoryMark(const char* dir)
     while (*dir)
         c = dir ++;
 
-    return TEST_SEPARATOR(c);
+    return DOS9_TEST_SEPARATOR(c);
 }
 
 int Dos9_CmdCopy(char* line)

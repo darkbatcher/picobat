@@ -247,7 +247,7 @@ int Dos9_CmdWc(char* line)
 
         } else {
 
-            if (!TEST_ABSOLUTE_PATH(param->str))
+            if (!DOS9_TEST_ABSOLUTE_PATH(param->str))
                 size = strlen(lpCurrentDir) + 1;
             else
                 size = 0;

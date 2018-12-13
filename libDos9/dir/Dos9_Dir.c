@@ -86,7 +86,9 @@ char* Dos9_GetNextLevel(char* up, char* base, int* jok)
             break;
 
         case '/':
+#ifdef WIN32
         case '\\':
+#endif
             if (joker)
                 return up;
             prev = up;
@@ -163,7 +165,7 @@ static int /* inline */ Dos9_EndWithDirectoryMark(const char *dir)
     while (*dir)
         c = dir++;
 
-    return c ? TEST_SEPARATOR(c) : 0;;
+    return c ? DOS9_TEST_SEPARATOR(c) : 0;
 }
 
 /* Fixme : This function is quite a lot unefficient under windows,
@@ -252,7 +254,7 @@ static FILELIST* Dos9_GetMatch(char* restrict base, char* restrict up, struct ma
                 - \\unc-name\ : A unc path
 
           */
-        if (TEST_ROOT_PATH(up)) {
+        if (DOS9_TEST_ROOT_PATH(up)) {
 
             /* For convenience, if a '/' is
                encountered, just set *base to be the empty string, as no file may
@@ -263,7 +265,7 @@ static FILELIST* Dos9_GetMatch(char* restrict base, char* restrict up, struct ma
             if (up && *up)
                 up ++;
 
-        } else if (TEST_DRIVE_PATH(up)) {
+        } else if (DOS9_TEST_DRIVE_PATH(up)) {
 
             base = basetmp;
             basetmp[0] = *up;
@@ -277,7 +279,7 @@ static FILELIST* Dos9_GetMatch(char* restrict base, char* restrict up, struct ma
             if (up && *up)
                 up++;
 
-        } else if (TEST_UNC_PATH(up)) {
+        } else if (DOS9_TEST_UNC_PATH(up)) {
 
             /* not implemented */
 
@@ -312,7 +314,7 @@ static FILELIST* Dos9_GetMatch(char* restrict base, char* restrict up, struct ma
 
             Dos9_EsCpy(path, base);
             if (!Dos9_EndWithDirectoryMark(path->str))
-                Dos9_EsCat(path, DEF_DELIMITER);
+                Dos9_EsCat(path, DOS9_DEF_DELIMITER);
             Dos9_EsCat(path, item);
 
         } else {
@@ -401,7 +403,7 @@ static FILELIST* Dos9_GetMatch(char* restrict base, char* restrict up, struct ma
             if (base != NULL) {
                 Dos9_EsCpy(path, base);
                 if (!Dos9_EndWithDirectoryMark(path->str))
-                    Dos9_EsCat(path, DEF_DELIMITER);
+                    Dos9_EsCat(path, DOS9_DEF_DELIMITER);
                 Dos9_EsCat(path, ent->d_name);
             } else {
                 Dos9_EsCpy(path, ent->d_name);
@@ -489,7 +491,7 @@ static FILELIST* Dos9_GetMatch(char* restrict base, char* restrict up, struct ma
             if (base != NULL) {
                 Dos9_EsCpy(path, base);
                 if (!Dos9_EndWithDirectoryMark(path->str))
-                    Dos9_EsCat(path, DEF_DELIMITER);
+                    Dos9_EsCat(path, DOS9_DEF_DELIMITER);
                 Dos9_EsCat(path, ent->d_name);
             } else {
                 Dos9_EsCpy(path, ent->d_name);
@@ -845,7 +847,11 @@ LIBDOS9 size_t Dos9_GetStaticLength(const char* str)
 
     while (*str) {
 
-        if (*str == '\\' || *str == '/') {
+        if (
+#ifdef WIN32
+            *str == '\\' ||
+#endif
+            *str == '/') {
 
             ptr = str;
 

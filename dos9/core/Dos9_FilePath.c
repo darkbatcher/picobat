@@ -35,10 +35,10 @@ int Dos9_GetFileFullPath(char* full, const char* p, size_t size)
 {
     char* partial = TRANS(p);
 
-    if (TEST_ABSOLUTE_PATH(partial)) {
+    if (DOS9_TEST_ABSOLUTE_PATH(partial)) {
 
 #ifdef WIN32
-        if (TEST_ROOT_PATH(partial)) {
+        if (DOS9_TEST_ROOT_PATH(partial)) {
             snprintf(full, size, "%c:\\%s", *lpCurrentDir, partial + 1);
 
             if (!Dos9_FileExists(full))
@@ -55,7 +55,7 @@ int Dos9_GetFileFullPath(char* full, const char* p, size_t size)
         return 0;
     }
 
-    snprintf(full, size, "%s" DEF_DELIMITER "%s", lpCurrentDir, partial);
+    snprintf(full, size, "%s" DOS9_DEF_DELIMITER "%s", lpCurrentDir, partial);
 
     if (!Dos9_FileExists(full))
         return -1;
@@ -67,10 +67,10 @@ void __inline__ Dos9_MakeFullPath(char* full, const char* p, size_t size)
 {
     char* partial = TRANS(p);
 
-    if (TEST_ABSOLUTE_PATH(partial)) {
+    if (DOS9_TEST_ABSOLUTE_PATH(partial)) {
 
 #ifdef WIN32
-        if (TEST_ROOT_PATH(partial)) {
+        if (DOS9_TEST_ROOT_PATH(partial)) {
             snprintf(full, size, "%c:\\%s", *lpCurrentDir, partial + 1);
             return;
         }
@@ -81,7 +81,7 @@ void __inline__ Dos9_MakeFullPath(char* full, const char* p, size_t size)
         return;
     }
 
-    snprintf(full, size, "%s" DEF_DELIMITER "%s", lpCurrentDir, partial);
+    snprintf(full, size, "%s" DOS9_DEF_DELIMITER "%s", lpCurrentDir, partial);
 }
 
 void __inline__ Dos9_MakeFullPathEs(ESTR* full, const char* p)
@@ -89,10 +89,10 @@ void __inline__ Dos9_MakeFullPathEs(ESTR* full, const char* p)
     char begin[] = "c:/";
     char* partial = TRANS(p);
 
-    if (TEST_ABSOLUTE_PATH(partial)) {
+    if (DOS9_TEST_ABSOLUTE_PATH(partial)) {
 
 #ifdef WIN32
-        if (TEST_ROOT_PATH(partial)) {
+        if (DOS9_TEST_ROOT_PATH(partial)) {
 
             begin[0] = *lpCurrentDir;
             Dos9_EsCpy(full, begin);
@@ -107,7 +107,7 @@ void __inline__ Dos9_MakeFullPathEs(ESTR* full, const char* p)
     }
 
     Dos9_EsCpy(full, lpCurrentDir);
-    Dos9_EsCat(full, DEF_DELIMITER);
+    Dos9_EsCat(full, DOS9_DEF_DELIMITER);
     Dos9_EsCat(full, partial);
 }
 
@@ -116,10 +116,10 @@ __inline__ char* Dos9_EsToFullPath(ESTR* full)
     size_t len, size;
     const char* p = TRANS(full->str);
 
-    if (TEST_ABSOLUTE_PATH(p)) {
+    if (DOS9_TEST_ABSOLUTE_PATH(p)) {
 
 #ifdef WIN32
-        if (TEST_ROOT_PATH(full->str)) {
+        if (DOS9_TEST_ROOT_PATH(full->str)) {
             /* we need at least two more bytes */
             len = strlen(p) + 1;
 
@@ -161,7 +161,7 @@ __inline__ char* Dos9_EsToFullPath(ESTR* full)
 
     memmove(full->str + size + 1, p, len);
     memcpy(full->str, lpCurrentDir, size);
-    *(full->str + size) = *(DEF_DELIMITER); /* DEF_DELIMITER is a string literal */
+    *(full->str + size) = *(DOS9_DEF_DELIMITER); /* DEF_DELIMITER is a string literal */
 
     return full->str;
 }
@@ -171,11 +171,11 @@ __inline__ char* Dos9_FullPathDup(const char* p)
     char *ret, *path = TRANS(p);
     size_t needed = strlen(path) + 1;
 
-    if (TEST_ABSOLUTE_PATH(path)) {
+    if (DOS9_TEST_ABSOLUTE_PATH(path)) {
         /* this is already absolute */
 
 #ifdef WIN32
-        if (TEST_ROOT_PATH(path)) {
+        if (DOS9_TEST_ROOT_PATH(path)) {
             ret = malloc(2 + needed);
 
             if (!ret)
@@ -207,7 +207,7 @@ __inline__ char* Dos9_FullPathDup(const char* p)
             return NULL;
 
         strcpy(ret, lpCurrentDir);
-        strcat(ret, DEF_DELIMITER);
+        strcat(ret, DOS9_DEF_DELIMITER);
         strcat(ret, path);
 
         return ret;
@@ -231,7 +231,7 @@ int Dos9_GetFilePath(char* lpFullPath, const char* lpPartial, size_t iBufSize)
 	if (lpPathExtBegin == NULL)
         lpPathExtBegin="";
 
-	if (TEST_ABSOLUTE_PATH(lpPartial)) {
+	if (DOS9_TEST_ABSOLUTE_PATH(lpPartial)) {
 		/* if the path is already absolute */
         bLoop = FALSE;
 
@@ -357,7 +357,7 @@ int Dos9_MakePath(ESTR* lpReturn, int nOps, ...)
 			/* if there are no dir terminating characters and still
 			   arguments, just cat a '/' */
 
-			Dos9_EsCat(lpReturn, DEF_DELIMITER);
+			Dos9_EsCat(lpReturn, DOS9_DEF_DELIMITER);
 
 		}
 

@@ -82,20 +82,20 @@ int __inline__ Dos9_Canonicalize(char* path)
     /* first pass to clean multiple separators and "." characters */
     while (*path) {
 
-        if (TEST_SEPARATOR(path))
-            *path = DEF_SEPARATOR;
+        if (DOS9_TEST_SEPARATOR(path))
+            *path = DOS9_DEF_SEPARATOR;
 
-        if (TEST_SEPARATOR(path)) {
+        if (DOS9_TEST_SEPARATOR(path)) {
 
             /* Try to swallow multiple delimiters */
             next = path + 1;
 
 reloop:
-            while (TEST_SEPARATOR(next))
+            while (DOS9_TEST_SEPARATOR(next))
                 next ++;
 
             /* check this not a dull "." folder */
-            if (*next == '.' && TEST_SEPARATOR((next + 1))) {
+            if (*next == '.' && DOS9_TEST_SEPARATOR((next + 1))) {
                 next ++;
                 goto reloop;
             } else if (*next == '.' && *(next + 1) == '\0')
@@ -107,11 +107,11 @@ reloop:
             }
 
             if (*(path + 1) == '.' && *(path + 2) == '.'
-                && (TEST_SEPARATOR((path + 3)) || *(path + 3) == '\0')) {
+                && (DOS9_TEST_SEPARATOR((path + 3)) || *(path + 3) == '\0')) {
 
                 /* Apparently, this folder is "..", find the previous dir & swallow both */
                 previous = path - 1;
-                while (previous >= orig && !TEST_SEPARATOR(previous))
+                while (previous >= orig && !DOS9_TEST_SEPARATOR(previous))
                     previous --;
 
                 if (previous < orig) {
@@ -157,7 +157,7 @@ int Dos9_SetCurrentDir(char* lpLine)
     char *p/*, *p2 = NULL */;
     size_t remain;
 
-    if (TEST_ABSOLUTE_PATH(lpLine)
+    if (DOS9_TEST_ABSOLUTE_PATH(lpLine)
         && Dos9_DirExists(lpLine)) {
 
  #ifdef WIN32

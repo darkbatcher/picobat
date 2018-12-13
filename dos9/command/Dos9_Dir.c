@@ -127,7 +127,7 @@ int Dos9_CmdDir(char* lpLine)
 
 			}
 
-			if (!TEST_ABSOLUTE_PATH(lpToken))
+			if (!DOS9_TEST_ABSOLUTE_PATH(lpToken))
                 nSize = strlen(lpCurrentDir) + 1;
             else
                 nSize = 0;
@@ -141,7 +141,7 @@ int Dos9_CmdDir(char* lpLine)
 		/* if no file or directory name have been specified
 		   the put a correct value on it */
 
-		snprintf(lpFileName, FILENAME_MAX, "%s" DEF_DELIMITER "*", lpCurrentDir);
+		snprintf(lpFileName, FILENAME_MAX, "%s" DOS9_DEF_DELIMITER "*", lpCurrentDir);
 		nSize = strlen(lpCurrentDir) + 1;
 
 	}

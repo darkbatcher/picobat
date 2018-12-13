@@ -436,7 +436,7 @@ int Dos9_CmdForSimple(ESTR* lpInput, PARSED_LINE* lpplLine, char cVarName,
 
                 }
 
-                if (!TEST_ABSOLUTE_PATH(lpesStr->str))
+                if (!DOS9_TEST_ABSOLUTE_PATH(lpesStr->str))
                     nSize = strlen(lpCurrentDir) + 1;
                 else
                     nSize = 0;

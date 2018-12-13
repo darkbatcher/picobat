@@ -382,32 +382,35 @@ LIBDOS9 void            Dos9_GetMousePos(FILE* f, char on_move, CONSOLECOORD* co
 #define DOS9_SEARCH_DIR_MODE 0x10
 
 #ifndef WIN32
-#define TEST_SEPARATOR(p) (*(p) == '/')
-#define TEST_ABSOLUTE_PATH(p) TEST_ROOT_PATH(p)
-#define TEST_UNC_PATH(p)  0
-#define TEST_ROOT_PATH(p) (TEST_SEPARATOR(p) && !TEST_SEPARATOR(p+1))
-#define TEST_DRIVE_PATH(p) 0
-#define DEF_DELIMITER "/"
-#define DEF_SEPARATOR '/'
+#define DOS9_TEST_SEPARATOR(p) (*(p) == '/')
+#define DOS9_TEST_ABSOLUTE_PATH(p) DOS9_TEST_ROOT_PATH(p)
+#define DOS9_TEST_UNC_PATH(p)  0
+#define DOS9_TEST_ROOT_PATH(p) (DOS9_TEST_SEPARATOR(p) && !DOS9_TEST_SEPARATOR(p+1))
+#define DOS9_TEST_DRIVE_PATH(p) 0
+#define DOS9_DEF_DELIMITER "/"
+#define DOS9_DEF_DELIMITERS "/"
+#define DOS9_DEF_SEPARATOR '/'
 #else
 /* The path may refer to a unc-type path */
-#define TEST_SEPARATOR(p) (*(p) == '/' || *(p) == '\\')
-#define TEST_UNC_PATH(p)  (TEST_SEPARATOR(p) && TEST_SEPARATOR(p+1))
-#define TEST_ROOT_PATH(p) (TEST_SEPARATOR(p) && !TEST_SEPARATOR(p+1))
-#define TEST_DRIVE_PATH(p) (*(p) && *(p+1)==':' && TEST_SEPARATOR(p+2))
-#define TEST_ABSOLUTE_PATH(p) (TEST_UNC_PATH(p) || TEST_ROOT_PATH(p) \
-                                || TEST_DRIVE_PATH(p))
-#define DEF_DELIMITER "\\"
-#define DEF_SEPARATOR '\\'
+#define DOS9_TEST_SEPARATOR(p) (*(p) == '/' || *(p) == '\\')
+#define DOS9_TEST_UNC_PATH(p)  (DOS9_TEST_SEPARATOR(p) && DOS9_TEST_SEPARATOR(p+1))
+#define DOS9_TEST_ROOT_PATH(p) (DOS9_TEST_SEPARATOR(p) && !DOS9_TEST_SEPARATOR(p+1))
+#define DOS9_TEST_DRIVE_PATH(p) (*(p) && *(p+1)==':' && DOS9_TEST_SEPARATOR(p+2))
+#define DOS9_TEST_ABSOLUTE_PATH(p) (DOS9_TEST_UNC_PATH(p) || DOS9_TEST_ROOT_PATH(p) \
+                                || DOS9_TEST_DRIVE_PATH(p))
+#define DOS9_DEF_DELIMITER "\\"
+#define DOS9_DEF_DELIMITERS "\\/"
+#define DOS9_DEF_SEPARATOR '\\'
 
-#define TEST_SEPARATOR_W(p) (*(p) == L'/' || *(p) == L'\\')
-#define TEST_UNC_PATH_W(p)  (TEST_SEPARATOR_W(p) && TEST_SEPARATOR_W(p+1))
-#define TEST_ROOT_PATH_W(p) (TEST_SEPARATOR_W(p) && !TEST_SEPARATOR_W(p+1))
-#define TEST_DRIVE_PATH_W(p) (*(p) && *(p+1)==':' && TEST_SEPARATOR_W(p+2))
-#define TEST_ABSOLUTE_PATH_W(p) (TEST_UNC_PATH_W(p) || TEST_ROOT_PATH_W(p) \
-                                || TEST_DRIVE_PATH_W(p))
-#define DEF_DELIMITER_W L"\\"
-#define DEF_SEPARATOR_W L'\\'
+#define DOS9_TEST_SEPARATOR_W(p) (*(p) == L'/' || *(p) == L'\\')
+#define DOS9_TEST_UNC_PATH_W(p)  (DOS9_TEST_SEPARATOR_W(p) && DOS9_TEST_SEPARATOR_W(p+1))
+#define DOS9_TEST_ROOT_PATH_W(p) (DOS9_TEST_SEPARATOR_W(p) && !DOS9_TEST_SEPARATOR_W(p+1))
+#define DOS9_TEST_DRIVE_PATH_W(p) (*(p) && *(p+1)==':' && DOS9_TEST_SEPARATOR_W(p+2))
+#define DOS9_TEST_ABSOLUTE_PATH_W(p) (DOS9_TEST_UNC_PATH_W(p) || DOS9_TEST_ROOT_PATH_W(p) \
+                                || DOS9_TEST_DRIVE_PATH_W(p))
+#define DOS9_DEF_DELIMITER_W L"\\"
+#define DOS9_DEF_DELIMITERS_W L"\\/"
+#define DOS9_DEF_SEPARATOR_W L'\\'
 #endif // _POSIX_C_SOURCE
 
 
