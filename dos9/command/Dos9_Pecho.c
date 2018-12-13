@@ -85,6 +85,8 @@ int Dos9_CmdPrompt(char* lpLine)
 
     if (!strcmp(prompt->str, "/?"))
         Dos9_ShowInternalHelp(DOS9_HELP_PROMPT);
+    else if (strlen(prompt->str) == 0)
+        Dos9_SetEnv(lpeEnv, "PROMPT", "$P$G");
     else
         Dos9_SetEnv(lpeEnv, "PROMPT", prompt->str);
 
