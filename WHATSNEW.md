@@ -2440,5 +2440,7 @@ build without prior
 * Removed old outdated man page reffering to dropped external commands.
 
 * Added a fix to the batbox modules to make color codes portable across all 
-  supported platforms. 
+  supported platforms.
+
+* Fixed man page typos.
 
