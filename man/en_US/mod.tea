@@ -1,0 +1,72 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2018  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+{{MOD Command}}
+
+	The {MOD} command is {dos9|Dos9}-specific command that enable
+	external modules designed for {Dos9} to be loaded at runtime in order
+	to provide extra functionalities through additional internal
+	commands.
+	
+{{Synopsis}}
+
+${MOD [/l] [/q] [module ...]}
+
+	Load or list loaded modules.
+	
+	- {/l} : List loaded modules.
+	
+	- {/q} : Ignore {module} silently if it has already been loaded.
+	
+	- {module} : A path to the module to be loaded. If {module} is
+	a relative path, then the associated file is searched using the
+	current directory as base folder. If no such file is found,
+	Dos9 loop through directories listed in {%PATH%} and use them
+    as base folders in order to find the associated file.	
+	
+	Trying to load binaries not intended to be used as modules may
+	cause {Dos9} to crash, or cause memory leaks. Thus it is
+	advised to pay extra attention not to provide ambiguous file
+	names in order to avoid that threat.
+	
+	As {Dos9} is multi-threaded, there is now way a module can be
+	unloaded without making other threads potentially unstable. Thus,
+	unloading modules is not possible. To discard a loaded module,
+	{Dos9} needs to be restarted.
+	
+	The module features might be disabled on systems that do not
+	provide a way to link dynamically at a runtime, such as Android
+	for example.
+	
+{{Modules files}}
+
+	Modules files are executables that can be dynamically loaded
+	by {Dos9} and that have been programmed to add commands to
+	the interpretor.
+	
+	The process of writing a module for Dos9 and their
+	capabilities are described inside the {GUIDELINES} file of the
+	source distribution.
+
+{{Compatibility}}
+
+	Not compatible with {cmd.exe}, this is an extension. Available
+	since version {218.3}.
+	
+{{See also}}
+
+	{modules/batbox|Batbox modules}

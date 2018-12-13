@@ -2446,3 +2446,5 @@ build without prior
 
 * Added manual page for the **VER** command.
 
+* Added manual page for the **MOD** command.
+
