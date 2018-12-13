@@ -34,6 +34,29 @@ FILE *tty = NULL;
 #define TTY_MODE "w+"
 #endif // WIN32
 
+#ifdef WIN32
+#define PORTABLE_COLOR(x) x
+#else
+/* On windows, colors are different than on unix :
+
+    win32           UNIX
+
+    1 = blue        1 = red
+    2 = green       2 = green
+    4 = red         4 = blue
+
+ */
+#define PORTABLE_COLOR(x) (FOREGROUND_COLOR(x) | BACKGROUND_COLOR(x))
+#define BACKGROUND_COLOR(x) ((((x) & 8) ? DOS9_BACKGROUND_INT : 0) \
+                           | (((x) & 1) ? DOS9_BACKGROUND_BLUE : 0) \
+                           | (((x) & 2) ? DOS9_BACKGROUND_GREEN : 0) \
+                           | (((x) & 4) ? DOS9_BACKGROUND_RED : 0))
+#define FOREGROUND_COLOR(x) ((((x) & 0x80) ? DOS9_FOREGROUND_INT : 0) \
+                           | (((x) & 0x10) ? DOS9_FOREGROUND_BLUE : 0) \
+                           | (((x) & 0x20) ? DOS9_FOREGROUND_GREEN : 0) \
+                           | (((x) & 0x40) ? DOS9_FOREGROUND_RED : 0))
+#endif
+
 void Dos9_ModuleAttach(void)
 {
     if (!tty
@@ -176,7 +199,7 @@ int batbox(char* cmd)
 
             if (cmd = Dos9_GetNextParameterEs(cmd, param))
                 Dos9_SetConsoleTextColor(Dos9_GetfOutput(),
-                                         args_get_number(param->str));
+                                         PORTABLE_COLOR(args_get_number(param->str)));
 
         } else if (fast_switch_cmp(param->str, 'k')
                    || fast_switch_cmp(param->str, 'l')) {
