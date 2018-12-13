@@ -2437,3 +2437,5 @@ build without prior
 * Changed name of **TEST\_\*\_PATH\(\)** macro families to 
   **DOS9\_TEST\_\*\_PATH\(\)** to add more consistency to the source code.
 
+* Removed old outdated man page reffering to dropped external commands. 
+
