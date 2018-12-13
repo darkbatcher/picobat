@@ -2444,3 +2444,5 @@ build without prior
 
 * Fixed man page typos.
 
+* Added manual page for the **VER** command.
+
