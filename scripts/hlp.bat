@@ -40,8 +40,8 @@ if /i "%~1" neq "/?" goto :show
 
 
 ECHO Hlp 1.0 - Manual page viewier
-ECHO Copyright ^(C^) 2013-2016 Romain Garbi ^(Darkbatcher^)
-ECHO Copyright ^(C^) 2016      Teddy Astie ^(TSnake41^)
+ECHO Copyright ^(C^) 2013-2018 Romain Garbi ^(Darkbatcher^)
+ECHO Copyright ^(C^) 2016-2018 Teddy Astie ^(TSnake41^)
 ECHO This program comes with ABSOLUTELY NO WARRANTY; This is free software,
 ECHO and you are welcome to redistribute it under the terms of the GNU CPL.
 ECHO.

@@ -2448,3 +2448,7 @@ build without prior
 
 * Added manual page for the **MOD** command.
 
+## Sunday 15th, December ##
+
+* Fixed searching issues with hlp script and implemented **help /l**. 
+
