@@ -61,6 +61,8 @@ ECHO        - language : The language to be used to build the manual page.
 ECHO.
 ECHO     - /c : configures option for the manual page maker.
 ECHO.
+ECHO     - /l : Show the list of available manual pages.
+ECHO.
 ECHO     - /d : download the manual package from the repository at
 ECHO       ^<http://www.dos9.org^>. [not functional yet]    
 
@@ -178,10 +180,10 @@ dir /b /s /a:-d') do (
 :: Now, create the hlpdb file
 ECHO.
 ECHO.4] Create title search system
-FOR /F "tokens=*" %%A in ('dir /b /s /a:-D txt/*.txt') do (
+(FOR /F "tokens=*" %%A in ('dir /b /s /a:-D txt/*.txt') do (
 	SET /p title= < "%%A" > NUL
 	ECHO !title!%%A
-) > hlpdb
+)) > hlpdb
 
 ECHO.
 ECHO.5] Cleanning temporary files
@@ -256,6 +258,10 @@ if not defined HlpPath[!choice!] goto :retry
 %view_cmd% !HlpPath[%choice%]!
 
 GOTO:EOF
+
+:list
+for /f "tokens=1,2 delims=" %%A in (!hlp_base_dir!/hlpdb) do echo %%~A
+goto :eof
 
 :config
 if exist hlp.conf.bat call hlp.conf.bat
