@@ -231,8 +231,11 @@ int Dos9_GetFilePath(char* lpFullPath, const char* lpPartial, size_t iBufSize)
 	if (lpPathExtBegin == NULL)
         lpPathExtBegin="";
 
-	if (DOS9_TEST_ABSOLUTE_PATH(lpPartial)) {
-		/* if the path is already absolute */
+	if (DOS9_TEST_ABSOLUTE_PATH(lpPartial)
+        || strpbrk(lpPartial, DOS9_DEF_DELIMITERS)) {
+		/* if the path is already absolute, or if the path include
+		   directory delimiters, do not loop through %PATH% listed
+		   files. */
         bLoop = FALSE;
 
 	}

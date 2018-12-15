@@ -2450,5 +2450,8 @@ build without prior
 
 ## Sunday 15th, December ##
 
-* Fixed searching issues with hlp script and implemented **help /l**. 
+* Fixed searching issues with hlp script and implemented **help /l**.
+
+* Fixed a little bug that caused %PATH% search functions to loop through 
+  %PATH% files even when given a relative path. 
 
