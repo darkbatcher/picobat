@@ -314,7 +314,24 @@ int Dos9_CmdMod(char* line)
             mode = QUIET;
         else {
 
-            if (Dos9_GetFilePath(path, param->str, FILENAME_MAX) == -1) {
+            if (!DOS9_TEST_ABSOLUTE_PATH(param->str)) {
+
+                /* if the path is not absolute, then the command is refferring
+                   to something in %DOS9_PATH%/modules */
+
+                ESTR* tmp = Dos9_EsInit();
+
+                Dos9_MakePath(tmp, 3, Dos9_GetEnv(lpeEnv, "DOS9_PATH"), "modules", param->str);
+
+                Dos9_EsFree(param);
+                param = tmp;
+
+
+            }
+
+            path = param->str;
+
+            if (!Dos9_FileExists(path)) {
 
                 Dos9_ShowErrorMessage(DOS9_FILE_ERROR, param->str, 0);
                 status = DOS9_FILE_ERROR;
@@ -345,8 +362,6 @@ end:
                                __FILE__ "/Dos9_CmdMod",
                                -1);
 
-    if (path)
-        free(path);
     Dos9_EsFree(param);
 
     return status;

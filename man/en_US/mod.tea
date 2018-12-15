@@ -33,26 +33,10 @@ ${MOD [/l] [/q] [module ...]}
 	- {/q} : Ignore {module} silently if it has already been loaded.
 	
 	- {module} : A path to the module to be loaded. If {module} is
-	a relative path, then the associated file is searched using the
-	current directory as base folder. If no such file is found,
-	Dos9 loop through directories listed in {%PATH%} and use them
-    as base folders in order to find the associated file.	
-	
-	Trying to load binaries not intended to be used as modules may
-	cause {Dos9} to crash, or cause memory leaks. Thus it is
-	advised to pay extra attention not to provide ambiguous file
-	names in order to avoid that threat.
-	
-	As {Dos9} is multi-threaded, there is now way a module can be
-	unloaded without making other threads potentially unstable. Thus,
-	unloading modules is not possible. To discard a loaded module,
-	{Dos9} needs to be restarted.
-	
-	The module features might be disabled on systems that do not
-	provide a way to link dynamically at a runtime, such as Android
-	for example.
-	
-{{Modules files}}
+	a relative path, then the associated file is searched inside the
+    module default path (which is {%DOS9_PATH%/modules}). If {module}
+    is an absolute path, the preceding behaviour is overridden and {MOD} tries
+    to load the file referred to by {module}.
 
 	Modules files are executables that can be dynamically loaded
 	by {Dos9} and that have been programmed to add commands to

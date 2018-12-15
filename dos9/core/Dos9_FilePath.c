@@ -354,7 +354,9 @@ int Dos9_MakePath(ESTR* lpReturn, int nOps, ...)
 		lpEnd=Dos9_GetLastChar(lpReturn);
 
 		if (*lpBegin!='\0'
+#ifdef WIN32
 		    && *lpEnd!='\\'
+#endif
 		    && *lpEnd!='/') {
 
 			/* if there are no dir terminating characters and still
