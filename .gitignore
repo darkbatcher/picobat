@@ -6,9 +6,9 @@
 *.mo
 *.txt
 bin/
-a.out
 femto-subst
 femto-config.mk
+femto-test\.out
 config.c
 config.h
 libcu8/config.h
@@ -28,6 +28,9 @@ dump/dump
 tea/tea
 build-dbg\.sh
 build-musl\.sh
-
 dump/dump_h_gen
 scripts/Dos9_Auto\.bat
+dump/dump.h
+libmatheval/femto-test\.out
+modules/batbox/batbox
+modules/sample/sample
