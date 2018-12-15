@@ -2453,5 +2453,13 @@ build without prior
 * Fixed searching issues with hlp script and implemented **help /l**.
 
 * Fixed a little bug that caused %PATH% search functions to loop through 
-  %PATH% files even when given a relative path. 
+  %PATH% files even when given a relative path.
+
+* Changed the behaviour of the **MOD** command. Modules are now search by 
+  default inside **%DOS9\_PATH%/modules** \(rather that in the whole 
+  **%PATH%** directories\), unless if the module file name is absolute; in 
+  that case **MOD** uses the file referred to by the absolute path.
+
+* Fixed a bug of **SET /a:f**. When expression contained spaces, the return 
+  value was systematically 0. 
 
