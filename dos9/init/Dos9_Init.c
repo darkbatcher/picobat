@@ -256,10 +256,10 @@ void Dos9_InitHelp(void)
        line terminators, since the stdout file descriptor is bound to be text
        oriented when this portion of code is to be executed */
 
-    puts("DOS9 [" DOS9_VERSION "] (" DOS9_HOST ") - " DOS9_BUILDDATE "\n"
-         "Copyright (c) 2010-" DOS9_BUILDYEAR " " DOS9_AUTHORS "\n" );
+    fputs("DOS9 [" DOS9_VERSION "] (" DOS9_HOST ") - " DOS9_BUILDDATE "\n"
+         "Copyright (c) 2010-" DOS9_BUILDYEAR " " DOS9_AUTHORS "\n\n", fError);
 
-    puts(lpHlpMain);
+    fputs(lpHlpMain, fError);
 
     exit(0);
 }

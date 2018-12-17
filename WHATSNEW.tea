@@ -2344,21 +2344,21 @@ ${(for %%a in (foo bar) do echo %%a) & echo loop}
 		automatically generated with platform-specific values).
 
 		- Fixed ${make bin} build without prior ${make all}.
-		
+
 {{Thursday 13rd}}
 
 	- Changed name of {TEST_*_PATH()} macro families to {DOS9_TEST_*_PATH()}
 	to add more consistency to the source code.
-	
+
 	- Removed old outdated man page reffering to dropped external commands.
 
 	- Added a fix to the batbox modules to make color codes portable across
 	all supported platforms.
-	
+
 	- Fixed man page typos.
-	
+
 	- Added manual page for the {VER} command.
-	
+
 	- Added manual page for the {MOD} command.
 
 {{Sunday 15th, December}}
@@ -2375,3 +2375,9 @@ ${(for %%a in (foo bar) do echo %%a) & echo loop}
 
     - Fixed a bug of {SET /a:f}. When expression contained spaces, the return
     value was systematically 0.
+
+{{Monday 16th, December}}
+
+    - Improved consistency between {command /?}, now {dos9 /?} and {dump /?} use
+      stderr/fError instead of stdout as output (which is more consistent with
+      internal commands).

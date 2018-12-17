@@ -138,30 +138,29 @@ struct dump_types_t types[] = {
 
 void help(void)
 {
-    puts("Dos9 dump [2.0] (" HOST ") - " __DATE__ "\n"
-            "Copyright (c) 2013-2018 Romain Garbi\n");
+    fputs("Dos9 dump [2.0] (" HOST ") - " __DATE__ "\n"
+          "Copyright (c) 2013-2018 Romain Garbi\n\n", stderr);
 
-    puts("Usage: dump [/H] [/B[:]format] [/T[:]type] [files ...]\n"
-         "Dump content of files.\n\n"
-         "\t- files ... : A list of files to be dumped.\n"
-         "\t- /h : Hexadecimal dump.\n"
-         "\t- /b:format : Set display format. Combination of:\n"
-         "\t\t- A : display addresses.\n"
-         "\t\t- T : display title.\n"
-         "\t\t- C : display chars.\n"
-         "\t\t- Q : display no spaces\n"
-         "\t- /T[:]type : Set dumped elements types. One of:\n"
-         "\t\t- c : char\n"
-         "\t\t- uc : unsigned char\n"
-         "\t\t- s : short\n"
-         "\t\t- us : unsigned short\n"
-         "\t\t- i : int\n"
-         "\t\t- ui : unsigned int\n"
-         "\t\t- ll : long long\n"
-         "\t\t- ull : unsigned long long\n"
-         "\t\t- f : float\n"
-         "\t\t- d : double"
-         );
+    fputs("Usage: dump [/H] [/B[:]format] [/T[:]type] [files ...]\n"
+          "Dump content of files.\n\n"
+          "\t- files ... : A list of files to be dumped.\n"
+          "\t- /h : Hexadecimal dump.\n"
+          "\t- /b:format : Set display format. Combination of:\n"
+          "\t\t- A : display addresses.\n"
+          "\t\t- T : display title.\n"
+          "\t\t- C : display chars.\n"
+          "\t\t- Q : display no spaces\n"
+          "\t- /T[:]type : Set dumped elements types. One of:\n"
+          "\t\t- c : char\n"
+          "\t\t- uc : unsigned char\n"
+          "\t\t- s : short\n"
+          "\t\t- us : unsigned short\n"
+          "\t\t- i : int\n"
+          "\t\t- ui : unsigned int\n"
+          "\t\t- ll : long long\n"
+          "\t\t- ull : unsigned long long\n"
+          "\t\t- f : float\n"
+          "\t\t- d : double\n", stderr);
 }
 
 int get_max(int i, int j)

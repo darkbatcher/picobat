@@ -145,7 +145,7 @@ Usage:\tDOS9 [/A[:]attr] [/I in] [/O out] [file ... | /K cmd ...|/C cmd ...]\n\n
 \t/C cmd\tRun cmd command and exit.\n\
 \t/K cmd\tRun cmd command and stay active.\n\n\
 Feel free to report bugs and submit suggestions at : <darkbatcher@dos9.org>\n\
-For more informations see : <http://dos9.org>");
+For more informations see : <http://dos9.org>\n");
 
     lpManyCompletionOptions=gettext("%d files matching, print anyway ?");
 

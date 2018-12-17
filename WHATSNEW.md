@@ -2461,5 +2461,11 @@ build without prior
   that case **MOD** uses the file referred to by the absolute path.
 
 * Fixed a bug of **SET /a:f**. When expression contained spaces, the return 
-  value was systematically 0. 
+  value was systematically 0.
+
+## Monday 16th, December ##
+
+* Improved consistency between **command /?**, now **dos9 /?** and **dump 
+  /?** use stderr/fError instead of stdout as output \(which is more 
+  consistent with internal commands\). 
 
