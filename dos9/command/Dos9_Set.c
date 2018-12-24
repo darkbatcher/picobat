@@ -347,8 +347,7 @@ int Dos9_CmdSetP(char* lpLine)
 	char* lpEqual;
 	int status = DOS9_NO_ERROR;
 
-	while (*lpLine==' ' || *lpLine=='\t') lpLine++;
-
+	lpLine = Dos9_SkipBlanks(lpLine);
 
     /* If the expression starts with an ", use get parameter
        to process the token in a clean way */
@@ -368,10 +367,12 @@ int Dos9_CmdSetP(char* lpLine)
 		*lpEqual='\0';
 		lpEqual++;
 
-
 		fprintf(fOutput, "%s", lpEqual);
 
-		Dos9_EsGet(lpEsInput, fInput);
+		INPUT_FILE file;
+        *(file.lpFileName) = '\0';
+
+		Dos9_GetLine(lpEsInput, &file);
 
 		if ((lpEqual=strchr(Dos9_EsToChar(lpEsInput), '\n')))
 			*lpEqual='\0';

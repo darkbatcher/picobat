@@ -2448,6 +2448,8 @@ build without prior
 
 * Added manual page for the **MOD** command.
 
+<<<<<<< HEAD 
+
 ## Sunday 15th, December ##
 
 * Fixed searching issues with hlp script and implemented **help /l**.
@@ -2467,5 +2469,9 @@ build without prior
 
 * Improved consistency between **command /?**, now **dos9 /?** and **dump 
   /?** use stderr/fError instead of stdout as output \(which is more 
-  consistent with internal commands\). 
+  consistent with internal commands\).
+
+## Monday 24th ##
+
+* Fixed set /p not providing history features under both windows and unices. 
 
