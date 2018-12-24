@@ -2473,5 +2473,7 @@ build without prior
 
 ## Monday 24th ##
 
-* Fixed set /p not providing history features under both windows and unices. 
+* Fixed set /p not providing history features under both windows and unices.
+
+* Switched to version 218.3 
 
