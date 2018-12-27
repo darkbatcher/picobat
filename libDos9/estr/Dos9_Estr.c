@@ -36,7 +36,7 @@
 //#define DOS9_ESTR_SIZE(s) ((s) / DEFAULT_ESTR + 1) * DEFAULT_ESTR
 #define DOS9_ESTR_SIZE(s) __fast_compute_size(s)
 
-int __inline__ __fast_compute_size(size_t s)
+static int __inline__ __fast_compute_size(size_t s)
 {
     size_t r = DEFAULT_ESTR;
     while (r < s)

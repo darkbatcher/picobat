@@ -2480,5 +2480,7 @@ build without prior
 ## Thursday 27th ##
 
 * Fixed missing documentation for **batbox** modules. Modified **README** and 
-  **GUIDELINES**. 
+  **GUIDELINES**.
+
+* Fixed missing static qualifiers in libDos9. 
 

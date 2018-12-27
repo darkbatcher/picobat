@@ -30,7 +30,7 @@
 #include "../../config.h"
 
 #if defined(WIN32)
-HANDLE __inline__ _Dos9_GetHandle(FILE* f)
+static HANDLE __inline__ _Dos9_GetHandle(FILE* f)
 {
     HANDLE h = (HANDLE)_get_osfhandle(fileno(f));
     DWORD mode;
