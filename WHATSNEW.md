@@ -2482,5 +2482,7 @@ build without prior
 * Fixed missing documentation for **batbox** modules. Modified **README** and 
   **GUIDELINES**.
 
-* Fixed missing static qualifiers in libDos9. 
+* Fixed missing static qualifiers in libDos9.
+
+* Fixed recursive file search under Linux and non-unicode windows. 
 

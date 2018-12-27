@@ -300,9 +300,9 @@ static FILELIST* Dos9_GetMatch(char* restrict base, char* restrict up, struct ma
 
     } else if ((up = Dos9_GetNextLevel(up, base, &joker))) {
 
-        cleanup = up;
-        *cleanup = '\0';
-        up ++;
+      cleanup = up;
+      *cleanup = '\0';
+       up ++;
 
     }
 
@@ -430,7 +430,7 @@ static FILELIST* Dos9_GetMatch(char* restrict base, char* restrict up, struct ma
                 up is NULL*/
                 if (up == NULL) {
 
-                    /* add the file and browse if recursive. If the returns uses
+                    /* add the directory and browse if recursive. If the returns uses
                        callback, do not forget to add match first. */
                     if ((arg->callback != NULL)) {
                         if ((tmp = Dos9_AddMatch(path->str, ret, arg)) == NULL)
@@ -485,7 +485,8 @@ static FILELIST* Dos9_GetMatch(char* restrict base, char* restrict up, struct ma
             }
 
         } else if ((arg->flags & DOS9_SEARCH_RECURSIVE)
-                   && Dos9_DirExists(ent->d_name)) {
+                    && up == NULL
+                    && (strcmp(ent->d_name, ".") && strcmp(ent->d_name, ".."))) {
 
             /* Compute the path of the current matching entity */
             if (base != NULL) {
@@ -497,10 +498,14 @@ static FILELIST* Dos9_GetMatch(char* restrict base, char* restrict up, struct ma
                 Dos9_EsCpy(path, ent->d_name);
             }
 
-            /* if it does not match *but* we are in recursive mode, browse
-               anyway */
-            arg->files = ret;
-            ret = Dos9_GetMatch(path->str, up, arg);
+            if (Dos9_DirExists(path->str)) {
+
+                /* if it does not match *but* we are in recursive mode, browse
+                   anyway */
+                arg->files = ret;
+                ret = Dos9_GetMatch(path->str, item, arg);
+
+            }
 
         }
 
