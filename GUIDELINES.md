@@ -268,6 +268,62 @@ displayed as a complement to the error message. If **iExitCode** is different
 from 0, then the function terminates the Dos9 process with **iErrorNumber** as 
 exit code.
 
+## Creating Modules ##
+
+The version **218.3** introducted the possibility to load modules in order to 
+load additionnal commands at run-time, providing the possibility to 
+dynamically extend Dos9. 
+
+The module feature requires a platform providing a way to link dynamically. 
+Some platforms such as Android do not provide such interfaces, thus the module 
+feature can be disabled when building using:
+
+    make no-modules
+
+Modules examples are provided inside the **modules/** directory. Files located 
+in **modules/lib** contain files used to build interfaces between modules and 
+Dos9. Thus, when compiling a module, it is mandatory to link against 
+**modules/lib/Dos9\_Module.o** if you use C/C++ or to provide equivalent 
+interfaces bindings through the programming language you use.
+
+Modules interfaces provide a way for modules to fetch and modify internal 
+parameters of the main **Dos9** process. For instance, modules can get 
+standard stream of the current Dos9 thread, or get and modify its environment 
+variables.
+
+Interfaces provided to modules are the following :
+
+    /* Set environment variable *name to *content */
+    void Dos9_SetEnv(const char* name, const char* content);
+    /* Get the content of variable *name */
+    char* Dos9_GetEnv(const char* name);
+    /* Get the current directory */
+    const char* Dos9_GetCurrentDir(void);
+    /* Set the current directory to *dir */
+    int Dos9_SetCurrentDir(const char* dir);
+    /* Get fInput */
+    FILE* Dos9_GetfInput(void);
+    /* Get fOutput */
+    FILE* Dos9_GetfOutput(void);
+    /* Get fError */
+    FILE* Dos9_GetfError(void);
+    /* Get bIsScript */
+    int Dos9_GetbIsScript(void);
+    /* Same as parameters functions */
+    char* Dos9_GetNextParameterEs(const char* line, ESTR* recv);
+    /* Register a new internal command named after *name, using *fn as a handler*/
+    int Dos9_RegisterCommand(const char* name, int(*fn)(char*));
+    /* Same as Dos9_ShowErrorMessage() */
+    void Dos9_ShowErrorMessage(int err, const char* str, int exitcode);
+    /* Same as Dos9_RunLine */
+    int Dos9_RunLine(ESTR* line);
+
+When a module gets loaded by **Dos9**, the module function 
+**Dos9\_ModuleAttach\(\)** is called just after completing interfaces set-up. 
+This allow for some module specific set-up \(such as global variables or 
+libraries initialization\) and registration of commands provided by modules 
+using **Dos9\_RegisterCommand\(\)**.
+
 ## Using gettext ##
 
 **Dos9** uses gettext to manage internationalized messages. Messages are 

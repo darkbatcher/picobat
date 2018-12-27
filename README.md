@@ -76,6 +76,10 @@ On the other hand, Dos9 also provides you with with a bunch of extensions:
          :: some code 
         )
 
+* A module system allowing extension loading at run-time. This offer numbers 
+  of possibilities from graphical user interfaces to networking extensions. 
+  Currently, the only module provided is the **BATBOX** module.
+
 * To speed up parsing, Dos9 loads files entirely in memory at startup. If the 
   file gets modified during its execution, it is reloaded and Dos9 restarts on 
   the next line \(counting lines from the begining\). This can also be 

@@ -2477,3 +2477,8 @@ build without prior
 
 * Switched to version 218.3 
 
+## Thursday 27th ##
+
+* Fixed missing documentation for **batbox** modules. Modified **README** and 
+  **GUIDELINES**. 
+
