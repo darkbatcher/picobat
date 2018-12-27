@@ -553,7 +553,11 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 				Dos9_EsCat(lpRecieve, lpDrive);
 
 				if (cFlag[i+1] == 'p')
+#ifdef WIN32
                     Dos9_EsCat(lpRecieve, "/");
+#else
+                    ;
+#endif
 				else if (cFlag[i+1]!=0)
 					Dos9_EsCat(lpRecieve, "\t");
 

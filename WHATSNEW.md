@@ -2484,5 +2484,7 @@ build without prior
 
 * Fixed missing static qualifiers in libDos9.
 
-* Fixed recursive file search under Linux and non-unicode windows. 
+* Fixed recursive file search under Linux and non-unicode windows.
+
+* Fixed a bug with **%~d** under \*nices causing double root symbol on paths. 
 
