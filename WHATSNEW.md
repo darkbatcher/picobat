@@ -2486,5 +2486,10 @@ build without prior
 
 * Fixed recursive file search under Linux and non-unicode windows.
 
-* Fixed a bug with **%~d** under \*nices causing double root symbol on paths. 
+* Fixed a bug with **%~d** under \*nices causing double root symbol on paths.
+
+## Monday, Junuary 14th ##
+
+* Added **src-dist** target to **Makefile** to automatically build source code 
+  tarballs reade to be distributed and/or uploaded on the website. 
 

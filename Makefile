@@ -65,6 +65,9 @@ bin: all bindir $(SUBDIRS_BIN)
 
 dist: bin
 	tar zcf dos9-$(VERSION).tar.gz $(BINDIR)
+	
+src-dist:
+	tar zcf dos9-$(VERSION)-src.tar.gz --transform 's,^,dos9-$(VERSION)/,' `git ls-files`
 
 git-dist: bin
 	tar zcf dos9-$(VERSION)-`git rev-parse --short HEAD`.tar.gz $(BINDIR)
