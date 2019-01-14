@@ -50,7 +50,7 @@
 
         )
 
-    * For each interger value in a range of values
+    * For each integer value in a range of values
 
         FOR /L %%A IN (begin, increment, end) DO (
 
@@ -1207,8 +1207,6 @@ int Dos9_ForMakeInputInfo(ESTR* lpInput, INPUTINFO* lpipInfo, FORINFO* lpfrInfo)
 
 			}
 
-			//printf("... Opened\n");
-
 			break;
 
 		case INPUTINFO_TYPE_STRING:
@@ -1242,7 +1240,7 @@ int Dos9_ForMakeInputInfo(ESTR* lpInput, INPUTINFO* lpipInfo, FORINFO* lpfrInfo)
 			}
 
 			/* Launch the actual command from which we get input on a separate
-               Dos9 process */
+               Dos9 thread */
 			if ((status = Dos9_ForInputProcess(lpInput, lpipInfo, iPipeFd)))
 				return status;
 
@@ -1294,7 +1292,7 @@ void Dos9_ExecuteForSubCommand(struct pipe_launch_data_t* arg)
     close(arg->fd);
 
     bIgnoreExit = TRUE;
-
+	
     bkBlock.lpBegin = Dos9_EsToChar(arg->str);
     bkBlock.lpEnd = bkBlock.lpBegin;
 

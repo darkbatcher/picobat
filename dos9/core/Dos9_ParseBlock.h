@@ -39,7 +39,7 @@ char* Dos9_GetNextBlockEnd(char* lpCh);
 
 /* Get the end of a line, taking account of multiples
    blocks on a single line */
-#define Dos9_GetBlockLineEnd(pch) Dos9_GetBlockLineEndEx(pch, 1)
+#define Dos9_GetBlockLineEnd(pch) Dos9_GetBlockLineEndEx(pch, 0)
 char* Dos9_GetBlockLineEndEx(char* lpCh, int par_end);
 
 /* get the begining of the very first next block*/

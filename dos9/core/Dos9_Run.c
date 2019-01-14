@@ -472,10 +472,11 @@ RestartSearch:
 int Dos9_RunBlock(BLOCKINFO* lpbkInfo)
 {
 
-	ESTR *lpEsLine=Dos9_EsInit();
+	ESTR *lpEsLine = Dos9_EsInit(),
+		 *lpEsBlock = Dos9_EsInit();
 
-	char *lpToken = lpbkInfo->lpBegin,
-         *lpEnd = lpbkInfo->lpEnd,
+	char *lpToken,
+         *lpEnd,
          *lpBlockBegin,
          *lpBlockEnd,
          *lpNl;
@@ -489,6 +490,24 @@ int Dos9_RunBlock(BLOCKINFO* lpbkInfo)
 	iOldState=Dos9_GetStreamStackLockState(lppsStreamStack);
 	Dos9_SetStreamStackLockState(lppsStreamStack, TRUE);
 
+
+			
+	if (lpbkInfo->lpEnd == NULL) {
+		
+		Dos9_EsCpy(lpEsBlock, lpbkInfo->lpBegin);
+		lpEnd = lpEsBlock->str + strlen(lpEsBlock->str);
+		
+	} else {
+	
+		Dos9_EsCpyN(lpEsBlock,  lpbkInfo->lpBegin, 
+				(size_t)(lpbkInfo->lpEnd - lpbkInfo->lpBegin));
+		lpEnd = lpEsBlock->str + (size_t)(lpbkInfo->lpEnd - 
+					lpbkInfo->lpBegin);	
+	}			
+	
+	lpToken = lpEsBlock->str;
+    
+	
 	DOS9_DBG("Block_b=\"%s\"\n"
 	         "Block_e=\"%s\"\n",
 	         lpToken,
@@ -553,6 +572,7 @@ int Dos9_RunBlock(BLOCKINFO* lpbkInfo)
 	Dos9_SetStreamStackLockState(lppsStreamStack, iOldState);
 
 	Dos9_EsFree(lpEsLine);
+	Dos9_EsFree(lpEsBlock);
 
 	return iErrorLevel;
 }
