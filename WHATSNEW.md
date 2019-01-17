@@ -2486,5 +2486,18 @@ build without prior
 
 * Fixed recursive file search under Linux and non-unicode windows.
 
-* Fixed a bug with **%~d** under \*nices causing double root symbol on paths. 
+* Fixed a bug with **%~d** under \*nices causing double root symbol on paths.
+
+## Monday, Junuary 14th ##
+
+* Added **src-dist** target to **Makefile** to automatically build source code 
+  tarballs reade to be distributed and/or uploaded on the website.
+
+* Fixed a bug involving **Dos9\_RunBlock\(\)** not parsing blocks correctly.
+
+## Thursday 17th ##
+
+* Finally fixed **hlp.bat** to make it able to be run from any directory, 
+  especially when the said directory names contains parenthesis or spaces 
+  \(what is very often the case under windows\). 
 

@@ -121,7 +121,7 @@ txt
 
 :: browse the directory and make subirectories that
 :: are not existing.
-FOR /F "tokens=*" %%A in ('cd %hlp_data_dir%/%lang_build%
+FOR /F "tokens=*" %%A in ('cd !hlp_data_dir!/!lang_build!
 dir /b /s /a:d') do (
 	
 	ECHO 	* Creating %%A
@@ -140,7 +140,7 @@ dir /b /s /a:d') do (
 ECHO.
 ECHO. 3] Produce the output :
 :: browse the directory and use tea to produce the output.
-FOR /F "tokens=*" %%A in ('cd %hlp_data_dir%/%lang_build%
+FOR /F "tokens=*" %%A in ('cd !hlp_data_dir!/!lang_build!
 dir /b /s /a:-d') do (
 
 	:: unfortunately, we used %~dpnA before to get all the stuff
@@ -154,15 +154,14 @@ dir /b /s /a:-d') do (
 	SET txt_build=txt/!name:.tea=!.txt
 	
 	ECHO    [*] Building "!name:.tea=!" :
-
 	ECHO      - file : !txt_build!
-	tea "%hlp_data_dir%/%lang_build%/%%A" !txt_build!.tmp /E:UTF-8 /O:TEXT-PLAIN
+	tea "%hlp_data_dir%/%lang_build%/%%~A" !txt_build!.tmp /E:UTF-8 /O:TEXT-PLAIN
 
 	ECHO      - file : !ansi_build!
-	tea "%hlp_data_dir%/%lang_build%/%%A" !ansi_build!.tmp /E:UTF-8 /O:TEXT-ANSI
+	tea "%hlp_data_dir%/%lang_build%/%%~A" !ansi_build!.tmp /E:UTF-8 /O:TEXT-ANSI
 
 	ECHO      - file : !html_build!
-    tea "%hlp_data_dir%/%lang_build%/%%A" !html_build! /E:UTF-8 /O:html /M "%hlp_data_dir%/meta" /H "%hlp_data_dir%/header" /F "%hlp_data_dir%/footer" /T "The Dos9 Project :: "
+    tea "%hlp_data_dir%/%lang_build%/%%~A" !html_build! /E:UTF-8 /O:html /M "%hlp_data_dir%/meta" /H "%hlp_data_dir%/header" /F "%hlp_data_dir%/footer" /T "The Dos9 Project :: "
 
 	ECHO      - converting output from UTF-8 to %charset_build%
 	:: just convert .ansi file, it is not needed for html document
