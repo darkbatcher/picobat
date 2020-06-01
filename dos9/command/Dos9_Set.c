@@ -150,7 +150,7 @@ int _Dos9_SetSetVarInt(char* lpName, int v)
 	Basically, `set "var1=1","var2=2"' may assign various variables, while
 	using a space may not.
 
-	Things are even worser in case of inline assignments using set /a.
+	Things are even worse in case of inline assignments using set /a.
 	Problems are introduced by the lack of standard precedence rules for
 	assignments. As an example, `set /a var=1+(var3=2)' evaluates to 3
 	whereas `set /a var=1+var3=2' evaluates to 2 (That does not make sense

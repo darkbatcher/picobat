@@ -40,7 +40,7 @@ struct string_ll_t {
     struct string_ll_t* next;
 };
 
-struct string_ll_t* IntEval_Strings;
+extern struct string_ll_t* IntEval_Strings;
 
 #define INTEVAL_NOERROR 0
 #define INTEVAL_ALLOCERROR 1

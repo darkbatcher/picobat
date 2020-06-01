@@ -33,6 +33,8 @@ int IntEval_Error=INTEVAL_NOERROR;
 int(*IntEval_Get)(const char*);
 int(*IntEval_Set)(const char*, int);
 
+struct string_ll_t* IntEval_Strings;
+
 int IntEval_Set_Fn(int(*get)(const char*),
                         int(*set)(const char*, int))
 {

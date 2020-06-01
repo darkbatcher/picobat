@@ -2448,8 +2448,6 @@ build without prior
 
 * Added manual page for the **MOD** command.
 
-<<<<<<< HEAD 
-
 ## Sunday 15th, December ##
 
 * Fixed searching issues with hlp script and implemented **help /l**.
@@ -2491,7 +2489,7 @@ build without prior
 ## Monday, Junuary 14th ##
 
 * Added **src-dist** target to **Makefile** to automatically build source code 
-  tarballs reade to be distributed and/or uploaded on the website.
+  tarballs ready to be distributed and/or uploaded on the website.
 
 * Fixed a bug involving **Dos9\_RunBlock\(\)** not parsing blocks correctly.
 
@@ -2499,5 +2497,9 @@ build without prior
 
 * Finally fixed **hlp.bat** to make it able to be run from any directory, 
   especially when the said directory names contains parenthesis or spaces 
-  \(what is very often the case under windows\). 
+  \(what is very often the case under windows\).
+
+## Monday, May 1st, 2020 ##
+
+* Fixed a double declaration inside the code of libinteval. 
 
