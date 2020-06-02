@@ -23,7 +23,7 @@ set hlp_base_dir=%USERPROFILE%/.dos9/hlp
 
 :: Cd to the appropriate directory
 if not exist !hlp_base_dir! MKDIR !hlp_base_dir!
-cd !hlp_base_dir!
+cd /d !hlp_base_dir!
 
 if not exist hlp.conf.bat (
 	echo No hlp.conf.bat
@@ -121,7 +121,7 @@ txt
 
 :: browse the directory and make subirectories that
 :: are not existing.
-FOR /F "tokens=*" %%A in ('cd !hlp_data_dir!/!lang_build!
+FOR /F "tokens=*" %%A in ('cd /d !hlp_data_dir!/!lang_build!
 dir /b /s /a:d') do (
 	
 	ECHO 	* Creating %%A
@@ -140,7 +140,7 @@ dir /b /s /a:d') do (
 ECHO.
 ECHO. 3] Produce the output :
 :: browse the directory and use tea to produce the output.
-FOR /F "tokens=*" %%A in ('cd !hlp_data_dir!/!lang_build!
+FOR /F "tokens=*" %%A in ('cd /d !hlp_data_dir!/!lang_build!
 dir /b /s /a:-d') do (
 
 	:: unfortunately, we used %~dpnA before to get all the stuff
@@ -302,9 +302,9 @@ ECHO.
 ECHO    The locale option determines the language you want to use for manual pages.
 ECHO The following list of locales is available : 
 ECHO.
-cd %hlp_data_dir%
+cd /d %hlp_data_dir%
 dir /b /A:D
-cd %hlp_base_dir%
+cd /d %hlp_base_dir%
 ECHO.
 
 :locale_retry
