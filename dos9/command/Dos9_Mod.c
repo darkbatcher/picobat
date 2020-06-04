@@ -211,6 +211,8 @@ int Dos9_CheckLoadedMods(const char* mod)
         if (!stricmp(mod, item->name))
             return 1;
 
+        item = item->next;
+
     }
 
     return 0;

@@ -2516,5 +2516,7 @@ build without prior
 * Fixed directory stack allocation bug that makes directory stack unusable 
   after a Dos9\_PopDir\(\) that cleared the stack.
 
-* Makes Dos9\_CloneInstance\(\) aware of directory stack. 
+* Makes Dos9\_CloneInstance\(\) aware of directory stack.
+
+* Fix mod deadlock when there is a module loaded. 
 
