@@ -29,7 +29,6 @@
 #include "Dos9_Pushd.h"
 #include "Dos9_Cd.h"
 
-#include "../errors/Dos9_Errors.h"
 #include "../lang/Dos9_Lang.h"
 #include "../lang/Dos9_ShowHelp.h"
 
@@ -57,12 +56,11 @@ int Dos9_CmdPushd (char *line)
   line += 5;
 
   if ((line = Dos9_GetNextParameterEs(line, estr)) == NULL) {
-    /* No argument specified */
-    size_t count = Dos9_DirStackCount();
-    char **paths = Dos9_GetDirStack();
+    /* No argument specified, display add paths of the stack. */
+    size_t i = dsDirStack.count;
 
-    while (count--)
-      fprintf(fOutput, "%s" DOS9_NL, paths[count]);
+    while (i--)
+      fprintf(fOutput, "%s" DOS9_NL, dsDirStack.paths[i]);
 
     Dos9_EsFree(estr);
     return 0;
@@ -75,14 +73,14 @@ int Dos9_CmdPushd (char *line)
     return 0;
   }
 
+  ESTR *current_dir = Dos9_EsInit();
+
   do {
-    ESTR *current_dir = Dos9_EsInit();
+    Dos9_EsCpy(current_dir, lpCurrentDir);
 
-    Dos9_EsCat(current_dir, lpCurrentDir);
-
-    if (Dos9_SetCurrentDir(Dos9_EsToChar(estr)) == 0) {
+    if (Dos9_SetCurrentDir(Dos9_EsToChar(estr)) == 0)
       Dos9_PushDir(Dos9_EsToChar(current_dir));
-    } else {
+    else {
       /* not a directory */
       Dos9_ShowErrorMessage(DOS9_DIRECTORY_ERROR, Dos9_EsToChar(estr), FALSE);
       Dos9_EsFree(current_dir);
@@ -93,6 +91,7 @@ int Dos9_CmdPushd (char *line)
     count++;
   } while((line = Dos9_GetNextParameterEs(line, estr)));
 
+  Dos9_EsFree(current_dir);
   Dos9_EsFree(estr);
   return 0;
 }

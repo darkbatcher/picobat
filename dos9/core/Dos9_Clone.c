@@ -74,6 +74,7 @@ void* Dos9_CloneTrampoline(void* data)
     lpclCommands = cloned->lpclCommands;
     lpvLocalVars = cloned->lpvLocalVars;
     lpvArguments = cloned->lpvArguments;
+    dsDirStack = cloned->dsDirStack;
     lppsStreamStack = cloned->lppsStreamStack;
     colColor = cloned->colColor;
     lpeEnv = cloned->lpeEnv;
@@ -123,6 +124,9 @@ int Dos9_DuplicateData(struct clone_data_t* data)
 
     data->lpvLocalVars = Dos9_DuplicateLocalVar(lpvLocalVars);
     data->lpvArguments = Dos9_DuplicateLocalVar(lpvArguments);
+
+    Dos9_DirStackCopy(&data->dsDirStack);
+
     data->lppsStreamStack = NULL;
     data->colColor = colColor;
     data->lpeEnv = Dos9_EnvDup(lpeEnv);

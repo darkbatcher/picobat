@@ -2503,3 +2503,18 @@ build without prior
 
 * Fixed a double declaration inside the code of libinteval. 
 
+## Wednesday, May 3rd, 2020 ##
+
+* Fixed hlp bug with Dos9 on another drive than user directory on Windows.
+
+## Thursday, May 4th, 2020  ##
+
+* Fixed pushd memory leak.
+
+* Reworked directory stack :
+
+* Fixed directory stack allocation bug that makes directory stack unusable 
+  after a Dos9\_PopDir\(\) that cleared the stack.
+
+* Makes Dos9\_CloneInstance\(\) aware of directory stack. 
+

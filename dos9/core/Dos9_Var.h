@@ -24,7 +24,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-#include "libDos9.h"
+#include <libDos9.h>
 
 #define LOCAL_VAR_BLOCK_SIZE 128
 

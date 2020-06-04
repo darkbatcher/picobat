@@ -156,7 +156,7 @@ void Dos9_OutputPromptString(const char* prompt)
             break;
 
         case '+':
-            dir_count = Dos9_DirStackCount();
+            dir_count = dsDirStack.count;
             while (dir_count --)
                 fputc('+', fOutput);
 

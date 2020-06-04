@@ -21,7 +21,6 @@
 #define DOS9_CLONE_H
 
 #include <libDos9.h>
-
 #include "Dos9_Core.h"
 
 struct clone_data_t {
@@ -36,6 +35,7 @@ struct clone_data_t {
     LOCAL_VAR_BLOCK* lpvLocalVars;
     LOCAL_VAR_BLOCK* lpvArguments;
     LPSTREAMSTACK lppsStreamStack;
+    struct dirstack_t dsDirStack;
     COLOR colColor;
     FILE* fInput; /* current thread input stream */
     FILE* fOutput; /* current thread output stream */

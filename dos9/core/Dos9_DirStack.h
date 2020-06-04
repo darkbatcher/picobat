@@ -24,13 +24,17 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+struct dirstack_t {
+  char **paths;
+  size_t count;
+};
+
 bool Dos9_DirStackInit(void);
 void Dos9_DirStackFree(void);
 
-bool Dos9_PushDir(const char *s);
-char *Dos9_PopDir(void);
+bool Dos9_PushDir(const char *dir);
+char *Dos9_PopDir(void); /* You need to free() the output directory path. */
 
-size_t Dos9_DirStackCount(void);
-char **Dos9_GetDirStack(void);
+bool Dos9_DirStackCopy(struct dirstack_t *dest);
 
 #endif /* DOS9_DIRSTACK_H */

@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2018 Astie Teddy
+ *   Copyright (C) 2018-2020 Astie Teddy
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -22,73 +22,116 @@
 #include <string.h>
 #include <stdbool.h>
 
+#include "Dos9_Core.h"
 #include "Dos9_DirStack.h"
 
-static __thread char **paths;
-static __thread size_t path_count;
+//#define DOS9_DBG_MODE
+#include "Dos9_Debug.h"
 
-#define paths_resize(new_size) realloc(paths, sizeof(char *) * (new_size))
+#define paths_resize(new_size) realloc(dsDirStack.paths, sizeof(char *) * (new_size))
 
 bool Dos9_DirStackInit(void)
 {
-  paths = NULL;
-  path_count = 0;
+  dsDirStack.paths = NULL;
+  dsDirStack.count = 0;
   return false;
 }
 
 void Dos9_DirStackFree(void)
 {
-  for (size_t i = 0; i < path_count; i++)
-    free(paths[i]);
+  for (size_t i = 0; i < dsDirStack.count; i++)
+    free(dsDirStack.paths[i]);
 
-  free(paths);
+  free(dsDirStack.paths);
 }
 
-bool Dos9_PushDir(const char *s)
+bool Dos9_PushDir(const char *dir)
 {
-  char **new_paths = paths_resize(path_count + 1);
-  if (new_paths == NULL)
+  char **new_paths = paths_resize(dsDirStack.count + 1);
+  if (new_paths == NULL) {
+    Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION, "Dos9_PushDir()", 0);
     return true;
+  }
 
-  paths = new_paths;
+  dsDirStack.paths = new_paths;
 
-  size_t s_len = strlen(s) + 1;
-  char *s_copy = malloc(s_len);
-  if (s_copy == NULL)
+  size_t dir_len = strlen(dir) + 1;
+  char *dir_copy = malloc(dir_len);
+  if (dir_copy == NULL) {
+    Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION, "Dos9_PushDir", 0);
     return true;
+  }
 
-  strncpy(s_copy, s, s_len);
+  strncpy(dir_copy, dir, dir_len);
 
-  paths[path_count] = s_copy;
-  path_count++;
+  dsDirStack.paths[dsDirStack.count] = dir_copy;
+  dsDirStack.count++;
   return false;
 }
 
 char *Dos9_PopDir(void)
 {
-  if (path_count == 0)
+  if (dsDirStack.count == 0)
     /* No more path. */
     return NULL;
 
-  char *p = paths[path_count - 1];
-  char **new_paths = paths_resize(path_count - 1);
-  if (new_paths != NULL) {
+  dsDirStack.count--;
+
+  char *p = dsDirStack.paths[dsDirStack.count];
+  char **new_paths = paths_resize(dsDirStack.count);
+
+  if (dsDirStack.count == 0 || new_paths != NULL) {
     /* If new_paths is NULL, there is no "big" issue
        because old paths is bigger than new_paths.
+
+       In case path_count is 0, new_paths may be NULL.
     */
-    paths = new_paths;
+    dsDirStack.paths = new_paths;
   }
 
-  path_count--;
   return p;
 }
 
-size_t Dos9_DirStackCount(void)
+bool Dos9_DirStackCopy(struct dirstack_t *dest)
 {
-  return path_count;
-}
+  /* NOTE: In case of failure, *dest must still be defined with a acceptable value. */
 
-char **Dos9_GetDirStack(void)
-{
-  return paths;
+  DOS9_DBG("Dos9_DirStackCopy(): Copying DirStack to %p", dest);
+
+  if (dest == NULL) {
+    memset(dest, 0, sizeof(struct dirstack_t)); /* NOTE */
+    return true;
+  }
+
+  dest->paths = malloc(dsDirStack.count * sizeof(char *));
+  dest->count = dsDirStack.count;
+
+  if (dest->paths == NULL) {
+    Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION, "Dos9_DirStackCopy", 0);
+    memset(dest, 0, sizeof(struct dirstack_t)); /* NOTE */
+    return true;
+  }
+
+  for (size_t i = 0; i < dsDirStack.count; i++) {
+    size_t len = strlen(dsDirStack.paths[i]) + 1;
+
+    dest->paths[i] = malloc(len);
+
+    if (dest->paths[i] == NULL) {
+      Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION, "Dos9_DirStackCopy", 0);
+
+      /* We need to free all allocated paths, from 0 to i-1. */
+      for (size_t j = 0; j < i; j++)
+        free(dest->paths[i]);
+
+      free(dest->paths);
+
+      memset(dest, 0, sizeof(struct dirstack_t)); /* NOTE */
+      return true;
+    }
+
+    memcpy(dest->paths[i], dsDirStack.paths[i], len);
+  }
+
+  return false;
 }

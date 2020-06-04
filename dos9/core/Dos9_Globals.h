@@ -25,6 +25,7 @@
 #include <stdio.h>
 #include <libDos9.h>
 
+#include "Dos9_Core.h"
 #include "../../config.h"
 
 #ifndef WIN32
@@ -68,6 +69,7 @@ extern __thread LPCOMMANDLIST lpclCommands; /* binary tree of commands */
 extern __thread LOCAL_VAR_BLOCK* lpvLocalVars; /* local variables array */
 extern __thread LOCAL_VAR_BLOCK* lpvArguments; /* arguments array */
 extern __thread LPSTREAMSTACK lppsStreamStack; /* status associated with streams */
+extern __thread struct dirstack_t dsDirStack; /* current directory stack. */
 extern __thread COLOR colColor; /* current command prompt colors */
 extern __thread INPUT_FILE ifIn; /* current parsed script */
 extern __thread ENVBUF* lpeEnv; /* environment variables local to threads */

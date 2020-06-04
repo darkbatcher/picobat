@@ -30,6 +30,7 @@
 #include "Dos9_Expand.h"
 
 #include "Dos9_Args.h"
+#include "Dos9_DirStack.h"
 #include "Dos9_Jump.h"
 #include "Dos9_VersionInfo.h"
 #include "Dos9_ShowIntro.h"
@@ -52,6 +53,5 @@
 #include "Dos9_Exec.h"
 #include "Dos9_Prompt.h"
 #include "Dos9_Completion.h"
-#include "Dos9_DirStack.h"
 
 #endif // DOS9_CORE_H_INCLUDED

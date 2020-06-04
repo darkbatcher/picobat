@@ -47,7 +47,7 @@ YEAR = $(shell date +%Y)
 PACKAGE = dos9
 PACKAGE_URL = http://dos9.org
 PACKAGE_BUGREPORT = darkbatcher@dos9.org
-VERSION = 218.3
+VERSION = 220.1
 
 all: $(SUBDIRS) $(MDFILES)
 

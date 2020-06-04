@@ -29,7 +29,7 @@
 #include <string.h>
 #include <assert.h>
 
-#include "libDos9.h"
+#include <libDos9.h>
 
 #include "Dos9_Core.h"
 #include "../../config.h"
