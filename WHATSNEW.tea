@@ -2384,36 +2384,36 @@ ${(for %%a in (foo bar) do echo %%a) & echo loop}
 
 {{Monday 24th}}
 
-	- Fixed set /p not providing history features under both windows and 
+	- Fixed set /p not providing history features under both windows and
 	unices.
-	
-	- Switched to version 218.3 
-	
+
+	- Switched to version 218.3
+
 {{Thursday 27th}}
 
 	- Fixed missing documentation for {batbox} modules. Modified {README}
 	and {GUIDELINES}.
-	
+
 	- Fixed missing static qualifiers in libDos9.
 
     - Fixed recursive file search under Linux and non-unicode windows.
 
     - Fixed a bug with {%~d} under *nices causing double root symbol on
     paths.
-	
+
 {{Monday, Junuary 14th}}
 
 	- Added {src-dist} target to {Makefile} to automatically build source
 	code tarballs ready to be distributed and/or uploaded on the website.
-	
+
 	- Fixed a bug involving {Dos9_RunBlock()} not parsing blocks correctly.
-	
+
 {{Thursday 17th}}
 
 	- Finally fixed {hlp.bat} to make it able to be run from any directory,
 	especially when the said directory names contains parenthesis or
 	spaces (what is very often the case under windows).
-	
+
 {{Monday, May 1st, 2020}}
 
 	- Fixed a double declaration inside the code of libinteval.
@@ -2427,15 +2427,20 @@ ${(for %%a in (foo bar) do echo %%a) & echo loop}
 	- Fixed pushd memory leak.
 
 	- Reworked directory stack :
-	
+
 		- Fixed directory stack allocation bug that makes directory stack unusable
 			after a	Dos9_PopDir() that cleared the stack.
 
 		- Makes Dos9_CloneInstance() aware of directory stack.
-		
+
+    - Fix mod deadlock when there is a module loaded.
+
 {{Sunday, July 19th}}
 
 	- Fixed Makefile for building po files. Some builds of gmake automatically
 	remove files that are not explicitelly a target of the make file so that
 	the po files ({*.pot} => {*.po} => {*.mo}) where identified as such and
 	deleted.
+
+  - Fixed %=EXITCODEASCII% endianness issue.
+    Removed unneeded switch in Dos9_Var.c.

@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2017 Romain Garbi
+ *   Copyright (C) 2010-2017,2020 Romain Garbi, Teddy ASTIE
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -193,7 +193,7 @@ int Dos9_GetVar(char* lpName, ESTR* lpRecieve)
 #if defined(DOS9_USE_LIBCU8)
         snprintf(lpBuf, sizeof(iErrorLevel)+1, "%s", &iErrorLevel);
 #else
-        snprintf(lpBuf, 2, "%s", &iErrorLevel);
+        snprintf(lpBuf, 2, "%c", iErrorLevel);
 #endif /* DOS9_USE_LIBCU8 */
 
 
@@ -408,21 +408,9 @@ char* Dos9_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 
 	for (; *(lpName) && strchr("fdnpxzta", *(lpName)) && i<DOS9_VAR_MAX_OPTION; lpName++) {
 
-		switch(*lpName) {
-
-		case 'f':
-		case 'd':
-		case 'n':
-		case 'p':
-		case 'x':
-		case 'z':
-		case 't':
-		case 'a':
-
 			cFlag[i] = *lpName;
 			i++;
 
-		}
 	}
 
 	if ((*lpName & 0x80) || (*lpName <= 0x20)) {

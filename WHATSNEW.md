@@ -2473,7 +2473,7 @@ build without prior
 
 * Fixed set /p not providing history features under both windows and unices.
 
-* Switched to version 218.3 
+* Switched to version 218.3
 
 ## Thursday 27th ##
 
@@ -2518,10 +2518,15 @@ build without prior
 
 * Makes Dos9\_CloneInstance\(\) aware of directory stack.
 
+* Fix mod deadlock when there is a module loaded.
+
 ## Sunday, July 19th ##
 
 * Fixed Makefile for building po files. Some builds of gmake automatically 
   remove files that are not explicitelly a target of the make file so that the 
   po files \(**\*.pot** => **\*.po** => **\*.mo**\) where identified as such 
-  and deleted. 
+  and deleted.
+
+* Fixed %=EXITCODEASCII% endianness issue. Removed unneeded switch in 
+  Dos9\_Var.c. 
 
