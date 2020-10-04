@@ -491,23 +491,23 @@ int Dos9_RunBlock(BLOCKINFO* lpbkInfo)
 	Dos9_SetStreamStackLockState(lppsStreamStack, TRUE);
 
 
-			
+
 	if (lpbkInfo->lpEnd == NULL) {
-		
+
 		Dos9_EsCpy(lpEsBlock, lpbkInfo->lpBegin);
 		lpEnd = lpEsBlock->str + strlen(lpEsBlock->str);
-		
+
 	} else {
-	
-		Dos9_EsCpyN(lpEsBlock,  lpbkInfo->lpBegin, 
+
+		Dos9_EsCpyN(lpEsBlock,  lpbkInfo->lpBegin,
 				(size_t)(lpbkInfo->lpEnd - lpbkInfo->lpBegin));
-		lpEnd = lpEsBlock->str + (size_t)(lpbkInfo->lpEnd - 
-					lpbkInfo->lpBegin);	
-	}			
-	
+		lpEnd = lpEsBlock->str + (size_t)(lpbkInfo->lpEnd -
+					lpbkInfo->lpBegin);
+	}
+
 	lpToken = lpEsBlock->str;
-    
-	
+
+
 	DOS9_DBG("Block_b=\"%s\"\n"
 	         "Block_e=\"%s\"\n",
 	         lpToken,
@@ -781,7 +781,11 @@ int Dos9_RunExternalBatch(char* lpFileName, char* lpFullLine, char** lpArguments
     return (int)ret;
 }
 
-PARSED_LINE* Dos9_LookAHeadMakeParsedLine(BLOCKINFO* block,PARSED_LINE* lookahead)
+/* Function used for a LookAHead command.
+
+   Transforms the first element of a PARSED_LINE (or allocate it if it NULL) using
+   the information contained in the BLOCKINFO* structure */
+PARSED_LINE* Dos9_LookAHeadMakeParsedLine(BLOCKINFO* block, PARSED_LINE* lookahead)
 {
 	ESTR* cmd = Dos9_EsInit();
 

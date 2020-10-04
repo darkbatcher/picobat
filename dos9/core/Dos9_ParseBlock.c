@@ -43,6 +43,9 @@
    Dos9_GetNextBlockEnd(). If pch does not point to a '(', then it
    looks for a full line of command taking account of blocks.
 
+   par_end is a boolean selecting ')' as a character that might end
+   blocks when set to 1
+
    ** Only returns null if a block happens to be malformed **
  */
 char* Dos9_GetBlockLineEndEx(char* pch, int par_end)

@@ -2432,3 +2432,10 @@ ${(for %%a in (foo bar) do echo %%a) & echo loop}
 			after a	Dos9_PopDir() that cleared the stack.
 
 		- Makes Dos9_CloneInstance() aware of directory stack.
+		
+{{Sunday, July 19th}}
+
+	- Fixed Makefile for building po files. Some builds of gmake automatically
+	remove files that are not explicitelly a target of the make file so that
+	the po files ({*.pot} => {*.po} => {*.mo}) where identified as such and
+	deleted.

@@ -60,3 +60,4 @@ $(DOMAIN_POTS): $(POTS)
 	
 .PHONY: all clean bin $(BIN_LOCALES)
 .SUFFIXES: .c .pot .mo .po .pot
+.SECONDARY: $(POS)

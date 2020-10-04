@@ -2501,7 +2501,7 @@ build without prior
 
 ## Monday, May 1st, 2020 ##
 
-* Fixed a double declaration inside the code of libinteval. 
+* Fixed a double declaration inside the code of libinteval.
 
 ## Wednesday, May 3rd, 2020 ##
 
@@ -2518,5 +2518,10 @@ build without prior
 
 * Makes Dos9\_CloneInstance\(\) aware of directory stack.
 
-* Fix mod deadlock when there is a module loaded. 
+## Sunday, July 19th ##
+
+* Fixed Makefile for building po files. Some builds of gmake automatically 
+  remove files that are not explicitelly a target of the make file so that the 
+  po files \(**\*.pot** => **\*.po** => **\*.mo**\) where identified as such 
+  and deleted. 
 
