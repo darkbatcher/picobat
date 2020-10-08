@@ -33,10 +33,13 @@
 
 void Dos9_InitConsole(void)
 {
+	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	CONSOLE_CURSOR_INFO cciCursorInfo;
-	cciCursorInfo.dwSize=100;
+
+	GetConsoleCursorInfo(hOut, &cciCursorInfo);
 	cciCursorInfo.bVisible=TRUE;
-	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cciCursorInfo);
+
+	SetConsoleCursorInfo(hOut, &cciCursorInfo);
 }
 
 #else
