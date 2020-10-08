@@ -2527,6 +2527,13 @@ build without prior
   po files \(**\*.pot** => **\*.po** => **\*.mo**\) where identified as such 
   and deleted.
 
+## Sunday, October 4th, 2020 ##
+
 * Fixed %=EXITCODEASCII% endianness issue. Removed unneeded switch in 
-  Dos9\_Var.c. 
+  Dos9\_Var.c.
+
+## Thursday, October 8th, 2020 ##
+
+* Changed Dos9\_InitConsole to don't override cursor size on Windows. - Fixed 
+  building on Clang.
 

@@ -2442,5 +2442,13 @@ ${(for %%a in (foo bar) do echo %%a) & echo loop}
 	the po files ({*.pot} => {*.po} => {*.mo}) where identified as such and
 	deleted.
 
+{{Sunday, October 4th, 2020}}
+
   - Fixed %=EXITCODEASCII% endianness issue.
     Removed unneeded switch in Dos9_Var.c.
+
+{{Thursday, October 8th, 2020}}
+
+	- Changed Dos9_InitConsole to don't override cursor size on Windows. 
+	
+	- Fixed some building issues on Clang.
