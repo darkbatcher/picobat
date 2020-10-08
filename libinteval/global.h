@@ -35,6 +35,10 @@ void IntEval_FreeStrings(void);
 char* IntEval_MakeString(int nb);
 int   IntEval_GetValue(const char* str);
 
+int   IntEval_parse(void);
+int   IntEval_lex(void);
+int   IntEval_error(char *s);
+
 struct string_ll_t {
     char* str;
     struct string_ll_t* next;
