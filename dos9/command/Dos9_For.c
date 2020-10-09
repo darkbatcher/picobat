@@ -149,6 +149,7 @@ int Dos9_CmdFor(char* lpLine, PARSED_LINE** lpplLine)
 			/* if the line is not complete */
 			Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "FOR", FALSE);
 
+            status = DOS9_EXPECTED_MORE;
 			goto error;
 
 		}
@@ -315,11 +316,7 @@ int Dos9_CmdFor(char* lpLine, PARSED_LINE** lpplLine)
 
     /* Beware after this line ! There is a quite high probability that lpLine
        will get somehow freed */
-    if (lpplLine) {
-        line = Dos9_LookAHeadMakeParsedLine(&bkCode, *lpplLine);
-    } else {
-        line = Dos9_LookAHeadMakeParsedLine(&bkCode, NULL);
-    }
+    line = Dos9_LookAHeadMakeParsedLine(&bkCode, lpplLine ? *lpplLine : NULL) ;
 
 	switch(iForType) {
 
@@ -667,8 +664,11 @@ int Dos9_ForMakeInfo(char* lpOptions, FORINFO* lpfiInfo)
 
             /* The default end-of-line character is ';', thus if you specify ';' as
                a delimiter, It is wise to remove it end-of-line character if those have
-               not been redefined yet. However, we do no check for every character, if
-               the user wants to specify explicitly, it is at his own reponsability ... */
+               not been redefined yet.
+
+               This obviously does not cover the case where ';' is specified explicitely
+               in both "delims" and "tokens" by the user. */
+
 			if (strchr(lpfiInfo->lpDelims, ' ') != NULL
                 && !strcmp(lpfiInfo->lpEol, ";"))
                 strcpy(lpfiInfo->lpEol, "");
@@ -900,14 +900,7 @@ void Dos9_ForAdjustParameter(char* lpOptions, ESTR* lpParam)
 	char lpTemp[2]= {0,0};
 
 
-	/* this is old-style options specifications ie,
-	       specifying every options on the same argument
-	       like
-
-	        "tokens=1,2 delims=,; eol=,#"
-
-       FIXME: not sure what this does or is intended to do ...
-       maybe fix it later ...
+	/* This functions completes lpParam with either spaces
 
 	 */
 
@@ -1292,7 +1285,7 @@ void Dos9_ExecuteForSubCommand(struct pipe_launch_data_t* arg)
     close(arg->fd);
 
     bIgnoreExit = TRUE;
-	
+
     bkBlock.lpBegin = Dos9_EsToChar(arg->str);
     bkBlock.lpEnd = bkBlock.lpBegin;
 

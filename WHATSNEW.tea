@@ -2437,7 +2437,8 @@ ${(for %%a in (foo bar) do echo %%a) & echo loop}
 
 {{Sunday, July 19th}}
 
-	- Fixed Makefile for building po files. Some builds of gmake automatically
+	- Fixed Makefile for building po files. Some builds of gmake
+	automatically
 	remove files that are not explicitelly a target of the make file so that
 	the po files ({*.pot} => {*.po} => {*.mo}) where identified as such and
 	deleted.
@@ -2452,3 +2453,6 @@ ${(for %%a in (foo bar) do echo %%a) & echo loop}
 	- Changed Dos9_InitConsole to don't override cursor size on Windows. 
 	
 	- Fixed some building issues on Clang.
+{{Friday, October 10th}}
+
+	- Fixes to typos.

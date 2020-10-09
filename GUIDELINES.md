@@ -349,7 +349,7 @@ building dos9 again. The resulting locale will automatically build \(but not
 automatically translated though\) and integrated to the **bin** target.
 
 The default domain used by **Dos9** is **dos9**. To add a new domain, edit the 
-**po/sources.list** and add a new line based on the following syntax:
+**po/domain.list** and add a new line based on the following syntax:
 
     domain-name source1 source2 ... sourceN
 

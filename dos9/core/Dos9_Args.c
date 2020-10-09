@@ -78,7 +78,7 @@ int Dos9_GetParameterPointers(char** lpPBegin, char** lpPEnd, const char* lpDeli
 }
 
 char* Dos9_GetNextParameter(char* lpLine, char* lpResponseBuffer, int iLength)
-/* determines wheter a paramater follows the position lpLine.
+/* determines whether a paramater follows the position lpLine.
  *
  * lpLine : A pointer to where to seek a parameter
  * lpResponse : A buffer to store the parameter

@@ -2534,6 +2534,11 @@ build without prior
 
 ## Thursday, October 8th, 2020 ##
 
-* Changed Dos9\_InitConsole to don't override cursor size on Windows. - Fixed 
-  building on Clang.
+* Changed Dos9\_InitConsole to don't override cursor size on Windows. 
+
+* Fixed some building issues on Clang. 
+
+## Friday, October 10th ##
+
+* Fixes to typos. 
 
