@@ -1,5 +1,24 @@
-int main() {
-#if defined(WIN32)
-  return 0;
+/* generate broken code if neither WIN32 or MINGW64-w64 is defined */
+
+#define CHECK_WIN32 1
+#define CHECK_MINGW_W64 2
+
+#if defined CHECK_@fnp@ == CHECK_WIN32
+#ifndef WIN32
+	break
+#endif /* WIN32 */
+#elif defined CHECK_@fnp@ == CHECK_MINGW_W64
+#ifdef __MINGW32__
+#include <_mingw.h>
+#ifndef __MINGW64_VERSION_MAJOR
+break
+#endif /* __MINGW64_VERSION_MAJOR */
+#else /*__MINGW32__ */
+break
+#endif /* __MINGW32__ */
+#endif /* CHECKS */
+
+int main()
+{
+	return 0;
 }
-#endif /* defined(WIN32) */

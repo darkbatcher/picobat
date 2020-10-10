@@ -2453,6 +2453,13 @@ ${(for %%a in (foo bar) do echo %%a) & echo loop}
 	- Changed Dos9_InitConsole to don't override cursor size on Windows. 
 	
 	- Fixed some building issues on Clang.
+
 {{Friday, October 10th}}
 
 	- Fixes to typos.
+
+	- Added a test to {Makefile} to check whether {Dos9} is being build
+	using {mingw-w64}. Indeed, {mingw-w64} requires 
+	{__USE_MINGW_ANSI_STDIO} to be defined otherwise {snprintf} is
+	replaced with windows provided {_snprintf} which does not end strings,
+	leading to a lot of errors as Dos9 assumes ANSI.

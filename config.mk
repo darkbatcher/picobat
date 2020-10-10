@@ -55,6 +55,10 @@ ifneq (,$(wildcard $(ROOTDIR)/femto-config.mk))
     include $(ROOTDIR)/femto-config.mk
 endif
 
+ifeq ($(fn_MINGW_W64),1)
+	CFLAGS += -D__USE_MINGW_ANSI_STDIO
+endif
+
 ifeq ($(use_libcu8),1)
 	LIBCU8_LD = -L$(ROOTDIR)/libcu8 -lcu8
 	LIBCU8_INC = -I$(ROOTDIR)/libcu8/include

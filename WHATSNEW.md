@@ -2536,9 +2536,15 @@ build without prior
 
 * Changed Dos9\_InitConsole to don't override cursor size on Windows. 
 
-* Fixed some building issues on Clang. 
+* Fixed some building issues on Clang.
 
 ## Friday, October 10th ##
 
-* Fixes to typos. 
+* Fixes to typos.
+
+* Added a test to **Makefile** to check whether **Dos9** is being build using 
+  **mingw-w64**. Indeed, **mingw-w64** requires 
+  **\_\_USE\_MINGW\_ANSI\_STDIO** to be defined otherwise **snprintf** is 
+  replaced with windows provided **\_snprintf** which does not end strings, 
+  leading to a lot of errors as Dos9 assumes ANSI. 
 

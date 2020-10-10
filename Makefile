@@ -98,7 +98,7 @@ $(SUBDIRS_BIN): $(SUBDIRS)
 
 # stuff to check
 PROGRAMS = mimeopen xdg-open
-FUNCTIONS = WIN32
+FUNCTIONS = WIN32 MINGW_W64
 LIBS = iconv intl pthread m dl
 FLAGS = PIC
 OPTIONS = libcu8 nls cmdlycorrect console modules
