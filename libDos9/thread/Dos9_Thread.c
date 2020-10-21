@@ -57,7 +57,11 @@ int Dos9_BeginThread(THREAD* lpThId, void*(*lpFunction)(void*) , int iMemAmount,
 
 LIBDOS9 void Dos9_AbortThread(THREAD* thSelfId)
 {
+    #ifdef __BIONIC__
+    /* NOTE: Missing function in bionic libc. */
+    #else
     pthread_cancel(thSelfId->thread);
+    #endif
     thSelfId->joined = 1;
 }
 
