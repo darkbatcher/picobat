@@ -25,9 +25,7 @@
 #include <process.h>
 #define DOS9_SPAWN_CAST const char* const*
 #else
-#include <spawn.h>
 #define DOS9_SPAWN_CAST char* const*
-#define spawnvp(a,b,c) posix_spawnp(NULL, b, NULL, NULL, c, environ)
 #endif
 
 #ifndef P_WAIT
