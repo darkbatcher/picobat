@@ -136,7 +136,7 @@ reloop:
 
             }
 
-            if (*path && *(path + 1) == '\0') {
+            if (*path && *(path + 1) == '\0' && path != orig) {
                 *path = '\0';
                 break;
             }

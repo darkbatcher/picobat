@@ -2553,5 +2553,7 @@ build without prior
 * Fixes to linenoise completion function that had bug on some systems.
 
 * Added a new build option to disable linenoise because I found it somehow 
-  interfered with gdb. 
+  interfered with gdb.
+
+* Fixed a bug that caused "/" path to be canonicalized into "", causing errors 
 

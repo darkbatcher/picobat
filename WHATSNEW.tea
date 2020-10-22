@@ -2470,3 +2470,6 @@ ${(for %%a in (foo bar) do echo %%a) & echo loop}
 
     - Added a new build option to disable linenoise because I found it somehow
     interfered with gdb.
+
+    - Fixed a bug that caused "/" path to be canonicalized into "", causing
+    errors
