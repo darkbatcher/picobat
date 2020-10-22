@@ -2546,5 +2546,12 @@ build without prior
   **mingw-w64**. Indeed, **mingw-w64** requires 
   **\_\_USE\_MINGW\_ANSI\_STDIO** to be defined otherwise **snprintf** is 
   replaced with windows provided **\_snprintf** which does not end strings, 
-  leading to a lot of errors as Dos9 assumes ANSI. 
+  leading to a lot of errors as Dos9 assumes ANSI.
+
+## Thursday, October 22 ##
+
+* Fixes to linenoise completion function that had bug on some systems.
+
+* Added a new build option to disable linenoise because I found it somehow 
+  interfered with gdb. 
 

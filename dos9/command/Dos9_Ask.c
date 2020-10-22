@@ -146,14 +146,18 @@ int Dos9_AskConfirmation(int iFlags, void(*lpFn)(char*,size_t),  const char* lpM
 	}
 
 	va_start(vaArgs, lpMsg);
+	vfprintf(fError, lpMsg, vaArgs);
+	va_end(vaArgs);
 
 	do {
 
-		vfprintf(fError, lpMsg, vaArgs);
-
 		fputs(lpChoices, fError);
 
-        Dos9_AskConfirmationRead(lpInput, sizeof(lpInput));
+        /* if no read function provided, fallback to default */
+        if (lpFn == NULL)
+            lpFn = Dos9_AskConfirmationRead;
+
+        lpFn(lpInput, sizeof(lpInput));
 
 		if (!stricmp(lpInput, lpAskYes)
 		    || !stricmp(lpInput, lpAskYesA)) {
@@ -195,7 +199,7 @@ int Dos9_AskConfirmation(int iFlags, void(*lpFn)(char*,size_t),  const char* lpM
 
 	} while (iRet==0);
 
-	va_end(vaArgs);
+
 
 	return iRet;
 }

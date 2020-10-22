@@ -101,8 +101,9 @@ PROGRAMS = mimeopen xdg-open
 FUNCTIONS = WIN32 MINGW_W64
 LIBS = iconv intl pthread m dl
 FLAGS = PIC
-OPTIONS = libcu8 nls cmdlycorrect console modules
-DEFAULTOPTIONS = no-libcu8 use-nls no-cmdlycorrect use-console use-modules
+OPTIONS = libcu8 nls cmdlycorrect console modules linenoise
+DEFAULTOPTIONS = no-libcu8 use-nls no-cmdlycorrect use-console use-modules \
+				 use-linenoise
 SUBCONFIG = libcu8 libmatheval
 ADDITIONALVARS = HOST BINDIR YEAR VERSION PACKAGE PACKAGE_URL PACKAGE_BUGREPORT
 

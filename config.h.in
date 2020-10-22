@@ -40,6 +40,10 @@
   #define DOS9_USE_MODULES 1
 #endif
 
+#if !@use_linenoise@
+  #define DOS9_NO_LINENOISE 1
+#endif
+
 #define PACKAGE  "@PACKAGE@"
 #define PACKAGE_BUGREPORT "@PACKAGE_BUGREPORT@"
 #define PACKAGE_NAME "@PACKAGE@"

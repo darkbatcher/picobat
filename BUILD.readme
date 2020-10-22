@@ -4,7 +4,7 @@ BUILDING Dos9 (Newer versions):
 Dos9 switched from autotools to a more lightweight build system based
 on gmake called femto (https://gitlab.com/darkbatcher/femto) which
 eases greatly the compiling process. Of course, some libraries are
-still needed :
+alwayseeded :
 
 	- gcc, gmake etc.
 	- GNU gettext
@@ -23,7 +23,7 @@ or `no-option` targets.
 
 	$ make use-option
 	
-Dos9 currently provides 4 options :
+Dos9 currently provides 6 options :
 
 	- libcu8 : Add native utf-8 support (disabled by default). Do not
 	  use under *nix.
@@ -35,7 +35,9 @@ Dos9 currently provides 4 options :
 	  terminal does not support such features, so this must be disabled.
 	- modules : Add support for Dos9 modules (enabled by default). Disabling
 	  it might be required if your are building using all static files.
-	
+	- linenoise : (*Nix only) enables linenoise library that provide
+      autocompletion and extended console input.
+
 Once you have configured your options, just compile using :
 
 	$ make all bin

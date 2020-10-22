@@ -31,7 +31,7 @@ void Dos9_InitCompletion(void)
 #if defined(WIN32) && defined(DOS9_USE_LIBCU8)
     libcu8_completion_handler = Dos9_CompletionHandler;
     libcu8_completion_handler_free = Dos9_CompletionHandlerFree;
-#elif !defined(WIN32)
+#elif !defined(WIN32) && !defined(DOS9_NO_LINENOISE)
     linenoiseSetCompletionCallback(Dos9_CompletionHandler);
 #endif /* WIN32 */
 }
@@ -47,6 +47,8 @@ int Dos9_CompletionGetCols(void)
     return csbi.dwSize.X - 1;
 }
 
+#define COMPLETION_READ NULL
+#elif defined(DOS9_NO_LINENOISE)
 #define COMPLETION_READ NULL
 #else
 
@@ -125,9 +127,16 @@ void Dos9_PrintCompletionList(FILELIST* files)
 
     if (count > 20) {
 
-        ok = Dos9_AskConfirmation(DOS9_ASK_YN | DOS9_ASK_DEFAULT_N
-                                  | DOS9_ASK_INVALID_REASK, COMPLETION_READ,
-                                  lpManyCompletionOptions, count);
+        do {
+
+            ok = Dos9_AskConfirmation(DOS9_ASK_YN | DOS9_ASK_DEFAULT_N,
+                                   COMPLETION_READ, lpManyCompletionOptions,
+                                   count);
+#if !defined(WIN32)
+            fputs("\r", fOutput);
+#endif
+
+        } while (ok == DOS9_ASK_INVALID);
 
         if (ok == DOS9_ASK_NO) {
             fputs(DOS9_NL, fOutput);

@@ -27,7 +27,7 @@
 
 #include "Dos9_Debug.h"
 
-#ifndef WIN32
+#if !defined(WIN32) && !defined(DOS9_NO_LINENOISE)
 #include "../linenoise/Dos9_LineNoise.h"
 #endif
 
@@ -160,7 +160,7 @@ int Dos9_GetLine_Cmdly(ESTR* lpesLine, INPUT_FILE* pIn)
 
 		pFile=fInput;
 
-#ifndef WIN32
+#if !defined(WIN32) && !defined(DOS9_NO_LINENOISE)
         /* If fInput is a tty, use Linenoise ! */
         if (isatty(fileno(pFile)))
             fn_getline = Dos9_LineNoise;

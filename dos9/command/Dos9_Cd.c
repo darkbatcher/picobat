@@ -171,14 +171,14 @@ int Dos9_SetCurrentDir(char* lpLine)
                unless lpCurrentDir refers to a unc path, but this
                is not handled yet */
             strncpy(lpCurrentDir + 2, lpLine, FILENAME_MAX-2);
-            lpCurrentDir[FILENAME_MAX-1];
+            lpCurrentDir[FILENAME_MAX-1] = '\0';
 
             return Dos9_Canonicalize(lpCurrentDir);
         }
  #endif
 
         strncpy(lpCurrentDir, lpLine, FILENAME_MAX);
-        lpCurrentDir[FILENAME_MAX - 1];
+        lpCurrentDir[FILENAME_MAX - 1] = '\0';
         return Dos9_Canonicalize(lpCurrentDir);
 
     }
