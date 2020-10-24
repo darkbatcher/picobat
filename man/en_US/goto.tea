@@ -36,6 +36,9 @@ ${GOTO [:]label [file] [/Q]}
 	    this couple of words must be preceded by a column {:}. It is not necessary for
 	    labels to start at column 1.
 
+        @- When searching for {label}, {Dos9} tolerates extra characters on the line, as
+        long as the label line matches at least {label} and delimiter caracter.
+
         - {file} : The file in which {dos9|Dos9} will seek the specified {label}. This
 		option requires the {spec/ext|dos9 extensions} to be enabled.
 

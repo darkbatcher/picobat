@@ -2464,7 +2464,7 @@ ${(for %%a in (foo bar) do echo %%a) & echo loop}
 	replaced with windows provided {_snprintf} which does not end strings,
 	leading to a lot of errors as Dos9 assumes ANSI.
 
-{{Thursday, October 22}}
+{{Thursday, October 22nd}}
 
     - Fixes to linenoise completion function that had bug on some systems.
 
@@ -2473,3 +2473,8 @@ ${(for %%a in (foo bar) do echo %%a) & echo loop}
 
     - Fixed a bug that caused "/" path to be canonicalized into "", causing
     errors
+
+{{Saturday, October 24th}}
+
+    - Fixed a bug that would not let the user add a space or a delimiter after
+    labels specifiers.

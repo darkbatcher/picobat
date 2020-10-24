@@ -226,14 +226,6 @@ int Dos9_GetLine_Cmdly(ESTR* lpesLine, INPUT_FILE* pIn)
 
 	lpAltPromptString = NULL;
 
-	DOS9_DBG("-------------------[READ]--------------------------\n"
-	         "%s\n"
-	         "---------------------------------------------------\n",
-	         Dos9_EsToChar(lpesLine)
-	        );
-
-	//getch();
-
     pIn->bEof=res;
 
 	if (*(pIn->lpFileName)!='\0') {

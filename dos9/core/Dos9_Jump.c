@@ -33,7 +33,7 @@ int Dos9_JumpToLabel(char* lpLabelName, char* lpFileName)
 {
     struct labels_t* lbl;
     struct batch_script_t script;
-    /* size_t size = strlen(lpLabelName); */
+    size_t size = strlen(lpLabelName);
     int new;
 
     /* If neither label nor filename are given or if interactive mode */
@@ -46,6 +46,7 @@ int Dos9_JumpToLabel(char* lpLabelName, char* lpFileName)
 
 	if (lpFileName && stricmp(ifIn.batch.name, lpFileName)) {
 
+        /* Parse a new batch script if lpFileName is specified */
         if (Dos9_OpenBatchScript(&script, lpFileName)) {
 
             Dos9_FreeBatchScript(&script);
@@ -70,7 +71,12 @@ int Dos9_JumpToLabel(char* lpLabelName, char* lpFileName)
 
 	}
 
-    while (lbl && (stricmp(lbl->label, lpLabelName)))
+	/* Look for a matching label followed by delims or end of line */
+    while (lbl && !(!strnicmp(lbl->label, lpLabelName, size)
+            && (*(lbl->label + size ) == '\0'
+                || Dos9_IsDelim(*(lbl->label + size))
+               )
+            ))
         lbl = lbl->next;
 
     if (lbl == NULL) {
@@ -83,7 +89,7 @@ int Dos9_JumpToLabel(char* lpLabelName, char* lpFileName)
     /* a label has been found */
     if (new) {
 
-        /* Set the new file as the new file */
+        /* Set the new file as the input file */
         Dos9_FreeBatchScript(&(ifIn.batch));
         memcpy(&(ifIn.batch), &script, sizeof(struct batch_script_t));
         memcpy(ifIn.lpFileName, ifIn.batch.name, sizeof(ifIn.lpFileName));
@@ -129,7 +135,10 @@ int Dos9_JumpToLabel_Cmdly(char* lpLabelName, char* lpFileName)
 
 	while (!Dos9_EsGet(lpLine, pFile)) {
 
-		if (!strnicmp(Dos9_SkipBlanks(lpLine->str), lpLabelName, iSize)) {
+        /* Check the label name matches is followed by a delimiter or '\0' */
+		if (!strnicmp(Dos9_SkipBlanks(lpLine->str), lpLabelName, iSize)
+            && (Dos9_IsDelim(*(lpLine->str + iSize))
+                || *(lpLine->str + iSize) == '\0')) {
 
 			if (lpFileName) {
 

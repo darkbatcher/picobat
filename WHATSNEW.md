@@ -2548,12 +2548,17 @@ build without prior
   replaced with windows provided **\_snprintf** which does not end strings, 
   leading to a lot of errors as Dos9 assumes ANSI.
 
-## Thursday, October 22 ##
+## Thursday, October 22nd ##
 
 * Fixes to linenoise completion function that had bug on some systems.
 
 * Added a new build option to disable linenoise because I found it somehow 
   interfered with gdb.
 
-* Fixed a bug that caused "/" path to be canonicalized into "", causing errors 
+* Fixed a bug that caused "/" path to be canonicalized into "", causing errors
+
+## Saturday, October 24th ##
+
+* Fixed a bug that would not let the user add a space or a delimiter after 
+  labels specifiers. 
 
