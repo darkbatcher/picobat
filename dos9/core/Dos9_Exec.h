@@ -34,9 +34,9 @@ typedef struct EXECINFO {
     int flags;
 } EXECINFO;
 
-int Dos9_ExecuteFile(EXECINFO* info);
-int Dos9_RunFile(EXECINFO* info, int* error);
-int Dos9_StartFile(EXECINFO* info, int* error);
+int Dos9_ExecuteFile(EXECINFO* info); /* try to execute any type of file */
+int Dos9_RunFile(EXECINFO* info, int* error); /* execute executables */
+int Dos9_StartFile(EXECINFO* info, int* error); /* Execute files or / exes*/
 
 
 #endif // DOS9_EXEC_H

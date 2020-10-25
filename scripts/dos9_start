@@ -18,7 +18,7 @@ case $1 in
     *://*)
       # URI
       if [ "x$have_xdg_open" = "x1" ]; then 
-        xdg-open $*;
+        xdg-open $* ;
       else
         echo "dos9_start: error: Nothing to start URI ($1)" 1>&2;
         exit 1;
@@ -27,9 +27,9 @@ case $1 in
     *)
       # File 
       if [ "x$have_mimeopen" = "x1" ]; then
-        mimeopen $*;
+        mimeopen -n $* ;
       elif [ "x$have_xdg_open" = "x1" ]; then
-        xdg-open $1; # does not handle parameters
+        xdg-open $1 ; # does not handle parameters
       else
         echo "dos9_start: error: Nothing to start file $1" 1>&2
         exit 1;

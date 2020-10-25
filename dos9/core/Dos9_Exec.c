@@ -76,6 +76,7 @@ int Dos9_ExecuteFile(EXECINFO* info)
 
     } else {
 
+        /* If we have a startscript then try the script */
         if (error) {
 
             error = 0;
@@ -120,7 +121,7 @@ int Dos9_RunFile(EXECINFO* info, int* error)
 
     si.cb = sizeof(si);
 
-    /* It is very important to serialize calls to Dos9_ExecuteFile() since
+    /* It is very important to serialize calls to run functions since
        several process may call it at once, and since fds might simultaneously
        be set to inheritable, interference can appear between processes */
     if (Dos9_LockMutex(&mRunFile))
@@ -328,7 +329,7 @@ int Dos9_RunFile(EXECINFO* info, int* error)
 		if ( execv(info->file, info->args) == -1) {
 
 			/* if we got here, we can't set ERRORLEVEL
-			   variable anymore, but print an error message anyway.
+			   variable anymore.
 
 			   This is problematic because if fork do not fail (that
 			   is the usual behaviour) command line such as
@@ -595,8 +596,8 @@ int Dos9_StartFile(EXECINFO* info, int* error)
 
         arg[i + 1] = NULL;
 
-        /* lppsStreamStack = Dos9_OpenOutput(lppsStreamStack, "/dev/null",
-                                                   DOS9_STDOUT, 0); */
+        lppsStreamStack = Dos9_OpenOutput(lppsStreamStack, "/dev/null",
+                                                   DOS9_STDOUT, 0);
 
         /* apply Dos9 internal environment variables */
         Dos9_ApplyEnv(lpeEnv);
@@ -619,7 +620,8 @@ int Dos9_StartFile(EXECINFO* info, int* error)
 
     } else {
 
-        waitpid(pid, &status, 0);
+        if  (info->flags & DOS9_EXEC_WAIT)
+            waitpid(pid, &status, 0);
 
     }
 
