@@ -586,6 +586,10 @@ int Dos9_CmdForF(ESTR* lpInput, PARSED_LINE* lpplLine, FORINFO* lpfrInfo)
 
 		} else {
 
+            /* If the line starts with one of the EOL characters, just skip it */
+            if (strchr(lpfrInfo->lpEol, *(lpInputToP->str)))
+                continue;
+
 			Dos9_ForSplitTokens(lpInputToP, lpfrInfo);
 			/* split the block on subtokens */
 
@@ -622,308 +626,385 @@ int Dos9_ForMakeInfo(char* lpOptions, FORINFO* lpfiInfo)
     informations
 */
 {
-	ESTR* lpParam=Dos9_EsInit();
-	char* lpToken;
-	int status= DOS9_NO_ERROR;
+	ESTR* param = Dos9_EsInit();
+	char* token;
+	int status = DOS9_NO_ERROR,
+        type;
 
-	while ((lpOptions = Dos9_GetNextParameterEsD(lpOptions, lpParam, " "))) {
+	while ((lpOptions = Dos9_ForGetSpecifier(lpOptions, param, &type))) {
 
-		if (!(stricmp(Dos9_EsToChar(lpParam), "usebackq"))) {
-			/* if the script specifies "usebackq" it will change dos9 behaviour
-			of the for /f loop */
-			lpfiInfo->bUsebackq=TRUE;
+        switch (type) {
 
-			continue;
-
-		}
-
-
-		if ((lpToken = strchr(Dos9_EsToChar(lpParam), '='))) {
-
-			*lpToken='\0';
-			lpToken++;
-
-		} else {
-			/* if no '=' was found, then the entries are just
+        case DOS9_FOR_SPEC_INVALID:
+            /* if no '=' was found, then the entries are just
 			   wrong */
 			Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT,
-                                    Dos9_EsToChar(lpParam),
+                                   param->str,
                                     FALSE);
 
 			status = DOS9_UNEXPECTED_ELEMENT;
 			goto error;
-		}
 
-		/* switching to choose the appropriate parameter */
+        case DOS9_FOR_SPEC_USEBACKQ:
+            /* if the script specifies "usebackq" it will change dos9 behaviour
+               of the for /f loop */
+			lpfiInfo->bUsebackq=TRUE;
 
-		if (!(stricmp(Dos9_EsToChar(lpParam), "delims"))) {
+			continue;
 
-			Dos9_ForAdjustParameter(lpOptions, lpParam);
-			strncpy(lpfiInfo->lpDelims, lpToken, sizeof(lpfiInfo->lpDelims));
+        case DOS9_FOR_SPEC_DELIMS:
+            /* if the script specifies delims for the for /f loop */
+            token = param->str + sizeof("delims");  /* get the part after the '=' */
+
+            strncpy(lpfiInfo->lpDelims, token, sizeof(lpfiInfo->lpDelims));
 			lpfiInfo->lpDelims[sizeof(lpfiInfo->lpDelims)-1] = '\0';
 
             /* The default end-of-line character is ';', thus if you specify ';' as
-               a delimiter, It is wise to remove it end-of-line character if those have
+               a delimiter, It is wise to remove it of end-of-line character if those have
                not been redefined yet.
 
                This obviously does not cover the case where ';' is specified explicitely
                in both "delims" and "tokens" by the user. */
 
-			if (strchr(lpfiInfo->lpDelims, ' ') != NULL
+			if (strchr(lpfiInfo->lpDelims, ';') != NULL
                 && !strcmp(lpfiInfo->lpEol, ";"))
                 strcpy(lpfiInfo->lpEol, "");
 
+			break;
 
-		} else if (!(stricmp(Dos9_EsToChar(lpParam), "skip"))) {
+        case DOS9_FOR_SPEC_SKIP:
+            /* if skip is specified */
+            token = param->str + sizeof("skip");  /* get the part after the '=' */
+            lpfiInfo->iSkip=strtol(token, NULL, 0);
 
-			lpfiInfo->iSkip=strtol(lpToken, NULL, 0);
+            break;
 
-		} else if (!(stricmp(Dos9_EsToChar(lpParam), "eol"))) {
-
-			Dos9_ForAdjustParameter(lpOptions, lpParam);
-			strncpy(lpfiInfo->lpEol, lpToken, sizeof(lpfiInfo->lpEol));
+        case DOS9_FOR_SPEC_EOL:
+            /* If EOL is specified */
+            token = param->str + sizeof("eol");  /* get the part after the '=' */
+            strncpy(lpfiInfo->lpEol, token, sizeof(lpfiInfo->lpEol));
 			lpfiInfo->lpEol[sizeof(lpfiInfo->lpEol)-1] = '\0';
 
-		} else if (!(stricmp(Dos9_EsToChar(lpParam), "tokens"))) {
+			break;
 
-			/* Compute tokens */
-			if ((status = Dos9_ForMakeTokens(lpToken, lpfiInfo)))
+        case DOS9_FOR_SPEC_TOKENS:
+            /* If tokens is specified*/
+            token = param->str + sizeof("tokens");  /* get the part after the '=' */
+            if ((status = Dos9_ForMakeTokens(token, lpfiInfo)))
 				goto error;
-
-
-		} else {
-
-			Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT,
-                                    Dos9_EsToChar(lpParam),
-                                    FALSE);
-
-			status = DOS9_UNEXPECTED_ELEMENT;
-
-			goto error;
-
-		}
-
-	}
+        }
+    }
 
 error:
-	Dos9_EsFree(lpParam);
+	Dos9_EsFree(param);
 
 	return status;
 }
 
-int  Dos9_ForMakeTokens(char* lpToken, FORINFO* lpfrInfo)
+int Dos9_ForIsSpecifier(const char* restrict p)
 {
-	/* this is used to determine the usefull tokens for
-	   the parsing */
+    if (!strnicmp(p, "tokens=", sizeof("tokens=") - 1))
+        return DOS9_FOR_SPEC_TOKENS;
 
-	char* const lpOriginTok=lpToken;
-	char* lpNextToken;
-	int iTokenNb;
-	int isCat=FALSE;
-	int iPrevTok;
-	int i=0;
+    if (!strnicmp(p, "eol=", sizeof("eol=") - 1))
+        return DOS9_FOR_SPEC_EOL;
 
-	lpfrInfo->lpToken[0]=0;
+    if (!strnicmp(p, "delims=", sizeof("delims=") -1 ))
+        return DOS9_FOR_SPEC_DELIMS;
 
-	while (lpToken) {
+    if (!strnicmp(p, "skip=", sizeof("skip=") - 1 ))
+        return DOS9_FOR_SPEC_SKIP;
 
-		iTokenNb=strtol(lpToken, &lpNextToken, 0);
-		/* Accept both decimal, hexadecimal and octal notations */
+    if (!strncasecmp(p, "usebackq", sizeof("usebackq") - 1)
+        && (*(p + sizeof("usebackq") - 1) == '\0' ||
+            *(p + sizeof("usebackq") - 1) == ' '))
+        return DOS9_FOR_SPEC_USEBACKQ;
 
-		switch (*lpNextToken) {
-
-			case ',':
-				/* just save the token to high low order word */
-
-				if (!isCat) {
-
-					lpfrInfo->lpToken[i]|=TOHIGH(iTokenNb)+TOLOW(iTokenNb);
-
-				} else {
-
-					lpfrInfo->lpToken[i]|=TOLOW(iTokenNb);
-					isCat=FALSE;
-					break;
-				}
-
-				if (i >= TOKENINFO_NB_MAX ) {
-
-					Dos9_ShowErrorMessage(DOS9_FOR_TOKEN_OVERFLOW,
-                                            (char*)TOKENINFO_NB_MAX, FALSE);
-
-					return DOS9_FOR_TOKEN_OVERFLOW;
-
-				}
-
-
-
-				lpfrInfo->lpToken[++i]=0;
-
-				lpNextToken++;
-
-				break;
-
-
-			case '-':
-
-				if (isCat) {
-
-					Dos9_ShowErrorMessage(DOS9_FOR_BAD_TOKEN_SPECIFIER,
-                                            lpOriginTok, FALSE);
-
-					return DOS9_FOR_BAD_TOKEN_SPECIFIER;
-
-				}
-
-
-				isCat=TRUE;
-
-				lpfrInfo->lpToken[i]|=TOHIGH(iTokenNb);
-
-				lpNextToken++;
-
-				break;
-
-			case '\0':
-
-				if (iTokenNb) {
-
-					if (!isCat) {
-
-						lpfrInfo->lpToken[i]=TOHIGH(iTokenNb)+TOLOW(iTokenNb);
-
-					} else {
-
-						lpfrInfo->lpToken[i]|=TOLOW(iTokenNb);
-
-					}
-
-					lpfrInfo->lpToken[++i]=0;
-
-				} else {
-
-					if (isCat) {
-
-						Dos9_ShowErrorMessage(DOS9_FOR_BAD_TOKEN_SPECIFIER,
-                                                lpOriginTok, FALSE);
-
-						return DOS9_FOR_BAD_TOKEN_SPECIFIER;
-
-					}
-
-				}
-
-                lpNextToken=NULL;
-				break;
-
-			case '*':
-
-				/* some unlawful syntax as
-
-				    4-* -> in this case isCat is TRUE
-				    4* -> in this case isCat is set to false and iTokenNb=4
-				    3,* ->
-
-				*/
-
-				if (!isCat) {
-
-					if (iTokenNb != 0) {
-
-						lpfrInfo->lpToken[i]|=TOHIGH(iTokenNb);
-
-
-					} else if (i > 0) {
-
-						iPrevTok=LOWWORD(lpfrInfo->lpToken[i-1]);
-
-						if (iPrevTok == -1) iPrevTok=0;
-
-
-						lpfrInfo->lpToken[i]|=TOHIGH(iPrevTok+1);
-
-					} else {
-
-						lpfrInfo->lpToken[i]|=TOHIGH(1);
-
-					}
-
-				}
-
-				lpfrInfo->lpToken[i]|=TOLOW(ALL_TOKEN);
-
-				lpfrInfo->lpToken[++i]=0;
-
-				lpNextToken++;
-
-				if (!*lpNextToken) {
-                    lpNextToken=NULL;
-				    break;
-				}
-
-
-                if (*lpNextToken!=',') {
-
-					Dos9_ShowErrorMessage(DOS9_FOR_BAD_TOKEN_SPECIFIER,
-                                                lpNextToken, FALSE);
-
-					return DOS9_FOR_BAD_TOKEN_SPECIFIER;
-
-				}
-
-				lpNextToken++;
-
-				break;
-
-			default:
-
-				Dos9_ShowErrorMessage(DOS9_UNEXPECTED_ELEMENT,
-                                                lpToken, FALSE);
-				return DOS9_UNEXPECTED_ELEMENT;
-
-		}
-
-		lpToken=lpNextToken;
-
-	}
-
-
-	lpfrInfo->iTokenNb=i;
-
-
-	return 0;
-
+    return 0;
 }
 
-void Dos9_ForAdjustParameter(char* lpOptions, ESTR* lpParam)
+char* Dos9_ForGetSpecifier(const char* restrict in, ESTR* restrict out, int* restrict type)
 {
-	char lpTemp[2]= {0,0};
+    char *next = NULL;
+
+    *type = Dos9_ForIsSpecifier(in);
+
+    if (*in == '\0')
+        return NULL;
+
+    /* find next space  or end of string */
+    if (!(next = strchr(in, ' '))) {
+        next = in + strlen(in);
+    } else {
+        /*skip unnecessary spaces */
+        while (*(next + 1)== ' ')
+            next++;
+    }
+
+    if (*type && *type != DOS9_FOR_SPEC_USEBACKQ) {
+
+        /* this is an equal based spec, iterate through spaces
+           to find the next valid specifier */
+
+        while (*next && !Dos9_ForIsSpecifier(next+1)) {
 
 
-	/* This functions completes lpParam with either spaces
+            if (!(next = strchr(next + 1, ' '))) {
 
-	 */
+                /* We reached the end of the line */
+                next = in + strlen(in);
+                break;
 
+            } else {
 
-	if (*lpOptions != '\0') {
+                /* skip unnecessary spaces */
+                while (*(next + 1) == ' ')
+                    next ++;
 
-		if (*(lpOptions+1) == ' ' || *(lpOptions+1) == '\t') {
+            }
+        }
+    }
 
-			lpTemp[0]=*lpOptions;
+    Dos9_EsCpyN(out, in, next - in);
 
-			Dos9_EsCpy(lpParam, lpTemp);
-
-			if (*(lpOptions+2) == ' ' || *(lpOptions+2) == '\t') {
-
-				lpTemp[0]=*lpOptions;
-
-				Dos9_EsCpy(lpParam, lpOptions);
-
-			}
-		}
-	}
+    return *next ? next + 1 : next;
 }
 
+int  Dos9_ForMakeTokens (char* p,  FORINFO* infos)
+{
+    int start =-1, /* The start of the token chunk */ /* -² means empty */
+        end =-1, /* The end of the token chunk */
+        operator = -1, /* The operator */
+        nb,
+        ok = 1,
+        last = 0, /* the last token */
+        i = 0; /* the current token index in FORINFO */
+
+    char* next, /* A pointer to the next item to process */
+          previous='\0', /* the memory of the last character */
+          *orig = p;
+
+    while (ok) {
+
+        /* skip unnecessary spaces and tabs */
+        while (*p == ' ' || *p == '\t')
+            p++;
+
+        /* try to read an actual number from the specifier */
+        nb = strtol(p, &next, 0); /* accept all formats (octal / hex / dec) */
+
+        if (next == p) {
+
+            /* Getting no number is unexpected unless p is `\0` or
+              p is `*` or the previous item was `*` and it is followed as
+              expected by `,` or the end of the string*/
+
+            if (*p && *p != '*'
+                && (previous == '*' &&  *p != ',' && *p != '\0'))
+                goto bad_token;
+
+
+        } else if (previous == '*') {
+
+            /* There is some trailing numbers right after a `*`, this is
+               unexpected */
+            goto bad_token;
+
+        } else if (operator != -1) {
+
+            if (start == -1) {
+                /* We have an operator but no start value, something
+                    has gone wrong */
+                goto bad_token;
+            }
+
+            /* This is the second member of a operator like - or . */
+            end = nb;
+
+        } else {
+
+            /* This is the first member */
+            start = nb;
+
+        }
+
+        p = next;
+
+        /* skip unnecessary spaces and tabs */
+        while (*p == ' ' || *p == '\t')
+            p++;
+
+        if (start == -1 && *p != '*') {
+            /* That's unexpected, we have a line that has no first member,
+               and the operator caracter is neither * */
+            goto bad_token;
+        }
+
+        /* Save the current character for subsequent loops */
+        previous = *p;
+
+        switch (*p)  {
+
+        case ',':
+        case '\0':
+            /* It is time to write to struct */
+
+
+            if (operator == - 1)  {
+
+                /* check there's still room for a new token chunk in the
+                       infos structure */
+                if (i >= TOKENINFO_NB_MAX )
+                    goto infos_overflow;
+
+                /* write a single token to infos */
+                infos->lpToken[i]|=TOHIGH(start)+TOLOW(start);
+                i++;
+
+                last = start;
+
+
+            } else if (end == -1) {
+
+                /* We have an operator but no second member, that's
+                   also unexpected .... */
+                goto bad_token;
+
+            } else {
+
+
+                if (operator == DOS9_FOR_TOKEN_CAT) {
+
+                    /* check there's still room for a new token chunk in the
+                       infos structure */
+                    if (i >= TOKENINFO_NB_MAX )
+                        goto infos_overflow;
+
+                    /* write a cat token to infos */
+                    infos->lpToken[i]|=TOHIGH(start)+TOLOW(end);
+                    i++;
+
+                } else {
+
+                    /* loop through tokens from start to end */
+                    while (start <= end) {
+
+                        /* check there's still room for a new token chunk in the
+                            infos structure */
+                        if (i >= TOKENINFO_NB_MAX )
+                            goto infos_overflow;
+
+                        infos->lpToken[i]|=TOHIGH(start)+TOLOW(start);
+                        i++;
+
+                        start ++;
+
+                    }
+
+                }
+
+                last = end;
+
+            }
+
+            /* reset internals */
+            operator = -1;
+            start = -1;
+            end = -1;
+
+
+
+            /* interupt the loop if we reached the end of the string */
+            if (!*p)
+                ok = 0;
+
+            p++;
+            break;
+
+
+        case '-':
+
+            if (end != -1)
+                goto bad_token;
+
+            /* select list operator */
+            operator = DOS9_FOR_TOKEN_LIST;
+
+            p++;
+            break;
+
+        case '.':
+
+            if (end != -1)
+                goto bad_token;
+
+            /* select catenation operator */
+            operator = DOS9_FOR_TOKEN_CAT;
+
+            p++;
+            break;
+
+        case '*':
+
+            if (start == -1) {
+
+                /* This is the basic * character */
+                start = last + 1;
+                end = ALL_TOKEN;
+                operator = DOS9_FOR_TOKEN_CAT;
+
+            } else if (operator == -1) {
+
+                /* This select the token `start` plus another chunk
+                   of tokens from `start + 1` to `ALL_TOKEN` */
+
+                if (i >= TOKENINFO_NB_MAX )
+                    goto infos_overflow;
+
+                /* write a single token to infos */
+                infos->lpToken[i]|=TOHIGH(start)+TOLOW(start);
+                i++;
+
+                start ++;
+                operator = DOS9_FOR_TOKEN_CAT;
+                end = ALL_TOKEN;
+
+            } else if (operator == DOS9_FOR_TOKEN_LIST) {
+
+                /* we certainly can't do 1-* */
+                goto bad_token;
+
+            } else if (operator == DOS9_FOR_TOKEN_CAT) {
+
+                /* Select all tokens from begin up to the end */
+                end = ALL_TOKEN;
+            }
+
+            p++;
+            break;
+
+        default:
+            /* That's unexpected ... */
+            goto bad_token;
+
+        }
+    }
+
+    infos->iTokenNb = i;
+
+    return 0;
+
+infos_overflow:
+    Dos9_ShowErrorMessage(DOS9_FOR_TOKEN_OVERFLOW,
+                            (char*)TOKENINFO_NB_MAX, FALSE);
+
+    return DOS9_FOR_TOKEN_OVERFLOW;
+
+bad_token:
+    Dos9_ShowErrorMessage(DOS9_FOR_BAD_TOKEN_SPECIFIER,
+                                    orig, FALSE);
+    return DOS9_FOR_BAD_TOKEN_SPECIFIER;
+}
 
 /* ************************************************************
     tokenization function
@@ -940,19 +1021,6 @@ void Dos9_ForSplitTokens(ESTR* lpContent, FORINFO* lpfrInfo)
 	     *lpEol=lpfrInfo->lpEol;
 
 	char cVarName=lpfrInfo->cFirstVar;
-
-
-	if ((lpToken=strpbrk(Dos9_EsToChar(lpContent), lpEol))) {
-
-		*lpToken='\0';
-
-	}
-	/* Truncate line at the first apparition of a end-of-line
-	   charcaters
-
-	   As specified by ``eol=;'' for example
-
-	   */
 
 	for (i=0; i < lpfrInfo->iTokenNb; i++) {
 
@@ -992,7 +1060,7 @@ void Dos9_ForGetToken(ESTR* lpContent, FORINFO* lpfrInfo, int iPos, ESTR* lpRetu
 	*Dos9_EsToChar(lpReturn) = '\0';
 
 	/*  the type of line that arrives here is already truncated
-	    at the first character specified in eof parameter */
+	    at the first character specified in eol parameter */
 
 	/* printf("Getting token nb. %d\n"
 	       "\t* iTokenBegin = %d\n"

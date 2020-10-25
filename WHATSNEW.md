@@ -2560,5 +2560,24 @@ build without prior
 ## Saturday, October 24th ##
 
 * Fixed a bug that would not let the user add a space or a delimiter after 
-  labels specifiers. 
+  labels specifiers.
+
+* Fixed a couple of bugs of the **FOR** command :
+
+  * Allow spaces to be inserted in **delims=** specifiers and provide a more 
+    robust parsing function for **FOR /F** options.
+
+  * Fixed incorrect behaviour of **eol** specifier. The **FOR /F** loop only 
+    skips inputs when the first character of the line processed has been 
+    specified through **eol**, this should not be a truncation.
+
+  * Fixed incorrect behaviour of **tokens** specifiers. The **n-p** specifier 
+    used to provide a concatenation of tokens from **n** up to **p** into a 
+    single variable. However, in **cmd** it selects **n** up to **p** but in 
+    different variables \(ie. not concatenated\). This behaviour has been 
+    fixed and **Dos9** has now the same behaviour as **cmd**.
+
+  * Added a syntax for **tokens** specifier which enables using the old 
+    **n-p** behaviour. The syntax is **n.p**, it provides a variable that 
+    contain all the tokens from **n** up to **p** 
 

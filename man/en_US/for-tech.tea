@@ -96,11 +96,12 @@ ${FOR /F [options] %%A IN (object) DO (
 )}
 
 	Execute some command on a string, a command output or a file. To ease the
-	reading of this page, parameters and switches described in the preceding paragraph
-	will not be described again.
+	reading of this page, parameters and switches described in the preceding
+    paragraph will not be described again.
 	
-	- {object} : the object that as to be used as the {FOR} command input {FOR}.
-	This parameter can be (or not) surrounded by one of these following delimiters:
+	- {object} : the object that as to be used as the {FOR} command input 
+    {FOR}. This parameter can be (or not) surrounded by one of these 
+    following delimiters:
 	
 	-- {'} : {Object} refers to a command whose output is used as {FOR}
 	loop input.
@@ -114,30 +115,33 @@ ${FOR /F [options] %%A IN (object) DO (
 	scripts as input. {dos9|Dos9} removed this restriction, as such more
 	complex script can be used as input.
 	
-	-- {"} : {Object} refer to a string of characters. The {FOR} loop will then
-	use {object} as input. If this string contains any end-of-line characters, then
-	this line will be used line by line.
+	-- {"} : {Object} refer to a string of characters. The {FOR} loop will 
+    then use {object} as input. If this string contains any end-of-line 
+    characters, then this line will be used line by line.
 	
-	-- If neither of the preceding characters surround {object}, then {object} refers
-	to a file name. The {FOR} loop will then open the file and read it entire content
-	and run the commands specified on its content.
+	-- If neither of the preceding characters surround {object},
+    then {object} refers to a file name. The {FOR} loop will then open the
+    file and read it entire content and run the commands specified on its
+    content.
 
-	@-- This file can obviously be multiline, but it is supposed to be somehow a
-	{text} file. If the file is not a {text} file, then the behaviour is unspecified.
+	@-- This file can obviously be multiline, but it is supposed to be 
+    somehow a {text} file. If the file is not a {text} file, then the
+    behaviour is unspecified.
 	
-	@-- As opposed to {cmd.exe}, {Dos9} does not remove empty lines from the loop
-	input. Nonetheless, a compatible behaviour can be enabled using {CMDLYCORRECT}
-	option from the command {setlocal|SETLOCAL}.
+	@-- As opposed to {cmd.exe}, {Dos9} does not remove empty lines from the
+    loop input. Nonetheless, a compatible behaviour can be enabled using
+    {CMDLYCORRECT} option from the command {setlocal|SETLOCAL}.
 
-	- {options} : options that must be used by the {FOR} loop. This options have to
-	be either one parameter containing all the options or a combination of various
-	parameters containing a bit of all information on options. Every option has
-	to be specified using the option name followed by the "=" sign and the
-	value associated with the option:
+	- {options} : options that must be used by the {FOR} loop. This options
+    have to be either one parameter containing all the options or a 
+    combination of various parameters containing a bit of all information on
+    options. Every option has to be specified using the option name followed
+    by the "=" sign and the value associated with the option:
 	
 	-- {eol} : Specify some characters to be used as end of line.
-	All the characters following the eol are
-	used as end of line. By default, this parameter is the semi colon {;}.
+	Any input line starting with the one of the characters specified by
+    {eol} will be skipped by the {FOR} command. By default, this parameter
+    is the semi colon {;}.
 
 	@-- At most {FILENAME_MAX-1} (ie. 259 characters using windows) different
 	characters from {ASCII} table, or from a single byte encoding (however,
@@ -152,25 +156,36 @@ ${FOR /F [options] %%A IN (object) DO (
 	@-- If the number given surpasses the actual length of the input, then
 	the loop will be skipped. The default value is 0.
 
-	-- {tokens} : A list specifying the way chunks of input lines will be assigned
-	to {spec/xvar|special variables} such as %%A. The list must conform to the
-	following rules, elements of the list must be separated using commas:
+	-- {tokens} : A list specifying the way chunks of input lines will be
+    assigned to {spec/xvar|special variables} such as %%A. The list must
+    conform to the following rules, elements of the list must be separated
+    using commas:
 	
 	--- {n} : Where {n} is an integer. Select the {n}-th tokens.
 	
-	--- {n-p} : Where {n} and {p} are integers. Select input from the {n}-th
-	tokens up to the {p}-th included.
+	--- {n-p} : Where {n} and {p} are integers. Select every token from the
+    {n}-th token to the {p}-th and stores each token in a different
+    {special variable}. This syntax is equivalent to {n,n+1,...,p-1,p}.
+
+    --- {n.p} : Where {n} and {p} are integers. Select every token from the
+    {n}-th token up to the {p}-th token and store their concatenation in a
+    single {special variable}.
+
+    --- {n*} : Where {n} is an integer. Select the  {n}-th token and store it
+    in a {special variable}, then select all the remaining tokens and store
+    them in the next {special variable}. This syntax is equivalent to {n,*}.
 	
-	--- {*} : Selects  all of the remaining tokens (all those following the last
-	selected token). This parameter can be used as {p} for the preceding syntax
-	{n-p}, in this case, it selects all of the tokens remaining after the {n}-th
-	token (included).
+	--- {*} : Selects  all of the remaining tokens (all those following the
+    last selected token). This parameter cannot be used as {p} for in the
+    {n-p} syntax, but it can for {n.p} syntax; in this case, it selects all
+    of the tokens remaining after the {n}-th token (included) and stores it 
+    in a single special variable.
 	
 	@-- Every selected set of tokens is assigned to a different
-	{spec/xvar|special variable}, starting with the specified {FOR} loop variable
-	and incrementing the {ASCII} code for every new set of token (roughly corresponding
-	to an alphabetical progression). If the code passes over {0x7F}, then the
-	following variable will be {0x21} (ie {!}).
+	{spec/xvar|special variable}, starting with the specified {FOR} loop
+    variable and incrementing the {ASCII} code for every new set of token
+    (roughly corresponding to an alphabetical progression). If the code
+    passes over {0x7F}, then the following variable will be {0x21} (ie {!}).
 
 	@-- If {FOR} has to assign an already assigned var, the loops stoops on
 	error.
@@ -193,10 +208,10 @@ ${FOR /F [options] %%A IN (object) DO (
 	used by the {FOR} loop.
 
 	-- {usebackq} : Uses the new syntax introduced with {Windows NT}; If
-	{object} is enclosed in single quotes, then string input is assumed. However,
-	if it enclosed in backward quotes, then command input is assumed. This
-	parameter is the only one requiring neither an equal sign nor a value
-	attached to it.
+	{object} is enclosed in single quotes, then string input is assumed.
+    However, if it enclosed in backward quotes, then command input is
+    assumed. This parameter is the only one requiring neither an equal sign
+    nor a value attached to it.
 	
 	@-- This parameter was really usefull using {cmd.exe} that frequently
 	truncates strings input from {FOR} whenever some usual double quote is
@@ -279,8 +294,8 @@ Charlie is French. He is Wally's counterpart in France}
 
 {{Synopsis - Third syntax}}
 
-	The third syntaxe allows doing traditional {FOR} loops (ie. a loop incrementing
-	a variable every new loop; in a somehow {C}-like manner).
+	The third syntaxe allows doing traditional {FOR} loops (ie. a loop
+    incrementing a variable every new loop; in a somehow {C}-like manner).
 	
 ${FOR /L %%A IN (start,step,end) DO (
 	:: Some commands
@@ -290,13 +305,13 @@ ${FOR /L %%A IN (start,step,end) DO (
 
 		- {step} : Steps value.
 
-		- {end} : The maximum value that {%%A} can reach by looping. When {%%A} gets
-		greater than {end}, the loop stops. If {end} is less than {start}, the loop is
-		not run.
+		- {end} : The maximum value that {%%A} can reach by looping. When
+        {%%A} gets greater than {end}, the loop stops. If {end} is less than
+        {start}, the loop is not run.
 		
-	The {FOR} loop requires {start}, {step} and {end} to be integers. If floating point
-	numbers are specified, they will be floored. If string is specified, the behaviours
-	is not defined.
+	The {FOR} loop requires {start}, {step} and {end} to be integers. If
+    floating point numbers are specified, they will be floored. If string
+    is specified, the behaviours is not defined.
 
 	{Example:} Counting from 1 to 10:
 
@@ -345,21 +360,23 @@ ${FOR /F "tokens=*" %%A IN ('dir /b /s /a:-D basedir/regexp') DO (
 
 {{Compatibility}}
 
-	Mostly compatible with {cmd.exe}. However, any code from {cmd.exe} can be executed 
-	with no bugs under {Dos9} concerning {FOR} loops.
+	Mostly compatible with {cmd.exe}. However, any code from {cmd.exe} can
+    be executed  with no bugs under {Dos9} concerning {FOR} loops.
 	
-	However, one can come across some unexpected behaviour using the {tokens} options.
-	Indeed, if tokens specifiers are not specified from the lowest to the highest, then
-	{cmd.exe} will silently try to sort the tokens. However {Dos9} does not do so, leading
-	to a potential unexpected behaviour. In addition, {Dos9} performs all right when two
-	tokens specifiers overlap (eg. "4-6,5-7") although {cmd.exe} fails to handle such
+	However, one can come across some unexpected behaviour using the {tokens}
+    options. Indeed, if tokens specifiers are not specified from the lowest to
+    the highest, then {cmd.exe} will silently try to sort the tokens. 
+    However {Dos9} does not do so, leading to a potential unexpected behaviour.
+    In addition, {Dos9} performs all right when two tokens specifiers overlap
+    (eg. "4-6,5-7") although {cmd.exe} fails to handle such
 	specifiers correctly.
 
-	Also, {Dos9} does process empty lines while using {/F} switches while {cmd.exe} keeps
-	skipping them. However this behaviour may be changed using {CMDLYCORRECT}.
+	Also, {Dos9} does process empty lines while using {/F} switches while
+    {cmd.exe} keeps skipping them. However this behaviour may be changed using
+    {CMDLYCORRECT}.
 
-	The {FOR} command is availables since version {0.7.0.0}. The {FOR /F} command is
-	totally functionnal since version {0.7.0.2}.
+	The {FOR} command is availables since version {0.7.0.0}.
+    The {FOR /F} command is totally functionnal since version {0.7.0.2}.
 
 {{See also}}
 

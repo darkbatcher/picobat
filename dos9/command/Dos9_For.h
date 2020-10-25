@@ -131,8 +131,21 @@ int Dos9_ForMakeInfo(char* lpOptions, FORINFO* lpfrInfo);
    i.e. from a string like "tokens=1,3,4 delims=, "
 */
 
-void Dos9_ForAdjustParameter(char* lpOptions, ESTR* lpParam);
-/* Adjust parametrt for for loops */
+#define DOS9_FOR_SPEC_INVALID   0
+#define DOS9_FOR_SPEC_USEBACKQ  1
+#define DOS9_FOR_SPEC_TOKENS    2
+#define DOS9_FOR_SPEC_DELIMS    3
+#define DOS9_FOR_SPEC_SKIP      4
+#define DOS9_FOR_SPEC_EOL       5
+
+int Dos9_ForIsSpecifier(const char* restrict p);
+/* check if the tokens begins with a specifier */
+
+char* Dos9_ForGetSpecifier(const char* restrict in, ESTR* restrict out, int* restrict type);
+/* Get the next specifier of the line */
+
+#define DOS9_FOR_TOKEN_LIST 0 /* a value for the ',' token operator */
+#define DOS9_FOR_TOKEN_CAT  1 /* a value for the '.' token operator */
 
 int  Dos9_ForMakeTokens(char* lpToken, FORINFO* lpfrInfo);
 /* Make token descriptions on the for loop */
