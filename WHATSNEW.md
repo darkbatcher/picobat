@@ -2579,5 +2579,7 @@ build without prior
 
   * Added a syntax for **tokens** specifier which enables using the old 
     **n-p** behaviour. The syntax is **n.p**, it provides a variable that 
-    contain all the tokens from **n** up to **p** 
+    contain all the tokens from **n** up to **p**
+
+* Improved documentation of lookahead commands on GUIDELINES file. 
 

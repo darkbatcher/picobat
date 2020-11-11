@@ -268,6 +268,33 @@ displayed as a complement to the error message. If **iExitCode** is different
 from 0, then the function terminates the Dos9 process with **iErrorNumber** as 
 exit code.
 
+## LookAHead command ##
+
+**Dos9** currently provides a mechanism to make commands behave like the FOR 
+and if commands \(which are called in Dos9 jargon "lookahead" commands\). 
+These commands have the particularity to automatically group command 
+left-wise; for example :
+
+$\(lookahead-cmd args & cmd :: equivalent to lookahead-cmd \(args & cmd\)}
+
+A lookAHead command is declared using the **DOS9\_COMMAND\_LOOKAHEAD** flag in 
+the definition of the command in **dos9/command/Dos9\_CommandInfo.c**. This 
+flag implicitly supposes that the prototype of the command function, supplied 
+in the **fn** field is the following:
+
+    int MyLookAheadCommand(const char* cmd, PARSED_LINE** line);
+
+The field **\*\*line**, is a pointer to the **Dos9\_RunParsedLine\(\)** copy 
+of the current **PARSED\_LINE\*** being executed. Thus **\*line** can be set 
+to NULL without causing any memory leakage as it is a copy of the original 
+pointer. The lookahed commands are allowed to mess with the PARSED\_LINE for 
+subsequent execution.
+
+To add a block at the beginning of the PARSED\_LINE, the following function 
+may be used :
+
+    PARSED_LINE* Dos9_LookAHeadMakeParsedLine(BLOCKINFO* block, PARSED_LINE* lookahead)
+
 ## Creating Modules ##
 
 The version **218.3** introducted the possibility to load modules in order to 
@@ -322,7 +349,7 @@ When a module gets loaded by **Dos9**, the module function
 **Dos9\_ModuleAttach\(\)** is called just after completing interfaces set-up. 
 This allow for some module specific set-up \(such as global variables or 
 libraries initialization\) and registration of commands provided by modules 
-using **Dos9\_RegisterCommand\(\)**.
+using **Dos9\_RegisterCommand\(\)**. 
 
 ## Using gettext ##
 
@@ -368,5 +395,5 @@ messages defined in **dos9/lang/Dos9\_ShowHelp.c** can contain '\n' characters
 that will be translated at runtime to the appropriate end-of-line characters.
 
 When adding new messages, please avoid to break the standard message format 
-used by already defined messages. 
+used by already defined messages.
 
