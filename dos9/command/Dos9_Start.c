@@ -149,16 +149,23 @@ int Dos9_CmdStart(char* line)
 
             info.flags &= ~DOS9_EXEC_SEPARATE_WINDOW;
 
-        } else if (!stricmp(param->str, "/NORMAL")) {
-        } else if (!stricmp(param->str, "/SHARED")) {
-        } else if (!stricmp(param->str, "/SEPARATE")) {
-        } else if (!stricmp(param->str, "/HIGH")) {
-        } else if (!stricmp(param->str, "/LOW")) {
-        } else if (!stricmp(param->str, "/REALTIME")) {
-        } else if (!stricmp(param->str, "/ABOVENORMAL")) {
-        } else if (!stricmp(param->str, "/BELOWNORMAL")) {
-
-        /* ignore all that shit */
+        } else if (!stricmp(param->str, "/NORMAL")              /* \        */
+                    ||!stricmp(param->str, "/SHARED")           /* |        */
+                    || !stricmp(param->str, "/SEPARATE")        /* |        */
+                    || !stricmp(param->str, "/HIGH")            /* |        */
+                    || !stricmp(param->str, "/LOW")             /* |        */
+                    || !stricmp(param->str, "/REALTIME")        /* | Ignore */
+                    || !stricmp(param->str, "/ABOVENORMAL")     /* | all    */
+                    || !stricmp(param->str, "/BELOWNORMAL")) {  /* | that   */
+                                                                /* | shitty */
+            /* do nothing */                                    /* | opts   */
+        } else if (!stricmp(param->str, "/NODE")                /* |        */
+                    || !stricmp(param->str, "/AFFINITY")) {     /* |        */
+                                                                /* |        */
+            if (next)                                           /* |        */
+                next = Dos9_GetNextParameterEs(next, param);    /* |        */
+                                                                /* |        */
+            /* do nothing */                                    /* /        */
 
         } else if (!stricmp(param->str, "/D")) {
 
