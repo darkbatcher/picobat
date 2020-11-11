@@ -2508,3 +2508,6 @@ ${(for %%a in (foo bar) do echo %%a) & echo loop}
     internal help for the start command.$
 
     - Fixed issue with combined pipes on linux based systems.
+
+    - Fixed {MORE} command to use a proper console input file instead of
+    {fInput} when run interactively.

@@ -29,7 +29,8 @@ int Dos9_CmdMore(char* lpLine);
                                       windows, so does nothing */
 #define DOS9_MORE_USEU8     (0x08) /* Enable internal utf-8 support */
 #define DOS9_MORE_ANSICODES (0x10) /* Enable ansi-codes clever handling */
+#define DOS9_MORE_INTERACTIVE (0x20) /* interractive interactive */
 
-int Dos9_MoreFile(int flags, int tabsize, int begin, char* filename);
+int Dos9_MoreFile(FILE* in, int flags, int tabsize, int begin, char* filename);
 
 #endif /* DOS9_MORE_H */

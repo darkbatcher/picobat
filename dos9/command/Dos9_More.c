@@ -42,12 +42,13 @@
 #include "../../config.h"
 
 static int Dos9_MoreWriteLine(int* begin, int flags, int tabsize, FILE* file);
-static int Dos9_MorePrompt(int* toprint, int* skip, int* ok);
+static int Dos9_MorePrompt(FILE* fIn, int* toprint, int* skip, int* ok);
 
 int Dos9_CmdMore(char* line)
 {
 
     ESTR* param=Dos9_EsInit();
+    FILE* fIn = NULL;
     int flags= DOS9_MORE_ANSICODES | DOS9_MORE_USEU8,
         tabsize=8,
         begin=0,
@@ -169,9 +170,32 @@ int Dos9_CmdMore(char* line)
         flags |= DOS9_MORE_CLEAR;
     #endif /* LIBDOS9_NO_CONSOLE */
 
+    if (isatty(fileno(fOutput))) {
+        flags |= DOS9_MORE_INTERACTIVE;
+
+#ifdef WIN32
+#define DOS9_MORE_INPUT_PATH "CONIN$"
+#else
+#define DOS9_MORE_INPUT_PATH "/dev/tty"
+#endif
+
+        /* We are running interactive so check that fInput is
+           also a console input or open a file pointing to
+           /dev/tty or equivalent on windows */
+        if (isatty(fileno(fInput)))
+            fIn = fInput;
+        else if (!(fIn = fopen(DOS9_MORE_INPUT_PATH, "r"))) {
+
+            Dos9_ShowErrorMessage(DOS9_FILE_ERROR,
+                                        DOS9_MORE_INPUT_PATH, -1);
+
+        }
+
+    }
+
     if (!list) {
 
-        Dos9_MoreFile(flags, tabsize, begin, NULL);
+        Dos9_MoreFile(fIn, flags, tabsize, begin, NULL);
 
     } else {
 
@@ -199,7 +223,7 @@ int Dos9_CmdMore(char* line)
 
         while (next && !status) {
 
-            status = Dos9_MoreFile(flags, tabsize, begin, next->lpFileName);
+            status = Dos9_MoreFile(fIn, flags, tabsize, begin, next->lpFileName);
             next = next->lpflNext;
 
         }
@@ -207,13 +231,15 @@ int Dos9_CmdMore(char* line)
     }
 
 end:
+    if (fIn && fIn != fInput)
+        fclose(fIn);
     Dos9_FreeFileList(list);
     Dos9_EsFree(param);
     return status;
 
 }
 
-int Dos9_MoreFile(int flags, int tabsize, int begin, char* filename)
+int Dos9_MoreFile(FILE* in, int flags, int tabsize, int begin, char* filename)
 {
 
     FILE *file;
@@ -242,13 +268,10 @@ int Dos9_MoreFile(int flags, int tabsize, int begin, char* filename)
 
      }
 
-     if (!isatty(fileno(fOutput))) {
+     if (!(flags & DOS9_MORE_INTERACTIVE)) {
 
         /* if we do not output in a tty, do not perform user interaction */
-
         while (Dos9_MoreWriteLine(&begin, flags, tabsize, file));
-
-        goto end;
 
      } else {
 
@@ -266,11 +289,13 @@ int Dos9_MoreFile(int flags, int tabsize, int begin, char* filename)
 
             }
 
+            if (isatty(fileno(fOutput)))
+
             while (toprint -- && ok)
                 ok = Dos9_MoreWriteLine(&begin, flags, tabsize, file);
 
 
-            if (Dos9_MorePrompt(&toprint, &begin, &ok))
+            if (Dos9_MorePrompt(in, &toprint, &begin, &ok))
                 goto end;
 
         }
@@ -469,13 +494,13 @@ static int Dos9_MoreWriteLine(int* begin, int flags, int tabsize, FILE* file)
 
 }
 
-int Dos9_GetMoreNb(void)
+int Dos9_GetMoreNb(FILE *in)
 {
 
     int ret=0,
         c;
 
-    while ((c=Dos9_Getch(fInput)) >= '0' && c <= '9')
+    while ((c=Dos9_Getch(in)) >= '0' && c <= '9')
         ret = ret*10 + c - '0';
 
     return ret;
@@ -483,14 +508,14 @@ int Dos9_GetMoreNb(void)
 }
 
 
-static int Dos9_MorePrompt(int* toprint, int* skip, int* ok)
+static int Dos9_MorePrompt(FILE* in, int* toprint, int* skip, int* ok)
 {
 	int i;
     fprintf(fOutput, "-- More --");
 
     while (1) {
 
-        switch(i=Dos9_Getch(fInput)) {
+        switch(i=Dos9_Getch(in)) {
 
             case 'q':
             case 'Q':
@@ -503,13 +528,13 @@ static int Dos9_MorePrompt(int* toprint, int* skip, int* ok)
 
             case 'S':
             case 's':
-                *skip = Dos9_GetMoreNb();
+                *skip = Dos9_GetMoreNb(in);
                 *toprint=23 ; /* refresh the entire screen */
                 goto end;
 
             case 'P':
             case 'p':
-                *toprint = Dos9_GetMoreNb();
+                *toprint = Dos9_GetMoreNb(in);
                 goto end;
 
 			case '\r': /* Windows actually returns a '\r' (ie 0x0D) when the
@@ -526,7 +551,7 @@ static int Dos9_MorePrompt(int* toprint, int* skip, int* ok)
                 /* clean the line */
                 Dos9_ClearConsoleLine(fOutput);
                 fprintf(fOutput, "-- ? : Help    Q : Quit   Sn : Skip n lines    Pn : Print n lines --");
-                Dos9_Getch(fInput);
+                Dos9_Getch(in);
                 Dos9_ClearConsoleLine(fOutput);
                 fprintf(fOutput, "-- More --");
                 break;
