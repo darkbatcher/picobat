@@ -99,6 +99,7 @@ int Dos9_CmdExit(char* lpLine)
 		}
 	}
 
+    /* Exit from the interpretor */
     Dos9_Exit();
 
     /* End thread or  the program */

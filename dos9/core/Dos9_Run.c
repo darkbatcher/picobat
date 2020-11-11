@@ -62,9 +62,6 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
 
 	while (!(pIn->bEof)) {
 
-		DOS9_DBG("[*] %d : Parsing new line\n", __LINE__);
-
-
 		if (*(pIn->lpFileName)=='\0'
 		    && bEchoOn ) {
 
@@ -99,11 +96,7 @@ int Dos9_RunBatch(INPUT_FILE* pIn)
         else
             bAbortCommand = 0;
 
-		DOS9_DBG("\t[*] Line run.\n");
-
 	}
-
-	DOS9_DBG("*** Input ends here  ***\n");
 
 	Dos9_EsFree(lpLine);
 
@@ -237,21 +230,7 @@ void Dos9_LaunchPipe(struct pipe_launch_data_t* infos)
 int Dos9_ExecOutput(PARSED_STREAM* lppssStart)
 {
 
-    DOS9_DBG("lppssStart->lpInputFile=%s\n"
-	         "          ->lpOutputFile=%s\n"
-	         "          ->cOutputMode=%d\n"
-	         "lppssStart->cOutputMode & ~PARSED_STREAM_START_MODE_TRUNCATE=%d\n"
-	         "lppssStart->cOutputMode & PARSED_STREAM_START_MODE_TRUNCATE=%d\n"
-	         "STDOUT_FILENO=%d\n",
-	         lppssStart->lpInputFile,
-	         lppssStart->lpOutputFile,
-	         lppssStart->cOutputMode,
-	         lppssStart->cOutputMode & ~PARSED_STREAM_MODE_TRUNCATE,
-	         lppssStart->cOutputMode & PARSED_STREAM_MODE_TRUNCATE,
-	         STDOUT_FILENO
-	        );
-
-	if (!lppssStart
+    if (!lppssStart
         || (!(lppssStart->lpInputFile)
 	    && !(lppssStart->lpOutputFile)
         && !(lppssStart->lpErrorFile)
@@ -319,12 +298,9 @@ int Dos9_RunLine(ESTR* lpLine)
 
 	orig = Dos9_ParseLine(lpLine);
 
-	if (orig == NULL) {
-
-		DOS9_DBG("!!! Can't parse line : \"%s\".\n", strerror(errno));
+	if (orig == NULL)
 		return -1;
 
-	}
 
 	Dos9_RunParsedLine(orig);
 
@@ -506,13 +482,6 @@ int Dos9_RunBlock(BLOCKINFO* lpbkInfo)
 	}
 
 	lpToken = lpEsBlock->str;
-
-
-	DOS9_DBG("Block_b=\"%s\"\n"
-	         "Block_e=\"%s\"\n",
-	         lpToken,
-	         lpEnd
-	        );
 
 	while ((*lpToken) && (lpToken < lpEnd)) {
 		/* get the block that are contained in the line */
@@ -781,10 +750,28 @@ int Dos9_RunExternalBatch(char* lpFileName, char* lpFullLine, char** lpArguments
     return (int)ret;
 }
 
-/* Function used for a LookAHead command.
+/* Refactors a PARSED_LINE that contains a lookAHead command.
 
-   Transforms the first element of a PARSED_LINE (or allocate it if it NULL) using
-   the information contained in the BLOCKINFO* structure */
+   PARSED lines are originally parsed not taking accound of
+   lookAheads, that is you can have something like this :
+
+   if 1 == 1 smthing & echo something else
+
+   Parsed into:
+                        &
+   "if 1 == 1 smthing" ==> "echo something else"
+
+   However, both the if and for commands (the only current lookAHeads)
+   swallow every command bits to the left of them. So when the command
+   is executed, the PARSED_LINE* must be refactored to look like this :
+
+              &
+   "smthing" ==> "echo something else"
+
+   that will either be executed later or not depending on the
+   command.
+
+   if lookahead is NULL a new PARSED_LINE will be malloc'd */
 PARSED_LINE* Dos9_LookAHeadMakeParsedLine(BLOCKINFO* block, PARSED_LINE* lookahead)
 {
 	ESTR* cmd = Dos9_EsInit();
@@ -805,13 +792,6 @@ PARSED_LINE* Dos9_LookAHeadMakeParsedLine(BLOCKINFO* block, PARSED_LINE* lookahe
             lookahead->lpCmdLine = NULL;
 
         }
-    } else {
-
-        /* Reuse the current struct in lookahead (clean it
-           carefully */
-        /* Dos9_FreeParsedStream(lookahead->sStream);
-         lookahead->sStream = NULL; */
-
     }
 
     Dos9_EsCpy(cmd, "(");

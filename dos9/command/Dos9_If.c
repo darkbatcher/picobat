@@ -32,6 +32,13 @@
 #include "../lang/Dos9_ShowHelp.h"
 #include "../errors/Dos9_Errors.h"
 #include "../core/Dos9_Core.h"
+/*
+        IF [/i] [NOT] test==valeur (...)
+        IF [/i] test2 CMP test2 (...)
+        IF [NOT] EXIST fichier (...)
+        IF [NOT] DEFINED var (...)
+        IF [NOT] ERRORLEVEL code (...) -> DEPRECATED !
+*/
 
 int Dos9_CmdIf(char* lpParam, PARSED_LINE** lpplLine)
 {
@@ -42,13 +49,6 @@ int Dos9_CmdIf(char* lpParam, PARSED_LINE** lpplLine)
 
 	ESTR *lpComparison, *lpOtherPart;
 	LPFILELIST lpflFileList;
-	/*
-	        IF [/i] [NOT] test==valeur (...)
-	        IF [/i] test2 CMP test2 (...)
-	        IF [NOT] EXIST fichier (...)
-	        IF [NOT] DEFINED var (...)
-	        IF [NOT] ERRORLEVEL code (...) -> DEPRECATED !
-	*/
 
 	BLOCKINFO bkInfo;
 
@@ -339,6 +339,7 @@ int Dos9_CmdIf(char* lpParam, PARSED_LINE** lpplLine)
 
         lpToken2 = Dos9_SkipBlanks(lpToken2);
 
+        /* refactor line */
         if (lpplLine && !*lpToken2)
             line = Dos9_LookAHeadMakeParsedLine(&bkInfo, *lpplLine);
         else

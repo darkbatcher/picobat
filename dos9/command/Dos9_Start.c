@@ -135,7 +135,12 @@ int Dos9_CmdStart(char* line)
 
     while (next = Dos9_GetNextParameterEs(line, param)) {
 
-        if (!stricmp(param->str, "/WAIT")
+        if (!stricmp(param->str, "/?")) {
+
+            Dos9_ShowInternalHelp(DOS9_HELP_START);
+            goto end;
+
+        } else if (!stricmp(param->str, "/WAIT")
             || !stricmp(param->str, "/W")) {
 
             info.flags |= DOS9_EXEC_WAIT;
@@ -145,6 +150,8 @@ int Dos9_CmdStart(char* line)
             info.flags &= ~DOS9_EXEC_SEPARATE_WINDOW;
 
         } else if (!stricmp(param->str, "/NORMAL")) {
+        } else if (!stricmp(param->str, "/SHARED")) {
+        } else if (!stricmp(param->str, "/SEPARATE")) {
         } else if (!stricmp(param->str, "/HIGH")) {
         } else if (!stricmp(param->str, "/LOW")) {
         } else if (!stricmp(param->str, "/REALTIME")) {
@@ -360,7 +367,7 @@ int Dos9_CmdStart(char* line)
     else
         status = Dos9_ExecuteFile(&info);
 
-
+end:
 error:
     Dos9_EsFree(cmdline);
     Dos9_EsFree(param);

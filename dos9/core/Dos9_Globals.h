@@ -51,7 +51,7 @@ extern int fdStderr;
 
 /* Current state of the interpreter associated to this
    thread */
-extern __thread int bAbortCommand; /* abort the command (0: no , 1: jump to next,
+extern __thread int bAbortCommand; /* abort the command (0: no , 1: jump to next l,
                                     -1 : move to upper execution level) */
 
 #define DOS9_ABORT_EXECUTION_LEVEL -1

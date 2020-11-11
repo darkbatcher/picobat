@@ -226,6 +226,10 @@ void Dos9_LoadInternalHelp(void)
 	lpInternalHelp[DOS9_HELP_VER]
 		=gettext("Print the OS type and version\n"
 				 "Usage: VER\n");
+
+    lpInternalHelp[DOS9_HELP_START]
+        =gettext("Start a program in another window\n"
+                 "Usage: START [/d dir] [/b] [/min] [/max] [/wait] [\"title\"] [command [parameter ...]]\n");
 }
 
 

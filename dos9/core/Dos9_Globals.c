@@ -52,7 +52,11 @@ MUTEX mModLock; /* a lock to serialize calls to mod */
 __thread int bDelayedExpansion=TRUE;
 __thread int bUseFloats=FALSE;
 __thread int bEchoOn=TRUE;
+
+/* call exit or endthread uppon exit*/
 __thread int bIgnoreExit=FALSE;
+
+/* Current errorlevel value */
 __thread int iErrorLevel=0;
 __thread int bIsScript;
 __thread int bCmdlyCorrect=FALSE;

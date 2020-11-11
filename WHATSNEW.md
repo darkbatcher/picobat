@@ -2585,5 +2585,8 @@ build without prior
 
 ## Wednesday, 11th November ##
 
-* Fixed a bug with **femto** flag detection implementation 
+* Fixed a bug with **femto** flag detection implementation
+
+* Fixed a **START** bug that had omitted depreciated switches and add the 
+  internal help for the start command. 
 

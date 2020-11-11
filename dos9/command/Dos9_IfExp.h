@@ -30,13 +30,12 @@
 
    [ exp ]    : subexpression
    exp or exp : or
-   exp and exp
+   exp and exp : and
 
    [not] defined varname
    [not] exist filename
 
-   var cmp cmp
-
+   var1 cmp var2
 
 
    */
