@@ -2588,5 +2588,7 @@ build without prior
 * Fixed a bug with **femto** flag detection implementation
 
 * Fixed a **START** bug that had omitted depreciated switches and add the 
-  internal help for the start command. 
+  internal help for the start command.$
+
+* Fixed issue with combined pipes on linux based systems. 
 

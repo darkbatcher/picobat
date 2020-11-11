@@ -36,7 +36,8 @@
 #include "Dos9_Core.h"
 
 struct pipe_launch_data_t {
-    int fd;
+    int fdin;
+    int fdout;
     ESTR* str;
     PARSED_STREAM* stream;
 };

@@ -1349,8 +1349,8 @@ void Dos9_ExecuteForSubCommand(struct pipe_launch_data_t* arg)
 {
     BLOCKINFO bkBlock;
 
-    lppsStreamStack = Dos9_OpenOutputD(lppsStreamStack, arg->fd, DOS9_STDOUT);
-    close(arg->fd);
+    lppsStreamStack = Dos9_OpenOutputD(lppsStreamStack, arg->fdout, DOS9_STDOUT);
+    close(arg->fdout);
 
     bIgnoreExit = TRUE;
 
@@ -1392,7 +1392,7 @@ int Dos9_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFd)
                                 __FILE__ "/Dos9_ForInputProcess()", -1);
 
 
-    param->fd = iPipeFd[1];
+    param->fdout = iPipeFd[1];
     param->str = Dos9_EsInit();
 
     Dos9_EsCpyE(param->str, lpInput);

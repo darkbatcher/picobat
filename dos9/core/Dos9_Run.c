@@ -113,14 +113,17 @@ int Dos9_ExecOperators(PARSED_LINE** lpLine)
     struct pipe_launch_data_t* infos;
     PARSED_LINE* line=*lpLine;
     char *pch;
-    int status = 0;
+    int status = 0,
+        lastin = -1;
 
     pch = line->lpCmdLine->str;
     pch = Dos9_SkipAllBlanks(pch);
 
     /* if we encounter a lookahead command, end processing the line,
        indeed if and for automatically swallow every operators on the
-       right hand side of the line */
+       right hand side of the line
+
+       so return the EXECOPERATORS_END status */
     if ((!strnicmp(pch, "if", 2) && Dos9_IsDelim(*(pch +2)))
         || (!strnicmp(pch, "for", 3) && Dos9_IsDelim(*(pch + 3))))
         status |= EXECOPERATORS_END;
@@ -148,47 +151,50 @@ int Dos9_ExecOperators(PARSED_LINE** lpLine)
 
 	}
 
-loop:
-    if (line->lppsNode
+    while (line->lppsNode
         && line->lppsNode->cNodeType == PARSED_STREAM_NODE_PIPE
         && !status) {
 
-        if (_Dos9_Pipe(pipedes, 4096, O_BINARY) == -1)
-            Dos9_ShowErrorMessage(DOS9_CREATE_PIPE | DOS9_PRINT_C_ERROR,
-                                    __FILE__ "/Dos9_ExecOperators()",
-                                    -1);
 
-        Dos9_SetFdInheritance(pipedes[0], 0);
-        Dos9_SetFdInheritance(pipedes[1], 0);
+        /* TODO : SERIALISE CALLS TO _Dos9_Pipe with calls with fork */     /**/
+        if (_Dos9_Pipe(pipedes, 4096, O_BINARY) == -1)                      /**/
+            Dos9_ShowErrorMessage(DOS9_CREATE_PIPE | DOS9_PRINT_C_ERROR,    /**/
+                                    __FILE__ "/Dos9_ExecOperators()",       /**/
+                                    -1);                                    /**/
+                                                                            /**/
+        Dos9_SetFdInheritance(pipedes[0], 0);                               /**/
+        Dos9_SetFdInheritance(pipedes[1], 0);                               /**/
 
         if ((infos = malloc(sizeof(struct pipe_launch_data_t))) == NULL)
             Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION | DOS9_PRINT_C_ERROR,
                                     __FILE__ "/Dos9_ExecOperators()", -1);
 
         /* prepare data to launch threads */
-        infos->fd = pipedes[1];
+        infos->fdout = pipedes[1];
+        infos->fdin = lastin;
+
         infos->str = Dos9_EsInit();
+        Dos9_EsCpyE(infos->str, line->lpCmdLine);
 
         if ((infos->stream = Dos9_DuplicateParsedStream(line->sStream)) == NULL)
             Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION | DOS9_PRINT_C_ERROR,
                                     __FILE__ "/Dos9_ExecOperators()", -1);
 
-
-        Dos9_EsCpyE(infos->str, line->lpCmdLine);
-
         res = Dos9_CloneInstance(Dos9_LaunchPipe, infos);
         Dos9_CloseThread(&res);
 
-        /* Listen from the pipe */
-        lppsStreamStack = Dos9_OpenOutputD(lppsStreamStack, pipedes[0], DOS9_STDIN);
-        close(pipedes[0]);
-
-        if (line->lppsNode) {
-
+        lastin = pipedes[0];
+        if (line->lppsNode)
             line = *lpLine = line->lppsNode;
-            goto loop;
+        else
+            break;
 
-        }
+    }
+
+    if (lastin != -1) {
+
+        lppsStreamStack = Dos9_OpenOutputD(lppsStreamStack, lastin, DOS9_STDIN);
+        close(lastin);
     }
 
     return status;
@@ -198,8 +204,13 @@ loop:
 void Dos9_LaunchPipe(struct pipe_launch_data_t* infos)
 {
 
-    lppsStreamStack = Dos9_OpenOutputD(lppsStreamStack, infos->fd, DOS9_STDOUT);
-    close(infos->fd);
+    lppsStreamStack = Dos9_OpenOutputD(lppsStreamStack, infos->fdout, DOS9_STDOUT);
+    close(infos->fdout);
+
+    if (infos->fdin !=-1) {
+        lppsStreamStack = Dos9_OpenOutputD(lppsStreamStack, infos->fdin, DOS9_STDIN);
+        close(infos->fdin);
+    }
 
     bIgnoreExit = TRUE;
 
