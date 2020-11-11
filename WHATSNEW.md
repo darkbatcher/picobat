@@ -2581,5 +2581,9 @@ build without prior
     **n-p** behaviour. The syntax is **n.p**, it provides a variable that 
     contain all the tokens from **n** up to **p**
 
-* Improved documentation of lookahead commands on GUIDELINES file. 
+* Improved documentation of lookahead commands on GUIDELINES file.
+
+## Wednesday, 11th November ##
+
+* Fixed a bug with **femto** flag detection implementation 
 

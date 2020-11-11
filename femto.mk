@@ -76,11 +76,11 @@ $(FLAGS):
 	@echo "Looking for flag $@ ..."
 	@sed -e 's,[@]fn[@],$@,g' -e 's,[@]fnp[@],$(shell echo $@ | sed -e 's,/,_,g' -e 's,[.],_,g'),g'< config.c.in > config.c
 	@if $(CC) -o femto-test.out config.c $(CFLAGS) $(LDFLAGS) -f$@ -O0 -s 2> /dev/null; then \
-		echo "flag_$@ = 0" >>  femto-config.mk; \
-		echo "	not supported"; \
-	else \
 		echo "flag_$@ = 1" >>  femto-config.mk; \
 		echo "	supported"; \
+	else \
+		echo "flag_$@ = 0" >>  femto-config.mk; \
+		echo "	not supported"; \
 	fi;
 
 $(USEOPTIONS):
