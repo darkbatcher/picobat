@@ -92,10 +92,10 @@ int Dos9_CmdFor(char* lpLine, PARSED_LINE** lpplLine)
 	BLOCKINFO bkCode;
 
 	FORINFO forInfo= {
-		" ", /* default token delimiter */
+		" \t", /* default token delimiter */
 		";", /* the default eol delimiter is ; */
 		0, /* no skipped line */
-		0, /* this is to be fullfiled later (the
+		0, /* this is to be filed later (the
                 name letter of loop special var) */
 		FALSE,
 		1, /* the number of tokens we were given */

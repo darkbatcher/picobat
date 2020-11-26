@@ -2593,5 +2593,9 @@ build without prior
 * Fixed issue with combined pipes on linux based systems.
 
 * Fixed **MORE** command to use a proper console input file instead of 
-  **fInput** when run interactively. 
+  **fInput** when run interactively.
+
+## Thursday, 26th November ##
+
+* Added **tab** to default **FOR** /f loop delimiters. 
 
