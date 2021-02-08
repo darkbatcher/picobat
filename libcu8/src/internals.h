@@ -31,7 +31,7 @@
 #ifndef INTERNALS_H
 #define INTERNALS_H
 
-#include <iconv.h>
+#include "iconv/iconv.h"
 
 #ifdef  DLL_EXPORT
 #define __LIBCU8__DLL

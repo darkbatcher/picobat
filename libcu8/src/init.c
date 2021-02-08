@@ -39,7 +39,7 @@
 #include <sys/stat.h>
 #include <direct.h>
 
-#include <iconv.h>
+#include "iconv/iconv.h"
 
 #include "internals.h"
 #include "config.h"

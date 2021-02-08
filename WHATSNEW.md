@@ -2597,5 +2597,10 @@ build without prior
 
 ## Thursday, 26th November ##
 
-* Added **tab** to default **FOR** /f loop delimiters. 
+* Added **tab** to default **FOR** /f loop delimiters.
+
+## Monday, February 8th, 2020 ##
+
+* Added the use of a win\_iconv to the **libcu8** library, to bypass using gnu 
+  iconv which is way too big for portability issues. 
 

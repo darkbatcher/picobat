@@ -36,7 +36,7 @@
 #include <errno.h>
 #include <windows.h>
 
-#include <iconv.h>
+#include "iconv/iconv.h"
 
 #include "internals.h"
 #include "libcu8.h"

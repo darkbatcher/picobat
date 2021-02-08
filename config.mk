@@ -55,36 +55,39 @@ ifneq (,$(wildcard $(ROOTDIR)/femto-config.mk))
     include $(ROOTDIR)/femto-config.mk
 endif
 
-ifeq ($(fn_MINGW_W64),1)
-	CFLAGS += -D__USE_MINGW_ANSI_STDIO
-endif
+#ifeq ($(fn_MINGW_W64),1)
+#	CFLAGS += -D__USE_MINGW_ANSI_STDIO
+#endif
 
 ifeq ($(use_libcu8),1)
 	LIBCU8_LD = -L$(ROOTDIR)/libcu8 -lcu8
 	LIBCU8_INC = -I$(ROOTDIR)/libcu8/include
 endif
 
-ifeq ($(lib_iconv),1)
-	LICONV_LD = -liconv
+ifeq ($(use_nls),1)
+	ifeq ($(lib_intl),1)
+		LINTL_LD = -lintl
+	endif
 endif
 
-ifeq ($(lib_intl),1)
-	LINTL_LD = -lintl
+ifeq ($(fn_WIN32),0)
+	ifeq ($(lib_pthread),1)
+		LPTHREAD_LD = -lpthread
+	endif
+
+	ifeq ($(lib_m),1)
+		LM_LD = -lm
+	endif
 endif
 
-ifeq ($(lib_pthread),1)
-	LPTHREAD_LD = -lpthread
+ifeq ($(use_modules),1)
+	ifeq ($(lib_dl),1)
+		LDL_LD = -ldl
+	endif
+	ifeq ($(flag_PIC),1)
+		CFLAGS += -fPIC
+		LDFLAGS += -fPIC
+	endif
 endif
 
-ifeq ($(lib_m),1)
-	LM_LD = -lm
-endif
 
-ifeq ($(lib_dl),1)
-	LDL_LD = -ldl
-endif
-
-ifeq ($(use_modules)$(flag_PIC),11)
-	CFLAGS += -fPIC
-	LDFLAGS += -fPIC
-endif
