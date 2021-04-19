@@ -23,7 +23,7 @@
 #include <libDos9.h>
 
 #include "../../config.h"
-#include "../gettext.h"
+#include <gettext.h>
 
 #include "../core/Dos9_Core.h"
 #include "Dos9_ShowHelp.h"

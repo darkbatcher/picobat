@@ -135,6 +135,14 @@ int Dos9_IfExp_Evaluate(ifexp_t* exp, int flags)
     if (res1 == -1)
         return -1;
 
+    /* take a shortcut here, on some occasions you don't have to
+       evaluate the left hand side of the expression */
+    if (exp->type == IFEXP_AND )
+        if (!res1)
+            return 0;
+    else if (res2)
+        return 1;
+
     if (exp->child2.type == IFEXP_NODE_OPS) {
 
         res2 = Dos9_IfExp_ExecuteTest(exp->child2.child.ops, flags);
@@ -302,17 +310,12 @@ int Dos9_IfExp_SuppressOneBracketPair(ifexp_line_t** line)
     if (!ops || !EQUCHR(ops->op->str, '['))
         return 0;
 
-    /* printf("Start = ");
-    _Dump_Line_t(*line); */
-
     prev = ops;
 
     while (ops->next) {
 
         prev = ops;
         ops = ops->next;
-
-        /* printf("Count : %d\tstr : \"%s\" \t ops->next : %X\n", count, ops->op->str, ops->next); */
 
 
         if (EQUCHR(ops->op->str, '[')) {
@@ -345,9 +348,6 @@ int Dos9_IfExp_SuppressOneBracketPair(ifexp_line_t** line)
     Dos9_EsFree(ops->op);
     free(ops);
 
-    /* printf("Result = ");
-    _Dump_Line_t(*line); */
-
     return 1;
 }
 
@@ -371,16 +371,12 @@ int Dos9_IfExp_Cut(char* tok, ifexp_line_t** begin, ifexp_line_t** end)
 
     while (line->next) {
 
-        /* printf("tok = \"%s\"\tlevel = %d\tNext = %X\n", line->next->op->str, level, line->next->next); */
-
         if (EQUCHR(line->next->op->str, '[')) {
             level ++;
         } else if (EQUCHR(line->next->op->str, ']')) {
             level --;
         } else if ((level == 0)
                 && !stricmp(line->next->op->str, tok)) {
-
-            /*printf("\tMatching token found\n");*/
 
             /* the token was found */
 

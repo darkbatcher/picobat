@@ -73,8 +73,8 @@ digit [0-9]
 number ({digit}+|{digit}+\.{digit}*|{digit}*\.{digit}+)([Ee][+\-]?{digit}+)?
 constant "e"|"log2e"|"log10e"|"ln2"|"ln10"|"pi"|"pi_2"|"pi_4"|"1_pi"|"2_pi"|"2_sqrtpi"|"sqrt2"|"sqrt1_2"
 function "exp"|"log"|"sqrt"|"sin"|"cos"|"tan"|"cot"|"sec"|"csc"|"asin"|"acos"|"atan"|"acot"|"asec"|"acsc"|"sinh"|"cosh"|"tanh"|"coth"|"sech"|"csch"|"asinh"|"acosh"|"atanh"|"acoth"|"asech"|"acsch"|"abs"|"step"|"delta"|"nandelta"|"erf"
-nodelim	   [^+\-*%/=()\n\t ]
-nodelimnb  [^+\-*%/=()\n\t 0-9]
+nodelim	   [^+\-*%/=()^\n\t ]
+nodelimnb  [^+\-*%/=()^\n\t 0-9]
 identifier {nodelim}*{nodelimnb}{nodelim}*
 
 %%

@@ -82,7 +82,7 @@ void Dos9_StartCommandExec(struct pipe_launch_data_t* data)
 }
 
 
-int Dos9_StartCommandBackground(char* cmdline, int wait)
+int Dos9_StartCommandBackground(const char* cmdline, int wait)
 {
     struct pipe_launch_data_t* data;
     THREAD handle;
@@ -96,7 +96,7 @@ int Dos9_StartCommandBackground(char* cmdline, int wait)
     data->str = Dos9_EsInit();
     Dos9_EsCat(data->str, cmdline);
 
-    handle = Dos9_CloneInstance(Dos9_StartCommandExec, data);
+    handle = Dos9_CloneInstance((void(*)(void*))Dos9_StartCommandExec, data);
 
     if (wait)
         Dos9_WaitForThread(&handle, &ret);
@@ -223,9 +223,8 @@ int Dos9_CmdStart(char* line)
 
                 } else {
 
-                    Dos9_GetExeFilename(buf, sizeof(buf));
-                    info.file = buf;
-                    Dos9_EsCpy(param, buf);
+                    info.file = lpDos9Exec;
+                    Dos9_EsCpy(param, lpDos9Exec);
                     Dos9_EsCat(param, " /a:q");
 
                     if (!bEchoOn)
@@ -259,6 +258,8 @@ int Dos9_CmdStart(char* line)
 
                 /* this is apparently a file, set it as the file name */
 
+                /* Search %PATH% first, if it is a failure, try to produce an
+                   absolute path */
                 if (Dos9_GetFilePath(buf, param->str, sizeof(buf)) == -1)
                     Dos9_MakeFullPath(buf, param->str, sizeof(buf));
 
@@ -268,9 +269,8 @@ int Dos9_CmdStart(char* line)
                 if (!stricmp(ext, ".bat")
                     || !stricmp(ext, ".cmd")) {
 
-                    Dos9_GetExeFilename(buf, sizeof(buf));
-                    info.file = buf;
-                    Dos9_EsCpy(param, buf);
+                    info.file = lpDos9Exec;
+                    Dos9_EsCpy(param, lpDos9Exec);
                     Dos9_EsCat(param, " /a:q");
 
                     if (!bEchoOn)
@@ -311,9 +311,8 @@ int Dos9_CmdStart(char* line)
 
         }
 
-        Dos9_GetExeFilename(buf, sizeof(buf));
-        info.file = buf;
-        Dos9_EsCpy(param, buf);
+        info.file = lpDos9Exec;
+        Dos9_EsCpy(param, lpDos9Exec);
         Dos9_EsCat(param, " /a:q");
 
         if (!bEchoOn)

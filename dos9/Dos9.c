@@ -121,8 +121,8 @@ int main(int argc, char *argv[])
     signal(SIGPIPE, SIG_IGN);
 #endif /* SIGPIPE */
 
-    /* Initialize libDos9 */
-    Dos9_InitLibDos9();
+    /* Initialize Dos9 Internals*/
+    Dos9_Init();
 
     /* Set the error handler called on errors that require the process to exit */
     pErrorHandler=Dos9_Exit;

@@ -33,6 +33,12 @@ LDFLAGS ?= -O2 -s
 
 BINDIR ?= $(ROOTDIR)/bin
 
+# microgettext
+MICROGETTEXT_DIR = $(ROOTDIR)/microgettext
+
+MICROGETTEXT_INC = -I$(MICROGETTEXT_DIR)
+MICROGETTEXT_LD = -L$(MICROGETTEXT_DIR) -lmicrogettext
+
 # libDos9
 LIBDOS9_DIR = $(ROOTDIR)/libDos9
 

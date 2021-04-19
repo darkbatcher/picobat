@@ -28,7 +28,7 @@
 #include "../core/Dos9_Core.h"
 
 #include "../../config.h"
-#include "../gettext.h"
+#include <gettext.h>
 
 const char* lpErrorMsg[DOS9_ERROR_MESSAGE_NUMBER];
 const char* lpQuitMessage;

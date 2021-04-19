@@ -1,6 +1,6 @@
 #
 #   Dos9 Manual pages, The Dos9 project
-#   Copyright (C) 2012-2013  Romain Garbi (DarkBatcher)
+#   Copyright (C) 2012-2021  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -64,37 +64,50 @@ ${	IF [/i] string1 cmp string2 (
 
 	   Where {cmp} can be one of the following:
 
-		- {EQU} : (EQUal). The condition is true if the value associated
-		to {string1} and {string2} are identical. Values can be specified
-		in various numeral bases, decimal, octal or hexadecimal as long as
-		the right prefix is specified ({0} for octal and {0x} for hexadecimal).
-		If any of {string1} and {string2} do not represent any valid number
-		(eg. {[-][prefix][value]}), then {EQU} compares the strings behaving
-		exactly as {==}.
-
+		- {EQU} : (EQUal) {string1} and {string2} are the same.
+		
 		- {NEQ} : (Not EQual). Exact opposite of preceeding condition.
 
 		- {LEQ} : (Less or EQual). The value associated to
-		  {string1} is lesser or equal to that of {string2}.
+		  {string1} is lesser or equal to {string2}.
 
 		- {LSS} : (LeSS). The value associated to
-		  {string1} is strictly lesser than that of {string2}.
+		  {string1} is strictly lesser than {string2}.
 
 		- {GTR} : (GreaTeR). The value associated to
-		  {string1} is strictly greater than that of {string2}.
+		  {string1} is strictly greater than  {string2}.
 
 		- {GEQ} : (Greater or EQual). The value associated to
-		  {string1} is greater or equal to that of {string2}.
+		  {string1} is greater or equal to {string2}.
 
 	{LSS}, {GTR}, {LEQ} and {GEQ} conditions require {string1} and {string2}
 	to represent integers otherwise the result is unspecified.
 	
-	Analogous conditions can be obtained for floating point numbers by
-	prefixing condition with an {F}, leading to {FEQU}, {FGTR}, {FGEQ}, {FLSS} and
-	{FLEQ}. The ability to deal with octal or hexadecimal floating point number
-	is not warranted and may depend on platform or versions. To remain compatible,
-	you have to use only the standard format [sign][number][.number][e|E][exponent].
-
+	Before attempting any comparisons, the {IF} command checks if both
+	{string1} and {string2} can be converted to integers. Strings that can
+	be converted to integers are numbers written either decimal, hexadecimal
+	(in which case the number have to be prefixed with {0x}) or octal
+	(which prefix is {0}) base. The said integer value must be between 	
+	{-2147483648} and {2147483647}. If both {string1} and {string2} can
+	be converted to integers, {IF} compares the two integers.
+	
+	If either {string1} or {string2} does not meet this criteria, {IF}
+	checks if {string1} and {string2} can be converted to floating point.
+	The only syntax authorized for floating point value is of the form
+	{value[e][exponant]}. If both {string1} and {string2} can be converted
+	to floats, then {IF} compares the floats values.
+	
+	If {string1} and {string2} cannot be converted, then {IF} compares
+	{string1} and {string2}. If any of {LEQ}, {LSS}, {GTR} or {GEQ}
+	comparisons is used, then {IF} bases comparison on lexicographical order.
+	For example is if {string1} is before {string2} in lexicographical order,
+	then {string1} is considered to be below {string2}.
+	
+	To force string comparisons, it is possible to add a prefix to the
+	comparison. For example :
+	
+${IF x!value1! EQU x!value2! command}
+	
 {{Synopsis - Third syntax}}
 
 	The last syntax allows to perform test on a object. Obviously, the specified command
@@ -231,10 +244,7 @@ ${IF %my_var%==test (
 		characters like & and | contained in {my_var} will still be interpreted, and {my_var} could
 		not contain double-quotes anymore.
 
-		- {my_var} can be enclosed in single quotes, avoiding blank characters problem. This causes
-		the same issues as previous, replacing "double quotes" by "single quotes".
-
-		- The last, and best solution is to expand {my_var} using {spec/exp|delayed expansion} rather
+		- The best solution is to expand {my_var} using {spec/exp|delayed expansion} rather
 		than {spec/exp|conventional expansion}. Indeed, using that trick, {my_var} will only be expanded
 		after the line parsing, and thus no character can cause issue.
 
@@ -281,7 +291,7 @@ IF !my_var! EQU test (
 
 {{Compatibility}}
 
-	Mostly compatible with {cmd.exe}. Indeed, the use of {IF ERRORLEVEL}
+	Compatible with {cmd.exe}. Indeed, the use of {IF ERRORLEVEL}
 	is not guaranted to be compatible with {cmd.exe}, as the behaviour of
 	{cmd.exe} is weird (it tests  if {ERRORLEVEL} is greater than the specified
 	number) and causes numbers of mistakes.

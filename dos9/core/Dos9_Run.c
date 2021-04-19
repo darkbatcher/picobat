@@ -180,7 +180,7 @@ int Dos9_ExecOperators(PARSED_LINE** lpLine)
             Dos9_ShowErrorMessage(DOS9_FAILED_ALLOCATION | DOS9_PRINT_C_ERROR,
                                     __FILE__ "/Dos9_ExecOperators()", -1);
 
-        res = Dos9_CloneInstance(Dos9_LaunchPipe, infos);
+        res = Dos9_CloneInstance((void(*)(void*))Dos9_LaunchPipe, infos);
         Dos9_CloseThread(&res);
 
         lastin = pipedes[0];
@@ -629,7 +629,7 @@ int Dos9_RunExternalCommand(char* lpCommandLine, int* error)
 
         info.file = lpFileName;
         info.cmdline = lpCmdLine->str;
-        info.args = lpArguments;
+        info.args = (const char* const*)lpArguments;
         info.dir = lpCurrentDir;
         info.title = NULL;
         info.flags = DOS9_EXEC_WAIT;
@@ -753,7 +753,7 @@ int Dos9_RunExternalBatch(char* lpFileName, char* lpFullLine, char** lpArguments
 
     arg->lpArguments[size] = NULL;
 
-    th = Dos9_CloneInstance(Dos9_LaunchExternalBatch, arg);
+    th = Dos9_CloneInstance((void(*)(void*))Dos9_LaunchExternalBatch, arg);
 
     if (Dos9_WaitForThread(&th, &ret) != 0)
         Dos9_CloseThread(&th);
@@ -828,7 +828,6 @@ PARSED_LINE* Dos9_LookAHeadMakeParsedLine(BLOCKINFO* block, PARSED_LINE* lookahe
 void Dos9_SigHandlerBreak(int sig)
 {
     int choice, i;
-    char lpExePath[FILENAME_MAX];
     ESTR* attr;
 
     /* using bIsScript is safe because it is inherited on a
@@ -847,9 +846,7 @@ void Dos9_SigHandlerBreak(int sig)
 
     attr = Dos9_EsInit();
 
-    Dos9_GetExeFilename(lpExePath, sizeof(lpExePath));
-
-    Dos9_EsCpy(attr, lpExePath);
+    Dos9_EsCpy(attr, lpDos9Exec);
     Dos9_EsCpy(attr, "/a:q");
 
     if (!bEchoOn)
@@ -864,7 +861,7 @@ void Dos9_SigHandlerBreak(int sig)
     chdir(lpCurrentDir);
     Dos9_ApplyEnv(lpeEnv);
 
-    execl(lpExePath, lpExePath, attr->str);
+    execl(lpDos9Exec, lpDos9Exec, attr->str);
 }
 
 #elif defined WIN32
@@ -891,7 +888,6 @@ BOOL WINAPI Dos9_SigHandler(DWORD dwCtrlType)
 {
     int choice, i;
     HANDLE thread;
-    char lpExePath[FILENAME_MAX];
     ESTR* args;
 
     STARTUPINFO si;
@@ -960,9 +956,8 @@ BOOL WINAPI Dos9_SigHandler(DWORD dwCtrlType)
 
             args = Dos9_EsInit();
 
-            Dos9_GetExeFilename(lpExePath, sizeof(lpExePath));
             Dos9_EsCpy(args, "\"");
-            Dos9_EsCat(args, lpExePath);
+            Dos9_EsCat(args, lpDos9Exec);
             Dos9_EsCat(args, "\"");
             Dos9_EsCat(args, " /a:q");
 
@@ -981,7 +976,7 @@ BOOL WINAPI Dos9_SigHandler(DWORD dwCtrlType)
 
             /* Use create process rather than spawn in order to break
                inheritance of probably broken stuff like fds */
-            if( !CreateProcess( lpExePath,
+            if( !CreateProcess( lpDos9Exec,
                                 args->str,
                                 NULL,
                                 NULL,
@@ -993,7 +988,7 @@ BOOL WINAPI Dos9_SigHandler(DWORD dwCtrlType)
                                 &pi )) {
 
                 /* The purpose of this is not to rewrite code again and again for
-                   unmaintainability's sake, but, not to refer to all this
+                   unmaintainability's sake, but, not to refer to all the
                    thread local defined stuff */
 
                 Dos9_SetConsoleTextColor(stderr, DOS9_BACKGROUND_DEFAULT | DOS9_FOREGROUND_IRED);

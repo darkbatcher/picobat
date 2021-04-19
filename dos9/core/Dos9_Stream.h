@@ -74,8 +74,8 @@
             DOS9_RESET_BUFFERING(fd, s)
 
 #define DOS9_DUP_STDIN(fd, s) \
-            __DOS9_DUP_STD(fd, s) \
-            DOS9_RESET_BUFFERING(fd, s)
+            __DOS9_DUP_STD(fd, s)
+//            DOS9_RESET_BUFFERING(fd, s)
 
 #define DOS9_XDUP(fd, s) \
             if (((fd) = dup(fileno(s))) == -1) \

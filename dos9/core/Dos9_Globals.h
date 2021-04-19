@@ -48,6 +48,8 @@ extern int fdStdin; /* temporary storage for streams */
 extern int fdStdout;
 extern int fdStderr;
 
+extern char lpDos9Path[]; /* A path to the directory of the Dos9 executable */
+extern char lpDos9Exec[]; /* A path to the Dos9 executable */
 
 /* Current state of the interpreter associated to this
    thread */

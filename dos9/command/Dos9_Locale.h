@@ -1,7 +1,7 @@
 /*
  *
  *   Dos9 - A Free, Cross-platform command prompt - The Dos9 project
- *   Copyright (C) 2010-2014 Romain GARBI
+ *   Copyright (C) 2010-2016 Romain GARBI
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -18,15 +18,10 @@
  *
  */
 
-#ifndef DOS9_INIT_INCLUDED_H
-#define DOS9_INIT_INCLUDED_H
+#ifndef DOS9_CMD_LOCALE_H
+#define DOS9_CMD_LOCALE_H
 
-void Dos9_AssignCommandLine(int c, char** argv);
-void Dos9_Init();
-char* Dos9_GetParameters(char** argv, char** lpFileName, int* bExitAfterCmd, int*
-                            bQuiet);
-void Dos9_InitConsoleTitles(char *lpFileName, int bQuiet);
-void Dos9_RunAutoBat(void);
-void Dos9_DuplicateStdStreams(void);
+void Dos9_LoadLocaleMessages(char* loc);
+int Dos9_CmdLocale(char* lpLine);
 
-#endif
+#endif // DOS9_CMD_ECHO_H

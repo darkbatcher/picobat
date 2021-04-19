@@ -77,6 +77,7 @@ COMMANDINFO lpCmdInfo[]= {
 	{"PECHO", Dos9_CmdPecho, STRLEN("PECHO")},
 	{"TIMEOUT", Dos9_CmdTimeout, STRLEN("TIMEOUT")},
 	{"MOD", Dos9_CmdMod, STRLEN("MOD")},
+	{"LOCALE", Dos9_CmdLocale, STRLEN("LOCALE")},
 	{"VER", Dos9_CmdVer, STRLEN("VER")}
 };
 

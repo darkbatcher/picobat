@@ -46,10 +46,10 @@
 
 #include "../core/Dos9_Core.h"
 #include "../core/Dos9_Debug.h"
+#include "../command/Dos9_Commands.h"
 
 #include "../../config.h"
-
-#include "../gettext.h"
+#include <gettext.h>
 
 void Dos9_AssignCommandLine(int c, char** argv)
 {
@@ -126,39 +126,14 @@ void Dos9_DuplicateStdStreams(void)
         setvbuf(fError, NULL, _IONBF, 0);
 }
 
-void Dos9_GettextInit(void)
+void Dos9_Init(void)
 {
-    char lpPath[FILENAME_MAX];
-	char lpSharePath[FILENAME_MAX];
-	char lpEncoding[15]="ASCII";
-    /* On windows, the best is to suppose that *all* the read-only
-       files are in the same folder as the binary. */
+    char lpSharePath[FILENAME_MAX];
 
-    Dos9_GetExePath(lpPath, FILENAME_MAX);
-	Dos9_GetConsoleEncoding(lpEncoding, sizeof(lpEncoding));
-
-    snprintf(lpSharePath, FILENAME_MAX, "%s/share/locale", lpPath);
-    bindtextdomain("dos9", lpSharePath);
-
-#if defined(WIN32) && !defined(DOS9_USE_LIBCU8)
-    /* This is not useful at all, libcu8 is able to convert utf-8 by
-       itself */
-	bind_textdomain_codeset("dos9", lpEncoding);
-#elif defined(DOS9_USE_LIBCU8)
-    bind_textdomain_codeset("dos9", "UTF-8");
-#endif
-
-	textdomain("dos9");
-}
-
-void Dos9_InitLibDos9(void)
-{
-    char lpExePath[FILENAME_MAX];
-
-    DOS9_DBG("Initializing Dos9's custom environ\n");
+    /* Initialize Dos9 specific environment */
     lpeEnv = Dos9_InitEnv(environ);
 
-    DOS9_DBG("Initializing libDos9 ...\n");
+    /* Start libDos9 */
     if (Dos9_LibInit() == -1) {
 
         puts("Error : Unable to load LibDos9. Exiting ...");
@@ -166,45 +141,48 @@ void Dos9_InitLibDos9(void)
 
     }
 
-    DOS9_DBG("Setting UNIX newlines ...\n");
+    /* Fixme : This is probably useless now */
     Dos9_SetNewLineMode(DOS9_NEWLINE_UNIX);
 
-    DOS9_DBG("Allocating local variable block ... \n");
+    /* Allocate locale blocks for special vars & arguments */
     lpvLocalVars=Dos9_GetLocalBlock();
     lpvArguments=Dos9_GetLocalBlock();
 
-    DOS9_DBG("Initializing console ...\n");
+    /* Initialize the console features of Dos9 */
     Dos9_InitConsole();
+
+    /* Initialize the completion features */
     Dos9_InitCompletion();
 
-    DOS9_DBG("Setting locale ...\n");
-
-#ifndef WIN32
-    setlocale(LC_ALL, "");
-    setlocale(LC_NUMERIC, "C");
-#else
-    setlocale(LC_ALL, ".OCP"); /* windows ... */
-    setlocale(LC_NUMERIC, "C");
-#endif // WIN32
-
-    DOS9_DBG("Loading GETTEXT messages... \n");
-
-    Dos9_GettextInit();
-    Dos9_LoadErrors();
-    Dos9_LoadStrings();
-    Dos9_LoadInternalHelp();
-
-    DOS9_DBG("Loading current directory...\n");
+    /* Set the current directory of the current thread */
     getcwd(lpCurrentDir, FILENAME_MAX);
 
-    DOS9_DBG("Getting current executable name ...\n");
-    Dos9_GetExePath(lpExePath, FILENAME_MAX);
+    /* Fetch path of the current directory */
+    Dos9_GetExePath(lpDos9Path, FILENAME_MAX);
+    Dos9_GetExeFilename(lpDos9Exec, FILENAME_MAX);
 
-    DOS9_DBG("\tGot \"%s\" as name ...\n", lpExePath);
+    /* Set the current locale for gettext to be able what language
+       should be used */
+    setlocale(LC_ALL, "");
+
+    snprintf(lpSharePath, FILENAME_MAX, "%s/share/locale", lpDos9Path);
+    Dos9_LoadLocaleMessages(lpSharePath);
+
+    /* Only use default LC_NUMERIC after loading messages
+       not to mess with gettext messages loading
+
+       Setting LC_NUMERIC to C enables to have strings numbers
+       written like 1.1, regardless of the chosen language. For
+       Example if LC_NUMERIC is french, then 1.1 becomes 1,1 */
+    setlocale(LC_NUMERIC, "C");
+
+
+
+    /* Set the value of %DOS9_PATH% */
     lpInitVar[4]="DOS9_PATH";
-    lpInitVar[5]=lpExePath;
+    lpInitVar[5]=lpDos9Path;
 
-    DOS9_DBG("Initializing variables ...\n");
+    /* Set the default Dos9 vars */
     Dos9_InitVar(lpInitVar);
 
     lppsStreamStack=Dos9_InitStreamStack();
@@ -250,14 +228,52 @@ int Dos9_InitSetModes(char* str)
     return bQuiet;
 }
 
+#ifdef ENABLE_NLS
+#define NLS_CONFIG "use-nls"
+#else
+#define NLS_CONFIG "no-nls"
+#endif // ENABLE_NLS
+
+#ifdef DOS9_USE_LIBCU8
+#define LIBCU8_CONFIG "use-libcu8"
+#else
+#define LIBCU8_CONFIG "no-libcu8"
+#endif // DOS9_USE_LIBCU8
+
+#ifdef DOS9_USE_MODULES
+#define MODULE_CONFIG "use-modules"
+#else
+#define MODULE_CONFIG "no-modules"
+#endif // DOS9_USE_MODULES
+
+#ifdef LIBDOS9_NO_CONSOLE
+#define CONSOLE_CONFIG "no-console"
+#else
+#define CONSOLE_CONFIG "use-console"
+#endif // LIBDOS9_NO_CONSOLE
+
+#ifdef DOS9_NO_LINENOISE
+#define LINENOISE_CONFIG "no-linenoise"
+#else
+#define LINENOISE_CONFIG "use-linenoise"
+#endif // DOS9_NO_LINENOISE
+
+#ifdef DOS9_STATIC_CMDLYCORRECT
+#define CMDLYCORRECT_CONFIG "use-cmdlycorrect"
+#else
+#define CMDLYCORRECT_CONFIG "no-cmdlycorrect"
+#endif // DOS9_STATIC_CMDLYCORRECT
+
 void Dos9_InitHelp(void)
 {
     /* Here it not mandatory to use the DOS9_NL macro to produce OS-independent
-       line terminators, since the stdout file descriptor is bound to be text
+       line terminators, since the stdout file descriptor is text
        oriented when this portion of code is to be executed */
 
     fputs("DOS9 [" DOS9_VERSION "] (" DOS9_HOST ") - " DOS9_BUILDDATE "\n"
-         "Copyright (c) 2010-" DOS9_BUILDYEAR " " DOS9_AUTHORS "\n\n", fError);
+         "Copyright (c) 2010-" DOS9_BUILDYEAR " " DOS9_AUTHORS "\n", fError);
+    fputs("config : " NLS_CONFIG " " MODULE_CONFIG " " LIBCU8_CONFIG " " LINENOISE_CONFIG " "
+          CONSOLE_CONFIG " " CMDLYCORRECT_CONFIG "\n\n", fError);
 
     fputs(lpHlpMain, fError);
 

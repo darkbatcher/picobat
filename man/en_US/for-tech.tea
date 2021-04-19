@@ -195,9 +195,10 @@ ${FOR /F [options] %%A IN (object) DO (
 	token (ie. sets may overlap or be in "reverse" order).
 	
 	-- {delims} : A set of characters used as delimiters to split input lines
-	got through {object} into tokens. By default, the only delimiter is {space}.
+	got through {object} into tokens. By default, the delimiters are {space}
+	and {tab}.
 	
-	@-- If this parameter is specified, then {space} is a delimiter
+	@-- If this parameter is specified, previously recorded value are not delimiters
 	any more and is replaced by the given character set. If {Dos9} encounters
 	a sub-string containing only delimiter in the input, then {Dos9} behaves
 	as if the sub-string was only one single delimiter (no empty tokens are

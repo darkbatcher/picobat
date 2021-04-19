@@ -2599,8 +2599,32 @@ build without prior
 
 * Added **tab** to default **FOR** /f loop delimiters.
 
-## Monday, February 8th, 2020 ##
+## Monday, February 8th, 2021 ##
 
 * Added the use of a win\_iconv to the **libcu8** library, to bypass using gnu 
-  iconv which is way too big for portability issues. 
+  iconv which is way too big for portability issues.
+
+## Monday, April 12th, 2021 ##
+
+* Created the microgettext library to remove the **GNU gettext** library of 
+  Dos9 depedencies. Dos9 has now no major dependencies aside from libdl and 
+  libgcc. Statically linked it is about 400ko
+
+* Created the experimental **LOCALE** command to provide a way to set custom 
+  paths for translations
+
+* Removed unnecessary references to Dos9\_GetExecutableName\(\)
+
+* Fixed the if comparison behaviour for floats, numbers and such :
+
+  * First check if the value passed are integers. If so use integer comparison
+
+  * Then try floats. If so use float comparisons
+
+  * Else use string lexicographical comparison
+
+* Fixed a bug leading **^** to be considered as a variable name instead of an 
+  operator
+
+* Fixed a bug with the libcu8 prompt. 
 

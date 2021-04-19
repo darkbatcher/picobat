@@ -229,8 +229,7 @@ int Dos9_CmdIf(char* lpParam, PARSED_LINE** lpplLine)
 				/* if script uses old c-style comparison */
 				*lpToken='\0';
 				lpToken+=2;
-
-				lpToken2 = Dos9_EsToChar(lpComparison);
+				lpToken2 = lpComparison->str;
 
 				/* Double quote hack
 
@@ -247,13 +246,13 @@ int Dos9_CmdIf(char* lpParam, PARSED_LINE** lpplLine)
 					lpToken++;
 				}
 
-				if (iFlag & DOS9_IF_CASE_UNSENSITIVE) {
-                    iResult=!stricmp(Dos9_EsToChar(lpComparison), lpToken);
-				} else {
-				    iResult=!strcmp(Dos9_EsToChar(lpComparison), lpToken);
-				}
+                iResult = Dos9_PerformExtendedTest("==",
+                                                   Dos9_EsToChar(lpComparison),
+                                                    lpToken,
+                                                    iFlag);
 
-				if (iFlag & DOS9_IF_NEGATION) iResult=!iResult;
+				if (iFlag & DOS9_IF_NEGATION)
+                    iResult=!iResult;
 
 
 			} else {
@@ -286,7 +285,7 @@ int Dos9_CmdIf(char* lpParam, PARSED_LINE** lpplLine)
 
 				}
 
-				iResult = Dos9_PerformExtendedTest(lpArgument,
+                iResult = Dos9_PerformExtendedTest(lpArgument,
                                                     Dos9_EsToChar(lpComparison),
                                                     Dos9_EsToChar(lpOtherPart),
                                                     iFlag);
@@ -435,6 +434,33 @@ int Dos9_CmdIf(char* lpParam, PARSED_LINE** lpplLine)
 	return 0;
 }
 
+/* Get the value from the chain pointed to by *number and return a value
+   based on mode based on mode :
+        1 -> double
+        0 -> int */
+int Dos9_GetCmpValue(const char* number, double* value)
+{
+    int val;
+    char* end;
+    int f=0;
+
+    while (1) {
+
+        if (f == 0)
+            *value = (double)strtol(number, &end, 0);
+        else /* Double mode chosen */
+            *value = strtod(number, &end);
+
+        if (*Dos9_SkipBlanks(end) != '\0'){
+            if (f == 0)
+                f = 1;
+            else
+                return  -1;
+        } else
+            return 0;
+
+    }
+}
 
 /* Performs an extended test for the if command (ie. for 'EQU' and so on ...)
 
@@ -453,80 +479,79 @@ int Dos9_PerformExtendedTest(const char* lpCmp, const char* lpParam1,
 {
 
     int comp_type=0,
-        irhs, /* right end side */
-        ilhs, /* left end side */
-        invalid=0;
+        string_comp=0;
 
     int iExp1,
         iExp2;
 
-    double drhs,
-            dlhs,
+    /* We do everything using */
+    double rhs,
+            lhs,
             x1,
             x2;
 
     char* lpEnd;
 
-    if (*lpCmp=='F' || *lpCmp=='f') {
+    /* Get the value of the left and right hand side of the
+       comparison */
+    if (Dos9_GetCmpValue(lpParam1, &rhs)
+        || Dos9_GetCmpValue(lpParam2, &lhs)) {
 
-        /* use the float versions of comparisons */
-        lpCmp++;
-        comp_type=CMP_FLOAT_COMP;
+        /* If we get here, do something clever, that is,
+           set left hand side to 0 and right hand side to
+           strcmp(lpParam1, lpParam2) */
 
-        drhs = strtod(lpParam1, &lpEnd);
-        if (*lpEnd != '\0') {
-            invalid=1;
-            goto next;
-        }
+        lhs = 0.0;
 
-        dlhs = strtod(lpParam2, &lpEnd);
-        if (*lpEnd != '\0') {
-            invalid=1;
-            goto next;
-        }
-
-    } else {
-
-        irhs = strtol(lpParam1, &lpEnd, 0);
-        if (*lpEnd != '\0') {
-            invalid=1;
-            goto next;
-        }
-
-        ilhs = strtol(lpParam2, &lpEnd, 0);
-        if (*lpEnd != '\0') {
-            invalid=1;
-            goto next;
-        }
+        if (iFlag & DOS9_IF_CASE_UNSENSITIVE)
+            rhs = (double)stricmp(lpParam1, lpParam2);
+        else
+            rhs = (double)strcmp(lpParam1, lpParam2);
 
     }
-
-next:
 
     if (!stricmp(lpCmp, "EQU")
         || !stricmp(lpCmp, "==")) {
 
-        comp_type|=CMP_EQUAL;
+        if (comp_type & CMP_FLOAT_COMP) {
+            x1 = frexp(rhs, &iExp1);
+            x2 = frexp(lhs, &iExp2);
+
+            /* majorate the error */
+            return (fabs(x1-x2*pow(2, iExp2-iExp1))
+                                <= DOS9_FLOAT_EQUAL_PRECISION);
+        }
+
+        return (rhs == lhs);
 
     } else if (!stricmp(lpCmp, "NEQ")) {
 
-        comp_type|=CMP_DIFFERENT;
+        if (comp_type & CMP_FLOAT_COMP) {
+            x1 = frexp(rhs, &iExp1);
+            x2 = frexp(lhs, &iExp2);
+
+            /* majorate the error */
+            return (fabs(x1-x2*pow(2, iExp2-iExp1))
+                                >= DOS9_FLOAT_EQUAL_PRECISION);
+        }
+
+        return (rhs != lhs);
 
     } else if (!stricmp(lpCmp, "GEQ")) {
 
-        comp_type|=CMP_GREATER_OR_EQUAL;
+        return (rhs >= lhs);
 
     } else if (!stricmp(lpCmp, "GTR")) {
 
-        comp_type|=CMP_GREATER;
+        return (rhs > lhs);
 
     } else if (!stricmp(lpCmp, "LEQ")) {
 
-        comp_type|=CMP_LESSER_OR_EQUAL;
+        return (rhs <= lhs);
 
     } else if (!stricmp(lpCmp, "LSS")) {
 
-        comp_type|=CMP_LESSER;
+        return (rhs < lhs);
 
     } else {
 
@@ -535,137 +560,4 @@ next:
 
     }
 
-    if (invalid && (comp_type != CMP_EQUAL)
-            && (comp_type != CMP_DIFFERENT)) {
-
-        Dos9_ShowErrorMessage(DOS9_COMPARISON_FORBIDS_STRING,
-                                lpCmp,
-                                FALSE
-                                );
-
-        return -1;
-
-    }
-
-    switch (comp_type) {
-
-        case CMP_EQUAL:
-            if (invalid) {
-
-                /* if there is no valid numbers */
-
-                if (iFlag & DOS9_IF_CASE_UNSENSITIVE) {
-
-                    return !stricmp(lpParam1, lpParam2);
-
-                } else {
-
-                    return !strcmp(lpParam1, lpParam2);
-
-                }
-
-            } else {
-
-                return (irhs == ilhs);
-
-            }
-
-        case CMP_DIFFERENT:
-            if (invalid) {
-
-                    /* then, we force use of logical expressions in order
-                       to get something between 1 and 0 */
-
-                if (iFlag & DOS9_IF_CASE_UNSENSITIVE) {
-
-                    return stricmp(lpParam1, lpParam2) != 0;
-
-                } else {
-
-                    return strcmp(lpParam1, lpParam2) != 0;
-
-                }
-
-            } else {
-
-                return (irhs != ilhs);
-
-            }
-
-        case CMP_GREATER:
-            return (irhs > ilhs);
-
-        case CMP_GREATER_OR_EQUAL:
-            return (irhs >= ilhs);
-
-        case CMP_LESSER:
-            return (irhs < ilhs);
-
-        case CMP_LESSER_OR_EQUAL:
-            return (irhs <= ilhs);
-
-        case CMP_EQUAL | CMP_FLOAT_COMP:
-            if (invalid) {
-
-                if (iFlag & DOS9_IF_CASE_UNSENSITIVE) {
-
-                    return !stricmp(lpParam1, lpParam2);
-
-                } else {
-
-                    return !strcmp(lpParam1, lpParam2);
-
-                }
-
-            } else {
-
-                x1 = frexp(drhs, &iExp1);
-                x2 = frexp(dlhs, &iExp2);
-
-                /* majorate the error */
-                return (fabs(x1-x2*pow(2, iExp2-iExp1))
-									<= DOS9_FLOAT_EQUAL_PRECISION);
-
-            }
-
-        case CMP_DIFFERENT | CMP_FLOAT_COMP:
-            if (invalid) {
-
-                if (iFlag & DOS9_IF_CASE_UNSENSITIVE) {
-
-                    return stricmp(lpParam1, lpParam2) != 0;
-
-                } else {
-
-                    return strcmp(lpParam1, lpParam2) != 0;
-
-                }
-
-            } else {
-
-                x1 = frexp(drhs, &iExp1);
-                x2 = frexp(dlhs, &iExp2);
-
-                /* major the error */
-                return !(fabs(x1-x2*pow(2, iExp2-iExp1))
-									<= DOS9_FLOAT_EQUAL_PRECISION);
-
-            }
-
-        case CMP_GREATER | CMP_FLOAT_COMP:
-            return (drhs > dlhs);
-
-        case CMP_GREATER_OR_EQUAL | CMP_FLOAT_COMP:
-            return (drhs >= dlhs);
-
-        case CMP_LESSER | CMP_FLOAT_COMP:
-            return (drhs < dlhs);
-
-        case CMP_LESSER_OR_EQUAL | CMP_FLOAT_COMP:
-            return (drhs <= dlhs);
-
-
-    }
-
-    return -1;
 }

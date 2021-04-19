@@ -58,6 +58,7 @@
 #include "Dos9_Xargs.h"
 #include "Dos9_Pecho.h"
 #include "Dos9_Timeout.h"
+#include "Dos9_Locale.h"
 #include "Dos9_Mod.h"
 #include "Dos9_Ver.h"
 

@@ -24,7 +24,7 @@
 #include "Dos9_Lang.h"
 
 #include "../../config.h"
-#include "../gettext.h"
+#include <gettext.h>
 
 #include <libDos9.h>
 

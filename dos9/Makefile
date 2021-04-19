@@ -20,12 +20,12 @@
 ROOTDIR = ..
 include ../config.mk
 
-CFLAGS += $(LIBDOS9_INC) $(LIBINTEVAL_INC) $(LIBMATHEVAL_INC) \
-		  $(LIBCU8_INC)
+CFLAGS += $(MICROGETTEXT_INC) $(LIBDOS9_INC) $(LIBINTEVAL_INC) \
+          $(LIBMATHEVAL_INC) $(LIBCU8_INC)
 
-LDFLAGS += $(LIBDOS9_LD) $(LIBINTEVAL_LD) $(LIBMATHEVAL_LD) \
-		   $(LIBCU8_LD) $(LICONV_LD)  $(LINTL_LD) $(LPTHREAD_LD)  \
-		   $(LM_LD) $(LDL_LD)
+LDFLAGS += $(MICROGETTEXT_LD) $(LIBDOS9_LD) $(LIBINTEVAL_LD) \
+           $(LIBMATHEVAL_LD) $(LIBCU8_LD) \
+		   $(LPTHREAD_LD) $(LM_LD) $(LDL_LD)
 
 ifeq ($(use_libcu8),1)
 	LDFLAGS += -lshlwapi
@@ -64,7 +64,7 @@ SRC_FILES := \
 	./core/Dos9_Exec.c ./core/Dos9_Prompt.c ./command/Dos9_Pecho.c \
 	./command/Dos9_CommandInfo.c ./core/Dos9_Completion.c \
 	./command/Dos9_Timeout.c ./command/Dos9_Mod.c \
-	./command/Dos9_Ver.c $(SRC_LINENOISE)
+	./command/Dos9_Ver.c ./command/Dos9_Locale.c $(SRC_LINENOISE)
 
 OBJ_FILES := $(SRC_FILES:.c=.o)
 

@@ -32,7 +32,7 @@ ifeq ($(use_nls),1)
 	SUBDIR_PO = po
 endif
 
-SUBDIRS = libDos9 libinteval libmatheval $(SUBDIRS_ADD) dos9 dos9ize dump tea \
+SUBDIRS = microgettext libDos9 libinteval libmatheval $(SUBDIRS_ADD) dos9 dos9ize dump tea \
 			scripts modules $(SUBDIR_PO)
 TEAFILES = README.tea WHATSNEW.tea GUIDELINES.tea THANKS.tea
 TEXTFILES = $(TEAFILES:.tea=.txt)
