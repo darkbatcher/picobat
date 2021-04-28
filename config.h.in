@@ -36,6 +36,10 @@
 	#define LIBDOS9_NO_CONSOLE 1
 #endif
 
+#if @use_w10ansi@
+  #define LIBDOS9_W10_ANSI 1
+#endif
+
 #if @use_modules@
   #define DOS9_USE_MODULES 1
 #endif

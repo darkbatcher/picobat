@@ -2626,5 +2626,12 @@ build without prior
 * Fixed a bug leading **^** to be considered as a variable name instead of an 
   operator
 
-* Fixed a bug with the libcu8 prompt. 
+* Fixed a bug with the libcu8 prompt.
+
+## Wednesday, April 28th, 2021 ##
+
+* Implemented w10ansi compilation flag to implement console functions using 
+  ANSI sequences instead of Windows API on Windows. Needs Windows 10 1903 and 
+  Legacy Console disabled to work properly, can also work on other Windows 
+  versions or with Legacy Console using ANSICON.
 

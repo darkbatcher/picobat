@@ -20,9 +20,27 @@
 #include "../libDos9.h"
 #include "../libDos9-int.h"
 
+#include "../../config.h"
+
+#ifdef WIN32
+  #ifndef ENABLE_VIRTUAL_TERMINAL_PROCESSING
+  #define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x4
+  #endif
+#endif
 
 LIBDOS9 int Dos9_LibInit(void)
 {
+    #if defined(WIN32) && defined(LIBDOS9_W10_ANSI)
+    /* Enable VT processing. */
+    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    DWORD mode;
+
+    GetConsoleMode(hOut, &mode);
+    mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+    SetConsoleMode(hOut, mode);
+    #endif
+
+    return 0;
 }
 
 LIBDOS9 void Dos9_LibClose(void)

@@ -28,7 +28,7 @@
 #include "Dos9_ShowIntro.h"
 #include "../lang/Dos9_Lang.h"
 
-#ifdef WIN32
+#if defined(WIN32) && !defined(LIBDOS9_W10_ANSI)
 #include <windows.h>
 
 void Dos9_InitConsole(void)
