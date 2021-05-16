@@ -18,18 +18,18 @@
  *
  */
 
-#ifndef _XOPEN_SOURCE
-#define _XOPEN_SOURCE 700
-#endif
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <fcntl.h>
-
 #include "../libDos9.h"
 #include "../../config.h"
 
-#if defined(WIN32)
+
+#if !defined(LIBDOS9_NO_CONSOLE) && defined(WIN32)
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <conio.h>
+
+#include <windows.h>
+
 static HANDLE __inline__ _Dos9_GetHandle(FILE* f)
 {
     HANDLE h = (HANDLE)_get_osfhandle(fileno(f));
@@ -41,51 +41,8 @@ static HANDLE __inline__ _Dos9_GetHandle(FILE* f)
 
     return h;
 }
-#endif // defined
 
-#if defined(LIBDOS9_NO_CONSOLE)
-
-void Dos9_ClearConsoleScreen(FILE *f)
-{
-}
-
-
-void Dos9_SetConsoleColor(FILE *f, COLOR cColor)
-{
-}
-
-void Dos9_SetConsoleTextColor(FILE* f, COLOR cColor) {
-}
-
-LIBDOS9 void Dos9_SetConsoleCursorPosition(FILE* f, CONSOLECOORD iCoord)
-{
-}
-
-LIBDOS9 CONSOLECOORD Dos9_GetConsoleCursorPosition(FILE* f)
-{
-    return (CONSOLECOORD){0,0};
-}
-
-LIBDOS9 void Dos9_SetConsoleCursorState(FILE* f, int bVisible, int iSize)
-{
-}
-
-void Dos9_SetConsoleTitle(FILE* f, char* lpTitle)
-{
-}
-void Dos9_ClearConsoleLine(FILE* f)
-{
-}
-
-void Dos9_GetMousePos(FILE* f, FILE* o, char* move, CONSOLECOORD* coords, int* type)
-{
-    type = 0;
-    coords->X = 0;
-    coords->Y = 0;
-}
-
-#elif defined(WIN32)
-#include <conio.h>
+#ifndef LIBDOS9_W10_ANSI
 
 void Dos9_ClearConsoleLine(FILE* f)
 {
@@ -228,6 +185,8 @@ void Dos9_SetConsoleTitle(FILE* f, char* lpTitle)
     SetConsoleTitle(lpTitle);
 }
 
+#endif
+
 /*
 
  The following functions are derived from the core library of darkbox
@@ -327,27 +286,6 @@ LIBDOS9 void Dos9_GetMousePos(FILE* f, char on_move, CONSOLECOORD* coords, int *
 		*b = tomouse_b(ir.Event.MouseEvent.dwButtonState, ir.Event.MouseEvent.dwEventFlags);
 
 	} while (!on_move && *b == CORE_NOTHING);
-}
-
-#endif
-
-
-#if defined(WIN32)
-
-int Dos9_Getch(FILE* f)
-{
-    if (_Dos9_GetHandle(f) == (HANDLE)-1)
-        return fgetc(f);
-
-    return getch();
-}
-
-int Dos9_Kbhit(FILE* f)
-{
-    if (_Dos9_GetHandle(f) == (HANDLE)-1)
-        return !feof(f);
-
-    return kbhit();
 }
 
 #endif

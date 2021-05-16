@@ -28,6 +28,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#include "../config.h"
+
 #ifdef  DLL_EXPORT
 #define __LIBDOS9__DLL
 #endif /* DLL_EXPORT */
@@ -245,7 +247,7 @@ LIBDOS9 COMMANDFLAG     Dos9_GetCommandProc(char* lpCommandLine, LPCOMMANDLIST l
 #define DOS9_CURSOR_SHOW 0
 #define DOS9_CURSOR_HIDE 1
 
-#if defined WIN32
+#if defined(WIN32) && !defined(LIBDOS9_W10_ANSI)
     #define DOS9_FOREGROUND_RED FOREGROUND_RED
     #define DOS9_FOREGROUND_BLUE FOREGROUND_BLUE
     #define DOS9_FOREGROUND_GREEN FOREGROUND_GREEN
@@ -265,7 +267,6 @@ LIBDOS9 COMMANDFLAG     Dos9_GetCommandProc(char* lpCommandLine, LPCOMMANDLIST l
     #define DOS9_GET_BACKGROUND_(a) ((a & 0xF0)>>4)
 
 #else
-
 
     #define DOS9_FOREGROUND_RED 0x01
     #define DOS9_FOREGROUND_BLUE 0x04

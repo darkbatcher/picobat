@@ -27,6 +27,7 @@
 #include <errno.h>
 
 #include <libDos9.h>
+#include "../../config.h"
 
 #include "../core/Dos9_Core.h"
 
@@ -43,7 +44,7 @@
 #define HWORD(a) ((0xF0 & (a)) >> 4)
 #define LWORD(a) (0xF & (a))
 
-#ifdef WIN32
+#if defined(WIN32) && !defined(LIBDOS9_W10_ANSI)
 #define BACKGROUND_COLOR(x) ((x) << 4)
 #define FOREGROUND_COLOR(x) (x)
 #else
