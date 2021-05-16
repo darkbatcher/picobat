@@ -45,12 +45,6 @@ LIBDOS9_DIR = $(ROOTDIR)/libDos9
 LIBDOS9_INC = -I$(LIBDOS9_DIR)
 LIBDOS9_LD = -L$(LIBDOS9_DIR) -lDos9
 
-# libinteval
-LIBINTEVAL_DIR = $(ROOTDIR)/libinteval
-
-LIBINTEVAL_INC = -I$(LIBINTEVAL_DIR)
-LIBINTEVAL_LD = -L$(LIBINTEVAL_DIR) -linteval
-
 # libmatheval
 LIBMATHEVAL_DIR = $(ROOTDIR)/libmatheval
 

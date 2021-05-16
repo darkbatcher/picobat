@@ -72,11 +72,13 @@ extern void input_reset (void);
 /* Grammar terminal symbols.  */
 %token <node> NUMBER CONSTANT VARIABLE
 %token <record> FUNCTION
+%left '|' 'o' '^'
+%left '&' 'a'
+%left '>' '<' 
 %left '-' '+'
-%left '*' '/'
+%left '*' '/' '%'
 %left '='
-%left NEG
-%left '^'
+%left NEG '!' '~'
 %token END
 
 /* Grammar non-terminal symbols.  */
@@ -113,17 +115,53 @@ expression
         /* Create division binary operation node.  */
         $$ = node_create ('b', '/', $1, $3);
 }
-| expression '=' expression {
+| expression '%' expression {
         /* Create division binary operation node.  */
+        $$ = node_create ('b', '%', $1, $3);
+}
+| expression '=' expression {
+        /* Create assignation binary operation node.  */
         $$ = node_create ('b', '=', $1, $3);
+}
+| expression '&' expression {
+        /* Create and binary operation node.  */
+        $$ = node_create ('b', '&', $1, $3);
+}
+| expression 'a' expression {
+        /* Create and binary operation node.  */
+        $$ = node_create ('b', 'a', $1, $3);
+}
+| expression '|' expression {
+        /* Create and binary operation node.  */
+        $$ = node_create ('b', '|', $1, $3);
+}
+| expression 'o' expression {
+        /* Create and binary operation node.  */
+        $$ = node_create ('b', 'o', $1, $3);
+}
+| expression '^' expression {
+        /* Create exclusive or binary operation node.  */
+        $$ = node_create ('b', '^', $1, $3);
+}
+| expression '>' expression {
+		/* Create shift right operation node.  */
+        $$ = node_create ('b', '>', $1, $3);
+}
+|  expression '<' expression {
+		/* Create shift left operation node.  */
+        $$ = node_create ('b', '<', $1, $3);
 }
 | '-' expression %prec NEG {
         /* Create minus unary operation node.  */
         $$ = node_create ('u', '-', $2);
 }
-| expression '^' expression {
-        /* Create exponentiation unary operation node.  */
-        $$ = node_create ('b', '^', $1, $3);
+| '!' expression %prec NEG {
+        /* Create logical negation unary operation node.  */
+        $$ = node_create ('u', '!', $2);
+}
+| '~' expression %prec NEG {
+        /* Create binary negation unary operation node.  */
+        $$ = node_create ('u', '~', $2);
 }
 | FUNCTION '(' expression ')' {
         /* Create function node.  */

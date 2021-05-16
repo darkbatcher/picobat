@@ -30,9 +30,6 @@
 #include <string.h>
 #include <errno.h>
 
-#include <matheval.h>
-#include <inteval.h>
-
 #include <libDos9.h>
 
 #include "../core/Dos9_Core.h"
@@ -69,9 +66,9 @@ int Dos9_CmdSetLocal(char* lpLine)
 
 			bDelayedExpansion=TRUE;
 
-		} else if (!stricmp(lpName, "ENABLEFLOATS")) {
+		} else if (!stricmp(lpName, "DISABLEDELAYEDEXPANSION")) {
 
-			bUseFloats=TRUE;
+			bDelayedExpansion=FALSE;
 
 		} else if (!stricmp(lpName, "CMDLYCORRECT")) {
 
@@ -95,15 +92,7 @@ int Dos9_CmdSetLocal(char* lpLine)
 
             return DOS9_UNABLE_SET_OPTION;
 #endif
-		} else if (!stricmp(lpName, "DISABLEFLOATS")) {
-
-			bUseFloats=FALSE;
-
-		} else if (!stricmp(lpName, "DISABLEDELAYEDEXPANSION")) {
-
-			bDelayedExpansion=FALSE;
-
-		} else if (!stricmp(lpName, "ENABLEEXTENSIONS")
+		}  else if (!stricmp(lpName, "ENABLEEXTENSIONS")
              || !stricmp(lpName, "DISABLEEXTENSION")) {
 
 			/* provided for backward compatibility. The ENABLEEXTENSIONS

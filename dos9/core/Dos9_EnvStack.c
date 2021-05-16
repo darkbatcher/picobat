@@ -34,7 +34,6 @@ void Dos9_PushEnvStack(void)
     item->previous = lpesEnv;
     item->lpeEnv = lpeEnv;
     item->bDelayedExpansion = bDelayedExpansion;
-    item->bUseFloats = bUseFloats;
     item->bCmdlyCorrect = bCmdlyCorrect;
 
     lpeEnv = Dos9_EnvDup(lpeEnv);
@@ -54,7 +53,6 @@ void Dos9_PopEnvStack(void)
     Dos9_EnvFree(lpeEnv);
     lpeEnv = item->lpeEnv;
     bDelayedExpansion = item->bDelayedExpansion;
-    bUseFloats = item->bUseFloats;
     bCmdlyCorrect = item->bCmdlyCorrect;
 
     free(item);
@@ -72,7 +70,6 @@ void Dos9_FreeEnvStack(void)
         Dos9_EnvFree(lpeEnv);
         lpeEnv = item->lpeEnv;
         bDelayedExpansion = item->bDelayedExpansion;
-        bUseFloats = item->bUseFloats;
         bCmdlyCorrect = item->bCmdlyCorrect;
 
         free(item);

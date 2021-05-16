@@ -151,12 +151,14 @@ int Dos9_ExecOperators(PARSED_LINE** lpLine)
 
 	}
 
+    /* Loop through a pipe chain, spawning parallel threads using
+       clone instance */
     while (line->lppsNode
         && line->lppsNode->cNodeType == PARSED_STREAM_NODE_PIPE
         && !status) {
 
 
-        /* TODO : SERIALISE CALLS TO _Dos9_Pipe with calls with fork */     /**/
+        /* TODO : SERIALISE CALLS TO _Dos9_Pipe with calls to fork */       /**/
         if (_Dos9_Pipe(pipedes, 4096, O_BINARY) == -1)                      /**/
             Dos9_ShowErrorMessage(DOS9_CREATE_PIPE | DOS9_PRINT_C_ERROR,    /**/
                                     __FILE__ "/Dos9_ExecOperators()",       /**/
@@ -224,7 +226,7 @@ void Dos9_LaunchPipe(struct pipe_launch_data_t* infos)
 
             if 1==1 (if 1==1 (echo test | find test))
 
-       as this function executes the left hand side of a pipe
+       as this function executes the left hand side of a pipe.
 
        */
     Dos9_ExecOutput(infos->stream);
@@ -335,6 +337,9 @@ void Dos9_RunParsedLine(PARSED_LINE* line)
 
         ok = Dos9_ExecOperators(&line);
 
+        /* If aborting, remove the last level of redirection
+           EXECOPERATORS_SKIP means that the line tokens is
+           skipped when using || or && */
 		if ((ok & EXECOPERATORS_SKIP) || bAbortCommand) {
 
             lppsStreamStack = Dos9_PopStreamStackUntilLock(lppsStreamStack);
@@ -347,7 +352,21 @@ void Dos9_RunParsedLine(PARSED_LINE* line)
 
         }
 
-		/* open file streams (ie. those induced by '>' or '<') */
+		/* open file streams (ie. those induced by '>' or '<')
+		   Note that FOR and IF never trigger file stream execution
+		   because they are considered lookahead commands. As such
+		   any redirection applies to the leftmost element inside the
+		   IF or the for:
+
+		   Example :
+
+                If > foo 1==1 echo test & echo test2
+
+		   is equivalent to
+
+                If 1==1 (echo test > foo & echo test2)
+
+            */
 		if (!((!strnicmp(pch, "if", 2) && Dos9_IsDelim(*(pch +2)))
             || (!strnicmp(pch, "for", 3) && Dos9_IsDelim(*(pch + 3)))))
             Dos9_ExecOutput(line->sStream);
@@ -851,8 +870,6 @@ void Dos9_SigHandlerBreak(int sig)
 
     if (!bEchoOn)
         Dos9_EsCat(attr, "e");
-    if (bUseFloats)
-        Dos9_EsCat(attr, "f");
     if (bDelayedExpansion)
         Dos9_EsCat(attr, "v");
     if (bCmdlyCorrect)
@@ -963,8 +980,6 @@ BOOL WINAPI Dos9_SigHandler(DWORD dwCtrlType)
 
             if (!bEchoOn)
                 Dos9_EsCat(args, "e");
-            if (bUseFloats)
-                Dos9_EsCat(args, "f");
             if (bDelayedExpansion)
                 Dos9_EsCat(args, "v");
             if (bCmdlyCorrect)

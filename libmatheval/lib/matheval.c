@@ -42,6 +42,7 @@ Node           *root;		/* Root of tree representation of
 				 * function.  */
 SymbolTable    *symbol_table;	/* Evaluator symbol table.  */
 int             ok;		/* Flag determining if parsing went OK.  */
+int             floats;
 double(*get_var)(const char*);
 double(*set_var)(const char*, double);
 
@@ -52,12 +53,13 @@ typedef struct {
 	SymbolTable    *symbol_table;	/* Evalutor symbol table.  */
 	char           *string;	/* Evaluator textual representation. */
 	int             count;	/* Number of evaluator variables. */
+	int             floats;
 	char          **names;	/* Array of pointers to evaluator variable
 				 * names. */
 } Evaluator;
 
 void           *
-evaluator_create(char *string)
+evaluator_create(char *string, int *pfloats)
 {
 	Evaluator      *evaluator;	/* Evaluator representing function
 					 * given by string.  */
@@ -79,6 +81,7 @@ evaluator_create(char *string)
 	ok = 1;
 
 	/* Do parsing. */
+	floats = 0;
 	evaluator_parse();
 
 	/* Free copy of string representing function. */
@@ -91,7 +94,7 @@ evaluator_create(char *string)
 		return NULL;
     }
 
-	/* Simplify tree represention of function. */
+	/* Simplify tree representation of function. */
 	root = node_simplify(root);
 
 	/* Allocate memory for and initialize evaluator data structure. */
@@ -100,7 +103,10 @@ evaluator_create(char *string)
 	evaluator->symbol_table = symbol_table;
 	evaluator->string = NULL;
 	evaluator->count = 0;
+	evaluator->floats = floats;
 	evaluator->names = NULL;
+
+	*pfloats = floats;
 
 	return evaluator;
 }
@@ -130,8 +136,9 @@ extern int evaluator_set_functions(double(*get)(const char*),
 double
 evaluator_evaluate(void *evaluator)
 {
-	/* Return requsted information. */
-	return node_evaluate(((Evaluator *) evaluator)->root);
+	/* Return requested information. */
+	return node_evaluate(((Evaluator *) evaluator)->root,
+                        ((Evaluator*)evaluator)->floats);
 }
 
 char           *
@@ -188,25 +195,4 @@ evaluator_get_variables(void *evaluator, char ***names, int *count)
 	/* Return requested information. */
 	*count = ((Evaluator *) evaluator)->count;
 	*names = ((Evaluator *) evaluator)->names;
-}
-
-void           *
-evaluator_derivative(void *evaluator, char *name)
-{
-	Evaluator      *derivative;	/* Derivative function evaluator. */
-
-	/* Allocate memory for and initalize data structure for evaluator
-	 * representing derivative of function given by evaluator. */
-	derivative = XMALLOC(Evaluator, 1);
-	derivative->root =
-	    node_simplify(node_derivative
-			  (((Evaluator *) evaluator)->root, name,
-			   ((Evaluator *) evaluator)->symbol_table));
-	derivative->symbol_table =
-	    symbol_table_assign(((Evaluator *) evaluator)->symbol_table);
-	derivative->string = NULL;
-	derivative->count = 0;
-	derivative->names = NULL;
-
-	return derivative;
 }

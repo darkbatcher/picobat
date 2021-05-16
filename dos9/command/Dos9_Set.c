@@ -31,7 +31,6 @@
 #include <errno.h>
 
 #include <matheval.h>
-#include <inteval.h>
 
 #include <libDos9.h>
 
@@ -47,7 +46,8 @@
 
 #include "../errors/Dos9_Errors.h"
 
-double _Dos9_SetGetVarFloat(const char* lpName)
+/* internal function for libmatheval to fetch variables values */
+double _Dos9_SetGetVar(const char* lpName)
 {
 	char* lpContent;
 
@@ -76,7 +76,9 @@ double _Dos9_SetGetVarFloat(const char* lpName)
 
 }
 
-double _Dos9_SetSetVarFloat(char* name, double f)
+
+/* internal function for libmatheval to set variables values */
+double _Dos9_SetSetVar(char* name, double f)
 {
 	char value[FILENAME_MAX];
 
@@ -86,40 +88,6 @@ double _Dos9_SetSetVarFloat(char* name, double f)
 
     return f;
 }
-
-int _Dos9_SetGetVarInt(char* lpName)
-{
-	char* lpContent;
-
-	lpContent=Dos9_GetEnv(lpeEnv, lpName);
-
-	if (lpContent) {
-
-		return atoi(lpContent);
-
-	} else {
-
-		return 0;
-
-	}
-
-}
-
-int _Dos9_SetSetVarInt(char* lpName, int v)
-{
-	char lpContent[FILENAME_MAX];
-    char *tok;
-
-    /* BIG HACK */
-    if ((tok = strchr(lpName, '=')))
-        *tok = '\0';
-
-    snprintf(lpContent, sizeof(lpContent), "%d", v);
-	Dos9_SetEnv(lpeEnv, lpName, lpContent);
-
-    return v;
-}
-
 
 /*
 
@@ -181,7 +149,6 @@ int Dos9_CmdSet(char *lpLine)
 
 	int i,
         nok = 0,
-	    bFloats,
 	    status = DOS9_NO_ERROR;
 
 	if ((lpNextToken=Dos9_GetNextParameter(lpLine+3, lpArgBuf,
@@ -192,27 +159,9 @@ int Dos9_CmdSet(char *lpLine)
 			Dos9_ShowInternalHelp(DOS9_HELP_SET);
 			goto error;
 
-		} else if (!strnicmp(lpArg, "/a", 2)) {
+		} else if (!stricmp(lpArg, "/a")) {
 
-			lpArg+=2;
-
-			bFloats=bUseFloats;
-			/* use mode set through setlocal */
-
-			if (*lpArg==':') lpArg++;
-
-			switch (toupper(*lpArg)) {
-
-				case 'F' :
-					bFloats=TRUE;
-					break;
-
-				case 'I' :
-					bFloats=FALSE;
-			}
-
-			/* get the floats */
-			if (status = Dos9_CmdSetA(lpNextToken, bFloats))
+			if (status = Dos9_CmdSetA(lpNextToken))
 				goto error;
 
 		} else if (!stricmp(lpArg, "/p")) {
@@ -339,6 +288,7 @@ int Dos9_CmdSetS(char* lpLine)
 	return 0;
 }
 
+/* Function for set /p */
 int Dos9_CmdSetP(char* lpLine)
 {
 
@@ -398,7 +348,7 @@ error:
 	return status;
 }
 
-int Dos9_CmdSetA(char* lpLine, int bFloats)
+int Dos9_CmdSetA(char* lpLine)
 {
 
 	ESTR* lpExpression=Dos9_EsInit();
@@ -406,45 +356,27 @@ int Dos9_CmdSetA(char* lpLine, int bFloats)
 
 	lpLine=Dos9_SkipBlanks(lpLine);
 
-	while ((lpLine=Dos9_GetNextParameterEsD(lpLine, lpExpression , "\","))) {
-
-		/* get the expression back */
-		//Dos9_GetEndOfLine(lpLine, lpExpression);
-
-		switch(bFloats) {
-
-        case TRUE:
-            /* evaluate floating expression */
-            if (status = Dos9_CmdSetEvalFloat(lpExpression))
-                goto error;
-
-            break;
-
-		case FALSE:
-			/* evaluate integer expression */
-			if (status = Dos9_CmdSetEvalInt(lpExpression))
-				goto error;
-
-			break;
-
-		}
-    }
+	while ((lpLine=Dos9_GetNextParameterEsD(lpLine, lpExpression , "\","))
+            && !(status = Dos9_CmdSetEval(lpExpression)))
+                /* loop through expressions */;
 
 error:
 	Dos9_EsFree(lpExpression);
 	return status;
 }
 
-int Dos9_CmdSetEvalFloat(ESTR* lpExpression)
+int Dos9_CmdSetEval(ESTR* lpExpression)
 {
 	void* evaluator; /* an evaluator for libmatheval-Dos9 */
 	char *lpVarName,
 	     *lpEqual,
-	     lpResult[30];
+	     lpResult[50];
 	char  cLeftAssign=0;
 	double dResult,
 	       dVal;
-    int status = DOS9_NO_ERROR;
+    int status = DOS9_NO_ERROR,
+        bDouble = 0,
+        fmode;
 
 	lpVarName=Dos9_EsToChar(lpExpression);
 
@@ -476,12 +408,12 @@ int Dos9_CmdSetEvalFloat(ESTR* lpExpression)
 
 	}
 
-    if (Dos9_LockMutex(&mSetFLock))
+    if (Dos9_LockMutex(&mSetLock))
         Dos9_ShowErrorMessage(DOS9_LOCK_MUTEX_ERROR,
                               __FILE__ "/Dos9_CmdSetEvalFloat()" , -1);
 
 	/* create evaluator */
-	if (!(evaluator=evaluator_create(lpEqual+1))) {
+	if (!(evaluator=evaluator_create(lpEqual+1, &fmode))) {
 
 		Dos9_ShowErrorMessage(DOS9_INVALID_EXPRESSION, lpEqual+1, FALSE);
 		status = DOS9_INVALID_EXPRESSION;
@@ -490,12 +422,22 @@ int Dos9_CmdSetEvalFloat(ESTR* lpExpression)
 
 	}
 
-    evaluator_set_functions(_Dos9_SetGetVarFloat, _Dos9_SetSetVarFloat);
+    evaluator_set_functions(_Dos9_SetGetVar, _Dos9_SetSetVar);
 	dResult=evaluator_evaluate(evaluator);
 
 	evaluator_destroy(evaluator);
 
-	/* clear if operator is recognised */
+	/* clear if operator is recognized */
+
+#define OPERATE_INT(op1, op, op2) \
+    (double)(((int)op1) op ((int)(op2)))
+
+#define OPERATE(op1, op, op2, mode) \
+    ((!mode) ? \
+        (OPERATE_INT(op1, op, op2)) \
+        : \
+        (op1 op op2))
+
 
 	switch (cLeftAssign) {
 
@@ -503,10 +445,12 @@ int Dos9_CmdSetEvalFloat(ESTR* lpExpression)
 		case '/':
 		case '+':
 		case '-':
+        case '%':
+        case '^':
 			*(lpEqual-1)='\0';
 			/* get the value of the variable */
 			Dos9_AdjustVarName(lpVarName);
-			dVal=_Dos9_SetGetVarFloat(lpVarName);
+			dVal=_Dos9_SetGetVar(lpVarName);
 
 			switch(cLeftAssign) {
 
@@ -515,8 +459,16 @@ int Dos9_CmdSetEvalFloat(ESTR* lpExpression)
 					break;
 
 				case '/':
-					dVal/=dResult;
+					dVal = OPERATE(dVal, /,
+                                    dResult, fmode);
 					break;
+
+                case '%':
+                    if (fmode)
+                        dVal = fmod(dVal, dResult);
+                    else
+                        dVal = OPERATE_INT(dVal, %, dResult);
+                    break;
 
 				case '+':
 					dVal+=dResult;
@@ -524,123 +476,12 @@ int Dos9_CmdSetEvalFloat(ESTR* lpExpression)
 
 				case '-':
 					dVal-=dResult;
-
-			}
-
-			break;
-
-		default:
-			dVal=dResult;
-
-	}
-
-	snprintf(lpResult, sizeof(lpResult), "%.16g", dVal);
-
-    if (!bIsScript)
-        fprintf(fOutput, "%.16g", dVal);
-
-	Dos9_SetEnv(lpeEnv, Dos9_EsToChar(lpExpression), lpResult);
-
-error:
-    if (Dos9_ReleaseMutex(&mSetFLock))
-        Dos9_ShowErrorMessage(DOS9_RELEASE_MUTEX_ERROR,
-                              __FILE__ "/Dos9_CmdSetEvalFloat()" , -1);
-
-	return status;
-}
-
-/* evaluate an interger expression */
-int Dos9_CmdSetEvalInt(ESTR* lpExpression)
-{
-	char *lpVarName,
-	     *lpEqual,
-	     lpResult[30];
-	char  cLeftAssign=0;
-	int   iResult,
-	      iVal,
-	      bDouble=FALSE,
-	      status = 0;
-
-	Dos9_EsCat(lpExpression, "\n");
-
-	lpVarName=Dos9_EsToChar(lpExpression);
-
-	while (*lpVarName==' ' || *lpVarName=='\t') lpVarName++;
-
-	/* if we don't have expression, end-up with an error */
-	if (!*lpVarName) {
-
-		Dos9_ShowErrorMessage(DOS9_EXPECTED_MORE, "SET", FALSE);
-        return DOS9_EXPECTED_MORE;
-
-	}
-
-	/* seek an '=' sign */
-	if (!(lpEqual=strchr(lpVarName, '='))) {
-
-		Dos9_ShowErrorMessage(DOS9_INVALID_EXPRESSION, lpVarName, FALSE);
-		return DOS9_EXPECTED_MORE;
-
-	}
-
-	*lpEqual='\0';
-
-	if (lpEqual != lpVarName) {
-
-		cLeftAssign=*(lpEqual-1);
-
-	}
-
-	if (Dos9_LockMutex(&mSetILock))
-        Dos9_ShowErrorMessage(DOS9_LOCK_MUTEX_ERROR,
-                              __FILE__ "/Dos9_CmdSetEvalInt()" , -1);
-
-    IntEval_Set_Fn(_Dos9_SetGetVarInt, _Dos9_SetSetVarInt);
-	iResult=IntEval_Eval(lpEqual+1);
-
-	if (IntEval_Error != INTEVAL_NOERROR) {
-
-		Dos9_ShowErrorMessage(DOS9_INVALID_EXPRESSION, lpEqual+1, FALSE);
-		status = DOS9_INVALID_EXPRESSION;
-
-		goto error;
-
-	}
-
-	switch(cLeftAssign) {
-
-		case '*':
-		case '/':
-		case '+':
-		case '-':
-		case '^':
-
-			*(lpEqual-1)='\0';
-
-			Dos9_AdjustVarName(lpVarName);
-			iVal=_Dos9_SetGetVarInt(lpVarName);
-
-			switch(cLeftAssign) {
-
-				case '*':
-					iVal*=iResult;
 					break;
 
-				case '/':
-					iVal/=iResult;
-					break;
+                case '^':
+                    dVal = OPERATE_INT(dVal, ^, dResult);
+                    break;
 
-				case '+':
-					iVal+=iResult;
-					break;
-
-				case '-':
-					iVal-=iResult;
-					break;
-
-				case '^':
-					iVal^=iResult;
-					break;
 
 			}
 
@@ -655,13 +496,13 @@ int Dos9_CmdSetEvalInt(ESTR* lpExpression)
 			*(lpEqual-1)='\0';
 
 			Dos9_AdjustVarName(lpVarName);
-			iVal=_Dos9_SetGetVarInt(lpVarName);
+			dVal=_Dos9_SetGetVar(lpVarName);
 
 			if (lpVarName != (lpEqual-1)) {
 
 				if (*(lpEqual-2) == cLeftAssign) {
 
-					bDouble=TRUE;
+					bDouble=1;
 					*(lpEqual-2)='\0';
 
 				}
@@ -671,50 +512,39 @@ int Dos9_CmdSetEvalInt(ESTR* lpExpression)
 			switch (cLeftAssign) {
 
 				case '|':
-					if (bDouble) {
-
-						iVal=iVal || iResult;
-
-					} else {
-
-						iVal|=iResult;
-
-					}
+					if (bDouble)
+                        dVal = OPERATE_INT(dVal, ||, dResult);
+                    else
+                        dVal = OPERATE_INT(dVal, |, dResult);
 
 					break;
 
 				case '&':
-					if (bDouble) {
-
-						iVal=iVal && iResult;
-
-					} else {
-
-						iVal&=iResult;
-
-					}
-
+					if (bDouble)
+                        dVal = OPERATE_INT(dVal, &&, dResult);
+                    else
+                        dVal = OPERATE_INT(dVal, &, dResult);
 			}
 
 			break;
 
+
 		default:
-			iVal=iResult;
+			dVal=dResult;
 
 	}
 
-	snprintf(lpResult, sizeof(lpResult), "%d", iVal);
+	snprintf(lpResult, sizeof(lpResult), "%.25g", dVal);
 
     if (!bIsScript)
-        fprintf(fOutput, "%d", iVal);
+        fprintf(fOutput, "%.25g", dVal);
 
 	Dos9_SetEnv(lpeEnv, Dos9_EsToChar(lpExpression), lpResult);
 
 error:
-    if (Dos9_ReleaseMutex(&mSetILock))
-            Dos9_ShowErrorMessage(DOS9_RELEASE_MUTEX_ERROR,
-                                  __FILE__ "/Dos9_CmdSetEvalInt()" , -1);
+    if (Dos9_ReleaseMutex(&mSetLock))
+        Dos9_ShowErrorMessage(DOS9_RELEASE_MUTEX_ERROR,
+                              __FILE__ "/Dos9_CmdSetEval()" , -1);
 
 	return status;
-
 }

@@ -34,9 +34,6 @@
 #include <io.h>
 #endif
 
-#include <matheval.h>
-#include <inteval.h>
-
 #include <libDos9.h>
 
 #include "../core/Dos9_Core.h"

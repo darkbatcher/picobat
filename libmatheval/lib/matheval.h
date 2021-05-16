@@ -30,7 +30,7 @@ extern          "C" {
 	 * returns pointer that should be passed as first argument to all
 	 * other library functions.  If an error occurs, function will
 	 * return null pointer. */
-	extern void    *evaluator_create(char *string);
+	extern void    *evaluator_create(char *string, int* pfloats);
 
 	/* Destroy evaluator specified. */
 	extern void     evaluator_destroy(void *evaluator);

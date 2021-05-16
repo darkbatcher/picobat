@@ -26,7 +26,6 @@ typedef struct ENVSTACK {
     struct ENVBUF* lpeEnv;
     struct ENVSTACK* previous;
     int bDelayedExpansion;
-    int bUseFloats;
     int bCmdlyCorrect;
 } ENVSTACK;
 

@@ -26,9 +26,6 @@
 #include <string.h>
 #include <errno.h>
 
-#include <matheval.h>
-#include <inteval.h>
-
 #include <libDos9.h>
 
 #include "../core/Dos9_Core.h"
@@ -46,7 +43,7 @@
 int Dos9_CmdRem(char* lpLine)
 {
 	/* Well, a help message for this function is included, however, is it
-	   really usefull, because, logically,
+	   really useful, because, logically,
 
 	        REM /?
 

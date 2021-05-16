@@ -25,9 +25,6 @@
 #include <string.h>
 #include <errno.h>
 
-#include <matheval.h>
-#include <inteval.h>
-
 #include <libDos9.h>
 
 #include "../core/Dos9_Core.h"
@@ -82,7 +79,8 @@ int Dos9_CmdLocale(char* line)
 
         } else if (!strcmp(param->str, "/?")) {
 
-            /* Do some thing with help message */
+            Dos9_ShowInternalHelp(DOS9_HELP_LOCALE);
+            done = 1;
 
         } else {
 

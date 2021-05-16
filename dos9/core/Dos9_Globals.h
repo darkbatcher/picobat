@@ -39,8 +39,7 @@ extern void(*pErrorHandler)(void); /* error handler */
 extern char* lpInitVar[]; /* list of variable for initialization */
 extern MUTEX mThreadLock; /* a mutex for single threaded parts */
 extern MUTEX mRunFile; /* a mutex to serialise call to fork() / CreatreProcess() */
-extern MUTEX mSetILock; /* a mutex for set (integers) */
-extern MUTEX mSetFLock; /* a mutex for set (floats) */
+extern MUTEX mSetLock; /* a mutex for set (floats) */
 extern MUTEX mEchoLock; /* a mutex for serializing calls to ECHO */
 extern MUTEX mModLock; /* a lock to serialize calls to mod */
 
@@ -63,7 +62,6 @@ extern __thread int bAbortCommand; /* abort the command (0: no , 1: jump to next
 extern __thread int bIgnoreExit; /* ignore exit */
 extern __thread int bDelayedExpansion; /* state of the delayed expansion */
 extern __thread int bCmdlyCorrect; /* state of cmdly correct interface */
-extern __thread int bUseFloats; /* state of use of floats */
 extern __thread int bIsScript; /* are we running a script ? */
 extern __thread int bEchoOn; /* is echo on ? */
 extern __thread int iErrorLevel; /* errorlevel state */

@@ -151,7 +151,7 @@ void Dos9_LoadInternalHelp(void)
 
 	lpInternalHelp[DOS9_HELP_SETLOCAL]
 	    =gettext("Set local environment and options of the Dos9 command prompt.\n"
-	             "Usage: SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] [ENABLEFLOATS | DISABLEFLOATS] [CMDLYCORRECT | CMDLYINCORRECT]\n");
+	             "Usage: SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] [CMDLYCORRECT | CMDLYINCORRECT]\n");
 
 	lpInternalHelp[DOS9_HELP_ENDLOCAL]
         =gettext("Reverts changes to environments and options made after a call to SETLOCAL.\n"
@@ -226,6 +226,10 @@ void Dos9_LoadInternalHelp(void)
 	lpInternalHelp[DOS9_HELP_VER]
 		=gettext("Print the OS type and version\n"
 				 "Usage: VER\n");
+
+    lpInternalHelp[DOS9_HELP_LOCALE]
+        =gettext("Sets directory of translation files\n"
+                 "Usage: LOCALE [dir]\n");
 
     lpInternalHelp[DOS9_HELP_START]
         =gettext("Start a program in another window\n"

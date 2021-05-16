@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dos9 218.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-24 18:19+0200\n"
+"POT-Creation-Date: 2021-05-16 22:30+0200\n"
 "PO-Revision-Date: 2018-07-07 22:13+0530\n"
 "Last-Translator: darkounet <darkbatcher@dos9.org>\n"
 "Language-Team: TheBATeam (www.thebateam.org)\n"
@@ -471,10 +471,9 @@ msgid ""
 "\t/A:attr\tA list of attributes for Dos9\n"
 "\t\tC\tEnable CMDLYCORRECT option to enable more compatibility\n"
 "\t\t\twith cmd.exe.\n"
-"\t\tF\tEnable floating numbers support.\n"
 "\t\tE\tDisable echo command (disable current path printing).\n"
 "\t\tQ\tQuiet Mode (does not print start screen).\n"
-"\t/I in\tFile descriptor to used as input.\n"
+"\t/I in\tFile descriptor to be used as input.\n"
 "\t/O out\tFile descriptor to be used as output.\n"
 "\tfile\tA batch file to be executed.\n"
 "\t/C cmd\tRun cmd command and exit.\n"
@@ -505,36 +504,36 @@ msgstr ""
 "<darkbatcher@dos9.org>\n"
 "अधिक जानकारी के लिए देखें: <http://dos9.org>\n"
 
-#: ../dos9/lang/Dos9_Lang.c:150
+#: ../dos9/lang/Dos9_Lang.c:149
 #, c-format
 msgid "%d files matching, print anyway ?"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:152
+#: ../dos9/lang/Dos9_Lang.c:151
 #, fuzzy, c-format
 msgid "Waiting for %f seconds, press a key to continue ..."
 msgstr "आगे बढ़ने के लिए कोई कुंजी दबाएं..."
 
-#: ../dos9/lang/Dos9_Lang.c:153
+#: ../dos9/lang/Dos9_Lang.c:152
 #, fuzzy, c-format
 msgid "Waiting for %f seconds, press CTRL-C to continue ..."
 msgstr "आगे बढ़ने के लिए कोई कुंजी दबाएं..."
 
-#: ../dos9/lang/Dos9_Lang.c:154
+#: ../dos9/lang/Dos9_Lang.c:153
 #, fuzzy
 msgid "Press a key to continue ..."
 msgstr "आगे बढ़ने के लिए कोई कुंजी दबाएं..."
 
-#: ../dos9/lang/Dos9_Lang.c:155
+#: ../dos9/lang/Dos9_Lang.c:154
 #, fuzzy
 msgid "Press CTRL-C to continue ..."
 msgstr "आगे बढ़ने के लिए कोई कुंजी दबाएं..."
 
-#: ../dos9/lang/Dos9_Lang.c:157
+#: ../dos9/lang/Dos9_Lang.c:156
 msgid "Loaded modules :"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:158
+#: ../dos9/lang/Dos9_Lang.c:157
 msgid "Module loading not supported."
 msgstr ""
 
@@ -751,10 +750,11 @@ msgstr ""
 "\tset var\n"
 
 #: ../dos9/lang/Dos9_ShowHelp.c:153
+#, fuzzy
 msgid ""
 "Set local environment and options of the Dos9 command prompt.\n"
 "Usage: SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] "
-"[ENABLEFLOATS | DISABLEFLOATS] [CMDLYCORRECT | CMDLYINCORRECT]\n"
+"[CMDLYCORRECT | CMDLYINCORRECT]\n"
 msgstr ""
 "स्थानीय वातावरण और Dos9 कमांड प्रॉंप्ट के विकल्प सेट करें ।\n"
 "उपयोग: SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] "
@@ -899,6 +899,12 @@ msgid ""
 msgstr ""
 
 #: ../dos9/lang/Dos9_ShowHelp.c:231
+msgid ""
+"Sets directory of translation files\n"
+"Usage: LOCALE [dir]\n"
+msgstr ""
+
+#: ../dos9/lang/Dos9_ShowHelp.c:235
 msgid ""
 "Start a program in another window\n"
 "Usage: START [/d dir] [/b] [/min] [/max] [/wait] [\"title\"] [command "

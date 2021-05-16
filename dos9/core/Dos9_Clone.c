@@ -65,7 +65,6 @@ void* Dos9_CloneTrampoline(void* data)
     void* arg;
 
     bDelayedExpansion = cloned->bDelayedExpansion;
-    bUseFloats = cloned->bUseFloats;
     bEchoOn = cloned->bEchoOn;
     iErrorLevel = cloned->iErrorLevel;
     bIsScript = cloned->bIsScript;
@@ -111,7 +110,6 @@ int Dos9_DuplicateData(struct clone_data_t* data)
     int fd;
 
     data->bDelayedExpansion = bDelayedExpansion;
-    data->bUseFloats = bUseFloats;
     data->bEchoOn = bEchoOn;
     data->iErrorLevel = iErrorLevel;
     data->bIsScript = bIsScript;

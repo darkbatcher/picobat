@@ -130,8 +130,7 @@ int main(int argc, char *argv[])
     /* duplicate std streams */
     Dos9_DuplicateStdStreams();
     Dos9_CreateMutex(&mThreadLock);
-    Dos9_CreateMutex(&mSetFLock);
-    Dos9_CreateMutex(&mSetILock);
+    Dos9_CreateMutex(&mSetLock);
     Dos9_CreateMutex(&mRunFile);
     Dos9_CreateMutex(&mEchoLock);
     Dos9_CreateMutex(&mModLock);

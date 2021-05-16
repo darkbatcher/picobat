@@ -32,7 +32,7 @@ ifeq ($(use_nls),1)
 	SUBDIR_PO = po
 endif
 
-SUBDIRS = microgettext libDos9 libinteval libmatheval $(SUBDIRS_ADD) dos9 dos9ize dump tea \
+SUBDIRS = microgettext libDos9 libmatheval $(SUBDIRS_ADD) dos9 dos9ize dump tea \
 			scripts modules $(SUBDIR_PO)
 TEAFILES = README.tea WHATSNEW.tea GUIDELINES.tea THANKS.tea
 TEXTFILES = $(TEAFILES:.tea=.txt)
@@ -99,7 +99,7 @@ $(SUBDIRS_BIN): $(SUBDIRS)
 # stuff to check
 PROGRAMS = mimeopen xdg-open
 FUNCTIONS = WIN32 MINGW_W64
-LIBS = iconv intl pthread m dl
+LIBS = pthread m dl
 FLAGS = PIC
 OPTIONS = libcu8 nls cmdlycorrect console modules linenoise
 DEFAULTOPTIONS = no-libcu8 use-nls no-cmdlycorrect use-console use-modules \

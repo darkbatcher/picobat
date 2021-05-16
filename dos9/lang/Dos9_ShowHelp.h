@@ -59,8 +59,9 @@
 #define DOS9_HELP_MOD       37
 #define DOS9_HELP_VER		38
 #define DOS9_HELP_START     39
+#define DOS9_HELP_LOCALE    40
 
-#define DOS9_HELP_ARRAY_SIZE 40
+#define DOS9_HELP_ARRAY_SIZE 41
 
 
 /* this is to instanciate a little embedded command

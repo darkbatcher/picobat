@@ -25,7 +25,6 @@
 
 struct clone_data_t {
     int bDelayedExpansion;
-    int bUseFloats;
     int bEchoOn;
     int iErrorLevel;
     int bIsScript;

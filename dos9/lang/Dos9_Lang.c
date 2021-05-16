@@ -136,10 +136,9 @@ Usage:\tDOS9 [/A[:]attr] [/I in] [/O out] [file ... | /K cmd ...|/C cmd ...]\n\n
 \t/A:attr\tA list of attributes for Dos9\n\
 \t\tC\tEnable CMDLYCORRECT option to enable more compatibility\n\
 \t\t\twith cmd.exe.\n\
-\t\tF\tEnable floating numbers support.\n\
 \t\tE\tDisable echo command (disable current path printing).\n\
 \t\tQ\tQuiet Mode (does not print start screen).\n\
-\t/I in\tFile descriptor to used as input.\n\
+\t/I in\tFile descriptor to be used as input.\n\
 \t/O out\tFile descriptor to be used as output.\n\
 \tfile\tA batch file to be executed.\n\
 \t/C cmd\tRun cmd command and exit.\n\

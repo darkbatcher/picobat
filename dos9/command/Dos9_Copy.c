@@ -25,9 +25,6 @@
 #include <string.h>
 #include <errno.h>
 
-#include <matheval.h>
-#include <inteval.h>
-
 #include <libDos9.h>
 
 #include "../core/Dos9_Core.h"
@@ -57,7 +54,7 @@
     at the end of the static part of the regular expression. For example, if
     COPY encounters :
 
-        path/to/folder/ *.*
+        path/to/folder/*.*
         \_____________/\_/
           Static part   Regexp
 

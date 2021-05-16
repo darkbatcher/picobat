@@ -203,11 +203,6 @@ int Dos9_InitSetModes(char* str)
                 bDelayedExpansion=TRUE;
                 break;
 
-            case 'F':
-                /* enables floats */
-                bUseFloats=TRUE;
-                break;
-
             case 'E':
                 bEchoOn=FALSE;
                 break;

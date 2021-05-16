@@ -25,8 +25,6 @@
 #include <string.h>
 #include <errno.h>
 
-#include <matheval.h>
-#include <inteval.h>
 
 #include <libDos9.h>
 

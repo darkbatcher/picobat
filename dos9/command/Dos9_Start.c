@@ -230,9 +230,6 @@ int Dos9_CmdStart(char* line)
                     if (!bEchoOn)
                         Dos9_EsCat(param, "e");
 
-                    if (bUseFloats)
-                        Dos9_EsCat(param, "f");
-
                     if (bCmdlyCorrect)
                         Dos9_EsCat(param, "c");
 
@@ -276,9 +273,6 @@ int Dos9_CmdStart(char* line)
                     if (!bEchoOn)
                         Dos9_EsCat(param, "e");
 
-                    if (bUseFloats)
-                        Dos9_EsCat(param, "f");
-
                     if (bCmdlyCorrect)
                         Dos9_EsCat(param, "c");
 
@@ -317,9 +311,6 @@ int Dos9_CmdStart(char* line)
 
         if (!bEchoOn)
             Dos9_EsCat(param, "e");
-
-        if (bUseFloats)
-            Dos9_EsCat(param, "f");
 
         if (bCmdlyCorrect)
             Dos9_EsCat(param, "c");

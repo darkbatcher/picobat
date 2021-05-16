@@ -1,9 +1,9 @@
-/* 
+/*
  * Copyright (C) 1999, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2011,
  * 2012, 2013 Free Software Foundation, Inc.
- * 
+ *
  * This file is part of GNU libmatheval
- * 
+ *
  * GNU libmatheval is free software: you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -36,14 +36,14 @@ typedef struct _Node {
 				 * for binary operation).  */
 	union {
 		double          number;	/* Number value.  */
-		Record         *constant;	/* Symbol table record for 
+		Record         *constant;	/* Symbol table record for
 						 * constant.  */
-		Record         *variable;	/* Symbol table record for 
+		Record         *variable;	/* Symbol table record for
 						 * variable.  */
 		struct {
-			Record         *record;	/* Symbol table record for 
+			Record         *record;	/* Symbol table record for
 						 * function.  */
-			struct _Node   *child;	/* Function argument node. 
+			struct _Node   *child;	/* Function argument node.
 						 */
 		} function;	/* Structure representing function.  */
 		struct {
@@ -51,7 +51,7 @@ typedef struct _Node {
 							 * ('-' for unary
 							 * minus).  */
 			struct _Node   *child;	/* Operand node.  */
-		} un_op;	/* Structure representing unary operation. 
+		} un_op;	/* Structure representing unary operation.
 				 */
 		struct {
 			char            operation;	/* Operation type
@@ -60,11 +60,11 @@ typedef struct _Node {
 							 * for
 							 * subtraction,
 							 * '*' for
-							 * multiplication, 
+							 * multiplication,
 							 * '/' for
 							 * division and
 							 * '^' for
-							 * exponentiation). 
+							 * exponentiation).
 							 */
 			struct _Node   *left,
 			               *right;	/* Operands nodes.  */
@@ -91,10 +91,10 @@ Node           *node_simplify(Node * node);
 
 /* Evaluate subtree rooted at given node.  For variables, values from
  * symbol table are used. */
-double          node_evaluate(Node * node);
+double          node_evaluate(Node * node, int fmode);
 
 /* Create derivative tree for subtree rooted at given node.  Second
- * argument is derivation variable, third argument is symbol table (needed 
+ * argument is derivation variable, third argument is symbol table (needed
  * for functions derivatives).  Function returns root of corresponding
  * derivation tree. */
 Node           *node_derivative(Node * node, char *name,
@@ -104,7 +104,7 @@ Node           *node_derivative(Node * node, char *name,
  * specified node. */
 void            node_flag_variables(Node * node);
 
-/* Calculate length of the string representing subtree rooted at specified 
+/* Calculate length of the string representing subtree rooted at specified
  * node. */
 int             node_get_length(Node * node);
 
