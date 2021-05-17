@@ -1,0 +1,44 @@
+#
+#   Dos9 Manual pages, The Dos9 project
+#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+{{LOCALE command}}
+
+	The {LOCALE} command tells {dos9|Dos9} the path to load translation
+	files. {Dos9} uses {.mo} files, generated using GNU gettext though
+	it uses its own internals to read translation files.
+
+{{Synopsis}}
+
+${LOCALE path}
+
+	Tries to load translation messages from {path} using the current
+	language of the OS. At startup, {Dos9} searches for translation
+	files in {%DOS9_PATH%/share/locale/}, but the {LOCALE} enables
+	translations files to be loaded from anywhere on the disk.
+
+	If custom paths for translation files are used, this command can
+	be used to set up the proper configuration in {dos9auto|Dos9_Auto.bat}
+	which is executed every time a {Dos9} process is started.
+	
+{{Compatibility}}
+
+	Specific to Dos9.
+
+{{See also}}
+
+	{commands|Commands list}

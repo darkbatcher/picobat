@@ -531,10 +531,10 @@ int Dos9_CmdSetEval(ESTR* lpExpression)
 
 	}
 
-	snprintf(lpResult, sizeof(lpResult), "%.25g", dVal);
+	snprintf(lpResult, sizeof(lpResult), "%.14g", dVal);
 
     if (!bIsScript)
-        fprintf(fOutput, "%.25g", dVal);
+        fprintf(fOutput, "%.14g", dVal);
 
 	Dos9_SetEnv(lpeEnv, Dos9_EsToChar(lpExpression), lpResult);
 
