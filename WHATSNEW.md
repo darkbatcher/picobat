@@ -2635,3 +2635,13 @@ build without prior
   Legacy Console disabled to work properly, can also work on other Windows 
   versions or with Legacy Console using ANSICON.
 
+## Monday, May 15th, 2021 ##
+
+* Changes to the **FOR** command documentation.
+
+* Remove the **ENABLEFLOATS** options. The float distinction has now meaning 
+  since the recent changes to the **SET /A** command. By default the command 
+  uses integers, but floats are automatically triggered when a floating point 
+  value is specified or when a function or a constant is used. All of this is 
+  explained in details in the **SET /A** manual page.
+

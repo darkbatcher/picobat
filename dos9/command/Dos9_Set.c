@@ -91,7 +91,7 @@ double _Dos9_SetSetVar(char* name, double f)
 
 /*
 
-	SET [/A[:][f|i]] [/P] var=exp
+	SET [/A] [/P] var=exp
 
 	Set an environment variable.
 
@@ -464,10 +464,7 @@ int Dos9_CmdSetEval(ESTR* lpExpression)
 					break;
 
                 case '%':
-                    if (fmode)
-                        dVal = fmod(dVal, dResult);
-                    else
-                        dVal = OPERATE_INT(dVal, %, dResult);
+                    dVal = fmod(dVal, dResult);
                     break;
 
 				case '+':

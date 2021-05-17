@@ -1,6 +1,6 @@
-﻿#
+#
 #   Dos9 Manual pages, The Dos9 project
-#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#   Copyright (C) 2012-2021  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -15,236 +15,301 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-
 {{FOR Command}}
 
-	The {FOR} loop is the most powerfully tool provided by batch language
-	to process various types of data, from integers, text files, command
-	outputs and even directories. Thus, the {FOR} loop is an important
-	piece to elaborate advanced and complex batch scripts and commands.
+	{FOR} is by no doubt the most useful tool that batch programming
+	provides. It enables processing of numerous type of objects, files,
+	command output, integers. Thus {FOR} is a really interresting tool
+	to create advanced scripts.
+	
+	{FOR} loop may seem difficult to use at first sight, nonetheless
+	it is the most important tool to batch programming.
 
-	The {FOR} loops may seem difficult to understand and mysty for
-	beginners, however, it is a very powerful tool for batch programmers.
+{{Synopsis - First syntax}}
 
-	If you wish to have more detailed description of the {FOR} loop
-	syntax, please consider reading {for-tech|FOR (technical)}
-
-{{Synopsis - First Syntax}}
+	The first syntax allows processing strings.
 
 ${FOR %%A IN (string) DO (
-	:: some commands
+	:: some commands 
 )}
 
-	Split {string} in tokens and processes specified commands for each
-	token.
+	Splits a {string} in chunks and execute the specified commands
+	on each of them.
 
-		- {%%A} : The name of the special var that will receive the token to
-		be processed with specified commands.
+		- {%%A} : The name of the {spec/xvar|special variable} that will receive
+		the chunk to be processed.
+		
+		@- The proprietary software {cmd.exe} needed the users to use two
+		different syntaxes, depending on the input mode (console or script).
+		In the first case, the user had to use {%A} instead of {%%A}, which
+		was required in the second case. {dos9|Dos9} uses a single syntax based
+		on the batch syntax (ie. always {%%}).
+		
+		- {string} : The string to split in chunks. Dos9 uses the following
+		delimiters:
+		
+		-- {' '} : space.
+		
+		-- {'	'} : tabs.
+		
+		-- {'\\n'} : line feed.
 
-		- {string} : The string to be split in tokens. The delimiters used
-		split the string in tokens are :
-
-			-- {' '} : Spaces.
-
-			-- {'	'} : Tabs.
-
-			-- {'\\n'} : Line feeds or new lines.
-
-			-- {:} : Columns.
-
-			-- {;} : Semi-columns.
-
-			-- {,} : Coma.
-
-	@- Note that you can discard any of the previous delimiters (expects line feeds or
-	new lines) just by enclosing the token between single or double quotes. Note
-	also that the double or single quote will remain in the tokens processed, to avoid
-	this, just use {%%~A} instead of {%%A} (for more details see {spec/xvar|special
-	variables}).
-
+		-- {:} : colon.
+		
+		-- {;} : semi-colon.
+		
+		-- {,} : comma.
+		
+		@- Any of these delimiters (except new lines) can be ignored using
+		quotes (simple or double). This quote will be kept in the variable.
+		To remove quotes, use {%%~A} instead of {%%A} (for more informations,
+		see {spec/xvar|special variable}).
+		
+		@- If any of the chunks consist in a {spec/regexp|regular expression},
+		then it is replaced by the files matching it. If no files match, the
+		chunk is skipped. If the chunk contains quotes, they will be removed.
+	
 	Example :
+	
 ${FOR %%A IN (some stuff "some stuff") DO (
-	ECHO The current token is %%A
+	ECHO current element : %%A
 )}
 
-	Output:
-${The current token is some
-The current token is stuff
-The current token is "some stuff"}
+	Output :
+${current element : some
+current element : stuff
+current element : "some stuff"}
 
 {{Synopsis - Second syntax}}
+
+	The second syntax is based on the {/f} switch. This allow making some transformations
+	on string, commands or files. Note that strings are not split the same way as using
+	the preceding syntax.
 
 ${FOR /F [options] %%A IN (object) DO (
 	:: some commands
 )}
 
-	Processes either a string, a command output or a file. For convenience,
-    and to ease reading of the page, none of the previously described
-    parameters will described again.
+	Execute some command on a string, a command output or a file. To ease the
+	reading of this page, parameters and switches described in the preceding
+    paragraph will not be described again.
+	
+	- {object} : the object that as to be used as the {FOR} command input 
+    {FOR}. This parameter can be (or not) surrounded by one of these 
+    following delimiters:
+	
+	-- {'} : {Object} refers to a command whose output is used as {FOR}
+	loop input.
+ 
+	@-- The corresponding command line is executed asynchronously (that is
+	both {FOR} loop commands and {object} are run simultaneously).
+	
+	@-- Using {cmd.exe}, if the command line was to contain any end of line
+	characters, the said characters will be removed and line would be
+	executed as if it was a single line, preventing user from using complex
+	scripts as input. {dos9|Dos9} removed this restriction, as such more
+	complex script can be used as input.
+	
+	-- {"} : {Object} refer to a string of characters. The {FOR} loop will 
+    then use {object} as input. If this string contains any end-of-line 
+    characters, then this line will be used line by line.
+	
+	-- If neither of the preceding characters surround {object},
+    then {object} refers to a file name. The {FOR} loop will then open the
+    file and read it entire content and run the commands specified on its
+    content.
 
-		- {object} : The object to be processed by the {FOR} loop. 
-        This parameters consist of a string that can be (or not) enclosed 
-        in only one type of the following delimiters :
+	@-- This file can obviously be multiline, but it is supposed to be 
+    somehow a {text} file. If the file is not a {text} file, then the
+    behaviour is unspecified.
+	
+	@-- As opposed to {cmd.exe}, {Dos9} does not remove empty lines from the
+    loop input. Nonetheless, a compatible behaviour can be enabled using
+    {CMDLYCORRECT} option from the command {setlocal|SETLOCAL}.
 
-			-- {'} : The object {object} is considered to be command line.
-            The {FOR} loop will run the given command line and then process
-            the output of the command line.
+	- {options} : options that must be used by the {FOR} loop. This options
+    have to be either one parameter containing all the options or a 
+    combination of various parameters containing a bit of all information on
+    options. Every option has to be specified using the option name followed
+    by the "=" sign and the value associated with the option:
+	
+	-- {eol} : Specify some characters to be used as end of line.
+	Any input line starting with the one of the characters specified by
+    {eol} will be skipped by the {FOR} command. By default, this parameter
+    is the semi colon {;}.
 
-			-- {"} : The object {object} is considered as a simple string.
-            The {FOR} loop will so process the string. If the string include
-            either line feeds or new lines, then they will not be split from
-            the processed string, and the string will be processed
-            line-by-line.
+	@-- At most {FILENAME_MAX-1} (ie. 259 characters using windows) different
+	characters from {ASCII} table, or from a single byte encoding (however,
+	no utf-8 character is accepted yet).
+	
+	@-- If this parameter is specified more than once, then, the {FOR} command
+	will only consider the last occurrence of this parameter.
+	
+	-- {skip} : Skip a given number of lines that should be ignored at the
+	start of the loop.
+	
+	@-- If the number given surpasses the actual length of the input, then
+	the loop will be skipped. The default value is 0.
 
-			-- If neither of the previous delimiters encloses {object},
-            then object will be considered to be file name list. The {FOR}
-            loop will open the file named by {object}
-			and read all its content, and finally process what have been read.
+	-- {tokens} : A list specifying the way chunks of input lines will be
+    assigned to {spec/xvar|special variables} such as %%A. The list must
+    conform to the following rules, elements of the list must be separated
+    using commas:
+	
+	--- {n} : Where {n} is an integer. Select the {n}-th tokens.
+	
+	--- {n-p} : Where {n} and {p} are integers. Select every token from the
+    {n}-th token to the {p}-th and stores each token in a different
+    {special variable}. This syntax is equivalent to {n,n+1,...,p-1,p}.
 
-		- {options} : The options that must be used by {FOR} to process
-        {object}. This must be, either a single parameter that gathers all
-        options or a combinations of short parameters that contain a part 
-        of the overall options. Each options must be specified by using the
-        name of the option followed by an equal sign and finally by the value
-        that is specified for these options. The options name are:
+    --- {n.p} : Where {n} and {p} are integers. Select every token from the
+    {n}-th token up to the {p}-th token and store their concatenation in a
+    single {special variable}.
 
-	        -- {eol} : Specify some characters to be used as end of line.
-        	Any input line starting with the one of the characters specified by
-            {eol} will be skipped by the {FOR} command. By default, this 
-            parameter is the semi colon {;}.
+    --- {n*} : Where {n} is an integer. Select the  {n}-th token and store it
+    in a {special variable}, then select all the remaining tokens and store
+    them in the next {special variable}. This syntax is equivalent to {n,*}.
+	
+	--- {*} : Selects  all of the remaining tokens (all those following the
+    last selected token). This parameter cannot be used as {p} for in the
+    {n-p} syntax, but it can for {n.p} syntax; in this case, it selects all
+    of the tokens remaining after the {n}-th token (included) and stores it 
+    in a single special variable.
+	
+	@-- Every selected set of tokens is assigned to a different
+	{spec/xvar|special variable}, starting with the specified {FOR} loop
+    variable and incrementing the {ASCII} code for every new set of token
+    (roughly corresponding to an alphabetical progression). If the code
+    passes over {0x7F}, then the following variable will be {0x21} (ie {!}).
 
+	@-- If {FOR} has to assign an already assigned var, the loops stoops on
+	error.
 
-			-- {skip} : Specify the number of lines to be skipped at the beginning of the processed
-			text. The default value is 0, obviously.
+	@-- The tokens positions start at {1}. As opposed to {cmd.exe}, Dos9
+	does not have any constraints on the order of selections of the
+	token (ie. sets may overlap or be in "reverse" order).
+	
+	-- {delims} : A set of characters used as delimiters to split input lines
+	got through {object} into tokens. By default, the only delimiter is {space}.
+	
+	@-- If this parameter is specified, then {space} is a delimiter
+	any more and is replaced by the given character set. If {Dos9} encounters
+	a sub-string containing only delimiter in the input, then {Dos9} behaves
+	as if the sub-string was only one single delimiter (no empty tokens are
+	created).
+	
+	@-- At most {FILENAME_MAX-1} characters can be specified. If there is
+	several instances of {delims} within {options}, only the last one is
+	used by the {FOR} loop.
 
-			-- {tokens} : A list describing which tokens will be assigned to special (local)
-			variables, such as {%%A}.
-			The token description must conform to the following rules,
-			separated by a comma:
+	-- {usebackq} : Uses the new syntax introduced with {Windows NT}; If
+	{object} is enclosed in single quotes, then string input is assumed.
+    However, if it enclosed in backward quotes, then command input is
+    assumed. This parameter is the only one requiring neither an equal sign
+    nor a value attached to it.
+	
+	@-- This parameter was really usefull using {cmd.exe} that frequently
+	truncates strings input from {FOR} whenever some usual double quote is
+	encountered. However, this is no more relevant using {Dos9}.	
+	
+	{Example 1:} String parsing
 
-				--- {n} : Where {n} is a number. Select the n-th token.
-
-				--- {n-p} : Where both {n} and {p} are numbers. Add all the
-                tokens in  a range starting at the n-th token up to the p-th 
-                token and stores them in separated {special variables}.
-
-                --- {n.g} : Where {n} and {p} are both integers. Concatenates
-                tokens from the {n}-th token to the {p}-th token and stores the
-                concatenation in a single {special variable}.
-
-				--- {*} : Select all the remaining tokens. This could be used for the {p}
-				parameter of the syntax {n-p}.
-
-			@-- Each token will be assigned to a different special var,
-			starting from the specified variable (in the previous code {%%A}) and incrementing
-			the ASCII code of the variables (ranging from ``A'' to ``Z'', and from ``a'' to ``z'').
-			You can get detailed information about the algorithm on the page
-			{for-tech|FOR (technical)}.
-
-			-- {delims} : Specify characters that will be used as delimiters to split the
-			string to process in tokens. By default, the only delimiter
-			used by dos9 is the space (`` '').
-
-			-- {usebackq} : Uses a new syntax. If {object} is enclosed in single
-			quotes, then it will be considered as a string.
-			If {object} is enclosed in backward quotes, then it will be considered
-			as a command to run. This options is not worth since it just changes
-			syntax of the {FOR} loop. Just provided for compatibility purpose.
-
-	{Example 1:} Parsing a string :
-
-${:: This first examples parses a simple string
-:: in this example, we'll process http-header like
-:: data.
+${:: The first example parses simple strings
+:: from http headers
 
 FOR /F "tokens=1,* delims=: " %%A IN ("Content-Type: text/plain
 Connection: keep-alive") DO (
 
-	:: The option 'delims=: ' selects ':' and ' ' as delimiters
-	:: The option 'tokens=1,*' assigns
-	::		- the first token to %%A
-	::		- from second token to end to %%B
-	:: If a ' ' follows a ':', it wil be considered as a single
-	:: delimiter.
-
-	ECHO The header entry is : %%A
-	ECHO The header value is : %%B
+	:: 'delims=: ' select either of ':' and ' ' as delimiters
+	:: 'tokens=1,*' assigns :
+	:: 		- The first token to %%A
+	::		- All the remaining tokens to %%B
+	:: A ' ' following a ':', is considered as a single
+	:: delimiter
+	ECHO The header field is : %%A
+	ECHO Its value is : %%B
 )}
 
 	Output:
-${The header entry is : Content-Type
-The header value is : text/plain
-The header entry is : Connection
-The header value is : keep alive
+${The header field is : Content-Type
+Its value is :  text/plain
+The header field is : Connection
+Its value is : keep alive
 }
 
-	{Example 2:} Getting the content of a directory:
+	{Example 2:} Listing sub directories
 
 ${FOR /F "tokens=*" %%A IN ('dir /b /a:D') DO (
 
-	:: The use of 'tokens=*' discard delimiters since
-	:: it just assign the whole line to %%A
+	:: "tokens=*" assigns the full line to %%A
 
-	:: The for get the string to proccess from running
-	:: the command ``dir /b /a:D'' which only output
-	:: subdirectories in the current directory
+	:: The loop uses ``dir /b /a:D'' output to
+	:: print only the sub-dirs
 
-	ECHO A subdirectory is "%%A"
+	ECHO Sub-dir : "%%A"
 
 )}
 
-	If this script is ran on Dos9 ``bin'' directory, it gives the following output:
+	If this loop is run on the ``bin'' folder of {Dos9}, the following output
+	is obtained.
 
-${A subdirectory is "share"
-A subdirectory is "cmd"}
+${Sub-dir : "share"
+Sub-dir : "cmd"}
 
-	{Exemple 3:} Getting content of a csv file:
+	{Example 3:} Parsing a {.csv} file
+	
+	Suppose we have a file named {infos.csv} containing.
 
-	Assume we have the following file, named ``my_csv.csv'':
-${Alan Turing,a british,mathematician,invented Turing machine
-Harry Nyquist,an american,engineer,contributed to communication theory
-Nathaniel B. Nichols,an american,engineer,contributed to control theory}
+${Wally,British,Waldo's counterpart in Britain
+Waldo,American,Charlie's counterpart in US
+Charlie,French,Wally's counterpart in France}
 
-	So this is a list of some famous man who contributed to computer theory. Let's
-	print it via a {FOR} loop:
+	It consist of names of {Wally} from the books {Where is wally} in
+	different countries, followed by their nationality and a brief description.
 
-${FOR /F "tokens=1,2,3 delims=," %%A IN (my_csv.csv) DO (
-	:: split that file into tokens
-	:: %%A will recieve the name
-	:: %%B will recieve the citizenship
-	:: %%C will recieve the proffession
-	:: %%D will recieve the description
+	Donc il s'agit d'une liste d'hommmes célèbres qui on contribué à la théorie informatique;
+	Nous pouvons l'afficher avec une boucle {FOR}:
 
-	ECHO %%A was %%B %%C who %%C
+	(Note the variant on the {option} syntax.)
+
+${FOR /F "tokens=1,2,3" "delims=," %%A IN (infos.csv) DO (
+	:: Separates different fields
+	:: %%A receives name
+	:: %%B receives nationality
+	:: %%C receives brief
+
+	ECHO %%A is %%C. He is %%C
 )}
 
-	The program will produce the following output.
+	The script output is:
 
-${Alan Turing was a british mathematician who invented Turing machine
-Harry Nyquist was an american engineer who contributed to communication theory
-Nathaniel B. Nichols was an american engineer who contributed to control theory}
+${Wally is British. He is Waldo's counterpart in Britain
+Waldo is American. He is Charlie's counterpart in US
+Charlie is French. He is Wally's counterpart in France}
 
 {{Synopsis - Third syntax}}
 
-${FOR /L %%A IN (start,increment,end) DO (
-	:: some commands
+	The third syntaxe allows doing traditional {FOR} loops (ie. a loop
+    incrementing a variable every new loop; in a somehow {C}-like manner).
+	
+${FOR /L %%A IN (start,step,end) DO (
+	:: Some commands
 )}
 
-	Perform commands incrementing a variable (like in {C} programming language).
+		- {start} : The first value assigned to {%%A}
 
-		- {start} : The first value that will be assigned to {%%A}.
+		- {step} : Steps value.
 
-		- {increment} : The value {%%A} will be incremented on each new loop.
+		- {end} : The maximum value that {%%A} can reach by looping. When
+        {%%A} gets greater than {end}, the loop stops. If {end} is less than
+        {start}, the loop is not run.
+		
+	The {FOR} loop requires {start}, {step} and {end} to be integers. If
+    floating point numbers are specified, they will be floored. If string
+    is specified, the behaviours is not defined.
 
-		- {end} : The value that specify when the loop will end. Once {%%A} is
-		greater than {end}, the loop stops. Note that if {end} is lower than {start}, no
-		loop action will be performed.
+	{Example:} Counting from 1 to 10:
 
-	The {FOR} loop requires both {start}, {increment} and {end} to be integers numbers. If
-	these are floating numbers, they will be truncated to the lower closest interger (floored). If
-	these are strings, the result is undefined.
-
-	{Example:} Counting from 1 up to 10:
 ${FOR /L %%A IN (1,1,10) DO (
 	ECHO %%A
 )}
@@ -262,40 +327,53 @@ ${1
 9
 10}
 
-{{Synopsis - Other deprecated syntaxes}}
+{{Synopsis - Deprecated syntaxes}}
 
-	Both following syntax are deprecated as richer effects can be achieved through
-	use of the previously described {/F} option.
+	The following syntaxes have been deprecated since {FOR} no allows to
+	achieve more robust, more flexible alternatives to theses. 
+	
+	The first deprecated syntax enables obtaining files within a folder and
+	its sub-folders that match a given {regexp|regular expression}.
 
-	The first syntax allows user to get files in a directory and in subdirectories,
-	matching a given mask.
-
-${FOR /R basedir %%A IN (mask) DO (
+${FOR /R basedir %%A IN (regexp) DO (
 	:: some stuff
 )}
 
-		- {basedir} : The directory where the search will begin.
+		- {basedir} : The base folder for the search.
 
-		- {mask} : The mask used to match files. This could contain a {spec/regexp|regular expression}.
+		- {regexp} : A regular expression to select matching files.
+		
+	This syntax is deprecated since the same result can be achieved using:
 
-	This syntax is deprecated because the same (and even richer) result can be achieved by using the
-	following syntax:
-
-${FOR /F "tokens=*" %%A IN ('dir /b /s /a:-D basedir/mask') DO (
+${FOR /F "tokens=*" %%A IN ('dir /b /s /a:-D basedir/regexp') DO (
 	:: some stuff
 )}
 
-	The second syntax allows user to get subdirectories in a directory, matching up with a given
-	mask. The syntax is the same as previous syntax, just replace {/R} switch by {/D}.
+	The second syntax behaves pretty much the same way as the preceding
+	except that it requires the {/D} switch and selects only folders
+	matching {regexp}.
 
 {{Compatibility}}
 
-	Mostly compatible with {cmd.exe}. Nevertheless, the syntax is backward compatible with
-	{cmd.exe}, so that any old code not written for Dos9 will run in Dos9.
+	Mostly compatible with {cmd.exe}. However, any code from {cmd.exe} can
+    be executed  with no bugs under {Dos9} concerning {FOR} loops.
+	
+	However, one can come across some unexpected behaviour using the {tokens}
+    options. Indeed, if tokens specifiers are not specified from the lowest to
+    the highest, then {cmd.exe} will silently try to sort the tokens. 
+    However {Dos9} does not do so, leading to a potential unexpected behaviour.
+    In addition, {Dos9} performs all right when two tokens specifiers overlap
+    (eg. "4-6,5-7") although {cmd.exe} fails to handle such
+	specifiers correctly.
 
-	The {FOR} command is available since version {0.7.0.0}. The {FOR /F} is fully functional
-	since version {0.7.0.2}.
+	Also, {Dos9} does process empty lines while using {/F} switches while
+    {cmd.exe} keeps skipping them. However this behaviour may be changed using
+    {CMDLYCORRECT}.
+
+	The {FOR} command is availables since version {0.7.0.0}.
+    The {FOR /F} command is totally functionnal since version {0.7.0.2}.
 
 {{See also}}
 
-{for|FOR (technical)}, {if|IF}
+{for|FOR Command}, {if|IF command}
+
