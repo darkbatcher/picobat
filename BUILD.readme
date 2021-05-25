@@ -1,7 +1,7 @@
-BUILDING Dos9 (Newer versions):
+BUILDING Picobat (Newer versions):
 ===============================
 
-Dos9 switched from autotools to a more lightweight build system based
+Picobat switched from autotools to a more lightweight build system based
 on gmake called femto (https://gitlab.com/darkbatcher/femto) which
 eases greatly the compiling process. Of course, some libraries are
 alwayseeded :
@@ -14,7 +14,7 @@ If you also want to enable START command support under non-windows platforms,
 either mimeopen or xdg-open are required, the early being the most
 recommended alternative.
 
-Building Dos9 is quite rapid, first configure the build using :
+Building Picobat is quite rapid, first configure the build using :
 
 	$ make config
 
@@ -23,17 +23,19 @@ or `no-option` targets.
 
 	$ make use-option
 	
-Dos9 currently provides 6 options :
+Picobat currently provides 6 options :
 
 	- libcu8 : Add native utf-8 support (disabled by default). Do not
 	  use under *nix.
 	- nls : Add translations (enabled by default).
 	- cmdlycorrect : Be the most compatible to cmd as possible (disabled
 	  by default).
+	- w10-ansi : Use ansi escape sequences instead of native windows
+	  api
 	- console : Add visual console features like colours (enabled by
 	  default). On some exotic systems (I'm thinking of NetBSD), the
 	  terminal does not support such features, so this must be disabled.
-	- modules : Add support for Dos9 modules (enabled by default). Disabling
+	- modules : Add support for Picobat modules (enabled by default). Disabling
 	  it might be required if your are building using all static files.
 	- linenoise : (*Nix only) enables linenoise library that provide
       autocompletion and extended console input.
@@ -42,35 +44,5 @@ Once you have configured your options, just compile using :
 
 	$ make all bin
 	
-This will compile Dos9 and put the resulting installation inside bin/.
+This will compile Picobat and put the resulting installation inside bin/.
 	
-BUILDING Dos9 (Older versions):
-===============================
-
-Dos9 uses the autotool build system, so that building and compiling Dos9
-distribution is quite straightforward. In order to buid Dos9, you need the
-following prequisites :
-
-    - Build essentials (basically, autotools, make and the GCC suite).
-    - GNU gettext library and utilities
-    - GNU libiconv
-
-These software are quite standard under *Nixes, but are also quite easy to get
-under windows (MinGW or MinGW-w64). Dos9 is quite architecture independent,
-and as been tested on x86 and x86_64 and under some exotic platforms like
-armv7.
-
-Buiding and installing Dos9 is quite easy under linux, using the following
-command:
-
-    ./build-prepare.sh
-    ./build-bin.sh
-    make install dos9-install-portable
-
-It is a little bit more complicated under Windows, especially if you want to
-access it out of MinGW.
-
-    ./configure --prefix=/c/Program\ Files/Dos9 --bindir=/c/Program\ Files/Dos9 --libdir=/c/Program\ Files/Dos9
-    make
-    make install
-    make dos9-install-portable
