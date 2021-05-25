@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-16 22:30+0200\n"
+"POT-Creation-Date: 2021-05-25 21:17+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,85 +21,85 @@ msgstr ""
 "#-#-#-#-#  Dos9_ShowHelp.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: ../dos9/errors/Dos9_Errors.c:42
+#: ../pBat/errors/pBat_Errors.c:42
 msgid "No error: OK."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:45
+#: ../pBat/errors/pBat_Errors.c:45
 #, c-format
 msgid "Error : Unable to access file \"%s\"."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:48
+#: ../pBat/errors/pBat_Errors.c:48
 #, c-format
 msgid "Error : Unable to find folder \"%s\"."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:51
+#: ../pBat/errors/pBat_Errors.c:51
 #, c-format
 msgid ""
 "Error : \"%s\" is not recognized as an internal or external command, an "
 "operable program or a batch file."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:55
+#: ../pBat/errors/pBat_Errors.c:55
 #, c-format
 msgid "Error : \"%s\" was unexpected."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:58
+#: ../pBat/errors/pBat_Errors.c:58
 #, c-format
 msgid "Error : Invalid command line for %s."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:61
+#: ../pBat/errors/pBat_Errors.c:61
 #, c-format
 msgid "Error : Unable to find label \"%s\"."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:64
-msgid "Warning : Using a Dos9 extension but the CMDLYCORRECT option is set."
+#: ../pBat/errors/pBat_Errors.c:64
+msgid "Warning : Using a pBat extension but the CMDLYCORRECT option is set."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:67
+#: ../pBat/errors/pBat_Errors.c:67
 #, c-format
 msgid "Error : \"%s\" expected more arguments."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:70
+#: ../pBat/errors/pBat_Errors.c:70
 #, c-format
 msgid "Error : Incompatible arguments %s."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:73
+#: ../pBat/errors/pBat_Errors.c:73
 #, c-format
 msgid "Error : Unable to rename \"%s\"."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:76
+#: ../pBat/errors/pBat_Errors.c:76
 msgid "Error : Overflown maximum value."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:79
+#: ../pBat/errors/pBat_Errors.c:79
 msgid "Error : Divide by 0."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:82
+#: ../pBat/errors/pBat_Errors.c:82
 #, c-format
 msgid "Error : Unable to create folder \"%s\"."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:85
+#: ../pBat/errors/pBat_Errors.c:85
 #, c-format
 msgid "Error : Unable to delete folder \"%s\"."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:88
+#: ../pBat/errors/pBat_Errors.c:88
 #, c-format
 msgid "Error : Stream module : \"%s\"."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:91
+#: ../pBat/errors/pBat_Errors.c:91
 #, c-format
 msgid ""
 "Error : \"%c\" is an invalid character for special variables. Special "
@@ -107,193 +107,193 @@ msgid ""
 "controls characters and space (0x00 - 0x30)."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:97
+#: ../pBat/errors/pBat_Errors.c:97
 #, c-format
 msgid ""
 "Error : \"%s\" is not a valid block (should at least be enclosed within "
 "parenthesis)."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:101
+#: ../pBat/errors/pBat_Errors.c:101
 #, c-format
 msgid "Error : \"%s\" is not a valid token specifier."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:104
+#: ../pBat/errors/pBat_Errors.c:104
 #, c-format
 msgid ""
 "Error : Attempted to specify more than TOKEN_NB_MAX (%d) different tokens."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:108
+#: ../pBat/errors/pBat_Errors.c:108
 #, c-format
 msgid "Error : \"%s\" violates the ``Usebackq'' syntax."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:111
+#: ../pBat/errors/pBat_Errors.c:111
 #, c-format
 msgid "Error : Unable to allocate memory (in %s)."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:114
+#: ../pBat/errors/pBat_Errors.c:114
 #, c-format
 msgid "Error : Can't create pipe (in %s)."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:117
+#: ../pBat/errors/pBat_Errors.c:117
 #, c-format
 msgid ""
-"Error : unable to run a subprocess of Dos9 to process the given input (\"%s"
+"Error : unable to run a subprocess of pBat to process the given input (\"%s"
 "\")."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:121
+#: ../pBat/errors/pBat_Errors.c:121
 #, c-format
 msgid "Error : Invalid token specifier. \"%s\" breaks input specifying rules."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:125
+#: ../pBat/errors/pBat_Errors.c:125
 #, c-format
 msgid "Error : FOR loop is trying to reassign already used %%%%%c variable."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:129
+#: ../pBat/errors/pBat_Errors.c:129
 #, c-format
 msgid "Error : \"%s\" is not a valid mathematical expression."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:132
+#: ../pBat/errors/pBat_Errors.c:132
 #, c-format
 msgid "Error : \"%s\" is not a valid top-level block."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:135
+#: ../pBat/errors/pBat_Errors.c:135
 #, c-format
 msgid "Error : Unable to duplicate file descriptor (%d)."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:138
+#: ../pBat/errors/pBat_Errors.c:138
 #, c-format
 msgid "Error : Unable to create pipe at function (%s)."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:141
+#: ../pBat/errors/pBat_Errors.c:141
 #, c-format
 msgid "Error : Unable to set environment string (%s)."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:144
+#: ../pBat/errors/pBat_Errors.c:144
 #, c-format
 msgid "Error : \"%s\" is an invalid stream redirection."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:147
+#: ../pBat/errors/pBat_Errors.c:147
 #, c-format
 msgid "Error : Redirection for \"%s\" was already specified."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:150
+#: ../pBat/errors/pBat_Errors.c:150
 #, c-format
 msgid "Error : Encountered malformed blocks (\"%s\")."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:153
+#: ../pBat/errors/pBat_Errors.c:153
 msgid "Error : Blocks left unclosed at end-of-file."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:156
+#: ../pBat/errors/pBat_Errors.c:156
 #, c-format
 msgid "Error : Unable to add command \"%s\"."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:159
+#: ../pBat/errors/pBat_Errors.c:159
 #, c-format
 msgid "Error : Unable to remap commands (in function %s)."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:162
+#: ../pBat/errors/pBat_Errors.c:162
 #, c-format
 msgid "Error : Trying to redefine already used \"%s\" command."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:165
+#: ../pBat/errors/pBat_Errors.c:165
 #, c-format
 msgid "Error : Unable to redefine \"%s\" command."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:168
+#: ../pBat/errors/pBat_Errors.c:168
 #, c-format
 msgid ""
 "Error : Unable to set option \"%s\", it is built statically inside your "
-"version of Dos9."
+"version of pBat."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:172
+#: ../pBat/errors/pBat_Errors.c:172
 #, c-format
 msgid "Error : The \"%s\" comparison forbids use of strings."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:175
+#: ../pBat/errors/pBat_Errors.c:175
 #, c-format
 msgid "Error : Unable to fork the current process (in function %s)."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:178
+#: ../pBat/errors/pBat_Errors.c:178
 #, c-format
 msgid "Error : Pathspec \"%s\" does not match any file."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:181
+#: ../pBat/errors/pBat_Errors.c:181
 #, c-format
 msgid "Error : %s does not recieved any valid file to process."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:184
+#: ../pBat/errors/pBat_Errors.c:184
 #, c-format
 msgid "Error : \"%s\" is not a valid number."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:187
+#: ../pBat/errors/pBat_Errors.c:187
 #, c-format
 msgid "Error : Too many arguments for %s command"
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:190
+#: ../pBat/errors/pBat_Errors.c:190
 #, c-format
 msgid "Error : \"%s\" is not a valid expression for IF command."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:193
+#: ../pBat/errors/pBat_Errors.c:193
 #, c-format
 msgid "Error : Unable to copy file \"%s\"."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:196
+#: ../pBat/errors/pBat_Errors.c:196
 #, c-format
 msgid "Error : Unable to move file \"%s\"."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:199
+#: ../pBat/errors/pBat_Errors.c:199
 #, c-format
 msgid "Error : Unable to create directory \"%s\"."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:202
+#: ../pBat/errors/pBat_Errors.c:202
 #, c-format
 msgid "Error : Unable to delete file \"%s\"."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:205
+#: ../pBat/errors/pBat_Errors.c:205
 #, c-format
 msgid "Error : Unable to delete directory \"%s\"."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:208
+#: ../pBat/errors/pBat_Errors.c:208
 #, c-format
 msgid "Error : \"%s\" is not a valid codepage on your system."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:211
+#: ../pBat/errors/pBat_Errors.c:211
 #, c-format
 msgid ""
 "Error : \"%s\" is a relative path, RENAME (or REN) do not handles relative "
@@ -301,161 +301,161 @@ msgid ""
 "should use MOVE command."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:216
-msgid "Error : Unable to access Dos9 main thread to perform break."
+#: ../pBat/errors/pBat_Errors.c:216
+msgid "Error : Unable to access pBat main thread to perform break."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:219
+#: ../pBat/errors/pBat_Errors.c:219
 #, c-format
 msgid "Error : Invalid label encountered within a block (at line %d)."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:222
+#: ../pBat/errors/pBat_Errors.c:222
 #, c-format
 msgid "Error : Unable to lock mutex (%s)."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:225
+#: ../pBat/errors/pBat_Errors.c:225
 #, c-format
 msgid "Error : Unable to release mutex (%s)."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:228
+#: ../pBat/errors/pBat_Errors.c:228
 #, c-format
 msgid "Error : Unable to catenate file \"%s\"."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:231
+#: ../pBat/errors/pBat_Errors.c:231
 #, c-format
 msgid "Error : Unable to load module \"%s\"."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:234
+#: ../pBat/errors/pBat_Errors.c:234
 #, c-format
 msgid "Error : Incompatible module \"%s\"."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:237
+#: ../pBat/errors/pBat_Errors.c:237
 #, c-format
 msgid "Error : Module \"%s\" is already loaded."
 msgstr ""
 
-#: ../dos9/errors/Dos9_Errors.c:240
-msgid "Aborting current command, press any key to end Dos9."
+#: ../pBat/errors/pBat_Errors.c:240
+msgid "Aborting current command, press any key to end pBat."
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:97
+#: ../pBat/lang/pBat_Lang.c:97
 msgid "Echo command enabled"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:98
+#: ../pBat/lang/pBat_Lang.c:98
 msgid "Echo command disabled"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:99
+#: ../pBat/lang/pBat_Lang.c:99
 msgid "Press any key to continue..."
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:101
+#: ../pBat/lang/pBat_Lang.c:101
 msgid "\tNo files found"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:102
+#: ../pBat/lang/pBat_Lang.c:102
 msgid "Last change\t\tSize\tAttr.\tName"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:103
+#: ../pBat/lang/pBat_Lang.c:103
 msgid "Files"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:104
+#: ../pBat/lang/pBat_Lang.c:104
 msgid "Folders"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:106
+#: ../pBat/lang/pBat_Lang.c:106
 #, c-format
 msgid "Are you sure you want to delete file \"%s\" ?"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:107
+#: ../pBat/lang/pBat_Lang.c:107
 #, c-format
 msgid "Are you sure you want to remove \"%s\" directory ?"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:109
+#: ../pBat/lang/pBat_Lang.c:109
 #, c-format
 msgid "File \"%s\" already exists, replace it by \"%s\" ?"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:111
+#: ../pBat/lang/pBat_Lang.c:111
 msgid "Do you really want to exit command script ?"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:113
+#: ../pBat/lang/pBat_Lang.c:113
 msgid " (Yes/no) "
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:114
+#: ../pBat/lang/pBat_Lang.c:114
 msgid " (yes/No) "
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:115
+#: ../pBat/lang/pBat_Lang.c:115
 msgid " (yes/no) "
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:117
+#: ../pBat/lang/pBat_Lang.c:117
 msgid " (Yes/no/all) "
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:118
+#: ../pBat/lang/pBat_Lang.c:118
 msgid " (yes/No/all) "
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:119
+#: ../pBat/lang/pBat_Lang.c:119
 msgid " (yes/no/All) "
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:120
+#: ../pBat/lang/pBat_Lang.c:120
 msgid " (yes/no/all) "
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:122
+#: ../pBat/lang/pBat_Lang.c:122
 msgid "YES"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:123
+#: ../pBat/lang/pBat_Lang.c:123
 msgid "Y"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:125
+#: ../pBat/lang/pBat_Lang.c:125
 msgid "NO"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:126
+#: ../pBat/lang/pBat_Lang.c:126
 msgid "N"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:128
+#: ../pBat/lang/pBat_Lang.c:128
 msgid "ALL"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:129
+#: ../pBat/lang/pBat_Lang.c:129
 msgid "A"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:131
+#: ../pBat/lang/pBat_Lang.c:131
 msgid "Please enter a correct choice (or type enter to choose default) !\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:133
+#: ../pBat/lang/pBat_Lang.c:133
 msgid ""
 "This is free software, you can modify and/or redistribute it under the terms "
 "of the GNU Genaral Public License v3 (or any later version).\n"
 "\n"
-"Usage:\tDOS9 [/A[:]attr] [/I in] [/O out] [file ... | /K cmd ...|/C "
+"Usage:\tPBAT [/A[:]attr] [/I in] [/O out] [file ... | /K cmd ...|/C "
 "cmd ...]\n"
 "\n"
-"\t/A:attr\tA list of attributes for Dos9\n"
+"\t/A:attr\tA list of attributes for pBat\n"
 "\t\tC\tEnable CMDLYCORRECT option to enable more compatibility\n"
 "\t\t\twith cmd.exe.\n"
 "\t\tE\tDisable echo command (disable current path printing).\n"
@@ -466,92 +466,92 @@ msgid ""
 "\t/C cmd\tRun cmd command and exit.\n"
 "\t/K cmd\tRun cmd command and stay active.\n"
 "\n"
-"Feel free to report bugs and submit suggestions at : <darkbatcher@dos9.org>\n"
-"For more informations see : <http://dos9.org>\n"
+"Feel free to report bugs and submit suggestions at : <darkbatcher@pbat.org>\n"
+"For more informations see : <http://pbat.org>\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:149
+#: ../pBat/lang/pBat_Lang.c:149
 #, c-format
 msgid "%d files matching, print anyway ?"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:151
+#: ../pBat/lang/pBat_Lang.c:151
 #, c-format
 msgid "Waiting for %f seconds, press a key to continue ..."
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:152
+#: ../pBat/lang/pBat_Lang.c:152
 #, c-format
 msgid "Waiting for %f seconds, press CTRL-C to continue ..."
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:153
+#: ../pBat/lang/pBat_Lang.c:153
 msgid "Press a key to continue ..."
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:154
+#: ../pBat/lang/pBat_Lang.c:154
 msgid "Press CTRL-C to continue ..."
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:156
+#: ../pBat/lang/pBat_Lang.c:156
 msgid "Loaded modules :"
 msgstr ""
 
-#: ../dos9/lang/Dos9_Lang.c:157
+#: ../pBat/lang/pBat_Lang.c:157
 msgid "Module loading not supported."
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:48
+#: ../pBat/lang/pBat_ShowHelp.c:48
 msgid ""
 "Create an alias on a command.\n"
 "Usage: ALIAS [/f] alias=command\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:52
+#: ../pBat/lang/pBat_ShowHelp.c:52
 msgid ""
 "Change current working directory.\n"
 "Usage: CD  [[/d] path]\n"
 "       CHDIR [[/d] path]\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:57
+#: ../pBat/lang/pBat_ShowHelp.c:57
 msgid ""
 "Clear console screen\n"
 "Usage: CLS\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:61
+#: ../pBat/lang/pBat_ShowHelp.c:61
 msgid ""
 "Change console color to the given code.\n"
 "Usage: COLOR [code]\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:65
+#: ../pBat/lang/pBat_ShowHelp.c:65
 msgid ""
 "Copy file(s) to another location.\n"
 "Usage: COPY [/R] [/-Y | /Y] [/A[:]attributes] source [+] ... destination\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:69
+#: ../pBat/lang/pBat_ShowHelp.c:69
 msgid ""
 "Call a script or a label from the current context.\n"
 "Usage: CALL [/e] [file] [:label] [parameters ...]\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:74
+#: ../pBat/lang/pBat_ShowHelp.c:74
 msgid ""
 "Delete file(s).\n"
 "Usage: DEL [/P] [/F] [/S] [/Q] [/A[:]attributes] name\n"
 "       ERASE [/P] [/F] [/S] [/Q] [/A[:]attributes] name\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:79
+#: ../pBat/lang/pBat_ShowHelp.c:79
 msgid ""
 "List files in a directory and in subdirectories.\n"
 "Usage: DIR [/A[:]attributes] [/S] [/B] [path]\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:83
+#: ../pBat/lang/pBat_ShowHelp.c:83
 msgid ""
 "Print a message, or enable/disable command echoing.\n"
 "Usage: ECHO [OFF|ON]\n"
@@ -559,7 +559,7 @@ msgid ""
 "       ECHO.text\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:89
+#: ../pBat/lang/pBat_ShowHelp.c:89
 #, c-format
 msgid ""
 "Perform commands against items (files, strings, command output).\n"
@@ -576,13 +576,13 @@ msgid ""
 "       )\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:101
+#: ../pBat/lang/pBat_ShowHelp.c:101
 msgid ""
 "Go to a label in a command script.\n"
 "Usage: GOTO [/Q] [/F[:]file] [:]label\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:105
+#: ../pBat/lang/pBat_ShowHelp.c:105
 msgid ""
 "Perform commands on some conditions.\n"
 "Usage: IF [/i] [NOT] string1==string2 (\n"
@@ -601,40 +601,40 @@ msgid ""
 "       )\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:120
+#: ../pBat/lang/pBat_ShowHelp.c:120
 msgid ""
 "Create the given directory.\n"
 "Usage: MD directory\n"
 "       MKDIR directory\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:126
+#: ../pBat/lang/pBat_ShowHelp.c:126
 msgid ""
 "Wait for a keystroke from the user.\n"
 "Usage: PAUSE\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:131
+#: ../pBat/lang/pBat_ShowHelp.c:131
 msgid ""
 "Remove a directory.\n"
 "Usage: RMDIR [/S] [/Q] directory\n"
 "       RD [/S] [/Q] directory\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:136
+#: ../pBat/lang/pBat_ShowHelp.c:136
 msgid ""
 "Renames a file.\n"
 "Usage: REN file name.ext\n"
 "       RENAME file name.ext\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:141
+#: ../pBat/lang/pBat_ShowHelp.c:141
 msgid ""
 "Introduce a comment.\n"
 "Usage: REM comment\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:146
+#: ../pBat/lang/pBat_ShowHelp.c:146
 msgid ""
 "Set or list environment variables.\n"
 "Usage: SET variable=content\n"
@@ -643,131 +643,131 @@ msgid ""
 "       SET var\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:153
+#: ../pBat/lang/pBat_ShowHelp.c:153
 msgid ""
-"Set local environment and options of the Dos9 command prompt.\n"
+"Set local environment and options of the pBat command prompt.\n"
 "Usage: SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] "
 "[CMDLYCORRECT | CMDLYINCORRECT]\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:157
+#: ../pBat/lang/pBat_ShowHelp.c:157
 msgid ""
 "Reverts changes to environments and options made after a call to SETLOCAL.\n"
 "Usage: ENDLOCAL\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:161
+#: ../pBat/lang/pBat_ShowHelp.c:161
 msgid ""
 "Set console title.\n"
 "Usage: TITLE title\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:165
+#: ../pBat/lang/pBat_ShowHelp.c:165
 msgid ""
 "Print a file.\n"
 "Usage: TYPE [file ...]\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:169
+#: ../pBat/lang/pBat_ShowHelp.c:169
 msgid ""
 "Exit from the command prompt.\n"
 "Usage: EXIT [/b] [code]\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:173
+#: ../pBat/lang/pBat_ShowHelp.c:173
 msgid ""
 "Change positions of command-line parameters.\n"
 "Usage: SHIFT [/start_number | /s[:]start_number] [/d[:]displacement]\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:177
+#: ../pBat/lang/pBat_ShowHelp.c:177
 msgid ""
 "Search occurrence of string in a set of files.\n"
 "Usage: FIND [/N] [/C] [/V] [/I] [/E] string [file ...]\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:181
+#: ../pBat/lang/pBat_ShowHelp.c:181
 msgid ""
 "Display content of files.\n"
 "Usage: MORE [/E] [/P] [/S] [/C] [/T[:]n] [+n] [file ...]\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:185
+#: ../pBat/lang/pBat_ShowHelp.c:185
 msgid ""
 "[Obsolete] Sets or Clears Extended CTRL+C checking on DOS system. (Do "
 "nothing)\n"
 "Usage: BREAK [ON | OFF]\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:189
+#: ../pBat/lang/pBat_ShowHelp.c:189
 msgid ""
 "Set Console codepage or encoding.\n"
 "Usage: CHCP [ codepage | encoding]\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:193
+#: ../pBat/lang/pBat_ShowHelp.c:193
 msgid ""
 "For each path, change current directory and pushd to stack\n"
 "the previous current directory.\n"
 "Usage: PUSHD [path1] [path2] [pathN] ...\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:198
+#: ../pBat/lang/pBat_ShowHelp.c:198
 msgid ""
 "Pull a directory on the stack to change current directory.\n"
 "Usage: POPD\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:202
+#: ../pBat/lang/pBat_ShowHelp.c:202
 msgid ""
 "Display counts of a file or of stdin.\n"
 "Usage: WC [/L] [/C] [/M] [/W] [files ...]\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:206
+#: ../pBat/lang/pBat_ShowHelp.c:206
 msgid ""
 "Run a command with arguments from standard input file.\n"
 "Usage: XARGS [command ...]\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:210
+#: ../pBat/lang/pBat_ShowHelp.c:210
 msgid ""
-"Changes dos9 command prompt.\n"
+"Changes pbat command prompt.\n"
 "Usage: PROMPT prompt-format\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:214
+#: ../pBat/lang/pBat_ShowHelp.c:214
 msgid ""
 "Print a message using prompt format.\n"
 "Usage: PECHO prompt-format\n"
 "       PECHO.prompt-format\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:219
+#: ../pBat/lang/pBat_ShowHelp.c:219
 msgid ""
 "Sleep for a delay in seconds.\n"
 "Usage: TIMEOUT [/T] [/NOBREAK] seconds[.milliseconds]\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:223
+#: ../pBat/lang/pBat_ShowHelp.c:223
 msgid ""
 "Load or list modules.\n"
 "Usage: MOD [/L] [/Q] module\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:227
+#: ../pBat/lang/pBat_ShowHelp.c:227
 msgid ""
 "Print the OS type and version\n"
 "Usage: VER\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:231
+#: ../pBat/lang/pBat_ShowHelp.c:231
 msgid ""
 "Sets directory of translation files\n"
 "Usage: LOCALE [dir]\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:235
+#: ../pBat/lang/pBat_ShowHelp.c:235
 msgid ""
 "Start a program in another window\n"
 "Usage: START [/d dir] [/b] [/min] [/max] [/wait] [\"title\"] [command "

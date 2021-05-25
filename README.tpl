@@ -5,30 +5,30 @@
 
 {{Quick starting guide}}
 
-{Dos9} is a open source command prompt meant to implement a superset of 
+{Picobat} is a open source command prompt meant to implement a superset of 
 {cmd.exe} script language (known as {batch} by most devellopers). It is 
 designed to be as simple to use as possible, reliable, portable and 
 lightweight.
 
-{{Getting started with Dos9}}
+{{Getting started with Picobat}}
 
 Firstly, if you have never used cmd or an equivalent interpreter before, you 
 should definitely consider reading a tutorial about batch programming. On the 
-other hand if you are already familiar with batch, just open {Dos9} and 
-start typing some commands ! Dos9 batch dialect is almost compatible with cmd.
+other hand if you are already familiar with batch, just open {pbat} and 
+start typing some commands ! Picobat batch dialect is almost compatible with cmd.
 
-If you use Dos9 on windows, the only file extension provided is {.dos9} by 
+If you use Picobat on windows, the only file extension provided is {.pbat} by 
 default (to avoid trashing your OS with potential conflicts). However, 
-calling a {.bat} or {.cmd} script from inside Dos9, leads them to get 
-executed by Dos9.
+calling a {.bat} or {.cmd} script from inside Picobat, leads them to get 
+executed by Picobat.
 
-{{Dos9 changes}}
+{{Picobat changes}}
 
-Once installed, it is quite straightforward to play with Dos9, especially if 
+Once installed, it is quite straightforward to play with Picobat, especially if 
 you are quite familiar with cmd. However, there is a couple of thing out there 
 you have to know about.
 
-On one hand, there is a couple of differences between Dos9 and cmd :
+On one hand, there is a couple of differences between Picobat and cmd :
 
 - The {doc/help|HELP} system is different from the original cmd help system. On the 
   first time you run the command, you need to genérate the whole documentation 
@@ -53,7 +53,7 @@ ${SETLOCAL EnableCmdlyCorrect}
 - Some undocumented but useful variables from cmd are still lacking (Though 
   {%=EXITCODEASCII%} is now supported).
 
-- Dos9 has no inconsistencies with escaped characters with {^}, it requires 
+- Picobat has no inconsistencies with escaped characters with {^}, it requires 
   only one escape.
 
 - {doc/dir|DIR /b} does not automatically return absolute paths.
@@ -62,7 +62,7 @@ ${SETLOCAL EnableCmdlyCorrect}
   options or the whole command might not be provided depending on your system 
   configuration if you use *nix.
 
-On the other hand, Dos9 also provides you with with a bunch of extensions:
+On the other hand, Picobat also provides you with with a bunch of extensions:
 
 - A full set of extensions to support floating points arithmetics through 
   {doc/set|SET} and {doc/if|IF}:
@@ -85,8 +85,8 @@ ${IF [ [ !ok! EQU 1 ] and [ defined file ] ] (
   of possibilities from graphical user interfaces to networking extensions.
   Currently, the only module provided is the {doc/batbox|BATBOX} module.
 
-- To speed up parsing, Dos9 loads files entirely in memory at startup. If the 
-  file gets modified during its execution, it is reloaded and Dos9 restarts on 
+- To speed up parsing, Picobat loads files entirely in memory at startup. If the 
+  file gets modified during its execution, it is reloaded and Picobat restarts on 
   the next line (counting lines from the begining). This can also be disabled 
   using:
 
@@ -134,26 +134,26 @@ dir /s /b /a:-D . | xargs wc /l}
 
 {{Troubleshooting}}
 
-Dos9 supports only two languages yet ({french} and {english}). If you 
+Picobat supports only two languages yet ({french} and {english}). If you 
 cannot see the messages translated, please check the value of the {LANG} and 
 {LANGUAGE} environment variables and set them appropriately.
 
-If you have some questions about or need some help with Dos9, please feel free 
-to join {Dos9}'s official discord at: 
+If you have some questions about or need some help with Picobat, please feel free 
+to join {Picobat}'s official discord at: 
 {https://discord.gg/w4KtdCv|https://discord.gg/w4KtdCv}
 
 {{What's in this folder ?}}
 
 There is a few interesting things in this directory that you might need:
 
-- {BUILD.readme|BUILD.readme} : A text file describing how to build {dos9}
+- {BUILD.readme|BUILD.readme} : A text file describing how to build {Picobat}
 
-- {WHATSNEW.md|WHATSNEW} : A log of the changes made to Dos9
+- {WHATSNEW.md|WHATSNEW} : A log of the changes made to Picobat
 
 - {THANKS.md|THANKS} : A list of all the contributors to the project.
 
 - {GUIDELINES.md|GUIDELINES} : A text files giving guidelines on how to 
-  modify Dos9.
+  modify Picobat.
 
-- {COPYING.*} : The license of the project and of projects used by Dos9.
+- {COPYING.*} : The license of the project and of projects used by Picobat.
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-16 22:30+0200\n"
+"POT-Creation-Date: 2021-05-25 21:17+0200\n"
 "PO-Revision-Date: 2020-12-08 18:56+0100\n"
 "Last-Translator: EMAIL@ADDRESS\n"
 "Language-Team: Language FR\n"
@@ -17,21 +17,21 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.2\n"
 
-#: ../dos9/errors/Dos9_Errors.c:42
+#: ../pBat/errors/pBat_Errors.c:42
 msgid "No error: OK."
 msgstr "Cap error: D'acord."
 
-#: ../dos9/errors/Dos9_Errors.c:45
+#: ../pBat/errors/pBat_Errors.c:45
 #, c-format
 msgid "Error : Unable to access file \"%s\"."
 msgstr "Incapaç d'accedir l'arxiu \"%s\"."
 
-#: ../dos9/errors/Dos9_Errors.c:48
+#: ../pBat/errors/pBat_Errors.c:48
 #, c-format
 msgid "Error : Unable to find folder \"%s\"."
 msgstr "Error: Incapaç de trobar la carpeta \"%s\"."
 
-#: ../dos9/errors/Dos9_Errors.c:51
+#: ../pBat/errors/pBat_Errors.c:51
 #, c-format
 msgid ""
 "Error : \"%s\" is not recognized as an internal or external command, an "
@@ -40,66 +40,67 @@ msgstr ""
 "Error: \"%s\" no es reconeix com un comandament intern o extern, programa o  "
 "arxiu per lots executable."
 
-#: ../dos9/errors/Dos9_Errors.c:55
+#: ../pBat/errors/pBat_Errors.c:55
 #, c-format
 msgid "Error : \"%s\" was unexpected."
 msgstr "Error: \"%s\" ha sigut inesperat."
 
-#: ../dos9/errors/Dos9_Errors.c:58
+#: ../pBat/errors/pBat_Errors.c:58
 #, c-format
 msgid "Error : Invalid command line for %s."
 msgstr "Error: Línia d'ordres invàlida per %s."
 
-#: ../dos9/errors/Dos9_Errors.c:61
+#: ../pBat/errors/pBat_Errors.c:61
 #, c-format
 msgid "Error : Unable to find label \"%s\"."
 msgstr "Error: Incapaç de trobar l'etiqueta \"%s\"."
 
-#: ../dos9/errors/Dos9_Errors.c:64
-msgid "Warning : Using a Dos9 extension but the CMDLYCORRECT option is set."
+#: ../pBat/errors/pBat_Errors.c:64
+#, fuzzy
+msgid "Warning : Using a pBat extension but the CMDLYCORRECT option is set."
 msgstr ""
 "Advertència: Utilitzant una extensió Dos9 pero la opció CMDLYCORRECT està "
 "establerta."
 
-#: ../dos9/errors/Dos9_Errors.c:67
+#: ../pBat/errors/pBat_Errors.c:67
 #, c-format
 msgid "Error : \"%s\" expected more arguments."
 msgstr "Error: \"%s\" esperats més arguments."
 
-#: ../dos9/errors/Dos9_Errors.c:70
+#: ../pBat/errors/pBat_Errors.c:70
 #, c-format
 msgid "Error : Incompatible arguments %s."
 msgstr "Error: Arguments incompatibles %s."
 
-#: ../dos9/errors/Dos9_Errors.c:73
+#: ../pBat/errors/pBat_Errors.c:73
 #, c-format
 msgid "Error : Unable to rename \"%s\"."
 msgstr "Error: Incapaç de renombrar \"%s\"."
 
-#: ../dos9/errors/Dos9_Errors.c:76
+#: ../pBat/errors/pBat_Errors.c:76
 msgid "Error : Overflown maximum value."
 msgstr "Error: Desbordament del valor màxim."
 
-#: ../dos9/errors/Dos9_Errors.c:79
+#: ../pBat/errors/pBat_Errors.c:79
 msgid "Error : Divide by 0."
 msgstr "Error: Divisió entre 0."
 
-#: ../dos9/errors/Dos9_Errors.c:82
+#: ../pBat/errors/pBat_Errors.c:82
 #, c-format
 msgid "Error : Unable to create folder \"%s\"."
 msgstr "Error: Incapaç de crear la carpeta \"%s\"."
 
-#: ../dos9/errors/Dos9_Errors.c:85
+#: ../pBat/errors/pBat_Errors.c:85
 #, c-format
 msgid "Error : Unable to delete folder \"%s\"."
 msgstr "Error: Incapaç d'eliminar la carpeta \"%s\"."
 
-#: ../dos9/errors/Dos9_Errors.c:88
+#: ../pBat/errors/pBat_Errors.c:88
 #, c-format
 msgid "Error : Stream module : \"%s\"."
 msgstr "Error:  Mòdul de transmissió: \"%s\"."
 
-#: ../dos9/errors/Dos9_Errors.c:91
+#: ../pBat/errors/pBat_Errors.c:91
 #, c-format
 msgid ""
 "Error : \"%c\" is an invalid character for special variables. Special "
@@ -110,7 +111,7 @@ msgstr ""
 "variables especials requereixen que el seu nom sigui estrictament caràcters "
 "ascii, excloent caràcters de control i espai (0x00 - 0x30)."
 
-#: ../dos9/errors/Dos9_Errors.c:97
+#: ../pBat/errors/pBat_Errors.c:97
 #, c-format
 msgid ""
 "Error : \"%s\" is not a valid block (should at least be enclosed within "
@@ -119,195 +120,195 @@ msgstr ""
 "Error: \"%s\" no és un bloc vàlid (almenys hauria d'estar tancat sense "
 "parèntesis)."
 
-#: ../dos9/errors/Dos9_Errors.c:101
+#: ../pBat/errors/pBat_Errors.c:101
 #, c-format
 msgid "Error : \"%s\" is not a valid token specifier."
 msgstr "Error: \"%s\" no es un especificador de token vàlid."
 
-#: ../dos9/errors/Dos9_Errors.c:104
+#: ../pBat/errors/pBat_Errors.c:104
 #, c-format
 msgid ""
 "Error : Attempted to specify more than TOKEN_NB_MAX (%d) different tokens."
 msgstr ""
 "Error: S'ha intentat especificar més de TOKEN_NB_MAX (%d) tokens diferents."
 
-#: ../dos9/errors/Dos9_Errors.c:108
+#: ../pBat/errors/pBat_Errors.c:108
 #, c-format
 msgid "Error : \"%s\" violates the ``Usebackq'' syntax."
 msgstr "Error: \"%s\" viola la sintaxi ``Usebackq''."
 
-#: ../dos9/errors/Dos9_Errors.c:111
+#: ../pBat/errors/pBat_Errors.c:111
 #, c-format
 msgid "Error : Unable to allocate memory (in %s)."
 msgstr "Error: Incapaç d'assignar la memòria (a %s)."
 
-#: ../dos9/errors/Dos9_Errors.c:114
+#: ../pBat/errors/pBat_Errors.c:114
 #, c-format
 msgid "Error : Can't create pipe (in %s)."
 msgstr "Error: No es pot crear una canalització (a %s)"
 
-#: ../dos9/errors/Dos9_Errors.c:117
-#, c-format
+#: ../pBat/errors/pBat_Errors.c:117
+#, fuzzy, c-format
 msgid ""
-"Error : unable to run a subprocess of Dos9 to process the given input (\"%s"
+"Error : unable to run a subprocess of pBat to process the given input (\"%s"
 "\")."
 msgstr ""
 "Error: Incapaç d'executar un subprocés de Dos9 a l'entrada especificada (\"%s"
 "\") ."
 
-#: ../dos9/errors/Dos9_Errors.c:121
+#: ../pBat/errors/pBat_Errors.c:121
 #, c-format
 msgid "Error : Invalid token specifier. \"%s\" breaks input specifying rules."
 msgstr ""
 "Error: Especificador de token invàlid. \"%s\" trenca les regles "
 "d'especificació."
 
-#: ../dos9/errors/Dos9_Errors.c:125
+#: ../pBat/errors/pBat_Errors.c:125
 #, c-format
 msgid "Error : FOR loop is trying to reassign already used %%%%%c variable."
 msgstr ""
 "Error: El bucle FOR està intentant reassignar la variable ja utilitzada %%%%"
 "%c."
 
-#: ../dos9/errors/Dos9_Errors.c:129
+#: ../pBat/errors/pBat_Errors.c:129
 #, c-format
 msgid "Error : \"%s\" is not a valid mathematical expression."
 msgstr "Error: \"%s\" no és una expressió matemàtica vàlida."
 
-#: ../dos9/errors/Dos9_Errors.c:132
+#: ../pBat/errors/pBat_Errors.c:132
 #, c-format
 msgid "Error : \"%s\" is not a valid top-level block."
 msgstr "Error: \"%s\" no és un bloc vàlid d'alt nivell."
 
-#: ../dos9/errors/Dos9_Errors.c:135
+#: ../pBat/errors/pBat_Errors.c:135
 #, c-format
 msgid "Error : Unable to duplicate file descriptor (%d)."
 msgstr "Error: Incapaç de duplicar el descriptor de fitxers (%d)."
 
-#: ../dos9/errors/Dos9_Errors.c:138
+#: ../pBat/errors/pBat_Errors.c:138
 #, c-format
 msgid "Error : Unable to create pipe at function (%s)."
 msgstr "Error: Incapaç de crear una canalització a la funció (%s)."
 
-#: ../dos9/errors/Dos9_Errors.c:141
+#: ../pBat/errors/pBat_Errors.c:141
 #, c-format
 msgid "Error : Unable to set environment string (%s)."
 msgstr "Error: Incapaç d'establir la cadena d'entorn (%s)."
 
-#: ../dos9/errors/Dos9_Errors.c:144
+#: ../pBat/errors/pBat_Errors.c:144
 #, c-format
 msgid "Error : \"%s\" is an invalid stream redirection."
 msgstr "Error: \"%s\" és una redirecció de transmissió invàlida."
 
-#: ../dos9/errors/Dos9_Errors.c:147
+#: ../pBat/errors/pBat_Errors.c:147
 #, c-format
 msgid "Error : Redirection for \"%s\" was already specified."
 msgstr "Error: La redirecció per \"%s\" ja ha sigut especificada."
 
-#: ../dos9/errors/Dos9_Errors.c:150
+#: ../pBat/errors/pBat_Errors.c:150
 #, c-format
 msgid "Error : Encountered malformed blocks (\"%s\")."
 msgstr "Error: S'han trobat blocs mal formats (\"%s\")."
 
-#: ../dos9/errors/Dos9_Errors.c:153
+#: ../pBat/errors/pBat_Errors.c:153
 msgid "Error : Blocks left unclosed at end-of-file."
 msgstr "Error: Queden blocks no tancats al final del fitxer."
 
-#: ../dos9/errors/Dos9_Errors.c:156
+#: ../pBat/errors/pBat_Errors.c:156
 #, c-format
 msgid "Error : Unable to add command \"%s\"."
 msgstr "Error: Incapaç d'afegir el comandament \"%s\"."
 
-#: ../dos9/errors/Dos9_Errors.c:159
+#: ../pBat/errors/pBat_Errors.c:159
 #, c-format
 msgid "Error : Unable to remap commands (in function %s)."
 msgstr "Error:  FALTA MILLORAR (%s)."
 
-#: ../dos9/errors/Dos9_Errors.c:162
+#: ../pBat/errors/pBat_Errors.c:162
 #, c-format
 msgid "Error : Trying to redefine already used \"%s\" command."
 msgstr "Error: Intentant redefinir el comandament ja utilitzat \"%s\"."
 
-#: ../dos9/errors/Dos9_Errors.c:165
+#: ../pBat/errors/pBat_Errors.c:165
 #, c-format
 msgid "Error : Unable to redefine \"%s\" command."
 msgstr "Error: Incapaç de redefinir el comandament \"%s\"."
 
-#: ../dos9/errors/Dos9_Errors.c:168
-#, c-format
+#: ../pBat/errors/pBat_Errors.c:168
+#, fuzzy, c-format
 msgid ""
 "Error : Unable to set option \"%s\", it is built statically inside your "
-"version of Dos9."
+"version of pBat."
 msgstr ""
 "Error: Incapaç d'establir l'opció \"%s\", està construida estàticament "
 "dintre de la teva versió de Dos9."
 
-#: ../dos9/errors/Dos9_Errors.c:172
+#: ../pBat/errors/pBat_Errors.c:172
 #, c-format
 msgid "Error : The \"%s\" comparison forbids use of strings."
 msgstr "Error: La comparació \"%s\" prohibeix l'ús de cadenes."
 
-#: ../dos9/errors/Dos9_Errors.c:175
+#: ../pBat/errors/pBat_Errors.c:175
 #, c-format
 msgid "Error : Unable to fork the current process (in function %s)."
 msgstr "Error: Incapaç de bifurcar el procés actual (en la funció %s)."
 
-#: ../dos9/errors/Dos9_Errors.c:178
+#: ../pBat/errors/pBat_Errors.c:178
 #, c-format
 msgid "Error : Pathspec \"%s\" does not match any file."
 msgstr "Error: Pathspec \"%s\" no correspon a cap fitxer."
 
-#: ../dos9/errors/Dos9_Errors.c:181
+#: ../pBat/errors/pBat_Errors.c:181
 #, c-format
 msgid "Error : %s does not recieved any valid file to process."
 msgstr "Error: %s no ha rebut cap fitxer valid al procés."
 
-#: ../dos9/errors/Dos9_Errors.c:184
+#: ../pBat/errors/pBat_Errors.c:184
 #, c-format
 msgid "Error : \"%s\" is not a valid number."
 msgstr "Error: \"%s\" no és un número vàlid."
 
-#: ../dos9/errors/Dos9_Errors.c:187
+#: ../pBat/errors/pBat_Errors.c:187
 #, c-format
 msgid "Error : Too many arguments for %s command"
 msgstr "Error: Massa arguments pel comandament %s"
 
-#: ../dos9/errors/Dos9_Errors.c:190
+#: ../pBat/errors/pBat_Errors.c:190
 #, c-format
 msgid "Error : \"%s\" is not a valid expression for IF command."
 msgstr "Error: \"%s\" no és una expressió vàlida pel comandament IF."
 
-#: ../dos9/errors/Dos9_Errors.c:193
+#: ../pBat/errors/pBat_Errors.c:193
 #, c-format
 msgid "Error : Unable to copy file \"%s\"."
 msgstr "Error: Incapaç de copiar el fitxer \"%s\"."
 
-#: ../dos9/errors/Dos9_Errors.c:196
+#: ../pBat/errors/pBat_Errors.c:196
 #, c-format
 msgid "Error : Unable to move file \"%s\"."
 msgstr "Error: Incapaç de moure el fitxer \"%s\"."
 
-#: ../dos9/errors/Dos9_Errors.c:199
+#: ../pBat/errors/pBat_Errors.c:199
 #, c-format
 msgid "Error : Unable to create directory \"%s\"."
 msgstr "Error: Incapaç de crear el directori \"%s\"."
 
-#: ../dos9/errors/Dos9_Errors.c:202
+#: ../pBat/errors/pBat_Errors.c:202
 #, c-format
 msgid "Error : Unable to delete file \"%s\"."
 msgstr "Error: Incapaç d'eliminar el fitxer \"%s\"."
 
-#: ../dos9/errors/Dos9_Errors.c:205
+#: ../pBat/errors/pBat_Errors.c:205
 #, c-format
 msgid "Error : Unable to delete directory \"%s\"."
 msgstr "Error: Incapaç d'eliminar el directori \"%s\"."
 
-#: ../dos9/errors/Dos9_Errors.c:208
+#: ../pBat/errors/pBat_Errors.c:208
 #, c-format
 msgid "Error : \"%s\" is not a valid codepage on your system."
 msgstr "Error: \"%s\" no és una pàgina de codis vàlida al teu sistema."
 
-#: ../dos9/errors/Dos9_Errors.c:211
+#: ../pBat/errors/pBat_Errors.c:211
 #, c-format
 msgid ""
 "Error : \"%s\" is a relative path, RENAME (or REN) do not handles relative "
@@ -318,167 +319,169 @@ msgstr ""
 "Si vols moure el fitxer i renombrar-lo al mateix temps, hauries d'utilitzar "
 "el comandament MOVE."
 
-#: ../dos9/errors/Dos9_Errors.c:216
-msgid "Error : Unable to access Dos9 main thread to perform break."
+#: ../pBat/errors/pBat_Errors.c:216
+#, fuzzy
+msgid "Error : Unable to access pBat main thread to perform break."
 msgstr ""
 "Error: Incapaç d'accedir el fil principal de Dos9 per realitzar una "
 "interrupció."
 
-#: ../dos9/errors/Dos9_Errors.c:219
+#: ../pBat/errors/pBat_Errors.c:219
 #, c-format
 msgid "Error : Invalid label encountered within a block (at line %d)."
 msgstr "Error: Etiqueta invàlida trobada sense un bloc (a la línia %d)."
 
-#: ../dos9/errors/Dos9_Errors.c:222
+#: ../pBat/errors/pBat_Errors.c:222
 #, c-format
 msgid "Error : Unable to lock mutex (%s)."
 msgstr "Error: Incapaç de bloquejar l'exclusió mútua (%s)."
 
-#: ../dos9/errors/Dos9_Errors.c:225
+#: ../pBat/errors/pBat_Errors.c:225
 #, c-format
 msgid "Error : Unable to release mutex (%s)."
 msgstr "Error: Incapaç de llançar l'exclusió mútua (%s)."
 
-#: ../dos9/errors/Dos9_Errors.c:228
+#: ../pBat/errors/pBat_Errors.c:228
 #, c-format
 msgid "Error : Unable to catenate file \"%s\"."
 msgstr "Error: Incapaç de concatenar el fitxer \"%s\"."
 
-#: ../dos9/errors/Dos9_Errors.c:231
+#: ../pBat/errors/pBat_Errors.c:231
 #, c-format
 msgid "Error : Unable to load module \"%s\"."
 msgstr "Error: Incapaç de carregar el mòdul \"%s\"."
 
-#: ../dos9/errors/Dos9_Errors.c:234
+#: ../pBat/errors/pBat_Errors.c:234
 #, c-format
 msgid "Error : Incompatible module \"%s\"."
 msgstr "Error: Mòdul incompatible \"%s\"."
 
-#: ../dos9/errors/Dos9_Errors.c:237
+#: ../pBat/errors/pBat_Errors.c:237
 #, c-format
 msgid "Error : Module \"%s\" is already loaded."
 msgstr "Error: El mòdul \"%s\" ja està carregat."
 
-#: ../dos9/errors/Dos9_Errors.c:240
-msgid "Aborting current command, press any key to end Dos9."
+#: ../pBat/errors/pBat_Errors.c:240
+#, fuzzy
+msgid "Aborting current command, press any key to end pBat."
 msgstr ""
 "Avortant el comandament actual, prem qualsevol tecla per finalitzar Dos9."
 
-#: ../dos9/lang/Dos9_Lang.c:97
+#: ../pBat/lang/pBat_Lang.c:97
 msgid "Echo command enabled"
 msgstr "Comandament echo habilitat"
 
-#: ../dos9/lang/Dos9_Lang.c:98
+#: ../pBat/lang/pBat_Lang.c:98
 msgid "Echo command disabled"
 msgstr "Comandament echo inhabilitat"
 
-#: ../dos9/lang/Dos9_Lang.c:99
+#: ../pBat/lang/pBat_Lang.c:99
 msgid "Press any key to continue..."
 msgstr "Prem qualsevol tecla per continuar..."
 
-#: ../dos9/lang/Dos9_Lang.c:101
+#: ../pBat/lang/pBat_Lang.c:101
 msgid "\tNo files found"
 msgstr "No s'han trobat arxius"
 
-#: ../dos9/lang/Dos9_Lang.c:102
+#: ../pBat/lang/pBat_Lang.c:102
 msgid "Last change\t\tSize\tAttr.\tName"
 msgstr "Últim canvi\t\tMida\tAtr.\tNom"
 
-#: ../dos9/lang/Dos9_Lang.c:103
+#: ../pBat/lang/pBat_Lang.c:103
 msgid "Files"
 msgstr "Fitxers"
 
-#: ../dos9/lang/Dos9_Lang.c:104
+#: ../pBat/lang/pBat_Lang.c:104
 msgid "Folders"
 msgstr "Carpetes"
 
-#: ../dos9/lang/Dos9_Lang.c:106
+#: ../pBat/lang/pBat_Lang.c:106
 #, c-format
 msgid "Are you sure you want to delete file \"%s\" ?"
 msgstr "Estàs segur que vols eliminar el fitxer \"%s\"?"
 
-#: ../dos9/lang/Dos9_Lang.c:107
+#: ../pBat/lang/pBat_Lang.c:107
 #, c-format
 msgid "Are you sure you want to remove \"%s\" directory ?"
 msgstr "Estàs segur que vols eliminar el directori \"%s\"?"
 
-#: ../dos9/lang/Dos9_Lang.c:109
+#: ../pBat/lang/pBat_Lang.c:109
 #, c-format
 msgid "File \"%s\" already exists, replace it by \"%s\" ?"
 msgstr "El fitxer \"%s\" ja existeix, substituir-lo per \"%s\"?"
 
-#: ../dos9/lang/Dos9_Lang.c:111
+#: ../pBat/lang/pBat_Lang.c:111
 msgid "Do you really want to exit command script ?"
 msgstr "Realment vols sortir de la seqüència de comandaments?"
 
-#: ../dos9/lang/Dos9_Lang.c:113
+#: ../pBat/lang/pBat_Lang.c:113
 msgid " (Yes/no) "
 msgstr " (Sí/no) "
 
-#: ../dos9/lang/Dos9_Lang.c:114
+#: ../pBat/lang/pBat_Lang.c:114
 msgid " (yes/No) "
 msgstr " (sí/No) "
 
-#: ../dos9/lang/Dos9_Lang.c:115
+#: ../pBat/lang/pBat_Lang.c:115
 msgid " (yes/no) "
 msgstr " (sí/no) "
 
-#: ../dos9/lang/Dos9_Lang.c:117
+#: ../pBat/lang/pBat_Lang.c:117
 msgid " (Yes/no/all) "
 msgstr " (Sí/no/tot) "
 
-#: ../dos9/lang/Dos9_Lang.c:118
+#: ../pBat/lang/pBat_Lang.c:118
 msgid " (yes/No/all) "
 msgstr " (sí/No/tot) "
 
-#: ../dos9/lang/Dos9_Lang.c:119
+#: ../pBat/lang/pBat_Lang.c:119
 msgid " (yes/no/All) "
 msgstr " (sí/no/Tot) "
 
-#: ../dos9/lang/Dos9_Lang.c:120
+#: ../pBat/lang/pBat_Lang.c:120
 msgid " (yes/no/all) "
 msgstr " (sí/no/tot) "
 
-#: ../dos9/lang/Dos9_Lang.c:122
+#: ../pBat/lang/pBat_Lang.c:122
 msgid "YES"
 msgstr "SÍ"
 
-#: ../dos9/lang/Dos9_Lang.c:123
+#: ../pBat/lang/pBat_Lang.c:123
 msgid "Y"
 msgstr "S"
 
-#: ../dos9/lang/Dos9_Lang.c:125
+#: ../pBat/lang/pBat_Lang.c:125
 msgid "NO"
 msgstr "NO"
 
-#: ../dos9/lang/Dos9_Lang.c:126
+#: ../pBat/lang/pBat_Lang.c:126
 msgid "N"
 msgstr "N"
 
-#: ../dos9/lang/Dos9_Lang.c:128
+#: ../pBat/lang/pBat_Lang.c:128
 msgid "ALL"
 msgstr "TOT"
 
-#: ../dos9/lang/Dos9_Lang.c:129
+#: ../pBat/lang/pBat_Lang.c:129
 msgid "A"
 msgstr "T"
 
-#: ../dos9/lang/Dos9_Lang.c:131
+#: ../pBat/lang/pBat_Lang.c:131
 msgid "Please enter a correct choice (or type enter to choose default) !\n"
 msgstr ""
 "Sisplau introdueixi una elecció correcte (o prem return per triar per "
 "defecte)!\n"
 
-#: ../dos9/lang/Dos9_Lang.c:133
+#: ../pBat/lang/pBat_Lang.c:133
 #, fuzzy
 msgid ""
 "This is free software, you can modify and/or redistribute it under the terms "
 "of the GNU Genaral Public License v3 (or any later version).\n"
 "\n"
-"Usage:\tDOS9 [/A[:]attr] [/I in] [/O out] [file ... | /K cmd ...|/C "
+"Usage:\tPBAT [/A[:]attr] [/I in] [/O out] [file ... | /K cmd ...|/C "
 "cmd ...]\n"
 "\n"
-"\t/A:attr\tA list of attributes for Dos9\n"
+"\t/A:attr\tA list of attributes for pBat\n"
 "\t\tC\tEnable CMDLYCORRECT option to enable more compatibility\n"
 "\t\t\twith cmd.exe.\n"
 "\t\tE\tDisable echo command (disable current path printing).\n"
@@ -489,8 +492,8 @@ msgid ""
 "\t/C cmd\tRun cmd command and exit.\n"
 "\t/K cmd\tRun cmd command and stay active.\n"
 "\n"
-"Feel free to report bugs and submit suggestions at : <darkbatcher@dos9.org>\n"
-"For more informations see : <http://dos9.org>\n"
+"Feel free to report bugs and submit suggestions at : <darkbatcher@pbat.org>\n"
+"For more informations see : <http://pbat.org>\n"
 msgstr ""
 "Això és programari lliure, pots modificar-lo i/o redistribuir-lo sobre els "
 "termes de la GNU General Public License v3 (o una versió més nova).\n"
@@ -514,38 +517,38 @@ msgstr ""
 "org>\n"
 "Per més informació vegeu: <http://dos9.org>\n"
 
-#: ../dos9/lang/Dos9_Lang.c:149
+#: ../pBat/lang/pBat_Lang.c:149
 #, c-format
 msgid "%d files matching, print anyway ?"
 msgstr "%d fitxers corresponents, imprimir de totes maneres?"
 
-#: ../dos9/lang/Dos9_Lang.c:151
+#: ../pBat/lang/pBat_Lang.c:151
 #, c-format
 msgid "Waiting for %f seconds, press a key to continue ..."
 msgstr "Esperant %f segons, prem una tecla per continuar..."
 
-#: ../dos9/lang/Dos9_Lang.c:152
+#: ../pBat/lang/pBat_Lang.c:152
 #, c-format
 msgid "Waiting for %f seconds, press CTRL-C to continue ..."
 msgstr "Esperant %f segons, prem Control-C per continuar..."
 
-#: ../dos9/lang/Dos9_Lang.c:153
+#: ../pBat/lang/pBat_Lang.c:153
 msgid "Press a key to continue ..."
 msgstr "Prem una tecla per continuar..."
 
-#: ../dos9/lang/Dos9_Lang.c:154
+#: ../pBat/lang/pBat_Lang.c:154
 msgid "Press CTRL-C to continue ..."
 msgstr "Prem Control-C per continuar..."
 
-#: ../dos9/lang/Dos9_Lang.c:156
+#: ../pBat/lang/pBat_Lang.c:156
 msgid "Loaded modules :"
 msgstr "Mòduls carregats:"
 
-#: ../dos9/lang/Dos9_Lang.c:157
+#: ../pBat/lang/pBat_Lang.c:157
 msgid "Module loading not supported."
 msgstr "Carregament de mòduls no suportat."
 
-#: ../dos9/lang/Dos9_ShowHelp.c:48
+#: ../pBat/lang/pBat_ShowHelp.c:48
 msgid ""
 "Create an alias on a command.\n"
 "Usage: ALIAS [/f] alias=command\n"
@@ -553,7 +556,7 @@ msgstr ""
 "Crea un alias en un comandament.\n"
 "Ús: ALIAS [/F] alias=comandament\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:52
+#: ../pBat/lang/pBat_ShowHelp.c:52
 msgid ""
 "Change current working directory.\n"
 "Usage: CD  [[/d] path]\n"
@@ -563,7 +566,7 @@ msgstr ""
 "Ús: CD [[/d] ruta]\n"
 "      CHDIR [[/d] ruta]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:57
+#: ../pBat/lang/pBat_ShowHelp.c:57
 msgid ""
 "Clear console screen\n"
 "Usage: CLS\n"
@@ -571,7 +574,7 @@ msgstr ""
 "Neteja la pantalla de la consola:\n"
 "Ús: CLS\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:61
+#: ../pBat/lang/pBat_ShowHelp.c:61
 msgid ""
 "Change console color to the given code.\n"
 "Usage: COLOR [code]\n"
@@ -579,7 +582,7 @@ msgstr ""
 "Canvia el color de la consola al color especificat.\n"
 "Ús: COLOR [codi]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:65
+#: ../pBat/lang/pBat_ShowHelp.c:65
 msgid ""
 "Copy file(s) to another location.\n"
 "Usage: COPY [/R] [/-Y | /Y] [/A[:]attributes] source [+] ... destination\n"
@@ -587,7 +590,7 @@ msgstr ""
 "Copia fitxers a una altra destinació.\n"
 "Ús: COPY [/R] [/-Y | /Y] [A:[:]atributs] origen [ + ] ... destinació\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:69
+#: ../pBat/lang/pBat_ShowHelp.c:69
 msgid ""
 "Call a script or a label from the current context.\n"
 "Usage: CALL [/e] [file] [:label] [parameters ...]\n"
@@ -596,7 +599,7 @@ msgstr ""
 "actual.\n"
 "Ús: CALL [/e] [fitxer] [:etiqueta] [paràmetres ...]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:74
+#: ../pBat/lang/pBat_ShowHelp.c:74
 msgid ""
 "Delete file(s).\n"
 "Usage: DEL [/P] [/F] [/S] [/Q] [/A[:]attributes] name\n"
@@ -606,7 +609,7 @@ msgstr ""
 "Ús: DEL [/P] [/F] [/S] [/Q] [/A[:]atributs] nom\n"
 "      ERASE [/P] [/F] [/S] [/Q] [/A[:]atributs] nom\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:79
+#: ../pBat/lang/pBat_ShowHelp.c:79
 msgid ""
 "List files in a directory and in subdirectories.\n"
 "Usage: DIR [/A[:]attributes] [/S] [/B] [path]\n"
@@ -614,7 +617,7 @@ msgstr ""
 "Llista fitxers en un directori i en subdirectoris.\n"
 "Ús: DIR [/A[:]atributs] [/S] [/B] [ruta]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:83
+#: ../pBat/lang/pBat_ShowHelp.c:83
 msgid ""
 "Print a message, or enable/disable command echoing.\n"
 "Usage: ECHO [OFF|ON]\n"
@@ -626,7 +629,7 @@ msgstr ""
 "      ECHO text\n"
 "      ECHO.text\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:89
+#: ../pBat/lang/pBat_ShowHelp.c:89
 #, c-format
 msgid ""
 "Perform commands against items (files, strings, command output).\n"
@@ -656,7 +659,7 @@ msgstr ""
 "       :: alguns comandaments\n"
 "    )\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:101
+#: ../pBat/lang/pBat_ShowHelp.c:101
 msgid ""
 "Go to a label in a command script.\n"
 "Usage: GOTO [/Q] [/F[:]file] [:]label\n"
@@ -664,7 +667,7 @@ msgstr ""
 "Vés a una etiqueta en un programa de comandaments.\n"
 "Ús: GOTO [/Q] [/F[:]fitxer] [:]etiqueta\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:105
+#: ../pBat/lang/pBat_ShowHelp.c:105
 msgid ""
 "Perform commands on some conditions.\n"
 "Usage: IF [/i] [NOT] string1==string2 (\n"
@@ -698,7 +701,7 @@ msgstr ""
 "       )\n"
 "\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:120
+#: ../pBat/lang/pBat_ShowHelp.c:120
 msgid ""
 "Create the given directory.\n"
 "Usage: MD directory\n"
@@ -708,7 +711,7 @@ msgstr ""
 "Ús: MD directori\n"
 "  MKDIR directori\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:126
+#: ../pBat/lang/pBat_ShowHelp.c:126
 msgid ""
 "Wait for a keystroke from the user.\n"
 "Usage: PAUSE\n"
@@ -716,7 +719,7 @@ msgstr ""
 "Espera fins una pulsació de tecla de l'usuari.\n"
 "Ús: PAUSE\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:131
+#: ../pBat/lang/pBat_ShowHelp.c:131
 msgid ""
 "Remove a directory.\n"
 "Usage: RMDIR [/S] [/Q] directory\n"
@@ -726,7 +729,7 @@ msgstr ""
 "Ús: RMDIR [/S] [/Q] directorI\n"
 "       RD [/S] [/Q] directorI\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:136
+#: ../pBat/lang/pBat_ShowHelp.c:136
 msgid ""
 "Renames a file.\n"
 "Usage: REN file name.ext\n"
@@ -736,7 +739,7 @@ msgstr ""
 "Ús: REN fitxer nom.ext\n"
 "       RENAME fitxer nom.ext\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:141
+#: ../pBat/lang/pBat_ShowHelp.c:141
 msgid ""
 "Introduce a comment.\n"
 "Usage: REM comment\n"
@@ -744,7 +747,7 @@ msgstr ""
 "Introdueix un comentari.\n"
 "Ús: REM comentari\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:146
+#: ../pBat/lang/pBat_ShowHelp.c:146
 msgid ""
 "Set or list environment variables.\n"
 "Usage: SET variable=content\n"
@@ -758,10 +761,10 @@ msgstr ""
 "        SET /a p variable=pregunta\n"
 "        SET var\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:153
+#: ../pBat/lang/pBat_ShowHelp.c:153
 #, fuzzy
 msgid ""
-"Set local environment and options of the Dos9 command prompt.\n"
+"Set local environment and options of the pBat command prompt.\n"
 "Usage: SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] "
 "[CMDLYCORRECT | CMDLYINCORRECT]\n"
 msgstr ""
@@ -769,7 +772,7 @@ msgstr ""
 "Ús: SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] "
 "[ENABLEFLOATS | DISABLEFLOATS] [CMDLYCORRECT | CMDLYINCORRECT]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:157
+#: ../pBat/lang/pBat_ShowHelp.c:157
 msgid ""
 "Reverts changes to environments and options made after a call to SETLOCAL.\n"
 "Usage: ENDLOCAL\n"
@@ -778,7 +781,7 @@ msgstr ""
 "SETLOCAL. \n"
 "Ús: ENDLOCAL\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:161
+#: ../pBat/lang/pBat_ShowHelp.c:161
 msgid ""
 "Set console title.\n"
 "Usage: TITLE title\n"
@@ -786,7 +789,7 @@ msgstr ""
 "Estableix el títol de la consola. \n"
 "Ús: TITLE títol\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:165
+#: ../pBat/lang/pBat_ShowHelp.c:165
 msgid ""
 "Print a file.\n"
 "Usage: TYPE [file ...]\n"
@@ -794,7 +797,7 @@ msgstr ""
 "Mostra el contingut d'un fitxer.\n"
 "Ús: TYPE [fitxer ...]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:169
+#: ../pBat/lang/pBat_ShowHelp.c:169
 msgid ""
 "Exit from the command prompt.\n"
 "Usage: EXIT [/b] [code]\n"
@@ -802,7 +805,7 @@ msgstr ""
 "Surt de l'intèrpret d'ordres.\n"
 "Ús: EXIT [/b] [codi]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:173
+#: ../pBat/lang/pBat_ShowHelp.c:173
 msgid ""
 "Change positions of command-line parameters.\n"
 "Usage: SHIFT [/start_number | /s[:]start_number] [/d[:]displacement]\n"
@@ -810,7 +813,7 @@ msgstr ""
 "Canvia la posició dels paràmetres de la línia d'ordres.\n"
 "Ús: SHIFT [/número_inici | /s[:]número_inici] [/d[:]desplaçament]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:177
+#: ../pBat/lang/pBat_ShowHelp.c:177
 msgid ""
 "Search occurrence of string in a set of files.\n"
 "Usage: FIND [/N] [/C] [/V] [/I] [/E] string [file ...]\n"
@@ -818,7 +821,7 @@ msgstr ""
 "Troba una ocurrència d'una cadena en un conjunt de fitxers.\n"
 "Ús: FIND [/N] [/C] [/V] [/I] [/E] cadena [fitxer ...]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:181
+#: ../pBat/lang/pBat_ShowHelp.c:181
 msgid ""
 "Display content of files.\n"
 "Usage: MORE [/E] [/P] [/S] [/C] [/T[:]n] [+n] [file ...]\n"
@@ -826,7 +829,7 @@ msgstr ""
 "Mostra el contingut de fitxers.\n"
 "Ús: MORE [/E] [/P] [/S] [/C] [/T[:]n] [+n] [fitxer ...]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:185
+#: ../pBat/lang/pBat_ShowHelp.c:185
 msgid ""
 "[Obsolete] Sets or Clears Extended CTRL+C checking on DOS system. (Do "
 "nothing)\n"
@@ -835,7 +838,7 @@ msgstr ""
 "[Obsolet] Estableix o neteja el CTRL+C estès en sistemes DOS. (No fa res)\n"
 "Ús: BREAK [ON | OFF]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:189
+#: ../pBat/lang/pBat_ShowHelp.c:189
 msgid ""
 "Set Console codepage or encoding.\n"
 "Usage: CHCP [ codepage | encoding]\n"
@@ -843,7 +846,7 @@ msgstr ""
 "Estableix la pàgina de codis o codificació.\n"
 "Ús: CHCP [pàgina de codis | codificació]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:193
+#: ../pBat/lang/pBat_ShowHelp.c:193
 msgid ""
 "For each path, change current directory and pushd to stack\n"
 "the previous current directory.\n"
@@ -853,7 +856,7 @@ msgstr ""
 "el previ directori actual.\n"
 "Ús: PUSHD [camí1] [camí2] [camíN] ...\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:198
+#: ../pBat/lang/pBat_ShowHelp.c:198
 msgid ""
 "Pull a directory on the stack to change current directory.\n"
 "Usage: POPD\n"
@@ -861,7 +864,7 @@ msgstr ""
 "Posa un directori a la pila per canviar el directori actual.\n"
 "Ús: POPD\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:202
+#: ../pBat/lang/pBat_ShowHelp.c:202
 msgid ""
 "Display counts of a file or of stdin.\n"
 "Usage: WC [/L] [/C] [/M] [/W] [files ...]\n"
@@ -869,7 +872,7 @@ msgstr ""
 "Mostra els comptes d'un fitxer o de STDIN.\n"
 "Ús: WC [/L] [/C] [/M] [/W] [fitxers ...]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:206
+#: ../pBat/lang/pBat_ShowHelp.c:206
 msgid ""
 "Run a command with arguments from standard input file.\n"
 "Usage: XARGS [command ...]\n"
@@ -877,15 +880,16 @@ msgstr ""
 "Executa un comandament amb arguments des de l'entrada d'arxius estàndard.\n"
 "Ús: XARGS [comandament ...]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:210
+#: ../pBat/lang/pBat_ShowHelp.c:210
+#, fuzzy
 msgid ""
-"Changes dos9 command prompt.\n"
+"Changes pbat command prompt.\n"
 "Usage: PROMPT prompt-format\n"
 msgstr ""
 "Canvia l'intèrpret d'ordres Dos9.\n"
 "Ús: PROMPT format\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:214
+#: ../pBat/lang/pBat_ShowHelp.c:214
 msgid ""
 "Print a message using prompt format.\n"
 "Usage: PECHO prompt-format\n"
@@ -895,7 +899,7 @@ msgstr ""
 "Ús: PECHO format-interpret\n"
 "       PECHO.format-interpret\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:219
+#: ../pBat/lang/pBat_ShowHelp.c:219
 msgid ""
 "Sleep for a delay in seconds.\n"
 "Usage: TIMEOUT [/T] [/NOBREAK] seconds[.milliseconds]\n"
@@ -903,7 +907,7 @@ msgstr ""
 "Dorm durant un temps en segons.\n"
 "Ús: TIMEOUT [/T] [/NOBREAK] segons[.mil·lisegons]\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:223
+#: ../pBat/lang/pBat_ShowHelp.c:223
 msgid ""
 "Load or list modules.\n"
 "Usage: MOD [/L] [/Q] module\n"
@@ -911,7 +915,7 @@ msgstr ""
 "Carrega o llista mòduls.\n"
 "Ús: MOD [/L] [/Q] mòdul\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:227
+#: ../pBat/lang/pBat_ShowHelp.c:227
 msgid ""
 "Print the OS type and version\n"
 "Usage: VER\n"
@@ -919,13 +923,13 @@ msgstr ""
 "Imprimeix el tipus de SO i la versió\n"
 "Ús: VER\n"
 
-#: ../dos9/lang/Dos9_ShowHelp.c:231
+#: ../pBat/lang/pBat_ShowHelp.c:231
 msgid ""
 "Sets directory of translation files\n"
 "Usage: LOCALE [dir]\n"
 msgstr ""
 
-#: ../dos9/lang/Dos9_ShowHelp.c:235
+#: ../pBat/lang/pBat_ShowHelp.c:235
 msgid ""
 "Start a program in another window\n"
 "Usage: START [/d dir] [/b] [/min] [/max] [/wait] [\"title\"] [command "
