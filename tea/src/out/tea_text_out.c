@@ -22,7 +22,7 @@
 #include <string.h>
 #include <errno.h>
 
-#include <libDos9.h>
+#include <libpBat.h>
 #include "../Tea.h"
 #include "tea_out.h"
 
@@ -187,7 +187,7 @@ void Tea_TextOutputParagraph(size_t iMargin, size_t iFirstLine, size_t iLength, 
 
 				while (iLeft) {
 
-					lpNext=Dos9_GetNextChar(lpBlock);
+					lpNext=pBat_GetNextChar(lpBlock);
 
 					while (lpBlock < lpNext) {
 
@@ -222,19 +222,19 @@ void Tea_TextParseHandler(int iMsg ,void* lpData)
 	if (iMsg==TEA_MSG_READ_FILE)
 		return;
 
-	lpEsStr=Dos9_EsInit();
+	lpEsStr=pBat_EsInit();
 
 	lpTeaNode=(TEANODE*)lpData;
 
 	switch(lpTeaNode->iNodeType) {
 
 	case TEA_NODE_EMPHASIS:
-		Dos9_EsCat(lpEsStr, "_");
-		Dos9_EsCat(lpEsStr, lpTeaNode->lpContent);
-		Dos9_EsCat(lpEsStr, "_");
+		pBat_EsCat(lpEsStr, "_");
+		pBat_EsCat(lpEsStr, lpTeaNode->lpContent);
+		pBat_EsCat(lpEsStr, "_");
 		free(lpTeaNode->lpContent);
 
-		if (!(lpTeaNode->lpContent=strdup(Dos9_EsToChar(lpEsStr)))) {
+		if (!(lpTeaNode->lpContent=strdup(pBat_EsToChar(lpEsStr)))) {
 
 			perror("TEA : Unable to allocate memory ");
 			exit(-1);
@@ -244,15 +244,15 @@ void Tea_TextParseHandler(int iMsg ,void* lpData)
 		break;
 
 	case TEA_NODE_LINK:
-		Dos9_EsCpy(lpEsStr, lpTeaNode->lpContent);
-		Dos9_EsCat(lpEsStr, " ");
-		Dos9_EsCat(lpEsStr, "(<");
-		Dos9_EsCat(lpEsStr, lpTeaNode->lpTarget);
-		Dos9_EsCat(lpEsStr, ">)");
+		pBat_EsCpy(lpEsStr, lpTeaNode->lpContent);
+		pBat_EsCat(lpEsStr, " ");
+		pBat_EsCat(lpEsStr, "(<");
+		pBat_EsCat(lpEsStr, lpTeaNode->lpTarget);
+		pBat_EsCat(lpEsStr, ">)");
 
 		free(lpTeaNode->lpContent);
 
-		if (!(lpTeaNode->lpContent=strdup(Dos9_EsToChar(lpEsStr)))) {
+		if (!(lpTeaNode->lpContent=strdup(pBat_EsToChar(lpEsStr)))) {
 
 			perror("TEA :: Unable to allocate memory ");
 			exit(-1);
@@ -262,7 +262,7 @@ void Tea_TextParseHandler(int iMsg ,void* lpData)
 
 	}
 
-	Dos9_EsFree(lpEsStr);
+	pBat_EsFree(lpEsStr);
 }
 
 void Tea_TextPlainParseHandler(int msg, void* data)

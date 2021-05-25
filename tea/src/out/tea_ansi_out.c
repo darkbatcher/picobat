@@ -20,7 +20,7 @@
  #include <stdio.h>
 #include <stdlib.h>
 
-#include <libDos9.h>
+#include <libpBat.h>
 #include "tea_out.h"
 #include "../Tea.h"
 

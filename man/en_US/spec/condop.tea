@@ -1,5 +1,5 @@
 #
-#   Dos9 Manual pages, The Dos9 project
+#   pBat Manual pages, The pBat project
 #   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -27,7 +27,7 @@
 	
 	Run two commands linked by a conditional operator:
 
-	- {command1}, {command2} : Two valid {../dos9|Dos9} commands.
+	- {command1}, {command2} : Two valid {../pbat|pBat} commands.
 
 	- {operator} : An operator linking {command1} and {command2}.
 
@@ -44,7 +44,7 @@
 
 	- {&&} : Run {command2} if the last executed command returned
 	on success.
-	To determine if an error occured, {../dos9|Dos9} uses the value
+	To determine if an error occured, {../pbat|pBat} uses the value
 	of the {%ERRORLEVEL%} variable fixed by the last executed command :
 	
 		-- if {%ERRORLEVEL%} is zero, then the command completed
@@ -54,7 +54,7 @@
 		
 	@- if the last executed command returned upon a failure, 
 	{command2} is ignored and
-	{Dos9} tries to run any of the subsequent commands following rules
+	{pBat} tries to run any of the subsequent commands following rules
 	associated with each of the conditional operators.
 	
 	- {\|\|} : Run {command2} if the last executed command returned upon a
@@ -63,13 +63,13 @@
 	- {\|} : Connects {command1} standard output to {command2} standard
 	input and run both simultaneously.
 	
-	@- As both commands are executed simultaneously, the process {../dos9|Dos9}
+	@- As both commands are executed simultaneously, the process {../pbat|pBat}
 	forks and a child interpreter is created. While {command2} runs on the
 	parent interpreter, {command1} is executed on the child. Once {command1}
 	exits, the child interpreter dies and the script execution continues on
 	the parent intepreter.
 	
-	@- Thus, if a {command1} modifies {Dos9} environment variable, the
+	@- Thus, if a {command1} modifies {pBat} environment variable, the
 	changes will not affect the parent interpretor, and the environment of
 	the parent will be left unchanged. As an example:
 	

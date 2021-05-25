@@ -1,5 +1,5 @@
 /*
- *   Batbox module for Dos9
+ *   Batbox module for pBat
  *   Copyright (C) 2018 Romain GARBI
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -19,8 +19,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <libDos9.h>
-#include <Dos9_Module.h>
+#include <libpBat.h>
+#include <pBat_Module.h>
 
 int batbox(char* cmd);
 
@@ -47,23 +47,23 @@ FILE *tty = NULL;
 
  */
 #define PORTABLE_COLOR(x) (FOREGROUND_COLOR(x) | BACKGROUND_COLOR(x))
-#define BACKGROUND_COLOR(x) ((((x) & 0x80) ? DOS9_BACKGROUND_INT : 0) \
-                           | (((x) & 0x10) ? DOS9_BACKGROUND_BLUE : 0) \
-                           | (((x) & 0x20) ? DOS9_BACKGROUND_GREEN : 0) \
-                           | (((x) & 0x40) ? DOS9_BACKGROUND_RED : 0))
-#define FOREGROUND_COLOR(x) ((((x) & 8) ? DOS9_FOREGROUND_INT : 0) \
-                           | (((x) & 1) ? DOS9_FOREGROUND_BLUE : 0) \
-                           | (((x) & 2) ? DOS9_FOREGROUND_GREEN : 0) \
-                           | (((x) & 4) ? DOS9_FOREGROUND_RED : 0))
+#define BACKGROUND_COLOR(x) ((((x) & 0x80) ? PBAT_BACKGROUND_INT : 0) \
+                           | (((x) & 0x10) ? PBAT_BACKGROUND_BLUE : 0) \
+                           | (((x) & 0x20) ? PBAT_BACKGROUND_GREEN : 0) \
+                           | (((x) & 0x40) ? PBAT_BACKGROUND_RED : 0))
+#define FOREGROUND_COLOR(x) ((((x) & 8) ? PBAT_FOREGROUND_INT : 0) \
+                           | (((x) & 1) ? PBAT_FOREGROUND_BLUE : 0) \
+                           | (((x) & 2) ? PBAT_FOREGROUND_GREEN : 0) \
+                           | (((x) & 4) ? PBAT_FOREGROUND_RED : 0))
 #endif
 
-void Dos9_ModuleAttach(void)
+void pBat_ModuleAttach(void)
 {
     if (!tty
         && (tty = fopen(TTY_PATH, TTY_MODE)) == NULL )
-        Dos9_ShowErrorMessage(DOS9_FILE_ERROR, TTY_PATH, -1);
+        pBat_ShowErrorMessage(PBAT_FILE_ERROR, TTY_PATH, -1);
 
-    Dos9_RegisterCommand("BATBOX", batbox);
+    pBat_RegisterCommand("BATBOX", batbox);
 }
 
 /* usage: batbox [/a chr] [/b] [/k[_] [name] | /l[_] [name]]
@@ -121,7 +121,7 @@ int args_get_number(const char* str)
     if (pch && *pch) {
 
         ret = 0;
-        buf = Dos9_GetEnv(str);
+        buf = pBat_GetEnv(str);
 
         if (buf)
             ret = strtol(buf, &pch, 0);
@@ -133,37 +133,37 @@ int args_get_number(const char* str)
 
 int batbox(char* cmd)
 {
-    ESTR* param = Dos9_EsInit();
+    ESTR* param = pBat_EsInit();
     int status = 0;
     static __thread CONSOLECOORD orig = {0, 0}, last = {0,0};
     cmd += 6;
 
     /* loop through arguments */
-    while (cmd && (cmd = Dos9_GetNextParameterEs(cmd, param))) {
+    while (cmd && (cmd = pBat_GetNextParameterEs(cmd, param))) {
 
         if (fast_switch_cmp(param->str, 'a')) {
 
-            if (cmd = Dos9_GetNextParameterEs(cmd, param))
-                fprintf(Dos9_GetfOutput(), "%c",
+            if (cmd = pBat_GetNextParameterEs(cmd, param))
+                fprintf(pBat_GetfOutput(), "%c",
                         args_get_number(param->str));
 
 
         } else if (fast_switch_cmp(param->str, 'd')) {
 
-            if (cmd = Dos9_GetNextParameterEs(cmd, param))
-                fputs(param->str, Dos9_GetfOutput());
+            if (cmd = pBat_GetNextParameterEs(cmd, param))
+                fputs(param->str, pBat_GetfOutput());
 
         } else if (fast_switch_cmp(param->str, 'n')) {
 
             last.Y ++;
-            Dos9_SetConsoleCursorPosition(Dos9_GetfOutput(), last);
+            pBat_SetConsoleCursorPosition(pBat_GetfOutput(), last);
 
         } else if (fast_switch_cmp(param->str, 'o')) {
 
-            if (cmd = Dos9_GetNextParameterEs(cmd, param)) {
+            if (cmd = pBat_GetNextParameterEs(cmd, param)) {
 
                 orig.X = args_get_number(param->str);
-                if (cmd = Dos9_GetNextParameterEs(cmd, param))
+                if (cmd = pBat_GetNextParameterEs(cmd, param))
                     orig.Y = args_get_number(param->str);
 
             }
@@ -173,32 +173,32 @@ int batbox(char* cmd)
 
             CONSOLECOORD coord;
 
-            if (cmd = Dos9_GetNextParameterEs(cmd, param)) {
+            if (cmd = pBat_GetNextParameterEs(cmd, param)) {
 
                 coord.X = orig.X + args_get_number(param->str);
-                if (cmd = Dos9_GetNextParameterEs(cmd, param)) {
+                if (cmd = pBat_GetNextParameterEs(cmd, param)) {
                     coord.Y = orig.Y + args_get_number(param->str);
                     last = coord;
-                    Dos9_SetConsoleCursorPosition(Dos9_GetfOutput(), coord);
+                    pBat_SetConsoleCursorPosition(pBat_GetfOutput(), coord);
                 }
 
             }
 
         } else if (fast_switch_cmp(param->str, 'h')) {
 
-            if (cmd = Dos9_GetNextParameterEs(cmd, param))
-                Dos9_SetConsoleCursorState(Dos9_GetfOutput(),
+            if (cmd = pBat_GetNextParameterEs(cmd, param))
+                pBat_SetConsoleCursorState(pBat_GetfOutput(),
                                            args_get_number(param->str),100);
 
         } else if (fast_switch_cmp(param->str, 'w')) {
 
-            if (cmd = Dos9_GetNextParameterEs(cmd, param))
-                Dos9_Sleep(args_get_number(param->str));
+            if (cmd = pBat_GetNextParameterEs(cmd, param))
+                pBat_Sleep(args_get_number(param->str));
 
         } else if (fast_switch_cmp(param->str, 'c')) {
 
-            if (cmd = Dos9_GetNextParameterEs(cmd, param))
-                Dos9_SetConsoleTextColor(Dos9_GetfOutput(),
+            if (cmd = pBat_GetNextParameterEs(cmd, param))
+                pBat_SetConsoleTextColor(pBat_GetfOutput(),
                                          PORTABLE_COLOR(args_get_number(param->str)));
 
         } else if (fast_switch_cmp(param->str, 'k')
@@ -216,7 +216,7 @@ int batbox(char* cmd)
 
             type = *(param->str+1);
 
-            if ((tmp = Dos9_GetNextParameterEs(cmd, param)) == NULL
+            if ((tmp = pBat_GetNextParameterEs(cmd, param)) == NULL
                 && fast_noswitch_check(param->str)) {
 
                 name = 1;
@@ -224,21 +224,21 @@ int batbox(char* cmd)
 
             }
 
-            if (!wait && !Dos9_Kbhit(tty))
+            if (!wait && !pBat_Kbhit(tty))
                 continue;
 
-            key = Dos9_Getch(tty);
+            key = pBat_Getch(tty);
 
             /* If we got an extended key */
             if (key == 224)
-                key += Dos9_Getch(tty);
+                key += pBat_Getch(tty);
 
             if (name) {
 
                 snprintf(buf, sizeof(buf), ((type == 'l' || type == 'L')
                                            && (key < 255)) ? "%c" : "%d", key);
 
-                Dos9_SetEnv(param->str, buf);
+                pBat_SetEnv(param->str, buf);
 
             } else {
 
@@ -260,19 +260,19 @@ int batbox(char* cmd)
                 || (*(param->str + 1) == 'm' && *(param->str + 2) == '_')))
                 onmove = 1;
 
-            if ((tmp = Dos9_GetNextParameterEs(cmd, param)) != NULL
+            if ((tmp = pBat_GetNextParameterEs(cmd, param)) != NULL
                 && fast_noswitch_check(param->str)) {
 
                 x = param;
-                param = Dos9_EsInit();
+                param = pBat_EsInit();
 
-                if ((tmp = Dos9_GetNextParameterEs(tmp, param)) != NULL
+                if ((tmp = pBat_GetNextParameterEs(tmp, param)) != NULL
                     && fast_noswitch_check(param->str)) {
 
                     y = param;
-                    param = Dos9_EsInit();
+                    param = pBat_EsInit();
 
-                    if ((tmp = Dos9_GetNextParameterEs(tmp, param)) != NULL
+                    if ((tmp = pBat_GetNextParameterEs(tmp, param)) != NULL
                         && fast_noswitch_check(param->str)) {
 
                         cmd = tmp;
@@ -284,34 +284,34 @@ int batbox(char* cmd)
 
             }
 
-            Dos9_GetMousePos(tty, onmove, &coords, &type);
+            pBat_GetMousePos(tty, onmove, &coords, &type);
 
             if (names) {
 
                 snprintf(buf, sizeof(buf), "%d", coords.X);
-                Dos9_SetEnv(x->str, buf);
+                pBat_SetEnv(x->str, buf);
                 snprintf(buf, sizeof(buf), "%d", coords.Y);
-                Dos9_SetEnv(y->str, buf);
+                pBat_SetEnv(y->str, buf);
                 snprintf(buf, sizeof(buf), "%d", type);
-                Dos9_SetEnv(param->str, buf);
+                pBat_SetEnv(param->str, buf);
 
             } else {
 
-                fprintf(Dos9_GetfOutput(), "%d:%d:%d" DOS9_NL, coords.X, coords.Y, type);
+                fprintf(pBat_GetfOutput(), "%d:%d:%d" PBAT_NL, coords.X, coords.Y, type);
 
             }
 
             if (x)
-                Dos9_EsFree(x);
+                pBat_EsFree(x);
 
             if (y)
-                Dos9_EsFree(y);
+                pBat_EsFree(y);
 
         }
 
     }
 
 end:
-    Dos9_EsFree(param);
-    return status; /* DOS9_NO_ERROR */
+    pBat_EsFree(param);
+    return status; /* PBAT_NO_ERROR */
 }

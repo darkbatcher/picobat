@@ -12,7 +12,7 @@
 	- {/E} : Active le mode étendu. Ce commutateur doit être passé à
 	{MORE} pour que les commutateurs {/C}, {/P} et {/S} ainsi que le {+n}
 	soient interprétés par {cmd.exe}. Cependant, ce commutateur n'est
-	fourni par {dos9|Dos9} que pour des raisons de compatibilité avec
+	fourni par {pbat|pBat} que pour des raisons de compatibilité avec
 	{cmd.exe} mais ce commutateur est ignoré.
 
 	- {/C} : Efface l'écran avant l'affichage de chaque nouvelle page. Ce
@@ -22,7 +22,7 @@
 	faire {que} page-par-page.
 
 	- {/P} : Développe les charactères de fin de formulaire (form-feed).
-	Ce commutateur n'est pas implémenté par {dos9|Dos9}.
+	Ce commutateur n'est pas implémenté par {pbat|pBat}.
 
 	- {/S} : Fusionne les lignes vides situées à la suite les unes des
 	autres.
@@ -63,7 +63,7 @@
 
 	- {Q} : Quitte la commande en cours.
 
-	Si {dos9|Dos9} a été compilé avec l'option {--disable-console}, alors
+	Si {pbat|pBat} a été compilé avec l'option {--disable-console}, alors
 	la commande more utilisera le commutateur {/C} obligatoirement. Le
 	défilement ligne par ligne ne sera donc plus possible.
 

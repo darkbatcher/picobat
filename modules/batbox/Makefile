@@ -4,10 +4,10 @@ include $(ROOTDIR)/config.mk
 MODULE = batbox
 SOURCES = batbox.c
 
-OBJ_FILES = $(SOURCES:.c=.o) ../lib/Dos9_Module.o
+OBJ_FILES = $(SOURCES:.c=.o) ../lib/pBat_Module.o
 
-LDFLAGS += $(LIBDOS9_LD) 
-CFLAGS += $(LIBDOS9_INC) -I../lib/
+LDFLAGS += $(LIBPBAT_LD) 
+CFLAGS += $(LIBPBAT_INC) -I../lib/
 
 all: $(MODULE)
 

@@ -1,5 +1,5 @@
 ﻿#
-#   Dos9 Manual pages, The Dos9 project
+#   pBat Manual pages, The pBat project
 #   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -18,9 +18,9 @@
 {{Environment variables}}
 
 	Environment variables are the most common way to deal with
-	variables with {../dos9|Dos9}. They are usually defined by the 
-	operating system but {Dos9} uses its own implementation.
-	Any external binary executed from {Dos9} inherits its
+	variables with {../pbat|pBat}. They are usually defined by the 
+	operating system but {pBat} uses its own implementation.
+	Any external binary executed from {pBat} inherits its
 	environment.
 
 {{Use}}
@@ -34,15 +34,15 @@
 {{Default defined variables}}
 
 	Some environment variables are automatically defined
-	by {Dos9}.
+	by {pBat}.
 
 	Eight of them are native variables :
 
-		- {../dos9var|%DOS9_OS%} : OS type.
+		- {../pbatvar|%PBAT_OS%} : OS type.
 
-		- {../dos9var|%DOS9_PATH%} : Dos9 binary path.
+		- {../pbatvar|%PBAT_PATH%} : pBat binary path.
 
-		- {../dos9var|%DOS9_VERSION%} : Dos9 version.
+		- {../pbatvar|%PBAT_VERSION%} : pBat version.
 		
 		- {../errorlevel|%ERRORLEVEL%} : Return value of last
         executed program.
@@ -56,9 +56,9 @@
 		- {../time|%TIME%} : Time.
 		
 	Some other variables are defined by the operating system or by
-	{../dos9auto|Dos9_Auto.bat}:
+	{../pbatauto|pBat_Auto.bat}:
 
-		- {%PATH%} : Dos9 paths list variable.
+		- {%PATH%} : pBat paths list variable.
 
 		- {%SYSTEMDRIVE%} : Disk root.
 		

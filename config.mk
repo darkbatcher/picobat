@@ -1,5 +1,5 @@
 #
-#   Dos9 Makefiles, The Dos9 project
+#   pBat Makefiles, The pBat project
 #   Copyright (C) 2012-2018  Romain Garbi, Teddy Astie
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -39,11 +39,11 @@ MICROGETTEXT_DIR = $(ROOTDIR)/microgettext
 MICROGETTEXT_INC = -I$(MICROGETTEXT_DIR)
 MICROGETTEXT_LD = -L$(MICROGETTEXT_DIR) -lmicrogettext
 
-# libDos9
-LIBDOS9_DIR = $(ROOTDIR)/libDos9
+# libpBat
+LIBPBAT_DIR = $(ROOTDIR)/libpBat
 
-LIBDOS9_INC = -I$(LIBDOS9_DIR)
-LIBDOS9_LD = -L$(LIBDOS9_DIR) -lDos9
+LIBPBAT_INC = -I$(LIBPBAT_DIR)
+LIBPBAT_LD = -L$(LIBPBAT_DIR) -lpBat
 
 # libmatheval
 LIBMATHEVAL_DIR = $(ROOTDIR)/libmatheval

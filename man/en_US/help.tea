@@ -1,5 +1,5 @@
 #
-#   Dos9 Manual pages, The Dos9 project
+#   pBat Manual pages, The pBat project
 #   Copyright (C) 2012-2018  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 
 {{HELP command}}
 
-	Print a list of {Dos9} commands accompaigned by a short description
+	Print a list of {pBat} commands accompaigned by a short description
 	of these commands. It is also possible to print manual pages.
 
 	By default, the {HELP} command is a alias pointing to {hlp|HLP command}
@@ -33,9 +33,9 @@ ${HELP [command]}
 		print.
 
 	By default, {HELP} is overriden by an {alias|ALIAS} command in
-	{dos9_auto|Dos9_Auto.bat} that associate {HELP} with {hlp|HLP}.
+	{pbat_auto|pBat_Auto.bat} that associate {HELP} with {hlp|HLP}.
 	This alias can be removed by removing the following line from
-	your {Dos9_Auto.bat}:
+	your {pBat_Auto.bat}:
 
 ${ALIAS /b HELP=hlp.bat}
 

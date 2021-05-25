@@ -27,7 +27,7 @@
 #include <strings.h>
 #endif
 
-#include <libDos9.h>
+#include <libpBat.h>
 
 #include "Tea.h"
 #include "out/tea_out.h"
@@ -41,9 +41,9 @@ int main(int argc, char *argv[])
 	LP_OUTPUT_HANDLER pOutputHandler=Tea_TextOutputHandler;
 	LP_PARSE_HANDLER pParseHandler=Tea_TextParseHandler;
 
-	if (Dos9_LibInit() == -1) {
+	if (pBat_LibInit() == -1) {
 
-		puts("Error : Unable to load LibDos9. Exiting ...");
+		puts("Error : Unable to load LibpBat. Exiting ...");
 		exit(-1);
 
 	}
@@ -56,15 +56,15 @@ int main(int argc, char *argv[])
 	int i=1,
 	    iContinue=TRUE;
 
-	lpEsEncoding=Dos9_EsInit();
-	Dos9_EsCpy(lpEsEncoding, "US-ASCII");
+	lpEsEncoding=pBat_EsInit();
+	pBat_EsCpy(lpEsEncoding, "US-ASCII");
 
 	if (argc < 1) {
 		fputs("TEA :: Error : Invalid command line\n", stderr);
 		return -1;
 	}
 
-	Dos9_SetNewLineMode(DOS9_NEWLINE_LINUX);
+	pBat_SetNewLineMode(PBAT_NEWLINE_LINUX);
 
 	while (argv[i] && iContinue) {
 
@@ -113,15 +113,15 @@ int main(int argc, char *argv[])
 
 			if (!stricmp("UTF-8" ,argv[i])) {
 
-				Dos9_SetEncoding(DOS9_UTF8_ENCODING);
+				pBat_SetEncoding(PBAT_UTF8_ENCODING);
 
 			} else {
 
-				Dos9_SetEncoding(DOS9_BYTE_ENCODING);
+				pBat_SetEncoding(PBAT_BYTE_ENCODING);
 
 			}
 
-			Dos9_EsCpy(lpEsEncoding, argv[i]);
+			pBat_EsCpy(lpEsEncoding, argv[i]);
 
 		} else if (!strcmp("/?", argv[i])) {
 
@@ -180,7 +180,7 @@ int main(int argc, char *argv[])
 
 	fclose(pOutput);
 
-	Dos9_LibClose();
+	pBat_LibClose();
 
 	return 0;
 }

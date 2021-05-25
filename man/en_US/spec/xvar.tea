@@ -1,5 +1,5 @@
 #
-#   Dos9 Manual pages, The Dos9 project
+#   pBat Manual pages, The pBat project
 #   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -17,14 +17,14 @@
 #
 {{Special variables}}
 
-	Special variables are internal variables provided by {../dos9|Dos9}.
+	Special variables are internal variables provided by {../pbat|pBat}.
 	Special variables are local, thus they can not be inherited by
 	external programs.
 
 {{Special variable use}}
 
 	Special variables can not be modified, the can only be defined
-	by {../dos9|Dos9}, the {../call|CALL command} or the
+	by {../pbat|pBat}, the {../call|CALL command} or the
     {../for|FOR command}.
 
     There is basically two types of special variables:
@@ -94,7 +94,7 @@
 	Several options may be combined simultaneously (up to 16 different options).
 	
 	As options are letters, conflicts can happen between variables
-	names and options. If it is the case {Dos9} will use the longest combination
+	names and options. If it is the case {pBat} will use the longest combination
 	of options (maximum greediness). As an example, the following code :
 
 	${ECHO %%~aI}
@@ -107,7 +107,7 @@
 
 		- Otherwise, no expansion takes place.
 
-	When the {%0} variable gets expanded, {Dos9} has a slightly different
+	When the {%0} variable gets expanded, {pBat} has a slightly different
 	behaviour:
 
 		- if {%0} or {%~0} is specified, the variable will be replaced by

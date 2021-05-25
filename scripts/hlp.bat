@@ -216,7 +216,7 @@ if "%~1" equ "" (
 SET i=0
 
 FOR /F "tokens=1,* delims=" %%A IN ('type hlpdb | find /i /e "*%~1**" ') DO (
-	SET /a:I i+=1
+	SET /a i+=1
 	SET tmp=%%B
 	SET HlpPath[!i!]=!tmp:txt=%mode%!
  	SET HlpPath[!i!].name=%%A

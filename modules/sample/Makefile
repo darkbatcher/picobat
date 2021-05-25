@@ -3,10 +3,10 @@ include $(ROOTDIR)/config.mk
 
 SOURCES = Sample.c
 
-OBJ_FILES = $(SOURCES:.c=.o) ../lib/Dos9_Module.o
+OBJ_FILES = $(SOURCES:.c=.o) ../lib/pBat_Module.o
 
-LDFLAGS += $(LIBDOS9_LD) 
-CFLAGS += $(LIBDOS9_INC) -I../lib/
+LDFLAGS += $(LIBPBAT_LD) 
+CFLAGS += $(LIBPBAT_INC) -I../lib/
 
 all: sample
 bin: sample

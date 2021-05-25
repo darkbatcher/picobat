@@ -1,1 +1,1 @@
-dos9 ../dos9/errors/Dos9_Errors.c ../dos9/lang/Dos9_Lang.c ../dos9/lang/Dos9_ShowHelp.c
+pBat ../pBat/errors/pBat_Errors.c ../pBat/lang/pBat_Lang.c ../pBat/lang/pBat_ShowHelp.c

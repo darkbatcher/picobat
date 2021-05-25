@@ -22,7 +22,7 @@
 #include <errno.h>
 #include <string.h>
 
-#include "libDos9.h"
+#include "libpBat.h"
 #include "Tea.h"
 
 const char* lpTeaOpenDelimiters[]= {"{{" , "${", NULL};
@@ -33,8 +33,8 @@ const char* lpNewParagraphMark[]= {"\n", NULL};
 TEAPAGE*    Tea_PageLoad(const char* lpFilename, LP_PARSE_HANDLER pHandler)
 {
 	FILE* pFile;
-	ESTR* lpEstr=Dos9_EsInit();
-	ESTR* lpTotalFile=Dos9_EsInit();
+	ESTR* lpEstr=pBat_EsInit();
+	ESTR* lpTotalFile=pBat_EsInit();
 	TEAPAGE *lpTeaPage;
 
 	int iFirstline=1;
@@ -43,23 +43,23 @@ TEAPAGE*    Tea_PageLoad(const char* lpFilename, LP_PARSE_HANDLER pHandler)
 	if (!(pFile=fopen(lpFilename, "r"))) return NULL;
 
 	/* r�cup�ration de tout le contenu du fichier */
-	while (!(Dos9_EsGet(lpEstr, pFile))) {
+	while (!(pBat_EsGet(lpEstr, pFile))) {
 
-		if ((_Dos9_TextMode==DOS9_UTF8_ENCODING)
-		    && (!strncmp(Dos9_EsToChar(lpEstr), "\xEF\xBB\xBF", 3))
+		if ((_pBat_TextMode==PBAT_UTF8_ENCODING)
+		    && (!strncmp(pBat_EsToChar(lpEstr), "\xEF\xBB\xBF", 3))
 		    && (iFirstline)) {
 
-			if (*(Dos9_EsToChar(lpEstr)+3)!='#')
-				Dos9_EsCat(lpTotalFile, Dos9_EsToChar(lpEstr)+3);
+			if (*(pBat_EsToChar(lpEstr)+3)!='#')
+				pBat_EsCat(lpTotalFile, pBat_EsToChar(lpEstr)+3);
 			iFirstline=0;
 			continue;
 
 		}
 
-		if (*Dos9_EsToChar(lpEstr)=='#')
+		if (*pBat_EsToChar(lpEstr)=='#')
 			continue ; /* a line begining with '#' is a comment */
 
-		Dos9_EsCatE(lpTotalFile, lpEstr);
+		pBat_EsCatE(lpTotalFile, lpEstr);
 	}
 
 	/* fermeture du fichier */
@@ -68,7 +68,7 @@ TEAPAGE*    Tea_PageLoad(const char* lpFilename, LP_PARSE_HANDLER pHandler)
 	pHandler(TEA_MSG_READ_FILE, lpTotalFile);
 
 	/* on parse le fichier */
-	lpTeaPage=Tea_ParseStringBlock(Dos9_EsToChar(lpTotalFile));
+	lpTeaPage=Tea_ParseStringBlock(pBat_EsToChar(lpTotalFile));
 
 	/* on nettoie la page des espaces inutiles et on re-d�coupe les paragraphes */
 	Tea_PurifyPage(lpTeaPage);
@@ -81,8 +81,8 @@ TEAPAGE*    Tea_PageLoad(const char* lpFilename, LP_PARSE_HANDLER pHandler)
 	/* on parse les paragraphes */
 	Tea_ParseParagraphs(lpTeaPage, pHandler);
 
-	Dos9_EsFree(lpTotalFile);
-	Dos9_EsFree(lpEstr);
+	pBat_EsFree(lpTotalFile);
+	pBat_EsFree(lpEstr);
 
 	return lpTeaPage;
 }

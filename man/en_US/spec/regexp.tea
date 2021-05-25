@@ -1,5 +1,5 @@
 #
-#   Dos9 Manual pages, The Dos9 project
+#   pBat Manual pages, The pBat project
 #   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 	specific syntax among a set of elements. They allow elements or
 	files to be selected using an {expression}.
 
-	{Regular expressions} provided by {dos9|Dos9} are based on those
+	{Regular expressions} provided by {pbat|pBat} are based on those
 	provided by {cmd.exe}. As such, they are considerably less flexible
 	than state-of-the-art regular expressions like {PCRE}.
 
@@ -41,7 +41,7 @@
 		- For any other character in {expression}, the string to be checked must
 		contain exactly the same character in the same position.
 		
-	When {*} is used, {../dos9|Dos9} uses the shortest correspondence between
+	When {*} is used, {../pbat|pBat} uses the shortest correspondence between
 	the {expression} and the string to test. As an example the string
 	{atest_test} does not match the expression {u*test} whereas it matches
 	the expression {u*_test}.
@@ -60,34 +60,34 @@
 	
 	${my/regu*/expressi?n/*}
 
-		- {my} : {Dos9} looks for a file nammed {my} in the current directory.
+		- {my} : {pBat} looks for a file nammed {my} in the current directory.
 		
-		- {regu*} : {Dos9} looks for directories which name matches {regu*} (ie. name
+		- {regu*} : {pBat} looks for directories which name matches {regu*} (ie. name
 		beginning by the string "regu") in {my/} folder
 		
-		- {expressi?n} : {Dos9} looks for directories which name matches {expressi?n} 
+		- {expressi?n} : {pBat} looks for directories which name matches {expressi?n} 
 		inside the set of directories found previously.
 
-		- {*} : {Dos9} looks for files and directories which name matches inside the
+		- {*} : {pBat} looks for files and directories which name matches inside the
 		set of directories from the previous set.
 
 	A recursive mode is available for file search, in this case, all the tokens
 	excepting the last one are used to find directories where the recursive search
-	will take place. Then, {Dos9} searches recursively for any file or directory matching
+	will take place. Then, {pBat} searches recursively for any file or directory matching
 	the last token within the search directories.
 	
 	If we consider the same expression:
 
 	${my/regu*/expressi?n/*}
 
-		- {my/regu*/expressi?n/} : {Dos9} looks for directories that match {my/regu*/expressi?n/}
+		- {my/regu*/expressi?n/} : {pBat} looks for directories that match {my/regu*/expressi?n/}
 
-		- {*} : Dos9 looks for any directories or files inside the directories found at the
+		- {*} : pBat looks for any directories or files inside the directories found at the
 		previous step which name matches {*}.
 		
 {{Note}}
 
-	Currently {Dos9} include no backtracking systems, meaning that it is always the most
+	Currently {pBat} include no backtracking systems, meaning that it is always the most
 	greedy possible. In addition, using {cmd.exe} the expression {*.*} is a bit specific
 	because it basically means "only files". This is not included inside windows thanks
 	to the wide support of {attr|files attributes}.

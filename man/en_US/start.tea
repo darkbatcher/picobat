@@ -1,5 +1,5 @@
 #
-#   Dos9 Manual pages, The Dos9 project
+#   pBat Manual pages, The pBat project
 #   Copyright (C) 2012-2017  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -31,14 +31,14 @@ ${START [/d dir] [/b] [/min] [/max] [/wait] ["title"] [command [parameter ...]]}
 	- {command} : A path to the executable to be launched. This path can also
 	refer to a {file} name, in which case the executable associated with the
 	file type will be launched with {command} as argument. If no {command} is
-	given, {START} launches {dos9|Dos9} by default.
+	given, {START} launches {pbat|pBat} by default.
 	
 	- {parameter ...} : A list of parameters to be passed to {command}.
 	
 	- {"title"} : The new window title (only supported under Windows). The
 	{"title"} parameter is handled the same way as with cmd. That is, if the
 	first parameter in the line is surrounded by quotation marks, then
-	{Dos9} will use it as {"title"}. Thus it is quite important to specify
+	{pBat} will use it as {"title"}. Thus it is quite important to specify
 	{"title"} (even as an empty string) to prevent buggy behaviours if {command}
 	happens to be also surrounded by quotes.
 	
@@ -65,8 +65,8 @@ ${START [/d dir] [/b] [/min] [/max] [/wait] ["title"] [command [parameter ...]]}
 
     Note that the implementation using {xdg-open} might be a bit buggy as
     this script has plenty of defaults, but it is more widespread than
-    {mimeopen} as it is older. Dos9 gives priority to {mimeopen} thus installing
-    it is highly recommended to get the best experience of {dos9|Dos9} on
+    {mimeopen} as it is older. pBat gives priority to {mimeopen} thus installing
+    it is highly recommended to get the best experience of {pbat|pBat} on
     UNIX-based platforms
 	
 	Available since {218.2}.

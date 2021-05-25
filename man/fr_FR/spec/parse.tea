@@ -1,5 +1,5 @@
 #
-#   Dos9 Manual pages, The Dos9 project
+#   pBat Manual pages, The pBat project
 #   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -17,49 +17,49 @@
 #
 {{Le parsage}}
 
-	Le parsage des lignes de commandes est effectué par {../dos9|Dos9} dans un ordre.
+	Le parsage des lignes de commandes est effectué par {../pbat|pBat} dans un ordre.
 	La compréhension du déroulement de ces étapes et de leur principe est très
 	pratique dans le cas de la programmation batch.
 
 {{Les étapes du parsage}} 
 
-	Lors du parsage, Dos9 effectue les opérations de parsage dans l'ordre suivant :
+	Lors du parsage, pBat effectue les opérations de parsage dans l'ordre suivant :
 
-	- {Lecture d'une ligne} : Lors de cette étape, {../dos9|Dos9} lit une {cmdline|ligne de commande}, soit à partir
+	- {Lecture d'une ligne} : Lors de cette étape, {../pbat|pBat} lit une {cmdline|ligne de commande}, soit à partir
 	de commandes entrées au clavier, où soit au travers d'un fichier. Il existe deux mode de lecture
 	de fichiers scripts, en fonction de l'état de l'option {CMDLYCORRECT}:
 	
 	-- Si {CMDLYCORRECT} est désactivé, le fichier est lu en une seule passe, en préparsant les lignes de
-	commandes. Ce comportement est spécifique à {Dos9}, il permet de gagner du temps d'exécution par rapport
-	à la méthode de lecture historique des fichiers batch. Avant d'exécuter une nouvelle ligne, {Dos9}
+	commandes. Ce comportement est spécifique à {pBat}, il permet de gagner du temps d'exécution par rapport
+	à la méthode de lecture historique des fichiers batch. Avant d'exécuter une nouvelle ligne, {pBat}
 	vérifie que le script n'a pas été modifié, sinon, il le recharge.
 	
-	-- Si {CMDLYCORRECT} est activé, {Dos9} utilise la même mécanique de lecture que {cmd.exe}. C'est-à-dire
+	-- Si {CMDLYCORRECT} est activé, {pBat} utilise la même mécanique de lecture que {cmd.exe}. C'est-à-dire
 	qu'avant chaque nouvelle lecture de ligne dans un script, le script est ouvert, la ligne est lue,
 	et le script est refermé. Cette méthode est héritée des anciennes versions de ms-dos, dont la mémoire
 	était très limitée. Même si elle permet des gains en mémoire, elle implique une forte pénalité en
-	termes de performance. C'est pour cette raison qu'elle n'est pas utilisée par défaut par Dos9.
+	termes de performance. C'est pour cette raison qu'elle n'est pas utilisée par défaut par pBat.
 
 	@- Le changement de mode de {CMDLYCORRECT} entraîne un redémarrage du script depuis le début. Il
 	n'est donc pas conseillé de modifier cette option en cours d'exécution
 	
-	- {Expansion conventionnelle} : Lors de cette étape Dos9 développe les variables selon 
+	- {Expansion conventionnelle} : Lors de cette étape pBat développe les variables selon 
 	{exp|l'expansion conventionnelle}. Les variables entourées par des {%} sont alors
 	développées.
 
-	- {Détection des} {red|redirections} : Lors de cette étape, Dos9 détecte les redirections
+	- {Détection des} {red|redirections} : Lors de cette étape, pBat détecte les redirections
 	et les applique.
 
-	- {Détecton des} {condop|opérateurs conditionnels} : Lors de cette étape, Dos9 détecte les
+	- {Détecton des} {condop|opérateurs conditionnels} : Lors de cette étape, pBat détecte les
 	opérateurs conditionnels.
 
-	- {Détection des arguments} : Lors de cette étape, Dos9 détecte les arguments de la
+	- {Détection des arguments} : Lors de cette étape, pBat détecte les arguments de la
 	{cmdline|ligne de commande}.
 	
 	- {Expansion des} {xvar|variables spéciales} : Lors de cette étape, les variables
 	spéciales sont dévellopées.
 
-	- {Expansion retardée} : Lors de cette étape, Dos9 procède à l'{exp|expansion retardée} des
+	- {Expansion retardée} : Lors de cette étape, pBat procède à l'{exp|expansion retardée} des
 	variable. Les variables entourées par des {!} seront dévellopées.
 
 {{Remarques}}

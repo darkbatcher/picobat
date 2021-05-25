@@ -1,6 +1,6 @@
 /*
  *
- *   Dos9 DUMP, a free file binary dumper, The Dos9 Project
+ *   pBat DUMP, a free file binary dumper, The pBat Project
  *   Copyright (C) 2013-2018 Romain GARBI
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -138,7 +138,7 @@ struct dump_types_t types[] = {
 
 void help(void)
 {
-    fputs("Dos9 dump [2.0] (" HOST ") - " __DATE__ "\n"
+    fputs("pBat dump [2.0] (" HOST ") - " __DATE__ "\n"
           "Copyright (c) 2013-2018 Romain Garbi\n\n", stderr);
 
     fputs("Usage: dump [/H] [/B[:]format] [/T[:]type] [files ...]\n"

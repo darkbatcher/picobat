@@ -23,7 +23,7 @@
 #include <string.h>
 
 #include "Tea.h"
-#include "libDos9.h"
+#include "libpBat.h"
 
 TEANODE*    Tea_AllocTeaNode(void)
 {

@@ -10,7 +10,7 @@ used almost new code.
 
 * Added welcome screen \(Two versions\).
 
-* Fixed a parsing bug \(The Function Dos9\_ParseStream\(\) always returned 
+* Fixed a parsing bug \(The Function pBat\_ParseStream\(\) always returned 
   NULL\).
 
 * Added initialisation routine \( main\(\) \).
@@ -49,7 +49,7 @@ used almost new code.
 
 * api is now cross-platform.
 
-* Dos9 now works pretty well on linux.
+* pBat now works pretty well on linux.
 
 * added lot of support for linux.
 
@@ -57,16 +57,16 @@ used almost new code.
 
 * thought about use of dynamic files to easily change language.
 
-* Dos9 runs 'Dos9\_Auto.bat' at launch, that initializes Variables to be 
+* pBat runs 'pBat\_Auto.bat' at launch, that initializes Variables to be 
   Cross-platform.
 
-* Dos9 has now 3 native variables :
+* pBat has now 3 native variables :
 
-  * %DOS9\_OS% : The operating system that is currently running Dos9.
+  * %PBAT\_OS% : The operating system that is currently running pBat.
 
-  * %DOS9\_VERSION% : The version of the running Dos9.
+  * %PBAT\_VERSION% : The version of the running pBat.
 
-  * %DOS9\_PATH% : The path of Dos9 interpreter.
+  * %PBAT\_PATH% : The path of pBat interpreter.
 
 ## Monday 11th, March ##
 
@@ -111,11 +111,11 @@ used almost new code.
 
 * Added different packages :
 
-  * Dos9 Project HLP : A man page viewer.
+  * pBat Project HLP : A man page viewer.
 
-  * Dos9 Project TEA : A simple, fast and tiny text processor.
+  * pBat Project TEA : A simple, fast and tiny text processor.
 
-  * Dos9 Project DUMP : A hex-dumper.
+  * pBat Project DUMP : A hex-dumper.
 
 * Added i18n support \(through GNU gettext\).
 
@@ -158,13 +158,13 @@ used almost new code.
 
 ## Friday 13th, December ##
 
-* Solved some bugs in libDos9 \(a hazardous non initialized var\)
+* Solved some bugs in libpBat \(a hazardous non initialized var\)
 
 * Added support **FOR /F** loops with files as input.
 
 ## Thursday 2nd, January 2014 ##
 
-* Corrected **Dos9\_ScriptCommand.c** bugs in which the delayed expansion was 
+* Corrected **pBat\_ScriptCommand.c** bugs in which the delayed expansion was 
   not executed even if it was enabled.
 
 * Corrected some manual page
@@ -185,7 +185,7 @@ used almost new code.
 * added final support of **FOR /F** including the use of command outputs as 
   **FOR** input.
 
-* added **DOS9\_SEARCH\_NO\_CURRENT\_DIR** which does not include the pseudo 
+* added **PBAT\_SEARCH\_NO\_CURRENT\_DIR** which does not include the pseudo 
   directories '..' and '.'.
 
 * corrected a compatibility bug with **cmd.exe**: **DIR /b** returned the 
@@ -230,9 +230,9 @@ used almost new code.
 
   * **YYYY** : Is the year the version was released.
 
-  * **major** : The major version of **Dos9**.
+  * **major** : The major version of **pBat**.
 
-  * **minor** : The minor version of **Dos9**.
+  * **minor** : The minor version of **pBat**.
 
   * **tag** : An optional character, meaning :
 
@@ -242,7 +242,7 @@ used almost new code.
 
 * Fixed problem with broken make.
 
-* Enhanced features of **FILELIST\*** functions of libDos9. Search is now 
+* Enhanced features of **FILELIST\*** functions of libpBat. Search is now 
   quicker. It also resulted in better execution times of the **FOR /R** 
   function \(even though still deprecated\).
 
@@ -257,7 +257,7 @@ used almost new code.
 
 * Added endianness support to **DUMP** command.
 
-* Behaviour of **Dos9** is now the same as **cmd.exe**'s one towards block.
+* Behaviour of **pBat** is now the same as **cmd.exe**'s one towards block.
 
 * Fixed a bug that required both **@** and **:** signs to be at first column.
 
@@ -320,7 +320,7 @@ used almost new code.
 ## Thursday 13th, February ##
 
 * Found a bug that occurs when using **CD** command from inside a batch 
-  script, if the path to the script given is relative, **Dos9** tries to open 
+  script, if the path to the script given is relative, **pBat** tries to open 
   it in the new current path, and fail, or execute a different script 
   depending on circumstances. This is to be fixed in next release \(that will 
   include a bunch of improvements, like **CALL**, I hope\).
@@ -355,7 +355,7 @@ used almost new code.
   correctly used, it used to be ignored when using internal commands.
 
 * Decided of a change in the way to deal with variables, in order to enable 
-  more compatibility between **Dos9** and **CMD.exe**. The changes resides in 
+  more compatibility between **pBat** and **CMD.exe**. The changes resides in 
   the way var and special vars are parsed.
 
   On the one hand, to make the difference between the two kind of variables, I 
@@ -380,7 +380,7 @@ used almost new code.
   work either, but well, it can just happen on a very few cases, so that it is 
   preferable not to use this notation.
 
-* Changed **Dos9** behaviour towards **%0, ..., %9** variables. Those which 
+* Changed **pBat** behaviour towards **%0, ..., %9** variables. Those which 
   are not explicitelly specified at startup will be filled with an empty 
   string, and will expand to the empty string.
 
@@ -400,7 +400,7 @@ used almost new code.
 
   * Returning **0** on success.
 
-* Added an example of batch powered by Dos9, a multifunction caculator using 
+* Added an example of batch powered by pBat, a multifunction caculator using 
   both floating point arithmetics and integer arithmetics.
 
 ## Thursday 6th, March ##
@@ -468,8 +468,8 @@ used almost new code.
   were called modules, and are now just outdated piece of code. I hope those 
   changes to be functional within a short delay. It is mainly about getting 
   rid of old and ugly pieces of codes i've been writing about two years ago. 
-  Some function have also been transfered to libDos9, this is limited however, 
-  since Dos9 is not stable enough to get it in a whole library.
+  Some function have also been transfered to libpBat, this is limited however, 
+  since pBat is not stable enough to get it in a whole library.
 
 ## Saturday 8th, March ##
 
@@ -477,14 +477,14 @@ used almost new code.
   implementations are much more safe and elegant. Lots of repetitions in the 
   code have be gathered into singles function to make it more maintainable.
 
-* Silenced **Dos9\_Jump.c**, but hoping to get it works within a short time.
+* Silenced **pBat\_Jump.c**, but hoping to get it works within a short time.
 
 * Added new string search based that take account of escaped-characters \(ie. 
   Characters preceded by '^'\).
 
 * Lots of bugfixes, particularly with the new parser and reader.
 
-* **Dos9** is much more unstable than it was, but it is to be fixed quickly 
+* **pBat** is much more unstable than it was, but it is to be fixed quickly 
   since new version are easier to maintain.
 
 * Changed behaviour of function than are used to get command-line arguments. 
@@ -501,31 +501,31 @@ used almost new code.
 
         if foo^ bar equ "foo bar" echo YES
 
-  Using, **Dos9**, the code will output **YES**. However, **cmd.exe** will 
+  Using, **pBat**, the code will output **YES**. However, **cmd.exe** will 
   not. It as been chosen to promote the first syntax since it is more easy to 
   handle and far less tricky than escaping characters with **cmd.exe**, which 
   require an almost random number of '^' to escape some character.
 
-* Optimised **Dos9\_RunBlock\(\)** function.
+* Optimised **pBat\_RunBlock\(\)** function.
 
 ## Wednesday 12th, March ##
 
-* Changed behaviour of the thread functions of libDos9. The **THREAD** 
+* Changed behaviour of the thread functions of libpBat. The **THREAD** 
   structure now refers to the thread ID rather than to a handle to that 
   thread. This new behaviour make it possible to work with thread without left 
   a handle on this thread opened. It also enables the stack to contain 
   **THREAD** structures on both **\*nix** and **windows**.
 
-* Added time-out to the Dos9\_WaitForAllThreads function. This is useful in 
+* Added time-out to the pBat\_WaitForAllThreads function. This is useful in 
   case of deadlocks or in case of thread that does not terminate.
 
-* Added Dos9\_AbortAllThread function, that kills all remaining thread \(only 
-  those that were launched through Dos9\_BeginThread\)
+* Added pBat\_AbortAllThread function, that kills all remaining thread \(only 
+  those that were launched through pBat\_BeginThread\)
 
-* Added Dos9\_AbortThread function, that kills a thread.
+* Added pBat\_AbortThread function, that kills a thread.
 
-* fixed a bug in the thread library that sometimes causes Dos9 to wait 
-  indefinitely, because function Dos9\_WaitForAllThread and Dos9\_EndThread 
+* fixed a bug in the thread library that sometimes causes pBat to wait 
+  indefinitely, because function pBat\_WaitForAllThread and pBat\_EndThread 
   sometimes deadlocked, in a random basis.
 
 * Re-enable **GOTO** function, that works now \(even with cross file 
@@ -549,20 +549,20 @@ used almost new code.
 * Fixed bugs with the run functions. The use of **program || goto error** to 
   perform feature test is avaliable for both windows and \*nix.
 
-* Fixed bugs with **Dos9\_SplitPath** command in \*nix.
+* Fixed bugs with **pBat\_SplitPath** command in \*nix.
 
 * Added a search in **%PATH%** and **%PATHEXT%** \(only in windows\) before 
   running any command.
 
 * Added a redirection for command that have **.cmd** or **.bat** as extension. 
-  Those files are now executed by a sub process of **Dos9** instead of being 
+  Those files are now executed by a sub process of **pBat** instead of being 
   loaded by **cmd.exe**.
 
-* Fixed bug with **Dos9\_GetFilePath** function. It prevented executables that 
+* Fixed bug with **pBat\_GetFilePath** function. It prevented executables that 
   were in one of the **%PATH%** directory to be found if a folder with the 
   same name was in the same directory.
 
-* Fixed bug with the **Dos9\_FileExists** function from libDos9. It sometimes 
+* Fixed bug with the **pBat\_FileExists** function from libpBat. It sometimes 
   returned true for files that where in the path though not in the current 
   directory.
 
@@ -572,10 +572,10 @@ used almost new code.
 * Improved block support by providing more routines and by making the code 
   more efficient.
 
-* Fixed a bug in **Dos9\_ExpandVar** function that was introduced build ago 
+* Fixed a bug in **pBat\_ExpandVar** function that was introduced build ago 
   when rules for expansion changed. I'm affraid not to have seen it before.
 
-* Fixed a bug with **Dos9\_EsCpyN** function in libDos9. If the functions with 
+* Fixed a bug with **pBat\_EsCpyN** function in libpBat. If the functions with 
   0 as iSize argument, although the function is expected to produce a void 
   string, it failed in windows, thanks to microsoft's crt implementation, that 
   throws a SIGSEGV if the last parameter of **strncpy** is 0.
@@ -584,7 +584,7 @@ used almost new code.
   described in the documentation : If several delimiters were encountered in a 
   raw, they were not skipped.
 
-* Fixed a bug with the **ECHO** command. The prompt line \(ie. **DOS9 
+* Fixed a bug with the **ECHO** command. The prompt line \(ie. **PBAT 
   ...>**\) was displayed whenever the **ECHO off** flag was set, on direct 
   input mode.
 
@@ -597,11 +597,11 @@ used almost new code.
   space, making the result inconsistent.
 
 * Made the hlp to work again, without problem, since version **0.7** and the 
-  deep changes made into **Dos9** core to get something more modern.
+  deep changes made into **pBat** core to get something more modern.
 
 ## Sunday 16th, March ##
 
-* Started building a **x64** version of Dos9. I experienced troubles because 
+* Started building a **x64** version of pBat. I experienced troubles because 
   of the lack of **x64** version of **MinGW**. However, I managed to get a 
   distribution of mingw-w64, the **MinGW** compiler adapted for **x64**, in 
   the TDM-gcc. The install of **libintl** \(and libiconv, on which libintl 
@@ -609,24 +609,24 @@ used almost new code.
   tricks to get it compiled in the x64 version. This is actually difficult to 
   build, and unstable as a did not perform further tests.
 
-* Started profiling the **Dos9** code base, looking for making **Dos9** more 
+* Started profiling the **pBat** code base, looking for making **pBat** more 
   fast. The use of **gprof** has brought several interesting analysis. On the 
   one hand, I can't get explanation why is **cmd.exe** faster for long files, 
-  although if both are run at the same time, **Dos9** perform about twice as 
+  although if both are run at the same time, **pBat** perform about twice as 
   much commands by second. The things to be updated are:
 
-  * **Dos9\_EsInit** and **Dos9\_EsFree** function are far too expensive. It 
+  * **pBat\_EsInit** and **pBat\_EsFree** function are far too expensive. It 
     sometimes consumes **10%** of the global time-run, thus, we removed parts 
-    of code from the **libDos9** library.
+    of code from the **libpBat** library.
 
-  * **Dos9\_GetCommandProc** is far too expensive. I'm currently looking for 
+  * **pBat\_GetCommandProc** is far too expensive. I'm currently looking for 
     an alternative, such as hash function. I haven't found a good one yet 
     \(however\), and i will probably write it by myself.
 
-  * I'm also to optimise the execution times of **Dos9\_String.h**. Those 
+  * I'm also to optimise the execution times of **pBat\_String.h**. Those 
     functions are almost ubiquitous in the code, so that large parts of code 
     will benefit from better execution rates. I'm especially targeting 
-    **Dos9\_SearchChar** and **Dos9\_SearchToken**, that account for a large 
+    **pBat\_SearchChar** and **pBat\_SearchToken**, that account for a large 
     share \(about 10% time execution overall\).
 
   All those test have be made for normal script optimisation, it was tested 
@@ -635,9 +635,9 @@ used almost new code.
   are the most time consuming are not the same. Though, the functions i listed 
   before were also much more time consuming than they need to be.
 
-* Improved efficiency of **Dos9\_String.h** and **Dos9\_Estr.c** from the 
-  **libDos9** library. Also disabled some piece of code that ran thread in 
-  some functions, that basically made them slow down. **Dos9** now achieve 
+* Improved efficiency of **pBat\_String.h** and **pBat\_Estr.c** from the 
+  **libpBat** library. Also disabled some piece of code that ran thread in 
+  some functions, that basically made them slow down. **pBat** now achieve 
   almost equivalent performances in **for** loops \(about 100 lines/s less 
   than **cmd.exe**, without further optimisation\), it also reach got 
   execution rates at script level \(with about 3250 lines/s while cmd.exe runs 
@@ -651,7 +651,7 @@ used almost new code.
 
 * Started comparisons between **GCC** optimisation levels.
 
-* Fixed a bug introduced in the function **Dos9\_SearchLastToken**. It appears 
+* Fixed a bug introduced in the function **pBat\_SearchLastToken**. It appears 
   that, on windows, the code runs faster using **-O2** than using **-O3** 
   optimisation switches, this might be caused by processor caching, but 
   however, this should not be expected to have the same effect on variouss 
@@ -662,20 +662,20 @@ used almost new code.
   least double. In fact, by experimenting, I got only about **4000 l/s**, 
   which it the speed of **cmd** on my computer when it consumes about 80%-90% 
   of the cpu, in random occasion, because cmd.exe's has really random 
-  performances. Instead, **Dos9** is limited to approximately **25%**.
+  performances. Instead, **pBat** is limited to approximately **25%**.
 
 ## Saturday 23th, March ##
 
-* Fixed a bug in **Dos9\_SearchLastChar** function.
+* Fixed a bug in **pBat\_SearchLastChar** function.
 
-* Fixed a bug with redirection that was not right dealt with. **Dos9** did not 
+* Fixed a bug with redirection that was not right dealt with. **pBat** did not 
   check whether several block are in a row on the same line.
 
 * Added some functionalities to the **cmd/hlp.bat** script, which is meant to 
   replace old-fashioned **hlp** manual page viewer. It is basically designed 
   to act as a manual page manager rather than just a viewer, by providing 
   interfaces to build manual trees, and to get manual tress from the 
-  repositories at **dos9.org** \(this is to be implemented later\).
+  repositories at **pbat.org** \(this is to be implemented later\).
 
 * Changed names of the manual-pages subdirectories, they now match up with 
   traditional \*NIX-like local names that are widely used. Note that only 
@@ -683,8 +683,8 @@ used almost new code.
 
 ## Tuesday 25th, March ##
 
-* Implemented replacement for old **ENABLE/DISABLEDOS9MODE**. Instead of the 
-  variable, **Dos9** provides the **CMDLYCORRECT** options that can be set 
+* Implemented replacement for old **ENABLE/DISABLEPBATMODE**. Instead of the 
+  variable, **pBat** provides the **CMDLYCORRECT** options that can be set 
   through **SETLOCAL**, and that enables more compatibility features for 
   **cmd.exe**.
 
@@ -706,7 +706,7 @@ used almost new code.
 
 * Fixed bug in Makefiles.
 
-* Fixed a file from libDos9 that still used old name **CALLSTACK** instead of 
+* Fixed a file from libpBat that still used old name **CALLSTACK** instead of 
   stack.
 
 * Found out that in some cases, **tea** breaks unicode sequences by intruding 
@@ -727,11 +727,11 @@ used almost new code.
 
 ## Wednesday 2nd, April ##
 
-* Implemented aliases within Dos9
+* Implemented aliases within pBat
 
 * Added **ALIAS** command.
 
-* Improved robustness of **Dos9\_AddCommandDynamic**.
+* Improved robustness of **pBat\_AddCommandDynamic**.
 
 * Fixed some bugs with **CALL** function that was not really functional. It 
   works much better now, but the features have not been all tested yet.
@@ -745,12 +745,12 @@ used almost new code.
 
 ## Tuesday 3rd, April ##
 
-* Updated build system, so that building **Dos9** can allmost be done without 
+* Updated build system, so that building **pBat** can allmost be done without 
   user intervention. It's as simple as typing the following line:
 
         make
 
-* Switched to version **2014.0.9**, because **dos9** is becoming pretty 
+* Switched to version **2014.0.9**, because **pbat** is becoming pretty 
   develloped now.
 
 ## Monday 7th, April ##
@@ -781,10 +781,10 @@ used almost new code.
     **autotools** programs make the developer to use all the **autotools** 
     programs.
 
-  * A fix for the **Dos9** code itself. The last revisions of **Dos9** 
+  * A fix for the **pBat** code itself. The last revisions of **pBat** 
     included a lot of features that had not been tested on \*NIX operating 
     systems. So that numerous incompatibilities were introduced along source 
-    code modification. Mainly, the **thread** part of **libDos9** had been 
+    code modification. Mainly, the **thread** part of **libpBat** had been 
     left totally untested on real system for versions. I apologize for that, I 
     should not have been waiting for such a long time to upgrade. So, fixes in 
     the code that have been made are:
@@ -792,30 +792,30 @@ used almost new code.
     * Make wrapper around undefined symbols coming from windows like 
       **stricmp** \(**strcasecmp** is used instead\).
 
-    * Fixed bugs from **libDos9/threads**, It caused double free exception for 
+    * Fixed bugs from **libpBat/threads**, It caused double free exception for 
       some errors.
 
     * Fixed used of **strupr** in **tea**. In fact, the symbol for **strupr** 
       that was intended to be used on **GNU/Linux** was used on **Windows** 
       platforms instead.
 
-    * Fixed incompatibilities in **libDos9/file**. In fact, default routines 
+    * Fixed incompatibilities in **libpBat/file**. In fact, default routines 
       for \*NIX used the functions **fopen** to check whether a file existed 
       or not. The bug was introduced because in many \*NIX systems, 
-      directories are indeed files that can be opened. **libDos9** now checks 
+      directories are indeed files that can be opened. **libpBat** now checks 
       for regular files using the **lstat** function instead.
 
     * Fixed incompatibilities with environment variables. This issue was 
       caused by the fact that environment variables are case-sensitive for 
       \*NIX operating systems while they are not for Windows systems. In fact, 
-      **Dos9** already capitalized variable names when variables were set, 
+      **pBat** already capitalized variable names when variables were set, 
       however, similar feature was not provided for expansion. This is now 
       fixed.
 
   * Fixes on other files, \(I mean, on files that are not required in order to 
-    make **Dos9** runing\). Those fixes include:
+    make **pBat** runing\). Those fixes include:
 
-    * Changed the name of the **Dos9** executable from **Dos9** to **dos9**. 
+    * Changed the name of the **pBat** executable from **pBat** to **pbat**. 
       This change will have no effect on windows, but it is usual, however, to 
       have command executable names in lower characters. I may implement a 
       feature for **GNU/linux** that ignore case for the command line. 
@@ -823,11 +823,11 @@ used almost new code.
       name, if you need compatibility, of course.
 
     * Fixed a bug with the translation system. It used to scan file 
-      **dos9/lang/Dos9\_Help.c** instead of file **dos9/lang/Dos9\_Lang.c**.
+      **pbat/lang/pBat\_Help.c** instead of file **pbat/lang/pBat\_Lang.c**.
 
-    * Fixed a bug from **Dos9\_Auto.bat**, the current version dit not 
-      included the path **%DOS9\_PATH%** in the **%PATH%** variable, that was 
-      problematic for \*NIX systems, however, the **Dos9** executable filename 
+    * Fixed a bug from **pBat\_Auto.bat**, the current version dit not 
+      included the path **%PBAT\_PATH%** in the **%PATH%** variable, that was 
+      problematic for \*NIX systems, however, the **pBat** executable filename 
       should be looked up by the program itself, rather than being included in 
       **%PATH%**.
 
@@ -852,7 +852,7 @@ used almost new code.
   of pipes\) to produce somewhat of a pipe effect, because I haven't actually 
   found a way to override the problem.
 
-* Fixed a bug with the **Dos9\_ParseOutput** function. It wasn't possible to 
+* Fixed a bug with the **pBat\_ParseOutput** function. It wasn't possible to 
   specify **2>&1** and **> foo** simultaneously, so, you it was not possible 
   to specify a redirection for **stdin** and **stdout** with **truncate** 
   attribute.
@@ -866,7 +866,7 @@ used almost new code.
 * Added a few fixes on languages, and I'm starting adding new messages for the 
   **file** commands.
 
-* Checked build on NetBSD. I've found out that **Dos9** conforms with 
+* Checked build on NetBSD. I've found out that **pBat** conforms with 
   **POSIX.1-2001**. Thus, On some platform, if you want to build if, you may 
   specify a configuration that defines the **\_POSIX\_C\_SOURCE** macro, that 
   is, type the configure line :
@@ -894,7 +894,7 @@ used almost new code.
   for some batch that needs enhanced compatibility features \(although they 
   should not need such compatibility features\).
 
-* Fixed a bug in **Dos9\_Thread.c**, threads functions were making casts from 
+* Fixed a bug in **pBat\_Thread.c**, threads functions were making casts from 
   different pointer sizes, ommiting the pointed object were different. Thus, 
   writing 8 bytes to a location which was supposed to be 4 bytes long, 
   depending on the locations of those data in the executable \(and hence 
@@ -908,7 +908,7 @@ used almost new code.
 
 ## Saturday 20th, April ##
 
-* Fixed a bug that caused **Dos9** to crash if either **%PATH%** or 
+* Fixed a bug that caused **pBat** to crash if either **%PATH%** or 
   **%PATHEXT%** \(only for windows\) were not in the command environment.
 
 * Corrected a bug with **tea** in **html** mode. The parser did used to escape 
@@ -917,7 +917,7 @@ used almost new code.
   noticed it until yet because most recent browsers do not care about such 
   errors, preventing error to be easilly triggered.
 
-* Fixed omission of **ansicon** on the **Dos9\_Auto.bat**, which is launched 
+* Fixed omission of **ansicon** on the **pBat\_Auto.bat**, which is launched 
   at startup.
 
 ## Saturday 14th, June ##
@@ -940,7 +940,7 @@ used almost new code.
 
             IF foo==foo echo  ") else ("
 
-    was understood differently by **Dos9** and **cmd.exe**. Now, the **"\) 
+    was understood differently by **pBat** and **cmd.exe**. Now, the **"\) 
     else \("** is considered to be escaped, and is no more interpreted as a 
     subcommand of **if**, as it did before.
 
@@ -963,7 +963,7 @@ used almost new code.
 
   * behaviour of function to remove quotation marks in parameters have also 
     changed in order to achieve more compatibility with **cmd.exe**. 
-    Basically, the algorithm that **Dos9** follows when removing parameters 
+    Basically, the algorithm that **pBat** follows when removing parameters 
     quotation marks is:
 
     * If the parameter begin with a quotation mark, then remove it, otherwise, 
@@ -972,7 +972,7 @@ used almost new code.
     * If the parameter end by a quotation mark, then remove it either. But, do 
       not remove it if the parameter does not begin with a quotation mark.
 
-* Cancelled the conversion of **Dos9** code to wide char. This was indeed far 
+* Cancelled the conversion of **pBat** code to wide char. This was indeed far 
   too hard \(it implied modifying almost any piece of code\), and had little 
   advantages \(huge incompatibilities between various platform, particularly 
   for non-c99 function that are obviously required in order to make thing 
@@ -995,7 +995,7 @@ used almost new code.
 
 ## Thursday 19th, June ##
 
-* I eventually decided to use the GNU toolchain to compile **Dos9**. I 
+* I eventually decided to use the GNU toolchain to compile **pBat**. I 
   previously expressed lots of criticism toward use of autotools, but libtool 
   \(which is par of the GNU toolchain\) is unfortunately the only program that 
   allows developers to deal with libraries \(statically or dynamically 
@@ -1014,7 +1014,7 @@ used almost new code.
   [batch.xoo.it](http://batch.xoo.it) who reported the error.
 
 * Added **local** target to **Makefile** that generates a local installation 
-  of **Dos9** inside the folder **./bin**. It is as simple as typing
+  of **pBat** inside the folder **./bin**. It is as simple as typing
 
         make local
 
@@ -1024,7 +1024,7 @@ used almost new code.
 ## Friday 29th, August ##
 
 This is the first time I write something in this file for a long time now. 
-I've been hacking around Dos9 for a little time now \(haaa, holidays\). This 
+I've been hacking around pBat for a little time now \(haaa, holidays\). This 
 is a list of improvements I made during from 24th June to today.
 
 * Changed behaviour of parameter handling routines, valid delimiter are now 
@@ -1056,7 +1056,7 @@ is a list of improvements I made during from 24th June to today.
   errors on case of string used as operators for **GEQ**, **GTR** **LSS**, 
   **LEQ** comparants. Moreover, the interpretor is able to handle both 
   hexadecimal, decimal and octal bases. Finally, implemented comparants for 
-  floats \(same as integer comparants but prefixed with f\), as a **Dos9** 
+  floats \(same as integer comparants but prefixed with f\), as a **pBat** 
   extension.
 
 * Fixed issues of compatibility for the SET command. It is mainly a matter of 
@@ -1070,12 +1070,12 @@ is a list of improvements I made during from 24th June to today.
 * Modified the FOR command in order to accept filename sets to be given as 
   input for the FOR /F command. This puts more sense on the "usebackq" option.
 
-* Added a custom environment within **Dos9** in order to instaure 
+* Added a custom environment within **pBat** in order to instaure 
   cross-platform syntax capabilities like use of "=" in variable names \(which 
   is impossible on many systems\), to set "=x:" variables for CD command.
 
 * Corrected a bug with SET command, wich displayed system environment while it 
-  was supposed to display **Dos9** custom environment.
+  was supposed to display **pBat** custom environment.
 
 * Corrected a bug that prevented the FOR command from getting command input 
   under any \*nix OS \(don't know the actual reason for this, but I 
@@ -1096,7 +1096,7 @@ is a list of improvements I made during from 24th June to today.
   operating systems, resulting in a mess between commands and commands 
   outputs.
 
-* Implemented new functions within libDos9 in order to quickly sort files 
+* Implemented new functions within libpBat in order to quickly sort files 
   matching to some attributes and file not matching in a single function call.
 
 * Re-implemented the TYPE command to get a command compatible with 
@@ -1107,12 +1107,12 @@ is a list of improvements I made during from 24th June to today.
   behaviour, except for some inconsistencies I've tried to address \(limited 
   line length, etc\).
 
-* Implemented the %\* variable, that have been lacking in the Dos9 
+* Implemented the %\* variable, that have been lacking in the pBat 
   implementation for a very long time \(special var are implemented at least 
   since 2013\). However, there is still little concerns, for example, on 
   Unix-like operating system it is impossible to retrieve the original command 
   line \(arguments are passed separated to the kernel\). Thus, the 
-  [Dos9](dos9) tries to construct the line back the best it can, by putting 
+  [pBat](pbat) tries to construct the line back the best it can, by putting 
   spaces between the arguments. This is only an issue at startup, though, with 
   call, it may not be a problem.
 
@@ -1138,11 +1138,11 @@ is a list of improvements I made during from 24th June to today.
   the host triplet was not reported to program. That does not matter a lot, 
   anyway.
 
-* Definitely set libDos9 as static by default. It is indeed much more 
+* Definitely set libpBat as static by default. It is indeed much more 
   convenient \(no installation needed on Unix-like operating systems\). Some 
   may object that it results in bigger executables. But most of time, size is 
   not really relevant, and it save setting library search path anyway, thus 
-  enabling dos9 to be embedded in the a memory stick for example \(And yeah, 
+  enabling pbat to be embedded in the a memory stick for example \(And yeah, 
   size ain't too relevant, because memory stick often have size of few GBs\). 
   Furthermore, static linking allows compiler to perform further 
   optimisations, that can't be done with dynamic linking.
@@ -1162,7 +1162,7 @@ is a list of improvements I made during from 24th June to today.
   external executables when it is so simple to add little commands to the 
   interpretor ?\). It includes almost every **cmd.exe** features, except the 
   form-feed expanding features \(never seen it used though\). However, if you 
-  build **Dos9** with the option **--disable-console**, you should still 
+  build **pBat** with the option **--disable-console**, you should still 
   encounter minor bugs, due to the lack of console capabilities. Finally, I 
   thought about replacing **MORE** with **TYPE** when building with 
   **--disable-console**, but it would be obviously sad not to benefit from 
@@ -1188,7 +1188,7 @@ is a list of improvements I made during from 24th June to today.
 
 ## Thursday 6th, January 2015 ##
 
-* Did some final arrangements that make **Dos9** ready to release on the 
+* Did some final arrangements that make **pBat** ready to release on the 
   GNU/Linux platforms. There is some work left for make it run under Microsoft 
   Windows platforms.
 
@@ -1197,14 +1197,14 @@ is a list of improvements I made during from 24th June to today.
   returns untranslated chariot return \(0x0D\). This subtleties was not taken 
   account by the **More** command, so that the enter was inactive.
 
-* Changed the way **Dos9** command line works; Now it's possible to use 
+* Changed the way **pBat** command line works; Now it's possible to use 
   widespread switches like '/C' or '/K'. The way to tell the interpreter which 
   option should be enabled and which should not through the command line has 
   also changed.
 
 * Fixed minor issues due to the previous behaviour change of 
-  Dos9\_GetExePath\(\) that affected both **FOR** command and 
-  Dos9\_RunExternalBatch\(\) function.
+  pBat\_GetExePath\(\) that affected both **FOR** command and 
+  pBat\_RunExternalBatch\(\) function.
 
 * Fixed the broken pipe system introduced by the change of pipe system on 
   GNU/Linux \(and most of \*nices\). This is not fully tested though. But the 
@@ -1213,7 +1213,7 @@ is a list of improvements I made during from 24th June to today.
 
 ## Tuesday 13th, January 2015 ##
 
-* Fixed an minor issue in the **Dos9\_SetEnv** function that caused some rare 
+* Fixed an minor issue in the **pBat\_SetEnv** function that caused some rare 
   bugs that made **SET** command to raise a segfault if it was invoked to 
   remove a variable from the environment. It wasn't that frequent because 
   usually, variable removal didn't worked, due to another bug. This is now 
@@ -1245,8 +1245,8 @@ is a list of improvements I made during from 24th June to today.
   had more than two years although the command changed. To clear this out, man 
   page content as been revised to be more relevant.
 
-* Added a brand new Dos9 extension to the **IF** command. I found pretty 
-  annoying that cmd \(and thus Dos9\) lacked support for multiple conditions 
+* Added a brand new pBat extension to the **IF** command. I found pretty 
+  annoying that cmd \(and thus pBat\) lacked support for multiple conditions 
   for a single if \(e.g. logical expressions\). Obviously this could have been 
   done previously by using the **SET** command to evaluate an expression but 
   this was time- and code-wasting. The interpretor currently supports only 
@@ -1306,7 +1306,7 @@ is a list of improvements I made during from 24th June to today.
 
 ## Thursday 7th, May ##
 
-* Fixed lots of man pages for the Dos9 project. Also fixed some little bugs in 
+* Fixed lots of man pages for the pBat project. Also fixed some little bugs in 
   the TEA text processor, dealing with some sort of **\** that where 
   mishandled in previous patches.
 
@@ -1345,7 +1345,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Added support of libcu8, a library designed to handle utf-8 efficiently with 
   msvcrt in windows. This is part of a large ongoing effort that attempts to 
-  make Dos9 more internationalizable. To do so, We had to kind short-circuit 
+  make pBat more internationalizable. To do so, We had to kind short-circuit 
   msvcrt with brand this brand new library. Although still experimental, this 
   works quite great.
 
@@ -1353,13 +1353,13 @@ is a list of improvements I made during from 24th June to today.
 
 ## Monday, 25th, Junuary ##
 
-* Changed version of Dos9 to emphasize the important changes of Dos9 since new 
+* Changed version of pBat to emphasize the important changes of pBat since new 
   year 2016.
 
 * Added functions to restrict fd inheritance, to make sure the appropriate fds 
   are closed on exec. It is basically usefull for FOR commands.
 
-* Hugely modified the libcu8 to fit with libDos9. It is still an experimental, 
+* Hugely modified the libcu8 to fit with libpBat. It is still an experimental, 
   though, but it works way better now.
 
 * Added some new behaviours in file expansion. Now, it is legal to specify 
@@ -1393,18 +1393,18 @@ is a list of improvements I made during from 24th June to today.
 
 ## Monday 16th, April ##
 
-* Modified the initialization procedure of Dos9. Dos9 can now handle two 
+* Modified the initialization procedure of pBat. pBat can now handle two 
   different startup files:
 
-  * **$HOME/.dos9/Dos9\_Auto.bat** : user-specific startup file
+  * **$HOME/.pbat/pBat\_Auto.bat** : user-specific startup file
 
-  * **$DOS9\_PATH/Dos9\_Auto.bat** : system-wide startup file
+  * **$PBAT\_PATH/pBat\_Auto.bat** : system-wide startup file
 
 * Fixed some bugs with **SET** and redirections.
 
-* still develloping dos9ize
+* still develloping pbatize
 
-* Fixed errors with folders containing spaces for Dos9.
+* Fixed errors with folders containing spaces for pBat.
 
 ## Friday 15th, July ##
 
@@ -1421,7 +1421,7 @@ is a list of improvements I made during from 24th June to today.
 ## Friday 18th, October 2016 ##
 
 * Removed the complex initialisation model set up the **16/04/2016** in favour 
-  of a single \(somewhat read-only\) **Dos9\_Auto.bat** initialization script 
+  of a single \(somewhat read-only\) **pBat\_Auto.bat** initialization script 
   that calls automatically local and global custom initialization scripts.
 
 * Worked a lot to improve the binary tree, in order to conform to unix 
@@ -1447,7 +1447,7 @@ is a list of improvements I made during from 24th June to today.
   32-bits platform. The lib now directly asks the location of function using 
   the kernel instead on relying on pointers given by the libC.
 
-* Some minor fixes for Dos9 in general.
+* Some minor fixes for pBat in general.
 
 * Fixed a little hlp bug
 
@@ -1482,7 +1482,7 @@ is a list of improvements I made during from 24th June to today.
 
 ## Wednesday 23th, November ##
 
-* Fixed compilation error in Dos9\_Lang.c.
+* Fixed compilation error in pBat\_Lang.c.
 
 * Add compilation command in BUILD.readme.
 
@@ -1498,7 +1498,7 @@ is a list of improvements I made during from 24th June to today.
             )
 
   * Cleaned up zombies processes that were not wiped from kernels buffer since 
-    Dos9 never explicitly specified to throw the data out. Basically, this 
+    pBat never explicitly specified to throw the data out. Basically, this 
     behaviour is particularly shown when repeating for loops. eg:
 
             :loop
@@ -1507,7 +1507,7 @@ is a list of improvements I made during from 24th June to today.
             )
             goto :loop
 
-* Changed Dos9 behaviour when getting a SIGINT on Linux. Depending on whether 
+* Changed pBat behaviour when getting a SIGINT on Linux. Depending on whether 
   a user input or a script is being executed, the interpretor choose to cancel 
   the command or to exit.
 
@@ -1556,7 +1556,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed many manual pages.
 
-* Fixed if dos9 extension bug.
+* Fixed if pbat extension bug.
 
 ## Monday 13th, February ##
 
@@ -1613,7 +1613,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Added styles to manual pages thanks to styles-sheets provided by Xenoxis.
 
-* Changed libDos9 functions to search files with a totally new implementation.
+* Changed libpBat functions to search files with a totally new implementation.
 
 ## Saturday 25th, February ##
 
@@ -1642,9 +1642,9 @@ is a list of improvements I made during from 24th June to today.
   before continuing in case of encountering **GOTO**s or **EXIT /b** command. 
   This led to an unnecessary "zombie" process and could easily lead to 
   unexpected behaviours since no synchronisation interface was provided by 
-  Dos9.
+  pBat.
 
-  This issue has been fixed by forcing Dos9 to wait for the process launched 
+  This issue has been fixed by forcing pBat to wait for the process launched 
   by **FOR** to exit before resuming execution. Note that it doesn't change 
   the overall **FOR** behaviour, that is, both processes are ran 
   asynchronously \(ie. at the same time\), which is different from cmd 
@@ -1665,7 +1665,7 @@ is a list of improvements I made during from 24th June to today.
 ## Wednesday 29th, March ##
 
 * Fixed some error in file search handling \(the origin folder of a static 
-  string was not added to matches, as if DOS9\_DIR\_MODE was the default 
+  string was not added to matches, as if PBAT\_DIR\_MODE was the default 
   behaviour\).
 
 ## Thursday 30th March ##
@@ -1673,12 +1673,12 @@ is a list of improvements I made during from 24th June to today.
 * Fixed a bug with **FOR** command that created more variable that it it was 
   necessary when using a joker **\*** as the final token specifier.
 
-* Fixed bug with **Dos9\_ShowErrorMessage\(\)** function that called the dos9 
+* Fixed bug with **pBat\_ShowErrorMessage\(\)** function that called the pbat 
   exit function twice, causing a SEGFAULT.
 
 * Fixed the **START** command :
 
-  * Fixed problems with transmission of **Dos9** attributes.
+  * Fixed problems with transmission of **pBat** attributes.
 
   * Fixed handling of the title parameter.
 
@@ -1710,7 +1710,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Added a safe CTRL-c handler on windows.
 
-* Merged po files for Dos9.
+* Merged po files for pBat.
 
 ## Wednesday 12th, April ##
 
@@ -1731,7 +1731,7 @@ is a list of improvements I made during from 24th June to today.
   weird old mechanics that consisted in opening/reading/closing script at 
   every new line. This achieve a great performance gain.
 
-* Fixed an error of the Dos9\_SetFdInheritance under unices.
+* Fixed an error of the pBat\_SetFdInheritance under unices.
 
 * Fixed the goto command to make it able to deal with label that have spaces 
   inside them.
@@ -1747,7 +1747,7 @@ is a list of improvements I made during from 24th June to today.
 * Fixed conditional definition of \_X\_OPEN\_SOURCE.
 
 * Fixed an enormous memory flaw that took place in the inteval libraries and 
-  caused Dos9 memory consumption to increase dramatically when using **SET 
+  caused pBat memory consumption to increase dramatically when using **SET 
   /a** intensively
 
 * Fixed typos with i18n.
@@ -1758,7 +1758,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed command **SHIFT** that picked arguments in the wrong local var blocks.
 
-* Fixed **Dos9\_Auto.bat** man page that was in ANSI instead of utf-8.
+* Fixed **pBat\_Auto.bat** man page that was in ANSI instead of utf-8.
 
 ## Tuesday 18th, April ##
 
@@ -1790,7 +1790,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Added support for concatenation using '+' with the the **COPY** command.
 
-* Added better support of variable truncating using numbers when Dos9 is 
+* Added better support of variable truncating using numbers when pBat is 
   explicitly compiled to deal with utf-8.
 
 * Fixed error messages and help messages.
@@ -1854,19 +1854,19 @@ is a list of improvements I made during from 24th June to today.
 
 ## Sunday 3rd, December ##
 
-* Fixes for path name handling in Dos9\_GetMatchFileList
+* Fixes for path name handling in pBat\_GetMatchFileList
 
 * Added semaphores to fix SET command.
 
 ## Sunday 1st April, 2018 ##
 
-* Added fixes for Dos9\_EsToFullPath\(\).
+* Added fixes for pBat\_EsToFullPath\(\).
 
 ## Sunday 7th, April ##
 
 * Fixed hlp.bat bug related to the behaviour change of %~pA.
 
-* Fixed bug that caused Dos9 not to append a / after disc in %~dpA.
+* Fixed bug that caused pBat not to append a / after disc in %~dpA.
 
 * Added a /C:MD file to generate html files compatible with pico
 
@@ -1874,7 +1874,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed error on handling **2>&1** redirection.
 
-* Fixed Dos9\_FilePath.c error that led Dos9 to check for **file** before 
+* Fixed pBat\_FilePath.c error that led pBat to check for **file** before 
   using **%PATHEXT%**.
 
 ## Sunday 23rd, April ##
@@ -1893,11 +1893,11 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed some manual pages.
 
-* Fixed additional **Dos9\_CloseThread\(\)** bug on unices.
+* Fixed additional **pBat\_CloseThread\(\)** bug on unices.
 
-* Fixed memory leak in **Dos9\_InitEnv\(\)**.
+* Fixed memory leak in **pBat\_InitEnv\(\)**.
 
-* Fixed some **FOR** commands bug using **Dos9\_EsToFullPath\(\)**.
+* Fixed some **FOR** commands bug using **pBat\_EsToFullPath\(\)**.
 
 * Fixed some invalid casts in search functions.
 
@@ -1907,7 +1907,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Changed version to 218.1
 
-* Fixed **Dos9\_RunExternalCommand\(\)** which add a pretty big footprint on 
+* Fixed **pBat\_RunExternalCommand\(\)** which add a pretty big footprint on 
   the stack, sometimes causing stack overflows with Musl libc.
 
 ## Tuesday 15th, May ##
@@ -2007,7 +2007,7 @@ is a list of improvements I made during from 24th June to today.
 
 ## Friday 1st, June ##
 
-* Added a brand new editing system to the libcu8 library so that Dos9's utf-8 
+* Added a brand new editing system to the libcu8 library so that pBat's utf-8 
   versions supports decent editing facilities like hability to insert 
   characters in the middle of the input or use history.
 
@@ -2030,7 +2030,7 @@ is a list of improvements I made during from 24th June to today.
   original command behaviour. The only behaviour used then is the old cmd 
   behaviour that truncate the input. Fixed the manual page also.
 
-* Fixed **Dos9\_RunCommand\(\)** and added **Dos9\_Exec.c** to provide a more 
+* Fixed **pBat\_RunCommand\(\)** and added **pBat\_Exec.c** to provide a more 
   reliable support for external command and the **START** command.
 
 * Fixed **FIND** command to provide ErrorLevels compatible with cmd.exe, \(ie. 
@@ -2056,16 +2056,16 @@ is a list of improvements I made during from 24th June to today.
   subsequently.
 
 * Fixed **START** command to detect batch files extension **.bat** and 
-  **.cmd** and start the appropriate **Dos9** interpretor instead of 
+  **.cmd** and start the appropriate **pBat** interpretor instead of 
   **cmd.exe** by default.
 
 * Fixed build errors under linux.
 
-* Fixed **Dos9\_RunFile\(\)** command to be able to detect failures due to non 
+* Fixed **pBat\_RunFile\(\)** command to be able to detect failures due to non 
   existant file or no executable files under UNIX compatible operating 
   systems.
 
-* Introduced the **%DOS9\_START\_SCRIPT%** variable which must contain a path 
+* Introduced the **%PBAT\_START\_SCRIPT%** variable which must contain a path 
   to a script or a program to handle mymetype associations on Unix compatible 
   platform.
 
@@ -2100,7 +2100,7 @@ is a list of improvements I made during from 24th June to today.
 
 ## Wednesday 21st ##
 
-* Added a little fix to prevent dos9 from executing line starting with a 
+* Added a little fix to prevent pbat from executing line starting with a 
   column after delayed expansion.
 
 * Do not exit when a label is encountered inside a block.
@@ -2129,7 +2129,7 @@ is a list of improvements I made during from 24th June to today.
 
 ## Monday 2nd, July ##
 
-* Implemented **hlp**'s **help** alias as a part of **Dos9\_Auto.bat**.
+* Implemented **hlp**'s **help** alias as a part of **pBat\_Auto.bat**.
 
 * New implementation of the **dump** command.
 
@@ -2158,11 +2158,11 @@ is a list of improvements I made during from 24th June to today.
 
 * Updated the local variables man pages.
 
-* Fixed a bug with **START** command. Since the output of **dos9\_start** was 
+* Fixed a bug with **START** command. Since the output of **pbat\_start** was 
   redirected to **NUL**, and the process was not awaited, it caused problem 
   when either **mimeopen** or **xdg-open** was trying to interact with user. 
-  To fix the problem, the output is no longer redirected and dos9 waits for 
-  **dos9\_start** completion. This might cause little inconveniences as both 
+  To fix the problem, the output is no longer redirected and pbat waits for 
+  **pbat\_start** completion. This might cause little inconveniences as both 
   **xdg-open** and **mimeopen** produce some output even when run without 
   errors, but this is the only workaround found yet.
 
@@ -2171,7 +2171,7 @@ is a list of improvements I made during from 24th June to today.
 * Fixed few errors with the **DUMP** command.
 
 * Fixed capitalised letters used inside a **#include** statement in 
-  **Dos9\_UnicodeDir.c**
+  **pBat\_UnicodeDir.c**
 
 * Added translation for Hindi thanks to **Karanveer Chouhan \(aka kvc\)**.
 
@@ -2180,7 +2180,7 @@ is a list of improvements I made during from 24th June to today.
 * Fixed **SET /a** bugs reported by DrNuget on the discord conversation. There 
   was essentially two bugs:
 
-  * the **-=** operator was mistakenly handled by **Dos9** as the **/=** which 
+  * the **-=** operator was mistakenly handled by **pBat** as the **/=** which 
     obviously led to unexpected behaviours.
 
   * Additional spaces between the variable name and the assignment operator 
@@ -2199,16 +2199,16 @@ is a list of improvements I made during from 24th June to today.
 
 ## Monday 16th ##
 
-* Fixed a little bug in the **Dos9\_GetNextBlockBeginEx\(\)** function.
+* Fixed a little bug in the **pBat\_GetNextBlockBeginEx\(\)** function.
 
 * Added **PROMPT** command and **%PROMPT%** variable.
 
 * Added the **PECHO** command which consists of an echo command using prompt 
   formats.
 
-* Moved the introduction message to **Dos9\_Auto.bat**.
+* Moved the introduction message to **pBat\_Auto.bat**.
 
-* Fixes to **dos9 variables** manual pages.
+* Fixes to **pbat variables** manual pages.
 
 * Modified **COLOR** to handle new **.** extension, which refer to the current 
   default color.
@@ -2220,7 +2220,7 @@ is a list of improvements I made during from 24th June to today.
 * Fixed remaining with msgmerge that was not properly updating the timestanp 
   of generated files.
 
-* Changed **Dos9\_Ask\(\)** input source to avoid potential conflicts with 
+* Changed **pBat\_Ask\(\)** input source to avoid potential conflicts with 
   buffering.
 
 * Added bash-like auto-complete features for windows platforms, still 
@@ -2233,20 +2233,20 @@ is a list of improvements I made during from 24th June to today.
   on linenoise. There is still some concerns that this might be broken on 
   platforms with console interraction dissabled.
 
-* Slightly modified **Dos9\_AskConfirmation\(\)** function to be able to 
+* Slightly modified **pBat\_AskConfirmation\(\)** function to be able to 
   specify some special input function in order to avoid conflicts with 
   standard buffering or raw mode.
 
 ## Saturday 21st ##
 
-* Fixed missing inclusion of <stddef.h> in **Dos9\_Ask.h**.
+* Fixed missing inclusion of <stddef.h> in **pBat\_Ask.h**.
 
 * Fixed **libcu8\_read\(\)** function problem handling some characters that 
   consume more than one monospaced width. Such characters can be found using 
   **NSimSum** font on windows systems \(for example, the **§**\).
 
 * Added **$P$G** as default **%PROMPT%** value, just in case there is no 
-  **Dos9\_Auto.bat** script available.
+  **pBat\_Auto.bat** script available.
 
 * Added an alternate prompt for multi-line input.
 
@@ -2264,7 +2264,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed few warnings.
 
-* Include Dos9\_DirStack.h to Dos9\_Core.h.
+* Include pBat\_DirStack.h to pBat\_Core.h.
 
 ## Monday 6th, August ##
 
@@ -2297,7 +2297,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Added the **TIMEOUT** command.
 
-* Modified the way **Dos9** set locale so that the subject LC\_NUMERIC \(that 
+* Modified the way **pBat** set locale so that the subject LC\_NUMERIC \(that 
   is, everything refering to numbers\) are not affected by the change.
 
 ## Sunday 19th ##
@@ -2318,11 +2318,11 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed scripts makefiles.
 
-* Fixed a bug with Dos9\_AskConfirmation keyboard routine.
+* Fixed a bug with pBat\_AskConfirmation keyboard routine.
 
 ## Sunday 26th ##
 
-* Fixed a bug with serialisation of sub process creation. Indeed, as Dos9 is 
+* Fixed a bug with serialisation of sub process creation. Indeed, as pBat is 
   multi-threaded, many different process can be creating at nearly the same 
   time, causing file inheritance issues with pipes.
 
@@ -2358,7 +2358,7 @@ is a list of improvements I made during from 24th June to today.
 ## Thursday 31st ##
 
 * Added the MOD command and a module toolkit to create simple dynamic link 
-  modules for Dos9. The object files to build modules can be found in 
+  modules for pBat. The object files to build modules can be found in 
   modules/lib and a very simple sample module is available in modules/sample.
 
 ## Sunday 3rd, November ##
@@ -2368,19 +2368,19 @@ is a list of improvements I made during from 24th June to today.
 
 * Slight fixes to MOD and module apis.
 
-* Lots of changes to the console apis of libDos9, changed functions to require 
-  stream as argument and got rid of the duplicated functions inside Dos9 and 
+* Lots of changes to the console apis of libpBat, changed functions to require 
+  stream as argument and got rid of the duplicated functions inside pBat and 
   initialisation functions
 
 * Added an experimental batbox module.
 
 ## Sunday 11st ##
 
-* Fixed PAUSE command misuse of Dos9\_Getch\(\).
+* Fixed PAUSE command misuse of pBat\_Getch\(\).
 
 * Fixed omitted thread locale attribute within MORE command code.
 
-* Fixed Dos9\_GetVar\(\) and Dos9\_UnEscape\(\) functions which happenned to 
+* Fixed pBat\_GetVar\(\) and pBat\_UnEscape\(\) functions which happenned to 
   be very slow on very large inputs.
 
 * Modified ESTR\* lib to extend buffer exponentially rather linearly.
@@ -2389,13 +2389,13 @@ is a list of improvements I made during from 24th June to today.
 
 ## Thursday, 29th ##
 
-* Added 'no-modules' options to build Dos9 without module support on platforms 
+* Added 'no-modules' options to build pBat without module support on platforms 
   that do not provide it.
 
 * Fixed THANKS file to thank Xenoxis for his contribution to the codebase with 
   the **VER** command.
 
-* Slightly modified the internationalization semantics used by Dos9 in order 
+* Slightly modified the internationalization semantics used by pBat in order 
   to fix slight Windows issue related to some message containing '\n' that 
   were not translated to '\r\n'. The semantics have been changed, in order to 
   fix this issue, as follows \(this is further discussed in GUIDELINES\):
@@ -2405,14 +2405,14 @@ is a list of improvements I made during from 24th June to today.
 
   * On the other hand, both normal and error message must not contain any 
     newline. Furthermore, it up to the command to print appropriate sequences 
-    using DOS9\_NL when displaying a normal message.
+    using PBAT\_NL when displaying a normal message.
 
 ## Sunday 1st, December ##
 
-* Fixed a bug preventing DOS9\_COLOR\_DEFAULT to work on unix-compatible 
+* Fixed a bug preventing PBAT\_COLOR\_DEFAULT to work on unix-compatible 
   operating systems.
 
-* Fixed omitted libdl link flag inside Dos9's makefile.
+* Fixed omitted libdl link flag inside pBat's makefile.
 
 ## Saturday 8th, December ##
 
@@ -2435,7 +2435,7 @@ build without prior
 ## Thursday 13rd ##
 
 * Changed name of **TEST\_\*\_PATH\(\)** macro families to 
-  **DOS9\_TEST\_\*\_PATH\(\)** to add more consistency to the source code.
+  **PBAT\_TEST\_\*\_PATH\(\)** to add more consistency to the source code.
 
 * Removed old outdated man page reffering to dropped external commands.
 
@@ -2456,7 +2456,7 @@ build without prior
   %PATH% files even when given a relative path.
 
 * Changed the behaviour of the **MOD** command. Modules are now search by 
-  default inside **%DOS9\_PATH%/modules** \(rather that in the whole 
+  default inside **%PBAT\_PATH%/modules** \(rather that in the whole 
   **%PATH%** directories\), unless if the module file name is absolute; in 
   that case **MOD** uses the file referred to by the absolute path.
 
@@ -2465,7 +2465,7 @@ build without prior
 
 ## Monday 16th, December ##
 
-* Improved consistency between **command /?**, now **dos9 /?** and **dump 
+* Improved consistency between **command /?**, now **pbat /?** and **dump 
   /?** use stderr/fError instead of stdout as output \(which is more 
   consistent with internal commands\).
 
@@ -2480,7 +2480,7 @@ build without prior
 * Fixed missing documentation for **batbox** modules. Modified **README** and 
   **GUIDELINES**.
 
-* Fixed missing static qualifiers in libDos9.
+* Fixed missing static qualifiers in libpBat.
 
 * Fixed recursive file search under Linux and non-unicode windows.
 
@@ -2491,7 +2491,7 @@ build without prior
 * Added **src-dist** target to **Makefile** to automatically build source code 
   tarballs ready to be distributed and/or uploaded on the website.
 
-* Fixed a bug involving **Dos9\_RunBlock\(\)** not parsing blocks correctly.
+* Fixed a bug involving **pBat\_RunBlock\(\)** not parsing blocks correctly.
 
 ## Thursday 17th ##
 
@@ -2505,7 +2505,7 @@ build without prior
 
 ## Wednesday, May 3rd, 2020 ##
 
-* Fixed hlp bug with Dos9 on another drive than user directory on Windows.
+* Fixed hlp bug with pBat on another drive than user directory on Windows.
 
 ## Thursday, May 4th, 2020  ##
 
@@ -2514,9 +2514,9 @@ build without prior
 * Reworked directory stack :
 
 * Fixed directory stack allocation bug that makes directory stack unusable 
-  after a Dos9\_PopDir\(\) that cleared the stack.
+  after a pBat\_PopDir\(\) that cleared the stack.
 
-* Makes Dos9\_CloneInstance\(\) aware of directory stack.
+* Makes pBat\_CloneInstance\(\) aware of directory stack.
 
 * Fix mod deadlock when there is a module loaded.
 
@@ -2530,11 +2530,11 @@ build without prior
 ## Sunday, October 4th, 2020 ##
 
 * Fixed %=EXITCODEASCII% endianness issue. Removed unneeded switch in 
-  Dos9\_Var.c.
+  pBat\_Var.c.
 
 ## Thursday, October 8th, 2020 ##
 
-* Changed Dos9\_InitConsole to don't override cursor size on Windows. 
+* Changed pBat\_InitConsole to don't override cursor size on Windows. 
 
 * Fixed some building issues on Clang.
 
@@ -2542,11 +2542,11 @@ build without prior
 
 * Fixes to typos.
 
-* Added a test to **Makefile** to check whether **Dos9** is being build using 
+* Added a test to **Makefile** to check whether **pBat** is being build using 
   **mingw-w64**. Indeed, **mingw-w64** requires 
   **\_\_USE\_MINGW\_ANSI\_STDIO** to be defined otherwise **snprintf** is 
   replaced with windows provided **\_snprintf** which does not end strings, 
-  leading to a lot of errors as Dos9 assumes ANSI.
+  leading to a lot of errors as pBat assumes ANSI.
 
 ## Thursday, October 22nd ##
 
@@ -2575,7 +2575,7 @@ build without prior
     used to provide a concatenation of tokens from **n** up to **p** into a 
     single variable. However, in **cmd** it selects **n** up to **p** but in 
     different variables \(ie. not concatenated\). This behaviour has been 
-    fixed and **Dos9** has now the same behaviour as **cmd**.
+    fixed and **pBat** has now the same behaviour as **cmd**.
 
   * Added a syntax for **tokens** specifier which enables using the old 
     **n-p** behaviour. The syntax is **n.p**, it provides a variable that 
@@ -2607,13 +2607,13 @@ build without prior
 ## Monday, April 12th, 2021 ##
 
 * Created the microgettext library to remove the **GNU gettext** library of 
-  Dos9 depedencies. Dos9 has now no major dependencies aside from libdl and 
+  pBat depedencies. pBat has now no major dependencies aside from libdl and 
   libgcc. Statically linked it is about 400ko
 
 * Created the experimental **LOCALE** command to provide a way to set custom 
   paths for translations
 
-* Removed unnecessary references to Dos9\_GetExecutableName\(\)
+* Removed unnecessary references to pBat\_GetExecutableName\(\)
 
 * Fixed the if comparison behaviour for floats, numbers and such :
 

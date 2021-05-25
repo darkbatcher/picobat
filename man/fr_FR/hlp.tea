@@ -1,5 +1,5 @@
 #
-#   Dos9 Manual pages, The Dos9 project
+#   pBat Manual pages, The pBat project
 #   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -32,7 +32,7 @@ ${hlp.bat [nom | /b [langue [encodage]] | /c ]}
 
 	- {/b} : Construit la documentation pour le langage et un encodage
 	spécifié. Ce commutateur est utilisé pour produire les fichiers à partir
-	des documents {tea|TEA} qui sont fournis avec {Dos9}. Les paramètres
+	des documents {tea|TEA} qui sont fournis avec {pBat}. Les paramètres
 	sont:
 
 		-- {langue} : Le langage dans lequel la documentation doit être
@@ -54,7 +54,7 @@ ${hlp.bat [nom | /b [langue [encodage]] | /c ]}
 	- {/c} : Configure les paramètres de la commande {hlp.bat}. Demande successivement
 	à l'utilisateur la langue, le format (html/texte/ansi) et l'encodage qu'il veut
 	utiliser. Cette option est une façon simple de configurer le fichier
-	{%USERPROFILE%/.dos9/hlp/hlp.conf.bat}.
+	{%USERPROFILE%/.pbat/hlp/hlp.conf.bat}.
 
 {{Fichiers de Configuration}}
 
@@ -68,7 +68,7 @@ ${%USERPROFILE%/share/hlp/hlp.conf.bat}
 		trois formats supportés :
 
 			-- {html} : {hlp.bat} affichera des pages html. Ce mode nécessite un navigateur
-			internet et le support d'une interfaçe de type {start} par dos9.
+			internet et le support d'une interfaçe de type {start} par pbat.
 
 			-- {ansi} : {hlp.bat} affichera des fichiers textes dans la console. Ces fichiers
 			sont formatés pour afficher de la couleur sur les terminals compatibles ANSI.
@@ -76,7 +76,7 @@ ${%USERPROFILE%/share/hlp/hlp.conf.bat}
 			-- {txt} : {hlp.bat} affichera des fichiers textes pur dans la console.
 
 		- {%locale%} : Le langage a utiliser sous la forme d'une locale {POSIX} (ie {langue_PAYS}).
-		Ce nom de locale doit correspondre à une locale installée dans {%DOS9_PATH%/share/hlp/man}.
+		Ce nom de locale doit correspondre à une locale installée dans {%PBAT_PATH%/share/hlp/man}.
 
 		- {%view_cmd%} : La commande à utiliser pour voir les pages de manuels. Cette commande peut
 		être interne ou externe. Par défaut on utilise la définition suivante :

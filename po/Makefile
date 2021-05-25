@@ -1,4 +1,4 @@
-# Overall Dos9 suite Makefile, The Dos9 Project (c) Darkbatcher
+# Overall pBat suite Makefile, The pBat Project (c) Darkbatcher
 # 2010-2016
 #
 # This is free software: you can redistribute it and/or modify it under the

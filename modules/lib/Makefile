@@ -1,9 +1,9 @@
 ROOTDIR = ../..
 include $(ROOTDIR)/config.mk
 
-OBJS = Dos9_Module.o
+OBJS = pBat_Module.o
 
-LDFLAGS += $(LIBDOS9_LD)
-CFLAGS += $(LIBDOS9_INC)
+LDFLAGS += $(LIBPBAT_LD)
+CFLAGS += $(LIBPBAT_INC)
 
 all: $(OBJS)

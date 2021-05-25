@@ -1,5 +1,5 @@
 #
-#   Dos9 Manual pages, The Dos9 project
+#   pBat Manual pages, The pBat project
 #   Copyright (C) 2012-2018  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -48,7 +48,7 @@ SET PROMPT=prompt_format}
 	
 	- {$l} : Expands to {<}.
 	
-	- {$n} : Expands to current drive (root, if the OS running {dos9|Dos9}
+	- {$n} : Expands to current drive (root, if the OS running {pbat|pBat}
 	does not provide an equivalent for the windows concept).
 	
 	- {$p} : Expands to the current working directory.
@@ -59,10 +59,10 @@ SET PROMPT=prompt_format}
 	
 	- {$t} : Expands to the content of {time|%TIME% variable}.
 	
-	- {$u} : Expands to the content of {dos9var|%USERNAME% variable}.
+	- {$u} : Expands to the content of {pbatvar|%USERNAME% variable}.
 	That is, if not modified, the current user name.
 	
-	- {$w} : Expands to the content of {dos9var|%USERDOMAIN% variable}.
+	- {$w} : Expands to the content of {pbatvar|%USERDOMAIN% variable}.
 	That is, if not modified, the current user domain name.
 	
 	- {$xCODE;} : Changes locally the color of the text displayed according
@@ -84,7 +84,7 @@ SET PROMPT=prompt_format}
 {{Compatibility}}
 
 	Mostly compatible with {cmd.exe}. However, the {$m} specifier is unsupported.
-	In addition, {$xCODE;} specifier is a {dos9|Dos9} extension.
+	In addition, {$xCODE;} specifier is a {pbat|pBat} extension.
 	
 	Available since {218.2}.
 	

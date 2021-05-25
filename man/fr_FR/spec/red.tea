@@ -1,5 +1,5 @@
 #
-#   Dos9 Manual pages, The Dos9 project
+#   pBat Manual pages, The pBat project
 #   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -27,7 +27,7 @@
 
 		- {L'entrée standard} (stdin) : Il s'agit de l'entrée par défaut des programmes. En général,
 		cette entrée correspond à du texte entré directement dans la console. Par exemple,
-		lorsqu'aucun fichier n'est donné en tant qu'argument, {../dos9|Dos9} prend ses commandes sur
+		lorsqu'aucun fichier n'est donné en tant qu'argument, {../pbat|pBat} prend ses commandes sur
 		cette entrée. Beaucoup de commandes utilisent l'entrée standard si l'on ne leur donne pas
 		d'arguments.
 
@@ -40,20 +40,20 @@
 		sortie. Cela permet entre autres d'empêcher les messages d'erreurs d'être mélangés avec la
 		sortie en cas de redirection.
 
-	Ces trois entrées sont les entrées que vous pouvez rediriger avec {Dos9}. Auparavant, en utilisant
+	Ces trois entrées sont les entrées que vous pouvez rediriger avec {pBat}. Auparavant, en utilisant
 	{cmd.exe}, il était posssible de rediriger un descripteur de fichier quelconque via les redirections,
 	mais celà amenait à des résultats abhérants car on ne savait pas réelement à quel fichier un descripteur
 	pouvait correspondre et comment obtenir un redirection adéquate. On pouvait aussi aboutir à des effets de
 	bords assez supprenant (par exemple, avec un peu d'expérimentations il était possible de créer une
-	redirection circulaire). Ce support a donc été abandonné pour {../dos9|Dos9}.
+	redirection circulaire). Ce support a donc été abandonné pour {../pbat|pBat}.
 
 {{Rediriger les entrées et sorties}}
 
-	{dos9|Dos9} utilise les caractères {>} et {<} pour spécifier les redirections. Le caractère {>} est
+	{pbat|pBat} utilise les caractères {>} et {<} pour spécifier les redirections. Le caractère {>} est
 	utilisé pour rediriger {stdout} et {stderr}, alors que le caractère {<} est utilisé pour rediriger
 	{stdin}.
 
-	Lorsque {dos9|Dos9} rencontre un {>} ou un {<}, alors Dos9 utilise le premier paramètre
+	Lorsque {pbat|pBat} rencontre un {>} ou un {<}, alors pBat utilise le premier paramètre
 	immédiatement à droite du signe comme nom de fichier (le nom de fichier et le signe ne doivent pas
 	nécessairement être séparé par un espace) et le retire de la ligne de commande, et ceci
 	sans se soucier de la position du {<} ou du {>}. Les syntaxes suivantes sont donc valides:
@@ -94,7 +94,7 @@ ${echo test de redirection > fichier}
 		${echo redirection de stderr et stdout > fichier 2>&1}
 
 		@- Le logiciel propriétaire {cmd.exe} exigeait que le {2>&1} soit placé après la redirection de {stdout} vers
-		{fichier}, cette limitation n'est plus effective avec {Dos9}.
+		{fichier}, cette limitation n'est plus effective avec {pBat}.
 
 {{Compatibilité}}
 

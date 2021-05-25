@@ -1,5 +1,5 @@
 #
-#   Dos9 Manual pages, The Dos9 project
+#   pBat Manual pages, The pBat project
 #   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -51,7 +51,7 @@ ${FOR %%A IN (chaine) DO (
 		différentes syntaxes, en fonction du mode d'entrée de la commande
 		(console ou batch). Dans le premier cas, l'utilsateur devait
 		utiliser {%A} à la place de {%%A}, qui devait être utilisée
-		pour le second cas. Cette différence n'a plus d'importance, car {dos9|Dos9}
+		pour le second cas. Cette différence n'a plus d'importance, car {pbat|pBat}
 		ne supporte que l'utilisation de {%%} pour les {spec/xvar|variables
 		spéciales} (exception faite pour les variables {%0} à {%9}, pour lesquelles
 		les deux sont supportées).
@@ -119,7 +119,7 @@ ${FOR /F [options] %%A IN (objet) DO (
 			@-- Sous {cmd.exe}, si la ligne de commande contenait des caractères de fin de ligne, ils étaient
 			enlevés de la ligne de commande et la ligne était donc exécutée comme si il s'agissait d'une
 			ligne unique, empéchant l'utilisateur d'utilser des scripts complexes comme {objet}.
-			Cette limitation n'existe plus dans {Dos9}, il est possible d'utilser des lignes de commandes
+			Cette limitation n'existe plus dans {pBat}, il est possible d'utilser des lignes de commandes
 			de plusieurs lignes, ainsi que des lignes de commandes plus complexes (y compris des boucles
 			{FOR}), ceci n'est néanmoins pas recommandé.
 
@@ -137,7 +137,7 @@ ${FOR /F [options] %%A IN (objet) DO (
 			n'est pas un fichier texte, alors le comportement est indéfini (de manière générale, cela
 			aura pour effet de découper les lignes contenant des caractères {NUL} en plusieurs lignes).
 
-			@- Contrairement à {cmd.exe}, {Dos9} ne retire pas les lignes vides de l'entrée de la boucle
+			@- Contrairement à {cmd.exe}, {pBat} ne retire pas les lignes vides de l'entrée de la boucle
 			{FOR}. Néanmoins, un comportement compatible peut être obtenu avec l'option {CMDLYCORRECT} de
 			la commande {setlocal|SETLOCAL}.
 
@@ -193,32 +193,32 @@ ${FOR /F [options] %%A IN (objet) DO (
 
 			@-- Le premier élément est désigné par le nombre {1}. Notez,
 			que contrairement au logiciel propriétaire {cmd.exe}, l'ordre des
-			opération n'est pas importante pour {Dos9} (Voir section {Compatibilité}).
+			opération n'est pas importante pour {pBat} (Voir section {Compatibilité}).
 
 			-- {delims} : spécifie les caractères à utiliser comme délimiteurs pour découper l'entrée
 			obtenue avec {objet} en éléments. Par défaut, le seul délimiteur
-			utilisé par {Dos9} est l'espace (`` '').
+			utilisé par {pBat} est l'espace (`` '').
 
 			@-- Si vous spécifiez ce paramètre, l'utilisation de l'espace
-			comme délimiteur sera remplacé par les caractères saisis. Si {Dos9} rencontre plusieurs délimiteurs
+			comme délimiteur sera remplacé par les caractères saisis. Si {pBat} rencontre plusieurs délimiteurs
 			se suivant dans une chaîne, ces délimiteurs seront considérés comme un seul délimiteur et il ne sera crée
-			qu'un seul élément ({Dos9} ne crée pas d'élément vide ``'').
+			qu'un seul élément ({pBat} ne crée pas d'élément vide ``'').
 
 			@-- Vous pouvez spécifier au plus {FILENAME_MAX-1} délimiteurs
 			en utilisant un encodage orienté octet. Si le même délimiteur est spécifié plus d'une fois, alors
-			il occupera deux fois l'espace necessaire dans le programme {dos9|Dos9}.
+			il occupera deux fois l'espace necessaire dans le programme {pbat|pBat}.
 
 			@-- Si ce paramètre est spécifié plusieurs fois, la commande {FOR} ne prendra en compte
 			que le dernier de ces paramètres, sans s'occuper des autres.
 
 			-- {usebackq} : Utilise la nouvelle syntaxe. Cette syntaxe a été introduite avec {Windows NT}. Si {objet}
-			est entouré par des guillemets simples, alors {Dos9} le considérera comme une chaîne. À l'inverse, s'il
+			est entouré par des guillemets simples, alors {pBat} le considérera comme une chaîne. À l'inverse, s'il
 			est entouré par des guillemets inversés, alors il sera considéré comme une ligne de commande. Ce paramètre
 			est le seul qui ne nécessite pas de signe égal ni de valeur
 
 			@-- Ce paramètre avait un réel intérêt avec {cmd.exe} qui tronquait souvent les chaînes spécifiées dans
 			les boucles {FOR} si celles-ci contenaient des paramètres, cependant, ce problème n'étant plus présent
-			avec {DOS9}, cette option est fournie pour la compatibilité, même si elle n'est pas dénuée d'un certain
+			avec {PBAT}, cette option est fournie pour la compatibilité, même si elle n'est pas dénuée d'un certain
 			esthétisme.
 
 	{Exemple 1:} Parsage de chaîne:
@@ -262,7 +262,7 @@ ${FOR /F "tokens=*" %%A IN ('dir /b /a:D') DO (
 
 )}
 
-	Si le script précédent est exécuté dans le dossier ``bin'' de {Dos9}, on obtient la sortie suivante.
+	Si le script précédent est exécuté dans le dossier ``bin'' de {pBat}, on obtient la sortie suivante.
 
 ${Un sous répertoire est "share"
 Un sous répertoire est "cmd"}
@@ -369,12 +369,12 @@ ${FOR /F "tokens=*" %%A IN ('dir /b /s /a:-D basedir/masque') DO (
 {{Compatibilité}}
 
 	Majoritairement compatible avec {cmd.exe}. Cependant, la syntaxe est compatible avec {cmd.exe},
-	si bien que tout code provenant de {cmd.exe} pourra fonctionner sous {Dos9}.
+	si bien que tout code provenant de {cmd.exe} pourra fonctionner sous {pBat}.
 
 	Notez tout de même que l'option {tokens} peut causer des problèmes. En effet, si les éléments
 	sont désordonées (par exemple, ``8,7''), {cmd.exe} triait silencieusement les élément pour
-	qu'ils soient dans l'orde. Néanmoins {Dos9} n'effectue ce triage, ce qui résulte en un comportement
-	légèrement différent. Notez que {Dos9} n'a pas de problème avec les intervalles d'éléments qui se
+	qu'ils soient dans l'orde. Néanmoins {pBat} n'effectue ce triage, ce qui résulte en un comportement
+	légèrement différent. Notez que {pBat} n'a pas de problème avec les intervalles d'éléments qui se
 	recouvrent (par exemple ``4-6,5-7''), alors que de tels intervalles seront en général mal découpés
 	par {cmd.exe}, en fonction de la fonction.
 

@@ -26,7 +26,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-#include <libDos9.h>
+#include <libpBat.h>
 
 char* strupr(char* lpChar)
 {
@@ -36,7 +36,7 @@ char* strupr(char* lpChar)
 
 		if (isalpha(*lpChar)) *lpChar=toupper(*lpChar);
 
-		lpChar=Dos9_GetNextChar(lpChar);
+		lpChar=pBat_GetNextChar(lpChar);
 
 	}
 

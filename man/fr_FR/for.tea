@@ -1,5 +1,5 @@
 #
-#   Dos9 Manual pages, The Dos9 project
+#   pBat Manual pages, The pBat project
 #   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -133,12 +133,12 @@ ${FOR /F [options] %%A IN (objet) DO (
 
 			-- {delims} : spécifie les caractères à utiliser comme délimiteurs pour découper l'entrée
 			obtenue avec {objet} en éléments. Par défaut, le seul délimiteur
-			utilisé par {Dos9} est l'espace (`` ''). Si vous spécifiez ce paramètre, l'utilisation de l'espace
-			comme délimiteur sera remplacé par les caractères saisis. Si {Dos9} rencontre plusieurs délimiteurs
-			se suivant dans une chaîne, {Dos9} ne crée pas d'élément vide ``''.
+			utilisé par {pBat} est l'espace (`` ''). Si vous spécifiez ce paramètre, l'utilisation de l'espace
+			comme délimiteur sera remplacé par les caractères saisis. Si {pBat} rencontre plusieurs délimiteurs
+			se suivant dans une chaîne, {pBat} ne crée pas d'élément vide ``''.
 
 			-- {usebackq} : Utilise la nouvelle syntaxe. Si {objet}
-			est entouré par des guillemets simples, alors {Dos9} le considérera comme une chaîne. À l'inverse, s'il
+			est entouré par des guillemets simples, alors {pBat} le considérera comme une chaîne. À l'inverse, s'il
 			est entouré par des guillemets inversés, alors il sera considéré comme une ligne de commande. Ce paramètre
 			est le seul qui ne nécessite pas de signe égal ni de valeur. Ce paramètre permet d'utiliser les guillemets
 
@@ -184,7 +184,7 @@ ${FOR /F "tokens=*" %%A IN ('dir /b /a:D') DO (
 
 )}
 
-	Si le script précédent est exécuté dans le dossier ``bin'' de {Dos9}, on obtient la sortie suivante.
+	Si le script précédent est exécuté dans le dossier ``bin'' de {pBat}, on obtient la sortie suivante.
 
 ${Un sous répertoire est "share"
 Un sous répertoire est "cmd"}
@@ -238,7 +238,7 @@ ${FOR /L %%A IN (début,pas,fin) DO (
 		dépasse {fin}, la boucle s'arrête.
 
 
-	La boucle {FOR} nécessite que {début}, {pas} et {fin} soient des nombres entiers, dans les bases décimales, octales ou hexadécimales. De plus les délimiteurs acceptés ne sont pas limités à la seule virgule; tous les délimiteurs valiides pour {Dos9} le sont aussi.
+	La boucle {FOR} nécessite que {début}, {pas} et {fin} soient des nombres entiers, dans les bases décimales, octales ou hexadécimales. De plus les délimiteurs acceptés ne sont pas limités à la seule virgule; tous les délimiteurs valiides pour {pBat} le sont aussi.
 
 	{Exemple:} Compter de 1 à 10:
 
@@ -283,7 +283,7 @@ ${FOR /R basedir %%A IN (masque) DO (
 {{Compatibilité}}
 
 	Majoritairement compatible avec {cmd.exe}. Cependant, la syntaxe est compatible avec {cmd.exe},
-	si bien que tout code provenant de {cmd.exe} pourra fonctionner sous {Dos9}. Il y a néamoins quelques
+	si bien que tout code provenant de {cmd.exe} pourra fonctionner sous {pBat}. Il y a néamoins quelques
 	incompatibilités, dont le détail est donné sur la page {for-tech|For (technique)}.
 
 	La commande {FOR} est disponible depuis la version {0.7.0.0}. Le {FOR /F} est complètement

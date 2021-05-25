@@ -1,5 +1,5 @@
 #
-#   Dos9 Manual pages, The Dos9 project
+#   pBat Manual pages, The pBat project
 #   Copyright (C) 2012-2018  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -72,10 +72,10 @@ ${command1 && (command2 || command3)}
 	A command-line is the most general construct existing in batch programming.
 	It refers to a well-constructed code line that can contain a combination of 
 	blocks (possibly nested), {command|commands} and {condop|conditional operators},
-	and that is executed within a single pass by {Dos9} (that is, only one reading 
+	and that is executed within a single pass by {pBat} (that is, only one reading 
 	operation and only one {var|conventional expansion} takes place).
 	
-	To match command-lines, Dos9 uses the following rules for associating and nesting
+	To match command-lines, pBat uses the following rules for associating and nesting
 	command, command-lines and blocks:
 	
 	- A {command-line} is made of at least one {command} or block.
@@ -85,7 +85,7 @@ ${command1 && (command2 || command3)}
 	
 	- A {block} can contain several {command-lines} separated by newlines.
 	
-	- A {command} can contain some blocks in {../if|IF} or {../for|FOR}. Dos9
+	- A {command} can contain some blocks in {../if|IF} or {../for|FOR}. pBat
 	does no syntax check to verify whether the syntax of the command is
 	correct.
 	

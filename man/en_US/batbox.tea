@@ -9,14 +9,14 @@
 	the command, please check out the {history} section.
 	
 	5.x series are available as a separate executable and as a module for
-	{Dos9}, which enable much faster execution speed compared to separate
+	{pBat}, which enable much faster execution speed compared to separate
 	executable. The {BATBOX} command is available for {WINDOWS} and
 	{Unix}-based OSes.
 	
 {{Synopsis}}
 
 ${MOD modules/batbox
-:: command to load Dos9 batbox module
+:: command to load pBat batbox module
 
 BATBOX  [/a chr] [/d string] [/g X Y] [/k[_] [name] | /l[_] [name]] [/w duration] [/c color] [/n] [/h show] [/m[_] [X Y type] | /y [X Y type]] ...}
 
@@ -102,12 +102,12 @@ ${BATBOX /g 10 10 /d "Hello world" /g 0 0}
 	
 		- As an external executable designed to provide a working command on 
 		{cmd.exe}, however, this version suffers from slow execution speed
-		since it is external, and is not compatible with {Dos9}.
+		since it is external, and is not compatible with {pBat}.
 		
-		- As a module for {Dos9}. This new format allows significant
+		- As a module for {pBat}. This new format allows significant
 		performances improvements since older {3.x}, {4.x} and {2.x} versions,
 		running nealy 50 times as fast as the older counterparts. In addition,
-		this module is shipped with {Dos9}. However, before being able to
+		this module is shipped with {pBat}. However, before being able to
 		use {BATBOX}, the module {modules/batbox} must be loaded using:
 		
 ${MOD modules/batbox}
@@ -161,7 +161,7 @@ ${MOD modules/batbox}
 	still being used. Based on the concept of lightweight server, this projet was
 	dropped because it syntax was complex and darkbox already existed.
 	
-	In november 2018, as modules features were starting to be added to the {Dos9}
+	In november 2018, as modules features were starting to be added to the {pBat}
 	interpretor, a batbox module has been written, seeing in module the capability
 	to make batbox more efficient and more flexible, resulting in version 5.x. This
 	new implementation allows for new features such as setting environment variable
@@ -172,6 +172,6 @@ ${MOD modules/batbox}
 	Batbox is provided under the GNU GPL license, copyrighted 2018 by Romain
 	Garbi. Older versions are also licensed under the 3-clause BSD license.
 	
-	Batbox uses libDos9 which code includes portions of darkbox by Teddy Astie.
+	Batbox uses libpBat which code includes portions of darkbox by Teddy Astie.
 	
 	

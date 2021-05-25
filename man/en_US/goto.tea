@@ -1,5 +1,5 @@
 #
-#   Dos9 Manual pages, The Dos9 project
+#   pBat Manual pages, The pBat project
 #   Copyright (C) 2012-2013  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -31,16 +31,16 @@ ${GOTO [:]label [file] [/Q]}
 
 	Jump to a label.
 
-        - {label} : the label where {dos9|Dos9} will jump. A {label} is a word, or even
+        - {label} : the label where {pbat|pBat} will jump. A {label} is a word, or even
 	    a couple of words, which are used to identify the different pieces of codes, and
 	    this couple of words must be preceded by a column {:}. It is not necessary for
 	    labels to start at column 1.
 
-        @- When searching for {label}, {Dos9} tolerates extra characters on the line, as
+        @- When searching for {label}, {pBat} tolerates extra characters on the line, as
         long as the label line matches at least {label} and delimiter caracter.
 
-        - {file} : The file in which {dos9|Dos9} will seek the specified {label}. This
-		option requires the {spec/ext|dos9 extensions} to be enabled.
+        - {file} : The file in which {pbat|pBat} will seek the specified {label}. This
+		option requires the {spec/ext|pbat extensions} to be enabled.
 
 		- {/Q} : Silently ignore warning if the given {label} is not found on the given
 		{file} and continue script execution at next line. This switch enables
@@ -109,7 +109,7 @@ ECHO You choosed 3
 {{Compatibility}}
 
 	This command is compatible with {cmd.exe}, excepted the {file} parameter
-	which is only supported by {Dos9}, since version {0.7}
+	which is only supported by {pBat}, since version {0.7}
 
 {{See also}}
 

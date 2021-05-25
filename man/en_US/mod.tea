@@ -1,5 +1,5 @@
 #
-#   Dos9 Manual pages, The Dos9 project
+#   pBat Manual pages, The pBat project
 #   Copyright (C) 2012-2018  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -17,8 +17,8 @@
 #
 {{MOD Command}}
 
-	The {MOD} command is {dos9|Dos9}-specific command that enable
-	external modules designed for {Dos9} to be loaded at runtime in order
+	The {MOD} command is {pbat|pBat}-specific command that enable
+	external modules designed for {pBat} to be loaded at runtime in order
 	to provide extra functionalities through additional internal
 	commands.
 	
@@ -34,15 +34,15 @@ ${MOD [/l] [/q] [module ...]}
 	
 	- {module} : A path to the module to be loaded. If {module} is
 	a relative path, then the associated file is searched inside the
-    module default path (which is {%DOS9_PATH%/modules}). If {module}
+    module default path (which is {%PBAT_PATH%/modules}). If {module}
     is an absolute path, the preceding behaviour is overridden and {MOD} tries
     to load the file referred to by {module}.
 
 	Modules files are executables that can be dynamically loaded
-	by {Dos9} and that have been programmed to add commands to
+	by {pBat} and that have been programmed to add commands to
 	the interpretor.
 	
-	The process of writing a module for Dos9 and their
+	The process of writing a module for pBat and their
 	capabilities are described inside the {GUIDELINES} file of the
 	source distribution.
 

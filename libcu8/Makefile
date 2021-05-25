@@ -1,5 +1,5 @@
 #
-#   Dos9 Makefiles, The Dos9 project
+#   pBat Makefiles, The pBat project
 #   Copyright (C) 2012-2018  Romain Garbi, Teddy Astie
 #
 #   This program is free software: you can redistribute it and/or modify

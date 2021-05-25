@@ -34,7 +34,7 @@
 #define TEA_TEXT_PAR_INDENT   4 /* the witdh of paragraph indent */
 #define TEA_TEXT_HEAD_INDENT  0 /* the width of paragaph indent */
 
-#include <libDos9.h>
+#include <libpBat.h>
 #include "../Tea.h"
 
 /* text output functions */

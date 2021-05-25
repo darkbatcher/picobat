@@ -1,5 +1,5 @@
 #
-#   Dos9 Manual pages, The Dos9 project
+#   pBat Manual pages, The pBat project
 #   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -27,7 +27,7 @@
 
 	- {Standard input} (stdin) : The default input of console programs. Usually this
 	input refers to text typed directly in the the terminal. As an example, when no
-	file path is given to {../dos9|Dos9}, it reads commands directly from the standard
+	file path is given to {../pbat|pBat}, it reads commands directly from the standard
 	input.
 	
 	- {Standard Output} (stdout) : The default output for console programs. Usually,
@@ -37,20 +37,20 @@
 	- {Standard Error} (stderr) : This is the default output used to print error message.
 	It is usually used to separate error message from actual output in redirections.
 	
-	Theses three output can be redirected using {Dos9}. However, {cmd.exe} allows user to
+	Theses three output can be redirected using {pBat}. However, {cmd.exe} allows user to
 	redirect any file descriptor through redirections. But this could lead to absurd results
 	since knowing which descriptor refers to which file. Moreover, this behavior can lead
-	to strange side effects. Thus, this feature is not supported by {../dos9|Dos9}.
+	to strange side effects. Thus, this feature is not supported by {../pbat|pBat}.
 
 {{Redirecting input and outputs}}
 
-	{../dos9|Dos9} uses {<} and {>} characters to set redirections. {>} character is used to redirect
+	{../pbat|pBat} uses {<} and {>} characters to set redirections. {>} character is used to redirect
 	{stdout} and {stderr}, whereas the {<} is used to specify {stdin} redirections.
 
-	When {../dos9|dos9} encounters either a {>} or a {<}, then Dos9 uses the very first
+	When {../pbat|pbat} encounters either a {>} or a {<}, then pBat uses the very first
 	parameter to the right of the same an use it as the name of a file to which the input
 	or output will be redirected. The name of the file and the sign do not have to be
-	separated by any blank character. Then Dos9 removes the file name from the
+	separated by any blank character. Then pBat removes the file name from the
 	command line. The {>} or {<} signs can be used anywhere in the command line, 
 	all of the following lines are valid.
 
@@ -98,7 +98,7 @@ echo redirection test > file}
 
 		${echo redirecting stderr and stdout at the same > file 2>&1}
 
-		@- Note that Dos9 allow the {2>&1} to be placed before the actual redirection, even
+		@- Note that pBat allow the {2>&1} to be placed before the actual redirection, even
 		though this would raise an error using {cmd.exe}
 
 {{Compatibility}}

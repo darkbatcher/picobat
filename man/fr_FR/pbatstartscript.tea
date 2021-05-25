@@ -1,0 +1,62 @@
+﻿#
+#   pBat Manual pages, The pBat project
+#   Copyright (C) 2012-2018  Romain Garbi (DarkBatcher)
+#   Copyright (C) 2016-2018  Teddy Astie (TSnake41)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+{{Variable d'environnement %PBAT_START_SCRIPT%}}
+
+    Cette page traite d'un sujet affectant uniquement les systèmes unixiens.
+    La variable {%PBAT_START_SCRIPT%} spécifie un script a exécuter pour
+    gérer le mécanisme d'association des fichiers du système d'exploitation.
+
+{{Synopsis}}
+
+${%PBAT_START_SCRIPT%}
+
+    Une variable contenant le chemin absolu du script utilisé pour gérer
+    l'association des fichiers du système d'exploitation. Ce script est
+    crucial pour que {start|Commande START} et {pbat|pBat} puissent lancer
+    des fichiers non-exécutables.
+
+    Le script référé par {%PBAT_START_SCRIPT%} est appelé par la commande
+    suivante :
+
+${%PBAT_START_SCRIPT% fichier [arguments ...]}
+
+    - {fichier} : Le fichier à lancer.
+
+    - {arguments} : Arguments optionnels à passer à {START}.
+
+    Par défaut, lors de la compilation, {pBat} regarde les différents scripts
+    disponibles gérant l'association des fichiers pour ensuite hardcoder l'un
+    des scripts disponibles.
+
+    Cependant, cette valeur est ecrasée par {pbatauto|pBat_Auto.bat} qui défini
+    sa valeur en {pbat_start}.
+
+    Si cette variable est indéfinie ou effacée, tout les appels pour lancer
+    un fichier non-executable échouront.
+
+{{Compatibilité}}
+
+	Non compatible avec {cmd.exe}, le mécanisme d'initialisation diffère.
+
+	Disponible depuis la version {0.7}.
+
+{{Voir aussi}}
+
+	{spec/var|Les variables d'environement}, {spec/index|Index des spécifications}

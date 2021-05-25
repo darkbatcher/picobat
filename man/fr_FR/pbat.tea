@@ -1,0 +1,104 @@
+#
+#   pBat Manual pages, The pBat project
+#   Copyright (C) 2012-2017 Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+{{Commande pBat}}
+
+	{pBat} est un interpréteur de commande utilisé pour les scripts
+	batch et les entrées de commandes.
+
+	{pBat} est un logiciel libre conçu pour être le plus compatible possible
+	avec {cmd.exe} de {Microsoft}.
+
+{{Synopsis}}
+
+${	PBAT [/A[:]attr] [/i entrée] [/o sortie] [fichier ... | /c commande ...| /k commande ... ]}
+
+	Exécute un fichier de commande ou attend une entrée de commande de
+	l'utilisateur.
+
+		- {fichier ...} : Chemin du script de commande a exécuter suivi des arguments à envoyer
+		au fichier.
+
+		- {/c commande ...} : Exécute la commande {commande} avec les arguments données
+		puis quitte l'interpréteur. {pBat} introduit une nouvelle sémantique, si la
+		commande est seulement le caractère {@}, alors {pBat} prend la commande
+		dans la variable {%__PBAT_COMMAND__%}.
+
+		- {/k commande ...} : Exécute la commande {commande}  avec les arguments données
+		puis reste actif. {pBat} introduit une nouvelle sémantique, si la
+		commande est seulement le caractère {@}, alors {pBat} prend la commande
+		dans la variable {%__PBAT_COMMAND__%}.
+
+		- {/A[:]attr} : Attributs déterminant le comportement de {pbat|pBat}
+
+		@-- {v}	  : Active {spec/exp|l'expansion retardée de variable}.
+
+		@-- {c}   : Active l'option {CMDLYCORRECT} de la commande {setlocal|SETLOCAL}.
+		ce qui permet de forcer le mode de compatibilité entre {pBat} et {cmd.exe}.
+
+		@-- {f}	  : Active les nombres flotants dans la commande {SET}. Pour
+		plus d'information, consultez la page {setaf|Commande SET (nombres flotants)}.
+
+		@-- {e}	  : Désactive l'affichage du chemin courant.
+
+		@-- {q}   : N'affiche pas l'écran de bienvenue.
+
+		- {/i entrée} : redirige le descripteur de fichier {entrée} vers
+		l'entrée standard.
+
+		- {/o sortie} : redirige la sortie standard vers le descripteur de
+		fichier {sortie}.
+
+{{Notes}}
+
+	Les commutateurs {/o} et {/i} ne sont pas destinés à être utilisés d'eux même,
+	ils sont conçus pour être utilisé par les boucles {for|FOR}.
+
+	Si vous voulez spécifier des commutateurs comme arguments pour un script, vous
+	devez placer le commutateur {//} avant le début des options.
+
+{{Compatibilité}}
+
+	   Compatible avec toutes les versions de {pBat}. Incompatible avec
+	   {cmd.exe}.
+
+	   {pBat} est multiplate-forme, et peut donc fonction à la fois sous {MS-WINDOWS} et
+	   sous {GNU/Linux}. En théorie, un portage de {pBat} sur un système d'exploitation
+	   compatible {POSIX} nécessite juste une recompilation via un compilateur {C89}.
+
+{{Licence}}
+
+	{pBat} est un logiciel libre distribué sous les termes de la
+	{http://www.gnu.org/licenses/gpl.html|Licence Publique Générale GNU}.
+	Pour plus d'information à propose de la philosophie du logiciel libre, consultez le
+	site web de la {http://www.fsf.org|Free Software Fundation}.
+
+{{Auteur}}
+
+	{pBat} a été écrit par {DarkBatcher (Romain Garbi)} depuis 2010. Il
+	utilise plusieur bibliothèques provenant du {http://www.gnu.org/|Système d'exploitation GNU},
+	principalement {http://www.gnu.org/software/libmatheval/|libmatheval} et {https://www.gnu.org/software/gettext/|gettext}.
+
+	Les paquets de {pBat} pour windows incluent aussi des binaires provenant du
+	{http://gnuwin32.sourceforge.net/|projet GnuWin}. Ces binaires sont {iconv|GNU iconv}
+	ete {nano|GNU Nano}.
+
+{{À voir aussi}}
+
+	{echo|Commande ECHO}, {scripts|Scripts de commandes},
+	{commands|Liste des commandes}

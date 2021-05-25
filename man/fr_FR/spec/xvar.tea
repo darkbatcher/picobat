@@ -1,5 +1,5 @@
 #
-#   Dos9 Manual pages, The Dos9 project
+#   pBat Manual pages, The pBat project
 #   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -17,14 +17,14 @@
 #
 {{Les variables spéciales}}
 
-	   Les variables spéciales sont des variables internes à {dos9|Dos9}:
-	Les commandes lancées avec {Dos9} n'héritent pas des variables
+	   Les variables spéciales sont des variables internes à {pbat|pBat}:
+	Les commandes lancées avec {pBat} n'héritent pas des variables
 	spéciales, ces variables sont donc locales.
 
 {{Utilisation des variables spéciales}}
 
 	Les variables spéciales ne sont pas modifiables, elles sont
-	uniquement définies par {../dos9|Dos9} ou par {../for|FOR}.
+	uniquement définies par {../pbat|pBat} ou par {../for|FOR}.
 
 	Les variables spéciales {%%0} à {%%9} (la syntaxe {%0} à {%9} est aussi
 	acceptée) sont affectés par les arguments passés au programme, dans l'ordre
@@ -35,7 +35,7 @@
 	paramètres passés au script, c'est-à-dire du contenu des variables {%1} à
 	{%9} et des paramètres suivants qui n'ont pas été affectés a une variable.
 	Sous les systèmes de type UNIX, il n'est pas possible de retrouver la
-	syntaxe exacte de la ligne de commande avec laquelle {../dos9|Dos9} a été
+	syntaxe exacte de la ligne de commande avec laquelle {../pbat|pBat} a été
 	invoqué, elle est reconstituée en plaçant les paramètres sur une même ligne
 	en les séparant par des espaces, en ajoutant des guillemets quand le
 	paramètre contient des délimiteurs valides ou des opérateurs conditionels,
@@ -77,7 +77,7 @@
 	On peut biensûr combiner les options (jusqu'a 16 simultanément).
 
 	Il se peut que des conflits entres options et noms de variables arrivent.
-	Si c'est le cas, {Dos9} utilisera la combinaison d'option la plus longue possible
+	Si c'est le cas, {pBat} utilisera la combinaison d'option la plus longue possible
 	donnant une variable valide (une variable définie). Ainsi, dans le code suivant :
 
 	${ECHO %%~aI}
@@ -93,7 +93,7 @@
 
 {{Note}}
 
-	{Dos9} est sensible à la casse pour les options et les noms de
+	{pBat} est sensible à la casse pour les options et les noms de
 	{variables spéciales}
 
 {{À voir aussi}}

@@ -1,5 +1,5 @@
 ﻿#
-#   Dos9 Manual pages, The Dos9 project
+#   pBat Manual pages, The pBat project
 #   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -31,14 +31,14 @@
 	   L'expansion conventionnelle a lieu à chaque lecture de ligne. On
 	ne peut pas la désactiver.
 
-	   Lors de cette étape {../dos9|Dos9} recherche les chaines délimitées
-	par des {%}. Si Dos9 trouve de telles chaines, il considère qu'il
+	   Lors de cette étape {../pbat|pBat} recherche les chaines délimitées
+	par des {%}. Si pBat trouve de telles chaines, il considère qu'il
 	s'agit de noms de {var|variables} et les remplace par leur contenu.
 
-	Lorsque {Dos9} rencontre une chaîne entourée par des {%} (pour-cent) sucessifs,
-	alors {Dos9} procède de la façon suivante:
+	Lorsque {pBat} rencontre une chaîne entourée par des {%} (pour-cent) sucessifs,
+	alors {pBat} procède de la façon suivante:
 
-		- Si la chaîne définit un nom de variable valide, alors {Dos9} dévellope
+		- Si la chaîne définit un nom de variable valide, alors {pBat} dévellope
 		l'entrée en le contenu de la variable:
 
 		@- Par exemple :
@@ -50,7 +50,7 @@ ECHO %var%}
 
 ${hello world !}
 
-		- Si les deux {%} sont accolés, alors Dos9 les remplace par
+		- Si les deux {%} sont accolés, alors pBat les remplace par
 		  un unique {%}.
 
 		@- Par exemple, le code suivant :
@@ -91,7 +91,7 @@ ${hello world !}
 			  s'arrêtera {nb2} caractères avant la fin de
 			  {nom_variable}
 			  
-		@- Notez que si la version de Dos9 que vous utilisez supporte l'utf8,
+		@- Notez que si la version de pBat que vous utilisez supporte l'utf8,
 		le découpage des variable ne se fait que sur des caractères entiers. Si
 		ce n'est pas le cas, aucune garantie n'est apportée.
 

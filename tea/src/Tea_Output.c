@@ -21,7 +21,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <libDos9.h>
+#include <libpBat.h>
 #include "Tea.h"
 
 size_t         Tea_GetWordLengthT(char* lpBegin, TEANODE* lpTeaNode)
@@ -51,7 +51,7 @@ size_t         Tea_GetWordLengthT(char* lpBegin, TEANODE* lpTeaNode)
 
 		} else {
 
-			lpBegin=Dos9_GetNextChar(lpBegin);
+			lpBegin=pBat_GetNextChar(lpBegin);
 
 		}
 
@@ -74,7 +74,7 @@ size_t      Tea_GetWordLength(char* lpBegin)
 	       && *lpBegin!=' '
 	       && *lpBegin!='\n') {
 
-		lpBegin=Dos9_GetNextChar(lpBegin);
+		lpBegin=pBat_GetNextChar(lpBegin);
 		iLength++;
 
 	}
@@ -105,7 +105,7 @@ char*       Tea_OutputWord(char* lpBegin, FILE* pFile, size_t* iLeft)
 	       && *iLeft) {
 
 
-		lpNext=Dos9_GetNextChar(lpBegin);
+		lpNext=pBat_GetNextChar(lpBegin);
 
 		while (lpBegin < lpNext) {
 

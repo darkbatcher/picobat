@@ -1,5 +1,5 @@
 #
-#   Dos9 Makefiles, The Dos9 project
+#   pBat Makefiles, The pBat project
 #   Copyright (C) 2012-2018  Romain Garbi, Teddy Astie
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -19,8 +19,8 @@
 ROOTDIR = ..
 include $(ROOTDIR)/config.mk
 
-CFLAGS += $(LIBDOS9_INC)
-LDFLAGS += $(LIBDOS9_LD) $(LPTHREAD_LD)
+CFLAGS += $(LIBPBAT_INC)
+LDFLAGS += $(LIBPBAT_LD) $(LPTHREAD_LD)
 
 SRC_FILES := \
 	src/Tea_Load.c src/Tea_Node.c src/Tea_Output.c \

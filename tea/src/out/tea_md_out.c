@@ -26,7 +26,7 @@
 #include <strings.h>
 #endif
 
-#include <libDos9.h>
+#include <libpBat.h>
 #include "../Tea.h"
 #include "tea_out.h"
 
@@ -82,23 +82,23 @@ void Tea_MDOutputHandler(TEAPAGE* lpTeaPage, FILE* pFile, int i, char** argv)
 
 void Tea_MDEscape(char** pp)
 {
-    ESTR* estr= Dos9_EsInit();
+    ESTR* estr= pBat_EsInit();
     char* new;
 
-    Dos9_EsCpy(estr, *pp);
-    Dos9_EsReplace(estr, "_", "\\\\_");
-    Dos9_EsReplace(estr, "*", "\\\\*");
-    Dos9_EsReplace(estr, "]", "\\\\]");
-    Dos9_EsReplace(estr, "[", "\\\\[");
-    Dos9_EsReplace(estr, "(", "\\\\(");
-    Dos9_EsReplace(estr, ")", "\\\\)");
+    pBat_EsCpy(estr, *pp);
+    pBat_EsReplace(estr, "_", "\\\\_");
+    pBat_EsReplace(estr, "*", "\\\\*");
+    pBat_EsReplace(estr, "]", "\\\\]");
+    pBat_EsReplace(estr, "[", "\\\\[");
+    pBat_EsReplace(estr, "(", "\\\\(");
+    pBat_EsReplace(estr, ")", "\\\\)");
 
     if ((new = strdup(estr->str))) {
         free(*pp);
         *pp = new;
     }
 
-    Dos9_EsFree(estr);
+    pBat_EsFree(estr);
 }
 
 void Tea_MDParseHandler(int iMsg ,void* lpData)
@@ -110,7 +110,7 @@ void Tea_MDParseHandler(int iMsg ,void* lpData)
         return;
 	}
 
-	lpEsStr=Dos9_EsInit();
+	lpEsStr=pBat_EsInit();
 
 	lpTeaNode=(TEANODE*)lpData;
 
@@ -119,12 +119,12 @@ void Tea_MDParseHandler(int iMsg ,void* lpData)
 	case TEA_NODE_EMPHASIS:
         Tea_MDEscape(&(lpTeaNode->lpContent));
 
-		Dos9_EsCat(lpEsStr, "**");
-		Dos9_EsCat(lpEsStr, lpTeaNode->lpContent);
-		Dos9_EsCat(lpEsStr, "**");
+		pBat_EsCat(lpEsStr, "**");
+		pBat_EsCat(lpEsStr, lpTeaNode->lpContent);
+		pBat_EsCat(lpEsStr, "**");
 		free(lpTeaNode->lpContent);
 
-		if (!(lpTeaNode->lpContent=strdup(Dos9_EsToChar(lpEsStr)))) {
+		if (!(lpTeaNode->lpContent=strdup(pBat_EsToChar(lpEsStr)))) {
 
 			perror("TEA : Unable to allocate memory ");
 			exit(-1);
@@ -137,16 +137,16 @@ void Tea_MDParseHandler(int iMsg ,void* lpData)
         Tea_MDEscape(&(lpTeaNode->lpContent));
         Tea_MDEscape(&(lpTeaNode->lpTarget));
 
-        Dos9_EsCpy(lpEsStr, "[");
-		Dos9_EsCat(lpEsStr, lpTeaNode->lpContent);
-		Dos9_EsCat(lpEsStr, "]");
-		Dos9_EsCat(lpEsStr, "(");
-		Dos9_EsCat(lpEsStr, lpTeaNode->lpTarget);
-		Dos9_EsCat(lpEsStr, ")");
+        pBat_EsCpy(lpEsStr, "[");
+		pBat_EsCat(lpEsStr, lpTeaNode->lpContent);
+		pBat_EsCat(lpEsStr, "]");
+		pBat_EsCat(lpEsStr, "(");
+		pBat_EsCat(lpEsStr, lpTeaNode->lpTarget);
+		pBat_EsCat(lpEsStr, ")");
 
 		free(lpTeaNode->lpContent);
 
-		if (!(lpTeaNode->lpContent=strdup(Dos9_EsToChar(lpEsStr)))) {
+		if (!(lpTeaNode->lpContent=strdup(pBat_EsToChar(lpEsStr)))) {
 
 			perror("TEA :: impossible d'allouer de la m�moire ");
 			exit(-1);
@@ -159,5 +159,5 @@ void Tea_MDParseHandler(int iMsg ,void* lpData)
 
 	}
 
-	Dos9_EsFree(lpEsStr);
+	pBat_EsFree(lpEsStr);
 }

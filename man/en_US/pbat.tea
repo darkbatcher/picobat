@@ -1,0 +1,91 @@
+#
+#   pBat Manual pages, The pBat project
+#   Copyright (C) 2012-2015  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+{{pBat command}}
+
+	{pBat} is a free, cross-platform command prompt used for batch scripts
+	and command processing.
+
+	{pBat} is a free software, designed to be as compatible as possible with
+	{cmd.exe} proprietary software from {Microsoft}.
+
+{{Synopsis}}
+
+${	PBAT [/A[:]attr] [/i input] [/o output] [file] [/ commande | /k command]}
+
+	Run a command file or wait for an user input.
+
+		- {file} : Path of the batch script to be run.
+
+		- {/c command} : Run {command} and exit {pBat}.
+
+		- {/k command} : Run {command} and stay active.
+
+		- {/A[:]attr} : Some attributes to set {pBat} behaviour:
+
+		@-- {v}	  : Enables {spec/var|delayed expansion}.
+
+		@-- {c}	  : Enables {CMDLYCORRECT} option from the {setlocal|SETLOCAL}
+		command. This forces {cmd.exe} compatible mode.
+
+		@-- {f}	  : Enables {spec/exp|floating numbers}.
+
+		@-- {e}	  : Disable current directory echoing.
+
+		@-- {q} : Run pBat quietly (ie. does not show the intro screen
+		at startup).
+
+		- {/i input} : redirects standard input to file descriptor
+		{input}.
+
+		- {/o output} : redirects standard output to file descriptor
+		{output}.
+
+
+{{Compatibility}}
+
+	   Compatible with any version of {pBat}. Incompatible with
+	   {cmd.exe}.
+
+	   {pBat} is cross-platform so that it can be run either on {MS-WINDOWS}
+	   or {GNU/Linux}. Moreover, pBat should be easily portable to operating
+	   systems that support either {POSIX} (and define {_POSIX_C_SOURCE}) or
+	   a {MS-WINDOWS} compatible API, including any POSIX-compatible function
+	   that is provided by it.
+
+{{License}}
+
+	{pBat} is a free software distributed under
+	{http://www.gnu.org/licenses/gpl.html|GNU General Public License} terms. For more
+	informations about free software's philosophy, see
+	{http://www.fsf.org|Free Software Fundation's} website.
+
+{{Author}}
+
+	{pBat} have been written since 2010 by {Darkbatcher (Romain Garbi)}. It uses severals
+	helpful free libraries from the {http://www.gnu.org/|GNU operating system}, mostly
+	{http://www.gnu.org/software/libmatheval/|libmatheval}, {https://www.gnu.org/software/gettext/|gettext}.
+
+    pBat uses a few open-source project. Theses project include GNU Iconv,
+    GNU Gettext, GNU libmatheval, and linenoise. pBat also includes a few
+    functions from {darkbox} by TSnake41.
+
+{{See Also}}
+
+	{echo|ECHO Command}, 
+	{commands|Commands list}

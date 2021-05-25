@@ -1,5 +1,5 @@
 ﻿#
-#   Dos9 Manual pages, The Dos9 project
+#   pBat Manual pages, The pBat project
 #   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -25,11 +25,11 @@
 
 ${CALL [/e] [file] [:label] [parameters ...]}
 
-	Call either the file {file} or the label {:label} within the current {Dos9}
+	Call either the file {file} or the label {:label} within the current {pBat}
 	context.
 
 	- {file} : A path to the file to be executed. If the label name {:label} and
-	the {/e} switch have been specified, then {Dos9} will serach the given label
+	the {/e} switch have been specified, then {pBat} will serach the given label
 	in {file}.
 
 	- {:label} : A label where the command file execution will be started. If
@@ -37,7 +37,7 @@ ${CALL [/e] [file] [:label] [parameters ...]}
 	on the current file.
 
 	- {/e} : Indicate that both {file} and {:label} have been specified. This switch
-	avoid ambiguous behaviour toward parameter. By default, {Dos9} will only take
+	avoid ambiguous behaviour toward parameter. By default, {pBat} will only take
 	in account the very firs parameter. This switch has no effect if not specified
 	in first or second position, it will be considered as a parameter to be passed
 	in {parameters}.
@@ -46,11 +46,11 @@ ${CALL [/e] [file] [:label] [parameters ...]}
 	parameters will be passed through {%1} - {%9}. You can give at most 9 parameters,
 	that is largely sufficient.
 
-	The specified script will be executed in the current {Dos9} context. That means,
+	The specified script will be executed in the current {pBat} context. That means,
 	it will be able to modify {spec/var|environment variables} but not
 	{spec/xvar|special variables}/
 
-	The ability to provide either {file} and {:label} are a {Dos9} extension. You
+	The ability to provide either {file} and {:label} are a {pBat} extension. You
 	can get a {cmd.exe} compatible behavior by setting the option
 	{CMDLYCORRECT} from the command {setlocal|SETLOCAL}.
 

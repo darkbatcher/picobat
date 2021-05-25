@@ -1,5 +1,5 @@
 #
-#   Dos9 Manual pages, The Dos9 project
+#   pBat Manual pages, The pBat project
 #   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -31,7 +31,7 @@ ${HLP [name | /b language [encoding] | /l | /d]}
 
 	- {/b} : Build documentation for a given language and a given encoding.
 	This switch is used to produce files from {tea|TEA} documents shipped
-	with {Dos9}. The parameters that can be specified are:
+	with {pBat}. The parameters that can be specified are:
 
 		-- {language} : The language in which the documentation will be
 		generated. A list of languages available can be obtained through
@@ -49,7 +49,7 @@ ${HLP [name | /b language [encoding] | /l | /d]}
 	- {/c} : Configures {hlp.bat} command parameter. Prompt the user for the
 	selected language, format (html, text or ansi) and encoding to be used.
 	This option is an user-friendly way to configure the configuration file
-	{%USERPROFILE%/.dos9/hlp/hlp.conf.bat}.
+	{%USERPROFILE%/.pbat/hlp/hlp.conf.bat}.
 	
 {{Config file}}
 
@@ -71,7 +71,7 @@ ${%USERPROFILE%/share/hlp/hlp.conf.bat}
 			-- {txt} : Help pages will be displayed at the command prompt using plain text
 
 		- {%locale%} : The language of help pages using a {POSIX} local (e.g {language_COUNTRY}).
-		The corresponding locale has to be installed in {%DOS9_PATH%/share/hlp/man}.
+		The corresponding locale has to be installed in {%PBAT_PATH%/share/hlp/man}.
 	
 		- {%view_cmd%} : The command to be used for Help pages display. This can either be an
 		internal or an external command. By default, {hlp} uses :

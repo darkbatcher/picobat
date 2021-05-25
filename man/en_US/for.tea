@@ -1,5 +1,5 @@
 #
-#   Dos9 Manual pages, The Dos9 project
+#   pBat Manual pages, The pBat project
 #   Copyright (C) 2012-2021  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -42,10 +42,10 @@ ${FOR %%A IN (string) DO (
 		@- The proprietary software {cmd.exe} needed the users to use two
 		different syntaxes, depending on the input mode (console or script).
 		In the first case, the user had to use {%A} instead of {%%A}, which
-		was required in the second case. {dos9|Dos9} uses a single syntax based
+		was required in the second case. {pbat|pBat} uses a single syntax based
 		on the batch syntax (ie. always {%%}).
 		
-		- {string} : The string to split in chunks. Dos9 uses the following
+		- {string} : The string to split in chunks. pBat uses the following
 		delimiters:
 		
 		-- {' '} : space.
@@ -107,7 +107,7 @@ ${FOR /F [options] %%A IN (object) DO (
 	@-- Using {cmd.exe}, if the command line was to contain any end of line
 	characters, the said characters will be removed and line would be
 	executed as if it was a single line, preventing user from using complex
-	scripts as input. {dos9|Dos9} removed this restriction, as such more
+	scripts as input. {pbat|pBat} removed this restriction, as such more
 	complex script can be used as input.
 	
 	-- {"} : {Object} refer to a string of characters. The {FOR} loop will 
@@ -123,7 +123,7 @@ ${FOR /F [options] %%A IN (object) DO (
     somehow a {text} file. If the file is not a {text} file, then the
     behaviour is unspecified.
 	
-	@-- As opposed to {cmd.exe}, {Dos9} does not remove empty lines from the
+	@-- As opposed to {cmd.exe}, {pBat} does not remove empty lines from the
     loop input. Nonetheless, a compatible behaviour can be enabled using
     {CMDLYCORRECT} option from the command {setlocal|SETLOCAL}.
 
@@ -185,7 +185,7 @@ ${FOR /F [options] %%A IN (object) DO (
 	@-- If {FOR} has to assign an already assigned var, the loops stoops on
 	error.
 
-	@-- The tokens positions start at {1}. As opposed to {cmd.exe}, Dos9
+	@-- The tokens positions start at {1}. As opposed to {cmd.exe}, pBat
 	does not have any constraints on the order of selections of the
 	token (ie. sets may overlap or be in "reverse" order).
 	
@@ -193,8 +193,8 @@ ${FOR /F [options] %%A IN (object) DO (
 	got through {object} into tokens. By default, the only delimiter is {space}.
 	
 	@-- If this parameter is specified, then {space} is a delimiter
-	any more and is replaced by the given character set. If {Dos9} encounters
-	a sub-string containing only delimiter in the input, then {Dos9} behaves
+	any more and is replaced by the given character set. If {pBat} encounters
+	a sub-string containing only delimiter in the input, then {pBat} behaves
 	as if the sub-string was only one single delimiter (no empty tokens are
 	created).
 	
@@ -210,7 +210,7 @@ ${FOR /F [options] %%A IN (object) DO (
 	
 	@-- This parameter was really usefull using {cmd.exe} that frequently
 	truncates strings input from {FOR} whenever some usual double quote is
-	encountered. However, this is no more relevant using {Dos9}.	
+	encountered. However, this is no more relevant using {pBat}.	
 	
 	{Example 1:} String parsing
 
@@ -250,7 +250,7 @@ ${FOR /F "tokens=*" %%A IN ('dir /b /a:D') DO (
 
 )}
 
-	If this loop is run on the ``bin'' folder of {Dos9}, the following output
+	If this loop is run on the ``bin'' folder of {pBat}, the following output
 	is obtained.
 
 ${Sub-dir : "share"
@@ -356,17 +356,17 @@ ${FOR /F "tokens=*" %%A IN ('dir /b /s /a:-D basedir/regexp') DO (
 {{Compatibility}}
 
 	Mostly compatible with {cmd.exe}. However, any code from {cmd.exe} can
-    be executed  with no bugs under {Dos9} concerning {FOR} loops.
+    be executed  with no bugs under {pBat} concerning {FOR} loops.
 	
 	However, one can come across some unexpected behaviour using the {tokens}
     options. Indeed, if tokens specifiers are not specified from the lowest to
     the highest, then {cmd.exe} will silently try to sort the tokens. 
-    However {Dos9} does not do so, leading to a potential unexpected behaviour.
-    In addition, {Dos9} performs all right when two tokens specifiers overlap
+    However {pBat} does not do so, leading to a potential unexpected behaviour.
+    In addition, {pBat} performs all right when two tokens specifiers overlap
     (eg. "4-6,5-7") although {cmd.exe} fails to handle such
 	specifiers correctly.
 
-	Also, {Dos9} does process empty lines while using {/F} switches while
+	Also, {pBat} does process empty lines while using {/F} switches while
     {cmd.exe} keeps skipping them. However this behaviour may be changed using
     {CMDLYCORRECT}.
 

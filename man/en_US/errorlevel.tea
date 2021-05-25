@@ -1,5 +1,5 @@
 #
-#   Dos9 Manual pages, The Dos9 project
+#   pBat Manual pages, The pBat project
 #   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 
 {{%ERRORLEVEL%, %=EXITCODEASCII% variables}}
 
-	{%ERRORLEVEL%} is an environment variable defined automatically by {dos9|Dos9}
+	{%ERRORLEVEL%} is an environment variable defined automatically by {pbat|pBat}
 	at end of command execution. It enables checking if the previous command failed.
 	With most commands, if {%ERRORLEVEL%} is equal to 0, then no error occurred.
 
@@ -37,10 +37,10 @@ ${%ERRORLEVEL%}
 ${%=EXITCODEASCII%}
 	
 	A variable containing the character associated to exit code according to
-	the {ASCII} codeset. If {dos9|Dos9} has been build with UTF-8 support,
+	the {ASCII} codeset. If {pbat|pBat} has been build with UTF-8 support,
 	then {%=EXITCODEASCII%} will contain the character associated according
 	to UTF-8, taking account of all the bits of the exit code in {%ERRORLEVEL%}.
-	If not, {dos9|Dos9} will only use the least significant 8 bits of the
+	If not, {pbat|pBat} will only use the least significant 8 bits of the
 	exit code.
 
 {{See also}}

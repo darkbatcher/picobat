@@ -1,0 +1,107 @@
+#
+#   pBat Manual pages, The pBat project
+#   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+{{Variables %PBAT_VER%, %PBAT_OS%, %PBAT_OS_TYPE%, %PBAT_PATH%, %PBAT_SHARE%, %PBAT_ETC%}}
+
+	La variable {%PBAT_VER%} permet d'obtenir la version de {pbat|pBat}
+	en cours d'execution.
+
+	La variable {%PBAT_OS%} permet d'obenir l'os sur lequel
+	{pbat|pBat} s'exécute.
+
+	La variable {%PBAT_OS_TYPE%}, d'obtenir le type d'os sur lequel
+	{pbat|pBat} s'exécute.
+
+	La variable {%PBAT_PATH%} permet d'obtenir le chemin de l'exécutable
+	{pbat|pBat}.
+	
+	Les variables {%PBAT_SHARE%} et {%PBAT_ETC%} indiquent l'emplacement
+	des fichiers de {pbat|pBat}.
+
+	Ces variable sont directement définies par {pBat}.
+
+{{Synopsis}}
+
+	${%PBAT_VER%}
+
+	Contient le numéro de la version de {pBat}.
+
+	${%PBAT_OS%}
+
+	Contient le type d'os sous lequel {pBat} s'éxécute. Cette variable ne
+	permet pas de distinguer la version de l'os mais seulement son nom.
+	Le contenu de cette variable peut-être, selon les cas :
+
+	- {WINDOWS} : Sur un système d'exploitation équipé de {MS-Windows}.
+
+	- {GNU/Linux} : Sur un système d'exploitation basé sur Linux et le
+	système GNU (les seuls systèmes actuellement supportés fonctionnant
+	sur le noyaux Linux).
+
+	- {NetBSD} : Sur les systèmes basés sur {NetBSD}.
+
+	- {OpenBSD} : Sur les sytèmes basés sur {OpenBSD}.
+
+	- {DragonFlyBSD} : Sur les systèmes basés sur {DragonFlyBSD}.
+
+	- Si aucun système d'exploitation n'est reconnu par {pBat}, alors le
+	nom du système sera le triplet de l'hote pour lequel {pBat} a été
+	compilé.
+
+	Cette variable n'a d'intérêt que pour exécuter du code spécifique à
+	chacune de ces plate-formes. Dans la majorité des cas, la distinction
+	entre les types de systèmes d'exploitation via la variable
+	{%PBAT_OS_TYPE%} suffit.
+
+
+	${%PBAT_OS_TYPE%}
+
+	Se développe en le nom du type de système d'exploitation sur lequel
+	le script est en train de s'exécuter. Le type de système d'exploitation
+	peut être :
+
+	- {*NIX} : Le système d'exploitation sur lequel {pbat|pBat} s'exécute
+	est un système UNIX-Like.
+
+	- {WINDOWS} : Le système d'exploitation sur lequel {pbat|pBat}
+	s'exécute est basé sur {Windows NT}.
+
+
+	${%PBAT_PATH%}
+
+	Contient le chemin de l'exécutable {pBat.exe} (WINDOWS) ou {pBat}(*NIX). Ce chemin est généré à chaque
+	lancement de {pBat}. Donc, il peut s'accommoder avec toutes sortes d'installations, par exemple, une
+	installation sur support amovible est tout à fait envisageable.
+	
+	${%PBAT_SHARE%}
+	
+	Contient le chemin du dossier ou sont stockées les données statiques de pBat.
+	
+	${%PBAT_ETC%}
+	
+	Contient le chemin du dossier ou sont stockées les fichiers de configuration de pBat.
+
+{{Compatibilité}}
+
+	Non-compatible avec {cmd.exe}, ces variables n'y sont pas définies.
+
+	Disponible depuis la version {0.7}.
+
+{{A voir aussi}}
+
+	{spec/var|Les variables d'environement}, {spec/index|Index des spécifications}

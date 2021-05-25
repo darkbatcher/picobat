@@ -1,5 +1,5 @@
 ﻿#
-#   Dos9 Manual pages, The Dos9 project
+#   pBat Manual pages, The pBat project
 #   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@
 
 	This step in fact consist of two different step. The first,
 	the {conventional expansion} and the {delayed expansion}. The
-	first takes places as the file is read by Dos9. The second
+	first takes places as the file is read by pBat. The second
 	one takes place just before the command execution.
 
 {{Conventional expansion}}
@@ -30,14 +30,14 @@
 	Conventional expansion takes places at every new line read. It 
 	can not be discarded.
 	
-	During this step {../dos9|Dos9} searches string delimited by
-	some {%}. If Dos9 finds any of those, it will consider it to be
+	During this step {../pbat|pBat} searches string delimited by
+	some {%}. If pBat finds any of those, it will consider it to be
 	{var|variable} names and replace it by their content.
 	
-	Once {Dos9} encounters such a string, it proceeds the following
+	Once {pBat} encounters such a string, it proceeds the following
 	way :
 	
-		- if the string refers to a valid variable name, then {Dos9} will
+		- if the string refers to a valid variable name, then {pBat} will
 		expand the string into the variable content.
 	
 		@- As example :
@@ -49,7 +49,7 @@ ECHO %var%}
 
 ${hello world !}
 
-		- If both {%} are next to one another, Dos9 replace it by a single
+		- If both {%} are next to one another, pBat replace it by a single
 		{%}
 
 		@- As example:
@@ -93,7 +93,7 @@ ${hello world !}
 			number, then the position are counted from the end of
 			the string
 			
-		@- Note that if the version of Dos9 that is running supports utf-8,
+		@- Note that if the version of pBat that is running supports utf-8,
 		then the variable truncation happens only counting entire characters.
 		If not, this is not warranted.
 

@@ -1,5 +1,5 @@
 #
-#   Dos9 Manual pages, The Dos9 project
+#   pBat Manual pages, The pBat project
 #   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -23,8 +23,8 @@
 
 {{Argument detection}}
 
-	What {../dos9|Dos9} considers to be arguments is a set characters delimited
-	by delimiters accepted by {Dos9} which are colons ({;}), semicolons ({;}), comma ({,}),
+	What {../pbat|pBat} considers to be arguments is a set characters delimited
+	by delimiters accepted by {pBat} which are colons ({;}), semicolons ({;}), comma ({,}),
 	newlines, tabs and spaces. Thus the following line consists of two arguments:
 
 ${COMMAND foo bar}
@@ -60,19 +60,19 @@ ${COMMAND foo"ta fu"bar}
     following possibilities, by order of precedence:
 
     -- An {internal command} to be ran, that is, a command which is included
-    inside the {../dos9|Dos9} command interpreter.
+    inside the {../pbat|pBat} command interpreter.
 
     -- A {path} or the name of an external command located inside one of the directories
-    listed in {var|%PATH% variable} if {Dos9} fails to find an internal command matching
+    listed in {var|%PATH% variable} if {pBat} fails to find an internal command matching
     {COMMAND}.
 
-    -- If both preceding options fail, {Dos9} considers that {COMMAND} refers to a file
+    -- If both preceding options fail, {pBat} considers that {COMMAND} refers to a file
     that is not executable and tries to find a program to handle {COMMAND} using
     operating systems files associations. The script used to find operating system
-    associations under UNIX-derived OSes can be customized using {../dos9startscript|%DOS9_START_SCRIPT%}
+    associations under UNIX-derived OSes can be customized using {../pbatstartscript|%PBAT_START_SCRIPT%}
     environment variable.
 
-    @- A list of commands shipped with {Dos9} (internal and external) can be obtained
+    @- A list of commands shipped with {pBat} (internal and external) can be obtained
     through {../commands|command list} manual page.
 	
 	- {madatory_argument} is an argument that must be specified for the command to run
@@ -96,7 +96,7 @@ ${COMMAND foo"ta fu"bar}
 
 	${COMMANDE {choix1|choix2}}
 	
-	@- No {Dos9} command is supposed to use this syntax as it not required
+	@- No {pBat} command is supposed to use this syntax as it not required
 	for well designed command to require the user to make a mandatory choice.
 
 {{See also}}

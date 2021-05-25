@@ -1,5 +1,5 @@
 #
-#   Dos9 Manual pages, The Dos9 project
+#   pBat Manual pages, The pBat project
 #   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -29,7 +29,7 @@
 	Execute des commandes liées par un opérateur conditionnel.
 
 	- {commande1}, {commande2} : Deux commandes pouvant être exécutées par
-	{dos9|Dos9}.
+	{pbat|pBat}.
 
 	- {opérateur} : Un opérateur conditionnel liant les deux commandes.
 
@@ -47,7 +47,7 @@
 
 	- {&&} : Exécute la commande {commande2} si et seulement si la commande
 	{commande1} se termine sans retourner d'erreur. Pour déterminer si la
-	commande a réussi, {dos9|Dos9}
+	commande a réussi, {pbat|pBat}
 	utilise la valeur de {../errorlevel|%ERRORLEVEL%} fixé par {commande1} et :
 
 		- si {%ERRORLEVEL} = 0, Alors la commande s'est terminé avec succès.
@@ -63,14 +63,14 @@
 	d'utiliser les données générées par {commande1}.
 
 	@- Lors de l'éxécution, {commande1} et {commande2} sont exécutés simultanément.
-	La {commande1} est exécuté sur un nouveau processus {../dos9|Dos9} crée par le
-	processus {Dos9} principal. Pendant ce temps, la {commande2} est exécutée sur
+	La {commande1} est exécuté sur un nouveau processus {../pbat|pBat} crée par le
+	processus {pBat} principal. Pendant ce temps, la {commande2} est exécutée sur
 	le processus principal. Une fois que la {commande1} a achevé son exécution,
 	le nouveau processus meurt et l'exécution du script continue sur le processus
 	principal.
 
 	@- C'est pour cela que si la commande {commande1} est censée modifier l'environnement
-	de {Dos9}, il ne se passera rien, i.e. la variable ne sera pas assigné. Ainsi
+	de {pBat}, il ne se passera rien, i.e. la variable ne sera pas assigné. Ainsi
 
 	${set exemple=1 | more test.txt}
 

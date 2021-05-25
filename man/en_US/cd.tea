@@ -1,5 +1,5 @@
 #
-#   Dos9 Manual pages, The Dos9 project
+#   pBat Manual pages, The pBat project
 #   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -17,10 +17,10 @@
 #
 {{CD, CHDIR commands and %CD% Variable}}
 
-	   The {CD} command changes or shows the current directory of {dos9|Dos9}
+	   The {CD} command changes or shows the current directory of {pbat|pBat}
        command prompt.
 
-       The {%CD%} variable expands to the current directory of {dos9|Dos9}
+       The {%CD%} variable expands to the current directory of {pbat|pBat}
 	   command prompt.
 
 {{Synopsis}}
@@ -64,9 +64,9 @@ CHDIR [[/d] path]}
 	${%CD%}
 
 	Expands to the current working directory. This variable is read-only
-	and can not be modified using {set|SET}. Depending on {dos9|Dos9}
+	and can not be modified using {set|SET}. Depending on {pbat|pBat}
 	version, the undocumented {%__CD__%} variable defined by {cmd}
-	might as well be defined by {dos9}, however its use is strongly
+	might as well be defined by {pbat}, however its use is strongly
 	discouraged.
 
 	${%=X:%}
@@ -81,7 +81,7 @@ CHDIR [[/d] path]}
 	On {Windows}, {CD} may actually change current directory to a path
 	that does not exist if {path} is made of dots. Indeed, internal
 	windows routines fail to identify such folders as non-existing, thus
-	allowing {Dos9} to change directory. For example:
+	allowing {pBat} to change directory. For example:
 
 ${CD ...}
 

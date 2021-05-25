@@ -1,5 +1,5 @@
 #
-#   Dos9 Makefiles, The Dos9 project
+#   pBat Makefiles, The pBat project
 #   Copyright (C) 2012-2018  Romain Garbi, Teddy Astie
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 
 ROOTDIR=..
 BINDIR?=$(ROOTDIR)/bin
-DOS9=$(BINDIR)/dos9
+PBAT=$(BINDIR)/pbat
 TESTS=$(shell find . -name "*.bat")
 TESTS.OUT=$(TESTS:.bat=.out)
 
@@ -33,7 +33,7 @@ test-clean:
 
 .bat.out:
 	@echo Running test :  $<
-	@$(DOS9) run-test.cmd $< $@
+	@$(PBAT) run-test.cmd $< $@
 	@cmp $@ $@.ok; \
 	case $$? in \
 		0) echo "	OK";true;; \

@@ -1,5 +1,5 @@
 #
-#   Dos9 Manual pages, The Dos9 project
+#   pBat Manual pages, The pBat project
 #   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -27,10 +27,10 @@
 ${CALL [/e] [ficher] [:label] [paramètres ...]}
 
 	Appelle le fichier {fichier} ou l'étiquette {:label} depuis le contexte courrant
-	de {Dos9}.
+	de {pBat}.
 
 		- {fichier} : Le chemin du fichier de commande a exécuter. Si un nom d'étiquette
-		{:label} et l'option {/e} ont été spécifiés, alors {Dos9} recherchera dans
+		{:label} et l'option {/e} ont été spécifiés, alors {pBat} recherchera dans
 		l'étiquette {:label} dans {fichier}.
 
 		- {:label} : Une étiquette spécifie où le fichier de commande doit être démaré. Si
@@ -41,7 +41,7 @@ ${CALL [/e] [ficher] [:label] [paramètres ...]}
 
 		- {/e} : Spécifie que les deux paramètres {fichier} et {:label} sont spécifiés.
 		Ce commutateur permet de lever les ambiguitées entre la nature des paramètres. Par défaut,
-		{Dos9} tiendra seulement en compte le premier des paramètres. Ce commutateur doit
+		{pBat} tiendra seulement en compte le premier des paramètres. Ce commutateur doit
 		impérativement être spécifié en première ou en seconde position, sinon il sera inopérant et considéré
 		comme un des {paramètres}.
 
@@ -54,7 +54,7 @@ ${CALL [/e] [ficher] [:label] [paramètres ...]}
 	{xvar|variables spéciales} de celui-ci.
 
 	La possibilité spécifier simultanément un fichier et une étiquette est une possibilité introduite
-	par {Dos9}. Pour optenir un comportement compatible avec celui de {cmd.exe}, vous pouvez spécifier
+	par {pBat}. Pour optenir un comportement compatible avec celui de {cmd.exe}, vous pouvez spécifier
 	l'option {CMDLYCORRECT} de la commande {setlocal|SETLOCAL}.
 
 {{Compatibilité}}

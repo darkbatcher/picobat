@@ -1,5 +1,5 @@
 #
-#   Dos9 Manual pages, The Dos9 project
+#   pBat Manual pages, The pBat project
 #   Copyright (C) 2012-2013  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -35,8 +35,8 @@ ${GOTO [/f[:]fichier] [/Q] [:]étiquette }
         - {étiquette} : étiquette à laquelle l'exécution se poursuivra.
 
         - {/f[:]fichier} : fichier de commande dans lequel on doit trouver
-          {étiquette}, nécessite le mode spécial Dos9 (voir
-          {spec/new|Nouvelles fonctions de Dos9}).
+          {étiquette}, nécessite le mode spécial pBat (voir
+          {spec/new|Nouvelles fonctions de pBat}).
 
 		- {/Q} : Ignore silencieusement les étiquettes invalides, et continue
 		à la ligne suivant l'instruction {GOTO} en mettant néamoins {errorlevel|%ERRORLEVEL%} à {0}
@@ -113,7 +113,7 @@ ECHO Vous avez choisi le choix 3
 	   Cette commande est compatible avec {cmd.exe}, mis à part le
 	paramètre {fichier} qui n'est pas supporté par {cmd.exe}.
 
-	   Le paramètre {fichier} est supporté par {dos9|Dos9} depuis la
+	   Le paramètre {fichier} est supporté par {pbat|pBat} depuis la
 	version {0.7}.
 
 {{A voir aussi}}

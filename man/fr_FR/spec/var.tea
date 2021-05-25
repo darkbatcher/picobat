@@ -1,5 +1,5 @@
 ﻿#
-#   Dos9 Manual pages, The Dos9 project
+#   pBat Manual pages, The pBat project
 #   Copyright (C) 2012-2014  Romain Garbi (DarkBatcher)
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -18,9 +18,9 @@
 {{Les variables d'environnement}}
 
 	   Les variables d'environnement sont le principal moyen de gérer les
-	variables pour {../dos9|Dos9}. Elles sont définies par le système
+	variables pour {../pbat|pBat}. Elles sont définies par le système
 	d'exploitation, donc chaque programme en possède certaines. Il faut
-	savoir que n'importe quel programmme lancé à partir de Dos9 hérite
+	savoir que n'importe quel programmme lancé à partir de pBat hérite
 	des variables d'environnement de celui-ci, ces variables sont donc
 	{globales}.
 
@@ -34,19 +34,19 @@
 
 {{Variables définies automatiquement}}
 
-	   {Dos9} définie et supporte de manière native plusieurs
+	   {pBat} définie et supporte de manière native plusieurs
 	{variables d'environnement}.
 
 	Il y a huit variables natives :
 
-		- {../dos9var|%DOS9_OS%}      : Contient le type d'os sous lequel
-		  {Dos9} s'exécute ({LINUX} ou {WINDOWS})
+		- {../pbatvar|%PBAT_OS%}      : Contient le type d'os sous lequel
+		  {pBat} s'exécute ({LINUX} ou {WINDOWS})
 
-		- {../dos9var|%DOS9_PATH%}    : Contient le chemin de
-		  l'exécutable {Dos9}
+		- {../pbatvar|%PBAT_PATH%}    : Contient le chemin de
+		  l'exécutable {pBat}
 
-		- {../dos9var|%DOS9_VERSION%} : Contient le numéro de version de
-		  {Dos9}
+		- {../pbatvar|%PBAT_VERSION%} : Contient le numéro de version de
+		  {pBat}
 
 		- {../errorlevel|%ERRORLEVEL%}   : Contient la valeur de retour de
 		  la dernière commande exécutée
@@ -60,10 +60,10 @@
 		- {../time|%TIME%}         : Contient l'heure
 
 	   D'autres variables sont définies par {Windows} ou par le ficher
-	{../dos9auto|Dos9_Auto.bat}
+	{../pbatauto|pBat_Auto.bat}
 
 		- {../path|%PATH%}        : Contient la variable path du système
-		  modifiée par {Dos9}
+		  modifiée par {pBat}
 
 		- {../systemdrive|%SYSTEMDRIVE%} : Contient la racine du disque
 		  (ou la racine sous LINUX)

@@ -1,5 +1,5 @@
 #
-#   Dos9 Makefiles, The Dos9 project
+#   pBat Makefiles, The pBat project
 #   Copyright (C) 2012-2018  Romain Garbi, Teddy Astie
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -32,7 +32,7 @@ ifeq ($(use_nls),1)
 	SUBDIR_PO = po
 endif
 
-SUBDIRS = microgettext libDos9 libmatheval $(SUBDIRS_ADD) dos9 dos9ize dump tea \
+SUBDIRS = microgettext libpBat libmatheval $(SUBDIRS_ADD) pbat pbatize dump tea \
 			scripts modules $(SUBDIR_PO)
 TEAFILES = README.tea WHATSNEW.tea GUIDELINES.tea THANKS.tea
 TEXTFILES = $(TEAFILES:.tea=.txt)
@@ -44,9 +44,9 @@ SUBDIRS_BIN := $(addsuffix .bin,$(SUBDIRS))
 HOST = $(shell $(CC) -dumpmachine)
 YEAR = $(shell date +%Y)
 
-PACKAGE = dos9
-PACKAGE_URL = http://dos9.org
-PACKAGE_BUGREPORT = darkbatcher@dos9.org
+PACKAGE = pbat
+PACKAGE_URL = http://pbat.org
+PACKAGE_BUGREPORT = darkbatcher@pbat.org
 VERSION = 220.1
 
 all: $(SUBDIRS) $(MDFILES)
@@ -64,13 +64,13 @@ $(SUBDIRS_CLEAN):
 bin: all bindir $(SUBDIRS_BIN)
 
 dist: bin
-	tar zcf dos9-$(VERSION).tar.gz $(BINDIR)
+	tar zcf pbat-$(VERSION).tar.gz $(BINDIR)
 
 src-dist:
-	tar zcf dos9-$(VERSION)-src.tar.gz --transform 's,^,dos9-$(VERSION)/,' `git ls-files`
+	tar zcf pbat-$(VERSION)-src.tar.gz --transform 's,^,pbat-$(VERSION)/,' `git ls-files`
 
 git-dist: bin
-	tar zcf dos9-$(VERSION)-`git rev-parse --short HEAD`.tar.gz $(BINDIR)
+	tar zcf pbat-$(VERSION)-`git rev-parse --short HEAD`.tar.gz $(BINDIR)
 
 bindir: $(TEXTFILES)
 	mkdir -p $(BINDIR)
