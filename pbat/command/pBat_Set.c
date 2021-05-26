@@ -319,10 +319,14 @@ int pBat_CmdSetP(char* lpLine)
 
 		fprintf(fOutput, "%s", lpEqual);
 
-		INPUT_FILE file;
-        *(file.lpFileName) = '\0';
 
-		pBat_GetLine(lpEsInput, &file);
+#if !defined(WIN32) && !defined(PBAT_NO_LINENOISE)
+        /* If fInput is a tty, use Linenoise ! */
+		if (isatty(fileno(fInput)))
+            pBat_LineNoise(lpEsInput, fInput);
+        else /* This may look to be a bug, but it's intentional */
+#endif
+            pBat_EsGet(lpEsInput, fInput);
 
 		if ((lpEqual=strchr(pBat_EsToChar(lpEsInput), '\n')))
 			*lpEqual='\0';
