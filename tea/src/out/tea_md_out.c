@@ -92,6 +92,9 @@ void Tea_MDEscape(char** pp)
     pBat_EsReplace(estr, "[", "\\\\[");
     pBat_EsReplace(estr, "(", "\\\\(");
     pBat_EsReplace(estr, ")", "\\\\)");
+    pBat_EsReplace(estr, "|", "\\\\|");
+    pBat_EsReplace(estr, "~", "\\\\~");
+    pBat_EsReplace(estr, "#", "\\\\#");
 
     if ((new = strdup(estr->str))) {
         free(*pp);
