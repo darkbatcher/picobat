@@ -151,7 +151,7 @@ used almost new code.
 
 ## Sunday 27th, October ##
 
-* Some bug fixes, including a bug that appeared with **%~A**.
+* Some bug fixes, including a bug that appeared with **%\~A**.
 
 * Added primary support of **FOR** loops \(ie. simple for loop without 
   options\).
@@ -191,8 +191,8 @@ used almost new code.
 * corrected a compatibility bug with **cmd.exe**: **DIR /b** returned the 
   pseudo directories '..' and '.'.
 
-* corrected an expansion bug with **%%~a** \(and similar var because the 
-  interpretor missinterpreted the command if, for example **%%~ax** was badly 
+* corrected an expansion bug with **%%\~a** \(and similar var because the 
+  interpretor missinterpreted the command if, for example **%%\~ax** was badly 
   expanded if **%%x** was not defined\). Now, the choosed varaible is the 
   largest match defined.
 
@@ -223,7 +223,7 @@ used almost new code.
 * Fixed a bug that caused some particular redirections to be misinterpreted, 
   particularly, in blocks **\(echo test>NUL\)** triggered an error, because 
   the output was interpreted to be a redirection to file **NUL\)**. This has 
-  been solved, and both '\(' , '|' and '&' operators are know prioritary.
+  been solved, and both '\(' , '\|' and '&' operators are know prioritary.
 
 * Modified version information management. Now version are numbered in the 
   following way: **YYYY.major.minor\[tag\]**. Where :
@@ -546,7 +546,7 @@ used almost new code.
 
 ## Thursday 13th, March ##
 
-* Fixed bugs with the run functions. The use of **program || goto error** to 
+* Fixed bugs with the run functions. The use of **program \|\| goto error** to 
   perform feature test is avaliable for both windows and \*nix.
 
 * Fixed bugs with **pBat\_SplitPath** command in \*nix.
@@ -934,7 +934,7 @@ used almost new code.
             gcc -Wl,import
 
   * Changed the way quotes are handled. Quotes have now precedence over 
-    conditional operators \(**|&**\) and command blocks \(**\(\)**\). This 
+    conditional operators \(**\|&**\) and command blocks \(**\(\)**\). This 
     enables to make statements more secure using quotes. The new behaviour 
     also conforms to cmd.exe behaviour. Typically, the following code :
 
@@ -1864,9 +1864,9 @@ is a list of improvements I made during from 24th June to today.
 
 ## Sunday 7th, April ##
 
-* Fixed hlp.bat bug related to the behaviour change of %~pA.
+* Fixed hlp.bat bug related to the behaviour change of %\~pA.
 
-* Fixed bug that caused pBat not to append a / after disc in %~dpA.
+* Fixed bug that caused pBat not to append a / after disc in %\~dpA.
 
 * Added a /C:MD file to generate html files compatible with pico
 
@@ -1961,7 +1961,7 @@ is a list of improvements I made during from 24th June to today.
 * Fixed parsing errors that misinterpreted **2>&1** as a combination of a 
   redirection and the conditional operator **&**.
 
-* Fixed **%~d0** variables. When file modifiers are called on the **%0** 
+* Fixed **%\~d0** variables. When file modifiers are called on the **%0** 
   argument, the path used is the path of the current executed batch.
 
 * Fixed string search functions handling of escape **^** character. Before, 
@@ -1996,7 +1996,7 @@ is a list of improvements I made during from 24th June to today.
 ## Wednesday 30th, May ##
 
 * Fixed if behaviour to be more compatible with **cmd.exe**. It now supports 
-  the use of **&** and **|** inside the if without specifying additional 
+  the use of **&** and **\|** inside the if without specifying additional 
   blocks.
 
 * Fixed broken **COLOR** command.
@@ -2154,7 +2154,7 @@ is a list of improvements I made during from 24th June to today.
 
 ## Wednesday 4th ##
 
-* Added the **%~f** options to special variables.
+* Added the **%\~f** options to special variables.
 
 * Updated the local variables man pages.
 
@@ -2170,7 +2170,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed few errors with the **DUMP** command.
 
-* Fixed capitalised letters used inside a **#include** statement in 
+* Fixed capitalised letters used inside a **\#include** statement in 
   **pBat\_UnicodeDir.c**
 
 * Added translation for Hindi thanks to **Karanveer Chouhan \(aka kvc\)**.
@@ -2328,7 +2328,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed a bug with history completion.
 
-* Fixed an error with the disk parameter **%~d** with special variables.
+* Fixed an error with the disk parameter **%\~d** with special variables.
 
 ## Monday 1st, October ##
 
@@ -2484,7 +2484,7 @@ build without prior
 
 * Fixed recursive file search under Linux and non-unicode windows.
 
-* Fixed a bug with **%~d** under \*nices causing double root symbol on paths.
+* Fixed a bug with **%\~d** under \*nices causing double root symbol on paths.
 
 ## Monday, Junuary 14th ##
 

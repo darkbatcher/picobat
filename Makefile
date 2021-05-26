@@ -32,7 +32,7 @@ ifeq ($(use_nls),1)
 	SUBDIR_PO = po
 endif
 
-SUBDIRS = microgettext libpBat libmatheval $(SUBDIRS_ADD) pbat pbatize dump tea \
+SUBDIRS = microgettext libpbat libmatheval $(SUBDIRS_ADD) pbat pbatize dump tea \
 			scripts modules $(SUBDIR_PO)
 TEAFILES = README.tea WHATSNEW.tea GUIDELINES.tea THANKS.tea
 TEXTFILES = $(TEAFILES:.tea=.txt)

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-25 21:17+0200\n"
+"POT-Creation-Date: 2021-05-26 23:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,85 +21,85 @@ msgstr ""
 "#-#-#-#-#  Dos9_ShowHelp.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: ../pBat/errors/pBat_Errors.c:42
+#: ../pbat/errors/pBat_Errors.c:42
 msgid "No error: OK."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:45
+#: ../pbat/errors/pBat_Errors.c:45
 #, c-format
 msgid "Error : Unable to access file \"%s\"."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:48
+#: ../pbat/errors/pBat_Errors.c:48
 #, c-format
 msgid "Error : Unable to find folder \"%s\"."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:51
+#: ../pbat/errors/pBat_Errors.c:51
 #, c-format
 msgid ""
 "Error : \"%s\" is not recognized as an internal or external command, an "
 "operable program or a batch file."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:55
+#: ../pbat/errors/pBat_Errors.c:55
 #, c-format
 msgid "Error : \"%s\" was unexpected."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:58
+#: ../pbat/errors/pBat_Errors.c:58
 #, c-format
 msgid "Error : Invalid command line for %s."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:61
+#: ../pbat/errors/pBat_Errors.c:61
 #, c-format
 msgid "Error : Unable to find label \"%s\"."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:64
+#: ../pbat/errors/pBat_Errors.c:64
 msgid "Warning : Using a pBat extension but the CMDLYCORRECT option is set."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:67
+#: ../pbat/errors/pBat_Errors.c:67
 #, c-format
 msgid "Error : \"%s\" expected more arguments."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:70
+#: ../pbat/errors/pBat_Errors.c:70
 #, c-format
 msgid "Error : Incompatible arguments %s."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:73
+#: ../pbat/errors/pBat_Errors.c:73
 #, c-format
 msgid "Error : Unable to rename \"%s\"."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:76
+#: ../pbat/errors/pBat_Errors.c:76
 msgid "Error : Overflown maximum value."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:79
+#: ../pbat/errors/pBat_Errors.c:79
 msgid "Error : Divide by 0."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:82
+#: ../pbat/errors/pBat_Errors.c:82
 #, c-format
 msgid "Error : Unable to create folder \"%s\"."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:85
+#: ../pbat/errors/pBat_Errors.c:85
 #, c-format
 msgid "Error : Unable to delete folder \"%s\"."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:88
+#: ../pbat/errors/pBat_Errors.c:88
 #, c-format
 msgid "Error : Stream module : \"%s\"."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:91
+#: ../pbat/errors/pBat_Errors.c:91
 #, c-format
 msgid ""
 "Error : \"%c\" is an invalid character for special variables. Special "
@@ -107,193 +107,193 @@ msgid ""
 "controls characters and space (0x00 - 0x30)."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:97
+#: ../pbat/errors/pBat_Errors.c:97
 #, c-format
 msgid ""
 "Error : \"%s\" is not a valid block (should at least be enclosed within "
 "parenthesis)."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:101
+#: ../pbat/errors/pBat_Errors.c:101
 #, c-format
 msgid "Error : \"%s\" is not a valid token specifier."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:104
+#: ../pbat/errors/pBat_Errors.c:104
 #, c-format
 msgid ""
 "Error : Attempted to specify more than TOKEN_NB_MAX (%d) different tokens."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:108
+#: ../pbat/errors/pBat_Errors.c:108
 #, c-format
 msgid "Error : \"%s\" violates the ``Usebackq'' syntax."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:111
+#: ../pbat/errors/pBat_Errors.c:111
 #, c-format
 msgid "Error : Unable to allocate memory (in %s)."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:114
+#: ../pbat/errors/pBat_Errors.c:114
 #, c-format
 msgid "Error : Can't create pipe (in %s)."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:117
+#: ../pbat/errors/pBat_Errors.c:117
 #, c-format
 msgid ""
 "Error : unable to run a subprocess of pBat to process the given input (\"%s"
 "\")."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:121
+#: ../pbat/errors/pBat_Errors.c:121
 #, c-format
 msgid "Error : Invalid token specifier. \"%s\" breaks input specifying rules."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:125
+#: ../pbat/errors/pBat_Errors.c:125
 #, c-format
 msgid "Error : FOR loop is trying to reassign already used %%%%%c variable."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:129
+#: ../pbat/errors/pBat_Errors.c:129
 #, c-format
 msgid "Error : \"%s\" is not a valid mathematical expression."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:132
+#: ../pbat/errors/pBat_Errors.c:132
 #, c-format
 msgid "Error : \"%s\" is not a valid top-level block."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:135
+#: ../pbat/errors/pBat_Errors.c:135
 #, c-format
 msgid "Error : Unable to duplicate file descriptor (%d)."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:138
+#: ../pbat/errors/pBat_Errors.c:138
 #, c-format
 msgid "Error : Unable to create pipe at function (%s)."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:141
+#: ../pbat/errors/pBat_Errors.c:141
 #, c-format
 msgid "Error : Unable to set environment string (%s)."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:144
+#: ../pbat/errors/pBat_Errors.c:144
 #, c-format
 msgid "Error : \"%s\" is an invalid stream redirection."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:147
+#: ../pbat/errors/pBat_Errors.c:147
 #, c-format
 msgid "Error : Redirection for \"%s\" was already specified."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:150
+#: ../pbat/errors/pBat_Errors.c:150
 #, c-format
 msgid "Error : Encountered malformed blocks (\"%s\")."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:153
+#: ../pbat/errors/pBat_Errors.c:153
 msgid "Error : Blocks left unclosed at end-of-file."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:156
+#: ../pbat/errors/pBat_Errors.c:156
 #, c-format
 msgid "Error : Unable to add command \"%s\"."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:159
+#: ../pbat/errors/pBat_Errors.c:159
 #, c-format
 msgid "Error : Unable to remap commands (in function %s)."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:162
+#: ../pbat/errors/pBat_Errors.c:162
 #, c-format
 msgid "Error : Trying to redefine already used \"%s\" command."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:165
+#: ../pbat/errors/pBat_Errors.c:165
 #, c-format
 msgid "Error : Unable to redefine \"%s\" command."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:168
+#: ../pbat/errors/pBat_Errors.c:168
 #, c-format
 msgid ""
 "Error : Unable to set option \"%s\", it is built statically inside your "
 "version of pBat."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:172
+#: ../pbat/errors/pBat_Errors.c:172
 #, c-format
 msgid "Error : The \"%s\" comparison forbids use of strings."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:175
+#: ../pbat/errors/pBat_Errors.c:175
 #, c-format
 msgid "Error : Unable to fork the current process (in function %s)."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:178
+#: ../pbat/errors/pBat_Errors.c:178
 #, c-format
 msgid "Error : Pathspec \"%s\" does not match any file."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:181
+#: ../pbat/errors/pBat_Errors.c:181
 #, c-format
 msgid "Error : %s does not recieved any valid file to process."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:184
+#: ../pbat/errors/pBat_Errors.c:184
 #, c-format
 msgid "Error : \"%s\" is not a valid number."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:187
+#: ../pbat/errors/pBat_Errors.c:187
 #, c-format
 msgid "Error : Too many arguments for %s command"
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:190
+#: ../pbat/errors/pBat_Errors.c:190
 #, c-format
 msgid "Error : \"%s\" is not a valid expression for IF command."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:193
+#: ../pbat/errors/pBat_Errors.c:193
 #, c-format
 msgid "Error : Unable to copy file \"%s\"."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:196
+#: ../pbat/errors/pBat_Errors.c:196
 #, c-format
 msgid "Error : Unable to move file \"%s\"."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:199
+#: ../pbat/errors/pBat_Errors.c:199
 #, c-format
 msgid "Error : Unable to create directory \"%s\"."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:202
+#: ../pbat/errors/pBat_Errors.c:202
 #, c-format
 msgid "Error : Unable to delete file \"%s\"."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:205
+#: ../pbat/errors/pBat_Errors.c:205
 #, c-format
 msgid "Error : Unable to delete directory \"%s\"."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:208
+#: ../pbat/errors/pBat_Errors.c:208
 #, c-format
 msgid "Error : \"%s\" is not a valid codepage on your system."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:211
+#: ../pbat/errors/pBat_Errors.c:211
 #, c-format
 msgid ""
 "Error : \"%s\" is a relative path, RENAME (or REN) do not handles relative "
@@ -301,153 +301,153 @@ msgid ""
 "should use MOVE command."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:216
+#: ../pbat/errors/pBat_Errors.c:216
 msgid "Error : Unable to access pBat main thread to perform break."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:219
+#: ../pbat/errors/pBat_Errors.c:219
 #, c-format
 msgid "Error : Invalid label encountered within a block (at line %d)."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:222
+#: ../pbat/errors/pBat_Errors.c:222
 #, c-format
 msgid "Error : Unable to lock mutex (%s)."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:225
+#: ../pbat/errors/pBat_Errors.c:225
 #, c-format
 msgid "Error : Unable to release mutex (%s)."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:228
+#: ../pbat/errors/pBat_Errors.c:228
 #, c-format
 msgid "Error : Unable to catenate file \"%s\"."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:231
+#: ../pbat/errors/pBat_Errors.c:231
 #, c-format
 msgid "Error : Unable to load module \"%s\"."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:234
+#: ../pbat/errors/pBat_Errors.c:234
 #, c-format
 msgid "Error : Incompatible module \"%s\"."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:237
+#: ../pbat/errors/pBat_Errors.c:237
 #, c-format
 msgid "Error : Module \"%s\" is already loaded."
 msgstr ""
 
-#: ../pBat/errors/pBat_Errors.c:240
+#: ../pbat/errors/pBat_Errors.c:240
 msgid "Aborting current command, press any key to end pBat."
 msgstr ""
 
-#: ../pBat/lang/pBat_Lang.c:97
+#: ../pbat/lang/pBat_Lang.c:97
 msgid "Echo command enabled"
 msgstr ""
 
-#: ../pBat/lang/pBat_Lang.c:98
+#: ../pbat/lang/pBat_Lang.c:98
 msgid "Echo command disabled"
 msgstr ""
 
-#: ../pBat/lang/pBat_Lang.c:99
+#: ../pbat/lang/pBat_Lang.c:99
 msgid "Press any key to continue..."
 msgstr ""
 
-#: ../pBat/lang/pBat_Lang.c:101
+#: ../pbat/lang/pBat_Lang.c:101
 msgid "\tNo files found"
 msgstr ""
 
-#: ../pBat/lang/pBat_Lang.c:102
+#: ../pbat/lang/pBat_Lang.c:102
 msgid "Last change\t\tSize\tAttr.\tName"
 msgstr ""
 
-#: ../pBat/lang/pBat_Lang.c:103
+#: ../pbat/lang/pBat_Lang.c:103
 msgid "Files"
 msgstr ""
 
-#: ../pBat/lang/pBat_Lang.c:104
+#: ../pbat/lang/pBat_Lang.c:104
 msgid "Folders"
 msgstr ""
 
-#: ../pBat/lang/pBat_Lang.c:106
+#: ../pbat/lang/pBat_Lang.c:106
 #, c-format
 msgid "Are you sure you want to delete file \"%s\" ?"
 msgstr ""
 
-#: ../pBat/lang/pBat_Lang.c:107
+#: ../pbat/lang/pBat_Lang.c:107
 #, c-format
 msgid "Are you sure you want to remove \"%s\" directory ?"
 msgstr ""
 
-#: ../pBat/lang/pBat_Lang.c:109
+#: ../pbat/lang/pBat_Lang.c:109
 #, c-format
 msgid "File \"%s\" already exists, replace it by \"%s\" ?"
 msgstr ""
 
-#: ../pBat/lang/pBat_Lang.c:111
+#: ../pbat/lang/pBat_Lang.c:111
 msgid "Do you really want to exit command script ?"
 msgstr ""
 
-#: ../pBat/lang/pBat_Lang.c:113
+#: ../pbat/lang/pBat_Lang.c:113
 msgid " (Yes/no) "
 msgstr ""
 
-#: ../pBat/lang/pBat_Lang.c:114
+#: ../pbat/lang/pBat_Lang.c:114
 msgid " (yes/No) "
 msgstr ""
 
-#: ../pBat/lang/pBat_Lang.c:115
+#: ../pbat/lang/pBat_Lang.c:115
 msgid " (yes/no) "
 msgstr ""
 
-#: ../pBat/lang/pBat_Lang.c:117
+#: ../pbat/lang/pBat_Lang.c:117
 msgid " (Yes/no/all) "
 msgstr ""
 
-#: ../pBat/lang/pBat_Lang.c:118
+#: ../pbat/lang/pBat_Lang.c:118
 msgid " (yes/No/all) "
 msgstr ""
 
-#: ../pBat/lang/pBat_Lang.c:119
+#: ../pbat/lang/pBat_Lang.c:119
 msgid " (yes/no/All) "
 msgstr ""
 
-#: ../pBat/lang/pBat_Lang.c:120
+#: ../pbat/lang/pBat_Lang.c:120
 msgid " (yes/no/all) "
 msgstr ""
 
-#: ../pBat/lang/pBat_Lang.c:122
+#: ../pbat/lang/pBat_Lang.c:122
 msgid "YES"
 msgstr ""
 
-#: ../pBat/lang/pBat_Lang.c:123
+#: ../pbat/lang/pBat_Lang.c:123
 msgid "Y"
 msgstr ""
 
-#: ../pBat/lang/pBat_Lang.c:125
+#: ../pbat/lang/pBat_Lang.c:125
 msgid "NO"
 msgstr ""
 
-#: ../pBat/lang/pBat_Lang.c:126
+#: ../pbat/lang/pBat_Lang.c:126
 msgid "N"
 msgstr ""
 
-#: ../pBat/lang/pBat_Lang.c:128
+#: ../pbat/lang/pBat_Lang.c:128
 msgid "ALL"
 msgstr ""
 
-#: ../pBat/lang/pBat_Lang.c:129
+#: ../pbat/lang/pBat_Lang.c:129
 msgid "A"
 msgstr ""
 
-#: ../pBat/lang/pBat_Lang.c:131
+#: ../pbat/lang/pBat_Lang.c:131
 msgid "Please enter a correct choice (or type enter to choose default) !\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_Lang.c:133
+#: ../pbat/lang/pBat_Lang.c:133
 msgid ""
 "This is free software, you can modify and/or redistribute it under the terms "
 "of the GNU Genaral Public License v3 (or any later version).\n"
@@ -470,88 +470,88 @@ msgid ""
 "For more informations see : <http://pbat.org>\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_Lang.c:149
+#: ../pbat/lang/pBat_Lang.c:149
 #, c-format
 msgid "%d files matching, print anyway ?"
 msgstr ""
 
-#: ../pBat/lang/pBat_Lang.c:151
+#: ../pbat/lang/pBat_Lang.c:151
 #, c-format
 msgid "Waiting for %f seconds, press a key to continue ..."
 msgstr ""
 
-#: ../pBat/lang/pBat_Lang.c:152
+#: ../pbat/lang/pBat_Lang.c:152
 #, c-format
 msgid "Waiting for %f seconds, press CTRL-C to continue ..."
 msgstr ""
 
-#: ../pBat/lang/pBat_Lang.c:153
+#: ../pbat/lang/pBat_Lang.c:153
 msgid "Press a key to continue ..."
 msgstr ""
 
-#: ../pBat/lang/pBat_Lang.c:154
+#: ../pbat/lang/pBat_Lang.c:154
 msgid "Press CTRL-C to continue ..."
 msgstr ""
 
-#: ../pBat/lang/pBat_Lang.c:156
+#: ../pbat/lang/pBat_Lang.c:156
 msgid "Loaded modules :"
 msgstr ""
 
-#: ../pBat/lang/pBat_Lang.c:157
+#: ../pbat/lang/pBat_Lang.c:157
 msgid "Module loading not supported."
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:48
+#: ../pbat/lang/pBat_ShowHelp.c:48
 msgid ""
 "Create an alias on a command.\n"
 "Usage: ALIAS [/f] alias=command\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:52
+#: ../pbat/lang/pBat_ShowHelp.c:52
 msgid ""
 "Change current working directory.\n"
 "Usage: CD  [[/d] path]\n"
 "       CHDIR [[/d] path]\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:57
+#: ../pbat/lang/pBat_ShowHelp.c:57
 msgid ""
 "Clear console screen\n"
 "Usage: CLS\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:61
+#: ../pbat/lang/pBat_ShowHelp.c:61
 msgid ""
 "Change console color to the given code.\n"
 "Usage: COLOR [code]\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:65
+#: ../pbat/lang/pBat_ShowHelp.c:65
 msgid ""
 "Copy file(s) to another location.\n"
 "Usage: COPY [/R] [/-Y | /Y] [/A[:]attributes] source [+] ... destination\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:69
+#: ../pbat/lang/pBat_ShowHelp.c:69
 msgid ""
 "Call a script or a label from the current context.\n"
 "Usage: CALL [/e] [file] [:label] [parameters ...]\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:74
+#: ../pbat/lang/pBat_ShowHelp.c:74
 msgid ""
 "Delete file(s).\n"
 "Usage: DEL [/P] [/F] [/S] [/Q] [/A[:]attributes] name\n"
 "       ERASE [/P] [/F] [/S] [/Q] [/A[:]attributes] name\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:79
+#: ../pbat/lang/pBat_ShowHelp.c:79
 msgid ""
 "List files in a directory and in subdirectories.\n"
 "Usage: DIR [/A[:]attributes] [/S] [/B] [path]\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:83
+#: ../pbat/lang/pBat_ShowHelp.c:83
 msgid ""
 "Print a message, or enable/disable command echoing.\n"
 "Usage: ECHO [OFF|ON]\n"
@@ -559,7 +559,7 @@ msgid ""
 "       ECHO.text\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:89
+#: ../pbat/lang/pBat_ShowHelp.c:89
 #, c-format
 msgid ""
 "Perform commands against items (files, strings, command output).\n"
@@ -576,13 +576,13 @@ msgid ""
 "       )\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:101
+#: ../pbat/lang/pBat_ShowHelp.c:101
 msgid ""
 "Go to a label in a command script.\n"
 "Usage: GOTO [/Q] [/F[:]file] [:]label\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:105
+#: ../pbat/lang/pBat_ShowHelp.c:105
 msgid ""
 "Perform commands on some conditions.\n"
 "Usage: IF [/i] [NOT] string1==string2 (\n"
@@ -601,40 +601,40 @@ msgid ""
 "       )\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:120
+#: ../pbat/lang/pBat_ShowHelp.c:120
 msgid ""
 "Create the given directory.\n"
 "Usage: MD directory\n"
 "       MKDIR directory\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:126
+#: ../pbat/lang/pBat_ShowHelp.c:126
 msgid ""
 "Wait for a keystroke from the user.\n"
 "Usage: PAUSE\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:131
+#: ../pbat/lang/pBat_ShowHelp.c:131
 msgid ""
 "Remove a directory.\n"
 "Usage: RMDIR [/S] [/Q] directory\n"
 "       RD [/S] [/Q] directory\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:136
+#: ../pbat/lang/pBat_ShowHelp.c:136
 msgid ""
 "Renames a file.\n"
 "Usage: REN file name.ext\n"
 "       RENAME file name.ext\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:141
+#: ../pbat/lang/pBat_ShowHelp.c:141
 msgid ""
 "Introduce a comment.\n"
 "Usage: REM comment\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:146
+#: ../pbat/lang/pBat_ShowHelp.c:146
 msgid ""
 "Set or list environment variables.\n"
 "Usage: SET variable=content\n"
@@ -643,131 +643,131 @@ msgid ""
 "       SET var\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:153
+#: ../pbat/lang/pBat_ShowHelp.c:153
 msgid ""
 "Set local environment and options of the pBat command prompt.\n"
 "Usage: SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] "
 "[CMDLYCORRECT | CMDLYINCORRECT]\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:157
+#: ../pbat/lang/pBat_ShowHelp.c:157
 msgid ""
 "Reverts changes to environments and options made after a call to SETLOCAL.\n"
 "Usage: ENDLOCAL\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:161
+#: ../pbat/lang/pBat_ShowHelp.c:161
 msgid ""
 "Set console title.\n"
 "Usage: TITLE title\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:165
+#: ../pbat/lang/pBat_ShowHelp.c:165
 msgid ""
 "Print a file.\n"
 "Usage: TYPE [file ...]\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:169
+#: ../pbat/lang/pBat_ShowHelp.c:169
 msgid ""
 "Exit from the command prompt.\n"
 "Usage: EXIT [/b] [code]\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:173
+#: ../pbat/lang/pBat_ShowHelp.c:173
 msgid ""
 "Change positions of command-line parameters.\n"
 "Usage: SHIFT [/start_number | /s[:]start_number] [/d[:]displacement]\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:177
+#: ../pbat/lang/pBat_ShowHelp.c:177
 msgid ""
 "Search occurrence of string in a set of files.\n"
 "Usage: FIND [/N] [/C] [/V] [/I] [/E] string [file ...]\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:181
+#: ../pbat/lang/pBat_ShowHelp.c:181
 msgid ""
 "Display content of files.\n"
 "Usage: MORE [/E] [/P] [/S] [/C] [/T[:]n] [+n] [file ...]\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:185
+#: ../pbat/lang/pBat_ShowHelp.c:185
 msgid ""
 "[Obsolete] Sets or Clears Extended CTRL+C checking on DOS system. (Do "
 "nothing)\n"
 "Usage: BREAK [ON | OFF]\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:189
+#: ../pbat/lang/pBat_ShowHelp.c:189
 msgid ""
 "Set Console codepage or encoding.\n"
 "Usage: CHCP [ codepage | encoding]\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:193
+#: ../pbat/lang/pBat_ShowHelp.c:193
 msgid ""
 "For each path, change current directory and pushd to stack\n"
 "the previous current directory.\n"
 "Usage: PUSHD [path1] [path2] [pathN] ...\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:198
+#: ../pbat/lang/pBat_ShowHelp.c:198
 msgid ""
 "Pull a directory on the stack to change current directory.\n"
 "Usage: POPD\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:202
+#: ../pbat/lang/pBat_ShowHelp.c:202
 msgid ""
 "Display counts of a file or of stdin.\n"
 "Usage: WC [/L] [/C] [/M] [/W] [files ...]\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:206
+#: ../pbat/lang/pBat_ShowHelp.c:206
 msgid ""
 "Run a command with arguments from standard input file.\n"
 "Usage: XARGS [command ...]\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:210
+#: ../pbat/lang/pBat_ShowHelp.c:210
 msgid ""
 "Changes pbat command prompt.\n"
 "Usage: PROMPT prompt-format\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:214
+#: ../pbat/lang/pBat_ShowHelp.c:214
 msgid ""
 "Print a message using prompt format.\n"
 "Usage: PECHO prompt-format\n"
 "       PECHO.prompt-format\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:219
+#: ../pbat/lang/pBat_ShowHelp.c:219
 msgid ""
 "Sleep for a delay in seconds.\n"
 "Usage: TIMEOUT [/T] [/NOBREAK] seconds[.milliseconds]\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:223
+#: ../pbat/lang/pBat_ShowHelp.c:223
 msgid ""
 "Load or list modules.\n"
 "Usage: MOD [/L] [/Q] module\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:227
+#: ../pbat/lang/pBat_ShowHelp.c:227
 msgid ""
 "Print the OS type and version\n"
 "Usage: VER\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:231
+#: ../pbat/lang/pBat_ShowHelp.c:231
 msgid ""
 "Sets directory of translation files\n"
 "Usage: LOCALE [dir]\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:235
+#: ../pbat/lang/pBat_ShowHelp.c:235
 msgid ""
 "Start a program in another window\n"
 "Usage: START [/d dir] [/b] [/min] [/max] [/wait] [\"title\"] [command "

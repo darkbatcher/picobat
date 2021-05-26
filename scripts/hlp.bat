@@ -18,8 +18,8 @@ SETLOCAL EnableDelayedExpansion
 ::   You should have received a copy of the GNU General Public License
 ::   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-set hlp_data_dir=%DOS9_SHARE%/dos9/hlp
-set hlp_base_dir=%USERPROFILE%/.dos9/hlp
+set hlp_data_dir=%PBAT_SHARE%/pbat/hlp
+set hlp_base_dir=%USERPROFILE%/.pbat/hlp
 
 :: Cd to the appropriate directory
 if not exist !hlp_base_dir! MKDIR !hlp_base_dir!

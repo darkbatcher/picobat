@@ -23,8 +23,8 @@ SRC_FILES = microgettext.c
 
 OBJ_FILES = $(SRC_FILES:.c=.o)
 
-AR ?= AR
-RANLIB ?=RANLIB
+AR ?= ar
+RANLIB ?= ranlib
 
 all: libmicrogettext.a
 

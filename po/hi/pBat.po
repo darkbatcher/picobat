@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dos9 218.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-25 21:17+0200\n"
+"POT-Creation-Date: 2021-05-26 23:13+0200\n"
 "PO-Revision-Date: 2018-07-07 22:13+0530\n"
 "Last-Translator: darkounet <darkbatcher@dos9.org>\n"
 "Language-Team: TheBATeam (www.thebateam.org)\n"
@@ -18,21 +18,21 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.0.8\n"
 
-#: ../pBat/errors/pBat_Errors.c:42
+#: ../pbat/errors/pBat_Errors.c:42
 msgid "No error: OK."
 msgstr "कोई गलती नहीं"
 
-#: ../pBat/errors/pBat_Errors.c:45
+#: ../pbat/errors/pBat_Errors.c:45
 #, c-format
 msgid "Error : Unable to access file \"%s\"."
 msgstr "ग़लत : \"% s\" फ़ाइल खोलने में असमर्थ"
 
-#: ../pBat/errors/pBat_Errors.c:48
+#: ../pbat/errors/pBat_Errors.c:48
 #, c-format
 msgid "Error : Unable to find folder \"%s\"."
 msgstr "ग़लत : \"% s\" फ़ाइल खोजने में असमर्थ"
 
-#: ../pBat/errors/pBat_Errors.c:51
+#: ../pbat/errors/pBat_Errors.c:51
 #, c-format
 msgid ""
 "Error : \"%s\" is not recognized as an internal or external command, an "
@@ -41,67 +41,67 @@ msgstr ""
 "ग़लत : \"%s\" कोई आंतरिक या बाहरी कमांड, अथवा कोई प्रोग्राम या बैच फ़ाइल के रूप में "
 "पहचाना नहीं जाता है।"
 
-#: ../pBat/errors/pBat_Errors.c:55
+#: ../pbat/errors/pBat_Errors.c:55
 #, c-format
 msgid "Error : \"%s\" was unexpected."
 msgstr "ग़लत : \"% s\" की उम्मीद नहीं थी"
 
-#: ../pBat/errors/pBat_Errors.c:58
+#: ../pbat/errors/pBat_Errors.c:58
 #, c-format
 msgid "Error : Invalid command line for %s."
 msgstr "ग़लत : \"%s\" के लिए गलत कमांड लाइन।"
 
-#: ../pBat/errors/pBat_Errors.c:61
+#: ../pbat/errors/pBat_Errors.c:61
 #, c-format
 msgid "Error : Unable to find label \"%s\"."
 msgstr "ग़लत : लेबल \"%s\" ढूंढने में असमर्थ।"
 
-#: ../pBat/errors/pBat_Errors.c:64
+#: ../pbat/errors/pBat_Errors.c:64
 #, fuzzy
 msgid "Warning : Using a pBat extension but the CMDLYCORRECT option is set."
 msgstr ""
 "चेतावनी: आप एक डॉस 9 एक्सटेंशन का उपयोग कर रहे हैं लेकिन CMDLYCORRECT विकल्प सेट है।"
 
-#: ../pBat/errors/pBat_Errors.c:67
+#: ../pbat/errors/pBat_Errors.c:67
 #, c-format
 msgid "Error : \"%s\" expected more arguments."
 msgstr "ग़लत : \"%s\"अधिक विकल्प की उम्मीद है।"
 
-#: ../pBat/errors/pBat_Errors.c:70
+#: ../pbat/errors/pBat_Errors.c:70
 #, c-format
 msgid "Error : Incompatible arguments %s."
 msgstr "ग़लत : \"%s\" अनुचित विकल्प."
 
-#: ../pBat/errors/pBat_Errors.c:73
+#: ../pbat/errors/pBat_Errors.c:73
 #, c-format
 msgid "Error : Unable to rename \"%s\"."
 msgstr "ग़लत: \"%s\" का नाम बदलने में असमर्थ।"
 
-#: ../pBat/errors/pBat_Errors.c:76
+#: ../pbat/errors/pBat_Errors.c:76
 msgid "Error : Overflown maximum value."
 msgstr "ग़लत: आपने अधिकतम क्षमता पार कर ली है"
 
-#: ../pBat/errors/pBat_Errors.c:79
+#: ../pbat/errors/pBat_Errors.c:79
 #, fuzzy
 msgid "Error : Divide by 0."
 msgstr "ग़लत : 0 से विभाजित नहीं कर सकते - थोड़ा गणित सीखें."
 
-#: ../pBat/errors/pBat_Errors.c:82
+#: ../pbat/errors/pBat_Errors.c:82
 #, c-format
 msgid "Error : Unable to create folder \"%s\"."
 msgstr "ग़लत : Unable to create folder \"%s\"."
 
-#: ../pBat/errors/pBat_Errors.c:85
+#: ../pbat/errors/pBat_Errors.c:85
 #, c-format
 msgid "Error : Unable to delete folder \"%s\"."
 msgstr "ग़लत: फ़ोल्डर \"%s\" को हटाने में असमर्थ ।"
 
-#: ../pBat/errors/pBat_Errors.c:88
+#: ../pbat/errors/pBat_Errors.c:88
 #, c-format
 msgid "Error : Stream module : \"%s\"."
 msgstr "ग़लत: स्ट्रीम मॉड्यूल: \"%s\""
 
-#: ../pBat/errors/pBat_Errors.c:91
+#: ../pbat/errors/pBat_Errors.c:91
 #, c-format
 msgid ""
 "Error : \"%c\" is an invalid character for special variables. Special "
@@ -112,7 +112,7 @@ msgstr ""
 "सख्त ASCII वर्ण होने की आवश्यकता होती है, नियंत्रण वर्णों को छोड़कर, और स्थान (0x00 - "
 "0x30)."
 
-#: ../pBat/errors/pBat_Errors.c:97
+#: ../pbat/errors/pBat_Errors.c:97
 #, c-format
 msgid ""
 "Error : \"%s\" is not a valid block (should at least be enclosed within "
@@ -120,115 +120,115 @@ msgid ""
 msgstr ""
 "ग़लत: \"%s\" एक मान्य ब्लॉक नहीं है (कम से कम कोष्ठक के भीतर संलग्न किया जाना चाहिए)"
 
-#: ../pBat/errors/pBat_Errors.c:101
+#: ../pbat/errors/pBat_Errors.c:101
 #, c-format
 msgid "Error : \"%s\" is not a valid token specifier."
 msgstr "ग़लत: \"%s\" मान्य टोकन विनिर्देशक नहीं है।"
 
-#: ../pBat/errors/pBat_Errors.c:104
+#: ../pbat/errors/pBat_Errors.c:104
 #, c-format
 msgid ""
 "Error : Attempted to specify more than TOKEN_NB_MAX (%d) different tokens."
 msgstr "ग़लत: TOKEN_NB_MAX (% d) अलग टोकन से अधिक निर्दिष्ट करने का प्रयास किया गया।"
 
-#: ../pBat/errors/pBat_Errors.c:108
+#: ../pbat/errors/pBat_Errors.c:108
 #, c-format
 msgid "Error : \"%s\" violates the ``Usebackq'' syntax."
 msgstr "ग़लत: \"% s\" \"Usebackq\" के सही उपयोग का उल्लंघन करता है।"
 
-#: ../pBat/errors/pBat_Errors.c:111
+#: ../pbat/errors/pBat_Errors.c:111
 #, c-format
 msgid "Error : Unable to allocate memory (in %s)."
 msgstr "ग़लत: DOS9 \"% s\" के लिए रैम में पर्याप्त जगह नहीं एकत्र कर सकता"
 
-#: ../pBat/errors/pBat_Errors.c:114
+#: ../pbat/errors/pBat_Errors.c:114
 #, c-format
 msgid "Error : Can't create pipe (in %s)."
 msgstr "ग़लत : \"%s\" में पाइप नहीं बना सकता है।"
 
-#: ../pBat/errors/pBat_Errors.c:117
+#: ../pbat/errors/pBat_Errors.c:117
 #, fuzzy, c-format
 msgid ""
 "Error : unable to run a subprocess of pBat to process the given input (\"%s"
 "\")."
 msgstr "ग़लत : दिए गए इनपुट (\"% s\") को संसाधित करने के लिए DOS9 असमर्थ."
 
-#: ../pBat/errors/pBat_Errors.c:121
+#: ../pbat/errors/pBat_Errors.c:121
 #, c-format
 msgid "Error : Invalid token specifier. \"%s\" breaks input specifying rules."
 msgstr "ग़लत: अमान्य टोकन विनिर्देशक। \"% s\" इनपुट निर्दिष्ट नियमों को तोड़ देता है।"
 
-#: ../pBat/errors/pBat_Errors.c:125
+#: ../pbat/errors/pBat_Errors.c:125
 #, c-format
 msgid "Error : FOR loop is trying to reassign already used %%%%%c variable."
 msgstr "ग़लत: FOR लूप पहले से ही %%%%%c का उपयोग करने का प्रयास कर रहा है।"
 
-#: ../pBat/errors/pBat_Errors.c:129
+#: ../pbat/errors/pBat_Errors.c:129
 #, c-format
 msgid "Error : \"%s\" is not a valid mathematical expression."
 msgstr "ग़लत: \"% s\" मान्य गणितीय अभिव्यक्ति नहीं है।"
 
-#: ../pBat/errors/pBat_Errors.c:132
+#: ../pbat/errors/pBat_Errors.c:132
 #, c-format
 msgid "Error : \"%s\" is not a valid top-level block."
 msgstr "ग़लत: \"% s\" शीर्ष-स्तरीय ब्लॉक मान्य नहीं है।"
 
-#: ../pBat/errors/pBat_Errors.c:135
+#: ../pbat/errors/pBat_Errors.c:135
 #, c-format
 msgid "Error : Unable to duplicate file descriptor (%d)."
 msgstr "ग़लत: फ़ाइल डिस्क्रिप्टर (%d) को डुप्लिकेट करने में असमर्थ।"
 
-#: ../pBat/errors/pBat_Errors.c:138
+#: ../pbat/errors/pBat_Errors.c:138
 #, c-format
 msgid "Error : Unable to create pipe at function (%s)."
 msgstr "ग़लत: फ़ंक्शन (%s) पर पाइप बनाने में असमर्थ।"
 
-#: ../pBat/errors/pBat_Errors.c:141
+#: ../pbat/errors/pBat_Errors.c:141
 #, c-format
 msgid "Error : Unable to set environment string (%s)."
 msgstr "ग़लत: पर्यावरण स्ट्रिंग (%s) सेट करने में असमर्थ।"
 
-#: ../pBat/errors/pBat_Errors.c:144
+#: ../pbat/errors/pBat_Errors.c:144
 #, c-format
 msgid "Error : \"%s\" is an invalid stream redirection."
 msgstr "ग़लत: \"%s\" एक अमान्य स्ट्रीम दिशा भेज रहा है।"
 
-#: ../pBat/errors/pBat_Errors.c:147
+#: ../pbat/errors/pBat_Errors.c:147
 #, c-format
 msgid "Error : Redirection for \"%s\" was already specified."
 msgstr "ग़लत: \"% s\" के लिए पुनर्निर्देशन पहले ही बता दिया था"
 
-#: ../pBat/errors/pBat_Errors.c:150
+#: ../pbat/errors/pBat_Errors.c:150
 #, c-format
 msgid "Error : Encountered malformed blocks (\"%s\")."
 msgstr "ग़लत: विकृत ब्लॉक्स से सामना हुआ ।  (\"%s\")"
 
-#: ../pBat/errors/pBat_Errors.c:153
+#: ../pbat/errors/pBat_Errors.c:153
 msgid "Error : Blocks left unclosed at end-of-file."
 msgstr "ग़लत: फ़ाइल के अंत में ब्लॉक बंद नहीं हैं।"
 
-#: ../pBat/errors/pBat_Errors.c:156
+#: ../pbat/errors/pBat_Errors.c:156
 #, c-format
 msgid "Error : Unable to add command \"%s\"."
 msgstr "ग़लत: \"%s\" कमांड जोड़ने में असमर्थ।"
 
-#: ../pBat/errors/pBat_Errors.c:159
+#: ../pbat/errors/pBat_Errors.c:159
 #, c-format
 msgid "Error : Unable to remap commands (in function %s)."
 msgstr "ग़लत: आदेश remap करने में असमर्थ (%s) ।"
 
-#: ../pBat/errors/pBat_Errors.c:162
+#: ../pbat/errors/pBat_Errors.c:162
 #, c-format
 msgid "Error : Trying to redefine already used \"%s\" command."
 msgstr ""
 "ग़लत: \"%s\" आदेश का पहले से ही उपयोग फिर से परिभाषित करने का प्रयास कर रहा है ।"
 
-#: ../pBat/errors/pBat_Errors.c:165
+#: ../pbat/errors/pBat_Errors.c:165
 #, c-format
 msgid "Error : Unable to redefine \"%s\" command."
 msgstr "ग़लत: \"%s\" कमांड को फिर से परिभाषित करने में असमर्थ।"
 
-#: ../pBat/errors/pBat_Errors.c:168
+#: ../pbat/errors/pBat_Errors.c:168
 #, fuzzy, c-format
 msgid ""
 "Error : Unable to set option \"%s\", it is built statically inside your "
@@ -237,72 +237,72 @@ msgstr ""
 "ग़लत: \"%s\" विकल्प सेट करने में असमर्थ, यह स्थिर रूप से Dos9 के अपने संस्करण के अंदर बनाया "
 "गया है ।"
 
-#: ../pBat/errors/pBat_Errors.c:172
+#: ../pbat/errors/pBat_Errors.c:172
 #, c-format
 msgid "Error : The \"%s\" comparison forbids use of strings."
 msgstr "ग़लत: \"%s\" तुलना टेक्स्ट स्ट्रिंग्स के उपयोग को रोकता है।"
 
-#: ../pBat/errors/pBat_Errors.c:175
+#: ../pbat/errors/pBat_Errors.c:175
 #, c-format
 msgid "Error : Unable to fork the current process (in function %s)."
 msgstr "ग़लत: वर्तमान प्रक्रिया (फ़ंक्शन \"%s\" में) कांटा करने में असमर्थ ।"
 
-#: ../pBat/errors/pBat_Errors.c:178
+#: ../pbat/errors/pBat_Errors.c:178
 #, c-format
 msgid "Error : Pathspec \"%s\" does not match any file."
 msgstr "ग़लत: Pathspec \"%s\" किसी भी फ़ाइल से मेल नहीं खाती ।"
 
-#: ../pBat/errors/pBat_Errors.c:181
+#: ../pbat/errors/pBat_Errors.c:181
 #, c-format
 msgid "Error : %s does not recieved any valid file to process."
 msgstr "ग़लत: \"%s\" को संसाधित करने के लिए कोई मांय फ़ाइल प्राप्त नहीं हुई ।"
 
-#: ../pBat/errors/pBat_Errors.c:184
+#: ../pbat/errors/pBat_Errors.c:184
 #, c-format
 msgid "Error : \"%s\" is not a valid number."
 msgstr "ग़लत: \"%s\" मान्य संख्या नहीं है।"
 
-#: ../pBat/errors/pBat_Errors.c:187
+#: ../pbat/errors/pBat_Errors.c:187
 #, c-format
 msgid "Error : Too many arguments for %s command"
 msgstr "ग़लत: कमांड \"%s\" में बहुत ज्यादा आर्गुमेंट हैं "
 
-#: ../pBat/errors/pBat_Errors.c:190
+#: ../pbat/errors/pBat_Errors.c:190
 #, c-format
 msgid "Error : \"%s\" is not a valid expression for IF command."
 msgstr "ग़लत: \"%s\" - IF कमांड के लिए कोई मांय व्यंजक नहीं है ।"
 
-#: ../pBat/errors/pBat_Errors.c:193
+#: ../pbat/errors/pBat_Errors.c:193
 #, c-format
 msgid "Error : Unable to copy file \"%s\"."
 msgstr "ग़लत: फ़ाइल \"% s\" की प्रतिलिपि बनाने में असमर्थ।"
 
-#: ../pBat/errors/pBat_Errors.c:196
+#: ../pbat/errors/pBat_Errors.c:196
 #, c-format
 msgid "Error : Unable to move file \"%s\"."
 msgstr "ग़लत: फ़ाइल \"% s\" को स्थानांतरित करने में असमर्थ।"
 
-#: ../pBat/errors/pBat_Errors.c:199
+#: ../pbat/errors/pBat_Errors.c:199
 #, c-format
 msgid "Error : Unable to create directory \"%s\"."
 msgstr "ग़लत: फ़ोल्डर \"%s\" बनाने में असमर्थ।"
 
-#: ../pBat/errors/pBat_Errors.c:202
+#: ../pbat/errors/pBat_Errors.c:202
 #, c-format
 msgid "Error : Unable to delete file \"%s\"."
 msgstr "ग़लत: फ़ाइल \"%s\" को हटाने में असमर्थ।"
 
-#: ../pBat/errors/pBat_Errors.c:205
+#: ../pbat/errors/pBat_Errors.c:205
 #, c-format
 msgid "Error : Unable to delete directory \"%s\"."
 msgstr "ग़लत: फ़ोल्डर \"%s\" को हटाने में असमर्थ।"
 
-#: ../pBat/errors/pBat_Errors.c:208
+#: ../pbat/errors/pBat_Errors.c:208
 #, c-format
 msgid "Error : \"%s\" is not a valid codepage on your system."
 msgstr "ग़लत: \"%s\" आपके सिस्टम पर मान्य कोडपृष्ठ नहीं है।"
 
-#: ../pBat/errors/pBat_Errors.c:211
+#: ../pbat/errors/pBat_Errors.c:211
 #, c-format
 msgid ""
 "Error : \"%s\" is a relative path, RENAME (or REN) do not handles relative "
@@ -313,156 +313,156 @@ msgstr ""
 "फ़ाइल को स्थानांतरित करना चाहते हैं और एक ही समय में इसका नाम बदलना चाहते हैं, तो आपको "
 "MOVE कमांड का उपयोग करना चाहिए।"
 
-#: ../pBat/errors/pBat_Errors.c:216
+#: ../pbat/errors/pBat_Errors.c:216
 #, fuzzy
 msgid "Error : Unable to access pBat main thread to perform break."
 msgstr "ग़लत: ब्रेक करने के लिए डॉस 9 मुख्य थ्रेड तक पहुंचने में असमर्थ।"
 
 # c-format
-#: ../pBat/errors/pBat_Errors.c:219
+#: ../pbat/errors/pBat_Errors.c:219
 #, c-format
 msgid "Error : Invalid label encountered within a block (at line %d)."
 msgstr "ग़लत: ब्लॉक के भीतर अमान्य लेबल का सामना करना पड़ा (लाइन \"%d\" पर)।"
 
-#: ../pBat/errors/pBat_Errors.c:222
+#: ../pbat/errors/pBat_Errors.c:222
 #, c-format
 msgid "Error : Unable to lock mutex (%s)."
 msgstr "ग़लत: mutex (%s) को लॉक करने में असमर्थ।"
 
-#: ../pBat/errors/pBat_Errors.c:225
+#: ../pbat/errors/pBat_Errors.c:225
 #, c-format
 msgid "Error : Unable to release mutex (%s)."
 msgstr "ग़लत: mutex (%s) को रिलीज़ करने में असमर्थ।"
 
-#: ../pBat/errors/pBat_Errors.c:228
+#: ../pbat/errors/pBat_Errors.c:228
 #, c-format
 msgid "Error : Unable to catenate file \"%s\"."
 msgstr "ग़लत: फाइल \"%s\" को बदलने में असमर्थ"
 
-#: ../pBat/errors/pBat_Errors.c:231
+#: ../pbat/errors/pBat_Errors.c:231
 #, c-format
 msgid "Error : Unable to load module \"%s\"."
 msgstr "ग़लत: \"%s\" का नाम बदलने में असमर्थ।"
 
-#: ../pBat/errors/pBat_Errors.c:234
+#: ../pbat/errors/pBat_Errors.c:234
 #, c-format
 msgid "Error : Incompatible module \"%s\"."
 msgstr "ग़लत : \"%s\" अनुचित विकल्प."
 
-#: ../pBat/errors/pBat_Errors.c:237
+#: ../pbat/errors/pBat_Errors.c:237
 #, c-format
 msgid "Error : Module \"%s\" is already loaded."
 msgstr "ग़लत: \"% s\" के लिए पुनर्निर्देशन पहले ही बता दिया था"
 
-#: ../pBat/errors/pBat_Errors.c:240
+#: ../pbat/errors/pBat_Errors.c:240
 #, fuzzy
 msgid "Aborting current command, press any key to end pBat."
 msgstr "वर्तमान कमांड को निरस्त करना, DOS9 को बंद करने के लिए कोई भी कुंजी दबाएं।"
 
-#: ../pBat/lang/pBat_Lang.c:97
+#: ../pbat/lang/pBat_Lang.c:97
 msgid "Echo command enabled"
 msgstr "इको कमांड चालू"
 
-#: ../pBat/lang/pBat_Lang.c:98
+#: ../pbat/lang/pBat_Lang.c:98
 msgid "Echo command disabled"
 msgstr "इको कमांड बंद कर दिया"
 
-#: ../pBat/lang/pBat_Lang.c:99
+#: ../pbat/lang/pBat_Lang.c:99
 msgid "Press any key to continue..."
 msgstr "आगे बढ़ने के लिए कोई कुंजी दबाएं..."
 
-#: ../pBat/lang/pBat_Lang.c:101
+#: ../pbat/lang/pBat_Lang.c:101
 msgid "\tNo files found"
 msgstr "कोई फाइल नहीं मिली"
 
-#: ../pBat/lang/pBat_Lang.c:102
+#: ../pbat/lang/pBat_Lang.c:102
 msgid "Last change\t\tSize\tAttr.\tName"
 msgstr "अंतिम change\t\tSize\tAttr.\tName"
 
-#: ../pBat/lang/pBat_Lang.c:103
+#: ../pbat/lang/pBat_Lang.c:103
 msgid "Files"
 msgstr "फ़ाइलें: (i)"
 
-#: ../pBat/lang/pBat_Lang.c:104
+#: ../pbat/lang/pBat_Lang.c:104
 msgid "Folders"
 msgstr "फ़ोल्डर"
 
-#: ../pBat/lang/pBat_Lang.c:106
+#: ../pbat/lang/pBat_Lang.c:106
 #, c-format
 msgid "Are you sure you want to delete file \"%s\" ?"
 msgstr "क्या आप सचमुच \"%s\" को मिटाना चाहते हैं?"
 
-#: ../pBat/lang/pBat_Lang.c:107
+#: ../pbat/lang/pBat_Lang.c:107
 #, c-format
 msgid "Are you sure you want to remove \"%s\" directory ?"
 msgstr "क्या आप वाकई \"%s\" फ़ोल्डर को हटाना चाहते हैं?"
 
-#: ../pBat/lang/pBat_Lang.c:109
+#: ../pbat/lang/pBat_Lang.c:109
 #, c-format
 msgid "File \"%s\" already exists, replace it by \"%s\" ?"
 msgstr "फ़ाइल \"%s\" पहले से मौजूद है, इसे \"%s\" से प्रतिस्थापित करें?"
 
-#: ../pBat/lang/pBat_Lang.c:111
+#: ../pbat/lang/pBat_Lang.c:111
 msgid "Do you really want to exit command script ?"
 msgstr "क्या आप वास्तव में ऐप से बाहर निकलना चाहते हैं?"
 
-#: ../pBat/lang/pBat_Lang.c:113
+#: ../pbat/lang/pBat_Lang.c:113
 msgid " (Yes/no) "
 msgstr "हाँ/ नहीं"
 
-#: ../pBat/lang/pBat_Lang.c:114
+#: ../pbat/lang/pBat_Lang.c:114
 msgid " (yes/No) "
 msgstr "हाँ/ नहीं"
 
-#: ../pBat/lang/pBat_Lang.c:115
+#: ../pbat/lang/pBat_Lang.c:115
 msgid " (yes/no) "
 msgstr "हाँ/ नहीं"
 
-#: ../pBat/lang/pBat_Lang.c:117
+#: ../pbat/lang/pBat_Lang.c:117
 msgid " (Yes/no/all) "
 msgstr "(हां / नहीं / सब)"
 
-#: ../pBat/lang/pBat_Lang.c:118
+#: ../pbat/lang/pBat_Lang.c:118
 msgid " (yes/No/all) "
 msgstr "(हाँ / नहीं / सब)"
 
-#: ../pBat/lang/pBat_Lang.c:119
+#: ../pbat/lang/pBat_Lang.c:119
 msgid " (yes/no/All) "
 msgstr "(हाँ / नहीं / सब)"
 
-#: ../pBat/lang/pBat_Lang.c:120
+#: ../pbat/lang/pBat_Lang.c:120
 msgid " (yes/no/all) "
 msgstr "(हाँ / नहीं / सब)"
 
-#: ../pBat/lang/pBat_Lang.c:122
+#: ../pbat/lang/pBat_Lang.c:122
 msgid "YES"
 msgstr "हां"
 
-#: ../pBat/lang/pBat_Lang.c:123
+#: ../pbat/lang/pBat_Lang.c:123
 msgid "Y"
 msgstr "Y"
 
-#: ../pBat/lang/pBat_Lang.c:125
+#: ../pbat/lang/pBat_Lang.c:125
 msgid "NO"
 msgstr "नही"
 
-#: ../pBat/lang/pBat_Lang.c:126
+#: ../pbat/lang/pBat_Lang.c:126
 msgid "N"
 msgstr "N"
 
-#: ../pBat/lang/pBat_Lang.c:128
+#: ../pbat/lang/pBat_Lang.c:128
 msgid "ALL"
 msgstr "इनमें से सभी"
 
-#: ../pBat/lang/pBat_Lang.c:129
+#: ../pbat/lang/pBat_Lang.c:129
 msgid "A"
 msgstr "A"
 
-#: ../pBat/lang/pBat_Lang.c:131
+#: ../pbat/lang/pBat_Lang.c:131
 msgid "Please enter a correct choice (or type enter to choose default) !\n"
 msgstr "कृपया सही विकल्प दर्ज करें (या डिफ़ॉल्ट चुनने के लिए एंटर टाइप करें)!\n"
 
-#: ../pBat/lang/pBat_Lang.c:133
+#: ../pbat/lang/pBat_Lang.c:133
 #, fuzzy
 msgid ""
 "This is free software, you can modify and/or redistribute it under the terms "
@@ -507,40 +507,40 @@ msgstr ""
 "<darkbatcher@dos9.org>\n"
 "अधिक जानकारी के लिए देखें: <http://dos9.org>\n"
 
-#: ../pBat/lang/pBat_Lang.c:149
+#: ../pbat/lang/pBat_Lang.c:149
 #, c-format
 msgid "%d files matching, print anyway ?"
 msgstr ""
 
-#: ../pBat/lang/pBat_Lang.c:151
+#: ../pbat/lang/pBat_Lang.c:151
 #, fuzzy, c-format
 msgid "Waiting for %f seconds, press a key to continue ..."
 msgstr "आगे बढ़ने के लिए कोई कुंजी दबाएं..."
 
-#: ../pBat/lang/pBat_Lang.c:152
+#: ../pbat/lang/pBat_Lang.c:152
 #, fuzzy, c-format
 msgid "Waiting for %f seconds, press CTRL-C to continue ..."
 msgstr "आगे बढ़ने के लिए कोई कुंजी दबाएं..."
 
-#: ../pBat/lang/pBat_Lang.c:153
+#: ../pbat/lang/pBat_Lang.c:153
 #, fuzzy
 msgid "Press a key to continue ..."
 msgstr "आगे बढ़ने के लिए कोई कुंजी दबाएं..."
 
-#: ../pBat/lang/pBat_Lang.c:154
+#: ../pbat/lang/pBat_Lang.c:154
 #, fuzzy
 msgid "Press CTRL-C to continue ..."
 msgstr "आगे बढ़ने के लिए कोई कुंजी दबाएं..."
 
-#: ../pBat/lang/pBat_Lang.c:156
+#: ../pbat/lang/pBat_Lang.c:156
 msgid "Loaded modules :"
 msgstr ""
 
-#: ../pBat/lang/pBat_Lang.c:157
+#: ../pbat/lang/pBat_Lang.c:157
 msgid "Module loading not supported."
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:48
+#: ../pbat/lang/pBat_ShowHelp.c:48
 msgid ""
 "Create an alias on a command.\n"
 "Usage: ALIAS [/f] alias=command\n"
@@ -548,7 +548,7 @@ msgstr ""
 "कमांड पर उपनाम बनाएं।\n"
 "उपयोग: ALIAS [/ f] alias=कमांड\n"
 
-#: ../pBat/lang/pBat_ShowHelp.c:52
+#: ../pbat/lang/pBat_ShowHelp.c:52
 msgid ""
 "Change current working directory.\n"
 "Usage: CD  [[/d] path]\n"
@@ -558,7 +558,7 @@ msgstr ""
 "उपयोग: CD [[/D] पथ] \n"
 "\tCHDIR [[/D] पथ]\n"
 
-#: ../pBat/lang/pBat_ShowHelp.c:57
+#: ../pbat/lang/pBat_ShowHelp.c:57
 msgid ""
 "Clear console screen\n"
 "Usage: CLS\n"
@@ -566,7 +566,7 @@ msgstr ""
 "कंसोल स्क्रीन साफ़ करे: \n"
 "प्रयोग: CLS\n"
 
-#: ../pBat/lang/pBat_ShowHelp.c:61
+#: ../pbat/lang/pBat_ShowHelp.c:61
 msgid ""
 "Change console color to the given code.\n"
 "Usage: COLOR [code]\n"
@@ -574,7 +574,7 @@ msgstr ""
 "दिए गए कोड में कंसोल रंग बदलें।\n"
 "उपयोग: Color [कोड]\n"
 
-#: ../pBat/lang/pBat_ShowHelp.c:65
+#: ../pbat/lang/pBat_ShowHelp.c:65
 msgid ""
 "Copy file(s) to another location.\n"
 "Usage: COPY [/R] [/-Y | /Y] [/A[:]attributes] source [+] ... destination\n"
@@ -582,7 +582,7 @@ msgstr ""
 "फ़ाइल को किसी अन्य स्थान पर कॉपी करें।\n"
 "उपयोग: Copy [/R] [/-Y | /Y] [/A[:]गुण] स्रोत[+] ... गंतव्य\n"
 
-#: ../pBat/lang/pBat_ShowHelp.c:69
+#: ../pbat/lang/pBat_ShowHelp.c:69
 msgid ""
 "Call a script or a label from the current context.\n"
 "Usage: CALL [/e] [file] [:label] [parameters ...]\n"
@@ -590,7 +590,7 @@ msgstr ""
 "वर्तमान प्रसंग से कोई स्क्रिप्ट या लेबल कॉल करें ।\n"
 "उपयोग: Call [/e] [फ़ाइल] [:लेबल] [पैरामीटर्स...]\n"
 
-#: ../pBat/lang/pBat_ShowHelp.c:74
+#: ../pbat/lang/pBat_ShowHelp.c:74
 msgid ""
 "Delete file(s).\n"
 "Usage: DEL [/P] [/F] [/S] [/Q] [/A[:]attributes] name\n"
@@ -600,7 +600,7 @@ msgstr ""
 "उपयोग: DEL [/P] [f] [/] [/Q] [/A[:] विशेषताएँ] नाम\n"
 "\tमिटा [/P] [f] [/[] [/Q] [/A[:] विशेषताएँ] नाम\n"
 
-#: ../pBat/lang/pBat_ShowHelp.c:79
+#: ../pbat/lang/pBat_ShowHelp.c:79
 msgid ""
 "List files in a directory and in subdirectories.\n"
 "Usage: DIR [/A[:]attributes] [/S] [/B] [path]\n"
@@ -608,7 +608,7 @@ msgstr ""
 "एक निर्देशिका में और उपनिदेशकों में फ़ाइलें सूचीबद्ध करें ।\n"
 "उपयोग: DIR [/A[:] विशेषताएँ] [/s] [/B] [पथ]\n"
 
-#: ../pBat/lang/pBat_ShowHelp.c:83
+#: ../pbat/lang/pBat_ShowHelp.c:83
 msgid ""
 "Print a message, or enable/disable command echoing.\n"
 "Usage: ECHO [OFF|ON]\n"
@@ -620,7 +620,7 @@ msgstr ""
 "Echo संदेश\n"
 "Echo. संदेश\n"
 
-#: ../pBat/lang/pBat_ShowHelp.c:89
+#: ../pbat/lang/pBat_ShowHelp.c:89
 #, c-format
 msgid ""
 "Perform commands against items (files, strings, command output).\n"
@@ -649,7 +649,7 @@ msgstr ""
 "          :: कुछ आदेश\n"
 "       )\n"
 
-#: ../pBat/lang/pBat_ShowHelp.c:101
+#: ../pbat/lang/pBat_ShowHelp.c:101
 msgid ""
 "Go to a label in a command script.\n"
 "Usage: GOTO [/Q] [/F[:]file] [:]label\n"
@@ -657,7 +657,7 @@ msgstr ""
 "कमांड स्क्रिप्ट में एक लेबल पर जाएं। \n"
 "उपयोग: GOTO [/Q] [/F[:] फ़ाइल] [:]लेबल\n"
 
-#: ../pBat/lang/pBat_ShowHelp.c:105
+#: ../pbat/lang/pBat_ShowHelp.c:105
 msgid ""
 "Perform commands on some conditions.\n"
 "Usage: IF [/i] [NOT] string1==string2 (\n"
@@ -691,7 +691,7 @@ msgstr ""
 "          :: कोड चलाने के लिए\n"
 "       )\n"
 
-#: ../pBat/lang/pBat_ShowHelp.c:120
+#: ../pbat/lang/pBat_ShowHelp.c:120
 msgid ""
 "Create the given directory.\n"
 "Usage: MD directory\n"
@@ -701,7 +701,7 @@ msgstr ""
 "उपयोग: MD निर्देशिका/फ़ोल्डर \n"
 "\tMKDIR निर्देशिका/फ़ोल्डर\n"
 
-#: ../pBat/lang/pBat_ShowHelp.c:126
+#: ../pbat/lang/pBat_ShowHelp.c:126
 msgid ""
 "Wait for a keystroke from the user.\n"
 "Usage: PAUSE\n"
@@ -709,7 +709,7 @@ msgstr ""
 "उपयोगकर्ता से एक keystroke के लिए रुको ।\n"
 "उपयोग: pause\n"
 
-#: ../pBat/lang/pBat_ShowHelp.c:131
+#: ../pbat/lang/pBat_ShowHelp.c:131
 #, fuzzy
 msgid ""
 "Remove a directory.\n"
@@ -720,7 +720,7 @@ msgstr ""
 "उपयोग: RMDIR [/S] [/Q] निर्देशिका/फ़ोल्डर\n"
 "\tRD [/S] [/Q] निर्देशिका/फ़ोल्डर\n"
 
-#: ../pBat/lang/pBat_ShowHelp.c:136
+#: ../pbat/lang/pBat_ShowHelp.c:136
 msgid ""
 "Renames a file.\n"
 "Usage: REN file name.ext\n"
@@ -730,7 +730,7 @@ msgstr ""
 "उपयोग: REN फ़ाइल नाम\n"
 "\t RENAME फ़ाइल  नाम\n"
 
-#: ../pBat/lang/pBat_ShowHelp.c:141
+#: ../pbat/lang/pBat_ShowHelp.c:141
 msgid ""
 "Introduce a comment.\n"
 "Usage: REM comment\n"
@@ -738,7 +738,7 @@ msgstr ""
 "एक परिचय टिप्पणी।\n"
 "उपयोग: REM टिप्पणी\n"
 
-#: ../pBat/lang/pBat_ShowHelp.c:146
+#: ../pbat/lang/pBat_ShowHelp.c:146
 msgid ""
 "Set or list environment variables.\n"
 "Usage: SET variable=content\n"
@@ -752,7 +752,7 @@ msgstr ""
 "\tset /p चर=प्रश्न\n"
 "\tset var\n"
 
-#: ../pBat/lang/pBat_ShowHelp.c:153
+#: ../pbat/lang/pBat_ShowHelp.c:153
 #, fuzzy
 msgid ""
 "Set local environment and options of the pBat command prompt.\n"
@@ -763,7 +763,7 @@ msgstr ""
 "उपयोग: SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] "
 "[ENABLEFLOATS | DISABLEFLOATS] [CMDLYCORRECT | CMDLYINCORRECT]\n"
 
-#: ../pBat/lang/pBat_ShowHelp.c:157
+#: ../pbat/lang/pBat_ShowHelp.c:157
 msgid ""
 "Reverts changes to environments and options made after a call to SETLOCAL.\n"
 "Usage: ENDLOCAL\n"
@@ -771,7 +771,7 @@ msgstr ""
 "SETLOCAL को कॉल करने के बाद किए गए परिवेशों और विकल्पों में परिवर्तन लौटाता है.\n"
 "उपयोग: ENDLOCAL\n"
 
-#: ../pBat/lang/pBat_ShowHelp.c:161
+#: ../pbat/lang/pBat_ShowHelp.c:161
 msgid ""
 "Set console title.\n"
 "Usage: TITLE title\n"
@@ -779,7 +779,7 @@ msgstr ""
 "कंसोल शीर्षक सेट करें।\n"
 "उपयोग: TITLE शीर्षक\n"
 
-#: ../pBat/lang/pBat_ShowHelp.c:165
+#: ../pbat/lang/pBat_ShowHelp.c:165
 msgid ""
 "Print a file.\n"
 "Usage: TYPE [file ...]\n"
@@ -787,7 +787,7 @@ msgstr ""
 "एक फाइल प्रिंट करें।\n"
 "उपयोग: Type [फ़ाइल ...]\n"
 
-#: ../pBat/lang/pBat_ShowHelp.c:169
+#: ../pbat/lang/pBat_ShowHelp.c:169
 msgid ""
 "Exit from the command prompt.\n"
 "Usage: EXIT [/b] [code]\n"
@@ -795,7 +795,7 @@ msgstr ""
 "कमांड प्रॉंप्ट से बाहर निकलें ।\n"
 "उपयोग: Exit [/b] [कोड]\n"
 
-#: ../pBat/lang/pBat_ShowHelp.c:173
+#: ../pbat/lang/pBat_ShowHelp.c:173
 msgid ""
 "Change positions of command-line parameters.\n"
 "Usage: SHIFT [/start_number | /s[:]start_number] [/d[:]displacement]\n"
@@ -803,7 +803,7 @@ msgstr ""
 "आदेश-पंक्ति पैरामीटर्स की स्थितियां परिवर्तित करें ।\n"
 "उपयोग: SHIFT [/start_number | /s[:]start_number] [/d[:]विस्थापन]\n"
 
-#: ../pBat/lang/pBat_ShowHelp.c:177
+#: ../pbat/lang/pBat_ShowHelp.c:177
 msgid ""
 "Search occurrence of string in a set of files.\n"
 "Usage: FIND [/N] [/C] [/V] [/I] [/E] string [file ...]\n"
@@ -811,7 +811,7 @@ msgstr ""
 "फ़ाइलों का एक सेट में स्ट्रिंग की खोज पुनरावृत्ति ।\n"
 "उपयोग: ढूँढें [/N] [परि.] [/V] [/I] [/E] स्ट्रिंग [फ़ाइल...]\n"
 
-#: ../pBat/lang/pBat_ShowHelp.c:181
+#: ../pbat/lang/pBat_ShowHelp.c:181
 msgid ""
 "Display content of files.\n"
 "Usage: MORE [/E] [/P] [/S] [/C] [/T[:]n] [+n] [file ...]\n"
@@ -819,7 +819,7 @@ msgstr ""
 "फाइलों की सामग्री प्रदर्शित करें।\n"
 "उपयोग: MORE [/E] [/P] [/S] [/C] [/T[:]n] [+n] [फाइल ...]\n"
 
-#: ../pBat/lang/pBat_ShowHelp.c:185
+#: ../pbat/lang/pBat_ShowHelp.c:185
 msgid ""
 "[Obsolete] Sets or Clears Extended CTRL+C checking on DOS system. (Do "
 "nothing)\n"
@@ -828,7 +828,7 @@ msgstr ""
 "[अप्रचलित] डॉस सिस्टम पर विस्तारित CTRL + C जांच सेट या साफ़ करता है। (कुछ भी नहीं)\n"
 "उपयोग: BREAK [चालू | बंद]\n"
 
-#: ../pBat/lang/pBat_ShowHelp.c:189
+#: ../pbat/lang/pBat_ShowHelp.c:189
 msgid ""
 "Set Console codepage or encoding.\n"
 "Usage: CHCP [ codepage | encoding]\n"
@@ -836,7 +836,7 @@ msgstr ""
 "कंसोल कोडपेज या एंकोडिंग सेट करें ।\n"
 "उपयोग: CHCP [कोडपेज | एंकोडिंग]\n"
 
-#: ../pBat/lang/pBat_ShowHelp.c:193
+#: ../pbat/lang/pBat_ShowHelp.c:193
 msgid ""
 "For each path, change current directory and pushd to stack\n"
 "the previous current directory.\n"
@@ -846,7 +846,7 @@ msgstr ""
 "निर्देशिका स्टैक करने के लिए पुश ।\n"
 "उपयोग: PUSHD [path1] [path2] [pathN]...\n"
 
-#: ../pBat/lang/pBat_ShowHelp.c:198
+#: ../pbat/lang/pBat_ShowHelp.c:198
 msgid ""
 "Pull a directory on the stack to change current directory.\n"
 "Usage: POPD\n"
@@ -854,7 +854,7 @@ msgstr ""
 "वर्तमान निर्देशिका बदलने के लिए स्टैक पर कोई निर्देशिका खींचें ।\n"
 "उपयोग: POPD\n"
 
-#: ../pBat/lang/pBat_ShowHelp.c:202
+#: ../pbat/lang/pBat_ShowHelp.c:202
 msgid ""
 "Display counts of a file or of stdin.\n"
 "Usage: WC [/L] [/C] [/M] [/W] [files ...]\n"
@@ -862,7 +862,7 @@ msgstr ""
 "किसी फ़ाइल या stdin की संख्याएं प्रदर्शित करें ।\n"
 "उपयोग: WC [/L] [/C] [/M] [/W] [फ़ाइलें...]\n"
 
-#: ../pBat/lang/pBat_ShowHelp.c:206
+#: ../pbat/lang/pBat_ShowHelp.c:206
 msgid ""
 "Run a command with arguments from standard input file.\n"
 "Usage: XARGS [command ...]\n"
@@ -870,44 +870,44 @@ msgstr ""
 "मानक इनपुट फ़ाइल से तर्क के साथ कोई आदेश चलाएं ।\n"
 "उपयोग: XARGS [आदेश...]\n"
 
-#: ../pBat/lang/pBat_ShowHelp.c:210
+#: ../pbat/lang/pBat_ShowHelp.c:210
 msgid ""
 "Changes pbat command prompt.\n"
 "Usage: PROMPT prompt-format\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:214
+#: ../pbat/lang/pBat_ShowHelp.c:214
 msgid ""
 "Print a message using prompt format.\n"
 "Usage: PECHO prompt-format\n"
 "       PECHO.prompt-format\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:219
+#: ../pbat/lang/pBat_ShowHelp.c:219
 msgid ""
 "Sleep for a delay in seconds.\n"
 "Usage: TIMEOUT [/T] [/NOBREAK] seconds[.milliseconds]\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:223
+#: ../pbat/lang/pBat_ShowHelp.c:223
 msgid ""
 "Load or list modules.\n"
 "Usage: MOD [/L] [/Q] module\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:227
+#: ../pbat/lang/pBat_ShowHelp.c:227
 msgid ""
 "Print the OS type and version\n"
 "Usage: VER\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:231
+#: ../pbat/lang/pBat_ShowHelp.c:231
 msgid ""
 "Sets directory of translation files\n"
 "Usage: LOCALE [dir]\n"
 msgstr ""
 
-#: ../pBat/lang/pBat_ShowHelp.c:235
+#: ../pbat/lang/pBat_ShowHelp.c:235
 msgid ""
 "Start a program in another window\n"
 "Usage: START [/d dir] [/b] [/min] [/max] [/wait] [\"title\"] [command "

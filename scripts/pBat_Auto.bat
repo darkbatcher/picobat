@@ -38,7 +38,7 @@ IF %PBAT_OS%==WINDOWS (
 	SET PBAT_SHARE=!PBAT_PATH!/share
 	SET PBAT_ETC=!PBAT_PATH!/etc
 
-    SET PBAT_START_SCRIPT=!PBAT_PATH!/cmd/PBAT_start
+    SET PBAT_START_SCRIPT=!PBAT_PATH!/cmd/pbat_start
 )
 
 ALIAS /f help=hlp.bat
