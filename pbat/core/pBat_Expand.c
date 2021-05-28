@@ -73,32 +73,31 @@ void pBat_ExpandSpecialVar(ESTR* ptrCommandLine, ESTR** buf)
 
 void pBat_ExpandVar(ESTR* ptrCommandLine, char cDelimiter, ESTR** buf)
 {
+	ESTR *lpExpanded=buf[0], /* To store the expanded line */
+         *lpVarContent=buf[1]; /* To store temporary var content */
 
-	ESTR *lpExpanded=buf[0],
-         *lpVarContent=buf[1];
-
-	char *ptrToken=pBat_EsToChar(ptrCommandLine),
+	char *ptrToken=ptrCommandLine->str,
 	      *ptrNextToken,
 	      *ptrEndToken;
 
-    char lpDelimiter[] = {cDelimiter, 0};
-
-	/* initialisation du buffer de sortie */
+    char lpDelimiter[] = {cDelimiter, '\0'};
 
 	while ((ptrNextToken=pBat_SearchChar(ptrToken, cDelimiter))) {
 
-		DEBUG(ptrToken);
 		*ptrNextToken='\0';
 		ptrNextToken++;
+
+        /* If we are doing delayed expansion, remove escape characters*/
+        if ((bDelayedExpansion
+                && cDelimiter == '!'))
+                pBat_UnEscape(ptrToken);
 
 		if (*ptrNextToken==cDelimiter) {
 
             /* a delimiter is escaped using double delimiter */
-
 			pBat_EsCat(lpExpanded, ptrToken);
 			pBat_EsCat(lpExpanded, lpDelimiter);
 			ptrToken=ptrNextToken+1;
-			continue;
 
 		} else if ((cDelimiter == '%' && (isdigit(*ptrNextToken)
                     || *ptrNextToken == '*'
@@ -108,28 +107,24 @@ void pBat_ExpandVar(ESTR* ptrCommandLine, char cDelimiter, ESTR** buf)
                                                       ptrNextToken, lpVarContent))) {
 
 			/* We encountered a parameter variable that must be
-			   develloped right here because it owns priority over
+			   developed right here because it owns priority over
 			   existing variables (eg, something like '2cent') whose
-			   name start with a number or an Asterix */
+			   name start with a number or an asterisk */
             pBat_EsCat(lpExpanded, ptrToken);
 			pBat_EsCatE(lpExpanded, lpVarContent);
 			ptrToken=ptrEndToken;
-			continue;
 
 
-		} else if ((ptrEndToken=pBat_StrToken(ptrNextToken, cDelimiter))) {
+		} else if ((ptrEndToken=pBat_SearchChar(ptrNextToken, cDelimiter))) {
 
 			*ptrEndToken='\0';
 
-			pBat_EsCat(lpExpanded, ptrToken);
+            pBat_EsCat(lpExpanded, ptrToken);
 
-			if ((pBat_GetVar(ptrNextToken, lpVarContent))) {
-
-				/* add the content of the variable only if
-				   it is really defined */
-				pBat_EsCatE(lpExpanded, lpVarContent);
-
-			}
+            /* add the content of the variable only if
+                it is really defined */
+			if ((pBat_GetVar(ptrNextToken, lpVarContent)))
+                pBat_EsCatE(lpExpanded, lpVarContent);
 
 			ptrToken=ptrEndToken+1;
 
@@ -148,12 +143,12 @@ void pBat_ExpandVar(ESTR* ptrCommandLine, char cDelimiter, ESTR** buf)
 		}
 	}
 
+    if ((bDelayedExpansion
+         && cDelimiter == '!'))
+        pBat_UnEscape(ptrToken);
+
 	pBat_EsCat(lpExpanded, ptrToken);
 	pBat_EsCpy(ptrCommandLine, pBat_EsToChar(lpExpanded));
-
-	PBAT_DBG("[ExpandVar] : '%s'\n",
-	         pBat_EsToChar(ptrCommandLine)
-	        );
 
 }
 
@@ -169,7 +164,7 @@ void pBat_ReplaceVars(ESTR* lpEsStr)
 }
 
 
-void pBat_DelayedExpand(ESTR* ptrCommandLine, char cEnableDelayedExpansion)
+void pBat_DelayedExpand(ESTR* ptrCommandLine)
 {
     ESTR* buf[2] = {pBat_EsInit(), pBat_EsInit()};
 
@@ -178,45 +173,11 @@ void pBat_DelayedExpand(ESTR* ptrCommandLine, char cEnableDelayedExpansion)
 	*pBat_EsToChar(buf[0]) = '\0';
     *pBat_EsToChar(buf[1]) = '\0';
 
-	if (cEnableDelayedExpansion) {
-
+	if (bDelayedExpansion)
 		pBat_ExpandVar(ptrCommandLine, '!', buf);
-
-	}
+    else
+        pBat_UnEscape(ptrCommandLine->str);
 
     pBat_EsFree(buf[0]);
     pBat_EsFree(buf[1]);
-}
-
-void pBat_RemoveEscapeChar(char* lpLine)
-{
-	/* this function is designed to remove the escape characters
-	   (e.g. char '^') from the command line */
-	char  lastEsc=FALSE;
-	char* lpPosition=lpLine;
-	for (; *lpLine; lpLine++,lpPosition++) {
-		if (*lpLine=='^' && lastEsc!=TRUE) {
-			lpPosition--;
-			lastEsc=TRUE;
-			continue;
-		}
-		lastEsc=FALSE;
-		if (lpPosition != lpLine) *lpPosition=*lpLine;
-	}
-	*lpPosition='\0';
-}
-
-char* pBat_StrToken(char* lpString, char cToken)
-{
-	if (lpString == NULL)
-		return NULL;
-
-	for (; *lpString!='\0'; lpString++) {
-
-		if (*lpString==cToken) return lpString;
-
-	}
-
-	return NULL;
-
 }

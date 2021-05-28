@@ -25,7 +25,14 @@
 //#define PBAT_DBG_MODE
 #include "pBat_Debug.h"
 
-int pBat_GetParameterPointers(char** lpPBegin, char** lpPEnd, const char* lpDelims, const char* lpLine)
+/* Return a pointer to the start and end of next parameter in
+   lpLine, Given a set of delimiter.
+
+   a pair of quotes and escapes characters override delimiters.
+
+  */
+int pBat_GetParameterPointers(char** lpPBegin, char** lpPEnd,
+                                    const char* lpDelims, const char* lpLine)
 {
 	const char  *lpBegin,
 				*lpEnd;
@@ -77,16 +84,17 @@ int pBat_GetParameterPointers(char** lpPBegin, char** lpPEnd, const char* lpDeli
 
 }
 
-char* pBat_GetNextParameter(char* lpLine, char* lpResponseBuffer, int iLength)
+
 /* determines whether a paramater follows the position lpLine.
- *
- * lpLine : A pointer to where to seek a parameter
- * lpResponse : A buffer to store the parameter
- * iLenght : The maximum length to be stored in lpResponse
- *
- * return : the part after the parameter or null if no parameter has been found
- *
+
+   lpLine : A pointer to where to seek a parameter
+   lpResponse : A buffer to store the parameter
+   iLenght : The maximum length to be stored in lpResponse
+
+   return : the part after the parameter or null if no parameter has been found
+
  */
+char* pBat_GetNextParameter(char* lpLine, char* lpResponseBuffer, int iLength)
 {
 	ESTR* lpParameter=pBat_EsInit();
 
@@ -161,10 +169,7 @@ char* pBat_GetNextBlockEs(char* lpLine, ESTR* lpReturn)
 	pBat_EsCpyN(lpReturn, bkInfo.lpBegin, iNbBytes);
 
 	/* replace delayed expansion */
-	pBat_DelayedExpand(lpReturn, bDelayedExpansion);
-
-	/* remove escape characters */
-	pBat_UnEscape(pBat_EsToChar(lpReturn));
+	pBat_DelayedExpand(lpReturn);
 
 	return lpNext+1;
 
@@ -264,10 +269,7 @@ next:
 	}
 
 	/* expand delayed expand variable */
-	pBat_DelayedExpand(lpReturn, bDelayedExpansion);
-
-	/* remove escape characters */
-	pBat_UnEscape(pBat_EsToChar(lpReturn));
+	pBat_DelayedExpand(lpReturn);
 
 	return lpEnd;
 }
@@ -304,7 +306,7 @@ struct PARAMLIST* pBat_GetParamList(char* lpLine)
         next->next = NULL;
         next->param = lpParam;
 
-		pBat_DelayedExpand(lpParam, bDelayedExpansion);
+		pBat_DelayedExpand(lpParam);
 
 		lpParam=pBat_EsInit();
 
@@ -337,9 +339,7 @@ LIBPBAT char* pBat_GetEndOfLine(char* lpLine, ESTR* lpReturn)
 {
 
 	pBat_EsCpy(lpReturn, lpLine); /* Copy the content of the line in the buffer */
-	pBat_DelayedExpand(lpReturn, bDelayedExpansion); /* Expands the content of the specified  line */
-
-	pBat_UnEscape(pBat_EsToChar(lpReturn));
+	pBat_DelayedExpand(lpReturn); /* Expands the content of the specified  line */
 
 	return NULL;
 }

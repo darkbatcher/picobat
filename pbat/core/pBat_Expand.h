@@ -24,9 +24,6 @@
 void pBat_ReplaceVars(ESTR* lpEsStr);
 void pBat_ExpandSpecialVar(ESTR* ptrCommandLine, ESTR** buf);
 void pBat_ExpandVar(ESTR* ptrCommandLine, char cDelimiter, ESTR** buf);
-void pBat_DelayedExpand(ESTR* ptrCommandLine, char cEnableDelayedExpansion);
-
-void  pBat_RemoveEscapeChar(char* lpLine);
-char* pBat_StrToken(char* lpString, char cToken);
+void pBat_DelayedExpand(ESTR* ptrCommandLine);
 
 #endif
