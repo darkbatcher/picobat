@@ -21,10 +21,11 @@
 EXEC_SUFFIX ?=
 OBJ_EXT ?= .o
 
-LD = $(CC)
-AR = ar r
-RANLIB = ranlib
+LD ?= $(CC)
 
+AR ?= ar r
+RANLIB ?= ranlib
+WINDRES ?= windres
 LEX ?= flex
 YACC ?= yacc
 

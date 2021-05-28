@@ -31,6 +31,12 @@ ifeq ($(use_libcu8),1)
 	LDFLAGS += -lshlwapi
 endif
 
+ifeq ($(fn_WIN32),1)
+	SRC_RC = rc/res.rc
+	OBJ_RC = rc/res.o
+endif
+
+
 SRC_LINENOISE = ./linenoise/pBat_LineNoise.c ./linenoise/utf8.c \
 				./linenoise/linenoise.c 
 
@@ -64,9 +70,9 @@ SRC_FILES := \
 	./core/pBat_Exec.c ./core/pBat_Prompt.c ./command/pBat_Pecho.c \
 	./command/pBat_CommandInfo.c ./core/pBat_Completion.c \
 	./command/pBat_Timeout.c ./command/pBat_Mod.c \
-	./command/pBat_Ver.c ./command/pBat_Locale.c $(SRC_LINENOISE)
+	./command/pBat_Ver.c ./command/pBat_Locale.c $(SRC_LINENOISE) \
 
-OBJ_FILES := $(SRC_FILES:.c=.o)
+OBJ_FILES := $(SRC_FILES:.c=.o) $(OBJ_RC)
 
 all: pbat
 
@@ -79,5 +85,9 @@ bin: pbat
 
 pbat: $(OBJ_FILES)
 	$(CC) -o pbat$(EXEC_SUFFIX) $(OBJ_FILES) $(LDFLAGS)
+	
+.rc.o:
+	$(WINDRES) -o $@ -i $<
 
+.SUFFIXES: .rc .o
 .PHONY: all clean bin
