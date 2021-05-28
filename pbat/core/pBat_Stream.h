@@ -62,7 +62,6 @@
                 setvbuf(s, NULL, _IONBF, 0)
 
 #define __PBAT_DUP_STD(fd, s) \
-            fflush(s);\
             if (dup2(fd, fileno(s)) == -1) \
                 pBat_ShowErrorMessage(PBAT_UNABLE_DUPLICATE_FD \
                                         | PBAT_PRINT_C_ERROR, \
@@ -70,6 +69,7 @@
             pBat_SetFdInheritance(fileno(s), 0);
 
 #define PBAT_DUP_STD(fd, s) \
+            fflush(s);\
             __PBAT_DUP_STD(fd, s) \
             PBAT_RESET_BUFFERING(fd, s)
 
