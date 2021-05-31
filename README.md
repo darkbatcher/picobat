@@ -1,7 +1,7 @@
 # Quick starting guide #
 
-**Picobat** is a open source command prompt meant to implement a superset of 
-**cmd.exe** script language \(known as **batch** by most devellopers\). It is 
+**Picobat** is an open source command prompt meant to implement a superset of 
+**cmd.exe** script language \(known as **batch** by most developers\). It is 
 designed to be as simple to use as possible, reliable, portable and 
 lightweight.
 

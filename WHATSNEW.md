@@ -675,7 +675,7 @@ used almost new code.
   replace old-fashioned **hlp** manual page viewer. It is basically designed 
   to act as a manual page manager rather than just a viewer, by providing 
   interfaces to build manual trees, and to get manual tress from the 
-  repositories at **pbat.org** \(this is to be implemented later\).
+  repositories at **picobat.org** \(this is to be implemented later\).
 
 * Changed names of the manual-pages subdirectories, they now match up with 
   traditional \*NIX-like local names that are widely used. Note that only 

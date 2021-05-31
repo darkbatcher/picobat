@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Dos9 218.2\n"
+"Project-Id-Version: picobat 218.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-26 23:13+0200\n"
+"POT-Creation-Date: 2021-05-31 23:04+0200\n"
 "PO-Revision-Date: 2013-12-14 20:24+0100\n"
 "Last-Translator: DarkBatcher <darkbatcher@gmail.com>\n"
 "Language-Team: French <darkbatcher@gmail.com>\n"
@@ -54,10 +54,10 @@ msgstr "Erreur : Impossible de trouver l'étiquette \"%s\"."
 
 #: ../pbat/errors/pBat_Errors.c:64
 #, fuzzy
-msgid "Warning : Using a pBat extension but the CMDLYCORRECT option is set."
+msgid "Warning : Using a picobat extension but the CMDLYCORRECT option is set."
 msgstr ""
 "Attention : il faut désactiver l'option CMDLYCORRECT pour utiliser les "
-"extensions de Dos9."
+"extensions de picobat."
 
 #: ../pbat/errors/pBat_Errors.c:67
 #, c-format
@@ -148,10 +148,10 @@ msgstr "Erreur : Impossible de créer un pipe (dans %s)."
 #: ../pbat/errors/pBat_Errors.c:117
 #, fuzzy, c-format
 msgid ""
-"Error : unable to run a subprocess of pBat to process the given input (\"%s"
-"\")."
+"Error : unable to run a subprocess of picobat to process the given input "
+"(\"%s\")."
 msgstr ""
-"Error : Impossible de lancer une seconde instance de Dos9 pour exécuter "
+"Error : Impossible de lancer une seconde instance de picobat pour exécuter "
 "l'entée spécifiée (\"%s\")."
 
 #: ../pbat/errors/pBat_Errors.c:121
@@ -238,7 +238,7 @@ msgid ""
 "version of pBat."
 msgstr ""
 "Erreur : Impossible d'activer l'option \"%s\" qui est compilée à l'intérieur "
-"de Dos9."
+"de picobat."
 
 #: ../pbat/errors/pBat_Errors.c:172
 #, c-format
@@ -318,9 +318,9 @@ msgstr ""
 
 #: ../pbat/errors/pBat_Errors.c:216
 #, fuzzy
-msgid "Error : Unable to access pBat main thread to perform break."
+msgid "Error : Unable to access picobat main thread to perform break."
 msgstr ""
-"Erreur : Impossible d'accéder au thread principal de Dos9 pour exécuter "
+"Erreur : Impossible d'accéder au thread principal de picobat pour exécuter "
 "break."
 
 #: ../pbat/errors/pBat_Errors.c:219
@@ -360,9 +360,10 @@ msgstr "Erreur : Le module \"%s\" est déjà chargé."
 
 #: ../pbat/errors/pBat_Errors.c:240
 #, fuzzy
-msgid "Aborting current command, press any key to end pBat."
+msgid "Aborting current command, press any key to end picobat."
 msgstr ""
-"Abandon de l'opération courrante, appuyez sur un touche pour terminer Dos9."
+"Abandon de l'opération courrante, appuyez sur un touche pour terminer "
+"picobat."
 
 #: ../pbat/lang/pBat_Lang.c:97
 msgid "Echo command enabled"
@@ -478,7 +479,7 @@ msgid ""
 "Usage:\tPBAT [/A[:]attr] [/I in] [/O out] [file ... | /K cmd ...|/C "
 "cmd ...]\n"
 "\n"
-"\t/A:attr\tA list of attributes for pBat\n"
+"\t/A:attr\tA list of attributes for picobat\n"
 "\t\tC\tEnable CMDLYCORRECT option to enable more compatibility\n"
 "\t\t\twith cmd.exe.\n"
 "\t\tE\tDisable echo command (disable current path printing).\n"
@@ -489,16 +490,17 @@ msgid ""
 "\t/C cmd\tRun cmd command and exit.\n"
 "\t/K cmd\tRun cmd command and stay active.\n"
 "\n"
-"Feel free to report bugs and submit suggestions at : <darkbatcher@pbat.org>\n"
-"For more informations see : <http://pbat.org>\n"
+"Feel free to report bugs and submit suggestions at : <darkbatcher@picobat."
+"org>\n"
+"For more informations see : <http://picobat.org>\n"
 msgstr ""
 "Ceci est un programme libre, il peut être modifié et/ou redistribué selon "
 "les termes de la Licence Publique Générale GNU (version 3 ou postérieure).\n"
 "\n"
-"Usage:\tDOS9 [/A[:]attr] [/I entrée] [/O sortie] [fichier ... | /K cmd ...| /"
+"Usage:\tPBAT [/A[:]attr] [/I entrée] [/O sortie] [fichier ... | /K cmd ...| /"
 "C cmd ...]\n"
 "\n"
-"\t/A:attr\tListe d'attributs pour Dos9\n"
+"\t/A:attr\tListe d'attributs pour picobat\n"
 "\t\tC\tActive le mode CMDLYCORRECT pour plus de compatibilité\n"
 "\t\t\tavec cmd.exe\n"
 "\t\tF\tActive les nombres flotants.\n"
@@ -510,8 +512,8 @@ msgstr ""
 "\t/C cmd\tExécute une commande et se termine.\n"
 "\t/K cmd\tExécute une commande et reste actif.\n"
 "\n"
-"Signalez les bogues à : <darkbatcher@dos9>\n"
-"Plus d'informations sur : <http://dos9.org>\n"
+"Signalez les bogues à : <darkbatcher@picobat>\n"
+"Plus d'informations sur : <http://picobat.org>\n"
 
 #: ../pbat/lang/pBat_Lang.c:149
 #, c-format
@@ -758,11 +760,11 @@ msgstr ""
 #: ../pbat/lang/pBat_ShowHelp.c:153
 #, fuzzy
 msgid ""
-"Set local environment and options of the pBat command prompt.\n"
+"Set local environment and options of the picobat command prompt.\n"
 "Usage: SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] "
 "[CMDLYCORRECT | CMDLYINCORRECT]\n"
 msgstr ""
-"Crée un environnement local et active ou désative les options de Dos9.\n"
+"Crée un environnement local et active ou désative les options de picobat.\n"
 "Usage: SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] "
 "[ENABLEFLOATS | DISABLEFLOATS] [CMDLYCORRECT | CMDLYINCORRECT]\n"
 
@@ -881,7 +883,7 @@ msgid ""
 "Changes pbat command prompt.\n"
 "Usage: PROMPT prompt-format\n"
 msgstr ""
-"Change la ligne de commande de Dos9.\n"
+"Change la ligne de commande de picobat.\n"
 "Usage: PROMPT format-prompt\n"
 
 #: ../pbat/lang/pBat_ShowHelp.c:214

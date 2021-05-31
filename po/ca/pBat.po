@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-26 23:13+0200\n"
+"POT-Creation-Date: 2021-05-31 23:04+0200\n"
 "PO-Revision-Date: 2020-12-08 18:56+0100\n"
 "Last-Translator: EMAIL@ADDRESS\n"
 "Language-Team: Language FR\n"
@@ -57,9 +57,9 @@ msgstr "Error: Incapaç de trobar l'etiqueta \"%s\"."
 
 #: ../pbat/errors/pBat_Errors.c:64
 #, fuzzy
-msgid "Warning : Using a pBat extension but the CMDLYCORRECT option is set."
+msgid "Warning : Using a picobat extension but the CMDLYCORRECT option is set."
 msgstr ""
-"Advertència: Utilitzant una extensió Dos9 pero la opció CMDLYCORRECT està "
+"Advertència: Utilitzant una extensió picobat pero la opció CMDLYCORRECT està "
 "establerta."
 
 #: ../pbat/errors/pBat_Errors.c:67
@@ -150,11 +150,11 @@ msgstr "Error: No es pot crear una canalització (a %s)"
 #: ../pbat/errors/pBat_Errors.c:117
 #, fuzzy, c-format
 msgid ""
-"Error : unable to run a subprocess of pBat to process the given input (\"%s"
-"\")."
+"Error : unable to run a subprocess of picobat to process the given input "
+"(\"%s\")."
 msgstr ""
-"Error: Incapaç d'executar un subprocés de Dos9 a l'entrada especificada (\"%s"
-"\") ."
+"Error: Incapaç d'executar un subprocés de picobat a l'entrada especificada "
+"(\"%s\") ."
 
 #: ../pbat/errors/pBat_Errors.c:121
 #, c-format
@@ -241,7 +241,7 @@ msgid ""
 "version of pBat."
 msgstr ""
 "Error: Incapaç d'establir l'opció \"%s\", està construida estàticament "
-"dintre de la teva versió de Dos9."
+"dintre de la teva versió de picobat."
 
 #: ../pbat/errors/pBat_Errors.c:172
 #, c-format
@@ -321,9 +321,9 @@ msgstr ""
 
 #: ../pbat/errors/pBat_Errors.c:216
 #, fuzzy
-msgid "Error : Unable to access pBat main thread to perform break."
+msgid "Error : Unable to access picobat main thread to perform break."
 msgstr ""
-"Error: Incapaç d'accedir el fil principal de Dos9 per realitzar una "
+"Error: Incapaç d'accedir el fil principal de picobat per realitzar una "
 "interrupció."
 
 #: ../pbat/errors/pBat_Errors.c:219
@@ -363,9 +363,9 @@ msgstr "Error: El mòdul \"%s\" ja està carregat."
 
 #: ../pbat/errors/pBat_Errors.c:240
 #, fuzzy
-msgid "Aborting current command, press any key to end pBat."
+msgid "Aborting current command, press any key to end picobat."
 msgstr ""
-"Avortant el comandament actual, prem qualsevol tecla per finalitzar Dos9."
+"Avortant el comandament actual, prem qualsevol tecla per finalitzar picobat."
 
 #: ../pbat/lang/pBat_Lang.c:97
 msgid "Echo command enabled"
@@ -481,7 +481,7 @@ msgid ""
 "Usage:\tPBAT [/A[:]attr] [/I in] [/O out] [file ... | /K cmd ...|/C "
 "cmd ...]\n"
 "\n"
-"\t/A:attr\tA list of attributes for pBat\n"
+"\t/A:attr\tA list of attributes for picobat\n"
 "\t\tC\tEnable CMDLYCORRECT option to enable more compatibility\n"
 "\t\t\twith cmd.exe.\n"
 "\t\tE\tDisable echo command (disable current path printing).\n"
@@ -492,16 +492,17 @@ msgid ""
 "\t/C cmd\tRun cmd command and exit.\n"
 "\t/K cmd\tRun cmd command and stay active.\n"
 "\n"
-"Feel free to report bugs and submit suggestions at : <darkbatcher@pbat.org>\n"
-"For more informations see : <http://pbat.org>\n"
+"Feel free to report bugs and submit suggestions at : <darkbatcher@picobat."
+"org>\n"
+"For more informations see : <http://picobat.org>\n"
 msgstr ""
 "Això és programari lliure, pots modificar-lo i/o redistribuir-lo sobre els "
 "termes de la GNU General Public License v3 (o una versió més nova).\n"
 "\n"
-"Ús:\tDOS9 [/A[:]attr]\\ [/I entrada] [/O sortida] [fitxer... | /K cmd ... | /"
+"Ús:\tPBAT [/A[:]attr]\\ [/I entrada] [/O sortida] [fitxer... | /K cmd ... | /"
 "C cmd]\n"
 "\n"
-"\t/A:attr\tUna llista d'atributs per Dos9\n"
+"\t/A:attr\tUna llista d'atributs per picobat\n"
 "\t\tC\tHabilita l'opció CMDLYCORRECT per habilitar més compatibilitat\n"
 "\t\t\tamb cmd.exe.\n"
 "\t\tF\tHabilita el suport números de punt flotant.\n"
@@ -513,9 +514,9 @@ msgstr ""
 "\t/C cmd\tExecuta comandament del cmd i surt.\n"
 "\t/K cmd\tExecuta comandament del cmd i continua actiu.\n"
 "\n"
-"Sigues lliure de reportar errors i sobmetre suggestions a: <darkbatcher@dos9."
-"org>\n"
-"Per més informació vegeu: <http://dos9.org>\n"
+"Sigues lliure de reportar errors i sobmetre suggestions a: "
+"<darkbatcher@picobat.org>\n"
+"Per més informació vegeu: <http://picobat.org>\n"
 
 #: ../pbat/lang/pBat_Lang.c:149
 #, c-format
@@ -764,11 +765,11 @@ msgstr ""
 #: ../pbat/lang/pBat_ShowHelp.c:153
 #, fuzzy
 msgid ""
-"Set local environment and options of the pBat command prompt.\n"
+"Set local environment and options of the picobat command prompt.\n"
 "Usage: SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] "
 "[CMDLYCORRECT | CMDLYINCORRECT]\n"
 msgstr ""
-"Estableix l'entorn actual i les opcions de l'intèrpret d'ordres Dos9.\n"
+"Estableix l'entorn actual i les opcions de l'intèrpret d'ordres picobat.\n"
 "Ús: SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] "
 "[ENABLEFLOATS | DISABLEFLOATS] [CMDLYCORRECT | CMDLYINCORRECT]\n"
 
@@ -886,7 +887,7 @@ msgid ""
 "Changes pbat command prompt.\n"
 "Usage: PROMPT prompt-format\n"
 msgstr ""
-"Canvia l'intèrpret d'ordres Dos9.\n"
+"Canvia l'intèrpret d'ordres picobat.\n"
 "Ús: PROMPT format\n"
 
 #: ../pbat/lang/pBat_ShowHelp.c:214

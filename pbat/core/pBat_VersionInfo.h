@@ -31,13 +31,13 @@
 #ifdef PACKAGE_BUGREPORT
 #define PBAT_BUGREPORT PACKAGE_BUGREPORT
 #else
-#define PBAT_BUGREPORT "darkbatcher@pbat.org"
+#define PBAT_BUGREPORT "darkbatcher@picobat.org"
 #endif
 
 #ifdef PACKAGE_URL
 #define PBAT_URL PACKAGE_URL
 #else
-#define PBAT_URL "http://www.pbat.org/"
+#define PBAT_URL "http://www.picobat.org/"
 #endif
 
 #ifdef HOST

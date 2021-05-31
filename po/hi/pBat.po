@@ -1,15 +1,15 @@
 # English translations for dos package.
 # Copyright (C) 2018 THE dos'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the dos package.
-# darkounet <darkbatcher@dos9.org>, 2018.
+# darkounet <darkbatcher@picobat.org>, 2018.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: dos9 218.2\n"
+"Project-Id-Version: picobat 218.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-26 23:13+0200\n"
+"POT-Creation-Date: 2021-05-31 23:04+0200\n"
 "PO-Revision-Date: 2018-07-07 22:13+0530\n"
-"Last-Translator: darkounet <darkbatcher@dos9.org>\n"
+"Last-Translator: darkounet <darkbatcher@picobat.org>\n"
 "Language-Team: TheBATeam (www.thebateam.org)\n"
 "Language: hi_IN\n"
 "MIME-Version: 1.0\n"
@@ -58,7 +58,7 @@ msgstr "ग़लत : लेबल \"%s\" ढूंढने में अस�
 
 #: ../pbat/errors/pBat_Errors.c:64
 #, fuzzy
-msgid "Warning : Using a pBat extension but the CMDLYCORRECT option is set."
+msgid "Warning : Using a picobat extension but the CMDLYCORRECT option is set."
 msgstr ""
 "चेतावनी: आप एक डॉस 9 एक्सटेंशन का उपयोग कर रहे हैं लेकिन CMDLYCORRECT विकल्प सेट है।"
 
@@ -139,7 +139,7 @@ msgstr "ग़लत: \"% s\" \"Usebackq\" के सही उपयोग क�
 #: ../pbat/errors/pBat_Errors.c:111
 #, c-format
 msgid "Error : Unable to allocate memory (in %s)."
-msgstr "ग़लत: DOS9 \"% s\" के लिए रैम में पर्याप्त जगह नहीं एकत्र कर सकता"
+msgstr "ग़लत: picobat \"% s\" के लिए रैम में पर्याप्त जगह नहीं एकत्र कर सकता"
 
 #: ../pbat/errors/pBat_Errors.c:114
 #, c-format
@@ -149,9 +149,9 @@ msgstr "ग़लत : \"%s\" में पाइप नहीं बना स�
 #: ../pbat/errors/pBat_Errors.c:117
 #, fuzzy, c-format
 msgid ""
-"Error : unable to run a subprocess of pBat to process the given input (\"%s"
-"\")."
-msgstr "ग़लत : दिए गए इनपुट (\"% s\") को संसाधित करने के लिए DOS9 असमर्थ."
+"Error : unable to run a subprocess of picobat to process the given input "
+"(\"%s\")."
+msgstr "ग़लत : दिए गए इनपुट (\"% s\") को संसाधित करने के लिए picobat असमर्थ."
 
 #: ../pbat/errors/pBat_Errors.c:121
 #, c-format
@@ -234,8 +234,8 @@ msgid ""
 "Error : Unable to set option \"%s\", it is built statically inside your "
 "version of pBat."
 msgstr ""
-"ग़लत: \"%s\" विकल्प सेट करने में असमर्थ, यह स्थिर रूप से Dos9 के अपने संस्करण के अंदर बनाया "
-"गया है ।"
+"ग़लत: \"%s\" विकल्प सेट करने में असमर्थ, यह स्थिर रूप से picobat के अपने संस्करण के अंदर "
+"बनाया गया है ।"
 
 #: ../pbat/errors/pBat_Errors.c:172
 #, c-format
@@ -315,7 +315,7 @@ msgstr ""
 
 #: ../pbat/errors/pBat_Errors.c:216
 #, fuzzy
-msgid "Error : Unable to access pBat main thread to perform break."
+msgid "Error : Unable to access picobat main thread to perform break."
 msgstr "ग़लत: ब्रेक करने के लिए डॉस 9 मुख्य थ्रेड तक पहुंचने में असमर्थ।"
 
 # c-format
@@ -356,8 +356,8 @@ msgstr "ग़लत: \"% s\" के लिए पुनर्निर्दे
 
 #: ../pbat/errors/pBat_Errors.c:240
 #, fuzzy
-msgid "Aborting current command, press any key to end pBat."
-msgstr "वर्तमान कमांड को निरस्त करना, DOS9 को बंद करने के लिए कोई भी कुंजी दबाएं।"
+msgid "Aborting current command, press any key to end picobat."
+msgstr "वर्तमान कमांड को निरस्त करना, picobat को बंद करने के लिए कोई भी कुंजी दबाएं।"
 
 #: ../pbat/lang/pBat_Lang.c:97
 msgid "Echo command enabled"
@@ -471,7 +471,7 @@ msgid ""
 "Usage:\tPBAT [/A[:]attr] [/I in] [/O out] [file ... | /K cmd ...|/C "
 "cmd ...]\n"
 "\n"
-"\t/A:attr\tA list of attributes for pBat\n"
+"\t/A:attr\tA list of attributes for picobat\n"
 "\t\tC\tEnable CMDLYCORRECT option to enable more compatibility\n"
 "\t\t\twith cmd.exe.\n"
 "\t\tE\tDisable echo command (disable current path printing).\n"
@@ -482,16 +482,17 @@ msgid ""
 "\t/C cmd\tRun cmd command and exit.\n"
 "\t/K cmd\tRun cmd command and stay active.\n"
 "\n"
-"Feel free to report bugs and submit suggestions at : <darkbatcher@pbat.org>\n"
-"For more informations see : <http://pbat.org>\n"
+"Feel free to report bugs and submit suggestions at : <darkbatcher@picobat."
+"org>\n"
+"For more informations see : <http://picobat.org>\n"
 msgstr ""
 "यह एक मुफ्त सॉफ्टवेयर है, आप इसे जीएनयू जेनरल पब्लिक लाइसेंस (GNU GPL) v3 (या बाद के "
 "संस्करण) के तहत संशोधित और / या पुनर्वितरण कर सकते हैं।\n"
 "\n"
-"उपयोग:\tDOS9 [/A[:]attr] [/I in] [/O out] [file ... | /K cmd ...|/C "
+"उपयोग:\tPBAT [/A[:]attr] [/I in] [/O out] [file ... | /K cmd ...|/C "
 "cmd ...]\n"
 "\n"
-"\t/A:attr\tDOS9 के लिए विशेषताओं की एक सूची\n"
+"\t/A:attr\tpicobat के लिए विशेषताओं की एक सूची\n"
 "\t\tC\tअधिक अनुकूलता सक्षम करने के लिए CMDLYCORRECT विकल्प सक्षम करें\n"
 "\t\t\tcmd.exe के साथ।\n"
 "\t\tF\tएफ फ़्लोटिंग नंबर समर्थन सक्षम करें।\n"
@@ -504,8 +505,8 @@ msgstr ""
 "/k cmd रन cmd कमांड और सक्रिय रहें।\n"
 "\n"
 "बग की रिपोर्ट करने के लिए स्वतंत्र महसूस करें और यहां पर सुझाव सबमिट करें: "
-"<darkbatcher@dos9.org>\n"
-"अधिक जानकारी के लिए देखें: <http://dos9.org>\n"
+"<darkbatcher@picobat.org>\n"
+"अधिक जानकारी के लिए देखें: <http://picobat.org>\n"
 
 #: ../pbat/lang/pBat_Lang.c:149
 #, c-format
@@ -755,11 +756,11 @@ msgstr ""
 #: ../pbat/lang/pBat_ShowHelp.c:153
 #, fuzzy
 msgid ""
-"Set local environment and options of the pBat command prompt.\n"
+"Set local environment and options of the picobat command prompt.\n"
 "Usage: SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] "
 "[CMDLYCORRECT | CMDLYINCORRECT]\n"
 msgstr ""
-"स्थानीय वातावरण और Dos9 कमांड प्रॉंप्ट के विकल्प सेट करें ।\n"
+"स्थानीय वातावरण और picobat कमांड प्रॉंप्ट के विकल्प सेट करें ।\n"
 "उपयोग: SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] "
 "[ENABLEFLOATS | DISABLEFLOATS] [CMDLYCORRECT | CMDLYINCORRECT]\n"
 

@@ -133,7 +133,7 @@ void pBat_LoadStrings(void)
 	lpHlpMain=gettext("This is free software, you can modify and/or redistribute it under \
 the terms of the GNU Genaral Public License v3 (or any later version).\n\n\
 Usage:\tPBAT [/A[:]attr] [/I in] [/O out] [file ... | /K cmd ...|/C cmd ...]\n\n\
-\t/A:attr\tA list of attributes for pBat\n\
+\t/A:attr\tA list of attributes for picobat\n\
 \t\tC\tEnable CMDLYCORRECT option to enable more compatibility\n\
 \t\t\twith cmd.exe.\n\
 \t\tE\tDisable echo command (disable current path printing).\n\
@@ -143,8 +143,8 @@ Usage:\tPBAT [/A[:]attr] [/I in] [/O out] [file ... | /K cmd ...|/C cmd ...]\n\n
 \tfile\tA batch file to be executed.\n\
 \t/C cmd\tRun cmd command and exit.\n\
 \t/K cmd\tRun cmd command and stay active.\n\n\
-Feel free to report bugs and submit suggestions at : <darkbatcher@pbat.org>\n\
-For more informations see : <http://pbat.org>\n");
+Feel free to report bugs and submit suggestions at : <darkbatcher@picobat.org>\n\
+For more informations see : <http://picobat.org>\n");
 
     lpManyCompletionOptions=gettext("%d files matching, print anyway ?");
 

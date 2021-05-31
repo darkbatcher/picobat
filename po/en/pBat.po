@@ -1,15 +1,15 @@
 # English translations for dos package.
 # Copyright (C) 2018 THE dos'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the dos package.
-# darkounet <darkbatcher@dos9.org>, 2018.
+# darkounet <darkbatcher@picobat.org>, 2018.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: dos9 218.2\n"
+"Project-Id-Version: picobat 218.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-26 23:13+0200\n"
+"POT-Creation-Date: 2021-05-31 23:04+0200\n"
 "PO-Revision-Date: 2018-07-03 10:30+0200\n"
-"Last-Translator: darkounet <darkbatcher@dos9.org>\n"
+"Last-Translator: darkounet <darkbatcher@picobat.org>\n"
 "Language-Team: English\n"
 "Language: en_US\n"
 "MIME-Version: 1.0\n"
@@ -57,8 +57,9 @@ msgstr "Error : Unable to find label \"%s\"."
 
 #: ../pbat/errors/pBat_Errors.c:64
 #, fuzzy
-msgid "Warning : Using a pBat extension but the CMDLYCORRECT option is set."
-msgstr "Warning : Using a Dos9 extension but the CMDLYCORRECT option is set."
+msgid "Warning : Using a picobat extension but the CMDLYCORRECT option is set."
+msgstr ""
+"Warning : Using a picobat extension but the CMDLYCORRECT option is set."
 
 #: ../pbat/errors/pBat_Errors.c:67
 #, c-format
@@ -148,11 +149,11 @@ msgstr "Error : Can't create pipe (in %s)."
 #: ../pbat/errors/pBat_Errors.c:117
 #, fuzzy, c-format
 msgid ""
-"Error : unable to run a subprocess of pBat to process the given input (\"%s"
-"\")."
+"Error : unable to run a subprocess of picobat to process the given input "
+"(\"%s\")."
 msgstr ""
-"Error : unable to run a subprocess of Dos9 to process the given input (\"%s"
-"\")."
+"Error : unable to run a subprocess of picobat to process the given input "
+"(\"%s\")."
 
 #: ../pbat/errors/pBat_Errors.c:121
 #, c-format
@@ -235,7 +236,7 @@ msgid ""
 "version of pBat."
 msgstr ""
 "Error : Unable to set option \"%s\", it is built statically inside your "
-"version of Dos9."
+"version of picobat."
 
 #: ../pbat/errors/pBat_Errors.c:172
 #, c-format
@@ -315,8 +316,8 @@ msgstr ""
 
 #: ../pbat/errors/pBat_Errors.c:216
 #, fuzzy
-msgid "Error : Unable to access pBat main thread to perform break."
-msgstr "Error : Unable to access Dos9 main thread to perform break."
+msgid "Error : Unable to access picobat main thread to perform break."
+msgstr "Error : Unable to access picobat main thread to perform break."
 
 #: ../pbat/errors/pBat_Errors.c:219
 #, c-format
@@ -355,8 +356,8 @@ msgstr "Error : Module \"%s\" already loaded."
 
 #: ../pbat/errors/pBat_Errors.c:240
 #, fuzzy
-msgid "Aborting current command, press any key to end pBat."
-msgstr "Aborting current command, press any key to end Dos9."
+msgid "Aborting current command, press any key to end picobat."
+msgstr "Aborting current command, press any key to end picobat."
 
 #: ../pbat/lang/pBat_Lang.c:97
 msgid "Echo command enabled"
@@ -470,7 +471,7 @@ msgid ""
 "Usage:\tPBAT [/A[:]attr] [/I in] [/O out] [file ... | /K cmd ...|/C "
 "cmd ...]\n"
 "\n"
-"\t/A:attr\tA list of attributes for pBat\n"
+"\t/A:attr\tA list of attributes for picobat\n"
 "\t\tC\tEnable CMDLYCORRECT option to enable more compatibility\n"
 "\t\t\twith cmd.exe.\n"
 "\t\tE\tDisable echo command (disable current path printing).\n"
@@ -481,16 +482,16 @@ msgid ""
 "\t/C cmd\tRun cmd command and exit.\n"
 "\t/K cmd\tRun cmd command and stay active.\n"
 "\n"
-"Feel free to report bugs and submit suggestions at : <darkbatcher@pbat.org>\n"
-"For more informations see : <http://pbat.org>\n"
+"Feel free to report bugs and submit suggestions at : <darkbatcher@picobat."
+"org>\n"
+"For more informations see : <http://picobat.org>\n"
 msgstr ""
 "This is free software, you can modify and/or redistribute it under the terms "
 "of the GNU Genaral Public License v3 (or any later version).\n"
 "\n"
-"Usage:\tDOS9 [/A[:]attr] [/I in] [/O out] [file ... | /K cmd ...|/C "
-"cmd ...]\n"
+"Usage:\tPBAT[/A[:]attr] [/I in] [/O out] [file ... | /K cmd ...|/C cmd ...]\n"
 "\n"
-"\t/A:attr\tA list of attributes for Dos9\n"
+"\t/A:attr\tA list of attributes for picobat\n"
 "\t\tC\tEnable CMDLYCORRECT option to enable more compatibility\n"
 "\t\t\twith cmd.exe.\n"
 "\t\tF\tEnable floating numbers support.\n"
@@ -502,8 +503,9 @@ msgstr ""
 "\t/C cmd\tRun cmd command and exit.\n"
 "\t/K cmd\tRun cmd command and stay active.\n"
 "\n"
-"Feel free to report bugs and submit suggestions at : <darkbatcher@dos9.org>\n"
-"For more informations see : <http://dos9.org>\n"
+"Feel free to report bugs and submit suggestions at : <darkbatcher@picobat."
+"org>\n"
+"For more informations see : <http://picobat.org>\n"
 
 #: ../pbat/lang/pBat_Lang.c:149
 #, c-format
@@ -750,11 +752,11 @@ msgstr ""
 #: ../pbat/lang/pBat_ShowHelp.c:153
 #, fuzzy
 msgid ""
-"Set local environment and options of the pBat command prompt.\n"
+"Set local environment and options of the picobat command prompt.\n"
 "Usage: SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] "
 "[CMDLYCORRECT | CMDLYINCORRECT]\n"
 msgstr ""
-"Set local environment and options of the Dos9 command prompt.\n"
+"Set local environment and options of the picobat command prompt.\n"
 "Usage: SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] "
 "[ENABLEFLOATS | DISABLEFLOATS] [CMDLYCORRECT | CMDLYINCORRECT]\n"
 
@@ -872,7 +874,7 @@ msgid ""
 "Changes pbat command prompt.\n"
 "Usage: PROMPT prompt-format\n"
 msgstr ""
-"Changes dos9 command prompt.\n"
+"Changes picobat command prompt.\n"
 "Usage: PROMPT prompt-format\n"
 
 #: ../pbat/lang/pBat_ShowHelp.c:214

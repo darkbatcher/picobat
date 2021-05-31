@@ -61,7 +61,7 @@ void pBat_LoadErrors(void)
 	    gettext("Error : Unable to find label \"%s\".");
 
 	lpErrorMsg[PBAT_EXTENSION_DISABLED_ERROR]=
-	    gettext("Warning : Using a pBat extension but the CMDLYCORRECT option is set.");
+	    gettext("Warning : Using a picobat extension but the CMDLYCORRECT option is set.");
 
 	lpErrorMsg[PBAT_EXPECTED_MORE]=
 	    gettext("Error : \"%s\" expected more arguments.");
@@ -114,7 +114,7 @@ void pBat_LoadErrors(void)
 	    gettext("Error : Can't create pipe (in %s).");
 
 	lpErrorMsg[PBAT_FOR_LAUNCH_ERROR]=
-	    gettext("Error : unable to run a subprocess of pBat to process "
+	    gettext("Error : unable to run a subprocess of picobat to process "
 	            "the given input (\"%s\").");
 
 	lpErrorMsg[PBAT_FOR_BAD_INPUT_SPECIFIER]=
@@ -213,7 +213,7 @@ void pBat_LoadErrors(void)
                 "rename it at the same time, you should use MOVE command.");
 
     lpErrorMsg[PBAT_BREAK_ERROR] =
-        gettext("Error : Unable to access pBat main thread to perform break.");
+        gettext("Error : Unable to access picobat main thread to perform break.");
 
     lpErrorMsg[PBAT_INVALID_LABEL] =
         gettext("Error : Invalid label encountered within a block (at line %d).");
@@ -237,7 +237,7 @@ void pBat_LoadErrors(void)
         gettext("Error : Module \"%s\" is already loaded.");
 
 	lpQuitMessage=
-	    gettext("Aborting current command, press any key to end pBat.");
+	    gettext("Aborting current command, press any key to end picobat.");
 
 }
 

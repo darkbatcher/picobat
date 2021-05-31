@@ -44,9 +44,9 @@ SUBDIRS_BIN := $(addsuffix .bin,$(SUBDIRS))
 HOST = $(shell $(CC) -dumpmachine)
 YEAR = $(shell date +%Y)
 
-PACKAGE = pbat
-PACKAGE_URL = http://pbat.org
-PACKAGE_BUGREPORT = darkbatcher@pbat.org
+PACKAGE = picobat
+PACKAGE_URL = http://picobat.org
+PACKAGE_BUGREPORT = darkbatcher@picobat.org
 VERSION = 220.1
 
 all: $(SUBDIRS) $(MDFILES)
@@ -67,10 +67,10 @@ dist: bin
 	tar zcf pbat-$(VERSION).tar.gz $(BINDIR)
 
 src-dist:
-	tar zcf pbat-$(VERSION)-src.tar.gz --transform 's,^,pbat-$(VERSION)/,' `git ls-files`
+	tar zcf picobat-$(VERSION)-src.tar.gz --transform 's,^,picobat-$(VERSION)/,' `git ls-files`
 
 git-dist: bin
-	tar zcf pbat-$(VERSION)-`git rev-parse --short HEAD`.tar.gz $(BINDIR)
+	tar zcf picobat-$(VERSION)-`git rev-parse --short HEAD`.tar.gz $(BINDIR)
 
 bindir: $(TEXTFILES)
 	mkdir -p $(BINDIR)

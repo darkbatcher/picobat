@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-26 23:13+0200\n"
+"POT-Creation-Date: 2021-05-31 23:04+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -58,7 +58,7 @@ msgid "Error : Unable to find label \"%s\"."
 msgstr ""
 
 #: ../pbat/errors/pBat_Errors.c:64
-msgid "Warning : Using a pBat extension but the CMDLYCORRECT option is set."
+msgid "Warning : Using a picobat extension but the CMDLYCORRECT option is set."
 msgstr ""
 
 #: ../pbat/errors/pBat_Errors.c:67
@@ -143,8 +143,8 @@ msgstr ""
 #: ../pbat/errors/pBat_Errors.c:117
 #, c-format
 msgid ""
-"Error : unable to run a subprocess of pBat to process the given input (\"%s"
-"\")."
+"Error : unable to run a subprocess of picobat to process the given input "
+"(\"%s\")."
 msgstr ""
 
 #: ../pbat/errors/pBat_Errors.c:121
@@ -302,7 +302,7 @@ msgid ""
 msgstr ""
 
 #: ../pbat/errors/pBat_Errors.c:216
-msgid "Error : Unable to access pBat main thread to perform break."
+msgid "Error : Unable to access picobat main thread to perform break."
 msgstr ""
 
 #: ../pbat/errors/pBat_Errors.c:219
@@ -341,7 +341,7 @@ msgid "Error : Module \"%s\" is already loaded."
 msgstr ""
 
 #: ../pbat/errors/pBat_Errors.c:240
-msgid "Aborting current command, press any key to end pBat."
+msgid "Aborting current command, press any key to end picobat."
 msgstr ""
 
 #: ../pbat/lang/pBat_Lang.c:97
@@ -455,7 +455,7 @@ msgid ""
 "Usage:\tPBAT [/A[:]attr] [/I in] [/O out] [file ... | /K cmd ...|/C "
 "cmd ...]\n"
 "\n"
-"\t/A:attr\tA list of attributes for pBat\n"
+"\t/A:attr\tA list of attributes for picobat\n"
 "\t\tC\tEnable CMDLYCORRECT option to enable more compatibility\n"
 "\t\t\twith cmd.exe.\n"
 "\t\tE\tDisable echo command (disable current path printing).\n"
@@ -466,8 +466,9 @@ msgid ""
 "\t/C cmd\tRun cmd command and exit.\n"
 "\t/K cmd\tRun cmd command and stay active.\n"
 "\n"
-"Feel free to report bugs and submit suggestions at : <darkbatcher@pbat.org>\n"
-"For more informations see : <http://pbat.org>\n"
+"Feel free to report bugs and submit suggestions at : <darkbatcher@picobat."
+"org>\n"
+"For more informations see : <http://picobat.org>\n"
 msgstr ""
 
 #: ../pbat/lang/pBat_Lang.c:149
@@ -645,7 +646,7 @@ msgstr ""
 
 #: ../pbat/lang/pBat_ShowHelp.c:153
 msgid ""
-"Set local environment and options of the pBat command prompt.\n"
+"Set local environment and options of the picobat command prompt.\n"
 "Usage: SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] "
 "[CMDLYCORRECT | CMDLYINCORRECT]\n"
 msgstr ""

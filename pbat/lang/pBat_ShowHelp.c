@@ -150,7 +150,7 @@ void pBat_LoadInternalHelp(void)
 	             "       SET var\n");
 
 	lpInternalHelp[PBAT_HELP_SETLOCAL]
-	    =gettext("Set local environment and options of the pBat command prompt.\n"
+	    =gettext("Set local environment and options of the picobat command prompt.\n"
 	             "Usage: SETLOCAL [ENABLEDELAYEDEXPANSION | DISABLEDELAYEDEXPANSION] [CMDLYCORRECT | CMDLYINCORRECT]\n");
 
 	lpInternalHelp[PBAT_HELP_ENDLOCAL]
