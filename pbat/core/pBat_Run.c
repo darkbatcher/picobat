@@ -428,7 +428,7 @@ RestartSearch:
 		switch (error) {
         case 1:
             /* This is the first error, expand lpCommand */
-            pBat_DelayedExpand(lpCommand, bDelayedExpansion);
+            pBat_DelayedExpand(lpCommand);
             goto RestartSearch;
 
         case 2:
