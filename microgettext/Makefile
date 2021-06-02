@@ -32,7 +32,7 @@ clean:
 	rm -f $(OBJ_FILES) libmicrogettext.a
 	
 libmicrogettext.a: $(OBJ_FILES)
-	$(AR) r $@ $(OBJ_FILES)
+	$(AR) $@ $(OBJ_FILES)
 	$(RANLIB) $@	
 	
 
