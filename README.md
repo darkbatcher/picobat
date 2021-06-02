@@ -69,11 +69,11 @@ On the other hand, Picobat also provides you with with a bunch of extensions:
 * A full set of extensions to support floating points arithmetics through 
   **SET** and **IF**:
 
-  * A new **SET /a:f** command to perform operations on floating point 
+  * New **SET /a** commands extensions to perform operations on floating point 
     numbers.
 
-  * New comparisons like **FEQ** or **FNEQ** for the **IF** command to compare 
-    floating-point numbers.
+  * Extensions for **IF** command to automatically detect floating-point and 
+    compare floating-point numbers.
 
 * The ground-breaking possibility to specify logical expressions using 
   **AND** and **OR** and the new **IF** extensions, like in the following 

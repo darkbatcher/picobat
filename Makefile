@@ -37,6 +37,7 @@ SUBDIRS = microgettext libpbat libmatheval $(SUBDIRS_ADD) pbat pbatize dump tea 
 TEAFILES = README.tea WHATSNEW.tea GUIDELINES.tea THANKS.tea
 TEXTFILES = $(TEAFILES:.tea=.txt)
 MDFILES = $(TEAFILES:.tea=.md)
+MANFILES = man/en_US/readme.tea
 
 SUBDIRS_CLEAN := $(addsuffix .clean,$(SUBDIRS))
 SUBDIRS_BIN := $(addsuffix .bin,$(SUBDIRS))
@@ -61,7 +62,7 @@ clean: $(SUBDIRS_CLEAN)
 $(SUBDIRS_CLEAN):
 	$(MAKE) -C $(basename $@) clean
 
-bin: all bindir $(SUBDIRS_BIN)
+bin: all bindir $(SUBDIRS_BIN) 
 
 dist: bin
 	mv bin picobat-$(VERSION)
@@ -73,7 +74,7 @@ src-dist:
 git-dist: bin
 	tar zcf picobat-$(VERSION)-`git rev-parse --short HEAD`.tar.gz $(BINDIR)
 
-bindir: $(TEXTFILES)
+bindir: $(MANFILES) $(TEXTFILES)
 	mkdir -p $(BINDIR)
 	mkdir -p $(BINDIR)/cmd
 	cp $(TEXTFILES) $(BINDIR)/
@@ -81,11 +82,14 @@ bindir: $(TEXTFILES)
 
 textfiles: $(TEXTFILES)
 
+man/en_US/readme.tea : README.tpl
+	cat $< | sed -e s,\{doc/,\{,g > $@
+
 doc.md: README.tpl
 	./tea/tea$(EXEC_SUFFIX) -e:utf-8 -o:md README.tpl doc.md
 
 .tpl.tea:
-	cat $< | sed -e s,\{doc[^}]*\|,\{,g > $@
+	cat $< footer.tpl | sed -e s,\{doc[^}]*\|,\{,g > $@
 
 .tea.txt:
 	./tea/tea$(EXEC_SUFFIX) -e:utf-8 -o:text-plain $< $@

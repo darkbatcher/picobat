@@ -72,11 +72,11 @@ On the other hand, Picobat also provides you with with a bunch of extensions:
 - A full set of extensions to support floating points arithmetics through 
   {doc/set|SET} and {doc/if|IF}:
 
-  -- A new {doc/setaf|SET /a:f} command to perform operations on floating point 
-    numbers.
+  -- New {doc/seta|SET /a} commands extensions to perform operations on
+     floating point numbers.
 
-  -- New comparisons like {FEQ} or {FNEQ} for the {IF} command to compare 
-    floating-point numbers.
+  -- Extensions for {IF} command to automatically detect floating-point 
+  and compare floating-point numbers.
 
 - The ground-breaking possibility to specify logical expressions using 
   {AND} and {OR} and the new {doc/if|IF} extensions, like in the following 
@@ -146,19 +146,4 @@ cannot see the messages translated, please check the value of the {LANG} and
 If you have some questions about or need some help with Picobat, please feel free 
 to join {Picobat}'s official discord at: 
 {https://discord.gg/w4KtdCv|https://discord.gg/w4KtdCv}
-
-{{What's in this folder ?}}
-
-There is a few interesting things in this directory that you might need:
-
-- {BUILD.readme|BUILD.readme} : A text file describing how to build {Picobat}
-
-- {WHATSNEW.md|WHATSNEW} : A log of the changes made to Picobat
-
-- {THANKS.md|THANKS} : A list of all the contributors to the project.
-
-- {GUIDELINES.md|GUIDELINES} : A text files giving guidelines on how to 
-  modify Picobat.
-
-- {COPYING.*} : The license of the project and of projects used by Picobat.
 
