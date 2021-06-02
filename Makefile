@@ -66,7 +66,7 @@ bin: all bindir $(SUBDIRS_BIN)
 
 dist: bin
 	mv bin picobat-$(VERSION)
-	zip -r pbat-$(VERSION).zip picobat-$(VERSION)
+	zip -r picobat-$(VERSION).zip picobat-$(VERSION)
 
 src-dist:
 	tar zcf picobat-$(VERSION)-src.tar.gz --transform 's,^,picobat-$(VERSION)/,' `git ls-files`
