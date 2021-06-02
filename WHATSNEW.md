@@ -2645,3 +2645,7 @@ build without prior
   value is specified or when a function or a constant is used. All of this is 
   explained in details in the **SET /A** manual page.
 
+## Thursday, June 3rd, 2021 ##
+
+* Fix some config issues due to missing renaming.
+

@@ -1,5 +1,5 @@
 /*
-   Dos9 Makefiles, The Dos9 project
+   pBat Makefiles, The pBat project
    Copyright (C) 2012-2018  Romain Garbi (DarkBatcher)
 
    This program is free software: you can redistribute it and/or modify
@@ -21,11 +21,11 @@
 #define DATA_PATH "@BINDIR@/share"
 
 #if @use_cmdlycorrect@
-	#define DOS9_STATIC_CMDLYCORRECT 1
+	#define PBAT_STATIC_CMDLYCORRECT 1
 #endif
 
 #if @use_libcu8@
-	#define DOS9_USE_LIBCU8 1
+	#define PBAT_USE_LIBCU8 1
 #endif
 
 #if @use_nls@
@@ -33,19 +33,19 @@
 #endif
 
 #if !@use_console@
-	#define LIBDOS9_NO_CONSOLE 1
+	#define LIBPBAT_NO_CONSOLE 1
 #endif
 
 #if @use_w10ansi@
-  #define LIBDOS9_W10_ANSI 1
+  #define LIBPBAT_W10_ANSI 1
 #endif
 
 #if @use_modules@
-  #define DOS9_USE_MODULES 1
+  #define PBAT_USE_MODULES 1
 #endif
 
 #if !@use_linenoise@
-  #define DOS9_NO_LINENOISE 1
+  #define PBAT_NO_LINENOISE 1
 #endif
 
 #define PACKAGE  "@PACKAGE@"
