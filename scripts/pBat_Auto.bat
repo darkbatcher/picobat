@@ -42,21 +42,19 @@ IF %PBAT_OS%==WINDOWS (
 )
 
 ALIAS /f help=hlp.bat
-SET PROMPT=$x.a;PBAT$x..; $P$G
+SET PROMPT=$x.a;Picobat$x..; $P$G
 
 IF exist !PBAT_ETC!/PBAT_Auto.bat CALL !PBAT_ETC!/PBAT_Auto.bat
 IF exist !USERPROFILE!/.PBAT/PBAT_Auto.bat CALL !USERPROFILE!/.PBAT/PBAT_Auto.bat
 
 IF %PBAT_IS_SCRIPT%==false (
-PECHO $x9E;  ______   _______  _______   _____                                          
-ECHO  (  __  \ (  ___  ^)(  ____ \ / ___ \  PBAT [%PBAT_VERSION%] - Beta release            
-ECHO  ^| (  \  ^)^| (   ^) ^|^| (    \/( (   ^) ^) Copyright (c^) 2010-2021                
-ECHO  ^| ^|   ^) ^|^| ^|   ^| ^|^| (_____ ( (___^) ^|    Romain Garbi, Teddy Astie           
-ECHO  ^| ^|   ^| ^|^| ^|   ^| ^|(_____  ^) \____  ^|                                        
-ECHO  ^| ^|   ^) ^|^| ^|   ^| ^|      ^) ^|      ^) ^| This is free software, you can modify  
-ECHO  ^| (__/  ^)^| (___^) ^|/\____^) ^|/\____^) ^) and/or redistribute it under the terms 
-ECHO  (______/ (_______^)\_______^)\______/  of the GNU Genaral Public License V3   
-PECHO                                                                              $x..;
+PECHO $x9E; _____ _           ____        _     Picobat [%PBAT_VERSION%]                         
+ECHO ^|  __ (_^)         ^|  _ \      ^| ^|    Copyright (c^) 2010-2021                 
+ECHO ^| ^|__^) ^|  ___ ___ ^| ^|_^) ^| __ _^| ^|_         Romain Garbi, Teddy Astie ^&c.     
+ECHO ^|  ___/ ^|/ __/ _ \^|  _ ^< / _` ^| __^|                                          
+ECHO ^| ^|   ^| ^| (_^| (_^) ^| ^|_^) ^| (_^| ^| ^|_   This is free software, under the GPLv3. 
+ECHO ^|_^|   ^|_^|\___\___/^|____/ \__,_^|\__^|  Learn more at ^<http://picobat.org^> or   
+PECHO                                      type : help "quick starting"            $x..;
 )
 
 :: At this state, PBAT will reset neither options or variables that have
