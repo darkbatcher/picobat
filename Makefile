@@ -47,7 +47,7 @@ YEAR = $(shell date +%Y)
 PACKAGE = picobat
 PACKAGE_URL = http://picobat.org
 PACKAGE_BUGREPORT = darkbatcher@picobat.org
-VERSION = 220.1
+VERSION = $(shell date +%Y | sed s/0//).$(shell date +%m)
 
 all: $(SUBDIRS) $(MDFILES)
 
@@ -64,7 +64,8 @@ $(SUBDIRS_CLEAN):
 bin: all bindir $(SUBDIRS_BIN)
 
 dist: bin
-	tar zcf pbat-$(VERSION).tar.gz $(BINDIR)
+	mv bin picobat-$(VERSION)
+	zip -r pbat-$(VERSION).zip picobat-$(VERSION)
 
 src-dist:
 	tar zcf picobat-$(VERSION)-src.tar.gz --transform 's,^,picobat-$(VERSION)/,' `git ls-files`
@@ -82,7 +83,6 @@ textfiles: $(TEXTFILES)
 
 doc.md: README.tpl
 	./tea/tea$(EXEC_SUFFIX) -e:utf-8 -o:md README.tpl doc.md
-
 
 .tpl.tea:
 	cat $< | sed -e s,\{doc[^}]*\|,\{,g > $@

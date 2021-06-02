@@ -22,6 +22,11 @@ default (to avoid trashing your OS with potential conflicts). However,
 calling a {.bat} or {.cmd} script from inside Picobat, leads them to get 
 executed by Picobat.
 
+{{Downloading Picobat}}
+
+The latest release of picobat is available {https://github.com/darkbatcher/picobat/releases|here}. 
+Extract the archive and start playing with {pbat} in the extracted folder.
+
 {{Picobat changes}}
 
 Once installed, it is quite straightforward to play with Picobat, especially if 
