@@ -1,7 +1,7 @@
-<nav>
-<p>Menu</p>
-<a href="http://www.dos9.org/index.html" class="Anav">Acceuil</a>
-<a href="http://www.dos9.org/doc/index.html" class="Anav">Documentation</a>
-<a href="http://www.dos9.org/download.html" class="Anav">Téléchargements</a>
-<a href="http://www.dos9.org/contacts.html" class="Anav">Contact</a>
-</nav>
+<header id="header">
+<div class="inner clearfix">
+    <h1><a id="logo" href=".">Picobat C:\&gt; Manual</a></h1>
+</div>
+</header>
+<section id="content">
+      <div class="inner">

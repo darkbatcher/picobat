@@ -1,151 +1,365 @@
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-Body
+@font-face {
+    font-family: "Open Sans";
+    font-weight: 400;
+    src: url("/assets/OpenSans.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Open Sans";
+    font-weight: 700;
+    src: url("/assets/OpenSans-Bold.ttf") format("truetype");
+}
+
+.center-image
 {
-    background-image:linear-gradient(to right, #c9c9c9 70%, grey 98%);
-    Font: 15px Arial;
-    margin-bottom: 10px;
-    margin-top: 20px;
-}
-
-
-nav
-{
-    position: fixed;
-    width: 200px;
-    min-width: 160px;
-    border: 2px grey solid;
-    border-radius: 12px 0px 12px 12px ;
-    top: 0;
-    right: 0;
-    margin-right: 20px;
-    margin-top: 20px;
-    z-index: 2;
-    box-shadow: 6px 4px 12px black;
-    background-color: #c9c9c9;
-    font-weight : bolder;
-	padding: 0px 10px;
-}
-
-nav a {
-    display: none;
-}
-
-nav:hover a {
+    margin: 0 auto;
     display: block;
 }
 
-nav:hover p {
-    display: none;
+/*=================================*/
+/* Pico Default Theme
+/* By: Gilbert Pellegrom
+/* http: //dev7studios.com
+/*=================================*/
+
+/* Reset Styles
+/*---------------------------------------------*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-weight: inherit;
+    font-style: inherit;
+    font-size: inherit;
+    font-family: inherit;
+    vertical-align: baseline;
 }
 
-h1
-{
+body {
+    line-height: 1;
+    color: black;
+    background: white;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+caption, th, td {
+    text-align: left;
+    font-weight: normal;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: "";
+}
+
+blockquote, q {
+    quotes: "" "";
+}
+
+/* HTML5 tags */
+header, section, footer,
+aside, nav, article, figure {
+    display: block;
+}
+
+/* hand cursor on clickable input elements */
+label, input[type=button], input[type=submit], button {
+    cursor: pointer;
+}
+
+/* make buttons play nice in IE:
+   www.viget.com/inspire/styling-the-button-element-in-internet-explorer/ */
+button {
+    width: auto;
+    overflow: visible;
+}
+
+/* Sharper Thumbnails */
+img {
+    -ms-interpolation-mode: bicubic;
+}
+
+/* Input Styles
+/*---------------------------------------------*/
+input,
+textarea,
+select {
+    padding: 5px;
+    font: 400 1em Verdana, Sans-serif;
+    color: #666;
+    background: #fff;
+    border: 1px solid #999999;
+    margin: 0 0 1em 0;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    color: #000;
+    background: #fff;
+    border: 1px solid #666666;
+}
+
+/* Main Styles
+/*---------------------------------------------*/
+html { height: 100%; }
+
+body {
+    font: 0.9em/1.8em 'Open Sans', Helvetica, Arial, Helvetica, sans-serif;
+    color: #444;
+    background: #fff;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+a, a:visited {
+    color: #202020;
+    text-decoration: none;
+	font-weight: bold;
+    -webkit-transition: all 0.2s linear;
+    -moz-transition: all 0.2s linear;
+    -ms-transition: all 0.2s linear;
+    -o-transition: all 0.2s linear;
+    transition: all 0.2s linear;
+}
+
+a:hover, a:active {
+    color: #000;
+    text-decoration: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #000;
+    line-height: 1.2em;
+    margin-bottom: 0.6em;
+}
+
+h1 {
+    font-size: 2em;
+}
+
+h2 {
+    font-size: 1.7em;
+}
+
+h3 {
+    font-size: 1.5em;
+    margin-top: 2em;
+}
+
+p, table, ol, ul, pre, blockquote, dl {
+    margin-bottom: 1em;
+}
+
+ol, ul {
+    padding-left: 30px;
+}
+
+b, strong {
+    font-weight: bold;
+}
+
+i, em {
+    font-style: italic;
+}
+
+u {
     text-decoration: underline;
-    Text-Align: Center;
-    box-shadow: 7px 7px 8px black;
-    max-width: 50%;
-    Border: 5px #595959 inset;
-    Background-color: white;
-    Font: 32px "Times New Roman";
-    margin-left: auto;
-    margin-right: auto;
-    border-radius: 10px;
-    font-weight: bolder;
-    padding: 6px;
-    margin-bottom: 40px;
-    margin-top: 20px;
 }
 
-h1, h2 
-{
-   width: intrinsic;           /* Safari/WebKit uses a non-standard name */
-   width: -moz-max-content;    /* Firefox/Gecko */
-   width: -webkit-max-content; /* Chrome */
+abbr, acronym {
+    cursor: help;
+    border-bottom: 0.1em dotted;
 }
 
-h2
-{
-   Border: 3px #000066 solid;
-   Border-radius: 10px 0px 10px 0px;
-   Text-Align: Center;
-   background-color: grey;
-   color: white;
-   margin-bottom: 15px;
-   margin-top: 25px;
-   margin-left: 10px;
-   Font: 24px "Times New Roman";
-   box-shadow: 2px 2px 8px black;
-   padding: 5px;
-   min-width: 130px;
-   display: inline-block;
+td, td img {
+    vertical-align: top;
 }
 
-a:visited
-{
-	Color: #3333ff;
+td, th {
+    border: solid 1px #999;
+    padding: 0.25em 0.5em;
 }
 
-a:hover
-{
-	Color: red;
+th {
+    font-weight: bold;
+    text-align: center;
+    background: #eee;
 }
 
-a
-{
-    Color: #3333ff;
+sub {
+    vertical-align: sub;
+    font-size: smaller;
 }
 
-p
-{
+sup {
+    vertical-align: super;
+    font-size: smaller;
+}
+
+code {
+    font-family: Courier, "Courier New", monospace;
+    background: #eee;
+    color: #333;
     padding: 0px;
-    margin: 6px;
-	padding-right: 15%;
-    width: 80%;
 }
 
-code
-{
-    font-family: "Lucida Console";
-    color: #307030;
-	max-width: 80%;
+pre {
+    background: #eee;
+    padding: 20px;
+    overflow: auto;
 }
 
-pre
-{
-    white-space: pre-wrap;
+blockquote {
+    font-style: italic;
+    margin-left: 15px;
+    padding-left: 10px;
+    border-left: 5px solid #dddddd;
 }
 
-.Anav
-{
-     margin-bottom: 10px;
-	 margin-top: 10px;
-     margin-right: auto;
-     margin-left: auto;
-     border: 1px grey solid;
-     border-radius: 13px 0px;
-     box-shadow: 4px 4px 9px grey;
-     padding: 4px;
-     padding-left: 7px;
+dd {
+    margin-left: 2em;
 }
 
-
-.Anav:hover
-{
-    color:  #d9d9d9;
-    background-color: grey;
+/* Structure Styles
+/*---------------------------------------------*/
+.inner {
+    width: 100%;
+    max-width: 850px;
+    margin: 0 auto;
 }
 
-footer
-{
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 35px;
-	width: 45%;
-	text-align: Center;
-	min-width: 530px;
-	border: 6px grey solid;
-	border-radius: 0px 25px 25px 25px;
-    Font: 12px "Arial";
-	padding: 10px;
+.next {
+	float: right;
+	border-bottom: 1px solid #e0e0e0;
+	padding: 0.3em	
+}
+
+.next:hover {
+	border-bottom: 1px solid #c0c0c0;
+}
+
+#header {
+    background: black;
+    padding: 60px 0;
+    margin-bottom: 80px;
+    color: #c0c0c0;
+}
+#header a {
+    color: #e0e0e0;
+}
+#header h1 a,
+#header a:hover,
+#header .active a {
+    color: #c0c0c0;
+}
+#header h1 {
+    font-weight: bold;
+    margin: 0;
+    float: left;
+}
+#header nav {
+    float: right;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+#header nav a {
+    font-weight: bold;
+    margin-left: 20px;
+}
+#header ul {
+    list-style: none;
+}
+#header li {
+    display: inline-block;
+    float: left;
+}
+#content { flex: 1 1 auto; }
+#footer {
+    background: #707070;
+    padding: 60px 0;
+    margin-top: 80px;
+    color: #C0C0C0;
+}
+#footer .social {
+    float: right;
+    margin: 0 0 0.5em 1em;
+    font-size: 200%;
+}
+#footer a { color: #ddd; }
+#footer a:hover { color: #fff; }
+
+/* Misc Styles
+/*---------------------------------------------*/
+.clearfix:before,
+.clearfix:after {
+    content: " ";
+    display: table;
+}
+.clearfix:after {
+    clear: both;
+}
+.clearfix {
+    *zoom: 1;
+}
+
+/* Media Queries
+/*---------------------------------------------*/
+
+/* Small Devices, Tablets */
+@media only screen and (max-width : 768px) {
+    .inner {
+        width: 85%;
+    }
+    .inner img {
+        width:100%;
+    }
+    #header {
+        margin-bottom: 40px;
+        padding: 30px 0;
+    }
+    #header h1 {
+        float: none;
+    }
+    #header nav {
+        float: none;
+        width: 100%;
+    }
+    #header nav ul {
+        padding: 0;
+    }
+    #header nav li {
+        display: block;
+        float: left;
+        width: 50%;
+        text-align: center;
+    }
+    #header nav li a {
+        display: block;
+        margin: 0;
+        padding: 10px 0;
+    }
+    #footer {
+        margin-top: 40px;
+        padding: 30px 0;
+    }
 }
 </style>

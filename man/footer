@@ -1,16 +1,15 @@
-<footer>
-<div>
-Pages de manuels Dos9, Le Projet dos9 - Copyright © 2010-2017 Romain GARBI et Contributeurs<br/>
-Design par IK_DC - Xenoxis
-<br/>
-Ceci est un logiciel libre : vous pouvez le redistribuer et/ou le modifier sous les termes de la Licence Publique Générale GNU telle que publiée par la Free Software Fundation, soit sous la version 3 ou, (selon votre volonté) n'importe quelle version postérieure</br>
-<br/>
-Merci de reporter les bogues et les erreurs à : &lt;darkbatcher at dos9 dot org&gt;
-</div>
+</div></section>
+<footer id="footer">
+    <div class="inner">
+    <p>Picobat manual pages - The Picobat project © 2010-2021 Romain Garbi, Teddy Astie &c.</p>
+    <p>This is free software, fell free to modify and distribute under the terms
+of GPLv3</p>
+    <p>Theme based on Picocms main theme</p>
+    </div>
 </footer>
-<!-- if the user is connectedt to internet, then, it can activate the
+<!-- if the user is connecte to internet, then, it can activate the
 	 syntax highlighting -->
-<script type="text/javascript" src="http://www.dos9.org/js/h.js" >
+<script type="text/javascript" src="http://picobat.org/_js/h.js" >
 </script>
 
 <script type='text/javascript'>
