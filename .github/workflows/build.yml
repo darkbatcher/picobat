@@ -13,7 +13,7 @@ jobs:
         with:
           msystem: MINGW64
           update: true
-          install: git base-devel mingw-w64-x86_64-toolchain zip
+          install: git base-devel mingw-w64-x86_64-toolchain mingw-w64-x86_64-dlfcn zip
       - name: CI-Build
         run: |
           make config use-libcu8
