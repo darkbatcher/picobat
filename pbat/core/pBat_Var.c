@@ -403,9 +403,9 @@ char* pBat_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 	lpName++;
 
 	/* this is an extended special variable */
-
 	if (!*lpName) return NULL;
 
+	/* Determine the longest possible match for the given variable */
 	for (; *(lpName) && strchr("fdnpxzta", *(lpName)) && i<PBAT_VAR_MAX_OPTION; lpName++) {
 
 			cFlag[i] = *lpName;
@@ -413,20 +413,12 @@ char* pBat_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 
 	}
 
-	if ((*lpName & 0x80) || (*lpName <= 0x20)) {
+    /* Check if the varname is valid */
+	if ((*lpName & 0x80) || (*lpName <= 0x20)
+        || !lpvBlock[(int)*lpName] ) {
 
 		/* the varname is not valid */
-		cValidName=FALSE;
-
-	} else if (!lpvBlock[(int)*lpName]) {
-
-		cValidName=FALSE;
-
-	}
-
-	if (!cValidName) {
-
-		cVarName=0;
+        cVarName=0;
 
 		/* if not, make a descending test */
 		while (i>0) {
@@ -454,13 +446,11 @@ char* pBat_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 		if (cVarName==0)
 			return NULL;
 
-	} else {
+	} else
+		cVarName=*lpName; /* if the var is defined */
 
-		/* if the var is defined */
-		cVarName=*lpName;
-
-	}
-
+    /* Determine if we have to fetch file information or
+       if we need to split the path is pieces */
     for (j = 0; cFlag[j]; j++)
         switch (cFlag[j]) {
             case 'a':
@@ -501,11 +491,17 @@ char* pBat_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 
 	if (bSeekFile) {
 
+        /* Override the content of %0 to be the current path */
 	    if (cVarName == '0')
+
             pBat_EsCpy(lpRecieve, ifIn.lpFileName);
 
-        lpPos=pBat_EsToFullPath(lpRecieve);
-		stat(lpPos, &stFileInfo);
+        else {
+
+            lpPos=pBat_EsToFullPath(lpRecieve);
+            stat(lpPos, &stFileInfo);
+
+		}
 
 #if defined WIN32
 		stFileInfo.st_mode=GetFileAttributes(lpPos);
@@ -514,6 +510,7 @@ char* pBat_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 
 	if (bSplitPath) {
 
+        /* Override the content of %0 to be the current path */
         if (cVarName == '0')
             pBat_EsCpy(lpRecieve, ifIn.lpFileName);
 
