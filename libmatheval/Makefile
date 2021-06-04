@@ -42,7 +42,7 @@ clean:
 bin:
 
 libmatheval.a: $(OBJ_FILES)
-	$(AR) $@ $(OBJ_FILES)
+	$(AR) r $@ $(OBJ_FILES)
 	$(RANLIB) $@
 
 lib/scanner.c: lib/scanner.l lib/parser.c

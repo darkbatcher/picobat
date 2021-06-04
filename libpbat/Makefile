@@ -35,7 +35,7 @@ OBJ_FILES := $(SRC_FILES:.c=.o)
 all: libpBat.a
 
 libpBat.a: $(OBJ_FILES)
-	$(AR) $@ $(OBJ_FILES)
+	$(AR) r $@ $(OBJ_FILES)
 	$(RANLIB) $@
 
 clean:

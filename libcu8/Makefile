@@ -41,7 +41,7 @@ test:
 	$(MAKE) -C test run-tests
 	
 libcu8.a: $(OBJ_FILES)
-	$(AR) $@ $(OBJ_FILES)
+	$(AR) r $@ $(OBJ_FILES)
 	$(RANLIB) $@	
 	
 bin:

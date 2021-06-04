@@ -23,7 +23,7 @@ OBJ_EXT ?= .o
 
 LD ?= $(CC)
 
-AR ?= ar r
+AR ?= ar
 RANLIB ?= ranlib
 WINDRES ?= windres
 LEX ?= flex
