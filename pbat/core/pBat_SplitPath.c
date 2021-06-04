@@ -30,24 +30,16 @@ void pBat_SplitPath(char* lpPath,
 	char* lpNextToken, *lpToken=lpPath;
 	char cSaveChar;
 
-	if (*lpToken) {
+	if (*lpToken
+        && (!strncmp(lpToken + 1, ":\\", 2)
+            || !strncmp(lpToken + 1, ":/", 2))) {
 
-		if (!strncmp(lpToken+1, ":\\", 2)) {
+        PBAT_DBG("Found disk_name=\"%c\"\n", *lpToken);
 
-			PBAT_DBG("Found disk_name=\"%c\"\n", *lpToken);
+        if (lpDisk)
+            snprintf(lpDisk, FILENAME_MAX, "%c:", *lpToken);
 
-			if (lpDisk)
-				snprintf(lpDisk, FILENAME_MAX, "%c:", *lpToken);
-
-			lpToken+=3;
-
-		} else {
-
-			if (lpDisk)
-				*lpDisk='\0';
-
-		}
-
+        lpToken+=3;
 
 	} else {
 

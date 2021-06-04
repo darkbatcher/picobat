@@ -493,18 +493,15 @@ char* pBat_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 
         /* Override the content of %0 to be the current path */
 	    if (cVarName == '0')
-
             pBat_EsCpy(lpRecieve, ifIn.lpFileName);
-
-        else {
-
+        else
             lpPos=pBat_EsToFullPath(lpRecieve);
-            stat(lpPos, &stFileInfo);
 
-		}
+
+		stat(lpRecieve->str, &stFileInfo);
 
 #if defined WIN32
-		stFileInfo.st_mode=GetFileAttributes(lpPos);
+		stFileInfo.st_mode=GetFileAttributes(lpRecieve->str);
 #endif
 	}
 
@@ -513,11 +510,11 @@ char* pBat_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
         /* Override the content of %0 to be the current path */
         if (cVarName == '0')
             pBat_EsCpy(lpRecieve, ifIn.lpFileName);
+        else
+            pBat_EsToFullPath(lpRecieve);
 
-        lpPos=pBat_EsToFullPath(lpRecieve);
-
-		pBat_SplitPath(lpPos, lpDrive, lpDir, lpFileName, lpExt);
-		snprintf(lpFullPath, sizeof(lpFullPath), "%s", lpPos);
+		pBat_SplitPath(lpRecieve->str, lpDrive, lpDir, lpFileName, lpExt);
+		snprintf(lpFullPath, sizeof(lpFullPath), "%s", lpRecieve->str);
 
 	}
 
@@ -526,6 +523,7 @@ char* pBat_GetLocalVar(LOCAL_VAR_BLOCK* lpvBlock, char* lpName, ESTR* lpRecieve)
 		*pBat_EsToChar(lpRecieve) = '\0';
 
 		for (i=0; cFlag[i]!=0; i++) {
+
 			switch (cFlag[i]) {
 
 			case 'f':
