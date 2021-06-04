@@ -184,6 +184,11 @@ int pBat_LoadBatchScript(struct batch_script_t* script)
 
         nb ++; /* increment line number */
 
+        if (nb == 1
+            && *pch == '#'
+            && *(pch + 1) == '!')
+                continue ; /* This is a shebang, skip it */
+
         if (*pch == ':') {
 
             if (*(pch+1) == ':')
