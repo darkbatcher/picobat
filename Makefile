@@ -83,13 +83,16 @@ bindir: $(MANFILES) $(TEXTFILES)
 textfiles: $(TEXTFILES)
 
 man/en_US/readme.tea : README.tpl
-	cat $< | sed -e s,\{doc/,\{,g > $@
+	cat $< doc.ft | sed -e s,\{doc/,\{,g > $@
 
 doc.md: README.tpl
-	./tea/tea$(EXEC_SUFFIX) -e:utf-8 -o:md README.tpl doc.md
-
+	cat README.tpl doc.ft > README.tea
+	./tea/tea$(EXEC_SUFFIX) -e:utf-8 -o:md README.tea .doc.md
+	cat doc.hd .doc.md > doc.md
+	rm README.tea .doc.md
+	
 .tpl.tea:
-	cat $< footer.tpl | sed -e s,\{doc[^}]*\|,\{,g > $@
+	cat $< repo.ft | sed -e s,\{doc[^}]*\|,\{,g > $@
 
 .tea.txt:
 	./tea/tea$(EXEC_SUFFIX) -e:utf-8 -o:text-plain $< $@

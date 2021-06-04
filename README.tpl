@@ -139,10 +139,6 @@ dir /s /b /a:-D . | xargs wc /l}
 
 {{Troubleshooting}}
 
-Picobat supports only two languages yet ({french} and {english}). If you 
-cannot see the messages translated, please check the value of the {LANG} and 
-{LANGUAGE} environment variables and set them appropriately.
-
 If you have some questions about or need some help with Picobat, please feel free 
 to join {Picobat}'s official discord at: 
 {https://discord.gg/w4KtdCv|https://discord.gg/w4KtdCv}

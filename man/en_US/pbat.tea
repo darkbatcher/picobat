@@ -38,16 +38,14 @@ ${	PBAT [/A[:]attr] [/i input] [/o output] [file] [/ commande | /k command]}
 
 		- {/A[:]attr} : Some attributes to set {pBat} behaviour:
 
-		@-- {v}	  : Enables {spec/var|delayed expansion}.
+		-- {v}	  : Enables {spec/var|delayed expansion}.
 
-		@-- {c}	  : Enables {CMDLYCORRECT} option from the {setlocal|SETLOCAL}
+		-- {c}	  : Enables {CMDLYCORRECT} option from the {setlocal|SETLOCAL}
 		command. This forces {cmd.exe} compatible mode.
 
-		@-- {f}	  : Enables {spec/exp|floating numbers}.
+		-- {e}	  : Disable current directory echoing.
 
-		@-- {e}	  : Disable current directory echoing.
-
-		@-- {q} : Run pBat quietly (ie. does not show the intro screen
+		-- {q} : Run pBat quietly (ie. does not show the intro screen
 		at startup).
 
 		- {/i input} : redirects standard input to file descriptor
