@@ -74,8 +74,9 @@
             PBAT_RESET_BUFFERING(fd, s)
 
 #define PBAT_DUP_STDIN(fd, s) \
-            setvbuf(s, NULL, _IONBF, 0); \
-            __PBAT_DUP_STD(fd, s)
+            __PBAT_DUP_STD(fd, s) \
+            setvbuf(s, NULL, _IOLBF, 0)
+
 
 #define PBAT_XDUP(fd, s) \
             if (((fd) = dup(fileno(s))) == -1) \
