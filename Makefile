@@ -80,16 +80,16 @@ bindir: $(MANFILES) $(TEXTFILES)
 	cp $(TEXTFILES) $(BINDIR)/
 	cp COPYING* $(BINDIR)/
 
-textfiles: $(TEXTFILES)
+textfiles: $(TEXTFILES) $(MDFILES)
 
 man/en_US/readme.tea : README.tpl
 	cat $< doc.ft | sed -e s,\{doc/,\{,g > $@
 
 doc.md: README.tpl
-	cat README.tpl doc.ft > README.tea
-	./tea/tea$(EXEC_SUFFIX) -e:utf-8 -o:md README.tea .doc.md
+	cat README.tpl doc.ft > .README.tea
+	./tea/tea$(EXEC_SUFFIX) -e:utf-8 -o:md .README.tea .doc.md
 	cat doc.hd .doc.md > doc.md
-	rm README.tea .doc.md
+	rm .README.tea .doc.md
 	
 .tpl.tea:
 	cat $< repo.ft | sed -e s,\{doc[^}]*\|,\{,g > $@

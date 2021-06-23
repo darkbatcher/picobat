@@ -139,7 +139,7 @@
 #ifdef WIN32
 
 typedef HANDLE THREAD;
-typedef HANDLE MUTEX;
+typedef CRITICAL_SECTION MUTEX;
 typedef int    PROCESS;
 
 #else

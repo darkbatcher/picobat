@@ -32,19 +32,19 @@ there you have to know about.
 
 On one hand, there is a couple of differences between Picobat and cmd :
 
-* The [HELP](doc/help) system is different from the original cmd help system. 
-  On the first time you run the command, you need to genérate the whole 
-  documentation using:
+* The **HELP** system is different from the original cmd help system. On the 
+  first time you run the command, you need to genérate the whole documentation 
+  using:
 
         help /b
 
   Once all the data has been generated you can use it as the **help** command, 
   but beware, it's fairly improved.
 
-* There is a few [FOR](doc/for) modifications:
+* There is a few **FOR** modifications:
 
-  * Empty line are processed by [FOR /F](doc/for). This behaviour can be 
-    disabled using:
+  * Empty line are processed by **FOR /F**. This behaviour can be disabled 
+    using:
 
             SETLOCAL EnableCmdlyCorrect
 
@@ -58,26 +58,26 @@ On one hand, there is a couple of differences between Picobat and cmd :
 * Picobat has no inconsistencies with escaped characters with **^**, it 
   requires only one escape.
 
-* [DIR /b](doc/dir) does not automatically return absolute paths.
+* **DIR /b** does not automatically return absolute paths.
 
-* Support of [START](doc/start) is a bit tricky under some platforms and some 
-  of the options or the whole command might not be provided depending on your 
-  system configuration if you use \*nix.
+* Support of **START** is a bit tricky under some platforms and some of the 
+  options or the whole command might not be provided depending on your system 
+  configuration if you use \*nix.
 
 On the other hand, Picobat also provides you with with a bunch of extensions:
 
 * A full set of extensions to support floating points arithmetics through 
-  [SET](doc/set) and [IF](doc/if):
+  **SET** and **IF**:
 
-  * New [SET /a](doc/seta) commands extensions to perform operations on 
-    floating point numbers.
+  * New **SET /a** commands extensions to perform operations on floating point 
+    numbers.
 
   * Extensions for **IF** command to automatically detect floating-point and 
     compare floating-point numbers.
 
 * The ground-breaking possibility to specify logical expressions using 
-  **AND** and **OR** and the new [IF](doc/if) extensions, like in the 
-  following example:
+  **AND** and **OR** and the new **IF** extensions, like in the following 
+  example:
 
         IF [ [ !ok! EQU 1 ] and [ defined file ] ] (
          :: some code 
@@ -85,7 +85,7 @@ On the other hand, Picobat also provides you with with a bunch of extensions:
 
 * A module system allowing extension loading at run-time. This offer numbers 
   of possibilities from graphical user interfaces to networking extensions. 
-  Currently, the only module provided is the [BATBOX](doc/batbox) module.
+  Currently, the only module provided is the **BATBOX** module.
 
 * To speed up parsing, Picobat loads files entirely in memory at startup. If 
   the file gets modified during its execution, it is reloaded and Picobat 
@@ -95,47 +95,44 @@ On the other hand, Picobat also provides you with with a bunch of extensions:
         SETLOCAL EnableCmdlyCorrect
 
 * As can be seen in the previous code, **::-style** comments can be used 
-  inside [blocks](doc/spec/cmdline).
+  inside **blocks**.
 
-* All the [FOR](doc/for) modifications described above.
+* All the **FOR** modifications described above.
 
-* Enhanced [GOTO](doc/goto) and [CALL](doc/call) that can use a file and a 
-  label at the same time and ignore errors:
+* Enhanced **GOTO** and **CALL** that can use a file and a label at the same 
+  time and ignore errors:
 
         GOTO :mylabel myfile.bat /Q
         CALL /e :mylabel myfile
 
-* Extended [HELP](doc/help) providing search capabilities and help in various 
-  formats including **HTML**.
+* Extended **HELP** providing search capabilities and help in various formats 
+  including **HTML**.
 
-* The new command [ALIAS](doc/alias) allowing to set up simple and fast 
-  aliases for the commands:
+* The new command **ALIAS** allowing to set up simple and fast aliases for the 
+  commands:
 
         ALIAS dbs=dir /b /s
 
-* An extension to the [FIND](doc/find) command to use simple regular 
-  expressions:
+* An extension to the **FIND** command to use simple regular expressions:
 
         echo match my regular expression | FIND /e "match * regular expression"
 
-* The [FIND](doc/find) and [MORE](doc/more) commands are provided as internal 
-  commands.
+* The **FIND** and **MORE** commands are provided as internal commands.
 
-* New internal commands [XARGS](doc/xargs) and [WC](doc/wc) inspired from 
-  their \*nix counterparts:
+* New internal commands **XARGS** and **WC** inspired from their \*nix 
+  counterparts:
 
-  * [XARGS](doc/xargs) runs a command taking command parameters on the 
-    standard input.
+  * **XARGS** runs a command taking command parameters on the standard input.
 
-  * [WC](doc/wc) counts line or words or bytes in a file.
+  * **WC** counts line or words or bytes in a file.
 
             :: Count lines in subdirs 
             dir /s /b /a:-D . | xargs wc /l
 
-* New external command [DUMP](doc/dump) to dump hexadecimal code.
+* New external command **DUMP** to dump hexadecimal code.
 
-* New [SHIFT](doc/shift) extensions and new **%+** variable containing the 
-  remaining arguments.
+* New **SHIFT** extensions and new **%+** variable containing the remaining 
+  arguments.
 
 ## Troubleshooting ##
 
@@ -143,7 +140,22 @@ If you have some questions about or need some help with Picobat, please feel
 free to join **Picobat**'s official discord at: 
 [https://discord.gg/w4KtdCv](https://discord.gg/w4KtdCv)
 
-If you want to dig deepeer, do not hesitate to browse the documentation. 
-[Command index](doc/commands) and [Specification index](doc/spec/index) are 
-good places to start. Have fun !
+For more documentations and updates, please see the [official Picobat 
+website](http://picobat.org).
+
+## What's in this folder ? ##
+
+There is a few interesting things in this directory that you might need:
+
+* [BUILD.readme](BUILD.readme) : A text file describing how to build 
+  **Picobat**
+
+* [WHATSNEW](WHATSNEW.md) : A log of the changes made to Picobat
+
+* [THANKS](THANKS.md) : A list of all the contributors to the project.
+
+* [GUIDELINES](GUIDELINES.md) : A text files giving guidelines on how to 
+  modify Picobat.
+
+* **COPYING.\*** : The license of the project and of projects used by Picobat.
 

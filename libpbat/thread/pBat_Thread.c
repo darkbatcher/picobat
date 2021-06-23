@@ -188,25 +188,26 @@ LIBPBAT int      pBat_WaitForThread(THREAD* thId, void** lpRet)
 
 LIBPBAT int      pBat_CreateMutex(MUTEX* lpMuId)
 {
-    *lpMuId=CreateMutex(NULL, FALSE, NULL);
-
-    return (*lpMuId!=NULL);
+    InitializeCriticalSection(lpMuId);
+    return 0;
 }
 
 LIBPBAT int      pBat_CloseMutex(MUTEX* lpMuId)
 {
-    CloseHandle(*lpMuId);
+    DeleteCriticalSection(lpMuId);
     return 0;
 }
 
 LIBPBAT int      pBat_LockMutex(MUTEX* lpMuId)
 {
-    return WaitForSingleObject(*lpMuId, INFINITE);
+    EnterCriticalSection(lpMuId);
+    return 0;
 }
 
 LIBPBAT int      pBat_ReleaseMutex(MUTEX* lpMuId)
 {
-    return !ReleaseMutex(*lpMuId);
+    LeaveCriticalSection(lpMuId);
+    return 0;
 }
 
 LIBPBAT void     pBat_CloseThread(THREAD* thId)
@@ -215,3 +216,5 @@ LIBPBAT void     pBat_CloseThread(THREAD* thId)
 }
 
 #endif
+
+
