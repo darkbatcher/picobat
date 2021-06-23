@@ -47,6 +47,7 @@ extern _CRTIMP struct ioinfo* __pioinfo[];
 #define osfile(i)   (pioinfo(i)->osfile)
 #define osfhnd(i)   (pioinfo(i)->osfhnd)
 #define NOINHERIT   0x10 /* not inheritable file */
+#define FHND        0x01 /* have a file handle */
 
 void pBat_SetFdInheritance(int fd, int mode)
 {
@@ -57,7 +58,23 @@ void pBat_SetFdInheritance(int fd, int mode)
     osfile(fd) &= ~ NOINHERIT;
 }
 
-#else
+void pBat_SetAllFdInheritance(int mode)
+{
+    int i;
+
+    for (i =0;; i ++) {
+
+        /* Check if the FD is alloc'd */
+        if (__pioinfo[i >> 5] == NULL)
+            break;
+        else if (osfile(i) & FHND)
+            pBat_SetFdInheritance(i, mode);
+
+
+    }
+}
+
+#else /* WIN32 */
 #ifndef _XOPEN_SOURCE
 #define _XOPEN_SOURCE 700
 #endif

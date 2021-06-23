@@ -24,4 +24,8 @@
 void pBat_SetFdInheritance(int fd, int mode);
 void pBat_SetStdInheritance(FILE *file, int mode);
 
+#ifdef WIN32
+void pBat_SetAllFdInheritance(int mode);
+#endif /* WIN32 */
+
 #endif // PBAT_FDINHERITANCE_H

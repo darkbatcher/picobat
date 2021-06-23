@@ -99,21 +99,22 @@ STREAMSTACK* pBat_OpenOutput(STREAMSTACK* stack, char* name, int fd, int mode)
 
     }
 
-    /* Note that cmd.exe implements a mechanism to create path that do not exist
+    /* Note that cmd.exe implements a mechanism to create path
+       that do not exist (eg. > a/b/c.txt creates a/b/ tree)
        upon opening of the file. This is not implemented yet. */
+
+    /* Serialize this with pBat_RunFile() */
+    PBAT_RUNFILE_LOCK();
 
     if ((newfd = open(name, fmode, S_IREAD | S_IWRITE)) == -1) {
 
         pBat_ShowErrorMessage(PBAT_FILE_ERROR | PBAT_PRINT_C_ERROR,
                                 name, 0);
         free(item);
-        return stack;
+        item = stack;
+        goto error;
 
     }
-
-    pBat_SetFdInheritance(newfd, 0); /* do not inherit this file descriptor
-                                        the only inheritable file descriptors
-                                        should be standard fds */
 
     item->lock = 0;
     item->fd = fd;
@@ -148,6 +149,8 @@ STREAMSTACK* pBat_OpenOutput(STREAMSTACK* stack, char* name, int fd, int mode)
     default:;
     }
 
+error:
+    PBAT_RUNFILE_RELEASE();
     return item;
 }
 
@@ -164,14 +167,12 @@ STREAMSTACK* pBat_OpenOutputD(STREAMSTACK* stack, int newfd, int fd)
 
     item->previous = stack;
 
-    if (newfd != -1)
-        pBat_SetFdInheritance(newfd, 0); /* do not inherit this file descriptor
-                                        the only inheritable file descriptors
-                                        should be standard fds */
-
     item->lock = 0;
     item->fd = fd;
     item->subst = PBAT_GET_SUBST();
+
+    /* Serialize this with pBat_RunFile() */
+    PBAT_RUNFILE_LOCK();
 
     /* do not forget to update the standard thread specific streams */
     switch (fd) {
@@ -194,6 +195,8 @@ STREAMSTACK* pBat_OpenOutputD(STREAMSTACK* stack, int newfd, int fd)
     default:;
     }
 
+    PBAT_RUNFILE_RELEASE();
+
     return item;
 }
 
@@ -207,6 +210,9 @@ STREAMSTACK* pBat_PopStreamStack(STREAMSTACK* stack)
         return stack;
 
     item = stack->previous;
+
+    /* Serialize this with pBat_RunFile() */
+    PBAT_RUNFILE_LOCK();
 
     switch (stack->fd) {
 
@@ -228,6 +234,8 @@ STREAMSTACK* pBat_PopStreamStack(STREAMSTACK* stack)
     default:;
     }
 
+    PBAT_RUNFILE_RELEASE();
+
     PBAT_APPLY_SUBST(stack->subst);
 
     free(stack);
@@ -245,6 +253,9 @@ STREAMSTACK* pBat_PopStreamStackUntilLock(STREAMSTACK* stack)
 
 void pBat_ApplyStreams(STREAMSTACK* stack)
 {
+    /* Serialize this with pBat_RunFile() */
+    PBAT_RUNFILE_LOCK();
+
     /* simple fast method */
     PBAT_XDUP(fdStdin, stdin);
     PBAT_XDUP(fdStdout, stdout);
@@ -254,20 +265,17 @@ void pBat_ApplyStreams(STREAMSTACK* stack)
     PBAT_DUP_STD(fileno(fOutput), stdout);
     PBAT_DUP_STD(fileno(fError), stderr);
 
-    pBat_SetFdInheritance(STDIN_FILENO, 1);
-    pBat_SetFdInheritance(STDOUT_FILENO, 1);
-    pBat_SetFdInheritance(STDERR_FILENO, 1);
+    PBAT_RUNFILE_RELEASE();
 }
 
 void pBat_UnApplyStreams(STREAMSTACK* stack)
 {
+    /* Serialize this with pBat_RunFile() */
+    PBAT_RUNFILE_LOCK();
+
     PBAT_DUP_STDIN(fdStdin, stdin);
     PBAT_DUP_STD(fdStdout, stdout);
     PBAT_DUP_STD(fdStderr, stderr);
-
-    pBat_SetFdInheritance(STDIN_FILENO, 0);
-    pBat_SetFdInheritance(STDOUT_FILENO, 0);
-    pBat_SetFdInheritance(STDERR_FILENO, 0);
 
     close(fdStdout);
     close(fdStdin);

@@ -65,8 +65,7 @@
             if (dup2(fd, fileno(s)) == -1) \
                 pBat_ShowErrorMessage(PBAT_UNABLE_DUPLICATE_FD \
                                         | PBAT_PRINT_C_ERROR, \
-                                            __FILE__ "/PBAT_DUP_STD()", -1); \
-            pBat_SetFdInheritance(fileno(s), 0);
+                                            __FILE__ "/PBAT_DUP_STD()", -1);
 
 #define PBAT_DUP_STD(fd, s) \
             fflush(s);\
@@ -82,8 +81,7 @@
             if (((fd) = dup(fileno(s))) == -1) \
                 pBat_ShowErrorMessage(PBAT_UNABLE_DUPLICATE_FD \
                                         | PBAT_PRINT_C_ERROR, \
-                                            __FILE__ "/PBAT_DUP_STD()", -1); \
-            pBat_SetFdInheritance(fd, 0);
+                                            __FILE__ "/PBAT_DUP_STD()", -1);
 
 #define pBat_SetStreamStackLockState(stack, state) \
                                 ((stack) ? (stack->lock = state) : 0)

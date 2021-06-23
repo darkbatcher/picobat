@@ -148,9 +148,5 @@ int pBat_DuplicateData(struct clone_data_t* data)
     DUPLICATE_STREAM(data->fOutput, fOutput, "w");
     DUPLICATE_STREAM(data->fError, fError, "w");
 
-    pBat_SetFdInheritance(fileno(data->fInput), 0);
-    pBat_SetFdInheritance(fileno(data->fOutput), 0);
-    pBat_SetFdInheritance(fileno(data->fError), 0);
-
     return 0;
 }

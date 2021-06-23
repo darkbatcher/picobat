@@ -1292,14 +1292,15 @@ int pBat_ForMakeInputInfo(ESTR* lpInput, INPUTINFO* lpipInfo, FORINFO* lpfrInfo)
 			lpipInfo->cType=INPUTINFO_TYPE_COMMAND;
             lpipInfo->Info.InputFile.lpesFiles[0]=NULL;
 
-			if (_pBat_Pipe(iPipeFd, 1024, O_BINARY) == -1) {
+            /* Serialize this with pBat_RunFile() */
+            PBAT_RUNFILE_LOCK();
 
+			if (_pBat_Pipe(iPipeFd, 4096, O_BINARY) == -1)
 				pBat_ShowErrorMessage(PBAT_CREATE_PIPE | PBAT_PRINT_C_ERROR ,
                                         __FILE__ "/pBat_MakeInputInfo()",
-                                        FALSE);
+                                        PBAT_CREATE_PIPE);
 
-				return PBAT_CREATE_PIPE ;
-			}
+			PBAT_RUNFILE_RELEASE();
 
 			/* Launch the actual command from which we get input on a separate
                pBat thread */
@@ -1371,9 +1372,6 @@ int pBat_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFd)
 {
     struct pipe_launch_data_t* param;
     FILE* pFile;
-
-    pBat_SetFdInheritance(iPipeFd[1], 0);
-	pBat_SetFdInheritance(iPipeFd[0], 0);
 
     if (!(pFile=fdopen(iPipeFd[0], "rb"))) {
 

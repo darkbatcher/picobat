@@ -121,12 +121,13 @@ int pBat_RunFile(EXECINFO* info, int* error)
 
     si.cb = sizeof(si);
 
-    /* It is very important to serialize calls to run functions since
-       several process may call it at once, and since fds might simultaneously
-       be set to inheritable, interference can appear between processes */
-    if (pBat_LockMutex(&mRunFile))
-        pBat_ShowErrorMessage(PBAT_LOCK_MUTEX_ERROR,
-                              __FILE__ ":pBat_ExecuteFile()" , -1);
+    si.lpTitle = info->title;
+    dwFlags = ((info->flags & PBAT_EXEC_SEPARATE_WINDOW) ?
+            CREATE_NEW_CONSOLE : 0);
+
+    PBAT_RUNFILE_LOCK();
+
+    pBat_SetAllFdInheritance(0);
 
     if (!(info->flags & PBAT_EXEC_SEPARATE_WINDOW)) {
 
@@ -143,11 +144,6 @@ int pBat_RunFile(EXECINFO* info, int* error)
 
     }
 
-    si.lpTitle = info->title;
-
-    dwFlags = ((info->flags & PBAT_EXEC_SEPARATE_WINDOW) ?
-            CREATE_NEW_CONSOLE : 0);
-
     if (!CreateProcessA(info->file,
                         info->cmdline,
                         NULL,
@@ -161,13 +157,7 @@ int pBat_RunFile(EXECINFO* info, int* error)
                         &pi))
         *error = 1;
 
-    pBat_SetFdInheritance(fileno(fInput), 0);
-    pBat_SetFdInheritance(fileno(fOutput), 0);
-    pBat_SetFdInheritance(fileno(fError), 0);
-
-    if (pBat_ReleaseMutex(&mRunFile))
-        pBat_ShowErrorMessage(PBAT_RELEASE_MUTEX_ERROR,
-                              __FILE__ ":pBat_ExecuteFile()" , -1);
+    PBAT_RUNFILE_RELEASE();
 
     if (info->flags & PBAT_EXEC_WAIT) {
 
@@ -222,13 +212,13 @@ int pBat_RunFile(EXECINFO* info, int* error)
         pBat_ShowErrorMessage(PBAT_FAILED_ALLOCATION | PBAT_PRINT_C_ERROR,
                                 __FILE__ "/pBat_RunExternalFile()", -1);
 
-    /* It is very important to serialize calls to pBat_ExecuteFile() since
-       several process may call it at once, and since fds might simultaneously
-       be set to inheritable, interference can appear between processes */
-    if (pBat_LockMutex(&mRunFile))
-        pBat_ShowErrorMessage(PBAT_LOCK_MUTEX_ERROR,
-                              __FILE__ ":pBat_ExecuteFile()" , -1);
+    dwFlags = CREATE_UNICODE_ENVIRONMENT
+        | ((info->flags & PBAT_EXEC_SEPARATE_WINDOW) ?
+            CREATE_NEW_CONSOLE : 0);
 
+    PBAT_RUNFILE_LOCK();
+
+    pBat_SetAllFdInheritance(0);
 
     if (!(info->flags & PBAT_EXEC_SEPARATE_WINDOW)) {
 
@@ -236,17 +226,11 @@ int pBat_RunFile(EXECINFO* info, int* error)
         pBat_SetFdInheritance(fileno(fOutput), 1);
         pBat_SetFdInheritance(fileno(fError), 1);
 
-
-
         si.dwFlags = STARTF_USESTDHANDLES;
         si.hStdInput = _get_osfhandle(fileno(fInput));
         si.hStdOutput = _get_osfhandle(fileno(fOutput));
         si.hStdError = _get_osfhandle(fileno(fError));
     }
-
-    dwFlags = CREATE_UNICODE_ENVIRONMENT
-        | ((info->flags & PBAT_EXEC_SEPARATE_WINDOW) ?
-            CREATE_NEW_CONSOLE : 0);
 
     if (!CreateProcessW(wfilename,
                         wfullline,
@@ -261,13 +245,7 @@ int pBat_RunFile(EXECINFO* info, int* error)
                         &pi))
         *error = 1;
 
-    pBat_SetFdInheritance(fileno(fInput), 0);
-    pBat_SetFdInheritance(fileno(fOutput), 0);
-    pBat_SetFdInheritance(fileno(fError), 0);
-
-    if (pBat_ReleaseMutex(&mRunFile))
-        pBat_ShowErrorMessage(PBAT_RELEASE_MUTEX_ERROR,
-                              __FILE__ ":pBat_ExecuteFile()" , -1);
+    PBAT_RUNFILE_RELEASE();
 
     if (info->flags & PBAT_EXEC_WAIT) {
         WaitForSingleObject(pi.hProcess, INFINITE);
@@ -295,7 +273,7 @@ int pBat_RunFile(EXECINFO* info, int* error)
 int pBat_RunFile(EXECINFO* info, int* error)
 {
 	pid_t iPid;
-	int fds[2];
+	int fds[2], i;
 	char c;
 
 	int iResult = 0;
@@ -313,9 +291,6 @@ int pBat_RunFile(EXECINFO* info, int* error)
                                 __FILE__ "/pBat_RunFile()",
                                 -1);
 
-    pBat_SetFdInheritance(fds[1], 0);
-    pBat_SetFdInheritance(fds[0], 0);
-
 	iPid=fork();
 
 	if (iPid == 0 ) {
@@ -323,6 +298,18 @@ int pBat_RunFile(EXECINFO* info, int* error)
         pBat_ApplyEnv(lpeEnv); /* set internal variable */
         pBat_ApplyStreams(lppsStreamStack);
         chdir(info->dir);
+
+        pBat_SetFdInheritance(fd[1], 0);
+
+        /* loop through fds and close the one that we don't need
+           anymore (ie. everything else than 0,1,2 and fds[1]
+
+           assume that we don't have more than 2048 fds openned */
+
+        for (i=3;i < 2048; i++)
+            if (i != fds[1])
+                close(i);
+
 
         close(fds[0]); /* close read end */
 
@@ -343,8 +330,8 @@ int pBat_RunFile(EXECINFO* info, int* error)
 			   For more safety, we return -1, along with a pipe message
                so that the given value will be reported anyway*/
 
-			write(fds[1], "x", 1);
-			close(fds[1]);
+            write(fds[1], "x", 1);
+            close(fds[1]);
 
 			exit(-1);
 

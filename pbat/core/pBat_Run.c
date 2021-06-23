@@ -158,14 +158,15 @@ int pBat_ExecOperators(PARSED_LINE** lpLine)
         && !status) {
 
 
-        /* TODO : SERIALISE CALLS TO _pBat_Pipe with calls to fork */       /**/
-        if (_pBat_Pipe(pipedes, 4096, O_BINARY) == -1)                      /**/
-            pBat_ShowErrorMessage(PBAT_CREATE_PIPE | PBAT_PRINT_C_ERROR,    /**/
-                                    __FILE__ "/pBat_ExecOperators()",       /**/
-                                    -1);                                    /**/
-                                                                            /**/
-        pBat_SetFdInheritance(pipedes[0], 0);                               /**/
-        pBat_SetFdInheritance(pipedes[1], 0);                               /**/
+        /* Serialize this withs calls to pBat_RunFile() */
+        PBAT_RUNFILE_LOCK();
+
+        if (_pBat_Pipe(pipedes, 4096, O_BINARY) == -1)
+            pBat_ShowErrorMessage(PBAT_CREATE_PIPE | PBAT_PRINT_C_ERROR,
+                                    __FILE__ "/pBat_ExecOperators()",
+                                    -1);
+
+        PBAT_RUNFILE_RELEASE();
 
         if ((infos = malloc(sizeof(struct pipe_launch_data_t))) == NULL)
             pBat_ShowErrorMessage(PBAT_FAILED_ALLOCATION | PBAT_PRINT_C_ERROR,
