@@ -57,9 +57,19 @@
 #define STREAM_MODE_ADD 0
 #define STREAM_MODE_TRUNCATE 0xffffffff
 
+
+/* On windows, 0 is an invalid argument to setvbuf() */
+#ifdef WIN32
+#define PBAT_DEF_BUF 256
+#else
+#define PBAT_DEF_BUF 0
+#endif
+
 #define PBAT_RESET_BUFFERING(fd, s) \
             if (isatty(fd)) \
-                setvbuf(s, NULL, _IONBF, 0)
+                setvbuf(s, NULL, _IONBF, 0); \
+            else \
+                setvbuf(s, NULL, _IOFBF, PBAT_DEF_BUF)
 
 #define __PBAT_DUP_STD(fd, s) \
             if (dup2(fd, fileno(s)) == -1) \
@@ -72,10 +82,18 @@
             __PBAT_DUP_STD(fd, s) \
             PBAT_RESET_BUFFERING(fd, s)
 
-#define PBAT_DUP_STDIN(fd, s) \
-            __PBAT_DUP_STD(fd, s) \
-            setvbuf(s, NULL, _IOLBF, 0)
+/* The trick here is that ftell(s) takes account of buffering situation so that
+   fseek can set positions accurately, but however, the FILE structure does not
+   contains any absolute counter for file pos.
 
+   Hence here we reset the postion of the file descriptor and then use fflush()
+   to clear any buffering information still in the FILE */
+#define PBAT_DUP_STDIN(fd, s) \
+            if (!isatty(fileno(s))) \
+                lseek(fileno(s), ftell(s), SEEK_SET); \
+            fflush(s); \
+            __PBAT_DUP_STD(fd, s) \
+            PBAT_RESET_BUFFERING(fd, s)
 
 #define PBAT_XDUP(fd, s) \
             if (((fd) = dup(fileno(s))) == -1) \
