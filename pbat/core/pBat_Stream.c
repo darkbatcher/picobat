@@ -277,6 +277,8 @@ void pBat_UnApplyStreams(STREAMSTACK* stack)
     PBAT_DUP_STD(fdStdout, stdout);
     PBAT_DUP_STD(fdStderr, stderr);
 
+    PBAT_RUNFILE_RELEASE();
+
     close(fdStdout);
     close(fdStdin);
     close(fdStderr);
