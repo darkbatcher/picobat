@@ -448,19 +448,27 @@ RestartSearch:
 
 	default:
 
-		if (iFlag & PBAT_ALIAS_FLAG) {
-			/* this is an alias, expand it */
+		if (iFlag & PBAT_DEF_FLAG) {
 
-			pBat_ExpandAlias(lpCommand,
+			/* this is a subroutine, expand it */
+			pBat_ExpandDef(lpCommand,
 			                 lpCmdLine + (iFlag & ~PBAT_COMMAND_FLAGS),
-			                 (char*)lpProc
-			                );
+                             (char*)lpProc); /* Not obvious but in this case lpProc
+                                                is variable to be substituted */
+            tmp = (char*)lpvLocalVars;
+            if (((lpvLocalVars = pBat_GetLocalBlock()) == NULL))
+                pBat_ShowErrorMessage(PBAT_FAILED_ALLOCATION,
+                                      __FILE__ "/pBat_RunFile",
+                                      PBAT_FAILED_ALLOCATION);
 
-			goto RestartSearch;
+            pBat_PushEnvLocals(lpeEnv);
+            pBat_RunCommand(lpCommand, lpplLine);
+            pBat_PopEnvLocals(lpeEnv);
 
-		}
+            pBat_FreeLocalBlock(lpvLocalVars);
+            lpvLocalVars = (LOCAL_VAR_BLOCK*)tmp;
 
-		if (iFlag & PBAT_COMMAND_LOOKAHEAD) {
+		} else if (iFlag & PBAT_COMMAND_LOOKAHEAD) {
 
             iErrorLevel=((int(*)(char*, PARSED_LINE**))lpProc)(lpCmdLine,
 																	lpplLine);

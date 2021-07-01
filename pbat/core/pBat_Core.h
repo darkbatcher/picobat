@@ -42,7 +42,7 @@
 #include "pBat_Expand.h"
 #include "pBat_SplitPath.h"
 #include "pBat_ParseBlock.h"
-#include "pBat_ExpandAlias.h"
+#include "pBat_ExpandDef.h"
 #include "pBat_OsStream.h"
 #include "pBat_FdInheritance.h"
 #include "pBat_ReadScript.h"

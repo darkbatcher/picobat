@@ -21,7 +21,7 @@
 #define PBAT_COMMAND_H
 
 /* include all internal commands headers */
-#include "pBat_Alias.h"
+#include "pBat_Def.h"
 #include "pBat_Ask.h"
 #include "pBat_Block.h"
 #include "pBat_Call.h"

@@ -41,7 +41,7 @@ IF %PBAT_OS%==WINDOWS (
     SET PBAT_START_SCRIPT=!PBAT_PATH!/cmd/pbat_start
 )
 
-ALIAS /f help=hlp.bat
+DEF /f help=hlp.bat $*
 SET PROMPT=$x.a;Picobat$x..; $P$G
 
 IF exist !PBAT_ETC!/PBAT_Auto.bat CALL !PBAT_ETC!/PBAT_Auto.bat

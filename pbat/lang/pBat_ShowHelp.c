@@ -44,9 +44,9 @@ static const char* lpInternalHelp[PBAT_HELP_ARRAY_SIZE];
 
 void pBat_LoadInternalHelp(void)
 {
-	lpInternalHelp[PBAT_HELP_ALIAS]
-	    =gettext("Create an alias on a command.\n"
-	             "Usage: ALIAS [/f] alias=command\n");
+	lpInternalHelp[PBAT_HELP_DEF]
+	    =gettext("Create a batch procedure.\n"
+	             "Usage: DEF [/f] alias=command\n");
 
 	lpInternalHelp[PBAT_HELP_CD]
 	    =gettext("Change current working directory.\n"

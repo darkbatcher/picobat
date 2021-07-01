@@ -36,13 +36,13 @@
 
 {{User-interface commands}}
 
-	- {break|BREAK} {[int]} : Enable/disable CTRL-C handling.
+	- {break|BREAK} {[int]} : Enables/disables CTRL-C handling.
 	
-	- {color|COLOR}  {[int]} : Change the console screen color.
+	- {color|COLOR}  {[int]} : Changes the console screen color.
 
-	- {cls|CLS}    {[int]} : Clear the console screen.
+	- {cls|CLS}    {[int]} : Clears the console screen.
 
-	- {echo|ECHO}   {[int]} : Display text in the console.
+	- {echo|ECHO}   {[int]} : Displays text in the console.
 	
 	- {help|HELP} {[int]} : Shows Picobat internal help|HELP
 	messages (provided for compatibility, alias of {HLP} when
@@ -50,31 +50,31 @@
 	
 	- {hlp|HLP} {[int]} : Shows Picobat full help.  
 	
-	- {pause|PAUSE}  {[int]} : Make a pause in a batch script
+	- {pause|PAUSE}  {[int]} : Makes a pause in a batch script
 
 	- {prompt|PROMPT} {[int]} : Changes pBat command prompt.
 	
-	- {pecho|PECHO} {[int]} : Display a text formatted for {PROMPT}
+	- {pecho|PECHO} {[int]} : Displays a text formatted for {PROMPT}
 
 	- {timeout|TIMEOUT} {[int]} : Introduces a delay in a
 	batch script.
 
-	- {title|TITLE}  {[int]} : Change console title.
+	- {title|TITLE}  {[int]} : Changes console title.
 
 {{Scripting commands}}
 
-	- {alias|ALIAS} {[int]} : Define an alias.
+	- {def|DEF} {[int]} : Defines a procedure or an alias.
 	
-	- {call|CALL} {[int]} : Call a external script or a routine, within
+	- {call|CALL} {[int]} : Calls a external script or a routine, within
 	the current command context.
 	
 	- {endlocal|ENDLOCAL} {[int]} : Reverts changes to local environment after {setlocal|SETLOCAL} call.
 	
 	- {exit|EXIT} {[int]} : Exits {pbat|pBat}.	
 	
-	- {for|FOR}      {[int]} : Loop through items a script.
+	- {for|FOR}      {[int]} : Loops through items a script.
 
-	- {goto|GOTO}     {[int]} : Jump to a label in a script.
+	- {goto|GOTO}     {[int]} : Jumps to a label in a script.
 	
 	- {if|IF} {[int]} : Executes conditionnaly depending on
 	test success.
@@ -82,58 +82,58 @@
 	- {pbat|PBAT} {[int]} : The main Picobat executable.
 	Interprets batch scripts.
 	
-	- {set|SET}    {[int]} : Modify an environment variable. Either
+	- {set|SET}    {[int]} : Modifies an environment variable. Either
 	through a string litteral, a mathematical expression or an user input.
 		
-	- {shift|SHIFT} {[int]} : Change position of command-line arguments
+	- {shift|SHIFT} {[int]} : Changes position of command-line arguments
 	in batch files.
 
-	- {start|START} {[int]} : Run a command.
+	- {start|START} {[int]} : Runs a command.
 
 	- {setlocal|SETLOCAL} {[int]} : Creates local environment and changes {pbat|pBat} mode.
 
-	- {rem|REM}		 {[int]} : Introduce a comment.
+	- {rem|REM}		 {[int]} : Introduces a comment.
 
 {{File commands}}
 	
-	- {cd|CD, CHDIR}  {[int]} : Change current directory.
+	- {cd|CD, CHDIR}  {[int]} : Changes current directory.
 	
-	- {copy|COPY}	{[int]} : Copy files.
+	- {copy|COPY}	{[int]} : Copies files.
 
-	- {dir|DIR}        {[int]} : Browse subdirectories.
+	- {dir|DIR}        {[int]} : Browses subdirectories.
 
-	- {del|DEL, ERASE} {[int]} : Delete files.
+	- {del|DEL, ERASE} {[int]} : Deletes files.
 	
 	- {dump|DUMP} {[int]} : Dumps hexadecimal content of a
 	file.
 
-	- {find|FIND} {[int]} : Find strings in files.
+	- {find|FIND} {[int]} : Finds strings in files.
 
-	- {md|MD, MKDIR}  {[int]} : Create directory.
+	- {md|MD, MKDIR}  {[int]} : Creates directory.
 
-	- {more|MORE} {[int]} : Display files screen by screen.
+	- {more|MORE} {[int]} : Displays files screen by screen.
 
-	- {move|MOVE}       {[int]} : Move files.
+	- {move|MOVE}       {[int]} : Moves files.
 
-	- {pushd|PUSHD}    {[int]} : Change current directory and push the
+	- {pushd|PUSHD}    {[int]} : Changes current directory and push the
 	  previous on the directory stack.
  
-	- {popd|POPD}     {[int]} : Pull a directory on the directory stack to
+	- {popd|POPD}     {[int]} : Pulls a directory on the directory stack to
 	  define the current directory.
 
-	- {rd|RD, RMDIR}  {[int]} : Delete directory.
+	- {rd|RD, RMDIR}  {[int]} : Deletes directory.
 	
-	- {ren|RENAME, REN} {[int]} : Rename files.
+	- {ren|RENAME, REN} {[int]} : Renames files.
 	
 	- {tea|TEA} {[ext]} : Fast and simple text preprocessor.
 	
-	- {type|TYPE} {[int]} : Type files.
+	- {type|TYPE} {[int]} : Types files.
 	
 	- {type|VER} {[int]} : Prints current OS version.
 	
-	- {wc|WC} {[int]} : Display file counts.
+	- {wc|WC} {[int]} : Displays file counts.
 	
-	- {xargs|XARGS} {[int]} : Run a command taking argument on standard input.	
+	- {xargs|XARGS} {[int]} : Runs a command taking argument on standard input.	
 	
 {{Modules commands}}
 	

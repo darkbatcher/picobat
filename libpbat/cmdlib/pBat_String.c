@@ -33,8 +33,8 @@ LIBPBAT char* pBat_SkipBlanks(const char* lpCh)
     while (pBat_IsDelim(*lpCh))
         lpCh++;
 
-    if (*lpCh=='^')
-        lpCh++;
+     /* if (*lpCh=='^')
+       lpCh++; */
 
     return (char*)lpCh;
 }

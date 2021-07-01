@@ -125,7 +125,7 @@ int pBat_GetLine(ESTR* lpesLine, INPUT_FILE* pIn)
 
         cmdlines = cmdlines->next;
 
-    } while (!(ok = pBat_CheckBlocks(lpesLine)) && cmdlines);
+    } while ((!(ok = pBat_CheckBlocks(lpesLine)) || ok == -1) && cmdlines);
 
     pBat_EsFree(tmp);
     pIn->batch.curr = cmdlines;

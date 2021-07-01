@@ -18,12 +18,12 @@
  *
  */
 
-#ifndef PBAT_ALIAS_H
-#define PBAT_ALIAS_H
+#ifndef PBAT_DEF_H
+#define PBAT_DEF_H
 
 #include <libpBat.h>
 
 /* expand an alias to its value */
-void pBat_ExpandAlias(ESTR* lpRet, char* lpCh, char* lpExp);
+void pBat_ExpandDef(ESTR* lpRet, char* lpCh, char* lpExp);
 
-#endif // PBAT_ALIAS_H
+#endif // PBAT_DEF_H

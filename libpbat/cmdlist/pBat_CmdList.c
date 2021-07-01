@@ -137,7 +137,7 @@ int _pBat_FillCommandList(LPCOMMANDLIST lpclList, LPCOMMANDINFO lpciCommandInfo)
     lpclList->cfFlag=lpciCommandInfo->cfFlag;
 
 
-    if (lpciCommandInfo->cfFlag & PBAT_ALIAS_FLAG) {
+    if (lpciCommandInfo->cfFlag & PBAT_DEF_FLAG) {
 
         if (!(lpclList->lpCommandProc
               =malloc(strlen(lpciCommandInfo->lpCommandProc)+1))) {
@@ -247,7 +247,7 @@ LIBPBAT COMMANDFLAG   pBat_GetCommandProc(char* lpCommandLine,
 
                 }
 
-                /* it did not matched, just try again */
+                /* it did not match, just try again */
 
                 iRet=stricmp(lpCommandLine, lpclCommandList->ptrCommandName);
 
@@ -296,14 +296,14 @@ LIBPBAT int				pBat_ReplaceCommand(LPCOMMANDINFO lpciCommand, LPCOMMANDLIST lpcl
 
 			/* substitute the given COMMANDINFO structure */
 
-			if (lpciCommand->cfFlag & PBAT_ALIAS_FLAG) {
+			if (lpciCommand->cfFlag & PBAT_DEF_FLAG) {
 
-				lpBuf=malloc(strlen(lpciCommand->lpCommandProc)+1);
+				lpBuf=malloc(strlen((char*)lpciCommand->lpCommandProc)+1);
 
 				if (!lpBuf)
 					return -1;
 
-				if (lpclCommandList->cfFlag & PBAT_ALIAS_FLAG)
+				if (lpclCommandList->cfFlag & PBAT_DEF_FLAG)
 					free(lpclCommandList->lpCommandProc);
 
 				strcpy(lpBuf, lpciCommand->lpCommandProc);
@@ -333,7 +333,7 @@ LIBPBAT int pBat_FreeCommandList(LPCOMMANDLIST lpclList)
         free(lpclList->ptrCommandName);
 
         /* if it is in fact an alias */
-        if (lpclList->cfFlag & PBAT_ALIAS_FLAG)
+        if (lpclList->cfFlag & PBAT_DEF_FLAG)
             free(lpclList->lpCommandProc);
 
         pBat_FreeCommandList(lpclList->lpclLeftRoot);
@@ -360,7 +360,7 @@ LIBPBAT LPCOMMANDLIST   pBat_DuplicateCommandList(LPCOMMANDLIST lpclList)
         lpclRet->cfFlag = lpclList->cfFlag;
         lpclRet->iLenght = lpclList->iLenght;
 
-        if (lpclRet->cfFlag & PBAT_ALIAS_FLAG) {
+        if (lpclRet->cfFlag & PBAT_DEF_FLAG) {
 
             if (!(lpclRet->lpCommandProc = malloc(
                             strlen(lpclList->lpCommandProc)+1)))
@@ -394,7 +394,7 @@ err:
 
             free(lpclRet->ptrCommandName);
 
-            if ((lpclRet->cfFlag & PBAT_ALIAS_FLAG)
+            if ((lpclRet->cfFlag & PBAT_DEF_FLAG)
                     && lpclRet->lpCommandProc) {
                 free(lpclRet->lpCommandProc);
 

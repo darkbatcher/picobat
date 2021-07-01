@@ -64,7 +64,7 @@ COMMANDINFO lpCmdInfo[]= {
 	{"(", pBat_CmdBlock, 0},
 	{"CALL", pBat_CmdCall, STRLEN("CALL")},
 	{"CALL:", pBat_CmdCall, 0},
-	{"ALIAS", pBat_CmdAlias, STRLEN("ALIAS")},
+	{"DEF", pBat_CmdDef, STRLEN("DEF") | PBAT_COMMAND_LOOKAHEAD},
 	{"SHIFT", pBat_CmdShift, STRLEN("SHIFT")},
 	{"FIND", pBat_CmdFind, STRLEN("FIND")},
 	{"BREAK", pBat_CmdBreak, STRLEN("BREAK")},

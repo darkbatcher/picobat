@@ -42,7 +42,7 @@
 #define PBAT_HELP_PAUSE     20
 #define PBAT_HELP_COLOR     21
 #define PBAT_HELP_EXIT      22
-#define PBAT_HELP_ALIAS     23
+#define PBAT_HELP_DEF     23
 #define PBAT_HELP_SHIFT     24
 #define PBAT_HELP_FIND      25
 #define PBAT_HELP_MORE      26

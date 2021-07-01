@@ -32,18 +32,18 @@ ${HELP [command]}
 		- {command} : The command name associated to the manual page to
 		print.
 
-	By default, {HELP} is overriden by an {alias|ALIAS} command in
+	By default, {HELP} is overriden by an {def|DEF} command in
 	{pbat_auto|pBat_Auto.bat} that associate {HELP} with {hlp|HLP}.
 	This alias can be removed by removing the following line from
 	your {pBat_Auto.bat}:
 
-${ALIAS /b HELP=hlp.bat}
+${DEF /b HELP=hlp.bat $*}
 
 {{Compatibility}}
 
 	Compatible with {cmd.exe}.
 
-	Available since version {0.0.0.42}
+	Available since version {0.0.0.42}.
 
 {{See also}}
 

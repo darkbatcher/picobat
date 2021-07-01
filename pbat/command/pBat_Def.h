@@ -18,9 +18,12 @@
  *
  */
 
-#ifndef PBAT_CMD_ALIAS_H
-#define PBAT_CMD_ALIAS_H
+#ifndef PBAT_CMD_DEF_H
+#define PBAT_CMD_DEF_H
 
-int pBat_CmdAlias(char* lpLine);
+#include "../core/pBat_Core.h"
+
+int pBat_CmdDef(char* lpLine, PARSED_LINE** lpplLine);
+void pBat_ListDefs(char *name, size_t len, COMMANDLIST* commands);
 
 #endif // PBAT_CMD_ALIAS_H

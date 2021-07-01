@@ -42,6 +42,16 @@ int pBat_EnvCompName(const void* p1, const void* p2)
     return stricmp(pVar1->name, pVar2->name);
 }
 
+int pBat_EnvCompLocal(const void* p1, const void* p2)
+{
+    ENVVAR *pVar1=*((ENVVAR**)p1), *pVar2=*((ENVVAR**)p2);
+
+    if ((pVar2->name == NULL))
+        return - PBAT_ENV_LOCAL_PREFIX;
+
+    return *(pVar2->name) - PBAT_ENV_LOCAL_PREFIX;
+}
+
 #define PBAT_ENV_BLOCK_MASK 0x7F
 
 ENVVAR**  pBat_ReAllocEnvBuf(int* nb, ENVVAR** envbuf)
@@ -117,6 +127,9 @@ error:
     } else if (!(pRet->name = strdup(name))
             || !(pRet->content = strdup(content)))
         goto error;
+
+    pRet->previous = NULL;
+    pRet->inherit = 0;
 
     return pRet;
 }
@@ -299,6 +312,7 @@ error:
             goto error;
 
         (*pRes)->name = namecpy;
+        (*pRes)->previous = NULL;
 
     } else {
 
@@ -320,6 +334,7 @@ error:
             goto error;
 
         pEnv->envbuf[pEnv->index]->name = namecpy;
+        pEnv->envbuf[pEnv->index]->previous = NULL;
         ++ pEnv->index;
 
     }
@@ -343,7 +358,9 @@ void  pBat_UnSetEnv(ENVBUF* pEnv, char* name)
 
     pRes = bsearch(&pKey, pEnv->envbuf, pEnv->index, sizeof(ENVVAR*), pBat_EnvCompName);
 
-    if (pRes) {
+    /* Do not let local variables used by previous contexts be freed */
+    if (pRes &&
+        ((*pRes)->previous) == NULL) {
 
         free((*pRes)->name);
         free((*pRes)->content);
@@ -465,3 +482,127 @@ void* pBat_GetEnvBlock(ENVBUF* pEnv, size_t *s)
 
     return block;
 }
+
+#define PBAT_PUSH_ENVVAR(pVar, pNew) \
+        if (!(pNew = pBat_AllocEnvVar((*pVar)->name, (*pVar)->content))) \
+            pBat_ShowErrorMessage(PBAT_FAILED_ALLOCATION | \
+                    PBAT_PRINT_C_ERROR, \
+                    __FILE__ "/pBat_PushEnvLocals()", -1); \
+\
+        pNew->previous = *pVar; \
+        *pVar = pNew;
+
+void pBat_PushEnvLocals(ENVBUF *pEnv)
+{
+    ENVVAR **pRes, **pVar, *pNew,
+            key={"_", NULL},
+            *pKey=&key;
+
+    /* Find all variables tagged to be local, ie. which name start
+       with PBAT_ENV_LOCAL_PREFIX */
+    pRes = bsearch(&pKey, pEnv->envbuf, pEnv->index, sizeof(ENVVAR*),
+                                                    pBat_EnvCompLocal);
+    if (!pRes)
+        return;
+
+    pVar = pRes;
+
+    while (pVar >= pEnv->envbuf
+           && (*pVar)->name
+           && *((*pVar)->name) == PBAT_ENV_LOCAL_PREFIX) {
+
+
+        PBAT_PUSH_ENVVAR(pVar, pNew);
+
+        pVar --;
+
+    }
+
+    pVar = pRes + 1;
+
+    while (pVar < (pEnv->envbuf + pEnv->index)
+           && (*pVar)->name
+           && *((*pVar)->name) == PBAT_ENV_LOCAL_PREFIX) {
+
+        PBAT_PUSH_ENVVAR(pVar, pNew);
+
+        pVar ++;
+
+    }
+}
+
+
+#define PBAT_POP_ENVVAR(pVar, pOld, sort) \
+        if ((pOld = (*pVar)->previous) == NULL) {\
+\
+            /* this variable has to be removed */\
+            free((*pVar)->name); \
+            free((*pVar)->content); \
+\
+            (*pVar)->name = NULL; \
+            (*pVar)->content = NULL; \
+            sort = 1; \
+\
+        } else if ((*pVar)->inherit) {\
+\
+            /* We need to inherit the current variable */\
+\
+            (*pVar)->previous = pOld->previous;\
+            free(pOld->name);\
+            free(pOld->content);\
+            free(pOld);\
+\
+        } else {\
+\
+            /* We need to discard changes to the variable */\
+            free((*pVar)->content);\
+            free((*pVar)->name);\
+            free((*pVar));\
+\
+            *pVar = pOld;\
+\
+        }
+
+void pBat_PopEnvLocals(ENVBUF *pEnv)
+{
+    ENVVAR **pRes, **pVar, *pOld,
+            key={"_", NULL},
+            *pKey=&key;
+    int sort = 0;
+
+
+    /* Find all variables tagged to be local, ie. which name start
+       with PBAT_ENV_LOCAL_PREFIX */
+    pRes = bsearch(&pKey, pEnv->envbuf, pEnv->index, sizeof(ENVVAR*),
+                                                    pBat_EnvCompLocal);
+    if (!pRes)
+        return;
+
+    pVar = pRes;
+
+    while (pVar >= pEnv->envbuf
+           && (*pVar)->name
+           && *((*pVar)->name) == PBAT_ENV_LOCAL_PREFIX) {
+
+        PBAT_POP_ENVVAR(pVar, pOld, sort);
+
+        pVar --;
+
+    }
+
+    pVar = pRes + 1;
+
+    while (pVar < (pEnv->envbuf + pEnv->index)
+           && (*pVar)->name
+           && *((*pVar)->name) == PBAT_ENV_LOCAL_PREFIX) {
+
+        PBAT_POP_ENVVAR(pVar, pOld, sort);
+
+        pVar ++;
+
+    }
+
+    if (sort)
+        qsort(pEnv->envbuf, pEnv->index, sizeof(ENVVAR*), pBat_EnvCompName);
+}
+

@@ -24,14 +24,32 @@
 
 #include "pBat_Core.h"
 
-void pBat_ExpandAlias(ESTR* lpRet, char* lpCh, char* lpExp)
+void pBat_ExpandDef(ESTR* lpRet, char* lpCh, char* lpExp)
 {
-    ESTR* lpEsRet=pBat_EsInit();
+    int i;
+    char var[]="$1";
+    ESTR *restrict ret=pBat_EsInit(),
+        *restrict param=pBat_EsInit();
 
-    pBat_EsCpy(lpEsRet, lpExp);
-    pBat_EsCat(lpEsRet, " ");
-    pBat_EsCat(lpEsRet, lpCh);
+    pBat_EsCpy(ret, lpExp);
 
-    pBat_EsCpyE(lpRet, lpEsRet);
-    pBat_EsFree(lpEsRet);
+    lpCh = pBat_SkipBlanks(lpCh);
+    pBat_EsReplace(ret, "$*", lpCh);
+
+    for (i = 1; i <= 10; i++) {
+
+        var[1] = '0' + i;
+
+        if (lpCh
+            && (lpCh = pBat_GetNextParameterEs(lpCh, param)))
+            pBat_EsReplace(ret, var, param->str);
+        else
+            pBat_EsReplace(ret, var, "");
+    }
+
+    pBat_EsCpyE(lpRet, ret);
+
+    pBat_EsFree(ret);
+    pBat_EsFree(param);
+
 }

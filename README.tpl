@@ -78,6 +78,13 @@ On the other hand, Picobat also provides you with with a bunch of extensions:
   -- Extensions for {IF} command to automatically detect floating-point 
   and compare floating-point numbers.
 
+- The amazing possibility to define functions and procedures in batch using
+ the Picobat specific {doc/def|DEF} command:
+
+${DEF ADD=(set /a $1=$2+$3)
+ADD result 4 3
+ECHO result = %result%}
+
 - The ground-breaking possibility to specify logical expressions using 
   {AND} and {OR} and the new {doc/if|IF} extensions, like in the following 
   example:
@@ -110,11 +117,6 @@ CALL /e :mylabel myfile}
 
 - Extended {doc/help|HELP} providing search capabilities and help in various formats 
   including {HTML}.
-
-- The new command {doc/alias|ALIAS} allowing to set up simple and fast aliases for the 
-  commands:
-
-${ALIAS dbs=dir /b /s}
 
 - An extension to the {doc/find|FIND} command to use simple regular expressions:
 

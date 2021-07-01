@@ -71,8 +71,9 @@ char* pBat_GetBlockLineEndEx(char* pch, int par_end)
 
         return next;
 
-    } else if ((strnicmp(pch, "if", 2) || !pBat_IsDelim(*(pch+2)))
-               && (strnicmp(pch, "for", 3) ||  !pBat_IsDelim(*(pch+3)))) {
+    } else if ((strnicmp(pch, "if", 2) || !pBat_IsDelim(*(pch + 2)))
+               && (strnicmp(pch, "for", 3) ||  !pBat_IsDelim(*(pch + 3)))
+               && (strnicmp(pch, "def", 3) || !pBat_IsDelim(*(pch + 3)))) {
 
         /* if there is no if or for, nor (, return the
            terminal character (here it is just \n to be able to
@@ -217,8 +218,9 @@ char* pBat_GetNextBlockBeginEx(char* pch, int bIsBlockCmd)
 
         pch = pBat_SkipAllBlanks(pch);
 
-        if ((strnicmp(pch, "if", 2) || !pBat_IsDelim(*(pch+2)))
-               && (strnicmp(pch, "for", 3) ||  !pBat_IsDelim(*(pch+3)))
+        if ((strnicmp(pch, "if", 2) || !pBat_IsDelim(*(pch + 2)))
+               && (strnicmp(pch, "for", 3) ||  !pBat_IsDelim(*(pch + 3)))
+               && (strnicmp(pch, "def", 3) || !pBat_IsDelim(*(pch + 3)))
                && *pch != '(' ) {
 
             if ((next = pBat_SearchToken_Hybrid(pch, "\n", "&|")) == NULL)

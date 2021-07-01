@@ -29,6 +29,8 @@ typedef struct ENVVAR {
                    it is not portable on most platforms through standard
                    libC calls */
     char* content; /* a pointer to the content of the variable */
+    struct ENVVAR* previous;
+    int inherit;
     size_t size; /* size for elaborating blocks */
 } ENVVAR;
 
@@ -60,5 +62,10 @@ void pBat_ApplyEnv(ENVBUF* pEnv);
 void pBat_UnApplyEnv(ENVBUF* pEnv);
 
 void pBat_EnvFree(ENVBUF* pEnv);
+
+#define PBAT_ENV_LOCAL_PREFIX '_'
+
+void pBat_PushEnvLocals(ENVBUF *pEnv);
+void pBat_PopEnvLocals(ENVBUF *pEnv);
 
 #endif
