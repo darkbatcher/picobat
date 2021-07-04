@@ -52,9 +52,9 @@ void Tea_MDOutputHandler(TEAPAGE* lpTeaPage, FILE* pFile, int i, char** argv)
 		case TEA_BLOCK_HEADING:
 
             if (first) {
-                fprintf(pFile, "# %s #", lpTeaPage->lpBlockContent);
+                fprintf(pFile, "# %s", lpTeaPage->lpBlockContent);
             } else {
-                fprintf(pFile, "## %s ##", lpTeaPage->lpBlockContent);
+                fprintf(pFile, "## %s", lpTeaPage->lpBlockContent);
             }
 
 			break;

@@ -45,7 +45,7 @@
 #else /* WIN32 */
 
 #define PBAT_RUNFILE_RELEASE()
-#define PBAT_RUNFILE_LOCK ()
+#define PBAT_RUNFILE_LOCK()
 
 #endif /* WIN32 */
 

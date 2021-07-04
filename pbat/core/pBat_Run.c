@@ -887,7 +887,7 @@ void pBat_SigHandlerBreak(int sig)
     chdir(lpCurrentDir);
     pBat_ApplyEnv(lpeEnv);
 
-    execl(lppBatExec, lppBatExec, attr->str);
+    execl(lppBatExec, lppBatExec, attr->str, NULL);
 }
 
 #elif defined WIN32
@@ -913,7 +913,6 @@ void pBat_SigHandlerBreak(int sig)
 BOOL WINAPI pBat_SigHandler(DWORD dwCtrlType)
 {
     int choice, i;
-    HANDLE thread;
     ESTR* args;
 
     STARTUPINFO si;
@@ -924,14 +923,10 @@ BOOL WINAPI pBat_SigHandler(DWORD dwCtrlType)
 		case CTRL_BREAK_EVENT:
 		    SetConsoleCtrlHandler(NULL, TRUE);
 
-            /* Request a handle to the main thread and try to freeze it */
-            thread = OpenThread(THREAD_ALL_ACCESS, FALSE, iMainThreadId);
-
-            if (thread == NULL)
-                pBat_ShowErrorMessage(PBAT_BREAK_ERROR, NULL, -1);
-
-            /* suspend the main thread */
-            SuspendThread(thread);
+            /* Stop other processes from acquiring the pBat_RunFile()
+               lock. This prevents any change to the actual value of
+               stdin, stdout or stderr */
+            PBAT_RUNFILE_LOCK();
 
             if (bIsScript) {
                 /* we are running a script, so give two options : either
@@ -962,16 +957,11 @@ BOOL WINAPI pBat_SigHandler(DWORD dwCtrlType)
 
                 if (choice == PBAT_ASK_NO) {
 
-                    ResumeThread(thread);
-                    CloseHandle(thread);
+                    PBAT_RUNFILE_RELEASE();
                     return TRUE;
 
                 }
             }
-
-            /* Kill the main thread right now */
-            TerminateThread(thread, -1);
-            CloseHandle(thread);
 
             /* Odds are that some pbat internal structures may
                have been corrupted by the somehow brutal kill of the
@@ -1024,7 +1014,6 @@ BOOL WINAPI pBat_SigHandler(DWORD dwCtrlType)
                 fputs(PBAT_NL, stderr);
                 fprintf(stderr, lpQuitMessage);
                 pBat_Getch(stderr);
-
 
                 exit(-1);
 
