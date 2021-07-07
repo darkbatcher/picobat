@@ -299,7 +299,7 @@ int pBat_RunFile(EXECINFO* info, int* error)
         pBat_ApplyStreams(lppsStreamStack);
         chdir(info->dir);
 
-        pBat_SetFdInheritance(fd[1], 0);
+        pBat_SetFdInheritance(fds[1], 0);
 
         /* loop through fds and close the one that we don't need
            anymore (ie. everything else than 0,1,2 and fds[1]
