@@ -394,7 +394,7 @@ LIBPBAT void            pBat_GetMousePos(FILE* f, char on_move, CONSOLECOORD* co
 #else
 /* The path may refer to a unc-type path */
 #define PBAT_TEST_SEPARATOR(p) (*(p) == '/' || *(p) == '\\')
-#define PBAT_TEST_UNC_PATH(p)  (PBAT_TEST_SEPARATOR(p) && PBAT_TEST_SEPARATOR(p+1))
+#define PBAT_TEST_UNC_PATH(p)  (*(p) == '\\' && *(p+1) == '\\')
 #define PBAT_TEST_ROOT_PATH(p) (PBAT_TEST_SEPARATOR(p) && !PBAT_TEST_SEPARATOR(p+1))
 #define PBAT_TEST_DRIVE_PATH(p) (*(p) && *(p+1)==':' && PBAT_TEST_SEPARATOR(p+2))
 #define PBAT_TEST_ABSOLUTE_PATH(p) (PBAT_TEST_UNC_PATH(p) || PBAT_TEST_ROOT_PATH(p) \
@@ -404,7 +404,7 @@ LIBPBAT void            pBat_GetMousePos(FILE* f, char on_move, CONSOLECOORD* co
 #define PBAT_DEF_SEPARATOR '\\'
 
 #define PBAT_TEST_SEPARATOR_W(p) (*(p) == L'/' || *(p) == L'\\')
-#define PBAT_TEST_UNC_PATH_W(p)  (PBAT_TEST_SEPARATOR_W(p) && PBAT_TEST_SEPARATOR_W(p+1))
+#define PBAT_TEST_UNC_PATH_W(p)  (*(p) == L'\\' && *(p+1) == L'\\')
 #define PBAT_TEST_ROOT_PATH_W(p) (PBAT_TEST_SEPARATOR_W(p) && !PBAT_TEST_SEPARATOR_W(p+1))
 #define PBAT_TEST_DRIVE_PATH_W(p) (*(p) && *(p+1)==':' && PBAT_TEST_SEPARATOR_W(p+2))
 #define PBAT_TEST_ABSOLUTE_PATH_W(p) (PBAT_TEST_UNC_PATH_W(p) || PBAT_TEST_ROOT_PATH_W(p) \
