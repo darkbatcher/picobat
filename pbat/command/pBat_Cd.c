@@ -68,13 +68,19 @@
     windows ! This allows doing proper treatment when being a disk root ...
  */
 
-
-
 int __inline__ pBat_Canonicalize(char* path)
 {
     char *previous = NULL, *next, *orig = path;
     size_t size = strlen(path) + 1;
 
+    /* If the path is UNC, just skip the very first part */
+    if (PBAT_TEST_UNC_PATH(path)) {
+        path += 2;
+	    
+	while (*path && !PBAT_TEST_SEPARATOR(path))
+		path ++;
+
+    }
 
     /* first pass to clean multiple separators and "." characters */
     while (*path) {
