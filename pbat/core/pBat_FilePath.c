@@ -183,7 +183,7 @@ __inline__ char* pBat_FullPathDup(const char* p)
 
             *ret = *lpCurrentDir;
             *(ret + 1) = ':';
-            strcat(ret, path);
+            memcpy(ret + 2, path, needed);
 
             return ret;
         }
