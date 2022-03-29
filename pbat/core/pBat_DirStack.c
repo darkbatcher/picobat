@@ -58,7 +58,7 @@ bool pBat_PushDir(const char *dir)
   size_t dir_len = strlen(dir) + 1;
   char *dir_copy = malloc(dir_len);
   if (dir_copy == NULL) {
-    pBat_ShowErrorMessage(PBAT_FAILED_ALLOCATION, "pBat_PushDir", 0);
+    pBat_ShowErrorMessage(PBAT_FAILED_ALLOCATION, "pBat_PushDir()", 0);
     return true;
   }
 

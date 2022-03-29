@@ -417,7 +417,7 @@ int pBat_CmdSetEval(ESTR* lpExpression)
                               __FILE__ "/pBat_CmdSetEvalFloat()" , -1);
 
 	/* create evaluator */
-	if (!(evaluator=evaluator_create(lpEqual+1, &fmode))) {
+	if (!(evaluator=evaluator_create(lpEqual+1, &fmode, lpstSymbols))) {
 
 		pBat_ShowErrorMessage(PBAT_INVALID_EXPRESSION, lpEqual+1, FALSE);
 		status = PBAT_INVALID_EXPRESSION;

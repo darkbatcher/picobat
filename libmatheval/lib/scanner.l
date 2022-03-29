@@ -57,8 +57,8 @@
 { result = input_from_string (buffer, max_size); }
 
 /* Variables used to communicate with code using scanner.  */
-extern SymbolTable *symbol_table; /* Evaluator symbol table.  */
-extern char *input_string; /* String representing function.  */
+extern _Thread_local SymbolTable *symbol_table; /* Evaluator symbol table.  */
+extern _Thread_local char *input_string; /* String representing function.  */
 
 /* Read next max_size character from string into buffer.  */
 static int input_from_string (char *buffer, int max_size);

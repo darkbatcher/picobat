@@ -30,6 +30,8 @@
 #include <locale.h>
 #include <signal.h>
 
+/* libmatheval symbol table */
+#include <symbol_table.h>
 
 #if defined WIN32
 #include <conio.h>
@@ -186,6 +188,9 @@ void pBat_Init(void)
     pBat_InitVar(lpInitVar);
 
     lppsStreamStack=pBat_InitStreamStack();
+
+    /* Prepare libmatheval symbol table. */
+    lpstSymbols = symbol_table_create(MIN_TABLE_LENGTH);
 }
 
 int pBat_InitSetModes(char* str)

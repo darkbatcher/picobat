@@ -32,6 +32,7 @@ void pBat_Exit(void)
 	pBat_FreeLocalBlock(lpvArguments);
 	pBat_FreeEnvStack();
 	pBat_EnvFree(lpeEnv);
+	symbol_table_destroy(lpstSymbols);
 
     /* pBat_WaitForAllThreads(); */
 

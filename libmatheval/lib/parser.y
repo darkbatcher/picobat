@@ -47,9 +47,9 @@
 #include "node.h"
 
 /* Variables used to communicate with code using parser.  */
-extern Node* root; /* Root of tree representation of function.  */
-extern SymbolTable *symbol_table; /* Evaluator symbol table.  */
-extern int ok; /* Flag representing success of parsing.  */
+extern _Thread_local Node* root; /* Root of tree representation of function.  */
+extern _Thread_local SymbolTable *symbol_table; /* Evaluator symbol table.  */
+extern _Thread_local int ok; /* Flag representing success of parsing.  */
 
 /* Report parsing error.  */
 int yyerror (char *s);

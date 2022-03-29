@@ -26,11 +26,13 @@
 extern          "C" {
 #endif
 
+	#include "symbol_table.h"
+
 	/* Create evaluator from string representing function.  Function
 	 * returns pointer that should be passed as first argument to all
 	 * other library functions.  If an error occurs, function will
 	 * return null pointer. */
-	extern void    *evaluator_create(char *string, int* pfloats);
+	extern void    *evaluator_create(char *string, int* pfloats, SymbolTable *symbols);
 
 	/* Destroy evaluator specified. */
 	extern void     evaluator_destroy(void *evaluator);

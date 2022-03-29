@@ -22,6 +22,9 @@
 #include "pBat_Core.h"
 #include "../../config.h"
 
+/* libmatheval symbol table */
+#include "symbol_table.h"
+
 int iMainThreadId;
 char* lpInitVar[]= {
 	"PBAT_VERSION", PBAT_VERSION,
@@ -87,6 +90,8 @@ __thread INPUT_FILE ifIn;
 __thread char lpCurrentDir[FILENAME_MAX];
 
 __thread char* lpAltPromptString = NULL;
+
+__thread SymbolTable *lpstSymbols = NULL; /* libmatheval symbol table */
 
 #ifdef WIN32
 #define environ _environ

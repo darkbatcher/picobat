@@ -29,7 +29,7 @@
 #include "common.h"
 #include "node.h"
 
-extern int floats;
+extern _Thread_local int floats;
 extern double(*get_var)(const char*);
 extern double(*set_var)(const char*, double);
 

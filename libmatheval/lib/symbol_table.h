@@ -26,6 +26,9 @@
 #include "config.h"
 #endif
 
+/* Minimal length of evaluator symbol table.  */
+#define MIN_TABLE_LENGTH 211
+
 /* Data structure representing symbol table record.  */
 typedef struct _Record {
 	struct _Record *next;	/* Pointer to next record.  */
