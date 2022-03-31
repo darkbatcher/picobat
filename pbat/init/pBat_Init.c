@@ -30,8 +30,12 @@
 #include <locale.h>
 #include <signal.h>
 
+#include "../../config.h"
+
+#ifndef PBAT_USE_FASTEVAL
 /* libmatheval symbol table */
 #include <symbol_table.h>
+#endif
 
 #if defined WIN32
 #include <conio.h>
@@ -50,7 +54,6 @@
 #include "../core/pBat_Debug.h"
 #include "../command/pBat_Commands.h"
 
-#include "../../config.h"
 #include <gettext.h>
 
 void pBat_AssignCommandLine(int c, char** argv)
@@ -189,8 +192,10 @@ void pBat_Init(void)
 
     lppsStreamStack=pBat_InitStreamStack();
 
+    #ifndef PBAT_USE_FASTEVAL
     /* Prepare libmatheval symbol table. */
     lpstSymbols = symbol_table_create(MIN_TABLE_LENGTH);
+    #endif
 }
 
 int pBat_InitSetModes(char* str)

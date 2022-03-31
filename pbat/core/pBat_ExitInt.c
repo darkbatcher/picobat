@@ -22,6 +22,7 @@
 #include <stdlib.h>
 
 #include "pBat_Core.h"
+#include "../../config.h"
 
 
 void pBat_Exit(void)
@@ -32,7 +33,10 @@ void pBat_Exit(void)
 	pBat_FreeLocalBlock(lpvArguments);
 	pBat_FreeEnvStack();
 	pBat_EnvFree(lpeEnv);
+
+	#ifndef PBAT_USE_FASTEVAL
 	symbol_table_destroy(lpstSymbols);
+	#endif
 
     /* pBat_WaitForAllThreads(); */
 

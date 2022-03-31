@@ -48,6 +48,10 @@
   #define PBAT_NO_LINENOISE 1
 #endif
 
+#if @use_fasteval@
+  #define PBAT_USE_FASTEVAL 1
+#endif
+
 #define PACKAGE  "@PACKAGE@"
 #define PACKAGE_BUGREPORT "@PACKAGE_BUGREPORT@"
 #define PACKAGE_NAME "@PACKAGE@"

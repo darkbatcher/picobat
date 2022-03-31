@@ -22,6 +22,8 @@
 #define _XOPEN_SOURCE 700
 #endif
 
+#include "../../config.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -30,7 +32,11 @@
 #include <string.h>
 #include <errno.h>
 
+#ifdef PBAT_USE_FASTEVAL
+#include <fasteval.h>
+#else
 #include <matheval.h>
+#endif
 
 #include <libpBat.h>
 
@@ -416,6 +422,7 @@ int pBat_CmdSetEval(ESTR* lpExpression)
         pBat_ShowErrorMessage(PBAT_LOCK_MUTEX_ERROR,
                               __FILE__ "/pBat_CmdSetEvalFloat()" , -1);
 
+	#ifndef PBAT_USE_FASTEVAL
 	/* create evaluator */
 	if (!(evaluator=evaluator_create(lpEqual+1, &fmode, lpstSymbols))) {
 
@@ -430,6 +437,9 @@ int pBat_CmdSetEval(ESTR* lpExpression)
 	dResult=evaluator_evaluate(evaluator);
 
 	evaluator_destroy(evaluator);
+	#else
+	dResult = fasteval_evaluate(lpEqual+1, _pBat_SetGetVar, _pBat_SetSetVar);
+	#endif
 
 	/* clear if operator is recognized */
 

@@ -49,7 +49,7 @@ IF exist !USERPROFILE!/.PBAT/PBAT_Auto.bat CALL !USERPROFILE!/.PBAT/PBAT_Auto.ba
 
 IF %PBAT_IS_SCRIPT%==false (
 PECHO $x9E; _____ _           ____        _     Picobat [%PBAT_VERSION%]                         
-ECHO ^|  __ (_^)         ^|  _ \      ^| ^|    Copyright (c^) 2010-2021                 
+ECHO ^|  __ (_^)         ^|  _ \      ^| ^|    Copyright (c^) 2010-2022                 
 ECHO ^| ^|__^) ^|  ___ ___ ^| ^|_^) ^| __ _^| ^|_         Romain Garbi, Teddy Astie ^&c.     
 ECHO ^|  ___/ ^|/ __/ _ \^|  _ ^< / _` ^| __^|                                          
 ECHO ^| ^|   ^| ^| (_^| (_^) ^| ^|_^) ^| (_^| ^| ^|_   This is free software, under the GPLv3. 

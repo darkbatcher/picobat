@@ -34,3 +34,7 @@ dump/dump.h
 libmatheval/femto-test\.out
 modules/batbox/batbox
 modules/sample/sample
+
+libfasteval/lib/parser.c
+libfasteval/lib/parser.h
+libfasteval/lib/scanner.c

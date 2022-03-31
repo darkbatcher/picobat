@@ -89,8 +89,11 @@ void* pBat_CloneTrampoline(void* data)
     _fOutput = fOutput;
 
     lpAltPromptString = NULL;
+
+    #ifndef PBAT_USE_FASTEVAL
     /* NOTE: Assumes that symbol table is constant. */
     lpstSymbols = symbol_table_create(MIN_TABLE_LENGTH);
+    #endif
 
     func = cloned->fn;
     arg = cloned->arg;

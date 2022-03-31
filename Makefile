@@ -23,6 +23,7 @@ endif
 BINDIR ?= bin
 SUBDIRS_ADD ?=
 SUBDIR_PO =
+SUBDIRS_EVAL =
 
 ifeq ($(use_libcu8),1)
 	SUBDIRS_ADD = libcu8
@@ -32,7 +33,13 @@ ifeq ($(use_nls),1)
 	SUBDIR_PO = po
 endif
 
-SUBDIRS = microgettext libpbat libmatheval $(SUBDIRS_ADD) pbat pbatize dump tea \
+ifeq ($(use_fasteval),1)
+	SUBDIRS_EVAL = libfasteval
+else
+	SUBDIRS_EVAL = libmatheval
+endif
+
+SUBDIRS = microgettext libpbat $(SUBDIRS_EVAL) $(SUBDIRS_ADD) pbat pbatize dump tea \
 			scripts modules $(SUBDIR_PO)
 TEAFILES = README.tea WHATSNEW.tea GUIDELINES.tea THANKS.tea
 TEXTFILES = $(TEAFILES:.tea=.txt)
@@ -108,7 +115,7 @@ PROGRAMS = mimeopen xdg-open
 FUNCTIONS = WIN32 MINGW_W64
 LIBS = pthread m dl
 FLAGS = PIC
-OPTIONS = libcu8 nls cmdlycorrect console modules linenoise w10ansi
+OPTIONS = libcu8 nls cmdlycorrect console modules linenoise w10ansi fasteval
 DEFAULTOPTIONS = no-libcu8 use-nls no-cmdlycorrect use-console use-modules \
 				 use-linenoise no-w10ansi
 SUBCONFIG = libcu8 libmatheval
