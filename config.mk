@@ -46,14 +46,20 @@ LIBPBAT_DIR = $(ROOTDIR)/libpbat
 LIBPBAT_INC = -I$(LIBPBAT_DIR)
 LIBPBAT_LD = -L$(LIBPBAT_DIR) -lpBat
 
+ifneq (,$(wildcard $(ROOTDIR)/femto-config.mk))
+    include $(ROOTDIR)/femto-config.mk
+endif
+
+ifeq ($(use_fasteval),1)
+	LIBMATHEVAL_DIR = $(ROOTDIR)/libfasteval
+	LIBMATHEVAL_INC = -I$(LIBMATHEVAL_DIR)/lib
+	LIBMATHEVAL_LD = -L$(LIBMATHEVAL_DIR) -lfasteval
+else
 # libmatheval
 LIBMATHEVAL_DIR = $(ROOTDIR)/libmatheval
 
 LIBMATHEVAL_INC = -I$(LIBMATHEVAL_DIR)/lib
 LIBMATHEVAL_LD = -L$(LIBMATHEVAL_DIR) -lmatheval
-
-ifneq (,$(wildcard $(ROOTDIR)/femto-config.mk))
-    include $(ROOTDIR)/femto-config.mk
 endif
 
 #ifeq ($(fn_MINGW_W64),1)
