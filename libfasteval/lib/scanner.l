@@ -82,29 +82,32 @@ identifier {nodelim}*{nodelimnb}*{nodelim}*
 {whitespace}
 
 {integer} {
-  evaluator_lval.number = strtod(yytext, NULL);
+  evaluator_lval.number.is_double = 0;
+  evaluator_lval.number.value.i = strtoll(yytext, NULL, 0);
   return NUMBER;
 }
 
 {float} {
-  evaluator_lval.number = strtod(yytext, NULL);
+  evaluator_lval.number.is_double = 1;
+  evaluator_lval.number.value.d = strtod(yytext, NULL);
   return NUMBER;
 }
 
 {constant} {
-  evaluator_lval.number = lookup_variable(yytext);
+  evaluator_lval.number.is_double = 1;
+  evaluator_lval.number.value.d = lookup_variable(yytext);
   return NUMBER;
 }
 
 {function} {
   /* Find symbol table record corresponding to function name.  */
-  evaluator_lval.func_name = strdup(yytext);
+  evaluator_lval.name = strdup(yytext);
   return FUNCTION;
 }
 
 {identifier} {
-  evaluator_lval.number = get_var(yytext);
-  return NUMBER;
+  evaluator_lval.name = strdup(yytext);
+  return VARIABLE;
 }
 
 "~" {
@@ -166,6 +169,10 @@ identifier {nodelim}*{nodelimnb}*{nodelim}*
 
 ")" {
   return ')';
+}
+
+"=" {
+  return '=';
 }
 
 "\n" {
