@@ -117,7 +117,7 @@ LIBS = pthread m dl
 FLAGS = PIC
 OPTIONS = libcu8 nls cmdlycorrect console modules linenoise w10ansi fasteval
 DEFAULTOPTIONS = no-libcu8 use-nls no-cmdlycorrect use-console use-modules \
-				 use-linenoise no-w10ansi no-fasteval
+				 use-linenoise no-w10ansi use-fasteval
 SUBCONFIG = libcu8 libmatheval
 ADDITIONALVARS = HOST BINDIR YEAR VERSION PACKAGE PACKAGE_URL PACKAGE_BUGREPORT
 
