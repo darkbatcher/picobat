@@ -33,6 +33,7 @@ void pBat_Exit(void)
 	pBat_FreeLocalBlock(lpvArguments);
 	pBat_FreeEnvStack();
 	pBat_EnvFree(lpeEnv);
+	pBat_DirStackFree();
 
 	#ifndef PBAT_USE_FASTEVAL
 	symbol_table_destroy(lpstSymbols);

@@ -245,7 +245,7 @@ void pBat_ShowErrorMessage(unsigned int iErrorNumber,
                            const char* lpComplement,
                            int iExitCode)
 {
-    char* msg;
+	char* msg = "Undefined";
 
 	pBat_SetConsoleTextColor(fError, PBAT_GET_BACKGROUND(colColor) | PBAT_FOREGROUND_IRED);
 
