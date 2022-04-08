@@ -46,7 +46,7 @@ lib/scanner.c: lib/scanner.l lib/parser.c
 	$(LEX) -Pevaluator_ -L -o$@ lib/scanner.l
 
 lib/parser.c: lib/parser.y
-	$(YACC) -v -g -d -p evaluator_ -o $@ $^
+	$(YACC) -d -p evaluator_ -o $@ $^
 	
 # stuff to check
 PROGRAMS =

@@ -63,34 +63,46 @@ double fasteval_evaluate(char *expr, double (*get)(const char *),
   return result;
 }
 
+int compare_strings(const char **restrict a, const char **restrict b)
+{
+  return strcmp(*a, *b);
+}
+
 double evaluate_function(const char *name, double arg)
 {
-  /* Symbol table predefined functions names. */
+  /* Symbol table predefined functions names.
+   * Must be stored in lexicographical order !
+   */
 	const char *functions_names[] = {
-		"exp", "log", "sqrt", "sin", "cos", "tan", "cot", "sec",
-		"csc", "asin", "acos", "atan", "acot", "asec", "acsc",
-		"sinh", "cosh", "tanh", "coth", "sech", "csch",
-		"asinh", "acosh", "atanh", "acoth", "asech", "acsch",
-		"abs", "step", "delta", "nandelta", "erf",
+    "abs", "acos", "acosh", "acot", "acoth", "acsc",
+    "acsch", "asec", "asech", "asin", "asinh", "atan",
+    "atanh", "cos", "cosh", "cot", "coth", "csc", "csch",
+    "delta", "erf", "exp", "log", "nandelta", "sec", "sech",
+    "sin", "sinh", "sqrt", "step", "tan", "tanh",
 	};
 
 	double (* const functions[]) (double) = {
-    exp, log, sqrt, sin, cos, tan, math_cot, math_sec,
-    math_csc, asin, acos, atan, math_acot, math_asec, math_acsc,
-    sinh, cosh, tanh, math_coth, math_sech, math_csch,
-    math_asinh, math_acosh, math_atanh, math_acoth, math_asech, math_acsch,
-    fabs, math_step, math_delta, math_nandelta, erf
+    fabs, acos, acosh, math_acot, math_acoth, math_acsc,
+    math_acsch, math_asec, math_asech, asin, asinh, atan,
+    atanh, cos, cosh, math_cot, math_coth, math_csc, math_csch,
+    math_delta, erf, exp, log, math_nandelta, math_sec, math_sech,
+    sin, sinh, sqrt, math_step, tan, tanh,
   };
 
-  for (size_t i = 0; i < sizeof(functions) / sizeof(*functions); i++)
-    if (!strcmp(name, functions_names[i]))
-      return functions[i](arg);
+  const char **matched_name = bsearch(&name, functions_names, 
+    sizeof(functions) / sizeof(*functions), sizeof(const char *),
+    (int (*)(const void *, const void *))compare_strings
+  );
+  
+  if (matched_name) {
+    size_t i = matched_name - functions_names;
+
+    return functions[i](arg);
+  }
 
   /** TODO: report error */
   return NAN;
 }
-
-#include <stdio.h>
 
 double lookup_variable(char *name)
 {
