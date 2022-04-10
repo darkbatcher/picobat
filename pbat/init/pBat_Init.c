@@ -196,6 +196,8 @@ void pBat_Init(void)
     /* Prepare libmatheval symbol table. */
     lpstSymbols = symbol_table_create(MIN_TABLE_LENGTH);
     #endif
+
+    pBat_EsCacheBuild(&ecEstrCache);
 }
 
 int pBat_InitSetModes(char* str)

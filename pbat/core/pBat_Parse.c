@@ -63,8 +63,8 @@ PARSED_STREAM* pBat_ParseOutput(ESTR* lpesLine)
 	char lpCorrect[]="1";
 	char cChar;
 
-	ESTR *lpesFinal=pBat_EsInit(),
-	      *lpesParam=pBat_EsInit();
+	ESTR *lpesFinal=pBat_EsInit_Cached(TAG_PARSE_OUTPUT_FINAL),
+	      *lpesParam=pBat_EsInit_Cached(TAG_PARSE_OUTPUT_PARAM);
 
 	PARSED_STREAM* lppssStart;
 
@@ -277,16 +277,16 @@ PARSED_STREAM* pBat_ParseOutput(ESTR* lpesLine)
 	pBat_EsCpyE(lpesLine, lpesFinal);
 
 
-	pBat_EsFree(lpesFinal);
-	pBat_EsFree(lpesParam);
+	pBat_EsFree_Cached(lpesFinal);
+	pBat_EsFree_Cached(lpesParam);
 
 	return lppssStart;
 
 error:
 	/* if some fail happened, free memory. However, the
 	   origin string will be useless */
-	pBat_EsFree(lpesFinal);
-	pBat_EsFree(lpesParam);
+	pBat_EsFree_Cached(lpesFinal);
+	pBat_EsFree_Cached(lpesParam);
 	return NULL;
 
 }
@@ -428,7 +428,7 @@ PARSED_LINE* pBat_AllocParsedLine(PARSED_LINE* lppsStream)
 			lppsStream->lppsNode=lppsNewElement;
 
 		lppsNewElement->lppsNode = NULL;
-		lppsNewElement->lpCmdLine = pBat_EsInit();
+		lppsNewElement->lpCmdLine = pBat_EsInit(); /* caching is not guaranteed */
 		lppsNewElement->sStream = NULL;
 
 		return lppsNewElement;

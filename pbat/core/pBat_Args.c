@@ -96,13 +96,13 @@ int pBat_GetParameterPointers(char** lpPBegin, char** lpPEnd,
  */
 char* pBat_GetNextParameter(char* lpLine, char* lpResponseBuffer, int iLength)
 {
-	ESTR* lpParameter=pBat_EsInit();
+	ESTR* lpParameter=pBat_EsInit_Cached(TAG_ARGS_PARAMETER);
 
 	lpLine=pBat_GetNextParameterEs(lpLine, lpParameter);
 	strncpy(lpResponseBuffer, pBat_EsToChar(lpParameter), iLength);
 	lpResponseBuffer[iLength-1]='\0';
 
-	pBat_EsFree(lpParameter);
+	pBat_EsFree_Cached(lpParameter);
 	return lpLine;
 }
 
@@ -193,8 +193,7 @@ char* pBat_GetNextParameterEsD(char* lpLine, ESTR* lpReturn, const
 
 next:
 
-	if (pBat_GetParameterPointers(&lpBegin, &lpEnd, lpDelims, lpLine)
-		==FALSE)
+	if (pBat_GetParameterPointers(&lpBegin, &lpEnd, lpDelims, lpLine) == FALSE)
 		return NULL;
 
     quote = *lpBegin;

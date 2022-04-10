@@ -487,8 +487,8 @@ RestartSearch:
 int pBat_RunBlock(BLOCKINFO* lpbkInfo)
 {
 
-	ESTR *lpEsLine = pBat_EsInit(),
-		 *lpEsBlock = pBat_EsInit();
+	ESTR *lpEsLine = pBat_EsInit_Cached(TAG_RUNBLOCK_LINE),
+		 *lpEsBlock = pBat_EsInit_Cached(TAG_RUNBLOCK_BLOCK);
 
 	char *lpToken,
          *lpEnd,
@@ -579,8 +579,8 @@ int pBat_RunBlock(BLOCKINFO* lpbkInfo)
 	/* releases the lock */
 	pBat_SetStreamStackLockState(lppsStreamStack, iOldState);
 
-	pBat_EsFree(lpEsLine);
-	pBat_EsFree(lpEsBlock);
+	pBat_EsFree_Cached(lpEsLine);
+	pBat_EsFree_Cached(lpEsBlock);
 
 	return iErrorLevel;
 }

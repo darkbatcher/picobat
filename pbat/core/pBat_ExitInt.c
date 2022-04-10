@@ -39,6 +39,8 @@ void pBat_Exit(void)
 	symbol_table_destroy(lpstSymbols);
 	#endif
 
+	pBat_EsCacheDrop(&ecEstrCache);
+
     /* pBat_WaitForAllThreads(); */
 
     fclose(fInput);

@@ -83,6 +83,7 @@ extern __thread FILE *fOutput, *_fOutput; /* current thread output stream */
 extern __thread FILE *fError, *_fError; /* current thread error stream */
 extern __thread ENVSTACK* lpesEnv;
 extern __thread char lpCurrentDir[FILENAME_MAX]; /* current path */
+extern __thread ESTRCACHE ecEstrCache; /* ESTR cache */
 
 #ifndef PBAT_USE_FASTEVAL
 extern __thread SymbolTable *lpstSymbols; /* libmatheval symbol table */

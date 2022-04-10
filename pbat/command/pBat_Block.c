@@ -44,7 +44,7 @@ int pBat_CmdBlock(char* lpLine)
 {
 	BLOCKINFO bkCode;
 	char* lpToken;
-	ESTR* lpNextBlock=pBat_EsInit();
+	ESTR* lpNextBlock=pBat_EsInit_Cached(TAG_BLOCK_NEXT_BLOCK);
 	int status = PBAT_NO_ERROR;
 
 	pBat_GetNextBlockEs(lpLine, lpNextBlock);
@@ -86,6 +86,6 @@ int pBat_CmdBlock(char* lpLine)
 	pBat_RunBlock(&bkCode);
 
 error:
-	pBat_EsFree(lpNextBlock);
+	pBat_EsFree_Cached(lpNextBlock);
 	return status ? status : iErrorLevel;
 }
