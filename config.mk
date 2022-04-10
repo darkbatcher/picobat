@@ -71,12 +71,6 @@ ifeq ($(use_libcu8),1)
 	LIBCU8_INC = -I$(ROOTDIR)/libcu8/include
 endif
 
-ifeq ($(use_nls),1)
-	ifeq ($(lib_intl),1)
-		LINTL_LD = -lintl
-	endif
-endif
-
 ifeq ($(fn_WIN32),0)
 	ifeq ($(lib_pthread),1)
 		LPTHREAD_LD = -lpthread
