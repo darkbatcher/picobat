@@ -252,7 +252,7 @@ static const char* iso639[] = {
 "uz" ,"uzbek",
 "ve" ,"venda",
 "vi" ,"vietnamese",
-"vo" ,"volapük",
+"vo" ,"volapï¿½k",
 "wa" ,"walloon",
 "cy" ,"welsh",
 "cy" ,"welsh",
@@ -515,7 +515,7 @@ char* microgettext_make_domain_path(const char* restrict d, int cat)
     int i;
 
     /* loop through transcriptions to find the appropriate category */
-    for (i = 0; i < sizeof(locale_categories); i++)
+    for (i = 0; i < sizeof(locale_categories) / sizeof(*locale_categories); i++)
         if (cat == locale_categories[i])
             cat_str = locale_strings[i];
 

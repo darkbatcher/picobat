@@ -19,6 +19,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 #
+CFLAGS := -O2 -ggdb
 SRC_FILES = microgettext.c
 
 OBJ_FILES = $(SRC_FILES:.c=.o)
@@ -27,6 +28,9 @@ AR ?= ar
 RANLIB ?= ranlib
 
 all: libmicrogettext.a
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 clean:
 	rm -f $(OBJ_FILES) libmicrogettext.a
