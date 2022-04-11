@@ -150,7 +150,7 @@ __inline__ char* xstrdup(const char* str)
 int pBat_LoadBatchScript(struct batch_script_t* script)
 {
     FILE* file;
-    ESTR *line = pBat_EsInit(),
+    ESTR *line = pBat_EsInit_Cached(),
          *cmd = pBat_EsInit_Cached();
     struct cmdlines_t* newcmd;
     struct labels_t* newlbl, *last=NULL;

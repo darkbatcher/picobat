@@ -49,7 +49,7 @@ int pBat_EsCacheBuild(ESTRCACHE *lpecCache)
       lpecCache->lpesPool[i].len = DEFAULT_ESTR_SIZE;
       lpecCache->lpesPool[i].str[0] = '\0';
 
-      STATUS_ON(i);
+      STATUS_OFF(i);
     } else {
       /* If this malloc fails, it's probably going to fail somewhere else, but
          it will not prevent us to build the cache but those cache entries will
@@ -75,12 +75,13 @@ ESTR *pBat_EsCacheInit(ESTRCACHE *lpecCache)
 {
   /* Find a available ESTR from cache. */
   for (size_t i = 0; i < ESTR_STATUS_ELEM_COUNT; i++) {
-    if (lpecCache->lpbStatus[i] != ~(uint32_t)0) {
-      register uint32_t status = lpecCache->lpbStatus[i];
+    register uint32_t status = lpecCache->lpbStatus[i];
+
+    if (status != ~(uint32_t)0) {
 
       /* At least one bit is unused. */
       for (size_t j = 0; j < 32; j++) {
-        if (status ^ 0x1) {
+        if (!(status & 0x1)) {
           /* j bit of lpecCache->lpbStatus[i] is 0 */
           size_t cache_index = i * 32 + j;
 
@@ -101,9 +102,7 @@ void pBat_EsCacheFree(ESTRCACHE *lpecCache, ESTR *lpEstr)
 {
   /* The provided lpEstr may not be in cache in case of the fallback with EsInit.
      Use pointer arithmetic to check if lpEstr is an element of lpecCache->lpesPool. */
-  
-  /* NOTE: TAG_LATEST is not a valid tag */
-  if (
+    if (
       ((uintptr_t)&lpecCache->lpesPool[0] <= (uintptr_t)lpEstr)
       && ((uintptr_t)&lpecCache->lpesPool[ESTR_CACHE_SIZE] > (uintptr_t)lpEstr)
    ) {

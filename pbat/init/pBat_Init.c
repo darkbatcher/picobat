@@ -58,7 +58,7 @@
 
 void pBat_AssignCommandLine(int c, char** argv)
 {
-    ESTR *lpEsStr=pBat_EsInit(),
+    ESTR *lpEsStr=pBat_EsInit_Cached(),
           *lpEsParam=pBat_EsInit_Cached();
 
     /* int i; */
@@ -135,6 +135,9 @@ void pBat_Init(void)
 {
     char lpSharePath[FILENAME_MAX];
 
+    /* Initialize ESTR cache */
+    pBat_EsCacheBuild(&ecEstrCache);
+
     /* Initialize pBat specific environment */
     lpeEnv = pBat_InitEnv(environ);
 
@@ -196,8 +199,6 @@ void pBat_Init(void)
     /* Prepare libmatheval symbol table. */
     lpstSymbols = symbol_table_create(MIN_TABLE_LENGTH);
     #endif
-
-    pBat_EsCacheBuild(&ecEstrCache);
 }
 
 int pBat_InitSetModes(char* str)

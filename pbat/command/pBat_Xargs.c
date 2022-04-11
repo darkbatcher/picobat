@@ -52,7 +52,7 @@
 
 int pBat_CmdXargs(char* line)
 {
-    ESTR *param = pBat_EsInit(),
+    ESTR *param = pBat_EsInit_Cached(),
          *cmdline = pBat_EsInit_Cached();
 
     line = pBat_SkipBlanks(line + 5);

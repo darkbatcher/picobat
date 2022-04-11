@@ -47,8 +47,8 @@
 */
 int pBat_CmdCall(char* lpLine)
 {
-	ESTR *lpEsParameter=pBat_EsInit(),
-		 *lpEsLabel=pBat_EsInit(),
+	ESTR *lpEsParameter=pBat_EsInit_Cached(),
+		 *lpEsLabel=pBat_EsInit_Cached(),
 		 *lpEsFile=pBat_EsInit_Cached();
 
 	char *lpCh,
@@ -240,7 +240,7 @@ int pBat_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 	char lpAbsPath[FILENAME_MAX];
 	int status = PBAT_NO_ERROR;
 
-	ESTR *lpEsParam=pBat_EsInit(),
+	ESTR *lpEsParam=pBat_EsInit_Cached(),
          *lpEsCmd
          /*, *lpEsTmp */;
 	int   c='1',

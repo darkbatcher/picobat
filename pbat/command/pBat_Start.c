@@ -121,8 +121,8 @@ int pBat_CmdStart(char* line)
          *backtrack = NULL;
     void* p;
 
-    ESTR *cmdline = pBat_EsInit(),
-         *param = pBat_EsInit(),
+    ESTR *cmdline = pBat_EsInit_Cached(),
+         *param = pBat_EsInit_Cached(),
          *dir = NULL,
          *title = NULL;
 

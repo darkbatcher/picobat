@@ -28,7 +28,7 @@ void pBat_ExpandDef(ESTR* lpRet, char* lpCh, char* lpExp)
 {
     int i;
     char var[]="$1";
-    ESTR *restrict ret=pBat_EsInit(),
+    ESTR *restrict ret=pBat_EsInit_Cached(),
         *restrict param=pBat_EsInit_Cached();
 
     pBat_EsCpy(ret, lpExp);

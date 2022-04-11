@@ -176,7 +176,7 @@ int pBat_ExecOperators(PARSED_LINE** lpLine)
         infos->fdout = pipedes[1];
         infos->fdin = lastin;
 
-        infos->str = pBat_EsInit_Cached();
+        infos->str = pBat_EsInit();
         pBat_EsCpyE(infos->str, line->lpCmdLine);
 
         if ((infos->stream = pBat_DuplicateParsedStream(line->sStream)) == NULL)
@@ -236,7 +236,7 @@ void pBat_LaunchPipe(struct pipe_launch_data_t* infos)
 
     /* don't forget to free unneeded memory */
     pBat_FreeParsedStream(infos->stream);
-    pBat_EsFree_Cached(infos->str);
+    pBat_EsFree(infos->str);
     free(infos);
 
 }
@@ -487,7 +487,7 @@ RestartSearch:
 int pBat_RunBlock(BLOCKINFO* lpbkInfo)
 {
 
-	ESTR *lpEsLine = pBat_EsInit(),
+	ESTR *lpEsLine = pBat_EsInit_Cached(),
 		 *lpEsBlock = pBat_EsInit_Cached();
 
 	char *lpToken,
