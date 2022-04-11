@@ -47,7 +47,7 @@
 int pBat_CmdDel(char* lpLine)
 {
 	char *lpToken;
-	ESTR *lpEstr=pBat_EsInit();
+	ESTR *lpEstr=pBat_EsInit_Cached();
 
     char **name,
          **tmp;
@@ -265,7 +265,7 @@ end:
 
     pBat_FreeFileList(list);
 
-	pBat_EsFree(lpEstr);
+	pBat_EsFree_Cached(lpEstr);
 	return status;
 }
 

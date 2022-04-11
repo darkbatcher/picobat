@@ -88,7 +88,7 @@ int pBat_TypeFile(char* lpFileName)
 
 int pBat_CmdType(char* lpLine)
 {
-	ESTR* lpEsParam=pBat_EsInit();
+	ESTR* lpEsParam=pBat_EsInit_Cached();
 
 	FILELIST *pBegin=NULL,
              *pTmp=NULL,
@@ -219,7 +219,7 @@ end:
     if (pBegin)
         pBat_FreeFileList(pBegin);
 
-    pBat_EsFree(lpEsParam);
+    pBat_EsFree_Cached(lpEsParam);
 
     return status;
 }

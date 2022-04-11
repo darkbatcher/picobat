@@ -63,7 +63,7 @@ int pBat_CmdTimeout(char* lpLine)
     double seconds = 0.0;
     char* p;
 
-    ESTR* param = pBat_EsInit();
+    ESTR* param = pBat_EsInit_Cached();
 
     lpLine += 7;
 
@@ -146,6 +146,6 @@ int pBat_CmdTimeout(char* lpLine)
     fputs(PBAT_NL, fError);
 
 end:
-    pBat_EsFree(param);
+    pBat_EsFree_Cached(param);
 	return status;
 }

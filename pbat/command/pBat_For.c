@@ -84,9 +84,9 @@
 
 int pBat_CmdFor(char* lpLine, PARSED_LINE** lpplLine)
 {
-	ESTR* lpParam=pBat_EsInit();
-	ESTR* lpDirectory=pBat_EsInit();
-	ESTR* lpInputBlock=pBat_EsInit();
+	ESTR* lpParam=pBat_EsInit_Cached();
+	ESTR* lpDirectory=pBat_EsInit_Cached();
+	ESTR* lpInputBlock=pBat_EsInit_Cached();
 	PARSED_LINE* line=NULL;
 
 	BLOCKINFO bkCode;
@@ -347,9 +347,9 @@ int pBat_CmdFor(char* lpLine, PARSED_LINE** lpplLine)
 	}
 
 error:
-	pBat_EsFree(lpParam);
-	pBat_EsFree(lpDirectory);
-	pBat_EsFree(lpInputBlock);
+	pBat_EsFree_Cached(lpParam);
+	pBat_EsFree_Cached(lpDirectory);
+	pBat_EsFree_Cached(lpInputBlock);
 
 	/* we already swallowed everything */
     if (lpplLine)
@@ -371,7 +371,7 @@ int pBat_CmdForSimple(ESTR* lpInput, PARSED_LINE* lpplLine, char cVarName,
 
     size_t nSize;
 
-    ESTR* lpesStr=pBat_EsInit();
+    ESTR* lpesStr=pBat_EsInit_Cached();
     FILELIST *files = NULL,
              *item = NULL;
 
@@ -475,7 +475,7 @@ int pBat_CmdForSimple(ESTR* lpInput, PARSED_LINE* lpplLine, char cVarName,
 
 	/* delete the special var */
 	pBat_SetLocalVar(lpvLocalVars, cVarName, NULL);
-    pBat_EsFree(lpesStr);
+	pBat_EsFree_Cached(lpesStr);
 
 	return 0;
 
@@ -494,7 +494,7 @@ int pBat_CmdForL(ESTR* lpInput, PARSED_LINE* lpplLine, char cVarName)
          *lpToken=pBat_EsToChar(lpInput),
          *lpNext;
 
-    ESTR* lpesStr=pBat_EsInit();
+    ESTR* lpesStr=pBat_EsInit_Cached();
 
 	while ((lpToken=pBat_GetNextParameterEs(lpToken, lpesStr)) && (i < 3)) {
         /* Loop to get start, increment and end */
@@ -556,7 +556,7 @@ int pBat_CmdForL(ESTR* lpInput, PARSED_LINE* lpplLine, char cVarName)
 	pBat_SetLocalVar(lpvLocalVars, cVarName, NULL);
 
 error:
-    pBat_EsFree(lpesStr);
+    pBat_EsFree_Cached(lpesStr);
 	return status;
 
 }
@@ -566,7 +566,7 @@ int pBat_CmdForF(ESTR* lpInput, PARSED_LINE* lpplLine, FORINFO* lpfrInfo)
 	int iSkip=lpfrInfo->iSkip,
         status = PBAT_NO_ERROR;
 
-	ESTR* lpInputToP=pBat_EsInit();
+	ESTR* lpInputToP=pBat_EsInit_Cached();
 
 	INPUTINFO inputInfo;
 
@@ -612,7 +612,7 @@ int pBat_CmdForF(ESTR* lpInput, PARSED_LINE* lpplLine, FORINFO* lpfrInfo)
 	pBat_ForVarUnassign(lpfrInfo);
 
 error:
-	pBat_EsFree(lpInputToP);
+	pBat_EsFree_Cached(lpInputToP);
 
 	return status;
 }
@@ -627,7 +627,7 @@ int pBat_ForMakeInfo(char* lpOptions, FORINFO* lpfiInfo)
     informations
 */
 {
-	ESTR* param = pBat_EsInit();
+	ESTR* param = pBat_EsInit_Cached();
 	char* token;
 	int status = PBAT_NO_ERROR,
         type;
@@ -697,7 +697,7 @@ int pBat_ForMakeInfo(char* lpOptions, FORINFO* lpfiInfo)
     }
 
 error:
-	pBat_EsFree(param);
+	pBat_EsFree_Cached(param);
 
 	return status;
 }
@@ -1015,7 +1015,7 @@ bad_token:
 void pBat_ForSplitTokens(ESTR* lpContent, FORINFO* lpfrInfo)
 {
 
-	ESTR* lpVarContent=pBat_EsInit();
+	ESTR* lpVarContent=pBat_EsInit_Cached();
 
 	int i;
 	char *lpToken,
@@ -1041,7 +1041,7 @@ void pBat_ForSplitTokens(ESTR* lpContent, FORINFO* lpfrInfo)
 
 	}
 
-	pBat_EsFree(lpVarContent);
+	pBat_EsFree_Cached(lpVarContent);
 
 }
 
@@ -1363,7 +1363,7 @@ void pBat_ExecuteForSubCommand(struct pipe_launch_data_t* arg)
 
     pBat_RunBlock(&bkBlock);
 
-    pBat_EsFree(arg->str);
+    pBat_EsFree_Cached(arg->str);
     free(arg);
 
 }
@@ -1392,7 +1392,7 @@ int pBat_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFd)
 
 
     param->fdout = iPipeFd[1];
-    param->str = pBat_EsInit();
+    param->str = pBat_EsInit_Cached();
 
     pBat_EsCpyE(param->str, lpInput);
 
@@ -1520,7 +1520,7 @@ int pBat_ForInputParseFileList(FILE_LIST_T* lpList, ESTR* lpInput)
 
     char *lpToken=pBat_EsToChar(lpInput);
 
-    ESTR *lpesStr=pBat_EsInit();
+    ESTR *lpesStr=pBat_EsInit_Cached();
 
     while ((lpToken=pBat_GetNextParameterEs(lpToken, lpesStr))
             && (i < FILE_LIST_T_BUFSIZ)) {
@@ -1531,7 +1531,7 @@ int pBat_ForInputParseFileList(FILE_LIST_T* lpList, ESTR* lpInput)
 
         lpList->lpesFiles[i++]=lpesStr;
 
-        lpesStr=pBat_EsInit();
+        lpesStr=pBat_EsInit_Cached();
 
     }
 
@@ -1542,7 +1542,7 @@ int pBat_ForInputParseFileList(FILE_LIST_T* lpList, ESTR* lpInput)
         return -1;
 
 
-    pBat_EsFree(lpesStr);
+    pBat_EsFree_Cached(lpesStr);
 
     return 0;
 }
@@ -1568,7 +1568,7 @@ void pBat_ForCloseInputInfo(INPUTINFO* lpipInfo)
 
 			while(lpipInfo->Info.InputFile.lpesFiles[i] != NULL) {
 
-                pBat_EsFree(lpipInfo->Info.InputFile.lpesFiles[i]);
+                pBat_EsFree_Cached(lpipInfo->Info.InputFile.lpesFiles[i]);
                 i++;
 
 			}
@@ -1601,7 +1601,7 @@ int  pBat_CmdForDeprecatedWrapper(ESTR* lpMask, ESTR* lpDir, char* lpAttribute, 
 
 	};
 
-	ESTR* lpCommandLine=pBat_EsInit();
+	ESTR* lpCommandLine=pBat_EsInit_Cached();
 
 	/* create equivalent for loop using for / */
 	pBat_EsCpy(lpCommandLine, "'DIR /b /s ");
@@ -1616,12 +1616,12 @@ int  pBat_CmdForDeprecatedWrapper(ESTR* lpMask, ESTR* lpDir, char* lpAttribute, 
 	if (pBat_CmdForF(lpCommandLine, lpplLine, &forInfo))
 		goto error;
 
-	pBat_EsFree(lpCommandLine);
+	pBat_EsFree_Cached(lpCommandLine);
 	return 0;
 
 error:
 
-	pBat_EsFree(lpCommandLine);
+	pBat_EsFree_Cached(lpCommandLine);
 	return -1;
 
 }

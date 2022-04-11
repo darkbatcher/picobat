@@ -51,7 +51,7 @@
 
 int pBat_CmdMkdir(char* lpLine)
 {
-	ESTR* lpEstr=pBat_EsInit();
+	ESTR* lpEstr=pBat_EsInit_Cached();
 	int status = PBAT_NO_ERROR;
 
 	if (!(lpLine=pBat_GetNextParameterEs(lpLine, lpEstr))) {
@@ -77,7 +77,7 @@ int pBat_CmdMkdir(char* lpLine)
 	}
 
 error:
-	pBat_EsFree(lpEstr);
+	pBat_EsFree_Cached(lpEstr);
 	return status;
 
 }

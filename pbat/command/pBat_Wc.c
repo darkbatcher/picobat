@@ -188,7 +188,7 @@ void pBat_PrintCounts(int mode, struct wc_count_t* cnt, const char* file)
 
 int pBat_CmdWc(char* line)
 {
-    ESTR* param = pBat_EsInit();
+    ESTR* param = pBat_EsInit_Cached();
     FILELIST *match = NULL,
              *end,
              *dirs,
@@ -348,7 +348,7 @@ end:
     if (match)
         pBat_FreeFileList(match);
 
-    pBat_EsFree(param);
+    pBat_EsFree_Cached(param);
     return status;
 
 }

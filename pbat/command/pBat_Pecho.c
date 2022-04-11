@@ -56,7 +56,7 @@ int pBat_CmdPecho(char* lpLine)
 
 	}
 
-	lpEsParameter=pBat_EsInit();
+	lpEsParameter=pBat_EsInit_Cached();
 
     pBat_GetEndOfLine(lpLine+1, lpEsParameter);
 
@@ -72,14 +72,14 @@ int pBat_CmdPecho(char* lpLine)
 
     }
 
-	pBat_EsFree(lpEsParameter);
+	pBat_EsFree_Cached(lpEsParameter);
 
 	return 0;
 }
 
 int pBat_CmdPrompt(char* lpLine)
 {
-    ESTR* prompt = pBat_EsInit();
+    ESTR* prompt = pBat_EsInit_Cached();
 
     pBat_GetEndOfLine(pBat_SkipBlanks(lpLine + 6), prompt);
 
@@ -90,7 +90,7 @@ int pBat_CmdPrompt(char* lpLine)
     else
         pBat_SetEnv(lpeEnv, "PROMPT", prompt->str);
 
-    pBat_EsFree(prompt);
+    pBat_EsFree_Cached(prompt);
 
     return 0;
 }

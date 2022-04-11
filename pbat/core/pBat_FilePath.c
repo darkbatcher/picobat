@@ -216,9 +216,9 @@ __inline__ char* pBat_FullPathDup(const char* p)
 
 int pBat_GetFilePath(char* lpFullPath, const char* lpPartial, size_t iBufSize)
 {
-	ESTR* lpEsTmp=pBat_EsInit();
-	ESTR* lpEsPart=pBat_EsInit();
-	ESTR* lpEsFinalPath=pBat_EsInit();
+	ESTR* lpEsTmp=pBat_EsInit_Cached();
+	ESTR* lpEsPart=pBat_EsInit_Cached();
+	ESTR* lpEsFinalPath=pBat_EsInit_Cached();
 
 	char *lpPathToken=pBat_GetEnv(lpeEnv, "PATH");
 
@@ -286,9 +286,9 @@ int pBat_GetFilePath(char* lpFullPath, const char* lpPartial, size_t iBufSize)
 	} while ((lpPathToken=pBat_GetPathNextPart(lpPathToken, lpEsPart))
           && bLoop);
 
-	pBat_EsFree(lpEsPart);
-	pBat_EsFree(lpEsTmp);
-	pBat_EsFree(lpEsFinalPath);
+	pBat_EsFree_Cached(lpEsPart);
+	pBat_EsFree_Cached(lpEsTmp);
+	pBat_EsFree_Cached(lpEsFinalPath);
 
 
 	return -1;
@@ -301,9 +301,9 @@ file_found:
 	         pBat_EsToChar(lpEsFinalPath)
 	        );
 
-	pBat_EsFree(lpEsPart);
-	pBat_EsFree(lpEsTmp);
-	pBat_EsFree(lpEsFinalPath);
+	pBat_EsFree_Cached(lpEsPart);
+	pBat_EsFree_Cached(lpEsTmp);
+	pBat_EsFree_Cached(lpEsFinalPath);
 
 	return 0;
 }

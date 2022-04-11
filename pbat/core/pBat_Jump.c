@@ -106,7 +106,7 @@ int pBat_JumpToLabel_Cmdly(char* lpLabelName, char* lpFileName)
 	size_t iSize=strlen(lpLabelName);
 	char* lpName=lpFileName;
 	FILE* pFile;
-	ESTR* lpLine=pBat_EsInit();
+	ESTR* lpLine=pBat_EsInit_Cached();
 
 
 	if (lpFileName==NULL) {
@@ -118,7 +118,7 @@ int pBat_JumpToLabel_Cmdly(char* lpLabelName, char* lpFileName)
     }
 
 	if (!(pFile=fopen(lpName, "r"))) {
-		pBat_EsFree(lpLine);
+		pBat_EsFree_Cached(lpLine);
 
 		DEBUG("unable to open file : %s");
 		DEBUG(strerror(errno));
@@ -158,7 +158,7 @@ int pBat_JumpToLabel_Cmdly(char* lpLabelName, char* lpFileName)
 			DEBUG("Freeing data");
 
 			fclose(pFile);
-			pBat_EsFree(lpLine);
+			pBat_EsFree_Cached(lpLine);
 
 			DEBUG("Jump created with success");
 
@@ -167,7 +167,7 @@ int pBat_JumpToLabel_Cmdly(char* lpLabelName, char* lpFileName)
 	}
 
 	fclose(pFile);
-	pBat_EsFree(lpLine);
+	pBat_EsFree_Cached(lpLine);
 
 	DEBUG("Unable to find label");
 

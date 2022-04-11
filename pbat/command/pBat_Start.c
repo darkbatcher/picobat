@@ -189,7 +189,7 @@ int pBat_CmdStart(char* line)
 
             info.dir = pBat_EsToFullPath(param);
             dir = param;
-            param = pBat_EsInit();
+            param = pBat_EsInit_Cached();
 
         } else if (info.file == NULL) {
 
@@ -208,7 +208,7 @@ int pBat_CmdStart(char* line)
                 info.title = param->str;
                 backtrack = line;
                 title = param;
-                param = pBat_EsInit();
+                param = pBat_EsInit_Cached();
 
             } else if ((pBat_GetCommandProc(param->str,
                                             lpclCommands, &p) != -1)) {
@@ -366,14 +366,14 @@ int pBat_CmdStart(char* line)
 
 end:
 error:
-    pBat_EsFree(cmdline);
-    pBat_EsFree(param);
+    pBat_EsFree_Cached(cmdline);
+    pBat_EsFree_Cached(param);
 
     if (dir)
-        pBat_EsFree(dir);
+        pBat_EsFree_Cached(dir);
 
     if (title)
-        pBat_EsFree(title);
+        pBat_EsFree_Cached(title);
 
     if (list)
         pBat_FreeParamList(list);

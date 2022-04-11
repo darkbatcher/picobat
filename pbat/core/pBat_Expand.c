@@ -158,18 +158,15 @@ void pBat_ReplaceVars(ESTR* lpEsStr)
 
     pBat_ExpandVar(lpEsStr, '%', buf);
 
-    pBat_EsFree(buf[0]);
-    pBat_EsFree(buf[1]);
+    pBat_EsFree_Cached(buf[0]);
+    pBat_EsFree_Cached(buf[1]);
 
 }
 
 
 void pBat_DelayedExpand(ESTR* ptrCommandLine)
 {
-	ESTR* buf[2] = {
-		pBat_EsInit_Cached(TAG_DELAYED_EXPAND_BUF0),
-		pBat_EsInit_Cached(TAG_DELAYED_EXPAND_BUF1)
-	};
+	ESTR* buf[2] = { pBat_EsInit(), pBat_EsInit() };
 		
 	pBat_ExpandSpecialVar(ptrCommandLine, buf);
 	

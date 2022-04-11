@@ -53,7 +53,7 @@ int pBat_CmdDir(char* lpLine)
         iDirNb, iFileNb,
         status = 0;
 
-	ESTR* lpParam=pBat_EsInit();
+	ESTR* lpParam=pBat_EsInit_Cached();
     FILELIST *files, *item, *others;
 
     short wAttr;
@@ -237,7 +237,7 @@ int pBat_CmdDir(char* lpLine)
 
 
 end:
-	pBat_EsFree(lpParam);
+	pBat_EsFree_Cached(lpParam);
 
 
     if (isatty(fileno(fOutput))) {

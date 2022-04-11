@@ -28,54 +28,73 @@
 
 #define DEFAULT_ESTR_SIZE 256
 
-/* Caching ESTR buffers may be a good idea in some parts of the code. */
+#define ESTR_STATUS_ELEM_COUNT (ESTR_CACHE_SIZE / 32)
+
+#define BIT(x) (1 << (x))
+
+#define STATUS_ON(x) lpecCache->lpbStatus[(x) / 32] |= BIT(x % 32)
+#define STATUS_OFF(x) lpecCache->lpbStatus[(x) / 32] &= ~BIT(x % 32)
 
 int pBat_EsCacheBuild(ESTRCACHE *lpecCache)
 {
-  for (size_t i = 0; i < TAG_LATEST; i++) {
+  /* Consider all status bits unused. */
+  for (size_t i = 0; i < ESTR_STATUS_ELEM_COUNT; i++)
+    lpecCache->lpbStatus[i] = ~(uint32_t)0;
+  
+  /* Allocate all ESTR */
+  for (size_t i = 0; i < ESTR_CACHE_SIZE; i++) {
     lpecCache->lpesPool[i].str = malloc(DEFAULT_ESTR_SIZE);
 
     if (lpecCache->lpesPool[i].str) {
       lpecCache->lpesPool[i].len = DEFAULT_ESTR_SIZE;
       lpecCache->lpesPool[i].str[0] = '\0';
 
-      lpecCache->lpbStatus[i] = 0;
+      STATUS_ON(i);
     } else {
       /* If this malloc fails, it's probably going to fail somewhere else, but
          it will not prevent us to build the cache but those cache entries will
          be unusable.
       */
       printf("Warning: Failed to build EsCache[%zu]\n", i);
-
-      lpecCache->lpesPool[i].str = NULL;
-      lpecCache->lpbStatus[i] = 1;
     }
   }
 }
 
 void pBat_EsCacheDrop(ESTRCACHE *lpecCache)
 {
-  for (size_t i = 0; i < TAG_LATEST; i++) {
-    /* Prevent any use of a cached estr */
-    lpecCache->lpbStatus[i] = 1;
-
+  /* Prevent any use of a cached estr */
+  for (size_t i = 0; i < ESTR_STATUS_ELEM_COUNT; i++)
+    lpecCache->lpbStatus[i] = ~(uint32_t)0;
+  
+  for (size_t i = 0; i < ESTR_CACHE_SIZE; i++)
     if (lpecCache->lpesPool[i].str)
       free(lpecCache->lpesPool[i].str);
-  }
 }
 
-ESTR *pBat_EsCacheInit(ESTRCACHE *lpecCache, enum EstrTag tag)
+ESTR *pBat_EsCacheInit(ESTRCACHE *lpecCache)
 {
-  assert(tag < TAG_LATEST);
+  /* Find a available ESTR from cache. */
+  for (size_t i = 0; i < ESTR_STATUS_ELEM_COUNT; i++) {
+    if (lpecCache->lpbStatus[i] != ~(uint32_t)0) {
+      register uint32_t status = lpecCache->lpbStatus[i];
 
-  if (lpecCache->lpbStatus[tag])
-    /* Fallback to EsInit() */
-    return pBat_EsInit();
-  else {
-    /* Use cached ESTR */
-    lpecCache->lpbStatus[tag] = 1;
-    return &lpecCache->lpesPool[tag];
+      /* At least one bit is unused. */
+      for (size_t j = 0; j < 32; j++) {
+        if (status ^ 0x1) {
+          /* j bit of lpecCache->lpbStatus[i] is 0 */
+          size_t cache_index = i * 32 + j;
+
+          STATUS_ON(cache_index);
+          return &lpecCache->lpesPool[cache_index];
+        }
+
+        status >>= 1;
+      }
+    }
   }
+
+  /* Fallback to EsInit */
+  return pBat_EsInit();
 }
 
 void pBat_EsCacheFree(ESTRCACHE *lpecCache, ESTR *lpEstr)
@@ -86,29 +105,29 @@ void pBat_EsCacheFree(ESTRCACHE *lpecCache, ESTR *lpEstr)
   /* NOTE: TAG_LATEST is not a valid tag */
   if (
       ((uintptr_t)&lpecCache->lpesPool[0] <= (uintptr_t)lpEstr)
-      && ((uintptr_t)&lpecCache->lpesPool[TAG_LATEST] > (uintptr_t)lpEstr)
+      && ((uintptr_t)&lpecCache->lpesPool[ESTR_CACHE_SIZE] > (uintptr_t)lpEstr)
    ) {
     /* The pointer is in the cache. */
-    size_t iTag = lpEstr - lpecCache->lpesPool;
+    size_t cache_index = lpEstr - lpecCache->lpesPool;
 
     /* Prepare tag for next usage. */
-    lpecCache->lpbStatus[iTag] = 0;
+    STATUS_OFF(cache_index);
 
-    if (lpecCache->lpesPool[iTag].len != DEFAULT_ESTR_SIZE) {
+    if (lpecCache->lpesPool[cache_index].len != DEFAULT_ESTR_SIZE) {
       /* resize if needed (len different from default size) */
-      void *resized_buffer = realloc(lpecCache->lpesPool[iTag].str, DEFAULT_ESTR_SIZE);
+      void *resized_buffer = realloc(lpecCache->lpesPool[cache_index].str, DEFAULT_ESTR_SIZE);
 
       if (resized_buffer) {
-        lpecCache->lpesPool[iTag].str = resized_buffer;
-        lpecCache->lpesPool[iTag].len = DEFAULT_ESTR_SIZE;
+        lpecCache->lpesPool[cache_index].str = resized_buffer;
+        lpecCache->lpesPool[cache_index].len = DEFAULT_ESTR_SIZE;
       } else {
         /* In case of failure, we can still keep the old buffer, but report a warning to the user. */
-        fprintf(fError, "Warning: Failed to resize EsCache buffer of tag (%zu)\n", iTag);
+        fprintf(fError, "Warning: Failed to resize EsCache buffer of tag (%zu)\n", cache_index);
       }
     }
 
-    if (lpecCache->lpesPool[iTag].len > 0)
-      lpecCache->lpesPool[iTag].str[0] = '\0';
+    if (lpecCache->lpesPool[cache_index].len > 0)
+      lpecCache->lpesPool[cache_index].str[0] = '\0';
   } else {
     /* regular estr */
     pBat_EsFree(lpEstr);

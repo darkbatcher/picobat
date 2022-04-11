@@ -74,7 +74,7 @@ char* pBat_strcasestr(const char* restrict s, const char* restrict find)
 int pBat_FileFind(char* restrict str, char* restrict name, int count, int flag, int reverse)
 {
     FILE* pFile;
-    ESTR* lpEsLine=pBat_EsInit();
+    ESTR* lpEsLine=pBat_EsInit_Cached();
 
     int i,
         line;
@@ -149,7 +149,7 @@ int pBat_FileFind(char* restrict str, char* restrict name, int count, int flag, 
 
 
 end:
-    pBat_EsFree(lpEsLine);
+    pBat_EsFree_Cached(lpEsLine);
     if (name)
         fclose(pFile); /* do no close stdin, please */
     else if (isatty(fileno(fInput)))
@@ -177,7 +177,7 @@ end:
 int pBat_CmdFind(char* lpLine)
 {
 
-    ESTR* lpEsParam=pBat_EsInit();
+    ESTR* lpEsParam=pBat_EsInit_Cached();
 
 	FILELIST *pBegin=NULL,
              *pTmp,
@@ -345,7 +345,7 @@ end:
     if (pBegin)
         pBat_FreeFileList(pBegin);
 
-    pBat_EsFree(lpEsParam);
+    pBat_EsFree_Cached(lpEsParam);
 
     return status;
 

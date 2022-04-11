@@ -44,7 +44,7 @@ int pBat_CmdBlock(char* lpLine)
 {
 	BLOCKINFO bkCode;
 	char* lpToken;
-	ESTR* lpNextBlock=pBat_EsInit_Cached(TAG_BLOCK_NEXT_BLOCK);
+	ESTR* lpNextBlock=pBat_EsInit_Cached();
 	int status = PBAT_NO_ERROR;
 
 	pBat_GetNextBlockEs(lpLine, lpNextBlock);

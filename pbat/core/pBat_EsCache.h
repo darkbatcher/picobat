@@ -21,40 +21,27 @@
 #ifndef PBAT_ES_CACHE_H
 #define PBAT_ES_CACHE_H
 
+#include <stdint.h>
+
 #include "pBat_Core.h"
 
-/* List of all tags to be used */
-enum EstrTag {
-    TAG_DELAYED_EXPAND_BUF0 = 0,
-    TAG_DELAYED_EXPAND_BUF1,
-    TAG_RUNBLOCK_LINE,
-    TAG_RUNBLOCK_BLOCK,
-    TAG_PARSE_OUTPUT_FINAL,
-    TAG_PARSE_OUTPUT_PARAM,
-    TAG_BLOCK_NEXT_BLOCK,
-    TAG_CALL_PARAMETER,
-    TAG_CALL_LABEL,
-    TAG_CALL_FILE,
-    TAG_CALL_CALLFILE_PARAM,
-    TAG_CALL_CALLEXTERNAL_LINE,
-    TAG_CALL_CALLEXTERNAL_CMD,
-    TAG_ECHO_PARAMETER,
-    TAG_ARGS_PARAMETER,
-    TAG_PARSE_CMDLINE1,
-    TAG_LATEST // also tag count
-};
+#define ESTR_CACHE_SIZE 128
 
 typedef struct ESTRCACHE {
-    ESTR lpesPool[TAG_LATEST]; /* ESTR buffers */
-    _Bool lpbStatus[TAG_LATEST]; /* ESTR buffers status (true is used) */
+    ESTR lpesPool[ESTR_CACHE_SIZE]; /* ESTR buffers */
+    uint32_t lpbStatus[ESTR_CACHE_SIZE / 32]; /* ESTR buffers status bitmap (1 if used) */
 } ESTRCACHE;
 
 int pBat_EsCacheBuild(ESTRCACHE *lpecCache);
 void pBat_EsCacheDrop(ESTRCACHE *lpecCache);
-ESTR *pBat_EsCacheInit(ESTRCACHE *lpecCache, enum EstrTag tag);
+ESTR *pBat_EsCacheInit(ESTRCACHE *lpecCache);
 void pBat_EsCacheFree(ESTRCACHE *lpecCache, ESTR *lpEstr);
 
-#define pBat_EsInit_Cached(tag) pBat_EsCacheInit(&ecEstrCache, tag)
+/* Cached variants of pBat_EsInit() with a corresponding pBat_EsFree
+   Faster than regular pBat_EsInit() with less likely out of memory errors, 
+   but must not be transferred between picobat instances.
+*/
+#define pBat_EsInit_Cached() pBat_EsCacheInit(&ecEstrCache)
 #define pBat_EsFree_Cached(estr) pBat_EsCacheFree(&ecEstrCache, estr)
 
 #endif /* PBAT_ES_CACHE_H */

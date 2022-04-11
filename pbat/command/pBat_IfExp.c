@@ -336,13 +336,13 @@ int pBat_IfExp_SuppressOneBracketPair(ifexp_line_t** line)
 
     /* free the last bracket */
     prev->next = NULL;
-    pBat_EsFree(ops->op);
+    pBat_EsFree_Cached(ops->op);
     free(ops);
 
     /* free the first bracket */
     ops = *line;
     *line = ops->next;
-    pBat_EsFree(ops->op);
+    pBat_EsFree_Cached(ops->op);
     free(ops);
 
     return 1;
@@ -358,7 +358,7 @@ int pBat_IfExp_Cut(char* tok, ifexp_line_t** begin, ifexp_line_t** end)
         *begin = NULL;
         *end = line->next;
 
-        pBat_EsFree(line->op);
+        pBat_EsFree_Cached(line->op);
         free (line);
 
     }
@@ -378,7 +378,7 @@ int pBat_IfExp_Cut(char* tok, ifexp_line_t** begin, ifexp_line_t** end)
             /* the token was found */
 
             *end = line->next->next;
-            pBat_EsFree(line->next->op);
+            pBat_EsFree_Cached(line->next->op);
             free(line->next);
             line->next = NULL;
 
@@ -396,7 +396,7 @@ int pBat_IfExp_Cut(char* tok, ifexp_line_t** begin, ifexp_line_t** end)
 char * pBat_IfExp_ParseLine(char* line, ifexp_line_t** ops)
 {
     int level = 0;
-    ESTR* str = pBat_EsInit();
+    ESTR* str = pBat_EsInit_Cached();
     ifexp_line_t *ret = NULL, *last=NULL;
 
     while ((line = pBat_GetNextParameterEs(line, str))) {
@@ -420,7 +420,7 @@ char * pBat_IfExp_ParseLine(char* line, ifexp_line_t** ops)
             break;
         }
 
-        str = pBat_EsInit();
+        str = pBat_EsInit_Cached();
 
     }
 
@@ -495,7 +495,7 @@ void pBat_IfExp_FreeLine(ifexp_line_t* line)
 
         next = line->next;
 
-        pBat_EsFree(line->op);
+        pBat_EsFree_Cached(line->op);
         free(line);
 
         line = next;

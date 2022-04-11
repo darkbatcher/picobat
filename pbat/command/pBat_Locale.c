@@ -65,7 +65,7 @@ void pBat_LoadLocaleMessages(char* loc)
  */
 int pBat_CmdLocale(char* line)
 {
-    ESTR* param = pBat_EsInit();
+    ESTR* param = pBat_EsInit_Cached();
     int done = 0, status = 0;
 
     while (line = pBat_GetNextParameterEs(line, param)) {
@@ -92,6 +92,6 @@ int pBat_CmdLocale(char* line)
     }
 
 end:
-    pBat_EsFree(param);
+    pBat_EsFree_Cached(param);
     return status;
 }

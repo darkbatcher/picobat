@@ -47,7 +47,7 @@
 int pBat_CmdTitle(char* lpLine)
 {
 	char lpArg[3];
-	ESTR* lpEsTitle=pBat_EsInit();
+	ESTR* lpEsTitle=pBat_EsInit_Cached();
 
 	lpLine+=5;
 
@@ -66,7 +66,7 @@ int pBat_CmdTitle(char* lpLine)
 
 	}
 
-	pBat_EsFree(lpEsTitle);
+	pBat_EsFree_Cached(lpEsTitle);
 
 	return 0;
 }

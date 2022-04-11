@@ -47,9 +47,9 @@
 */
 int pBat_CmdCall(char* lpLine)
 {
-	ESTR *lpEsParameter=pBat_EsInit_Cached(TAG_CALL_PARAMETER),
-		 *lpEsLabel=pBat_EsInit_Cached(TAG_CALL_LABEL),
-		 *lpEsFile=pBat_EsInit_Cached(TAG_CALL_FILE);
+	ESTR *lpEsParameter=pBat_EsInit(),
+		 *lpEsLabel=pBat_EsInit(),
+		 *lpEsFile=pBat_EsInit_Cached();
 
 	char *lpCh,
 	     *lpNxt,
@@ -240,7 +240,7 @@ int pBat_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 	char lpAbsPath[FILENAME_MAX];
 	int status = PBAT_NO_ERROR;
 
-	ESTR *lpEsParam=pBat_EsInit_Cached(TAG_CALL_CALLFILE_PARAM),
+	ESTR *lpEsParam=pBat_EsInit(),
          *lpEsCmd
          /*, *lpEsTmp */;
 	int   c='1',
@@ -314,7 +314,7 @@ int pBat_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 
 	} else if (lpCmdLine) {
 
-        lpEsCmd = pBat_EsInit_Cached(TAG_CALL_CALLEXTERNAL_CMD);
+        lpEsCmd = pBat_EsInit_Cached();
 
         while ((lpCmdLine = pBat_GetNextParameterEs(lpCmdLine, lpEsParam))) {
             pBat_EsReplace(lpEsParam, " ", "^ ");
@@ -401,7 +401,7 @@ int pBat_CmdCallExternal(char* lpFile, char* lpCh)
 
 	BLOCKINFO bkInfo;
 
-	ESTR *lpEsLine=pBat_EsInit_Cached(TAG_CALL_CALLEXTERNAL_LINE);
+	ESTR *lpEsLine=pBat_EsInit_Cached();
 
 	char *lpStr;
 

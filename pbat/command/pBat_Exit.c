@@ -54,7 +54,7 @@
 
 int pBat_CmdExit(char* lpLine)
 {
-    ESTR* param=pBat_EsInit();
+    ESTR* param=pBat_EsInit_Cached();
     char* ntoken;
     int ret=iErrorLevel;
 
@@ -63,7 +63,7 @@ int pBat_CmdExit(char* lpLine)
 		if (!stricmp(param->str, "/?")) {
 
 			pBat_ShowInternalHelp(PBAT_HELP_EXIT);
-			pBat_EsFree(param);
+			pBat_EsFree_Cached(param);
 			return 0;
 
 		} else if (!stricmp(param->str, "/b")) {
@@ -76,7 +76,7 @@ int pBat_CmdExit(char* lpLine)
                 if (*ntoken) {
 
                     pBat_ShowErrorMessage(PBAT_UNEXPECTED_ELEMENT, ntoken, 0);
-                    pBat_EsFree(param);
+                    pBat_EsFree_Cached(param);
                     return PBAT_UNEXPECTED_ELEMENT;
 
                 }
@@ -85,7 +85,7 @@ int pBat_CmdExit(char* lpLine)
 
             }
 
-            pBat_EsFree(param);
+            pBat_EsFree_Cached(param);
             bAbortCommand = PBAT_ABORT_EXECUTION_LEVEL;
             return ret;
 

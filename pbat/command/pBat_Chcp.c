@@ -49,7 +49,7 @@
 
 int pBat_CmdChcp(char* line)
 {
-    ESTR* param = pBat_EsInit();
+    ESTR* param = pBat_EsInit_Cached();
     char *enc;
     int cp,
         status = PBAT_NO_ERROR;
@@ -121,7 +121,7 @@ int pBat_CmdChcp(char* line)
     }
 
 error:
-    pBat_EsFree(param);
+    pBat_EsFree_Cached(param);
     return 0;
 
 }

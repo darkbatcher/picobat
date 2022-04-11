@@ -50,7 +50,7 @@ extern const int iCmdInfoNb;
 
 int pBat_CmdHelp(char* lpLine)
 {
-    ESTR *param = pBat_EsInit();
+    ESTR *param = pBat_EsInit_Cached();
     int n = 0, status = 0;
 
     lpLine += 4;
@@ -86,6 +86,6 @@ int pBat_CmdHelp(char* lpLine)
     pBat_RunCommand(param, NULL);
 
 error:
-    pBat_EsFree(param);
+    pBat_EsFree_Cached(param);
 	return status;
 }

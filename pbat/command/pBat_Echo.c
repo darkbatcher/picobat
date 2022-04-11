@@ -59,7 +59,7 @@ int pBat_CmdEcho(char* lpLine)
 
 	}
 
-	lpEsParameter=pBat_EsInit_Cached(TAG_ECHO_PARAMETER);
+	lpEsParameter=pBat_EsInit_Cached();
 
 	if (pBat_LockMutex(&mEchoLock))
         pBat_ShowErrorMessage(PBAT_LOCK_MUTEX_ERROR,

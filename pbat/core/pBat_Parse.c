@@ -63,8 +63,8 @@ PARSED_STREAM* pBat_ParseOutput(ESTR* lpesLine)
 	char lpCorrect[]="1";
 	char cChar;
 
-	ESTR *lpesFinal=pBat_EsInit_Cached(TAG_PARSE_OUTPUT_FINAL),
-	      *lpesParam=pBat_EsInit_Cached(TAG_PARSE_OUTPUT_PARAM);
+	ESTR *lpesFinal=pBat_EsInit(),
+	      *lpesParam=pBat_EsInit_Cached();
 
 	PARSED_STREAM* lppssStart;
 
@@ -428,7 +428,7 @@ PARSED_LINE* pBat_AllocParsedLine(PARSED_LINE* lppsStream)
 			lppsStream->lppsNode=lppsNewElement;
 
 		lppsNewElement->lppsNode = NULL;
-		lppsNewElement->lpCmdLine = pBat_EsInit(); /* caching is not guaranteed */
+		lppsNewElement->lpCmdLine = pBat_EsInit_Cached(); /* caching is not guaranteed */
 		lppsNewElement->sStream = NULL;
 
 		return lppsNewElement;
@@ -489,7 +489,7 @@ void pBat_FreeParsedLine(PARSED_LINE* line)
         if (line->sStream)
             pBat_FreeParsedStream(line->sStream);
 
-        pBat_EsFree(line->lpCmdLine);
+        pBat_EsFree_Cached(line->lpCmdLine);
 
         line = line->lppsNode;
 
