@@ -336,6 +336,9 @@ int pBat_CmdSetP(char* lpLine)
 
 		if ((lpEqual=strchr(pBat_EsToChar(lpEsInput), '\n')))
 			*lpEqual='\0';
+		
+		if (*pBat_EsToChar(lpEsInput) == '\0')
+			status = 1;
 
 		pBat_SetEnv(lpeEnv, pBat_EsToChar(lpEsVar),
 				pBat_EsToChar(lpEsInput));
