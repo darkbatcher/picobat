@@ -53,7 +53,8 @@ ENVBUF* pBat_InitEnv(char** env);
 ENVBUF* pBat_EnvDup(ENVBUF* pBuf);
 
 char* pBat_GetEnv(ENVBUF* pEnv, const char* name);
-void  pBat_SetEnv(ENVBUF* pEnv, char* name, const char* content);
+void  pBat_SetEnvEx(ENVBUF* pEnv, char* name, const char* content, int inherit);
+#define pBat_SetEnv(p,n,c) pBat_SetEnvEx(p,n,c,0)
 void  pBat_UnSetEnv(ENVBUF* pEnv, char* name);
 
 void* pBat_GetEnvBlock(ENVBUF* pEnv, size_t *s);

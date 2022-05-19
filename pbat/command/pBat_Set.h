@@ -24,7 +24,7 @@
 #include <libpBat.h>
 
 int pBat_CmdSet(char *lpLine);
-int pBat_CmdSetS(char* lpLine);
+int pBat_CmdSetS(char* lpLine, int inherit);
 int pBat_CmdSetP(char* lpLine);
 int pBat_CmdSetA(char* lpLine);
 int pBat_CmdSetEval(ESTR* lpExpression);

@@ -178,8 +178,10 @@ int pBat_CmdSet(char *lpLine)
 		} else {
 
 			/* simple set */
-
-			nok = pBat_CmdSetS(lpLine+3);
+            if (!stricmp(lpArg, "/x"))
+                nok = pBat_CmdSetS(lpNextToken, 1);
+            else
+                nok = pBat_CmdSetS(lpLine+3, 0);
 
 		}
 
@@ -230,7 +232,7 @@ error:
 }
 
 /* simple set */
-int pBat_CmdSetS(char* lpLine)
+int pBat_CmdSetS(char* lpLine, int inherit)
 {
 	ESTR* lpEsVar=pBat_EsInit();
 
@@ -286,7 +288,7 @@ int pBat_CmdSetS(char* lpLine)
 		*lpCh='\0';
 		lpCh++;
 
-		pBat_SetEnv(lpeEnv, lpBegin, lpCh);
+		pBat_SetEnvEx(lpeEnv, lpBegin, lpCh, inherit);
 
 	}
 

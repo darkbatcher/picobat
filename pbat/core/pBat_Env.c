@@ -251,7 +251,7 @@ char* pBat_GetEnv(ENVBUF* pEnv, const char* name)
         is ignored and the variable is deleted from the environement.
 
  */
-void pBat_SetEnv(ENVBUF* pEnv, char* name, const char* content)
+void pBat_SetEnvEx(ENVBUF* pEnv, char* name, const char* content, int inherit)
 {
     ENVVAR **pRes,
             key,
@@ -296,6 +296,8 @@ error:
 
         }
 
+        (*pRes)->inherit |= inherit;
+
         return;
 
     }
@@ -313,6 +315,7 @@ error:
 
         (*pRes)->name = namecpy;
         (*pRes)->previous = NULL;
+        (*pRes)->inherit |= inherit;
 
     } else {
 
@@ -334,7 +337,9 @@ error:
             goto error;
 
         pEnv->envbuf[pEnv->index]->name = namecpy;
+        pEnv->envbuf[pEnv->index]->inherit = inherit;
         pEnv->envbuf[pEnv->index]->previous = NULL;
+
         ++ pEnv->index;
 
     }
@@ -535,13 +540,15 @@ void pBat_PushEnvLocals(ENVBUF *pEnv)
 #define PBAT_POP_ENVVAR(pVar, pOld, sort) \
         if ((pOld = (*pVar)->previous) == NULL) {\
 \
-            /* this variable has to be removed */\
-            free((*pVar)->name); \
-            free((*pVar)->content); \
+            if ((*pVar)->inherit == 0) { \
+                /* this variable has to be removed */\
+                free((*pVar)->name); \
+                free((*pVar)->content); \
 \
-            (*pVar)->name = NULL; \
-            (*pVar)->content = NULL; \
-            sort = 1; \
+                (*pVar)->name = NULL; \
+                (*pVar)->content = NULL; \
+                sort = 1; \
+            } \
 \
         } else if ((*pVar)->inherit) {\
 \

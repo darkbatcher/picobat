@@ -23,7 +23,7 @@
 
 {{Synopsis - Simple set}}
 
-	${SET variable[=[content]]}
+	${SET [/x] variable[=[content]]}
 
 	Assign {content} to variable {variable}. If {content} is not specified, the
 	the variable {variable} is removed from the environment.
@@ -44,6 +44,12 @@
 		affected unless there is also a quotation mark preceding {variable}, in
 		which case, {content} will be trimmed at the last occurrence of a
 		quotation mark.
+		
+	If the {/x} switch is specified, then the value of {variable} is set to be
+	inherited by the previous context if the procedure ends. This has only an
+	effect on procedure-local variables. Please see the {def|DEF} command page
+	for more details.
+	
 	 
 {{Synopsis - Arithmetic evaluation}}
 
