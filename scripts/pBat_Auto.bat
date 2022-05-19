@@ -26,13 +26,20 @@ IF %PBAT_OS%==WINDOWS (
 
 	:: set windows compatible variable
 	SET SYSTEMROOT=/bin
+	SET WINDIR=/bin
 	SET SYSTEMDRIVE=/
-	
+	SET TMP=/tmp
+	SET TEMP=/tmp
+	SET OS=!PBAT_OS!
+	SET COMSPEC=!PBAT_PATH!/pbat
+	SET APPDATA=!HOME!/.local
+	SET LOCALPPDATA=!HOME!/.local
 	
 	SET PROGRAMFILES=!PBAT_PATH!/bin
-	SET USERPROFILE=%HOME%
+	SET USERPROFILE=!HOME!
 	id -un | SET /p USERNAME=
 	uname -n | SET /p USERDOMAIN=
+	
 	
 	:: Define additionnal paths for sub-programs
 	SET PBAT_SHARE=!PBAT_PATH!/share
