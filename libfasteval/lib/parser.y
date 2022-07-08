@@ -24,7 +24,7 @@
 /*
  * Copyright (C) 1999, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2011,
  * Copyright (C) 2022 Astie Teddy and pBat developers.
- * 
+ *
  * pBat libfasteval is free software: you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -64,25 +64,27 @@ extern int yylex (void);
 extern void input_reset (void);
 
 /* Consider x as a double */
-#define AS_DOUBLE(x) ((x).is_double ? (x).value.d : (double)(x).value.i)
+#define AS_DOUBLE(x) ((x).is_double ? (x).d : (double)(x).i)
 
 /* Consider x as an integer */
-#define AS_INTEGER(x) ((x).is_double ? (long long)(x).value.d : (x).value.i)
+#define AS_INTEGER(x) ((x).is_double ? (long long)(x).d : (x).i)
 
 /* Define a binary operation where :
   - if a and b are integer : result = a 'op' b as integer
   - otherwise : result = a 'op' b as double
  */
 #define INT_FLOAT_OP(op, result, a, b) \
-  if ((a).is_double == 0 && (b).is_double == 0) { \
-    /* Both are integer */ \
-    (result).is_double = 0; \
-    (result).value.i = (a).value.i op (b).value.i; \
-  } else { \
-    /* One of both is a double */ \
-    (result).is_double = 1; \
-    (result).value.d = AS_DOUBLE(a) op AS_DOUBLE(b); \
-  }
+    (result).is_double = (a).is_double || (b).is_double; \
+    if (!(result).is_double) \
+        (result).i = (a).i op (b).i; \
+    (result).d = (a).d op (b).d;
+
+
+#define INT_OP(op, result, a, b) \
+    (result).is_double = (a).is_double || (b).is_double; \
+    if (!(result).is_double) \
+        (result).i = (a).i op (b).i; \
+    (result).d = (double)((int)(a).d op  (int)(b).d);
 %}
 
 /* Parser semantic values type.  */
@@ -90,10 +92,8 @@ extern void input_reset (void);
   struct {
     /* Whether the number is a double or an integer. */
     _Bool is_double;
-    union {
-      long long i;
-      double d;
-    } value;
+    long long i;
+    double d;
   } number;
   char *name;
 }
@@ -103,7 +103,7 @@ extern void input_reset (void);
 %token <name> FUNCTION VARIABLE
 %left '|' 'o' '^'
 %left '&' 'a'
-%left '>' '<' 
+%left '>' '<'
 %left '-' '+'
 %left '*' '/' '%'
 %left '='
@@ -139,67 +139,64 @@ expression
   INT_FLOAT_OP(/, $$, $1, $3);
 }
 | expression '%' expression {
+
   /* modulo may use integer operator % or fmod function */
-  if ($1.is_double == $3.is_double == 0) {
-    $$.is_double = 0;
-    $$.value.i = $1.value.i % $3.value.i;
-  } else {
-    $$.is_double = 1;
-    $$.value.d = fmod(AS_DOUBLE($1), AS_DOUBLE($3));
-  }
+  $$.is_double  = $1.is_double || $3.is_double;
+  if (!($$.is_double))
+    $$.i = $1.i % $3.i;
+  $$.d = fmod($1.d, $3.d);
+
 }
 /* As there is no reason to store the result of a bitwise operator as double,
  * bitwise operators will return an integer value regardless of the type of its
  * operands.
  */
 | expression '&' expression {
-  $$.is_double = 0;
-  $$.value.i = AS_INTEGER($1) & AS_INTEGER($3);
+  INT_OP(&, $$, $1, $3)
 }
 | expression '|' expression {
-  $$.is_double = 0;
-  $$.value.i = AS_INTEGER($1) | AS_INTEGER($3);
+  INT_OP(|, $$, $1, $3)
 }
 | expression 'o' expression {
-  $$.is_double = 0;
-  $$.value.i = AS_INTEGER($1) || AS_INTEGER($3);
+  INT_OP(||, $$, $1, $3)
+}
+| expression 'a' expression {
+  INT_OP(&&, $$, $1, $3)
 }
 | expression '^' expression {
-  $$.is_double = 0;
-  $$.value.i = AS_INTEGER($1) ^ AS_INTEGER($3);
+  INT_OP(^, $$, $1, $3)
 }
 | expression '>' expression {
-  $$.is_double = 0;
-  $$.value.i = AS_INTEGER($1) >> AS_INTEGER($3);
+  INT_OP(>>, $$, $1, $3)
 }
 |  expression '<' expression {
-  $$.is_double = 0;
-  $$.value.i = AS_INTEGER($1) << AS_INTEGER($3);
+  INT_OP(<<, $$, $1, $3)
 }
 | '-' expression %prec NEG {
   $$.is_double = $2.is_double;
 
-  if ($2.is_double)
-    $$.value.d = -($2.value.d);
-  else
-    $$.value.i = -($2.value.i);
+  if (!$2.is_double)
+    $$.i = -($2.i);
+  $$.d = - $2.d;
+
 }
 | '!' expression %prec NEG {
-  $$.is_double = 0; /* binary value */
+  $$.is_double = $2.is_double;
 
-  if ($2.is_double)
-    $$.value.i = $2.value.d == 0.0;
-  else
-    $$.value.i = !($2.value.i);
+  if (!$2.is_double)
+    $$.i = !($2.i);
+  $$.d = (double)(! (int)$2.d);
 }
 | '~' expression %prec NEG {
-  $$.is_double = 0;
+  $$.is_double = $2.is_double;
 
-  $$.value.i = ~AS_INTEGER($2);
+  if (!$2.is_double)
+    $$.i = ~($2.i);
+  $$.d = (double)(~ (int)$2.d);
 }
 | FUNCTION '(' expression ')' {
   $$.is_double = 1;
-  $$.value.d = evaluate_function($1, AS_DOUBLE($3));
+  $$.d = evaluate_function($1, AS_DOUBLE($3));
   free($1);
 }
 | '(' expression ')' {
@@ -211,8 +208,9 @@ expression
 }
 | VARIABLE {
   /* TODO: Improve this */
-  $$.is_double = 1;
-  $$.value.d = get_var($1);
+  $$.is_double = 0;
+  $$.d = get_var($1);
+  $$.i = (int)$$.d;
 }
 ;
 

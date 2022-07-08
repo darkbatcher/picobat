@@ -83,19 +83,20 @@ identifier {nodelim}*{nodelimnb}*{nodelim}*
 
 {integer} {
   evaluator_lval.number.is_double = 0;
-  evaluator_lval.number.value.i = strtoll(yytext, NULL, 0);
+  evaluator_lval.number.i = strtoll(yytext, NULL, 0);
+  evaluator_lval.number.d = (double )evaluator_lval.number.i;
   return NUMBER;
 }
 
 {float} {
   evaluator_lval.number.is_double = 1;
-  evaluator_lval.number.value.d = strtod(yytext, NULL);
+  evaluator_lval.number.d = strtod(yytext, NULL);
   return NUMBER;
 }
 
 {constant} {
   evaluator_lval.number.is_double = 1;
-  evaluator_lval.number.value.d = lookup_variable(yytext);
+  evaluator_lval.number.d = lookup_variable(yytext);
   return NUMBER;
 }
 
