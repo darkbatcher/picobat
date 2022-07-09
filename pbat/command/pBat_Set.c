@@ -234,7 +234,7 @@ error:
 /* simple set */
 int pBat_CmdSetS(char* lpLine, int inherit)
 {
-	ESTR* lpEsVar=pBat_EsInit();
+	ESTR* lpEsVar=pBat_EsInit_Cached();
 
 	char *lpCh,
 		*lpBegin,
@@ -280,7 +280,7 @@ int pBat_CmdSetS(char* lpLine, int inherit)
 			   however, we do not display error, and backtrack to
 			   the original function  */
 
-			pBat_EsFree(lpEsVar);
+			pBat_EsFree_Cached(lpEsVar);
 			return 1;
 
 		}
@@ -292,7 +292,7 @@ int pBat_CmdSetS(char* lpLine, int inherit)
 
 	}
 
-	pBat_EsFree(lpEsVar);
+	pBat_EsFree_Cached(lpEsVar);
 	return 0;
 }
 
@@ -300,8 +300,8 @@ int pBat_CmdSetS(char* lpLine, int inherit)
 int pBat_CmdSetP(char* lpLine)
 {
 
-	ESTR* lpEsVar=pBat_EsInit();
-	ESTR* lpEsInput=pBat_EsInit();
+	ESTR* lpEsVar=pBat_EsInit_Cached();
+	ESTR* lpEsInput=pBat_EsInit_Cached();
 	char* lpEqual;
 	int status = PBAT_NO_ERROR;
 
@@ -338,6 +338,9 @@ int pBat_CmdSetP(char* lpLine)
 
 		if ((lpEqual=strchr(pBat_EsToChar(lpEsInput), '\n')))
 			*lpEqual='\0';
+		
+		if (*pBat_EsToChar(lpEsInput) == '\0')
+			status = 1;
 
 		pBat_SetEnv(lpeEnv, pBat_EsToChar(lpEsVar),
 				pBat_EsToChar(lpEsInput));
@@ -355,15 +358,15 @@ int pBat_CmdSetP(char* lpLine)
 	}
 
 error:
-	pBat_EsFree(lpEsVar);
-	pBat_EsFree(lpEsInput);
+	pBat_EsFree_Cached(lpEsVar);
+	pBat_EsFree_Cached(lpEsInput);
 	return status;
 }
 
 int pBat_CmdSetA(char* lpLine)
 {
 
-	ESTR* lpExpression=pBat_EsInit();
+	ESTR* lpExpression=pBat_EsInit_Cached();
 	int status = PBAT_NO_ERROR;
 
 	lpLine=pBat_SkipBlanks(lpLine);
@@ -373,7 +376,7 @@ int pBat_CmdSetA(char* lpLine)
                 /* loop through expressions */;
 
 error:
-	pBat_EsFree(lpExpression);
+	pBat_EsFree_Cached(lpExpression);
 	return status;
 }
 

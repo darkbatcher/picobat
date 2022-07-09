@@ -154,6 +154,10 @@ expression
 | expression '&' expression {
   INT_OP(&, $$, $1, $3)
 }
+| expression 'a' expression {
+  $$.is_double = 0;
+  $$.value.i = AS_INTEGER($1) && AS_INTEGER($3);
+}
 | expression '|' expression {
   INT_OP(|, $$, $1, $3)
 }

@@ -52,7 +52,7 @@
 
 int pBat_CmdShift(char* lpLine)
 {
-	ESTR* lpEsArg=pBat_EsInit();
+	ESTR* lpEsArg=pBat_EsInit_Cached();
 	char *lpToken;
 	int iBegin=0,        /* the first parameter to be displaced */
 	    iDisplacement=1, /* the displacement of parameters on the left */
@@ -237,7 +237,7 @@ int pBat_CmdShift(char* lpLine)
 	}
 
 error:
-	pBat_EsFree(lpEsArg);
+	pBat_EsFree_Cached(lpEsArg);
 	return status;
 
 }

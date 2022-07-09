@@ -96,13 +96,13 @@ int pBat_GetParameterPointers(char** lpPBegin, char** lpPEnd,
  */
 char* pBat_GetNextParameter(char* lpLine, char* lpResponseBuffer, int iLength)
 {
-	ESTR* lpParameter=pBat_EsInit();
+	ESTR* lpParameter=pBat_EsInit_Cached();
 
 	lpLine=pBat_GetNextParameterEs(lpLine, lpParameter);
 	strncpy(lpResponseBuffer, pBat_EsToChar(lpParameter), iLength);
 	lpResponseBuffer[iLength-1]='\0';
 
-	pBat_EsFree(lpParameter);
+	pBat_EsFree_Cached(lpParameter);
 	return lpLine;
 }
 
@@ -193,8 +193,7 @@ char* pBat_GetNextParameterEsD(char* lpLine, ESTR* lpReturn, const
 
 next:
 
-	if (pBat_GetParameterPointers(&lpBegin, &lpEnd, lpDelims, lpLine)
-		==FALSE)
+	if (pBat_GetParameterPointers(&lpBegin, &lpEnd, lpDelims, lpLine) == FALSE)
 		return NULL;
 
     quote = *lpBegin;
@@ -279,8 +278,8 @@ struct PARAMLIST* pBat_GetParamList(char* lpLine)
     gets a list of parameters
 */
 {
-	ESTR* lpParam=pBat_EsInit();
-	ESTR* lpTemp=pBat_EsInit();
+	ESTR* lpParam=pBat_EsInit_Cached();
+	ESTR* lpTemp=pBat_EsInit_Cached();
 	char* lpNext;
 	struct PARAMLIST *ret = NULL, *item, *next;
 
@@ -308,14 +307,14 @@ struct PARAMLIST* pBat_GetParamList(char* lpLine)
 
 		pBat_DelayedExpand(lpParam);
 
-		lpParam=pBat_EsInit();
+		lpParam=pBat_EsInit_Cached();
 
 		lpLine=lpNext;
 
 	}
 
-	pBat_EsFree(lpParam);
-	pBat_EsFree(lpTemp);
+	pBat_EsFree_Cached(lpParam);
+	pBat_EsFree_Cached(lpTemp);
 
 	return ret;
 }
@@ -326,7 +325,7 @@ void pBat_FreeParamList(struct PARAMLIST* list)
 
     while (list) {
 
-        pBat_EsFree(list->param);
+        pBat_EsFree_Cached(list->param);
         item = list->next;
         free(list);
         list = item;

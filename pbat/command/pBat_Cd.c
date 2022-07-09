@@ -218,7 +218,7 @@ int pBat_SetCurrentDir(char* lpLine)
 int pBat_CmdCd_nix(char* lpLine)
 {
 	char* lpNext;
-	ESTR* lpEsDir=pBat_EsInit();
+	ESTR* lpEsDir=pBat_EsInit_Cached();
 	int status = PBAT_NO_ERROR,
 	    quotes = 0;
 
@@ -316,7 +316,7 @@ def:
 	}
 
 error:
-	pBat_EsFree(lpEsDir);
+	pBat_EsFree_Cached(lpEsDir);
 	return status;
 }
 
@@ -329,7 +329,7 @@ int pBat_CmdCd_win(char* lpLine)
 		 passed=0;
     int quotes = 0;
 
-    ESTR* lpesStr=pBat_EsInit();
+    ESTR* lpesStr=pBat_EsInit_Cached();
 
     int force=0,
 		status=0;
@@ -458,7 +458,7 @@ def:
     pBat_SetEnv(lpeEnv, varname, lpLine);
 
 end:
-    pBat_EsFree(lpesStr);
+    pBat_EsFree_Cached(lpesStr);
 
     return status;
 }

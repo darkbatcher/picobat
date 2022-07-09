@@ -59,7 +59,7 @@ int pBat_CmdEcho(char* lpLine)
 
 	}
 
-	lpEsParameter=pBat_EsInit();
+	lpEsParameter=pBat_EsInit_Cached();
 
 	if (pBat_LockMutex(&mEchoLock))
         pBat_ShowErrorMessage(PBAT_LOCK_MUTEX_ERROR,
@@ -109,7 +109,7 @@ int pBat_CmdEcho(char* lpLine)
         pBat_ShowErrorMessage(PBAT_RELEASE_MUTEX_ERROR,
                                         "pBat_Echo.c/pBat_CmdEcho()", -1);
 
-	pBat_EsFree(lpEsParameter);
+	pBat_EsFree_Cached(lpEsParameter);
 
 	return 0;
 }

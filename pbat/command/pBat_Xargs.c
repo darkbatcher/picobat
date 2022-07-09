@@ -52,8 +52,8 @@
 
 int pBat_CmdXargs(char* line)
 {
-    ESTR *param = pBat_EsInit(),
-         *cmdline = pBat_EsInit();
+    ESTR *param = pBat_EsInit_Cached(),
+         *cmdline = pBat_EsInit_Cached();
 
     line = pBat_SkipBlanks(line + 5);
 
@@ -105,8 +105,8 @@ int pBat_CmdXargs(char* line)
     status = pBat_RunCommand(cmdline, NULL);
 
 end:
-    pBat_EsFree(cmdline);
-    pBat_EsFree(param);
+    pBat_EsFree_Cached(cmdline);
+    pBat_EsFree_Cached(param);
 
     return status;
 }

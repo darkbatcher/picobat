@@ -218,7 +218,7 @@ int pBat_GetLongestCommonMatch(FILELIST* files, int min)
 void pBat_CompletionHandler(const char* in, const char** subst)
 {
     FILELIST* files;
-    ESTR* name = pBat_EsInit();
+    ESTR* name = pBat_EsInit_Cached();
     int len, match;
 
     pBat_EsCpy(name, in);
@@ -263,7 +263,7 @@ void pBat_CompletionHandler(const char* in, const char** subst)
         *subst = (char*)-1;
 
 end:
-    pBat_EsFree(name);
+    pBat_EsFree_Cached(name);
     pBat_FreeFileList(files);
 }
 

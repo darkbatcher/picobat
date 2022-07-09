@@ -154,30 +154,29 @@ void pBat_ExpandVar(ESTR* ptrCommandLine, char cDelimiter, ESTR** buf)
 
 void pBat_ReplaceVars(ESTR* lpEsStr)
 {
-    ESTR* buf[2] = {pBat_EsInit(), pBat_EsInit()};
+    ESTR* buf[2] = {pBat_EsInit_Cached(), pBat_EsInit_Cached()};
 
     pBat_ExpandVar(lpEsStr, '%', buf);
 
-    pBat_EsFree(buf[0]);
-    pBat_EsFree(buf[1]);
-
+    pBat_EsFree_Cached(buf[0]);
+    pBat_EsFree_Cached(buf[1]);
 }
 
 
 void pBat_DelayedExpand(ESTR* ptrCommandLine)
 {
-    ESTR* buf[2] = {pBat_EsInit(), pBat_EsInit()};
-
+	ESTR* buf[2] = { pBat_EsInit_Cached(), pBat_EsInit_Cached() };
+		
 	pBat_ExpandSpecialVar(ptrCommandLine, buf);
-
+	
 	*pBat_EsToChar(buf[0]) = '\0';
-    *pBat_EsToChar(buf[1]) = '\0';
-
+	*pBat_EsToChar(buf[1]) = '\0';
+	
 	if (bDelayedExpansion)
 		pBat_ExpandVar(ptrCommandLine, '!', buf);
-    else
-        pBat_UnEscape(ptrCommandLine->str);
-
-    pBat_EsFree(buf[0]);
-    pBat_EsFree(buf[1]);
+	else
+		pBat_UnEscape(ptrCommandLine->str);
+	
+	pBat_EsFree_Cached(buf[0]);
+	pBat_EsFree_Cached(buf[1]);
 }

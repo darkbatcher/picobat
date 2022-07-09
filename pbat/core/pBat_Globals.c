@@ -90,6 +90,7 @@ __thread ENVBUF* lpeEnv;
 __thread ENVSTACK* lpesEnv = NULL;
 __thread INPUT_FILE ifIn;
 __thread char lpCurrentDir[FILENAME_MAX];
+__thread ESTRCACHE ecEstrCache; /* ESTR cache */
 
 __thread char* lpAltPromptString = NULL;
 

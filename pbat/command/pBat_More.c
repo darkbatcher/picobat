@@ -47,7 +47,7 @@ static int pBat_MorePrompt(FILE* fIn, int* toprint, int* skip, int* ok);
 int pBat_CmdMore(char* line)
 {
 
-    ESTR* param=pBat_EsInit();
+    ESTR* param=pBat_EsInit_Cached();
     FILE* fIn = NULL;
     int flags= PBAT_MORE_ANSICODES | PBAT_MORE_USEU8,
         tabsize=8,
@@ -234,7 +234,7 @@ end:
     if (fIn && fIn != fInput)
         fclose(fIn);
     pBat_FreeFileList(list);
-    pBat_EsFree(param);
+    pBat_EsFree_Cached(param);
     return status;
 
 }

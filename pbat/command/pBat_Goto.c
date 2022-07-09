@@ -45,7 +45,7 @@ int pBat_CmdGoto(char* lpLine)
     char lpLabelName[FILENAME_MAX] = "";
     char lpFileName[FILENAME_MAX] = "";
     char *next, *pch;
-    ESTR* arg = pBat_EsInit();
+    ESTR* arg = pBat_EsInit_Cached();
     int quiet = 0;
 
     lpLine+=4;
@@ -123,6 +123,6 @@ int pBat_CmdGoto(char* lpLine)
 
 next:
 err:
-    pBat_EsFree(arg);
+    pBat_EsFree_Cached(arg);
     return iErrorLevel; /* leave errorlevel unaffected */
 }

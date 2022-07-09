@@ -150,8 +150,8 @@ __inline__ char* xstrdup(const char* str)
 int pBat_LoadBatchScript(struct batch_script_t* script)
 {
     FILE* file;
-    ESTR *line = pBat_EsInit(),
-         *cmd = pBat_EsInit();
+    ESTR *line = pBat_EsInit_Cached(),
+         *cmd = pBat_EsInit_Cached();
     struct cmdlines_t* newcmd;
     struct labels_t* newlbl, *last=NULL;
     int eof=0, nb=0, checkres=0;
@@ -266,8 +266,8 @@ int pBat_LoadBatchScript(struct batch_script_t* script)
 
     script->curr = script->cmds;
 
-    pBat_EsFree(cmd);
-    pBat_EsFree(line);
+    pBat_EsFree_Cached(cmd);
+    pBat_EsFree_Cached(line);
     fclose(file);
 
     /* pBat_DumpBatchScript(script); */
@@ -277,8 +277,8 @@ error:
     if (file)
         fclose(file);
 
-    pBat_EsFree(line);
-    pBat_EsFree(cmd);
+    pBat_EsFree_Cached(line);
+    pBat_EsFree_Cached(cmd);
     return -1;
 }
 

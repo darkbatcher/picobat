@@ -103,7 +103,7 @@ int pBat_CmdCopy(char* line)
              *next=NULL,
              *end;
 
-    ESTR *param=pBat_EsInit();
+    ESTR *param=pBat_EsInit_Cached();
 
     int i=0,
         len=0,
@@ -313,7 +313,7 @@ int pBat_CmdCopy(char* line)
 end:
     pBat_FreeFileList(files);
     pBat_FreeFileList(next);
-    pBat_EsFree(param);
+    pBat_EsFree_Cached(param);
 
     if (file) {
         for (i=0;i < len; i++)
@@ -333,7 +333,7 @@ int pBat_CmdCopyFile(char* file, const char* dest, int* flags)
     char  name[FILENAME_MAX],
           ext[FILENAME_MAX];
 
-    ESTR* dest_real = pBat_EsInit();
+    ESTR* dest_real = pBat_EsInit_Cached();
 
     if (((*flags & PBAT_COPY_MULTIPLE)
             && !(*flags & PBAT_COPY_CAT))) {
@@ -393,7 +393,7 @@ int pBat_CmdCopyFile(char* file, const char* dest, int* flags)
 
     }
 
-    pBat_EsFree(dest_real);
+    pBat_EsFree_Cached(dest_real);
 
     return status;
 }
@@ -405,7 +405,7 @@ int pBat_CmdCopyRecursive(char* file, const char* dest, short attr, int* flags)
              *end=NULL,
              *item;
 
-    ESTR* real_dest = pBat_EsInit();
+    ESTR* real_dest = pBat_EsInit_Cached();
 
     int  status = 0;
     size_t size  = pBat_GetStaticLength(file);
@@ -479,7 +479,7 @@ int pBat_CmdCopyRecursive(char* file, const char* dest, short attr, int* flags)
     }
 
 end:
-    pBat_EsFree(real_dest);
+    pBat_EsFree_Cached(real_dest);
     pBat_FreeFileList(files);
     pBat_FreeFileList(end);
     pBat_FreeFileList(dirs);

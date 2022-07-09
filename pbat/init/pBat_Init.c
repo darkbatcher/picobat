@@ -58,8 +58,8 @@
 
 void pBat_AssignCommandLine(int c, char** argv)
 {
-    ESTR *lpEsStr=pBat_EsInit(),
-          *lpEsParam=pBat_EsInit();
+    ESTR *lpEsStr=pBat_EsInit_Cached(),
+          *lpEsParam=pBat_EsInit_Cached();
 
     /* int i; */
 
@@ -89,8 +89,8 @@ void pBat_AssignCommandLine(int c, char** argv)
 
     pBat_SetLocalVar(lpvArguments, c, pBat_EsToChar(lpEsStr));
 
-    pBat_EsFree(lpEsStr);
-    pBat_EsFree(lpEsParam);
+    pBat_EsFree_Cached(lpEsStr);
+    pBat_EsFree_Cached(lpEsParam);
 }
 
 void pBat_DuplicateStdStreams(void)
@@ -134,6 +134,9 @@ void pBat_DuplicateStdStreams(void)
 void pBat_Init(void)
 {
     char lpSharePath[FILENAME_MAX];
+
+    /* Initialize ESTR cache */
+    pBat_EsCacheBuild(&ecEstrCache);
 
     /* Initialize pBat specific environment */
     lpeEnv = pBat_InitEnv(environ);
@@ -330,7 +333,7 @@ char* pBat_GetParameters(char** argv, char** lpFileName, int* bExitAfterCmd, int
 
                         /* allow a tiny memory leak, since i cannot see how
                            to handle it otherwise */
-                        lpCmdC = pBat_EsInit();
+                        lpCmdC = pBat_EsInit_Cached();
 
                         do {
 

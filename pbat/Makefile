@@ -53,7 +53,7 @@ SRC_FILES := \
 	./errors/pBat_Errors.c ./lang/pBat_Lang.c ./core/pBat_Debug.c \
 	./core/pBat_FilePath.c ./core/pBat_ParseBlock.c ./lang/pBat_ShowHelp.c \
 	./core/pBat_ExpandDef.c ./core/pBat_ReadScript.c ./core/pBat_Clone.c \
-	./command/pBat_Def.c ./command/pBat_Ask.c \
+	./core/pBat_EsCache.c ./command/pBat_Def.c ./command/pBat_Ask.c \
 	./command/pBat_Block.c ./command/pBat_Call.c ./command/pBat_Cd.c \
 	./command/pBat_Cls.c ./command/pBat_Color.c ./command/pBat_Copy.c \
 	./command/pBat_Del.c ./command/pBat_Dir.c ./command/pBat_Echo.c \

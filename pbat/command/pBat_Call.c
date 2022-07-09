@@ -47,9 +47,9 @@
 */
 int pBat_CmdCall(char* lpLine)
 {
-	ESTR *lpEsParameter=pBat_EsInit(),
-		 *lpEsLabel=pBat_EsInit(),
-		 *lpEsFile=pBat_EsInit();
+	ESTR *lpEsParameter=pBat_EsInit_Cached(),
+		 *lpEsLabel=pBat_EsInit_Cached(),
+		 *lpEsFile=pBat_EsInit_Cached();
 
 	char *lpCh,
 	     *lpNxt,
@@ -223,9 +223,9 @@ int pBat_CmdCall(char* lpLine)
 	}
 
 error:
-	pBat_EsFree(lpEsFile);
-	pBat_EsFree(lpEsParameter);
-	pBat_EsFree(lpEsLabel);
+	pBat_EsFree_Cached(lpEsFile);
+	pBat_EsFree_Cached(lpEsParameter);
+	pBat_EsFree_Cached(lpEsLabel);
 
 	return status ? status : iErrorLevel;
 }
@@ -240,7 +240,7 @@ int pBat_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 	char lpAbsPath[FILENAME_MAX];
 	int status = PBAT_NO_ERROR;
 
-	ESTR *lpEsParam=pBat_EsInit(),
+	ESTR *lpEsParam=pBat_EsInit_Cached(),
          *lpEsCmd
          /*, *lpEsTmp */;
 	int   c='1',
@@ -314,7 +314,7 @@ int pBat_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 
 	} else if (lpCmdLine) {
 
-        lpEsCmd = pBat_EsInit();
+        lpEsCmd = pBat_EsInit_Cached();
 
         while ((lpCmdLine = pBat_GetNextParameterEs(lpCmdLine, lpEsParam))) {
             pBat_EsReplace(lpEsParam, " ", "^ ");
@@ -332,7 +332,7 @@ int pBat_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
         /* set the %+ parameter */
         pBat_SetLocalVar(lpvTmpArgs, '+', lpEsCmd->str);
 
-        pBat_EsFree(lpEsCmd);
+        pBat_EsFree_Cached(lpEsCmd);
 
 	} else {
 
@@ -392,7 +392,7 @@ int pBat_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 	lpvArguments = lpvOldArgs;
 
 error:
-	pBat_EsFree(lpEsParam);
+	pBat_EsFree_Cached(lpEsParam);
 	return status ? status : iErrorLevel; /* do not affect errorlevel */
 }
 
@@ -401,7 +401,7 @@ int pBat_CmdCallExternal(char* lpFile, char* lpCh)
 
 	BLOCKINFO bkInfo;
 
-	ESTR *lpEsLine=pBat_EsInit();
+	ESTR *lpEsLine=pBat_EsInit_Cached();
 
 	char *lpStr;
 
@@ -420,7 +420,7 @@ int pBat_CmdCallExternal(char* lpFile, char* lpCh)
 
 	pBat_RunBlock(&bkInfo);
 
-	pBat_EsFree(lpEsLine);
+	pBat_EsFree_Cached(lpEsLine);
 
 	return iErrorLevel; /* do not affect errorlevel */
 

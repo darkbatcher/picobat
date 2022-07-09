@@ -45,7 +45,7 @@
 
 int pBat_CmdRen(char* lpLine)
 {
-	ESTR* lpEstr=pBat_EsInit();
+	ESTR* lpEstr=pBat_EsInit_Cached();
 	char lpFileName[FILENAME_MAX]= {0}, lpFileDest[FILENAME_MAX]= {0};
 	char* lpToken;
 
@@ -60,7 +60,7 @@ int pBat_CmdRen(char* lpLine)
     } else {
 
 		pBat_ShowErrorMessage(PBAT_EXPECTED_MORE, "REN / RENAME", FALSE);
-		pBat_EsFree(lpEstr);
+		pBat_EsFree_Cached(lpEstr);
 
 		return PBAT_EXPECTED_MORE;
 
@@ -83,7 +83,7 @@ int pBat_CmdRen(char* lpLine)
                                         lpEstr->str,
                                         0);
 
-                pBat_EsFree(lpEstr);
+                pBat_EsFree_Cached(lpEstr);
                 return PBAT_MOVE_NOT_RENAME;
 
 			}
@@ -111,7 +111,7 @@ int pBat_CmdRen(char* lpLine)
 			if (rename(lpFileName, lpFileDest)) {
 
 				pBat_ShowErrorMessage(PBAT_UNABLE_RENAME, lpFileName, FALSE);
-				pBat_EsFree(lpEstr);
+				pBat_EsFree_Cached(lpEstr);
 				return PBAT_UNABLE_RENAME;
 
 			}
@@ -121,7 +121,7 @@ int pBat_CmdRen(char* lpLine)
 	}
 
 	pBat_ShowErrorMessage(PBAT_EXPECTED_MORE, "REN / RENAME", FALSE);
-	pBat_EsFree(lpEstr);
+	pBat_EsFree_Cached(lpEstr);
 
 	return PBAT_EXPECTED_MORE;
 }

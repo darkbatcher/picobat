@@ -113,7 +113,7 @@ int pBat_GetLine(ESTR* lpesLine, INPUT_FILE* pIn)
 
     pBat_EsCpy(lpesLine, "");
     cmdlines = pIn->batch.curr;
-    tmp = pBat_EsInit();
+    tmp = pBat_EsInit_Cached();
 
     /* Get the next line */
     do {
@@ -127,7 +127,7 @@ int pBat_GetLine(ESTR* lpesLine, INPUT_FILE* pIn)
 
     } while ((!(ok = pBat_CheckBlocks(lpesLine)) || ok == -1) && cmdlines);
 
-    pBat_EsFree(tmp);
+    pBat_EsFree_Cached(tmp);
     pIn->batch.curr = cmdlines;
     pBat_RmTrailingNl(lpesLine->str);
 
@@ -148,7 +148,7 @@ error:
 int pBat_GetLine_Cmdly(ESTR* lpesLine, INPUT_FILE* pIn)
 {
 	FILE* pFile;
-	ESTR* lpesTmp=pBat_EsInit();
+	ESTR* lpesTmp=pBat_EsInit_Cached();
 
 	char bCorrectBlocks=FALSE;
 	char* lpCh;
@@ -239,7 +239,7 @@ int pBat_GetLine_Cmdly(ESTR* lpesLine, INPUT_FILE* pIn)
 
 	if (!*pBat_EsToChar(lpesLine)) {
 
-		pBat_EsFree(lpesTmp);
+		pBat_EsFree_Cached(lpesTmp);
 		return 1;
 
 	}
@@ -251,7 +251,7 @@ int pBat_GetLine_Cmdly(ESTR* lpesLine, INPUT_FILE* pIn)
 
 	}
 
-	pBat_EsFree(lpesTmp);
+	pBat_EsFree_Cached(lpesTmp);
 
 	pBat_RmTrailingNl(lpesLine->str);
 
@@ -259,7 +259,7 @@ int pBat_GetLine_Cmdly(ESTR* lpesLine, INPUT_FILE* pIn)
 
 error:
 	pIn->bEof=TRUE;
-	pBat_EsFree(lpesTmp);
+	pBat_EsFree_Cached(lpesTmp);
 	return -1;
 
 }

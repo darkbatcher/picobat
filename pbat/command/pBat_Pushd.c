@@ -51,7 +51,7 @@
 int pBat_CmdPushd (char *line)
 {
   int count = 1;
-  ESTR *estr = pBat_EsInit();
+  ESTR *estr = pBat_EsInit_Cached();
 
   line += 5;
 
@@ -62,18 +62,18 @@ int pBat_CmdPushd (char *line)
     while (i--)
       fprintf(fOutput, "%s" PBAT_NL, dsDirStack.paths[i]);
 
-    pBat_EsFree(estr);
+    pBat_EsFree_Cached(estr);
     return 0;
   }
 
   if (!strncmp(pBat_EsToChar(estr), "/?", 2)) {
     /* Show help */
     pBat_ShowInternalHelp(PBAT_HELP_PUSHD);
-    pBat_EsFree(estr);
+    pBat_EsFree_Cached(estr);
     return 0;
   }
 
-  ESTR *current_dir = pBat_EsInit();
+  ESTR *current_dir = pBat_EsInit_Cached();
 
   do {
     pBat_EsCpy(current_dir, lpCurrentDir);
@@ -83,16 +83,16 @@ int pBat_CmdPushd (char *line)
     else {
       /* not a directory */
       pBat_ShowErrorMessage(PBAT_DIRECTORY_ERROR, pBat_EsToChar(estr), FALSE);
-      pBat_EsFree(current_dir);
-      pBat_EsFree(estr);
+      pBat_EsFree_Cached(current_dir);
+      pBat_EsFree_Cached(estr);
       return PBAT_DIRECTORY_ERROR;
     }
 
     count++;
   } while((line = pBat_GetNextParameterEs(line, estr)));
 
-  pBat_EsFree(current_dir);
-  pBat_EsFree(estr);
+  pBat_EsFree_Cached(current_dir);
+  pBat_EsFree_Cached(estr);
   return 0;
 }
 

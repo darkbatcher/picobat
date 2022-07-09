@@ -48,6 +48,7 @@
 #include "pBat_ReadScript.h"
 #include "pBat_Clone.h"
 #include "pBat_EnvStack.h"
+#include "pBat_EsCache.h"
 #include "pBat_Globals.h"
 #include "pBat_ExitInt.h"
 #include "pBat_Exec.h"

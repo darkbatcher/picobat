@@ -177,7 +177,7 @@ int main(int argc, char *argv[])
 
     if (lpCmdCSwitch != NULL) {
 
-        lpesCmd=pBat_EsInit();
+        lpesCmd=pBat_EsInit_Cached();
 
         pBat_EsCpy(lpesCmd, lpCmdCSwitch);
         pBat_RunLine(lpesCmd);

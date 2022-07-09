@@ -203,7 +203,7 @@ int pBat_CmdIf(char* lpParam, PARSED_LINE** lpplLine)
 	} else {
 
 		/* the script uses normal comparisons */
-		lpComparison=pBat_EsInit();
+		lpComparison=pBat_EsInit_Cached();
 
         lpNext=pBat_GetNextParameterEs(lpParam, lpComparison);
 
@@ -213,7 +213,7 @@ int pBat_CmdIf(char* lpParam, PARSED_LINE** lpplLine)
 
             if (iResult == -1) {
 
-                pBat_EsFree(lpComparison);
+                pBat_EsFree_Cached(lpComparison);
                 pBat_ShowErrorMessage(PBAT_INVALID_IF_EXPRESSION, lpParam, FALSE);
 
                 if (lpplLine)
@@ -261,7 +261,7 @@ int pBat_CmdIf(char* lpParam, PARSED_LINE** lpplLine)
 				if (!(lpNext=pBat_GetNextParameter(lpNext, lpArgument, 11))) {
 
 					pBat_ShowErrorMessage(PBAT_EXPECTED_MORE, "IF", FALSE);
-					pBat_EsFree(lpComparison);
+					pBat_EsFree_Cached(lpComparison);
 
                     if (lpplLine)
                         *lpplLine = NULL;
@@ -270,13 +270,13 @@ int pBat_CmdIf(char* lpParam, PARSED_LINE** lpplLine)
 
 				}
 
-                lpOtherPart=pBat_EsInit();
+                lpOtherPart=pBat_EsInit_Cached();
 
 				if (!(lpNext=pBat_GetNextParameterEs(lpNext, lpOtherPart))) {
 
 					pBat_ShowErrorMessage(PBAT_EXPECTED_MORE, "IF", FALSE);
-					pBat_EsFree(lpOtherPart);
-					pBat_EsFree(lpComparison);
+					pBat_EsFree_Cached(lpOtherPart);
+					pBat_EsFree_Cached(lpComparison);
 
                     if (lpplLine)
                         *lpplLine = NULL;
@@ -290,7 +290,7 @@ int pBat_CmdIf(char* lpParam, PARSED_LINE** lpplLine)
                                                     pBat_EsToChar(lpOtherPart),
                                                     iFlag);
 
-                pBat_EsFree(lpOtherPart);
+                pBat_EsFree_Cached(lpOtherPart);
 
                 if (iResult == -1) {
 
@@ -304,7 +304,7 @@ int pBat_CmdIf(char* lpParam, PARSED_LINE** lpplLine)
 		} else {
 
 			pBat_ShowErrorMessage(PBAT_EXPECTED_MORE, "IF", FALSE);
-			pBat_EsFree(lpComparison);
+			pBat_EsFree_Cached(lpComparison);
 
             if (lpplLine)
                 *lpplLine = NULL;
@@ -314,7 +314,7 @@ int pBat_CmdIf(char* lpParam, PARSED_LINE** lpplLine)
 		}
 
 		lpParam=lpNext;
-		pBat_EsFree(lpComparison);
+		pBat_EsFree_Cached(lpComparison);
 
 	}
 

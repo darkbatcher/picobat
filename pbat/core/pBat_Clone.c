@@ -95,6 +95,8 @@ void* pBat_CloneTrampoline(void* data)
     lpstSymbols = symbol_table_create(MIN_TABLE_LENGTH);
     #endif
 
+    pBat_EsCacheBuild(&ecEstrCache);
+
     func = cloned->fn;
     arg = cloned->arg;
 

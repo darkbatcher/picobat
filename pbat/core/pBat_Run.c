@@ -51,7 +51,7 @@
 
 int pBat_RunBatch(INPUT_FILE* pIn)
 {
-	ESTR* lpLine=pBat_EsInit();
+	ESTR* lpLine=pBat_EsInit_Cached();
 
 	INPUT_FILE pIndIn;
 
@@ -98,7 +98,7 @@ int pBat_RunBatch(INPUT_FILE* pIn)
 
 	}
 
-	pBat_EsFree(lpLine);
+	pBat_EsFree_Cached(lpLine);
 
 	return iErrorLevel;
 
@@ -487,8 +487,8 @@ RestartSearch:
 int pBat_RunBlock(BLOCKINFO* lpbkInfo)
 {
 
-	ESTR *lpEsLine = pBat_EsInit(),
-		 *lpEsBlock = pBat_EsInit();
+	ESTR *lpEsLine = pBat_EsInit_Cached(),
+		 *lpEsBlock = pBat_EsInit_Cached();
 
 	char *lpToken,
          *lpEnd,
@@ -579,8 +579,8 @@ int pBat_RunBlock(BLOCKINFO* lpbkInfo)
 	/* releases the lock */
 	pBat_SetStreamStackLockState(lppsStreamStack, iOldState);
 
-	pBat_EsFree(lpEsLine);
-	pBat_EsFree(lpEsBlock);
+	pBat_EsFree_Cached(lpEsLine);
+	pBat_EsFree_Cached(lpEsBlock);
 
 	return iErrorLevel;
 }
@@ -592,7 +592,7 @@ int pBat_RunExternalCommand(char* lpCommandLine, int* error)
 	     lpFileName[FILENAME_MAX],
 	     lpExt[_MAX_EXT];
 
-	ESTR *lpCmdLine = pBat_EsInit();
+	ESTR *lpCmdLine = pBat_EsInit_Cached();
 
 	PARAMLIST *list=NULL, *item;
 
@@ -667,7 +667,7 @@ int pBat_RunExternalCommand(char* lpCommandLine, int* error)
     }
 
 error:
-    pBat_EsFree(lpCmdLine);
+    pBat_EsFree_Cached(lpCmdLine);
 
     if (lpArguments)
         free(lpArguments);
@@ -714,7 +714,7 @@ void pBat_LaunchExternalBatch(struct batch_launch_data_t* arg)
     /* well skip the very first argument as it represents script
        name */
 
-    tmp = pBat_EsInit();
+    tmp = pBat_EsInit_Cached();
 
     if (str = pBat_GetNextParameterEs(arg->lpFullLine, tmp)) {
 
@@ -724,7 +724,7 @@ void pBat_LaunchExternalBatch(struct batch_launch_data_t* arg)
     } else
         pBat_SetLocalVar(lpvArguments, '*', arg->lpFullLine);
 
-    pBat_EsFree(tmp);
+    pBat_EsFree_Cached(tmp);
 
     pBat_SetLocalVar(lpvArguments, '0', arg->lpFileName);
 
@@ -813,7 +813,7 @@ int pBat_RunExternalBatch(char* lpFileName, char* lpFullLine, char** lpArguments
    if lookahead is NULL a new PARSED_LINE will be malloc'd */
 PARSED_LINE* pBat_LookAHeadMakeParsedLine(BLOCKINFO* block, PARSED_LINE* lookahead)
 {
-	ESTR* cmd = pBat_EsInit();
+	ESTR* cmd = pBat_EsInit_Cached();
 
     if (!lookahead) {
         if (!(lookahead = malloc(sizeof(PARSED_LINE)))) {
@@ -838,7 +838,7 @@ PARSED_LINE* pBat_LookAHeadMakeParsedLine(BLOCKINFO* block, PARSED_LINE* lookahe
     pBat_EsCat(cmd, ")");
 
     if (lookahead->lpCmdLine)
-        pBat_EsFree(lookahead->lpCmdLine);
+        pBat_EsFree_Cached(lookahead->lpCmdLine);
 
     lookahead->lpCmdLine = cmd;
 
@@ -872,7 +872,7 @@ void pBat_SigHandlerBreak(int sig)
 
     }
 
-    attr = pBat_EsInit();
+    attr = pBat_EsInit_Cached();
 
     pBat_EsCpy(attr, lppBatExec);
     pBat_EsCpy(attr, "/a:q");
@@ -935,7 +935,7 @@ BOOL WINAPI pBat_SigHandler(DWORD dwCtrlType)
                 fputs(PBAT_NL, stderr);
                 fprintf(stderr, "%s %s ", lpBreakConfirm, lpAskyN);
 
-                args = pBat_EsInit();
+                args = pBat_EsInit_Cached();
 
                 choice = PBAT_ASK_NO;
 
@@ -970,7 +970,7 @@ BOOL WINAPI pBat_SigHandler(DWORD dwCtrlType)
                that much and simply restart a new pBat command prompt. This
                implies a little performance penalty, but ... */
 
-            args = pBat_EsInit();
+            args = pBat_EsInit_Cached();
 
             pBat_EsCpy(args, "\"");
             pBat_EsCat(args, lppBatExec);

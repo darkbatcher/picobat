@@ -401,7 +401,7 @@ void pBat_EnvFree(ENVBUF* pEnv)
 void pBat_ApplyEnv(ENVBUF* pEnv)
 {
     int i;
-    ESTR* exp = pBat_EsInit();
+    ESTR* exp = pBat_EsInit_Cached();
 
     for (i=0; i < pEnv->index; i++) {
 
@@ -417,13 +417,13 @@ void pBat_ApplyEnv(ENVBUF* pEnv)
 
     }
 
-    pBat_EsFree(exp);
+    pBat_EsFree_Cached(exp);
 }
 
 void pBat_UnApplyEnv(ENVBUF* pEnv)
 {
     int i;
-    ESTR* exp = pBat_EsInit();
+    ESTR* exp = pBat_EsInit_Cached();
 
     for (i=0; i < pEnv->index; i++) {
 
@@ -439,7 +439,7 @@ void pBat_UnApplyEnv(ENVBUF* pEnv)
 
     }
 
-    pBat_EsFree(exp);
+    pBat_EsFree_Cached(exp);
 }
 
 

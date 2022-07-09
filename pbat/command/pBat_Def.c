@@ -34,7 +34,7 @@
 int pBat_CmdDef(char* lpLine, PARSED_LINE** lpplLine)
 {
 
-	ESTR* lpEsParam=pBat_EsInit();
+	ESTR* lpEsParam=pBat_EsInit_Cached();
 	COMMANDLIST* lpclNewCommands;
 	COMMANDINFO  ciCommand;
 
@@ -172,7 +172,7 @@ int pBat_CmdDef(char* lpLine, PARSED_LINE** lpplLine)
     }
 
 end:
-	pBat_EsFree(lpEsParam);
+	pBat_EsFree_Cached(lpEsParam);
 	return status;
 }
 

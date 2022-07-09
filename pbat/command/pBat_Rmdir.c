@@ -57,7 +57,7 @@
 
 int pBat_CmdRmdir(char* lpLine)
 {
-	ESTR *lpEstr=pBat_EsInit();
+	ESTR *lpEstr=pBat_EsInit_Cached();
 
 	int	mode=PBAT_SEARCH_DEFAULT | PBAT_SEARCH_NO_PSEUDO_DIR,
 		param=PBAT_ASK_CONFIRMATION,
@@ -234,7 +234,7 @@ end:
 
     }
 
-	pBat_EsFree(lpEstr);
+	pBat_EsFree_Cached(lpEstr);
 	return status;
 
 }

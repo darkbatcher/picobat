@@ -281,7 +281,7 @@ int pBat_LoadMod(const char* mod)
 #define QUIET 1
 int pBat_CmdMod(char* line)
 {
-    ESTR* param = pBat_EsInit();
+    ESTR* param = pBat_EsInit_Cached();
     char *path;
     int mode = LOUD, status = PBAT_NO_ERROR;
     line += 3;
@@ -321,11 +321,11 @@ int pBat_CmdMod(char* line)
                 /* if the path is not absolute, then the command is refferring
                    to something in %PBAT_PATH%/modules */
 
-                ESTR* tmp = pBat_EsInit();
+                ESTR* tmp = pBat_EsInit_Cached();
 
                 pBat_MakePath(tmp, 3, pBat_GetEnv(lpeEnv, "PBAT_PATH"), "modules", param->str);
 
-                pBat_EsFree(param);
+                pBat_EsFree_Cached(param);
                 param = tmp;
 
 
@@ -364,7 +364,7 @@ end:
                                __FILE__ "/pBat_CmdMod",
                                -1);
 
-    pBat_EsFree(param);
+    pBat_EsFree_Cached(param);
 
     return status;
 }
