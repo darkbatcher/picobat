@@ -1363,7 +1363,7 @@ void pBat_ExecuteForSubCommand(struct pipe_launch_data_t* arg)
 
     pBat_RunBlock(&bkBlock);
 
-    pBat_EsFree_Cached(arg->str);
+    pBat_EsFree(arg->str);
     free(arg);
 
 }
@@ -1392,7 +1392,7 @@ int pBat_ForInputProcess(ESTR* lpInput, INPUTINFO* lpipInfo, int* iPipeFd)
 
 
     param->fdout = iPipeFd[1];
-    param->str = pBat_EsInit_Cached();
+    param->str = pBat_EsInit();
 
     pBat_EsCpyE(param->str, lpInput);
 
