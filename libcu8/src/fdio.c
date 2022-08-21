@@ -188,3 +188,61 @@ __LIBCU8__IMP __cdecl int libcu8_fd_set_inheritance(int fd, int mode)
 
     return 0;
 }
+
+/* CRT function replacement for file management functions */
+__LIBCU8__IMP __cdecl int libcu8_remove(const char* file)
+{
+    wchar_t *wcs;
+    int ret;
+    size_t len;
+
+    if (!(wcs = (wchar_t*)libcu8_xconvert(LIBCU8_TO_U16, file, strlen(file)+1,
+                                          &len)))
+        return -1;
+
+    ret = _wremove(wcs);
+    free(wcs);
+
+    return ret;
+}
+
+__LIBCU8__IMP __cdecl int libcu8_unlink(const char* file)
+{
+    wchar_t *wcs;
+    int ret;
+    size_t len;
+
+    if (!(wcs = (wchar_t*)libcu8_xconvert(LIBCU8_TO_U16, file, strlen(file)+1,
+                                          &len)))
+        return -1;
+
+    ret = _wunlink(wcs);
+    free(wcs);
+
+    return ret;
+}
+
+__LIBCU8__IMP __cdecl int libcu8_rename(const char* oldn, const char* newn)
+{
+    wchar_t *wold=NULL, *wnew=NULL;
+    int ret;
+    size_t len;
+
+    if ((wold = (wchar_t*)libcu8_xconvert(LIBCU8_TO_U16, oldn, strlen(oldn)+1,
+                                          &len))
+        && (wnew = (wchar_t*)libcu8_xconvert(LIBCU8_TO_U16, newn, strlen(newn)+1,
+                                          &len))) {
+
+        ret = _wrename(wold, wnew);
+
+    } else
+        ret = -1;
+
+
+    if (wold)
+        free(wold);
+    if (wnew)
+        free(wnew);
+
+    return ret;
+}

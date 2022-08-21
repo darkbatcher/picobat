@@ -106,7 +106,10 @@ struct fn_replace_t functions[] = {
     {"_mkdir", libcu8_mkdir},
     {"_getcwd", libcu8_getcwd},
     {"_open", libcu8_open},
-    {"fopen", libcu8_fopen}
+    {"fopen", libcu8_fopen},
+    {"remove", libcu8_remove},
+    {"rename", libcu8_rename},
+    {"_unlink", libcu8_unlink}
 };
 
 
