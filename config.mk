@@ -30,7 +30,7 @@ LEX ?= flex
 YACC ?= yacc
 
 CFLAGS ?= -O2
-LDFLAGS ?= -O2 -s
+LDFLAGS ?= -O2 -s -static
 
 BINDIR ?= $(ROOTDIR)/bin
 
