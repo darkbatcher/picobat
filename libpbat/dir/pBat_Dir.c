@@ -828,9 +828,7 @@ LIBPBAT int pBat_RegExpCaseMatch(const char* restrict regexp, const char* restri
 LIBPBAT int pBat_FormatFileSize(char* lpBuf, int iLength, unsigned int iFileSize)
 {
 	int i=0, iLastPart=0;
-	if (!iFileSize) {
-		return (int)strncpy(lpBuf, "", iLength);
-	}
+
 	char* lpUnit[]= {"o", "ko", "mo", "go"};
 	while (iFileSize>=1000) {
 		iLastPart=iFileSize % 1000;
