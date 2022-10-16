@@ -252,7 +252,7 @@ static const char* iso639[] = {
 "uz" ,"uzbek",
 "ve" ,"venda",
 "vi" ,"vietnamese",
-"vo" ,"volap�k",
+"vo" ,"volapuk",
 "wa" ,"walloon",
 "cy" ,"welsh",
 "cy" ,"welsh",
@@ -489,6 +489,7 @@ void microgettext_get_lang(int cat, char* restrict loc, size_t size)
 
     microgettext_lower(loc);
 
+
     /* Check if loc matches an english language name and convert it to
        2 letters format */
     if ((i = microgettext_get_index(key, iso639, sizeof(iso639)/(2*sizeof(char*)),
@@ -498,6 +499,7 @@ void microgettext_get_lang(int cat, char* restrict loc, size_t size)
         loc[size-1] =  '\0';
 
     }
+
 }
 
 /* Produces the *.mo file path associated with a domain and a category

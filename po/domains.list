@@ -1,1 +1,1 @@
-pBat ../pbat/errors/pBat_Errors.c ../pbat/lang/pBat_Lang.c ../pbat/lang/pBat_ShowHelp.c
+pbat ../pbat/errors/pBat_Errors.c ../pbat/lang/pBat_Lang.c ../pbat/lang/pBat_ShowHelp.c
