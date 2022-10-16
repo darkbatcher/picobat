@@ -1,1 +1,32 @@
 0 ICON "pbat.ico"
+1 VERSIONINFO
+FILEVERSION 10,11,10,1
+PRODUCTVERSION 10,11,10,1
+FILEOS 0x4
+FILETYPE 0x1
+{
+BLOCK "StringFileInfo"
+{
+    BLOCK "040904E4"
+    {
+        VALUE "CompanyName", "PicoBAT Team"
+        VALUE "Developer", "darkbatcher & TSnake41"
+        VALUE "OriginalFilename", "PBAT.exe"
+        VALUE "Comments", "PBAT"
+        VALUE "FileDescription", "PBAT"
+        VALUE "InternalName", "PBAT"
+        VALUE "ProductName", "PBAT"
+        VALUE "LegalCopyright", "\xA9 2022 PicoBAT Team"
+        VALUE "Build", "2022"
+        VALUE "FileVersion", "10.11.10.01"
+        VALUE "ProductVersion", "10.11.10.01"
+        VALUE "LegalTrademarks", "\xA9 2022 PicoBAT Team"
+        VALUE "Debugger", "0"
+    }
+}
+
+BLOCK "VarFileInfo"
+{
+    VALUE "Translation", 0x041F 0x04E4  
+}
+}
