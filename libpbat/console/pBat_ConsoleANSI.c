@@ -32,6 +32,7 @@
 
 #ifndef WIN32
 #include <fcntl.h>
+#include <unistd.h>
 #endif
 
 #ifdef LIBPBAT_W10_ANSI

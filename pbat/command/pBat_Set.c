@@ -40,6 +40,8 @@
 
 #include <libpBat.h>
 
+#include "../linenoise/pBat_LineNoise.h"
+
 #include "../core/pBat_Core.h"
 
 #include "pBat_Set.h"
