@@ -32,11 +32,6 @@
 
 #include "../../config.h"
 
-#ifndef PBAT_USE_FASTEVAL
-/* libmatheval symbol table */
-#include <symbol_table.h>
-#endif
-
 #if defined WIN32
 #include <conio.h>
 #endif
@@ -195,10 +190,6 @@ void pBat_Init(void)
 
     lppsStreamStack=pBat_InitStreamStack();
 
-    #ifndef PBAT_USE_FASTEVAL
-    /* Prepare libmatheval symbol table. */
-    lpstSymbols = symbol_table_create(MIN_TABLE_LENGTH);
-    #endif
 }
 
 int pBat_InitSetModes(char* str)

@@ -33,13 +33,7 @@ ifeq ($(use_nls),1)
 	SUBDIR_PO = po
 endif
 
-ifeq ($(use_fasteval),1)
-	SUBDIRS_EVAL = libfasteval
-else
-	SUBDIRS_EVAL = libmatheval
-endif
-
-SUBDIRS = microgettext libpbat $(SUBDIRS_EVAL) $(SUBDIRS_ADD) pbat pbatize dump tea \
+SUBDIRS = microgettext libpbat libfasteval $(SUBDIRS_ADD) pbat pbatize dump tea \
 			scripts modules $(SUBDIR_PO)
 TEAFILES = README.tea WHATSNEW.tea GUIDELINES.tea THANKS.tea
 TEXTFILES = $(TEAFILES:.tea=.txt)
@@ -115,10 +109,10 @@ PROGRAMS = mimeopen xdg-open
 FUNCTIONS = WIN32 MINGW_W64
 LIBS = pthread m dl
 FLAGS = PIC
-OPTIONS = libcu8 nls cmdlycorrect console modules linenoise w10ansi fasteval
+OPTIONS = libcu8 nls cmdlycorrect console modules linenoise w10ansi
 DEFAULTOPTIONS = no-libcu8 use-nls no-cmdlycorrect use-console use-modules \
-				 use-linenoise no-w10ansi use-fasteval
-SUBCONFIG = libcu8 libmatheval
+				 use-linenoise no-w10ansi
+SUBCONFIG = libcu8
 ADDITIONALVARS = HOST BINDIR YEAR VERSION PACKAGE PACKAGE_URL PACKAGE_BUGREPORT
 
 include femto.mk

@@ -28,11 +28,6 @@
 #include "pBat_Core.h"
 #include "../../config.h"
 
-#ifndef PBAT_USE_FASTEVAL
-/* libmatheval symbol table */
-#include "symbol_table.h"
-#endif
-
 #ifndef WIN32
 extern char** environ;
 extern MUTEX mLineNoise;
@@ -84,10 +79,6 @@ extern __thread FILE *fError, *_fError; /* current thread error stream */
 extern __thread ENVSTACK* lpesEnv;
 extern __thread char lpCurrentDir[FILENAME_MAX]; /* current path */
 extern __thread ESTRCACHE ecEstrCache; /* ESTR cache */
-
-#ifndef PBAT_USE_FASTEVAL
-extern __thread SymbolTable *lpstSymbols; /* libmatheval symbol table */
-#endif
 
 extern __thread char* lpAltPromptString; /* possible alternate prompt string for completion */
 

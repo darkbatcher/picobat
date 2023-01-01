@@ -22,7 +22,12 @@
 #ifndef FASTEVAL_H
 #define FASTEVAL_H 1
 
+struct fasteval_result_t {
+    double result;
+    int fmode;
+};
+
 double fasteval_evaluate(char *expr, double (*get)(const char *),
-  double (*set)(char *, double));
+  double (*set)(char *, double), int *fmode);
 
 #endif

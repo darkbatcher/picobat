@@ -35,10 +35,6 @@ void pBat_Exit(void)
 	pBat_EnvFree(lpeEnv);
 	pBat_DirStackFree();
 
-	#ifndef PBAT_USE_FASTEVAL
-	symbol_table_destroy(lpstSymbols);
-	#endif
-
 	pBat_EsCacheDrop(&ecEstrCache);
 
     /* pBat_WaitForAllThreads(); */

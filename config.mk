@@ -50,17 +50,9 @@ ifneq (,$(wildcard $(ROOTDIR)/femto-config.mk))
     include $(ROOTDIR)/femto-config.mk
 endif
 
-ifeq ($(use_fasteval),1)
-	LIBMATHEVAL_DIR = $(ROOTDIR)/libfasteval
-	LIBMATHEVAL_INC = -I$(LIBMATHEVAL_DIR)/lib
-	LIBMATHEVAL_LD = -L$(LIBMATHEVAL_DIR) -lfasteval
-else
-# libmatheval
-LIBMATHEVAL_DIR = $(ROOTDIR)/libmatheval
-
+LIBMATHEVAL_DIR = $(ROOTDIR)/libfasteval
 LIBMATHEVAL_INC = -I$(LIBMATHEVAL_DIR)/lib
-LIBMATHEVAL_LD = -L$(LIBMATHEVAL_DIR) -lmatheval
-endif
+LIBMATHEVAL_LD = -L$(LIBMATHEVAL_DIR) -lfasteval
 
 #ifeq ($(fn_MINGW_W64),1)
 #	CFLAGS += -D__USE_MINGW_ANSI_STDIO

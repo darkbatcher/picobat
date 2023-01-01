@@ -43,8 +43,11 @@
 #include <stdlib.h>
 #include <math.h>
 
+#include "fasteval.h"
+
+
 /* Variables used to communicate with code using parser.  */
-extern _Thread_local double result;
+extern _Thread_local struct fasteval_result_t result;
 extern _Thread_local _Bool ok;
 
 extern double (*get_var)(const char *);
@@ -119,7 +122,8 @@ extern void input_reset (void);
 
 input
 : expression '\n' {
-  result = AS_DOUBLE($1);
+  result.result = AS_DOUBLE($1);
+  result.fmode = $1.is_double;
 }
 ;
 

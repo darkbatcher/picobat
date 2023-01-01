@@ -32,11 +32,7 @@
 #include <string.h>
 #include <errno.h>
 
-#ifdef PBAT_USE_FASTEVAL
 #include <fasteval.h>
-#else
-#include <matheval.h>
-#endif
 
 #include <libpBat.h>
 
@@ -340,7 +336,7 @@ int pBat_CmdSetP(char* lpLine)
 
 		if ((lpEqual=strchr(pBat_EsToChar(lpEsInput), '\n')))
 			*lpEqual='\0';
-		
+
 		if (*pBat_EsToChar(lpEsInput) == '\0')
 			status = 1;
 
@@ -384,7 +380,6 @@ error:
 
 int pBat_CmdSetEval(ESTR* lpExpression)
 {
-	void* evaluator; /* an evaluator for libmatheval-pBat */
 	char *lpVarName,
 	     *lpEqual,
 	     lpResult[50];
@@ -429,24 +424,7 @@ int pBat_CmdSetEval(ESTR* lpExpression)
         pBat_ShowErrorMessage(PBAT_LOCK_MUTEX_ERROR,
                               __FILE__ "/pBat_CmdSetEvalFloat()" , -1);
 
-	#ifndef PBAT_USE_FASTEVAL
-	/* create evaluator */
-	if (!(evaluator=evaluator_create(lpEqual+1, &fmode, lpstSymbols))) {
-
-		pBat_ShowErrorMessage(PBAT_INVALID_EXPRESSION, lpEqual+1, FALSE);
-		status = PBAT_INVALID_EXPRESSION;
-
-		goto error;
-
-	}
-
-    evaluator_set_functions(_pBat_SetGetVar, _pBat_SetSetVar);
-	dResult=evaluator_evaluate(evaluator);
-
-	evaluator_destroy(evaluator);
-	#else
-	dResult = fasteval_evaluate(lpEqual+1, _pBat_SetGetVar, _pBat_SetSetVar);
-	#endif
+	dResult = fasteval_evaluate(lpEqual+1, _pBat_SetGetVar, _pBat_SetSetVar, &fmode);
 
 	/* clear if operator is recognized */
 
