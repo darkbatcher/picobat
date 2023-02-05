@@ -20,6 +20,8 @@ ROOTDIR = ..
 include $(ROOTDIR)/config.mk
 
 CFLAGS += $(LIBPBAT_INC)
+LDFLAGS += $(LIBPBAT_LD) $(LIBCU8_LD)
+
 LDFLAGS += $(LIBPBAT_LD) $(LPTHREAD_LD)
 
 SRC_FILES := \

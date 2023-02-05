@@ -68,7 +68,7 @@ int main(void)
     INPUT input_buffer[NB_ITEMS(input_string)-1];
     HANDLE old;
 
-    int size;
+    int size, ret;
     char buf[FILENAME_MAX],
         buf2[FILENAME_MAX];
 
@@ -88,12 +88,11 @@ int main(void)
 
     SetForegroundWindow(old);
 
-    size = read (0, buf, sizeof(buf));
-
-    if (size != sizeof(input_u8)-1) {
+    if (fgets(buf, sizeof(buf), stdin) == NULL
+        || strlen(buf) != sizeof(input_u8)-1) {
         log_msg("read() returned wrong size.\n");
         return 1;
-    } else if (strncmp(buf, input_u8, size)) {
+    } else if (strncmp(buf, input_u8, sizeof(input_u8)-1)) {
         log_msg("read() returned invalid translation\n");
         return 1;
     }

@@ -1,4 +1,4 @@
-# What's New ? #
+# What's New ?
 
 This a list of fixed bugs and improvements made :
 
@@ -6,7 +6,7 @@ This a list of fixed bugs and improvements made :
 before October 2012 were not included since the version started in this dates 
 used almost new code.
 
-## Friday 11st, October 2012 ##
+## Friday 11st, October 2012
 
 * Added welcome screen \(Two versions\).
 
@@ -19,7 +19,7 @@ used almost new code.
 
 * Added support for current directory.
 
-## Thursday 6th, December ##
+## Thursday 6th, December
 
 * Added support of end of line.
 
@@ -29,13 +29,13 @@ used almost new code.
 
 * Sorted code files for a better understandability.
 
-## Friday 4th, Junuary, 2013 ##
+## Friday 4th, Junuary, 2013
 
 * added several commands \(TYPE/MORE, CLS, COLOR, TITLE, GOTO\).
 
 * added support for english and french.
 
-## Thursday 11th, February ##
+## Thursday 11th, February
 
 * added api function for file matching \(i.e. paths using '\*' and '?'\).
 
@@ -43,7 +43,7 @@ used almost new code.
 
 * added function to extended strings.
 
-## Wednesday 20th, February ##
+## Wednesday 20th, February
 
 * fixed many portabiility issues for api.
 
@@ -68,7 +68,7 @@ used almost new code.
 
   * %PBAT\_PATH% : The path of pBat interpreter.
 
-## Monday 11th, March ##
+## Monday 11th, March
 
 * Solve many portability issues \(i.e some programs did not work under 
   Linux\).
@@ -87,7 +87,7 @@ used almost new code.
 
 * Fixed a bug in delayed variable expansion.
 
-## Thursday 11th, April ##
+## Thursday 11th, April
 
 * Corrected support of delayed expansion that didn't match to the way cmd.exe 
   parses it.
@@ -105,7 +105,7 @@ used almost new code.
 * Fixed a bug in a parameter for delayed expansion \(cEnableDelayedExpansion 
   was not taken account\).
 
-## Thursday 12th, September ##
+## Thursday 12th, September
 
 * Added UTF-8 support.
 
@@ -121,7 +121,7 @@ used almost new code.
 
 * Added a README file.
 
-## Tuesday 17th, September ##
+## Tuesday 17th, September
 
 * Fixed bug with the message **Error : "..." is not recognized as ...** 
   message in linux version.
@@ -129,7 +129,7 @@ used almost new code.
 * Fixed bug with the wait\(\) function in that made the program hold 
   indefinitely.
 
-## Thursday 16th, October ##
+## Thursday 16th, October
 
 * Changed build architecture. Now, the package can be built through a single 
   command line, that build all dependencies, i.e.:
@@ -149,20 +149,20 @@ used almost new code.
 * Added a kind of old allocated ESTR structure reuser, that avoid reallocating 
   new estr structures. \(Saves up speed\).
 
-## Sunday 27th, October ##
+## Sunday 27th, October
 
 * Some bug fixes, including a bug that appeared with **%\~A**.
 
 * Added primary support of **FOR** loops \(ie. simple for loop without 
   options\).
 
-## Friday 13th, December ##
+## Friday 13th, December
 
 * Solved some bugs in libpBat \(a hazardous non initialized var\)
 
 * Added support **FOR /F** loops with files as input.
 
-## Thursday 2nd, January 2014 ##
+## Thursday 2nd, January 2014
 
 * Corrected **pBat\_ScriptCommand.c** bugs in which the delayed expansion was 
   not executed even if it was enabled.
@@ -180,7 +180,7 @@ used almost new code.
 
 * added support for top-level blocks.
 
-## Thursday 14th, January ##
+## Thursday 14th, January
 
 * added final support of **FOR /F** including the use of command outputs as 
   **FOR** input.
@@ -211,14 +211,14 @@ used almost new code.
 
 * some manual pages enhancement.
 
-## Wednesday 15th, January ##
+## Wednesday 15th, January
 
 * fixed a bug that prevented both **FOR /R** and **FOR /D** to be executed the 
   right way.
 
 * fixed a bug with use of **.** in file searches.
 
-## Friday 17th, January ##
+## Friday 17th, January
 
 * Fixed a bug that caused some particular redirections to be misinterpreted, 
   particularly, in blocks **\(echo test>NUL\)** triggered an error, because 
@@ -246,7 +246,7 @@ used almost new code.
   quicker. It also resulted in better execution times of the **FOR /R** 
   function \(even though still deprecated\).
 
-## Monday 20th, January ##
+## Monday 20th, January
 
 * Corrected a but that caused line like **:: comment & command** to execute 
   the command **command**, unlike **cmd.exe**'s behaviour.
@@ -268,7 +268,7 @@ used almost new code.
 * Fixed a bug with an added extra space with redirection placed at end of 
   input line.
 
-## Thursday 23th, January ##
+## Thursday 23th, January
 
 * Fixed a bug with the **TITLE** command. The **TITLE** command set a title 
   that was the whole command line \(including **TITLE** statement\).
@@ -276,11 +276,11 @@ used almost new code.
 * Fixed a bug with the **FILELIST** features. It now works as expected with 
   both '/' \(filesystem root sign\) and '\[driveletter\]:/' with windows.
 
-## Friday 24th, January ##
+## Friday 24th, January
 
 * Started working on an enhanced version of **TEA** text preprocessor.
 
-## Saturday 1st, February ##
+## Saturday 1st, February
 
 * Final version of **TEAv2**. Added support for both **HTML 5**, **HTML 
   4.01** and **xHTML**. Others formats have been dropped.
@@ -301,7 +301,7 @@ used almost new code.
   to be printed at exit, due to an undefined behaviour with **atexit\(\)** 
   function.
 
-## Friday 7th, February ##
+## Friday 7th, February
 
 * Fixed a bug of **SET /P** subcommand. The bug caused a SEGFAULT to be raised 
   on execution.
@@ -312,12 +312,12 @@ used almost new code.
 * Added an error message if the **SET** command is unable to set environment 
   variable.
 
-## Wednesday 12th, February ##
+## Wednesday 12th, February
 
 * Fixed a bug of **SET /P** subcommand, that didn't not removed the carriage 
   return at the end of the input.
 
-## Thursday 13th, February ##
+## Thursday 13th, February
 
 * Found a bug that occurs when using **CD** command from inside a batch 
   script, if the path to the script given is relative, **pBat** tries to open 
@@ -325,7 +325,7 @@ used almost new code.
   depending on circumstances. This is to be fixed in next release \(that will 
   include a bunch of improvements, like **CALL**, I hope\).
 
-## Friday 14th, February ##
+## Friday 14th, February
 
 * Started working in version **2014.0.8**, a version that will include more 
   features, \(including use of intelligent help browsing, and improved command 
@@ -336,7 +336,7 @@ used almost new code.
 * Added own function to search files in path. It is not used everywhere 
   though.
 
-## Friday 21th, February ##
+## Friday 21th, February
 
 * Added support of new threaded function, through a particular header.
 
@@ -349,7 +349,7 @@ used almost new code.
   given as batch script, it will just printf a few \(or more\) errors messages 
   at the prompt.
 
-## Monday 24th, February ##
+## Monday 24th, February
 
 * Solve a bug that prevented correct **%ERROLEVEL%** values from being 
   correctly used, it used to be ignored when using internal commands.
@@ -384,7 +384,7 @@ used almost new code.
   are not explicitelly specified at startup will be filled with an empty 
   string, and will expand to the empty string.
 
-## Thursday 25th, February ##
+## Thursday 25th, February
 
 * Finalized behaviour change for variables. Singles **%** are now split from 
   the input at parsing, exception made for the special variables **%0, ..., 
@@ -403,7 +403,7 @@ used almost new code.
 * Added an example of batch powered by pBat, a multifunction caculator using 
   both floating point arithmetics and integer arithmetics.
 
-## Thursday 6th, March ##
+## Thursday 6th, March
 
 * Changed the behaviour of the function which decide wether the command is 
   multiline or not. It now correctly handles parenthesis that are not 
@@ -459,7 +459,7 @@ used almost new code.
   since it is hard to see the point of writing awful Makefile.am in order to 
   produce a Makefile that can be written by hand.
 
-## Friday 7th, March ##
+## Friday 7th, March
 
 * Started to work on a safer block determination. This should not be to 
   difficult to obtain.
@@ -471,7 +471,7 @@ used almost new code.
   Some function have also been transfered to libpBat, this is limited however, 
   since pBat is not stable enough to get it in a whole library.
 
-## Saturday 8th, March ##
+## Saturday 8th, March
 
 * Added brand new parser, and also, brand new file reader. The new 
   implementations are much more safe and elegant. Lots of repetitions in the 
@@ -508,7 +508,7 @@ used almost new code.
 
 * Optimised **pBat\_RunBlock\(\)** function.
 
-## Wednesday 12th, March ##
+## Wednesday 12th, March
 
 * Changed behaviour of the thread functions of libpBat. The **THREAD** 
   structure now refers to the thread ID rather than to a handle to that 
@@ -544,7 +544,7 @@ used almost new code.
   that was loaded with the **GOTO** command contained a **CD** command so that 
   the file could not be retrieved because it was kept with a relative path.
 
-## Thursday 13th, March ##
+## Thursday 13th, March
 
 * Fixed bugs with the run functions. The use of **program \|\| goto error** to 
   perform feature test is avaliable for both windows and \*nix.
@@ -599,7 +599,7 @@ used almost new code.
 * Made the hlp to work again, without problem, since version **0.7** and the 
   deep changes made into **pBat** core to get something more modern.
 
-## Sunday 16th, March ##
+## Sunday 16th, March
 
 * Started building a **x64** version of pBat. I experienced troubles because 
   of the lack of **x64** version of **MinGW**. However, I managed to get a 
@@ -647,7 +647,7 @@ used almost new code.
 * Fixed a bug of **IF** command. The **lss** comparison operator was 
   interpreted as **leq**.
 
-## Thursday 20th, March ##
+## Thursday 20th, March
 
 * Started comparisons between **GCC** optimisation levels.
 
@@ -664,7 +664,7 @@ used almost new code.
   of the cpu, in random occasion, because cmd.exe's has really random 
   performances. Instead, **pBat** is limited to approximately **25%**.
 
-## Saturday 23th, March ##
+## Saturday 23th, March
 
 * Fixed a bug in **pBat\_SearchLastChar** function.
 
@@ -681,7 +681,7 @@ used almost new code.
   traditional \*NIX-like local names that are widely used. Note that only 
   useful locales should be implemented \(at most one for every language\).
 
-## Tuesday 25th, March ##
+## Tuesday 25th, March
 
 * Implemented replacement for old **ENABLE/DISABLEPBATMODE**. Instead of the 
   variable, **pBat** provides the **CMDLYCORRECT** options that can be set 
@@ -694,7 +694,7 @@ used almost new code.
 * Changed switch to specify part of lines that are not constituted of switches 
   but by text. It is now **//**, a bit like \*NIX's **--**.
 
-## Wednesday 26th, March ##
+## Wednesday 26th, March
 
 * Added a short internal documentation to get help for internal functions. 
   These are however much tinier that the full documentation given in **HLP**. 
@@ -725,7 +725,7 @@ used almost new code.
 * Added a couple of manual pages. It is also combined with new pages and 
   translations.
 
-## Wednesday 2nd, April ##
+## Wednesday 2nd, April
 
 * Implemented aliases within pBat
 
@@ -743,7 +743,7 @@ used almost new code.
 
   * if no **label** was given, **%0** contains the file name.
 
-## Tuesday 3rd, April ##
+## Tuesday 3rd, April
 
 * Updated build system, so that building **pBat** can allmost be done without 
   user intervention. It's as simple as typing the following line:
@@ -753,7 +753,7 @@ used almost new code.
 * Switched to version **2014.0.9**, because **pbat** is becoming pretty 
   develloped now.
 
-## Monday 7th, April ##
+## Monday 7th, April
 
 * Fixed numerous bugs on the **GNU/Linux** version. Before that update, it 
   would have been fairly difficult to make it work. I posted only fixes for 
@@ -839,7 +839,7 @@ used almost new code.
   wrong directory \(ie. **./bin/share/man** instead of 
   **./bin/share/man/man** that was wrong.
 
-## Thursday 10th, April ##
+## Thursday 10th, April
 
 * Discovered a strange bug with pipes. This bug appears when input have 
   several lines, when the pipe is closed, the input is not restored \(or, at 
@@ -857,7 +857,7 @@ used almost new code.
   to specify a redirection for **stdin** and **stdout** with **truncate** 
   attribute.
 
-## Monday 14th, April ##
+## Monday 14th, April
 
 * Added some corrections that make the pipe function quite well on both 
   **GNU/Linux** and **Windows** architectures \(I also tested on **NetBSD** 
@@ -877,7 +877,7 @@ used almost new code.
   wrong function exposures, so that if you use, it, you might need to specify 
   **\_NETBSD\_SOURCE** macro.
 
-## Thursday 17th, April ##
+## Thursday 17th, April
 
 * Added some translation message in the locale.
 
@@ -906,7 +906,7 @@ used almost new code.
   next few month, but I hope i'll be able to submit new fix starting in the 
   summer holidays.
 
-## Saturday 20th, April ##
+## Saturday 20th, April
 
 * Fixed a bug that caused **pBat** to crash if either **%PATH%** or 
   **%PATHEXT%** \(only for windows\) were not in the command environment.
@@ -920,7 +920,7 @@ used almost new code.
 * Fixed omission of **ansicon** on the **pBat\_Auto.bat**, which is launched 
   at startup.
 
-## Saturday 14th, June ##
+## Saturday 14th, June
 
 * Following advices of guys for dostips.org, changed the delimiters and the 
   way quotes are handled:
@@ -983,7 +983,7 @@ used almost new code.
   may easily be removed for platforms that do not handle utf-8, or those that 
   do it natively.
 
-## Monday 16th, June ##
+## Monday 16th, June
 
 * Reorganized the source tree for internal commands. Before that, every file 
   of the **command** subdirectory contained several different commands. I 
@@ -993,7 +993,7 @@ used almost new code.
 * Added a functional **/Q** switch to the **RMDIR** command. However, it is 
   supposed to deal with the **/S** switch, which is not functional yet.
 
-## Thursday 19th, June ##
+## Thursday 19th, June
 
 * I eventually decided to use the GNU toolchain to compile **pBat**. I 
   previously expressed lots of criticism toward use of autotools, but libtool 
@@ -1007,7 +1007,7 @@ used almost new code.
   overlapping objects file names. Some of the name are more logical, but, some 
   are not really.
 
-## Tuesday 24th, June ##
+## Tuesday 24th, June
 
 * Corrected a bug that prevented local variable \(eg. like **%1**\) to be used 
   as argument with the **call** command, thanks to Jo15 from 
@@ -1021,7 +1021,7 @@ used almost new code.
 * Added macros from the **gnu gettext** package. Also enabled the use of the 
   --disable-nls switch for configure.
 
-## Friday 29th, August ##
+## Friday 29th, August
 
 This is the first time I write something in this file for a long time now. 
 I've been hacking around pBat for a little time now \(haaa, holidays\). This 
@@ -1119,7 +1119,7 @@ is a list of improvements I made during from 24th June to today.
 * Changed the version number to **2014.0.9b**, I think the interpretor may be 
   mature enough to think of a real release in a close time.
 
-## Wednesday 3rd, September ##
+## Wednesday 3rd, September
 
 * Implemented a new pipe system for Unix-like operating systems \(that may 
   have broken the good-old WINDOWS implementation, haven't checked yet\). It 
@@ -1156,7 +1156,7 @@ is a list of improvements I made during from 24th June to today.
 * Fixed some bugs in translations. Removed the en\_US local which is almost 
   stupid.
 
-## Wednesday 24th, September ##
+## Wednesday 24th, September
 
 * Implemented the **MORE** command as an internal command \(why create 
   external executables when it is so simple to add little commands to the 
@@ -1175,7 +1175,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Corrected a few bugs for Unix-like systems.
 
-## Tuesday 2nd, December ##
+## Tuesday 2nd, December
 
 * Corrected a bug within the **IF** command that prevented **ELSE IF** 
   combination to be executed correctly. This was actually caused by a failure 
@@ -1186,7 +1186,7 @@ is a list of improvements I made during from 24th June to today.
 * Added two features within the **MORE** command that enable it to accept both 
   UTF-8 encoded text and ansi escape codes to be mixed with text.
 
-## Thursday 6th, January 2015 ##
+## Thursday 6th, January 2015
 
 * Did some final arrangements that make **pBat** ready to release on the 
   GNU/Linux platforms. There is some work left for make it run under Microsoft 
@@ -1211,7 +1211,7 @@ is a list of improvements I made during from 24th June to today.
   new way of handling pipes permits infinite length for both input and output 
   of commands.
 
-## Tuesday 13th, January 2015 ##
+## Tuesday 13th, January 2015
 
 * Fixed an minor issue in the **pBat\_SetEnv** function that caused some rare 
   bugs that made **SET** command to raise a segfault if it was invoked to 
@@ -1227,7 +1227,7 @@ is a list of improvements I made during from 24th June to today.
 * Changed the version number to 214.1b, that mean, it's the beta of the first 
   stable version which is expected to be released within a short time.
 
-## Tuesday 21rd, April ##
+## Tuesday 21rd, April
 
 * Fixed a minor issue in the error system for the **IF** command, the command 
   used to exit the interpretor upon minor error.
@@ -1277,11 +1277,11 @@ is a list of improvements I made during from 24th June to today.
 
         if [ a equ b ] echo no, seriously ?
 
-## Sunday 10th, May ##
+## Sunday 10th, May
 
 * Some fixes for windows, specially for the CTRL+C handling routines.
 
-## Friday 24th, April ##
+## Friday 24th, April
 
 * Fixed a few remaining bugs in the implementation of if extended expression. 
   As a example, in some case, an **or** used to be computed as an **and**. 
@@ -1304,7 +1304,7 @@ is a list of improvements I made during from 24th June to today.
 
   * **mail://**
 
-## Thursday 7th, May ##
+## Thursday 7th, May
 
 * Fixed lots of man pages for the pBat project. Also fixed some little bugs in 
   the TEA text processor, dealing with some sort of **\** that where 
@@ -1319,7 +1319,7 @@ is a list of improvements I made during from 24th June to today.
   expressions on patterns. With this option **FIND** checks that the entire 
   line matches the expression.
 
-## Thursday 2nd, June ##
+## Thursday 2nd, June
 
 * Corrected some issues compatibility issue with the newest MinGW version that 
   now defines **\_POSIX\_C\_SOURCE**.
@@ -1331,7 +1331,7 @@ is a list of improvements I made during from 24th June to today.
 * Added some little info message to the **SET** command in order to print the 
   result of the expression when using **/A** slash.
 
-## Thursday 10th, June ##
+## Thursday 10th, June
 
 * Added a wrapper to the **MORE** command to make it display utf-8 text the 
   way it is intended to. Indeed **windows** does not implement implement the 
@@ -1341,7 +1341,7 @@ is a list of improvements I made during from 24th June to today.
 * Fixed a bug of the **MORE** command that caused miscomputation of utf-8 
   characters number.
 
-## Wednesday 13th, Junuary, 2016 ##
+## Wednesday 13th, Junuary, 2016
 
 * Added support of libcu8, a library designed to handle utf-8 efficiently with 
   msvcrt in windows. This is part of a large ongoing effort that attempts to 
@@ -1351,7 +1351,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Added new CHCP command to handle efficiently the new libcu8 library.
 
-## Monday, 25th, Junuary ##
+## Monday, 25th, Junuary
 
 * Changed version of pBat to emphasize the important changes of pBat since new 
   year 2016.
@@ -1369,7 +1369,7 @@ is a list of improvements I made during from 24th June to today.
 
         %var:~-2,-1%
 
-## Thursday, 28th, Junuary ##
+## Thursday, 28th, Junuary
 
 * Added an option that allow using switch catenated with commands, such as
 
@@ -1377,7 +1377,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed and modified hugely the dump command so that it is way more portable.
 
-## Sunday, 7th, February ##
+## Sunday, 7th, February
 
 * Fixed some bugs with the FOR command.
 
@@ -1385,13 +1385,13 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed little bugs in libcu8.
 
-## Thursday 18th, February ##
+## Thursday 18th, February
 
 * Added the '=' operator for the SET command. The operator do behave a little 
   bit differently from cmd.exe's SET, but it is convenient too. For the 
   moment, libmatheval only supports explicit number anyway.
 
-## Monday 16th, April ##
+## Monday 16th, April
 
 * Modified the initialization procedure of pBat. pBat can now handle two 
   different startup files:
@@ -1406,19 +1406,19 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed errors with folders containing spaces for pBat.
 
-## Friday 15th, July ##
+## Friday 15th, July
 
 * Fixed a little bug with the for command. When the field "delims=;" is 
   specified with **FOR** without "eol=" being specified, then the character 
   ";" is not used as the default end-of-line character.
 
-## Wednesday, 14th, September 2016 ##
+## Wednesday, 14th, September 2016
 
 * Added PUSHD and POPD commands
 
 * Allow to list variable which match with a prefix
 
-## Friday 18th, October 2016 ##
+## Friday 18th, October 2016
 
 * Removed the complex initialisation model set up the **16/04/2016** in favour 
   of a single \(somewhat read-only\) **pBat\_Auto.bat** initialization script 
@@ -1438,7 +1438,7 @@ is a list of improvements I made during from 24th June to today.
 
   * Few documentation updates.
 
-## Tuesday 26th, October ##
+## Tuesday 26th, October
 
 * Fixed configure.ac bug preventing autotools from properly detect BSD based 
   OSes.
@@ -1451,42 +1451,42 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed a little hlp bug
 
-## Wednesday 26th, October 2016 ##
+## Wednesday 26th, October 2016
 
 * Rewrite Pushd and Popd commands.
 
 * Fix some commands help.
 
-## Thursday 27th, October ##
+## Thursday 27th, October
 
 * Change location of gettext files under unices to match the usual file 
   layout.
 
-## Friday 28th, October ##
+## Friday 28th, October
 
 * Fix some compilation errors.
 
-## Sunday 30th, October ##
+## Sunday 30th, October
 
 * Improve pushd command and add documentation.
 
-## Tuesday 1st, November ##
+## Tuesday 1st, November
 
 * Fixed some compilation errors with some the stat and findnext functions.
 
-## Wednesday 9th, November ##
+## Wednesday 9th, November
 
 * Fixed some minor errors with config.h \(basically expansion of datadir\)
 
 * Fixed errors.
 
-## Wednesday 23th, November ##
+## Wednesday 23th, November
 
 * Fixed compilation error in pBat\_Lang.c.
 
 * Add compilation command in BUILD.readme.
 
-## Sunday 4th, December ##
+## Sunday 4th, December
 
 * Fixed some major bugs submitted by Teddy Astie, for unices. Including :
 
@@ -1511,16 +1511,16 @@ is a list of improvements I made during from 24th June to today.
   a user input or a script is being executed, the interpretor choose to cancel 
   the command or to exit.
 
-## Monday 5th, December ##
+## Monday 5th, December
 
 * Fixed a bug with FIND command, the case sensitive and insensitive features 
   were swapped
 
-## Wednesday 7th, December ##
+## Wednesday 7th, December
 
 * Correct some words in French \(fr\_FR\) manual.
 
-## Monday 30th, Junuary 2017 ##
+## Monday 30th, Junuary 2017
 
 * Fixed little errors with **SET** and **/a:i** switches.
 
@@ -1528,11 +1528,11 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed errors with gotos, basically omit spaces before labels.
 
-## Wednesday 8th, February 2017 ##
+## Wednesday 8th, February 2017
 
 * Fixed some bugs with the move command.
 
-## Thursday 9th, February ##
+## Thursday 9th, February
 
 * Fixed a major bug of the IF command. Before that, it had fuzzy behaviour 
   with blocks that were part of a later command. Indeed, when combined with a 
@@ -1550,7 +1550,7 @@ is a list of improvements I made during from 24th June to today.
         echo test
         ))
 
-## Saturday 12th, February ##
+## Saturday 12th, February
 
 * Fixed minor bugs with the **START** command.
 
@@ -1558,7 +1558,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed if pbat extension bug.
 
-## Monday 13th, February ##
+## Monday 13th, February
 
 * Fixed libcu8 so that it runs flawlessly under windows XP. The bug consisted 
   of a CRITICAL\_SECTION that was wrongly initialized. A second bug involving 
@@ -1566,7 +1566,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed errors with the hlp script.
 
-## Wednesday 15th, February ##
+## Wednesday 15th, February
 
 * Fixed a lot of memory leaks.
 
@@ -1575,7 +1575,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed libcu8\_dup\(\) functions to handle standard input the right way.
 
-## Friday 17th, February ##
+## Friday 17th, February
 
 * Fixed libcu8 so that libcu8 ignores invalid utf-8 bytes sequences, instead 
   of returning errors.
@@ -1584,14 +1584,14 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed some manual pages.
 
-## Thursday 16th, February ##
+## Thursday 16th, February
 
 * Update hlp.bat and man.
 
 * Fix a bug with some libc when display the current directory \(with Echo 
   on\).
 
-## Wednesday 22th, February ##
+## Wednesday 22th, February
 
 * Added a new feature to the **FOR** command that allows using regular 
   expressions with simple **FOR** loops. \(eg. such syntaxes are now correct\)
@@ -1615,7 +1615,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Changed libpBat functions to search files with a totally new implementation.
 
-## Saturday 25th, February ##
+## Saturday 25th, February
 
 * Fixed some errors with libcu8 that was unable to behave properly using pipe 
   as it sometimes blocked on input.
@@ -1626,12 +1626,12 @@ is a list of improvements I made during from 24th June to today.
 * Fixed errors with propagation of environment variables during application 
   launch affecting batch and external command launch.
 
-## Tuesday 28th, February ##
+## Tuesday 28th, February
 
 * Fixed libcu8 handling of pipe that did not allowed interaction with programs 
   such as **darkbox**.
 
-## Thursday 16th, March ##
+## Thursday 16th, March
 
 * Fixed some error of libcu8. Sped up the library by determining when charset 
   conversion is really necessary \(ie. do not convert blindly text from utf-8 
@@ -1650,7 +1650,7 @@ is a list of improvements I made during from 24th June to today.
   asynchronously \(ie. at the same time\), which is different from cmd 
   behaviour.
 
-## Tuesday 21th, March ##
+## Tuesday 21th, March
 
 * Fixed some typos that caused some minor bugs depending on configuration.
 
@@ -1662,13 +1662,13 @@ is a list of improvements I made during from 24th June to today.
 
 * Made the **/b** switch working with unices.
 
-## Wednesday 29th, March ##
+## Wednesday 29th, March
 
 * Fixed some error in file search handling \(the origin folder of a static 
   string was not added to matches, as if PBAT\_DIR\_MODE was the default 
   behaviour\).
 
-## Thursday 30th March ##
+## Thursday 30th March
 
 * Fixed a bug with **FOR** command that created more variable that it it was 
   necessary when using a joker **\*** as the final token specifier.
@@ -1687,11 +1687,11 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed block parsing systems.
 
-## Sunday 2nd April ##
+## Sunday 2nd April
 
 * Fixed a compilation error on \*NIXes.
 
-## Wednesday 5th, March ##
+## Wednesday 5th, March
 
 * Fixed lots of bugs caused by the new parsing system.
 
@@ -1699,7 +1699,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed the **TYPE** to make it capable of handling binary files.
 
-## Sunday 9th, March ##
+## Sunday 9th, March
 
 * Fixed the expansion system to behave closely like cmd does. \(ie. made two 
   distinct level of special var expansion, one for the program parameters and 
@@ -1712,7 +1712,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Merged po files for pBat.
 
-## Wednesday 12th, April ##
+## Wednesday 12th, April
 
 * Fixed incorrect block parsing that did not handled properly escaped new line 
   characters that resulted in executing commands as if there was actually more 
@@ -1725,7 +1725,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed plenty of tiny bugs.
 
-## Thursday 13th, April ##
+## Thursday 13th, April
 
 * Added new system that loads the entire script file at once, instead of the 
   weird old mechanics that consisted in opening/reading/closing script at 
@@ -1740,7 +1740,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed some manual pages.
 
-## Friday 14th, April ##
+## Friday 14th, April
 
 * Fixed some interpretation error with the **SET /p** command.
 
@@ -1760,7 +1760,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed **pBat\_Auto.bat** man page that was in ANSI instead of utf-8.
 
-## Tuesday 18th, April ##
+## Tuesday 18th, April
 
 * Added new file searching functions to speed up file search under windows.
 
@@ -1768,7 +1768,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed issues of both libinteval and libmatheval in determining delimiters.
 
-## Thursday 20th, April ##
+## Thursday 20th, April
 
 * Fixed errors in unicodes files search functions.
 
@@ -1778,7 +1778,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed some typos.
 
-## Monday 24th, April ##
+## Monday 24th, April
 
 * Fixed errors in unicode file searching function and functions.
 
@@ -1786,7 +1786,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed the set command.
 
-## Friday 5th, May ##
+## Friday 5th, May
 
 * Added support for concatenation using '+' with the the **COPY** command.
 
@@ -1797,7 +1797,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed manual pages.
 
-## Friday 25th, May ##
+## Friday 25th, May
 
 * Fixed lots of little bugs
 
@@ -1819,7 +1819,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed man pages and i18n messages.
 
-## Tuesday 30th, May ##
+## Tuesday 30th, May
 
 * Fixed dir search function for non-unicode and unicode versions.
 
@@ -1831,7 +1831,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed call bug.
 
-## Friday 2nd, June ##
+## Friday 2nd, June
 
 * Fixed extra newline bug after **echo** off.
 
@@ -1843,7 +1843,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed file search bug for vanilla functions under windows.
 
-## Friday 21st, July ##
+## Friday 21st, July
 
 * Heavily modified the interpretor that no uses threads instead of of 
   separated processes.
@@ -1852,17 +1852,17 @@ is a list of improvements I made during from 24th June to today.
 
 * Lots of bugfixes.
 
-## Sunday 3rd, December ##
+## Sunday 3rd, December
 
 * Fixes for path name handling in pBat\_GetMatchFileList
 
 * Added semaphores to fix SET command.
 
-## Sunday 1st April, 2018 ##
+## Sunday 1st April, 2018
 
 * Added fixes for pBat\_EsToFullPath\(\).
 
-## Sunday 7th, April ##
+## Sunday 7th, April
 
 * Fixed hlp.bat bug related to the behaviour change of %\~pA.
 
@@ -1870,14 +1870,14 @@ is a list of improvements I made during from 24th June to today.
 
 * Added a /C:MD file to generate html files compatible with pico
 
-## Wednesday 11th, April ##
+## Wednesday 11th, April
 
 * Fixed error on handling **2>&1** redirection.
 
 * Fixed pBat\_FilePath.c error that led pBat to check for **file** before 
   using **%PATHEXT%**.
 
-## Sunday 23rd, April ##
+## Sunday 23rd, April
 
 * Changed conditional operators and redirections semantics \(ie. conditional 
   operators now own precedence over redirections, just the regular cmd-way\).
@@ -1889,7 +1889,7 @@ is a list of improvements I made during from 24th June to today.
 * Fixed compatibility issue due to msvcrt inconsistent structures name for 
   **finddata** and **stat**.
 
-## Thursday 26th, April ##
+## Thursday 26th, April
 
 * Fixed some manual pages.
 
@@ -1901,7 +1901,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed some invalid casts in search functions.
 
-## Saturday 29th, April ##
+## Saturday 29th, April
 
 * Fixed a memory leak.
 
@@ -1910,7 +1910,7 @@ is a list of improvements I made during from 24th June to today.
 * Fixed **pBat\_RunExternalCommand\(\)** which add a pretty big footprint on 
   the stack, sometimes causing stack overflows with Musl libc.
 
-## Tuesday 15th, May ##
+## Tuesday 15th, May
 
 * Added new build system based on femto.
 
@@ -1927,12 +1927,12 @@ is a list of improvements I made during from 24th June to today.
   the same behaviour as the one used with **DIR** is used so that files inside 
   that dir get deleted.
 
-## Thursday 17th, May ##
+## Thursday 17th, May
 
 * Fixed CTRC-C handling. Sadly the new multi-thread implementation makes it 
   impossible to grab any current directory or modified environment.
 
-## Tuesday 22nd, May ##
+## Tuesday 22nd, May
 
 * Fixed Mutex locking error in the SET command.
 
@@ -1942,7 +1942,7 @@ is a list of improvements I made during from 24th June to today.
 * Added the local variable environment creation via **SETLOCAL** and 
   **ENDLOCAL**.
 
-## Wednesday 23rd, May ##
+## Wednesday 23rd, May
 
 * Added new manual and functionalities to **START**. When calling internal 
   command with **/b** option, The command is launched as an internal thread.
@@ -1969,7 +1969,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed error with conversion of local var blocks to unicode.
 
-## Friday 25th, May ##
+## Friday 25th, May
 
 * Added femto-style configuration to libmatheval. Provide a @fnp@ symbol to be 
   conformant will preprocessor macros.
@@ -1980,7 +1980,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed a lot of compilation warnings.
 
-## Tuesday 29th, May ##
+## Tuesday 29th, May
 
 * Fixed libintl messages directories and initialisation of current locale.
 
@@ -1993,7 +1993,7 @@ is a list of improvements I made during from 24th June to today.
   Commands now return an **%ERRORLEVEL%** value equal to the error code 
   associated with the message printed.
 
-## Wednesday 30th, May ##
+## Wednesday 30th, May
 
 * Fixed if behaviour to be more compatible with **cmd.exe**. It now supports 
   the use of **&** and **\|** inside the if without specifying additional 
@@ -2005,7 +2005,7 @@ is a list of improvements I made during from 24th June to today.
   with -lm was necessary. Also fixed makefiles trying to build libcu8 even on 
   linux
 
-## Friday 1st, June ##
+## Friday 1st, June
 
 * Added a brand new editing system to the libcu8 library so that pBat's utf-8 
   versions supports decent editing facilities like hability to insert 
@@ -2018,7 +2018,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed Broken console functions for linux.
 
-## Wednesday 6th ##
+## Wednesday 6th
 
 * Fixed **%ERRORLEVEL%** variable which is now implemented as a read-only 
   variable to avoid polluting child processes environment \(especially cmd.exe 
@@ -2049,7 +2049,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Enabled version 218.2.
 
-## Friday 8th ##
+## Friday 8th
 
 * Fixed segmentation fault happening when calling a batch file with no 
   arguments and calling the **SHIFT** command from within the script 
@@ -2073,7 +2073,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed **CTRC-C** handling under UNIX compatible system.
 
-## Monday 11th ##
+## Monday 11th
 
 * Added line editing capabilities under linux, through the use of a slightly 
   modified version of **linenoise**. Linenoise is tiny library allowing 
@@ -2098,7 +2098,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Incorporated some utf-8 fixes to the linenoise library.
 
-## Wednesday 21st ##
+## Wednesday 21st
 
 * Added a little fix to prevent pbat from executing line starting with a 
   column after delayed expansion.
@@ -2108,7 +2108,7 @@ is a list of improvements I made during from 24th June to today.
 * Fixed **START** command error when trying to launch an external batch 
   script.
 
-## Wednesday 27th ##
+## Wednesday 27th
 
 * Fixes to the start command.
 
@@ -2122,12 +2122,12 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixes to the thread library.
 
-## Friday, 29th ##
+## Friday, 29th
 
 * Fixed bug involving pipes and wrongly inherited file descriptors created 
   after a call to **dup\(\)**.
 
-## Monday 2nd, July ##
+## Monday 2nd, July
 
 * Implemented **hlp**'s **help** alias as a part of **pBat\_Auto.bat**.
 
@@ -2135,7 +2135,7 @@ is a list of improvements I made during from 24th June to today.
 
 * New makefiles for gettext files.
 
-## Tuesday 3rd ##
+## Tuesday 3rd
 
 * Added new target **/O:MD** for **TEA** that output markdown files. This is 
   very usefull as it helps providing more readable documentations on git 
@@ -2152,7 +2152,7 @@ is a list of improvements I made during from 24th June to today.
   from **README.tea**. **README.tea** is generated through a template 
   **README.tpl**.
 
-## Wednesday 4th ##
+## Wednesday 4th
 
 * Added the **%\~f** options to special variables.
 
@@ -2166,7 +2166,7 @@ is a list of improvements I made during from 24th June to today.
   **xdg-open** and **mimeopen** produce some output even when run without 
   errors, but this is the only workaround found yet.
 
-## Saturday, 7th ##
+## Saturday, 7th
 
 * Fixed few errors with the **DUMP** command.
 
@@ -2190,14 +2190,14 @@ is a list of improvements I made during from 24th June to today.
 * Fixed a tiny error with **femto** so that configuration target can be 
   specified in a single line.
 
-## Sunday 15th ##
+## Sunday 15th
 
 * Modified po Makefiles to stop auto-rebuild problems.
 
 * Modified dir and variables to fix locale date formatting problems and added 
   proper setlocale.
 
-## Monday 16th ##
+## Monday 16th
 
 * Fixed a little bug in the **pBat\_GetNextBlockBeginEx\(\)** function.
 
@@ -2215,7 +2215,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Modified the behaviour of libcu8 history.
 
-## Tuesday 17th ##
+## Tuesday 17th
 
 * Fixed remaining with msgmerge that was not properly updating the timestanp 
   of generated files.
@@ -2237,7 +2237,7 @@ is a list of improvements I made during from 24th June to today.
   specify some special input function in order to avoid conflicts with 
   standard buffering or raw mode.
 
-## Saturday 21st ##
+## Saturday 21st
 
 * Fixed missing inclusion of <stddef.h> in **pBat\_Ask.h**.
 
@@ -2253,54 +2253,54 @@ is a list of improvements I made during from 24th June to today.
 * Fixed missing preprocessor directives inside **linenoise/linenoise.c** today 
   exclude **windows** targets.
 
-## Thursday 24th ##
+## Thursday 24th
 
 * Added the ESC key shortcut to clear the command under windows platforms.
 
 * Added **dist** makefile target to make a zip of the **bin** folder when 
   called.
 
-## Saturday 4th, August ##
+## Saturday 4th, August
 
 * Fixed few warnings.
 
 * Include pBat\_DirStack.h to pBat\_Core.h.
 
-## Monday 6th, August ##
+## Monday 6th, August
 
 * Fixed Makefile bug that triggered the build of **po** sub directory even 
   when **no-nls** was used to configure the femto build suite.
 
 * Fixed **CD** outdated manual page.
 
-## Wednesday 8th ##
+## Wednesday 8th
 
 * Fixed a bug causing a segfault when using the **DIR** command.
 
-## Friday 10th ##
+## Friday 10th
 
 * Implemented a better support to **UNC** paths. Such paths can not be used by 
   **CD** for now.
 
-## Saturday 11th ##
+## Saturday 11th
 
 * Implement a new behaviour for **XARGS** command. Each line of the input is 
   interpreted as a single parameter. Thus whenever a line containing 
   delimiters and not surrounded by quotes is encountered, quotes are 
   automatically added.
 
-## Wednesday 15th ##
+## Wednesday 15th
 
 * Fixed documentation errors on **Special variable** expansions.
 
-## Friday 17th ##
+## Friday 17th
 
 * Added the **TIMEOUT** command.
 
 * Modified the way **pBat** set locale so that the subject LC\_NUMERIC \(that 
   is, everything refering to numbers\) are not affected by the change.
 
-## Sunday 19th ##
+## Sunday 19th
 
 * Fixed an error introduced some commit ago that caused file search functions 
   that caused a '/' to be added before the '/' root sign when using linux.
@@ -2314,13 +2314,13 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixes to manual pages generation systems.
 
-## Wednesday 22nd ##
+## Wednesday 22nd
 
 * Fixed scripts makefiles.
 
 * Fixed a bug with pBat\_AskConfirmation keyboard routine.
 
-## Sunday 26th ##
+## Sunday 26th
 
 * Fixed a bug with serialisation of sub process creation. Indeed, as pBat is 
   multi-threaded, many different process can be creating at nearly the same 
@@ -2330,12 +2330,12 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed an error with the disk parameter **%\~d** with special variables.
 
-## Monday 1st, October ##
+## Monday 1st, October
 
 * Fixed a bug where the closing parenthesis was not recognised as a delimiter 
   for files names when using redirections.
 
-## Wednesday 3rd ##
+## Wednesday 3rd
 
 * Fixed an annoying bug of the windows version that used autocompletion when 
   prompting the user a question, resulting sometimes on unconvienient nested 
@@ -2347,7 +2347,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed an unitialized variable bug in the RMDIR command code.
 
-## Thursday 4th ##
+## Thursday 4th
 
 * Fixed redirections not being handled when combined with pipes.
 
@@ -2355,13 +2355,13 @@ is a list of improvements I made during from 24th June to today.
 
 * Fixed an error with special variable expansion.
 
-## Thursday 31st ##
+## Thursday 31st
 
 * Added the MOD command and a module toolkit to create simple dynamic link 
   modules for pBat. The object files to build modules can be found in 
   modules/lib and a very simple sample module is available in modules/sample.
 
-## Sunday 3rd, November ##
+## Sunday 3rd, November
 
 * Fixed a bug of block parsing preventing proper handling of redirections when 
   mixed with top-level blocks.
@@ -2374,7 +2374,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Added an experimental batbox module.
 
-## Sunday 11st ##
+## Sunday 11st
 
 * Fixed PAUSE command misuse of pBat\_Getch\(\).
 
@@ -2387,7 +2387,7 @@ is a list of improvements I made during from 24th June to today.
 
 * Added functions to the batbox module.
 
-## Thursday, 29th ##
+## Thursday, 29th
 
 * Added 'no-modules' options to build pBat without module support on platforms 
   that do not provide it.
@@ -2407,14 +2407,14 @@ is a list of improvements I made during from 24th June to today.
     newline. Furthermore, it up to the command to print appropriate sequences 
     using PBAT\_NL when displaying a normal message.
 
-## Sunday 1st, December ##
+## Sunday 1st, December
 
 * Fixed a bug preventing PBAT\_COLOR\_DEFAULT to work on unix-compatible 
   operating systems.
 
 * Fixed omitted libdl link flag inside pBat's makefile.
 
-## Saturday 8th, December ##
+## Saturday 8th, December
 
 * Improved femto by adding femto-clean and by using femto-test.out to avoid 
   using compiler-default file output \(such as a.exe or a.out\).
@@ -2432,7 +2432,7 @@ build without prior
 
 .
 
-## Thursday 13rd ##
+## Thursday 13rd
 
 * Changed name of **TEST\_\*\_PATH\(\)** macro families to 
   **PBAT\_TEST\_\*\_PATH\(\)** to add more consistency to the source code.
@@ -2448,7 +2448,7 @@ build without prior
 
 * Added manual page for the **MOD** command.
 
-## Sunday 15th, December ##
+## Sunday 15th, December
 
 * Fixed searching issues with hlp script and implemented **help /l**.
 
@@ -2463,19 +2463,19 @@ build without prior
 * Fixed a bug of **SET /a:f**. When expression contained spaces, the return 
   value was systematically 0.
 
-## Monday 16th, December ##
+## Monday 16th, December
 
 * Improved consistency between **command /?**, now **pbat /?** and **dump 
   /?** use stderr/fError instead of stdout as output \(which is more 
   consistent with internal commands\).
 
-## Monday 24th ##
+## Monday 24th
 
 * Fixed set /p not providing history features under both windows and unices.
 
 * Switched to version 218.3
 
-## Thursday 27th ##
+## Thursday 27th
 
 * Fixed missing documentation for **batbox** modules. Modified **README** and 
   **GUIDELINES**.
@@ -2486,28 +2486,28 @@ build without prior
 
 * Fixed a bug with **%\~d** under \*nices causing double root symbol on paths.
 
-## Monday, Junuary 14th ##
+## Monday, Junuary 14th
 
 * Added **src-dist** target to **Makefile** to automatically build source code 
   tarballs ready to be distributed and/or uploaded on the website.
 
 * Fixed a bug involving **pBat\_RunBlock\(\)** not parsing blocks correctly.
 
-## Thursday 17th ##
+## Thursday 17th
 
 * Finally fixed **hlp.bat** to make it able to be run from any directory, 
   especially when the said directory names contains parenthesis or spaces 
   \(what is very often the case under windows\).
 
-## Monday, May 1st, 2020 ##
+## Monday, May 1st, 2020
 
 * Fixed a double declaration inside the code of libinteval.
 
-## Wednesday, May 3rd, 2020 ##
+## Wednesday, May 3rd, 2020
 
 * Fixed hlp bug with pBat on another drive than user directory on Windows.
 
-## Thursday, May 4th, 2020  ##
+## Thursday, May 4th, 2020 
 
 * Fixed pushd memory leak.
 
@@ -2520,25 +2520,25 @@ build without prior
 
 * Fix mod deadlock when there is a module loaded.
 
-## Sunday, July 19th ##
+## Sunday, July 19th
 
 * Fixed Makefile for building po files. Some builds of gmake automatically 
   remove files that are not explicitelly a target of the make file so that the 
   po files \(**\*.pot** => **\*.po** => **\*.mo**\) where identified as such 
   and deleted.
 
-## Sunday, October 4th, 2020 ##
+## Sunday, October 4th, 2020
 
 * Fixed %=EXITCODEASCII% endianness issue. Removed unneeded switch in 
   pBat\_Var.c.
 
-## Thursday, October 8th, 2020 ##
+## Thursday, October 8th, 2020
 
 * Changed pBat\_InitConsole to don't override cursor size on Windows. 
 
 * Fixed some building issues on Clang.
 
-## Friday, October 10th ##
+## Friday, October 10th
 
 * Fixes to typos.
 
@@ -2548,7 +2548,7 @@ build without prior
   replaced with windows provided **\_snprintf** which does not end strings, 
   leading to a lot of errors as pBat assumes ANSI.
 
-## Thursday, October 22nd ##
+## Thursday, October 22nd
 
 * Fixes to linenoise completion function that had bug on some systems.
 
@@ -2557,7 +2557,7 @@ build without prior
 
 * Fixed a bug that caused "/" path to be canonicalized into "", causing errors
 
-## Saturday, October 24th ##
+## Saturday, October 24th
 
 * Fixed a bug that would not let the user add a space or a delimiter after 
   labels specifiers.
@@ -2583,7 +2583,7 @@ build without prior
 
 * Improved documentation of lookahead commands on GUIDELINES file.
 
-## Wednesday, 11th November ##
+## Wednesday, 11th November
 
 * Fixed a bug with **femto** flag detection implementation
 
@@ -2595,16 +2595,16 @@ build without prior
 * Fixed **MORE** command to use a proper console input file instead of 
   **fInput** when run interactively.
 
-## Thursday, 26th November ##
+## Thursday, 26th November
 
 * Added **tab** to default **FOR** /f loop delimiters.
 
-## Monday, February 8th, 2021 ##
+## Monday, February 8th, 2021
 
 * Added the use of a win\_iconv to the **libcu8** library, to bypass using gnu 
   iconv which is way too big for portability issues.
 
-## Monday, April 12th, 2021 ##
+## Monday, April 12th, 2021
 
 * Created the microgettext library to remove the **GNU gettext** library of 
   pBat depedencies. pBat has now no major dependencies aside from libdl and 
@@ -2628,14 +2628,14 @@ build without prior
 
 * Fixed a bug with the libcu8 prompt.
 
-## Wednesday, April 28th, 2021 ##
+## Wednesday, April 28th, 2021
 
 * Implemented w10ansi compilation flag to implement console functions using 
   ANSI sequences instead of Windows API on Windows. Needs Windows 10 1903 and 
   Legacy Console disabled to work properly, can also work on other Windows 
   versions or with Legacy Console using ANSICON.
 
-## Monday, May 15th, 2021 ##
+## Monday, May 15th, 2021
 
 * Changes to the **FOR** command documentation.
 
@@ -2645,7 +2645,7 @@ build without prior
   value is specified or when a function or a constant is used. All of this is 
   explained in details in the **SET /A** manual page.
 
-## Thursday, June 3rd, 2021 ##
+## Thursday, June 3rd, 2021
 
 * Fix some config issues due to missing renaming.
 

@@ -30,9 +30,6 @@
 /* used for compatibility purpose */
 #include <io.h>
 #define pipe(a,b,c) _pipe(a,b,c)
-#define flushall() _flushall()
-#define dup(a) _dup(a)
-#define dup2(a,b) _dup2(a,b)
 
 #define O_WRONLY _O_WRONLY
 #define O_RDONLY _O_RDONLY
@@ -47,7 +44,6 @@
 #endif /* S_IWUSR */
 #else /* WIN32 */
 #include <unistd.h>
-#define flushall()
 #endif /* WIN32 */
 
 #define PBAT_STDIN STDIN_FILENO

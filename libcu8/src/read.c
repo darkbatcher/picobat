@@ -40,160 +40,94 @@
 #include <string.h>
 
 #include "internals.h"
-#include "libcu8.h"
 
 struct fd_buffering_t* libcu8_fd_buffers;
 
-__LIBCU8__IMP __cdecl int libcu8_read(int fd, void* buf, unsigned int cnt)
+__LIBCU8__IMP __cdecl int libcu8_fgetc(FILE *f)
 {
-    struct ioinfo* info = pioinfo(fd);
-    int ret;
+    char buf[2], *ret;
 
-    if (!IS_VALID(fd)) {
+    ret = libcu8_fgets(buf, 2, f);
 
-        errno = EBADF;
-        return -1;
+    if (ret == NULL)
+        return EOF;
+    else
+        return buf[0];
 
-    }
-
-    /* lock fd and call nolock version */
-    EnterCriticalSection(&(info->lock));
-
-    ret = libcu8_read_nolock(fd, buf,cnt);
-
-    LeaveCriticalSection(&(info->lock));
-
-    return ret;
 }
 
-int libcu8_is_tty(void* hndl)
+__LIBCU8__IMP __cdecl char* libcu8_fgets(char* buf, int s, FILE* f)
 {
-    DWORD mode;
-    int ret;
+    int fd, ret;
+    char* const orig = buf;
+    size_t written, sz = s;
 
-    if (GetConsoleMode(hndl, &mode) == 0 &&
-            GetLastError() == ERROR_INVALID_HANDLE)
-        return 0;
+    /* quick abort if buf is null or if the file is at EOF */
+    if (buf == NULL
+        || sz == 0
+        || feof(f))
+        return NULL;
 
-    return 1;
-}
+    /* if there is only one byte available in buf, stuff it with a 0 and
+       return */
+    if (sz == 1) {
+        *buf = '\0';
+        return buf;
+    } else
+        sz --; /* reserve a byte for the null char */
 
-__LIBCU8__IMP __cdecl int libcu8_read_nolock(int fd, void* b, unsigned int cnt_arg)
-{
-    HANDLE file;
-    int mode,
-        ret,
-        i,
-        j;
-    char *buf = (char*)b,
-         *orig = b, *p;
-    size_t cnt = cnt_arg,
-           len = cnt,
-           written;
+    fd = fileno(f);
 
-    DWORD nbread=0, wrt;
-
-    mode = osfile(fd);
-    file = osfhnd(fd);
-
-    if (buf == NULL || cnt == 0 || IS_ATEOF(mode) ) {
-
-        /* nothing much to read */
-        return 0;
-
+    /* Read bytes still in the buffer place*/
+    libcu8_read_buffered (fd, &buf, &sz);
+    if (sz == 0) {
+        *buf = '\0';
+        return orig;
     }
 
-    libcu8_read_buffered (fd, &buf, &cnt);
-    nbread = len - cnt;
-
-    if (cnt == 0)
-        return nbread;
-
-    if (!IS_TEXTMODE(mode) /*|| IS_PIPE(mode)*/) {
-        /* Whatever, if the file is using binary mode, just get input from the
-           ReadFile API, without any kind of translation or encoding
-           conversion */
-
-        ret = ReadFile(file, buf, cnt, &wrt, NULL);
-        written = wrt;
-
-    } else if (libcu8_is_tty(file)) {
+    if (isatty(fd)) {
 
         /* Since ReadConsoleA is broken for many encodings, and ReadConsoleW is
            just pain in the ass (can't support byte-to-byte transmission, that
            is, can only return full wchar_t characters), We prefer using our
            own read console function */
 
-        ret = libcu8_readconsole(fd, buf, cnt, &written);
+        ret = libcu8_readconsole(fd, buf, sz, &written);
 
-    } else if (IS_PIPE(mode)) {
 
-        /* Pipes are somewhat hard to deal with under windows, since
-           it messes everything if you do not read at least two bytes at a time
-           (who knows why ?). At first I thought it has something to deal with file
-           interlocking, but apparently, it is just some kind of weird bug.  */
-        ret = ReadFile(file, buf, cnt, &wrt, NULL);
-
-        i = (j = 0);
-
-        while (i + j < wrt) {
-
-            if (j != 0)
-                buf[i] = buf[i + j];
-
-            if (buf[i] ==  '\r' ) {
-
-                /* strip the \r from the input. In theory, we
-                   should be able to handle this the right way, with
-                   a somewhat really complex algorithm, but anyway,
-                   who really cares ? */
-
-                j ++;
-
-                continue;
-
-            }
-
-            i++;
-
-        }
-
-        written = i;
 
     } else {
 
         /* For other files (such as regular files, pipes or device) opened in text
            mode, just convert from ascii to utf8 characters. */
 
-        ret = libcu8_readfile(fd, buf, cnt, &written);
+        ret = libcu8_readfile(f, buf, sz, &written);
 
     }
 
-    if (!ret) {
-        if (GetLastError() == ERROR_BROKEN_PIPE)
-            return 0; /* msvcrt does so */
+    /* there was an error */
+    if (ret != 1)
+        return NULL;
 
-        errno = EBADF;
-        return -1;
-    }
+    /* Add the null terminator */
+    if (written <= sz
+        && written != 0)
+        *(buf + written) = '\0';
+    else
+        return NULL;
 
-    nbread += written;
-
-    return nbread;
+    return orig;
 }
 
 
-int libcu8_readfile(int fd, char* buf, size_t size, size_t* written)
+int libcu8_readfile(FILE* f, char* buf, size_t size, size_t* written)
 {
     const size_t orig = size;
-    void* handle = osfhnd(fd);
+    int fd = fileno(f);
     char utf8[4],
-         ansi[FILENAME_MAX],
-         last = pipech(fd);
+         ansi[FILENAME_MAX];
     int  ret = 0;
     size_t su8=sizeof(utf8), sansi = 0 ;
-
-    pipech(fd) = 0; /* Clear remaining \r if set */
 
     iconv_t context = libcu8_mode2context(LIBCU8_FROM_ANSI);
 
@@ -202,7 +136,7 @@ int libcu8_readfile(int fd, char* buf, size_t size, size_t* written)
 
     while (size) {
 
-        ret = libcu8_get_file_byte(handle, ansi, &sansi);
+        ret = libcu8_get_file_byte(f, ansi, &sansi);
 
         switch (ret) {
 
@@ -221,25 +155,12 @@ int libcu8_readfile(int fd, char* buf, size_t size, size_t* written)
         switch (ret) {
 
             case 0:
-                if (last == '\r' && *utf8 != '\n') {
-
-                    libcu8_write_buffered(fd, &buf, &size, &last, 1);
-
-                    if (*utf8 == '\r' && size == 0) {
-                        pipech(fd) = '\r';
-                        continue;
-                    }
-                }
-
-                if (*utf8 == '\r') {
-                    last = '\r';
-                    continue;
-                } else {
-                    last = 0;
-                }
-
                 /* We were able to get an utf8 character, write it*/
                 libcu8_write_buffered(fd, &buf, &size, utf8, su8);
+
+                if (*utf8 == '\n' )
+                    goto next;
+
                 su8 = sizeof(utf8);
                 break;
 
@@ -256,7 +177,6 @@ int libcu8_readfile(int fd, char* buf, size_t size, size_t* written)
 next:
 
     iconv_close(context);
-
     *written = orig - size;
 
     return 1;
@@ -267,18 +187,16 @@ err:
 
 }
 
-int libcu8_get_file_byte(void* handle, char* buf, size_t* sansi)
+int libcu8_get_file_byte(FILE *f, char* buf, size_t* sansi)
 {
-    DWORD wrt = 0;
-    int ret;
+    int ret, c, wrt;
 
     if (*sansi >= FILENAME_MAX)
         return -1; /* we ran out of space in the buffer, report error */
 
-    ret = ReadFile(handle, buf + *sansi, 1, &wrt, NULL);
+    wrt = fread(buf + *sansi, 1, 1, f);
 
-
-    if ((!ret) && GetLastError() != ERROR_BROKEN_PIPE)
+    if ((!wrt) && ferror(f))
         return -1; /* report error */
 
     if (wrt == 0)
@@ -353,7 +271,7 @@ __cdecl void (*libcu8_completion_handler_free)(char*);
 #define ESC 0x1b
 int libcu8_readconsole(int fd, char* buf, size_t size, size_t* written)
 {
-    void *handle = osfhnd(fd), *conout = GetStdHandle(STD_OUTPUT_HANDLE);
+    HANDLE handle = (HANDLE)_get_osfhandle(fd), conout = GetStdHandle(STD_OUTPUT_HANDLE);
     char utf8[4]="", tutf8[4]="", wcs[2*sizeof(wchar_t)],
          *pin,
          *pout,
@@ -364,7 +282,7 @@ int libcu8_readconsole(int fd, char* buf, size_t size, size_t* written)
 
     wchar_t* wstr;
     const size_t orig = size;
-    const char* orig_buf = buf;
+    char* const orig_buf = buf;
 
     size_t wlen, wlen_tmp,
             len;
@@ -406,7 +324,6 @@ int libcu8_readconsole(int fd, char* buf, size_t size, size_t* written)
                 goto err;
 
             case 0: /* EOF */
-                osfile(fd) |= ATEOF;
                 goto next;
 
         }
@@ -718,7 +635,7 @@ int libcu8_refresh_console_line(void* handle, char* buf, size_t size,
 {
     wchar_t *wstr1 = NULL, *wstr2 = NULL;
     size_t wlen1 = 0 , wlen2 = 0;
-    int wrt;
+    DWORD wrt;
     int i;
     CONSOLE_CURSOR_INFO info;
 
@@ -738,11 +655,11 @@ int libcu8_refresh_console_line(void* handle, char* buf, size_t size,
     line->current.Y = line->orig.Y;
 
     if ((cursor
-        && !(wstr1 = libcu8_xconvert(LIBCU8_TO_U16,
+        && !(wstr1 = (wchar_t*)libcu8_xconvert(LIBCU8_TO_U16,
                                     buf,
                                     cursor, &wlen1)))
         || ((size - cursor)
-            && !(wstr2 = libcu8_xconvert(LIBCU8_TO_U16,
+            && !(wstr2 = (wchar_t*)libcu8_xconvert(LIBCU8_TO_U16,
                                         buf + cursor,
                                         size - cursor, &wlen2)))) {
             if (wstr1)
@@ -814,7 +731,7 @@ int libcu8_refresh_console_line(void* handle, char* buf, size_t size,
 
 void libcu8_clear_character(void* handle, struct libcu8_line_t* line)
 {
-    int wrt;
+    DWORD wrt;
     CONSOLE_CURSOR_INFO info;
 
     info.dwSize = 100;

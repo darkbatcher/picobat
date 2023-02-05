@@ -38,6 +38,7 @@
 #endif /* DLL_EXPORT */
 
 /* short circuit libcu8.h inclusion by file */
+#define LIBCU8_NO_WRAPPERS
 #include <libcu8.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -50,73 +51,6 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include "config.h"
-
-/*
-*******************************************************************************
-    crt internal functions
-
-    Define some msvcrt internal function to be able to alter msvcrt's private
-    datas.
-*******************************************************************************
-*/
-
-
-/* import the __pioinfo symbol */
-struct ioinfo {
-    void* osfhnd;
-    unsigned char osfile;
-    unsigned char pipech;
-    int lockinitflag;
-    CRITICAL_SECTION lock;
-};
-
-extern _CRTIMP struct ioinfo* __pioinfo[];
-
-/* define some macros to deal with __pioinfo buffer (which stores
-   data file information */
-#define IOINFO_TABLE_SIZE (1 << 5)
-#define IOINFO_MAX_TABLE 64
-#define MAKE_FD(table,index)  ( (table) << 5 + (index))
-
-#define pioinfo(i)  (__pioinfo[((i) >> 5)] + \
-                                    ((i) & (IOINFO_TABLE_SIZE - 1)))
-#define osfhnd(i)   (pioinfo(i)->osfhnd)
-#define osfile(i)   (pioinfo(i)->osfile)
-#define pipech(i)   (pioinfo(i)->pipech)
-
-#define FHND        0x01 /* have a file handle */
-#define ATEOF       0x02 /* descriptor at EOF */
-#define PIPE        0x08 /* is a pipe */
-#define TTY         0x40 /* is a tty */
-#define TEXTMODE    0x80 /* use text mode */
-#define NOINHERIT   0x10 /* not inheritable file */
-#define APPEND      0x20 /* append at end of file */
-
-#define IS_VALID(i)  (((i) >> 5 ) < IOINFO_MAX_TABLE && \
-                     __pioinfo[(i) >> 5] != NULL && \
-                     ( osfile(i) & FHND))
-
-
-/* Some macros to make simple test */
-#define IS_TEXTMODE(mode)   (mode & TEXTMODE)
-#define IS_PIPE(mode)       (mode & PIPE)
-#define HAS_FHND(mode)      (mode & FHND)
-#define IS_TTY(mode)        (mode & TTY)
-#define IS_ATEOF(mode)      (mode & ATEOF)
-
-/*
-*******************************************************************************
-    inject.c functions
-
-    Functions to inject new functions in place of dll functions or so.
-*******************************************************************************
-*/
-
-/* A function to inject new enhanced functions */
-int libcu8_replace_fn(void* oldfn, void* newfn, int n);
-int libcu8_reserve_fn_table(int nb, void* base_fn);
-void** libcu8_get_fn_pointer(void* fn);
-void __cdecl libcu8_save_changes(void);
 
 /*
 *******************************************************************************
@@ -179,12 +113,12 @@ int libcu8_is_tty(void* hndl);
 
 /* Custom readconsole-like function */
 int libcu8_readconsole(int fd, char* buf, size_t size, size_t* written);
-int libcu8_get_file_byte(void* handle, char* buf, size_t* sansi);
+int libcu8_get_file_byte(FILE *f, char* buf, size_t* sansi);
 int libcu8_try_convert(iconv_t context, char* in, size_t* insize,
                                                 char* utf8, size_t* outsize);
 
 /* custom readfile-like function */
-int libcu8_readfile(int fd, char* buf, size_t size, size_t* written);
+int libcu8_readfile(FILE* f, char* buf, size_t size, size_t* written);
 
 struct libcu8_line_t {
     COORD orig;
@@ -238,7 +172,7 @@ void libcu8_completion_insert(const char* completion,
  */
 
 int libcu8_write_console(int fd, void* buf, size_t cnt, size_t* written);
-int libcu8_write_file(int fd, void* buf, size_t cnt, size_t* written);
+int libcu8_write_file(FILE* f, void* buf, size_t cnt, size_t* written);
 char* libcu8_lf_to_crlf(const char* buf, size_t len, size_t* cvt);
 
 

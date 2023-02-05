@@ -44,6 +44,11 @@
 #endif /* __LIBPBAT__DLL */
 #endif /* LIBPBAT  */
 
+
+#if defined PBAT_USE_LIBCU8
+#include <libcu8.h>
+#endif
+
 #if defined WIN32
 
     #include <windows.h>
@@ -76,9 +81,7 @@
     /*
      * provide some wrapper over windows pseudo-POSIX functions
      */
-    #define flushall() _flushall()
-    #define dup(a) _dup(a)
-    #define dup2(a,b) _dup2(a,b)
+
     #define write(a,b,c) _write(a,b,c)
     #define read(a,b,c) _read(a,b,c)
     #define access(a,b) _access(a,b)

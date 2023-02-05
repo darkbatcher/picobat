@@ -39,7 +39,6 @@
 #include <sys/stat.h>
 
 #include "internals.h"
-#include "libcu8.h"
 
 
 /* build libcu8_stat32 */

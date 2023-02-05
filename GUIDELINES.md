@@ -1,4 +1,4 @@
-# Programming Guidelines to pBat #
+# Programming Guidelines to pBat
 
 This documents sums up some quite important guidelines to programmers that are 
 interested in extending pBat. It discusses overall topic about internal pBat 
@@ -7,7 +7,7 @@ features.
 Please read this document carefully before attempting any modifications to the 
 original code base.
 
-## Command semantics ##
+## Command semantics
 
 pBat follows some rules for the design of command-lines for the command it 
 includes. As far as possible, the following rules must be met:
@@ -20,14 +20,14 @@ includes. As far as possible, the following rules must be met:
 
 * No choices should be mandatory. We consider that there is very few occasions 
   where a choice cannot be ignored in a well designed command. Please try to 
-  avoid syntaxes like **{param1 | param2}**.
+  avoid syntaxes like **{param1 \| param2}**.
 
 * Commands dealing with files should definitely handle regular expressions and 
   be able to process as many file name as can be provided. This is sadly not 
   the case in every pBat command but providing robust commands is highly 
   considered. 
 
-## Creating new commands ##
+## Creating new commands
 
 Commands are the easiest extension that can be added to pBat. To begin with, a 
 typical function implementing a command should be of the following form:
@@ -65,14 +65,14 @@ below. Be sure to free all the objects you may allocate.
 If your command uses standard input and output, please use carefully the 
 thread-local files provided by the interpretor, as described below.
 
-## Includes ##
+## Includes
 
 Almost everything you may ever need is in:
 
     #include "pBat_Core.h" /* file in pbat/core/ */
      #include <libpBat.h>
 
-## Multi threading ##
+## Multi threading
 
 It is important to notice that this branch of pBat actively uses 
 multi-threading capabilities to run various interpretors from a single pBat 
@@ -97,7 +97,7 @@ the thread returns a value corresponding to the interpretors last
 As a process may host various interpretors, it is advised to pay a particular 
 attention to memory leaks as they can affect really badly other interpretors.
 
-## ESTR structures ##
+## ESTR structures
 
 pBat also provides some functions to manage dynamic sized strings. These allow 
 dealing with string without caring about the size of the underlying buffer. 
@@ -123,7 +123,7 @@ needs to be allocated through **pBat\_EsInit\(\)** and freed through
 **pBat\_EsFree\(\)**. The c-string associated with a **ESTR** structure can be 
 obtaine using the **str** member as described above.
 
-## Output streams ##
+## Output streams
 
 As said earlier, pBat is multi-threaded, various thread may run 
 simultaneously, and have different output files. For these reasons, standard 
@@ -141,7 +141,7 @@ In addition, both **fInput**, **fOutput** and **fError** are binary files,
 thus, If you want a message containing newlines to be printed portably across 
 platforms, use the **PBAT\_NL** macro instead of **\n**.
 
-## Paths ##
+## Paths
 
 As pBat is multi threaded, a command shall not refer to OS current directory, 
 instead, it shall use one of the following function to create Absolute paths. 
@@ -162,7 +162,7 @@ command without using these functions to convert them to absolute path.
 **pBat\_FullPathDup\(\)** allocates a new string to store the absolute path, 
 be sure to free it with **free\(\)** when no longer needed.
 
-## Environment ##
+## Environment
 
 Concerning environment variable, pBat uses its own internal functions that 
 deal with internally stored environment. pBat does not rely on functions 
@@ -190,7 +190,7 @@ via an array of c-strings \(just like **environ**\) using
 To access the current intrepretor environment, please use the thread-local 
 variable **lpeEnv**.
 
-## File search functions ##
+## File search functions
 
 pBat provides a mechanism to get matching files from regular expression in 
 libpBat. 
@@ -253,7 +253,7 @@ elements, that is **\*pIn** is somehow destroyed in the process. Both
 **\*\*pSelected** and **\*\*pRemaining** must be freed when they are no longer 
 useful using **pBat\_FreeFileList\(\)**.
 
-## Errors handling ##
+## Errors handling
 
 **pBat** provides a set of standardized error messages declared in 
 **pbat/errors/pBat\_Errors.h**. Upon failure, the return value of a command 
@@ -268,7 +268,7 @@ displayed as a complement to the error message. If **iExitCode** is different
 from 0, then the function terminates the pBat process with **iErrorNumber** as 
 exit code.
 
-## LookAHead command ##
+## LookAHead command
 
 **pBat** currently provides a mechanism to make commands behave like the FOR 
 and if commands \(which are called in pBat jargon "lookahead" commands\). 
@@ -295,7 +295,7 @@ may be used :
 
     PARSED_LINE* pBat_LookAHeadMakeParsedLine(BLOCKINFO* block, PARSED_LINE* lookahead)
 
-## Creating Modules ##
+## Creating Modules
 
 The version **218.3** introducted the possibility to load modules in order to 
 load additionnal commands at run-time, providing the possibility to 
@@ -351,7 +351,7 @@ This allow for some module specific set-up \(such as global variables or
 libraries initialization\) and registration of commands provided by modules 
 using **pBat\_RegisterCommand\(\)**. 
 
-## Using gettext ##
+## Using gettext
 
 **pBat** uses gettext to manage internationalized messages. Messages are 
 defined in **pbat/errors/pBat\_Errors.c**, **pbat/lang/pBat\_Lang.c** and 

@@ -39,7 +39,6 @@
 #include "iconv/iconv.h"
 
 #include "internals.h"
-#include <libcu8.h>
 
 __LIBCU8__IMP __cdecl intptr_t libcu8_spawnl(int mode, const char* file, ...)
 {

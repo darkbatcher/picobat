@@ -25,53 +25,22 @@
 #ifdef WIN32
 #include <stdlib.h>
 #include <windows.h>
-
-struct ioinfo {
-    void* osfhnd;
-    unsigned char osfile;
-    unsigned char pipech;
-    int lockinitflag;
-    CRITICAL_SECTION lock;
-};
-
-extern _CRTIMP struct ioinfo* __pioinfo[];
-
-/* define some macros to deal with __pioinfo buffer (which stores
-   data file information */
-#define IOINFO_TABLE_SIZE (1 << 5)
-#define IOINFO_MAX_TABLE 64
-#define MAKE_FD(table,index)  ( (table) << 5 + (index))
-
-#define pioinfo(i)  (__pioinfo[((i) >> 5)] + \
-                                    ((i) & (IOINFO_TABLE_SIZE - 1)))
-#define osfile(i)   (pioinfo(i)->osfile)
-#define osfhnd(i)   (pioinfo(i)->osfhnd)
-#define NOINHERIT   0x10 /* not inheritable file */
-#define FHND        0x01 /* have a file handle */
+#include <io.h>
 
 void pBat_SetFdInheritance(int fd, int mode)
 {
-    HANDLE handle = osfhnd(fd);
+    HANDLE handle = (HANDLE)_get_osfhandle(fd);
 
     SetHandleInformation(handle, HANDLE_FLAG_INHERIT, mode);
-
-    osfile(fd) &= ~ NOINHERIT;
 }
 
 void pBat_SetAllFdInheritance(int mode)
 {
     int i;
 
-    for (i =0;; i ++) {
+    for (i =0;i < 1024; i ++)
+        pBat_SetFdInheritance(i, mode);
 
-        /* Check if the FD is alloc'd */
-        if (__pioinfo[i >> 5] == NULL)
-            break;
-        else if (osfile(i) & FHND)
-            pBat_SetFdInheritance(i, mode);
-
-
-    }
 }
 
 #else /* WIN32 */

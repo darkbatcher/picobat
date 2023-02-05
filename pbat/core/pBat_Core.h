@@ -55,4 +55,6 @@
 #include "pBat_Prompt.h"
 #include "pBat_Completion.h"
 
+#include <libcu8.h>
+
 #endif // PBAT_CORE_H_INCLUDED

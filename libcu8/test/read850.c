@@ -42,10 +42,11 @@
 int main(void)
 {
     char check_u8[] = "Proin fam\xC3\xA8s vulputate conubi\xC3\xA9 n\xC3\xBBllam justo mauris "
-    "condiment\xC3\xBBm s\xC3\xA8n\xC3\xA8ktus du aenean elit",
-         buf[sizeof(check_u8)-1];
+    "condiment\xC3\xBBm s\xC3\xA8n\xC3\xA8ktus du aenean elit.",
+         buf[sizeof(check_u8)];
 
-    int fd, rd, i;
+    int ret;
+    FILE* f;
 
     if (libcu8_init(NULL)) {
         log_msg("libcu8_init() failed");
@@ -54,24 +55,23 @@ int main(void)
 
     libcu8_set_fencoding("CP850");
 
-    if ((fd = open(CHECK_850_FILE, O_RDONLY | O_TEXT)) == -1) {
+    if ((f = fopen(CHECK_850_FILE, "r")) == NULL) {
         log_msg("Unable to open() check_850 file");
         return 1;
     }
 
-    rd = read(fd, buf, sizeof(buf));
-
-    if (rd != sizeof(check_u8)-1) {
+    if (fgets(buf, sizeof(buf), f) == NULL
+        || strlen(buf) != sizeof(check_u8)-1) {
         log_msg("read() did not read enough bytes");
         return 1;
     }
 
-    if (memcmp(buf, check_u8, rd)) {
+    if (memcmp(buf, check_u8, sizeof(check_u8))) {
         log_msg("read() returned wrong content");
         return 1;
     }
 
-    close (fd);
+    fclose(f);
 
     return 0;
 }

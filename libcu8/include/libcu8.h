@@ -71,34 +71,155 @@ __LIBCU8__IMP __cdecl char* libcu8_xconvert(int mode, const char* src,
                                             size_t size, size_t* converted);
 
 /* CRT function replacement for low-level io */
-__LIBCU8__IMP __cdecl int libcu8_read_nolock(int fd, void* buf,
-                                             unsigned int cnt);
-__LIBCU8__IMP __cdecl int libcu8_read(int fd, void* buf, unsigned int cnt);
-__LIBCU8__IMP __cdecl int libcu8_write_nolock(int fd, void* buf,
-                                                unsigned int cnt);
-__LIBCU8__IMP __cdecl int libcu8_write(int fd, void* buf, unsigned int cnt);
+#ifndef LIBCU8_NO_WRAPPERS
+#undef fgetc
+#undef getc
+#define fgetc(a) libcu8_fgetc(a)
+#define getc(a) libcu8_fgetc(a)
+#endif
+__LIBCU8__IMP __cdecl int libcu8_fgetc(FILE *f);
+
+#ifndef LIBCU8_NO_WRAPPERS
+#undef fgets
+#define fgets(a,b,c) libcu8_fgets(a,b,c)
+#endif
+__LIBCU8__IMP __cdecl char* libcu8_fgets(char* buf, int s, FILE* f);
+
+#ifndef LIBCU8_NO_WRAPPERS
+#undef fprintf
+#define fprintf libcu8_fprintf
+#endif
+__LIBCU8__IMP __cdecl int libcu8_fprintf(FILE* f, const char* fmt, ...);
+
+#ifndef LIBCU8_NO_WRAPPERS
+#undef vfprintf
+#define vfprintf libcu8_vfprintf
+#endif
+__LIBCU8__IMP __cdecl int libcu8_vfprintf(FILE* f, const char* fmt, va_list args);
+
+#ifndef LIBCU8_NO_WRAPPERS
+#undef fputc
+#undef putc
+#define fputc(a,b) libcu8_fputc(a,b)
+#define putc(a,b) libcu8_fputc(a,b)
+#endif
+__LIBCU8__IMP __cdecl int libcu8_fputc(int c, FILE* f);
+
+#ifndef LIBCU8_NO_WRAPPERS
+#undef fputs
+#define fputs(a,b) libcu8_fputs(a,b)
+#endif
+__LIBCU8__IMP __cdecl int libcu8_fputs(const char* s, FILE* f);
+
+#ifndef LIBCU8_NO_WRAPPERS
+#undef fopen
+#define fopen(a,b) libcu8_fopen(a,b)
+#endif
 __LIBCU8__IMP __cdecl FILE* libcu8_fopen(const char* __restrict__ name, const char* __restrict__ mode);
-__LIBCU8__IMP __cdecl int libcu8_open(char* name, int oflags, int pmode);
+
+#ifndef LIBCU8_NO_WRAPPERS
+#undef open
+#define open libcu8_open
+#endif
+__LIBCU8__IMP __cdecl int libcu8_open(char* name, int oflags, ...);
+
+#ifndef LIBCU8_NO_WRAPPERS
+#undef sopen
+#define sopen(a,b,c,d) libcu8_sopen(a,b,c,d)
+#endif
 __LIBCU8__IMP __cdecl int libcu8_sopen(char* name, int oflags,
                                             int shflags, int pmode);
+
+#ifndef LIBCU8_NO_WRAPPERS
+#undef creat
+#define creat(a,b) libcu8_creat(a,b)
+#endif
 __LIBCU8__IMP __cdecl int libcu8_creat(char* name, int pmode);
+
+#ifndef LIBCU8_NO_WRAPPERS
+#undef lseek
+#define lseek(a,b,c) libcu8_lseek(a,b,c)
+#endif
 __LIBCU8__IMP __cdecl int libcu8_lseek(int fd, long offset, int origin);
+
+#ifndef LIBCU8_NO_WRAPPERS
+#undef fseek
+#define fseek(a,b,c) libcu8_fseek(a,b,c)
+#endif
+__LIBCU8__IMP __cdecl int libcu8_fseek(FILE* f, long offset, int origin);
+
+#ifndef LIBCU8_NO_WRAPPERS
+#undef commit
+#define commit(a) libcu8_commit(a)
+#endif
 __LIBCU8__IMP __cdecl int libcu8_commit(int fd);
+
+#ifndef LIBCU8_NO_WRAPPERS
+#undef fflush
+#define fflush(a) libcu8_fflush(a)
+#endif
+__LIBCU8__IMP __cdecl int libcu8_fflush(FILE* f);
+
+#ifndef LIBCU8_NO_WRAPPERS
+#undef dup
+#define dup(a) libcu8_dup(a)
+#endif
 __LIBCU8__IMP __cdecl int libcu8_dup(int fd);
-__LIBCU8__IMP __cdecl int libcu8_dup_nolock(int fd);
+
+#ifndef LIBCU8_NO_WRAPPERS
+#undef dup2
+#define dup2(a,b) libcu8_dup2(a,b)
+#endif
 __LIBCU8__IMP __cdecl int libcu8_dup2(int fd1, int fd2);
-__LIBCU8__IMP __cdecl int libcu8_dup2_nolock(int fd1, int fd2);
 
 /* CRT function replacement for file management functions */
+#ifndef LIBCU8_NO_WRAPPERS
+#undef remove
+#define remove(a) libcu8_remove(a)
+#endif
 __LIBCU8__IMP __cdecl int libcu8_remove(const char* file);
-__LIBCU8__IMP __cdecl int libcu8_rename(const char* oldn, const char* newn);
-__LIBCU8__IMP __cdecl int libcu8_unlink(const char* file);
-__LIBCU8__IMP __cdecl int libcu8_chmod(const char* file, int mode);
-__LIBCU8__IMP __cdecl int libcu8_dup(int fd);
-__LIBCU8__IMP __cdecl int libcu8_dup_nolock(int fd);
-__LIBCU8__IMP __cdecl int libcu8_dup2(int fd1, int fd2);
-__LIBCU8__IMP __cdecl int libcu8_dup2_nolock(int fd1, int fd2);
 
+#ifndef LIBCU8_NO_WRAPPERS
+#undef rename
+#define rename(a,b) libcu8_rename(a,b)
+#endif
+__LIBCU8__IMP __cdecl int libcu8_rename(const char* oldn, const char* newn);
+
+#ifndef LIBCU8_NO_WRAPPERS
+#undef unlink
+#define unlink(a) libcu8_unlink(a)
+#endif
+__LIBCU8__IMP __cdecl int libcu8_unlink(const char* file);
+
+#ifndef LIBCU8_NO_WRAPPERS
+#undef chmod
+#define chmod(a,b) libcu8_chmod(a,b)
+#endif
+__LIBCU8__IMP __cdecl int libcu8_chmod(const char* file, int mode);
+
+#ifndef LIBCU8_NO_WRAPPERS
+#undef getcwd
+#define getcwd(a,b) libcu8_getcwd(a,b)
+#endif
+__LIBCU8__IMP __cdecl int libcu8_getcwd(char* dir, size_t size);
+
+#ifndef LIBCU8_NO_WRAPPERS
+#undef chdir
+#define chdir(a) libcu8_chdir(a)
+#endif
+__LIBCU8__IMP __cdecl int libcu8_chdir(const char* dir);
+
+#ifndef LIBCU8_NO_WRAPPERS
+#undef rmdir
+#define rmdir(a) libcu8_rmdir(a)
+#endif
+__LIBCU8__IMP __cdecl int libcu8_rmdir(const char* dir);
+
+#ifndef LIBCU8_NO_WRAPPERS
+#undef mkdir
+#define mkdir(a) libcu8_mkdir(a)
+#endif
+__LIBCU8__IMP __cdecl int libcu8_mkdir(const char* dir);
 
 /* CRT functions replacement for spawn*/
 __LIBCU8__IMP __cdecl intptr_t libcu8_spawnl(int mode, const char* file, ...);
@@ -115,10 +236,7 @@ __LIBCU8__IMP __cdecl intptr_t libcu8_spawnvpe(int mode, const char* file,
                                                     const char* const *argv,
                                                     const char *const *envp);
 
-__LIBCU8__IMP __cdecl int libcu8_getcwd(char* dir, size_t size);
-__LIBCU8__IMP __cdecl int libcu8_chdir(const char* dir);
-__LIBCU8__IMP __cdecl int libcu8_rmdir(const char* dir);
-__LIBCU8__IMP __cdecl int libcu8_mkdir(const char* dir);
+
 __LIBCU8__IMP __cdecl int libcu8_fd_set_inheritance(int fd, int mode);
 
 __LIBCU8__IMP __cdecl void (*libcu8_completion_handler)(const char*, char**);

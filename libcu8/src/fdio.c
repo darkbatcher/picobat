@@ -36,13 +36,14 @@
 #include <errno.h>
 #include <windows.h>
 #include <assert.h>
+#include <stdarg.h>
 
 #include "internals.h"
-#include "libcu8.h"
 
 __LIBCU8__IMP __cdecl FILE* libcu8_fopen(const char* __restrict__ name, const char* __restrict__ mode)
 {
     wchar_t *wfile, *wmode;
+    int fd;
     size_t conv;
     FILE* ret;
 
@@ -65,21 +66,40 @@ __LIBCU8__IMP __cdecl FILE* libcu8_fopen(const char* __restrict__ name, const ch
 
     ret = _wfopen(wfile, wmode);
 
+    fd = fileno(ret);
+
+    if (fd != -1) {
+
+        /* empty buffering structure */
+        libcu8_fd_buffers[fd].rcount = 0;
+        libcu8_fd_buffers[fd].len = 0;
+
+    }
+
     free(wfile);
     free(wmode);
 
     return ret;
 }
 
-__LIBCU8__IMP __cdecl int libcu8_open(char* name, int oflags, int pmode)
+__LIBCU8__IMP __cdecl int libcu8_open(char* name, int oflags, ...)
 {
     wchar_t *wcs;
-    int fd;
+    int fd, pmode = 0;
     size_t len;
+    va_list args;
 
     if (!(wcs = (wchar_t*)libcu8_xconvert(LIBCU8_TO_U16, name, strlen(name)+1,
                                           &len)))
         return -1;
+
+    if (oflags & _O_CREAT) {
+
+        va_start(args, oflags);
+        pmode = va_arg(args, int);
+        va_end(args);
+
+    }
 
     fd = _wopen(wcs, oflags, pmode);
 
@@ -150,12 +170,7 @@ __LIBCU8__IMP __cdecl int libcu8_creat(char* name, int pmode)
 
 __LIBCU8__IMP __cdecl int libcu8_commit(int fd)
 {
-    HANDLE handle = osfhnd(fd);
-
-    if (FlushFileBuffers(handle)) {
-        errno = GetLastError();
-        return errno;
-    }
+    _commit(fd);
 
     libcu8_fd_buffers[fd].rcount = 0;
     libcu8_fd_buffers[fd].len = 0;
@@ -163,14 +178,35 @@ __LIBCU8__IMP __cdecl int libcu8_commit(int fd)
     return 0;
 }
 
+__LIBCU8__IMP __cdecl int libcu8_fflush(FILE* f)
+{
+    int fd = fileno(f);
+    fflush(f);
+
+    libcu8_fd_buffers[fd].rcount = 0;
+    libcu8_fd_buffers[fd].len = 0;
+
+    return 0;
+}
+
+
 __LIBCU8__IMP __cdecl int libcu8_lseek(int fd, long offset, int origin)
 {
-    HANDLE handle = osfhnd(fd);
     int ret;
 
-    if ((ret = SetFilePointer(handle, offset, NULL, origin)) == -1) {
-        errno = GetLastError();
-    }
+    ret = lseek(fd, offset, origin);
+
+    libcu8_fd_buffers[fd].rcount = 0;
+    libcu8_fd_buffers[fd].len = 0;
+
+    return ret;
+}
+
+__LIBCU8__IMP __cdecl int libcu8_fseek(FILE* f, long offset, int origin)
+{
+    int ret, fd = fileno(f);
+
+    ret = fseek(f, offset, origin);
 
     libcu8_fd_buffers[fd].rcount = 0;
     libcu8_fd_buffers[fd].len = 0;
@@ -180,11 +216,9 @@ __LIBCU8__IMP __cdecl int libcu8_lseek(int fd, long offset, int origin)
 
 __LIBCU8__IMP __cdecl int libcu8_fd_set_inheritance(int fd, int mode)
 {
-    HANDLE handle = osfhnd(fd);
+    HANDLE handle = (HANDLE)_get_osfhandle(fd);
 
     SetHandleInformation(handle, HANDLE_FLAG_INHERIT, mode);
-
-    osfile(fd) &= ~ NOINHERIT;
 
     return 0;
 }

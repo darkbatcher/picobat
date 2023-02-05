@@ -25,7 +25,7 @@ endif
 
 CFLAGS += $(LIBCU8_INC) -I./include
 
-SRC_FILES = src/init.c src/inject.c src/encoding.c src/read.c src/write.c \
+SRC_FILES = src/init.c src/encoding.c src/read.c src/write.c \
 			src/fdio.c src/spawn.c src/stat.c src/dup.c src/find.c src/dir.c \
 			src/dirent.c src/iconv/iconv.c
 

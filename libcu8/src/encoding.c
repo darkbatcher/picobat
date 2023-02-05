@@ -39,7 +39,6 @@
 #include "iconv/iconv.h"
 
 #include "internals.h"
-#include "libcu8.h"
 
 #define CLOSE_IF_OPEN(cd) ( cd == (iconv_t) -1 ) ? () : ( iconv_close(cd))
 

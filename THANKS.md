@@ -1,4 +1,4 @@
-# Thanks #
+# Thanks
 
 This is a list of people and contributors I would particularly like to thank 
 for their help on the project. Without them, pBat would certainly not be so 

@@ -61,6 +61,8 @@ LIBMATHEVAL_LD = -L$(LIBMATHEVAL_DIR) -lfasteval
 ifeq ($(use_libcu8),1)
 	LIBCU8_LD = -L$(ROOTDIR)/libcu8 -lcu8
 	LIBCU8_INC = -I$(ROOTDIR)/libcu8/include
+	LIBPBAT_INC += $(LIBCU8_INC)
+	LIBPBAT_LD += $(LIBCU8_LD)
 endif
 
 ifeq ($(fn_WIN32),0)

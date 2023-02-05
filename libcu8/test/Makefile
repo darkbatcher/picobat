@@ -32,41 +32,23 @@ ifdef lib_iconv
 	LDFLAGS += -liconv
 endif
 
-noinst_SOURCES = convert.c ansi.c invalid.c read.c read850.c readconsole.c 
-noinst_PROGRAMS = $(noinst_SOURCES:.c=)
+noinst_SOURCES = convert.c ansi.c invalid.c read.c read850.c readconsole.c fgetc850.c writeconsole.c  \
+fgets_oversize.c fgets_nl.c
+noinst_PROGRAMS = $(noinst_SOURCES:.c=.exe)
 
-ansi_SOURCES = ansi.c
-ansi_LDADD = -L.. -lcu8
-ansi_CFLAGS = -I../include
 
-convert_SOURCES = convert.c
-convert_LDADD = -L.. -lcu8
-convert_CFLAGS = -I../include
+LDADD += -L.. -lcu8
+CFLAGS += -I../include
 
-read_SOURCES = read.c
-read_LDADD =  -L.. -lcu8 
-read_CFLAGS = -I../include
-
-read850_SOURCES = read850.c 
-read850_LDADD =  -L.. -lcu8
-read850_CFLAGS = -I../include
-
-readconsole_SOURCES = readconsole.c
-readconsole_LDADD = -L.. -lcu8
-readconsole_CFLAGS = -I../include
-
-invalid_SOURCES = invalid.c
-invalid_LDADD = -L.. -lcu8
-invalid_CFLAGS = -I../include
 
 all: $(noinst_PROGRAMS)
 
-$(noinst_PROGRAMS): $(noinst_SOURCES) ../libcu8.a
-	$(CC) -o $@$(EXEC_SUFFIX) $($@_SOURCES) $($@_CFLAGS) $($@_LDADD) $(CFLAGS) $(LDFLAGS) 
+%.exe : %.c ../libcu8.a
+	$(CC) -o $@ $< $(LDADD) $(CFLAGS) $(LDFLAGS)
 	
 clean:
 	rm -f *.o
-	rm -f $(addsuffix $(EXEC_SUFFIX),$(noinst_PROGRAMS)) 	
+	rm -f $(noinst_PROGRAMS) 	
 
 # Run the tests
 run-tests: all
@@ -82,3 +64,4 @@ run-tests: all
 	done; 2>&1
 
 .PHONY: run-tests all clean
+.SUFFIXES: .c .exe

@@ -45,7 +45,7 @@
 #include "config.h"
 #include <libcu8.h>
 
-
+#if 0
 #define REPLACE_FN( )
 
 struct fn_replace_t functions[] = {
@@ -112,6 +112,7 @@ struct fn_replace_t functions[] = {
     {"_unlink", libcu8_unlink}
 };
 
+#endif
 
 /* initialize the new functions */
 __LIBCU8__IMP __cdecl int libcu8_init(const char*** pargv)
@@ -143,40 +144,6 @@ __LIBCU8__IMP __cdecl int libcu8_init(const char*** pargv)
     if (pargv != NULL && libcu8_get_argv(pargv) == -1 )
         return -1;
 
-
-    if ((msvcrt = LoadLibraryW(L"msvcrt.dll")) == NULL) {
-
-        free(libcu8_fd_buffers);
-        return -1;
-
-    }
-
-    n = sizeof(functions)/sizeof(functions[0]);
-
-    /* replace functions from msvcrt by functions from libcu8 */
-    for (i = 0;i < n;i ++) {
-
-        /* get the source function address */
-        if ((oldfn = GetProcAddress(msvcrt, functions[i].name)) != NULL) {
-
-            /* replace the function by those shipped with libcu8 */
-            if (libcu8_replace_fn(oldfn, functions[i].fn, n))
-            {
-
-                free(libcu8_fd_buffers);
-                return -1;
-
-            }
-
-        }
-    }
-
-    FreeLibrary(msvcrt);
-
-    libcu8_save_changes();
-
-    //fprintf(stderr, "Returning \n");
-
     return 0;
 
 }
@@ -197,11 +164,8 @@ int libcu8_get_argv(const char*** pargv)
 
     __wgetmainargs(&argc, &wargv, &wenv, 0, &stinfo);
 
-    // fprintf(stderr, "Getting memory for argv\n");
-
     if (!(argv = malloc((argc + 1) * sizeof(char*)))) {
 
-        // fprintf(stderr, "Failed to get memory for argv\n");
         errno = ENOMEM;
         return -1;
 
@@ -211,19 +175,14 @@ int libcu8_get_argv(const char*** pargv)
 
     for (i=0; i < argc; i ++) {
 
-        //fwprintf(stderr, "Converting %d th argumenent \"%s\"\n", i, wargv[i]);
-
         if (!(argv[i] = libcu8_xconvert(LIBCU8_FROM_U16, (char*)wargv[i],
                                 (wcslen(wargv[i])+1)*sizeof(wchar_t), &converted))) {
 
-        //    fprintf(stderr, "Failed to convert %d th argumenent\n", i);
             return -1;
 
         }
 
     }
-
-    // fprintf(stderr, "End lo");
 
     *pargv = (const char**)argv;
 

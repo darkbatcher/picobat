@@ -46,31 +46,32 @@ int main(void)
     "condiment\xC3\xBBm s\xC3\xA8n\xC3\xA8ktus du aenean elit.",
          buf[sizeof(check_u8)];
 
-    int fd, rd, i;
+    char* ret;
+    FILE *f;
 
     if (libcu8_init(NULL)) {
         log_msg("libcu8_init() failed");
         return 1;
     }
 
-    if ((fd = open(CHECK_U8_FILE, O_RDONLY)) == -1) {
+    if ((f = fopen(CHECK_U8_FILE, "r")) == NULL) {
         log_msg("Unable to open() check_u8 file");
         return 1;
     }
 
-    rd = read(fd, buf, sizeof(buf));
-
-    if (rd != sizeof(check_u8)-1) {
+    ret = fgets(buf, sizeof(buf), f);
+    if ( ret == NULL
+        || strlen(buf) != sizeof(check_u8)-1) {
         log_msg("read() did not read enough bytes");
         return 1;
     }
 
-    if (memcmp(buf, check_u8, rd)) {
+    if (memcmp(buf, check_u8, sizeof(check_u8))) {
         log_msg("read() returned wrong content");
         return 1;
     }
 
-    close (fd);
+    fclose (f);
 
     return 0;
 }

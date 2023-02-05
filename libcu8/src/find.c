@@ -41,7 +41,6 @@
 
 #include "config.h"
 #include "internals.h"
-#include "libcu8.h"
 
 #ifdef HAVE__FINDFIRST64
 /* Gen libcu8_findfirst64 and libcu8_findnext64 */
