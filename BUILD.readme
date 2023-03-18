@@ -10,6 +10,18 @@ alwayseeded :
 	- GNU gettext
 	- GNU libiconv
 
+Simple Build in Linux without libcu8
+```bash
+git clone https://github.com/darkbatcher/picobat.git
+cd picobat
+sudo apt install gcc
+sudo apt install bison
+sudo apt install flex
+sudo apt install gettext
+make no-libcu8
+make all bin
+```
+
 If you also want to enable START command support under non-windows platforms,
 either mimeopen or xdg-open are required, the early being the most
 recommended alternative.
