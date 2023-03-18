@@ -55,6 +55,8 @@
 #include "pBat_Prompt.h"
 #include "pBat_Completion.h"
 
+#if defined(WIN32) && defined(PBAT_USE_LIBCU8)
 #include <libcu8.h>
+#endif
 
 #endif // PBAT_CORE_H_INCLUDED
