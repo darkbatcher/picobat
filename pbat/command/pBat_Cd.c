@@ -76,7 +76,7 @@ int __inline__ pBat_Canonicalize(char* path)
     /* If the path is UNC, just skip the very first part */
     if (PBAT_TEST_UNC_PATH(path)) {
         path += 2;
-	    
+
 	while (*path && !PBAT_TEST_SEPARATOR(path))
 		path ++;
 
@@ -171,8 +171,9 @@ int pBat_SetCurrentDir(char* lpLine)
         if (*lpLine == '/') {
 
             /* well, arguably lpCurrentDir[2] is a slash ...
-               unless lpCurrentDir refers to a unc path, but this
-               is not handled yet */
+               unless lpCurrentDir refers to a unc path
+               which is still unsupported  */
+
             strncpy(lpCurrentDir + 2, lpLine, FILENAME_MAX-2);
             lpCurrentDir[FILENAME_MAX-1] = '\0';
 
@@ -402,40 +403,30 @@ def:
 
         if (*pBat_SkipBlanks(lpLine+2) == '\0') {
 
-            /* only got a drive name */
+            /* If the only  argument is a drive letter eg `x:` do the following
+               steps :
+                    - check if `=x:` variable exists, if so change current directory to it
+                    - if no change directory to x:\ and set `=x:` accordingly */
+
+            force = TRUE;
+
             varname[1] = *lpLine;
 
-            if (!(lpNext = pBat_GetEnv(lpeEnv, varname))) {
+            if (!(lpLine = pBat_GetEnv(lpeEnv, varname))) {
 
-                lpNext = lpLine;
-
-            }
-
-            if (pBat_SetCurrentDir(lpNext)) {
-
-                pBat_ShowErrorMessage(PBAT_DIRECTORY_ERROR
-                                        | PBAT_PRINT_C_ERROR,
-                                      lpNext,
-                                      FALSE
-                                      );
-
-                status = PBAT_DIRECTORY_ERROR;
+                /* append a slash so this becomes a valid path */
+                lpLine = pBat_SkipBlanks(lpesStr->str);
 
             }
-
-            goto end;
-
         }
 
-
-        /* get current curent directory disk */
         passed = *lpLine;
 
     }
 
     if ((passed == 0)
         || (toupper(passed) == toupper(current))
-        || (force == TRUE)) {
+        || force) {
 
         /* change the current directory, yeah */
 
@@ -454,8 +445,7 @@ def:
     }
 
     varname[1] = (passed == 0) ? (current) : (passed);
-
-    pBat_SetEnv(lpeEnv, varname, lpLine);
+    pBat_SetEnv(lpeEnv, varname, (passed == 0) ? lpCurrentDir : lpLine);
 
 end:
     pBat_EsFree_Cached(lpesStr);

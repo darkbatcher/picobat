@@ -179,11 +179,19 @@ void pBat_Init(void)
        Example if LC_NUMERIC is french, then 1.1 becomes 1,1 */
     setlocale(LC_NUMERIC, "C");
 
-
-
     /* Set the value of %PBAT_PATH% */
     lpInitVar[4]="PBAT_PATH";
     lpInitVar[5]=lppBatPath;
+
+#ifdef WIN32
+    char drive_var[] = "=x:";
+
+    /* initialize the current %=x:% drive variable with current dir */
+    drive_var[1] = *lpCurrentDir;
+    lpInitVar[6] = drive_var;
+    lpInitVar[7] = lpCurrentDir;
+
+#endif // WIN32
 
     /* Set the default pBat vars */
     pBat_InitVar(lpInitVar);

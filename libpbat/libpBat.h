@@ -399,7 +399,7 @@ LIBPBAT void            pBat_GetMousePos(FILE* f, char on_move, CONSOLECOORD* co
 #define PBAT_TEST_SEPARATOR(p) (*(p) == '/' || *(p) == '\\')
 #define PBAT_TEST_UNC_PATH(p)  (*(p) == '\\' && *(p+1) == '\\')
 #define PBAT_TEST_ROOT_PATH(p) (PBAT_TEST_SEPARATOR(p) && !PBAT_TEST_SEPARATOR(p+1))
-#define PBAT_TEST_DRIVE_PATH(p) (*(p) && *(p+1)==':' && PBAT_TEST_SEPARATOR(p+2))
+#define PBAT_TEST_DRIVE_PATH(p) (*(p) && *(p+1)==':' && (!*(p+2) || PBAT_TEST_SEPARATOR(p+2)))
 #define PBAT_TEST_ABSOLUTE_PATH(p) (PBAT_TEST_UNC_PATH(p) || PBAT_TEST_ROOT_PATH(p) \
                                 || PBAT_TEST_DRIVE_PATH(p))
 #define PBAT_DEF_DELIMITER "\\"

@@ -102,6 +102,7 @@ int pBat_DirExists(const char *ptrName)
     wchar_t* name;
     size_t conv;
 
+
     if ((name = (wchar_t*) libcu8_xconvert(LIBCU8_TO_U16, ptrName,
                 strlen(ptrName)+1, &conv)) == NULL)
         return 0;

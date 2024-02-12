@@ -27,6 +27,9 @@ char* lpInitVar[]= {
 	"PBAT_VERSION", PBAT_VERSION,
 	"PBAT_OS", PBAT_OS,
 	NULL, NULL, /* PBAT_PATH is dinamically generated */
+#ifdef WIN32
+	NULL, NULL, /* used to initialize the %=x:% variable based on the current path*/
+#endif
     "PBAT_OS_TYPE", PBAT_OS_TYPE,
     "PBAT_START_SCRIPT", START_SCRIPT,
     "PROMPT","$P$G",

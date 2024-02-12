@@ -132,7 +132,8 @@ int pBat_ExecOperators(PARSED_LINE** lpLine)
 
 
     /* If we get to this, it is because the first command of the
-       pipe sequence has not be executed, so skip*/
+       pipe sequence has not been executed, so skip
+       eg. a || b | c and a fails.*/
 	case PARSED_STREAM_NODE_PIPE:
         status |= EXECOPERATORS_SKIP;
 
@@ -229,7 +230,7 @@ void pBat_LaunchPipe(struct pipe_launch_data_t* infos)
 
        as this function executes the left hand side of a pipe.
 
-       */
+    */
     pBat_ExecOutput(infos->stream);
 
     pBat_RunCommand(infos->str, NULL);
@@ -328,6 +329,7 @@ void pBat_RunParsedLine(PARSED_LINE* line)
 	int lock, ok;
 	char *pch;
 
+	/* loop though operators */
 	do {
 
 		lock = pBat_GetStreamStackLockState(lppsStreamStack);
