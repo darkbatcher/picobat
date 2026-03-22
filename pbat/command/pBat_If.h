@@ -55,7 +55,10 @@
     ret = (pBat_GetEnv(env, var) != NULL);
 
 #define PBAT_IF_ERRORLEVEL_TEST(ret, val, env) \
-    ret = !stricmp(val, pBat_GetEnv(env, "ERRORLEVEL"));
+    do { \
+        const char* _pbat_errorlevel = pBat_GetEnv(env, "ERRORLEVEL"); \
+        ret = atoi((_pbat_errorlevel != NULL) ? _pbat_errorlevel : "0") >= atoi(val); \
+    } while (0)
 
 int pBat_PerformExtendedTest(const char* lpCmp, const char* lpParam1, const char* lpParam2, int iFlag);
 

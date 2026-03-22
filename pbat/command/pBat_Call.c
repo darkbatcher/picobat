@@ -194,13 +194,10 @@ int pBat_CmdCall(char* lpLine)
 		   determine ``file'' extension, to choose wether it should
 		   be executed inside or outside pBat */
 
-        if (pBat_GetFilePath(lpFullName, lpFile, sizeof(lpFullName)) == -1) {
-
-            pBat_ShowErrorMessage(PBAT_COMMAND_ERROR, lpFile, 0);
-
-            status = PBAT_COMMAND_ERROR;
-            goto error;
-        }
+	        if (pBat_GetFilePath(lpFullName, lpFile, sizeof(lpFullName)) == -1) {
+	            status = pBat_CmdCallExternal(lpFile, lpLine);
+	            goto error;
+	        }
 
 		pBat_SplitPath(lpFullName, NULL, NULL, NULL, lpExt);
 
@@ -269,6 +266,7 @@ int pBat_CmdCallFile(char* lpFile, char* lpFull, char* lpLabel, char* lpCmdLine)
 
 		ifIn.bEof=FALSE;          /* the file is not at EOF */
 		ifIn.iPos=0;              /* places the cursor at the origin */
+		ifIn.batch.curr = ifIn.batch.cmds;
 		snprintf(ifIn.lpFileName,
 		         sizeof(ifIn.lpFileName),
 		         "%s",
@@ -409,7 +407,7 @@ int pBat_CmdCallExternal(char* lpFile, char* lpCh)
 	pBat_EsCat(lpEsLine, " ");
 	pBat_EsCat(lpEsLine, lpCh);
 
-    /* Offer a free new expansion turn  */
+	    /* Offer a free new expansion turn  */
 	pBat_ReplaceVars(lpEsLine);
 
 	bkInfo.lpBegin=pBat_EsToChar(lpEsLine);
