@@ -19,7 +19,7 @@
 ROOTDIR=..
 BINDIR?=$(ROOTDIR)/bin
 PBAT=$(BINDIR)/pbat
-TESTS=$(shell find . -name "*.bat")
+TESTS=$(shell find . -path "./helpers" -prune -o -name "*.bat" -print)
 TESTS.OUT=$(TESTS:.bat=.out)
 
 

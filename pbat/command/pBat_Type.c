@@ -200,8 +200,12 @@ int pBat_CmdType(char* lpLine)
             pTmp = pBegin;
 
             while (pTmp) {
+                char name[_MAX_FNAME] = "";
+                char ext[_MAX_EXT] = "";
 
-                fprintf(fOutput, "---------- %s" PBAT_NL , pTmp->lpFileName);
+                pBat_SplitPath(pTmp->lpFileName, NULL, NULL, name, ext);
+
+                fprintf(fOutput, "---------- %s%s" PBAT_NL , name, ext);
                 status |= pBat_TypeFile(pTmp->lpFileName);
 
                 pTmp = pTmp->lpflNext;
