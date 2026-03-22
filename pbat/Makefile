@@ -27,6 +27,12 @@ LDFLAGS += $(MICROGETTEXT_LD) $(LIBPBAT_LD) \
            $(LIBMATHEVAL_LD) $(LIBCU8_LD) \
 		   $(LPTHREAD_LD) $(LM_LD) $(LDL_LD)
 
+ifneq ($(fn_WIN32),1)
+ifeq ($(filter -lm,$(LDFLAGS)),)
+	LDFLAGS += -lm
+endif
+endif
+
 ifeq ($(use_libcu8),1)
 	LDFLAGS += -lshlwapi
 endif
@@ -84,7 +90,7 @@ clean:
 bin: pbat
 	cp pbat$(EXEC_SUFFIX) $(BINDIR)/
 
-pbat: $(OBJ_FILES)
+pbat: $(OBJ_FILES) ../microgettext/libmicrogettext.a ../libpbat/libpBat.a ../libfasteval/libfasteval.a
 	$(CC) -o pbat$(EXEC_SUFFIX) $(OBJ_FILES) $(LDFLAGS)
 	
 .rc.o:

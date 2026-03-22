@@ -41,4 +41,6 @@ libpBat.a: $(OBJ_FILES)
 clean:
 	rm -f $(OBJ_FILES) libpBat.a
 
-.PHONY: all tea clean
+bin: libpBat.a
+
+.PHONY: all tea clean bin

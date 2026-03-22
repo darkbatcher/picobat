@@ -532,10 +532,11 @@ void xlibcu8_completion_insert(const char* completion,
 static int completeLine(struct linenoiseState *ls, char *cbuf, size_t cbuf_len, int *c) {
 
 
-    char *item, *completion,
+    char *item,
          *orig_buf = ls->buf,
          *pos = orig_buf + ls->pos,
          *buf = orig_buf + ls->len;
+    const char *completion;
 
     size_t size = ls->buflen - ls->len;
 
@@ -547,7 +548,7 @@ static int completeLine(struct linenoiseState *ls, char *cbuf, size_t cbuf_len, 
 
         completionCallback(item, &completion);
 
-        if (completion == (char*)-1) {
+        if (completion == (const char*)-1) {
             /* Well, apparently a list is to be printed. Make a simple
                assertion : The prompt is the same length as the
                previous one ... */
@@ -568,7 +569,7 @@ static int completeLine(struct linenoiseState *ls, char *cbuf, size_t cbuf_len, 
 
             ls->buf[ls->len] = '\0';
 
-            free(completion);
+            free((void*)completion);
 
         }
 

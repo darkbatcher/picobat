@@ -61,7 +61,29 @@ $(LIBS):
 		echo "lib_$@ = 0" >>  femto-config.mk; \
 	fi;
 
-$(FUNCTIONS):
+WIN32:
+	@echo "Looking for : $@ ..."
+	@case "$(HOST)" in \
+		*mingw*|*cygwin*|*msys*) \
+			echo "fn_$@ = 1" >> femto-config.mk; \
+			echo "	found";; \
+		*) \
+			echo "fn_$@ = 0" >> femto-config.mk; \
+			echo "	none";; \
+	esac
+
+MINGW_W64:
+	@echo "Looking for : $@ ..."
+	@case "$(HOST)" in \
+		*w64-mingw32*) \
+			echo "fn_$@ = 1" >> femto-config.mk; \
+			echo "	found";; \
+		*) \
+			echo "fn_$@ = 0" >> femto-config.mk; \
+			echo "	none";; \
+	esac
+
+$(filter-out WIN32 MINGW_W64,$(FUNCTIONS)):
 	@echo "Looking for : $@ ..."
 	@sed -e 's,[@]fn[@],$@,g' -e 's,[@]fnp[@],$(shell echo $@ | sed -e 's,/,_,g' -e 's,[.],_,g'),g'< config.c.in > config.c
 	@if $(CC) -o femto-test.out config.c $(CFLAGS) $(LDFLAGS) -O0 -s 2> /dev/null; then \

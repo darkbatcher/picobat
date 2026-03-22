@@ -53,6 +53,11 @@ VERSION = $(shell date +%Y | sed s/0//).$(shell date +%m)
 
 all: $(SUBDIRS) $(MDFILES)
 
+libpbat: microgettext
+pbat: microgettext libpbat libfasteval
+pbatize tea modules: libpbat
+po: pbat
+
 $(SUBDIRS):
 	$(MAKE) -C $@
 
@@ -85,6 +90,10 @@ textfiles: $(TEXTFILES) $(MDFILES)
 
 man/en_US/readme.tea : README.tpl
 	cat $< doc.ft | sed -e s,\{doc/,\{,g > $@
+
+tea/tea$(EXEC_SUFFIX): tea
+
+$(TEXTFILES) $(MDFILES): tea/tea$(EXEC_SUFFIX)
 
 doc.md: README.tpl
 	cat README.tpl doc.ft > .README.tea

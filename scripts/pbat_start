@@ -1,0 +1,18 @@
+#!/bin/sh
+
+file=$1
+
+if [ -z "$file" ]; then
+    exit 1
+fi
+
+if command -v mimeopen >/dev/null 2>&1; then
+    exec mimeopen "$file"
+fi
+
+if command -v xdg-open >/dev/null 2>&1; then
+    exec xdg-open "$file"
+fi
+
+echo "pbat_start: no file association helper found (need mimeopen or xdg-open)" >&2
+exit 127

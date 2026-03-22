@@ -7,6 +7,7 @@ OBJ_FILES = $(SOURCES:.c=.o) ../lib/pBat_Module.o
 
 LDFLAGS += $(LIBPBAT_LD) 
 CFLAGS += $(LIBPBAT_INC) -I../lib/
+MODULE_LDFLAGS = $(filter-out -static,$(LDFLAGS))
 
 all: sample
 bin: sample
@@ -16,5 +17,5 @@ bin: sample
 clean:
 	rm -rf $(OBJ_FILES)	
 	
-sample: $(OBJ_FILES)
-	$(CC) -shared -fvisibility=hidden -o sample $(OBJ_FILES) $(LDFLAGS)
+sample: $(OBJ_FILES) ../../libpbat/libpBat.a
+	$(CC) -shared -fvisibility=hidden -o sample $(OBJ_FILES) $(MODULE_LDFLAGS)

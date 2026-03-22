@@ -33,7 +33,7 @@ OBJ_FILES = $(SRC_FILES:.c=.o)
 
 all: tea
 
-tea: $(OBJ_FILES)
+tea: $(OBJ_FILES) ../libpbat/libpBat.a
 	$(CC) -o tea$(EXEC_SUFFIX) $(OBJ_FILES) $(LDFLAGS)
 
 clean:

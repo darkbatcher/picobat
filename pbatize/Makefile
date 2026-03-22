@@ -25,7 +25,7 @@ SRC_FILES = pbatize.c pairs.c
 
 all: pbatize
 
-pbatize:
+pbatize: ../libpbat/libpBat.a
 	$(CC) -o pbatize$(EXEC_SUFFIX) $(SRC_FILES) $(LDFLAGS) $(CFLAGS)
 
 clean:
