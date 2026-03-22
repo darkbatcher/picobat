@@ -36,6 +36,7 @@
 #define PBAT_HELP_REM       13
 #define PBAT_HELP_DIR       14
 #define PBAT_HELP_CLS       16
+#define PBAT_HELP_CHOICE    15
 #define PBAT_HELP_TITLE     17
 #define PBAT_HELP_REN       18
 #define PBAT_HELP_TYPE      19
@@ -61,7 +62,7 @@
 #define PBAT_HELP_START     39
 #define PBAT_HELP_LOCALE    40
 
-#define PBAT_HELP_ARRAY_SIZE 41
+#define PBAT_HELP_ARRAY_SIZE 42
 
 
 /* this is to instanciate a little embedded command

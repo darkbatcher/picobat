@@ -39,6 +39,7 @@ COMMANDINFO lpCmdInfo[]= {
 	{"HELP", pBat_CmdHelp, STRLEN("HELP")},
 	{"REM", pBat_CmdRem, STRLEN("REM")},
 	{"CLS", pBat_CmdCls, STRLEN("CLS")},
+	{"CHOICE", pBat_CmdChoice, STRLEN("CHOICE")},
 	{"COLOR", pBat_CmdColor, STRLEN("COLOR")},
 	{"TITLE", pBat_CmdTitle, STRLEN("TITLE")},
 	{"TYPE", pBat_CmdType, STRLEN("TYPE")},

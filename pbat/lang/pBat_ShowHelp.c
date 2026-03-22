@@ -19,6 +19,7 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include <libpBat.h>
 
@@ -56,6 +57,11 @@ void pBat_LoadInternalHelp(void)
 	lpInternalHelp[PBAT_HELP_CLS]
 	    =gettext("Clear console screen\n"
 	             "Usage: CLS\n");
+
+	lpInternalHelp[PBAT_HELP_CHOICE]
+	    =gettext("Prompt the user for a single-character choice.\n"
+	             "Usage: CHOICE [/C[:]choices] [/N] [/CS] [/M[:]message] [/T[:]seconds] [/D[:]choice]\n"
+	             "       CHOICE [/C[:]choices] [/N] [/CS] [/M[:]message] [/T[:]choice,seconds]\n");
 
 	lpInternalHelp[PBAT_HELP_COLOR]
 	    =gettext("Change console color to the given code.\n"

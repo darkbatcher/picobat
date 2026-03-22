@@ -27,6 +27,7 @@
 #include "pBat_Call.h"
 #include "pBat_Cd.h"
 #include "pBat_Cls.h"
+#include "pBat_Choice.h"
 #include "pBat_Color.h"
 #include "pBat_Echo.h"
 #include "pBat_Exit.h"

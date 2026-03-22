@@ -62,7 +62,7 @@ SRC_FILES := \
 	./core/pBat_EsCache.c ./core/pBat_Pipe.c \
 	./command/pBat_Def.c ./command/pBat_Ask.c \
 	./command/pBat_Block.c ./command/pBat_Call.c ./command/pBat_Cd.c \
-	./command/pBat_Cls.c ./command/pBat_Color.c ./command/pBat_Copy.c \
+	./command/pBat_Choice.c ./command/pBat_Cls.c ./command/pBat_Color.c ./command/pBat_Copy.c \
 	./command/pBat_Del.c ./command/pBat_Dir.c ./command/pBat_Echo.c \
 	./command/pBat_Exit.c ./command/pBat_For.c ./command/pBat_Goto.c \
 	./command/pBat_Help.c ./command/pBat_If.c ./command/pBat_Mkdir.c \
