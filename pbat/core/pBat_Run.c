@@ -20,7 +20,7 @@
 #if !defined(WIN32) && !defined(_X_OPEN_SOURCE)
 #define _XOPEN_SOURCE 700
 #endif
-
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
@@ -48,6 +48,27 @@
 
 #include "../errors/pBat_Errors.h"
 #include "../lang/pBat_Lang.h"
+
+static FILE* pBat_DupFileStream(FILE* stream, const char* mode, const char* caller)
+{
+    int fd = dup(fileno(stream));
+    FILE* dup_stream;
+
+    if (fd == -1)
+        pBat_ShowErrorMessage(PBAT_UNABLE_DUPLICATE_FD | PBAT_PRINT_C_ERROR,
+                                caller, -1);
+
+    dup_stream = fdopen(fd, mode);
+    if (dup_stream == NULL) {
+        close(fd);
+        pBat_ShowErrorMessage(PBAT_FAILED_ALLOCATION | PBAT_PRINT_C_ERROR,
+                                caller, -1);
+    }
+
+    pBat_SetStdInheritance(dup_stream, 0);
+
+    return dup_stream;
+}
 
 int pBat_RunBatch(INPUT_FILE* pIn)
 {
@@ -174,8 +195,10 @@ int pBat_ExecOperators(PARSED_LINE** lpLine)
                                     __FILE__ "/pBat_ExecOperators()", -1);
 
         /* prepare data to launch threads */
-        infos->out = pipef[1];
-        infos->in = lastin;
+        infos->out = pBat_DupFileStream(pipef[1], "wb",
+                                        __FILE__ "/pBat_ExecOperators()");
+        infos->in = lastin ? pBat_DupFileStream(lastin, "rb",
+                                        __FILE__ "/pBat_ExecOperators()") : NULL;
 
         infos->str = pBat_EsInit();
         pBat_EsCpyE(infos->str, line->lpCmdLine);
@@ -187,6 +210,11 @@ int pBat_ExecOperators(PARSED_LINE** lpLine)
         res = pBat_CloneInstance((void(*)(void*))pBat_LaunchPipe, infos);
         pBat_CloseThread(&res);
 
+        /* The child thread owns the write end now. Keeping it open in the
+           parent prevents downstream readers from ever seeing EOF. */
+        fclose(pipef[1]);
+        if (lastin != NULL)
+            fclose(lastin);
         lastin = pipef[0];
         if (line->lppsNode)
             line = *lpLine = line->lppsNode;
@@ -207,7 +235,7 @@ void pBat_LaunchPipe(struct pipe_launch_data_t* infos)
 
     lppsStreamStack = pBat_OpenOutputF(lppsStreamStack, infos->out, PBAT_STDOUT);
 
-    if (infos->in == NULL)
+    if (infos->in != NULL)
         lppsStreamStack = pBat_OpenOutputF(lppsStreamStack, infos->in, PBAT_STDIN);
 
     bIgnoreExit = TRUE;
@@ -759,7 +787,7 @@ int pBat_RunExternalBatch(char* lpFileName, char* lpFullLine, char** lpArguments
     if (pBat_WaitForThread(&th, &ret) != 0)
         pBat_CloseThread(&th);
 
-    return (int)ret;
+    return (int)(intptr_t)ret;
 }
 
 /* Refactors a PARSED_LINE that contains a lookAHead command.

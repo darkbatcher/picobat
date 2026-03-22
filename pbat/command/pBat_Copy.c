@@ -25,6 +25,12 @@
 #include <string.h>
 #include <errno.h>
 
+#if defined(WIN32)
+#include <io.h>
+#else
+#include <unistd.h>
+#endif
+
 #include <libpBat.h>
 
 #include "../core/pBat_Core.h"
@@ -89,7 +95,7 @@
 
 int pBat__EndWithDirectoryMark(const char* dir)
 {
-    char* c="";
+    const char* c = "";
 
     while (*dir)
         c = dir ++;
@@ -136,7 +142,11 @@ int pBat_CmdCopy(char* line)
         if (!stricmp("/Y", str)
             || !stricmp("/-Y", str)) {
 
-            flags |= (*(str+1)=='-') ? PBAT_COPY_SILENCE : 0;
+            if (*(str+1) == '-') {
+                flags &= ~PBAT_COPY_SILENCE;
+            } else {
+                flags |= PBAT_COPY_SILENCE;
+            }
 
         } else if (!strnicmp("/A", str, 2)) {
 

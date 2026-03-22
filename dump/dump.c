@@ -25,6 +25,7 @@
 #include <math.h>
 #include <float.h>
 #include <fcntl.h>
+#include <errno.h>
 
 #ifdef WIN32
 #include <io.h>
@@ -228,7 +229,21 @@ int dump_fd(int fd, struct dump_t* context)
 
     spaces = (context->flags & DUMP_QUIET) ? "" : " ";
 
-    while ((count = read(fd, data, size))) {
+    while (1) {
+        count = read(fd, data, size);
+
+        if (count < 0) {
+            if (errno == EINTR)
+                continue;
+
+            fprintf(stderr, "dump: read error.\n");
+            free(chars);
+            free(data);
+            return -1;
+        }
+
+        if (count == 0)
+            break;
 
         if (count < size) {
              /* we reached eof and count is not a multiple of the
@@ -362,7 +377,7 @@ int main(int argc, char** argv)
 
             flags &= ~ DUMP_DEFAULT;
 
-            while (*argv) {
+            while (**argv) {
                 switch (**argv) {
 
                 case 'a':

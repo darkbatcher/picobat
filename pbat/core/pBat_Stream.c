@@ -72,7 +72,7 @@ STREAMSTACK* pBat_OpenOutput(STREAMSTACK* stack, char* name, int mode)
     char *fmode;
 
     switch (mode & (PBAT_STDIN | PBAT_STDOUT | PBAT_STDERR
-                | PBAT_STREAM_MODE_ADD | PBAT_STREAM_MODE_ADD)) {
+                | PBAT_STREAM_MODE_ADD | PBAT_STREAM_MODE_TRUNCATE)) {
 
     case PBAT_STDOUT | PBAT_STREAM_MODE_ADD:
     case PBAT_STDERR | PBAT_STREAM_MODE_ADD:
