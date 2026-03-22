@@ -32,6 +32,12 @@
 #include <string.h>
 #include <ctype.h>
 
+#if defined(WIN32)
+#include <io.h>
+#else
+#include <unistd.h>
+#endif
+
 #include <libpBat.h>
 
 #include "../core/pBat_Core.h"
@@ -42,12 +48,12 @@
 
 char* pBat_FindRegExpMatch(const char* restrict s, const char* restrict exp)
 {
-    return (char*)pBat_RegExpMatch(exp, s);
+    return pBat_RegExpMatch(exp, s) ? (char*)s : NULL;
 }
 
 char* pBat_FindRegExpCaseMatch(const char* restrict s, const char* restrict exp)
 {
-    return (char*)pBat_RegExpCaseMatch(exp, s);
+    return pBat_RegExpCaseMatch(exp, s) ? (char*)s : NULL;
 }
 
 /* This function come from FreeBSD (and, BSD I think) implementation of

@@ -27,7 +27,10 @@
 #include <string.h>
 #include <fcntl.h>
 
-#ifndef WIN32
+#if defined(WIN32)
+#include <io.h>
+#else
+#include <unistd.h>
 #include <termios.h>
 #endif
 

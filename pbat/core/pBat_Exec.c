@@ -313,7 +313,7 @@ int pBat_RunFile(EXECINFO* info, int* error)
 
         close(fds[0]); /* close read end */
 
-		if ( execv(info->file, info->args) == -1) {
+			if ( execv(info->file, (char* const*)info->args) == -1) {
 
 			/* if we got here, we can't set ERRORLEVEL
 			   variable anymore.
@@ -545,7 +545,7 @@ int pBat_StartFile(EXECINFO* info, int* error)
     pid_t pid;
 
     ESTR* tmp;
-    char **arg, *script;
+    const char **arg, *script;
     int status=0, i;
 
     script = pBat_GetEnv(lpeEnv, "PBAT_START_SCRIPT");
@@ -588,13 +588,13 @@ int pBat_StartFile(EXECINFO* info, int* error)
         arg[i + 1] = NULL;
 
         lppsStreamStack = pBat_OpenOutput(lppsStreamStack, "/dev/null",
-                                                   PBAT_STDOUT, 0);
+                                                   PBAT_STDOUT);
 
         /* apply pBat internal environment variables */
         pBat_ApplyEnv(lpeEnv);
         pBat_ApplyStreams(lppsStreamStack);
 
-        if (execv(script, arg) == -1) {
+        if (execv(script, (char* const*)arg) == -1) {
             pBat_ShowErrorMessage(PBAT_COMMAND_ERROR | PBAT_PRINT_C_ERROR,
                                     script,
                                     -1);

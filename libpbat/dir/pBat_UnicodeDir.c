@@ -586,7 +586,7 @@ LIBPBAT LPFILELIST  pBat_GetMatchFileList(char* lpPathMatch, int iFlag)
     return file;
 }
 
-LIBPBAT int pBat_GetMatchFileCallback(char* lpPathMatch, int iFlag, void(*pCallBack)(FILELIST*))
+LIBPBAT LPFILELIST pBat_GetMatchFileCallback(char* lpPathMatch, int iFlag, void(*pCallBack)(FILELIST*))
 {
     struct match_args_t args;
     FILELIST* file;
@@ -613,7 +613,7 @@ LIBPBAT int pBat_GetMatchFileCallback(char* lpPathMatch, int iFlag, void(*pCallB
 
     free(wpath);
 
-    return (int)file;
+    return file;
 }
 
 #endif

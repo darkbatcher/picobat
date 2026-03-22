@@ -30,6 +30,12 @@
 #include <string.h>
 #include <errno.h>
 
+#if defined(WIN32)
+#include <io.h>
+#else
+#include <unistd.h>
+#endif
+
 #include <libpBat.h>
 
 #include "../core/pBat_Core.h"

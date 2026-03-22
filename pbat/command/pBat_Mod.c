@@ -37,7 +37,7 @@
 
 void pBat_ModSetEnv(const char* name, const char* content)
 {
-    pBat_SetEnv(lpeEnv, name, content);
+    pBat_SetEnv(lpeEnv, (char*)name, content);
 }
 
 char* pBat_ModGetEnv(const char* name)
@@ -52,7 +52,7 @@ const char* pBat_ModGetCurrentDir(void)
 
 int pBat_ModSetCurrentDir(const char* dir)
 {
-    return pBat_SetCurrentDir(dir);
+    return pBat_SetCurrentDir((char*)dir);
 }
 
 FILE* pBat_ModGetfInput(void)
@@ -77,7 +77,7 @@ int pBat_ModGetbIsScript(void)
 
 char* pBat_ModGetNextParameterEs(const char* line, ESTR* recv)
 {
-    return pBat_GetNextParameterEs(line, recv);
+    return pBat_GetNextParameterEs((char*)line, recv);
 }
 
 char* pBat_ModEsToFullPath(ESTR* str)
@@ -92,11 +92,11 @@ int pBat_ModRegisterCommand(const char* name, int(*handler)(char*))
     void* p;
     int status = PBAT_NO_ERROR;
 
-    command.ptrCommandName = name;
+    command.ptrCommandName = (char*)name;
     command.lpCommandProc = handler;
     command.cfFlag = strlen(name);
 
-    if (pBat_GetCommandProc(name, lpclCommands, &p) != -1) {
+    if (pBat_GetCommandProc((char*)name, lpclCommands, &p) != -1) {
 
         pBat_ShowErrorMessage(PBAT_TRY_REDEFINE_COMMAND,
 							  name,

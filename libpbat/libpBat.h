@@ -428,7 +428,7 @@ typedef struct FILELIST {
 LIBPBAT int         pBat_RegExpMatch(const char* restrict lpRegExp, const char* restrict lpMatch);
 LIBPBAT int         pBat_RegExpCaseMatch(const char* restrict lpRegExp, const char* restrict lpMatch);
 LIBPBAT LPFILELIST  pBat_GetMatchFileList(char* lpPathMatch, int iFlag);
-LIBPBAT int         pBat_GetMatchFileCallback(char* lpPathMatch, int iFlag, void(*pCallBack)(FILELIST*));
+LIBPBAT LPFILELIST  pBat_GetMatchFileCallback(char* lpPathMatch, int iFlag, void(*pCallBack)(FILELIST*));
 LIBPBAT int         pBat_FreeFileList(LPFILELIST lpflFileList);
 LIBPBAT int         pBat_FormatFileSize (char* lpBuf, int iLenght, unsigned int iSize);
 LIBPBAT int         pBat_GetStaticPart(const char* lpPathMatch, char* lpStaticPart, size_t size);

@@ -170,8 +170,10 @@ int pBat_CmdFor(char* lpLine, PARSED_LINE** lpplLine)
 
 			if (pBat_TestLocalVarName(cVarName)) {
 
+                char badVarName[] = { cVarName, '\0' };
+
                 pBat_ShowErrorMessage(PBAT_SPECIAL_VAR_NON_ASCII,
-                                        (void*)cVarName,
+                                        badVarName,
                                         FALSE);
 
                 status = PBAT_SPECIAL_VAR_NON_ASCII;
@@ -356,7 +358,7 @@ error:
         *lpplLine = NULL;
 
 	if (!lpplLine && line)
-        pBat_FreeParsedStream(line);
+        pBat_FreeParsedLine(line);
 
 	return status;
 }
@@ -726,7 +728,7 @@ int pBat_ForIsSpecifier(const char* restrict p)
 
 char* pBat_ForGetSpecifier(const char* restrict in, ESTR* restrict out, int* restrict type)
 {
-    char *next = NULL;
+    const char *next = NULL;
 
     *type = pBat_ForIsSpecifier(in);
 
@@ -768,7 +770,7 @@ char* pBat_ForGetSpecifier(const char* restrict in, ESTR* restrict out, int* res
 
     pBat_EsCpyN(out, in, next - in);
 
-    return *next ? next + 1 : next;
+    return (char*)(*next ? next + 1 : next);
 }
 
 int  pBat_ForMakeTokens (char* p,  FORINFO* infos)
@@ -1162,8 +1164,10 @@ int pBat_ForVarCheckAssignment(FORINFO* lpfrInfo)
 
 		if ((pBat_GetLocalVarPointer(lpvLocalVars, cVarName))) {
 
+            char varName[] = { cVarName, '\0' };
+
 			pBat_ShowErrorMessage(PBAT_FOR_TRY_REASSIGN_VAR,
-                                        (char*)(cVarName), FALSE);
+                                        varName, FALSE);
 			return PBAT_FOR_TRY_REASSIGN_VAR;
 
 		}

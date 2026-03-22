@@ -255,9 +255,12 @@ void pBat_CompletionHandler(const char* in, const char** subst)
     } else if (match > len) {
         /* a partial match ! */
 
-        *subst = malloc(match - len + 1);
-        if (*subst)
-            snprintf(*subst, match - len + 1, "%s",  files->lpFileName + len);
+        char* completion = malloc(match - len + 1);
+
+        if (completion) {
+            snprintf(completion, match - len + 1, "%s", files->lpFileName + len);
+            *subst = completion;
+        }
 
     } else
         *subst = (char*)-1;

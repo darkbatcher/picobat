@@ -30,6 +30,12 @@
 #include <locale.h>
 #include <signal.h>
 
+#if defined(WIN32)
+#include <io.h>
+#else
+#include <unistd.h>
+#endif
+
 #include "../../config.h"
 
 #if defined WIN32

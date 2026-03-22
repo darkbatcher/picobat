@@ -28,6 +28,10 @@
 #include <stdarg.h>
 #include <string.h>
 
+#if !defined(WIN32)
+#include <unistd.h>
+#endif
+
 #include <libpBat.h>
 
 #include "pBat_Ask.h"

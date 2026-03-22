@@ -28,7 +28,8 @@ int pBat_GetColorCode(char* lpArg);
 
 void pBat_OutputPromptString(const char* prompt)
 {
-    char *pch, *t;
+    const char *pch;
+    char *t;
     size_t count, dir_count;
     char buf[30];
     int code;

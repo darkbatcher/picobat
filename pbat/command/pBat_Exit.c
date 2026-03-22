@@ -25,6 +25,7 @@
 #include <ctype.h>
 #include <string.h>
 #include <errno.h>
+#include <stdint.h>
 
 #include <libpBat.h>
 
@@ -101,7 +102,7 @@ int pBat_CmdExit(char* lpLine)
 
     /* End thread or  the program */
 	if (bIgnoreExit)
-        pBat_EndThread((void*)ret);
+        pBat_EndThread((void*)(intptr_t)ret);
     else {
         exit(ret);
     }

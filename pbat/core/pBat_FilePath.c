@@ -33,7 +33,7 @@
 
 int pBat_GetFileFullPath(char* full, const char* p, size_t size)
 {
-    char* partial = TRANS(p);
+    const char* partial = TRANS(p);
 
     if (PBAT_TEST_ABSOLUTE_PATH(partial)) {
 
@@ -65,7 +65,7 @@ int pBat_GetFileFullPath(char* full, const char* p, size_t size)
 
 void __inline__ pBat_MakeFullPath(char* full, const char* p, size_t size)
 {
-    char* partial = TRANS(p);
+    const char* partial = TRANS(p);
 
     if (PBAT_TEST_ABSOLUTE_PATH(partial)) {
 
@@ -87,7 +87,7 @@ void __inline__ pBat_MakeFullPath(char* full, const char* p, size_t size)
 void __inline__ pBat_MakeFullPathEs(ESTR* full, const char* p)
 {
     char begin[] = "c:/";
-    char* partial = TRANS(p);
+    const char* partial = TRANS(p);
 
     if (PBAT_TEST_ABSOLUTE_PATH(partial)) {
 
@@ -136,7 +136,7 @@ __inline__ char* pBat_EsToFullPath(ESTR* full)
 
             memmove(full->str + 2, p, len);
             *(full->str) = *lpCurrentDir;
-            *(full->str) = ':';
+            *(full->str + 1) = ':';
 
         }
 #endif // WIN32
@@ -168,7 +168,8 @@ __inline__ char* pBat_EsToFullPath(ESTR* full)
 
 __inline__ char* pBat_FullPathDup(const char* p)
 {
-    char *ret, *path = TRANS(p);
+    char *ret;
+    const char *path = TRANS(p);
     size_t needed = strlen(path) + 1;
 
     if (PBAT_TEST_ABSOLUTE_PATH(path)) {

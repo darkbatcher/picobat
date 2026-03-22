@@ -51,7 +51,7 @@ LIBPBAT char* pBat_SkipAllBlanks(const char* lpCh)
 
 LIBPBAT char* pBat_SearchChar(const char* lpCh, int cChar)
 {
-    char* lpNxt;
+    const char* lpNxt;
     char ok;
     int i;
 
@@ -88,7 +88,7 @@ LIBPBAT char* pBat_SearchChar(const char* lpCh, int cChar)
 
 LIBPBAT char* pBat_SearchLastChar(const char* lpCh, int cChar)
 {
-    char *lpLastMatch=NULL,
+    const char *lpLastMatch = NULL,
          *lpNxt;
     char ok;
     int i;
@@ -160,7 +160,7 @@ LIBPBAT char* pBat_GetNextNonEscaped(const char* lpCh)
 LIBPBAT char* pBat_SearchToken(const char* restrict lpCh, const char* restrict lpDelims)
 {
 
-    char* lpNxt;
+    const char* lpNxt;
     char ok;
     int i;
 
@@ -226,7 +226,7 @@ LIBPBAT char* pBat_SearchLastToken(const char* restrict lpCh, const char* restri
 LIBPBAT char* pBat_SearchChar_OutQuotes(const char* lpCh, int cChar)
 {
 
-    char *lpNxt,
+    const char *lpNxt,
     	  *lpNextQuote;
 
 	int i;
@@ -332,7 +332,7 @@ LIBPBAT char* pBat_SearchChar_OutQuotes(const char* lpCh, int cChar)
 LIBPBAT char* pBat_SearchToken_OutQuotes(const char* restrict lpCh, const char* restrict lpDelims)
 {
 
-    char *lpNxt,
+    const char *lpNxt,
 		 *lpNextQuote;
 
 	int i;

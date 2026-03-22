@@ -160,7 +160,7 @@ static FILELIST* pBat_AddMatch(char* name, FILELIST* files, struct match_args_t*
 
 static int /* inline */ pBat_EndWithDirectoryMark(const char *dir)
 {
-    char *c = NULL;
+    const char *c = NULL;
 
     while (*dir)
         c = dir++;
@@ -563,7 +563,7 @@ LIBPBAT LPFILELIST  pBat_GetMatchFileList(char* lpPathMatch, int iFlag)
     return file;
 }
 
-LIBPBAT int pBat_GetMatchFileCallback(char* lpPathMatch, int iFlag, void(*pCallBack)(FILELIST*))
+LIBPBAT LPFILELIST pBat_GetMatchFileCallback(char* lpPathMatch, int iFlag, void(*pCallBack)(FILELIST*))
 {
     struct match_args_t args;
     FILELIST* file;
@@ -581,7 +581,7 @@ LIBPBAT int pBat_GetMatchFileCallback(char* lpPathMatch, int iFlag, void(*pCallB
 
     }
 
-    return (int)file;
+    return file;
 }
 #endif
 
@@ -632,7 +632,7 @@ LIBPBAT int pBat_EndWithPattern(const char* restrict match, const char* restrict
 
 LIBPBAT int pBat_RegExpMatch(const char* restrict regexp, const char* restrict match)
 {
-	char* next;
+	const char* next;
     size_t size;
 
     //printf("*** Comparing \"%s\" et \"%s\"\n", regexp, match);
@@ -751,7 +751,7 @@ LIBPBAT int pBat_EndWithCasePattern(const char* restrict match, const char* rest
 
 LIBPBAT int pBat_RegExpCaseMatch(const char* restrict regexp, const char* restrict match)
 {
-	char* next;
+	const char* next;
     size_t size;
 
     //printf("*** Comparing \"%s\" et \"%s\"\n", regexp, match);

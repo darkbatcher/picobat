@@ -354,7 +354,7 @@ int pBat_CmdStart(char* line)
 
     args[n] = NULL;
 
-    info.args = args;
+    info.args = (const char* const*)args;
     if (info.dir == NULL)
         info.dir = lpCurrentDir;
 

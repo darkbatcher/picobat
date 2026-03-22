@@ -25,6 +25,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
+#include <stdint.h>
 
 #include <unistd.h>
 #include <sys/types.h>
@@ -103,9 +104,9 @@ void* pBat_CloneTrampoline(void* data)
     fclose(fOutput);
     fclose(fError);
 
-    pBat_EndThread((void*)iErrorLevel);
+    pBat_EndThread((void*)(intptr_t)iErrorLevel);
 
-    return (void*)iErrorLevel;
+    return (void*)(intptr_t)iErrorLevel;
 }
 
 /* Duplicate pBat internal structures */
