@@ -66,7 +66,7 @@ int pBat_CmdDir(char* lpLine)
     char bSimple;
     size_t nSize = 0;
 
-    char lpType[]="D RHSA ",
+	char lpType[]="D RHSA ",
 	              lpSize[16],
 	              lpTime[30];
 
@@ -158,8 +158,8 @@ int pBat_CmdDir(char* lpLine)
 	if (!bSimple) {
 
         fputs(PBAT_NL, fOutput);
-        fputs(lpDirListTitle, fOutput);
-        fputs(PBAT_NL, fOutput);
+        fprintf(fOutput, "%-19s %-10s %-7s %s" PBAT_NL,
+                "Last change", "Size", "Attr.", "Name");
 
 	}
 
@@ -187,12 +187,11 @@ int pBat_CmdDir(char* lpLine)
                     lpType[0]='D';
                     iDirNb++;
 
-                    strcpy(lpSize, "<REP>\t");
+                    snprintf(lpSize, sizeof(lpSize), "%s", "<REP>");
 
                 } else {
 
-                    strcpy(lpSize, "       ");
-                    pBat_FormatFileSize(lpSize+7, 8, pBat_GetFileSize(item));
+                    pBat_FormatFileSize(lpSize, sizeof(lpSize), pBat_GetFileSize(item));
 
                     iFileNb++;
 
@@ -214,11 +213,11 @@ int pBat_CmdDir(char* lpLine)
 
                 localtime_r(&(pBat_GetModifTime(item)), &lTime);
                 strftime(lpTime, sizeof(lpTime), "%x %X", &lTime);
-                fprintf(fOutput, "%s %s\t%s\t%s" PBAT_NL, lpTime,
-                                                                lpSize,
-                                                                lpType,
-                                                                item->lpFileName + nSize
-                                                                );
+                fprintf(fOutput, "%-19s %-10s %-7s %s" PBAT_NL,
+                        lpTime,
+                        lpSize,
+                        lpType,
+                        item->lpFileName + nSize);
 
             } else {
 
@@ -236,8 +235,8 @@ int pBat_CmdDir(char* lpLine)
         pBat_FreeFileList(files);
 
         if (!bSimple)
-            fprintf(fOutput, "\t\t\t\t%d %s" PBAT_NL "\t\t\t\t%d %s" PBAT_NL,
-                                iFileNb, lpDirFile, iDirNb, lpDirDir);
+            fprintf(fOutput, "%30s%d %s" PBAT_NL "%30s%d %s" PBAT_NL,
+                                "", iFileNb, lpDirFile, "", iDirNb, lpDirDir);
 
 	}
 

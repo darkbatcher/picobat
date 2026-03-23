@@ -174,6 +174,7 @@ void pBat_OutputPromptString(const char* prompt)
 
     count = strlen(prompt);
     fwrite(prompt, 1, count, fOutput);
+    fflush(fOutput);
 }
 
 

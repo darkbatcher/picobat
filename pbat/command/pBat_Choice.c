@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <signal.h>
 
 #if !defined(WIN32)
 #include <unistd.h>
@@ -427,8 +428,12 @@ int pBat_CmdChoice(char* lpLine)
         }
 
         if (key == 3) {
-            choice_index = 0;
-            break;
+#if !defined(WIN32)
+            raise(SIGINT);
+#endif
+            bAbortCommand = PBAT_ABORT_EXECUTION_LEVEL;
+            status = PBAT_BREAK_ERROR;
+            goto end;
         }
 
         if (key == '\r' || key == '\n')
