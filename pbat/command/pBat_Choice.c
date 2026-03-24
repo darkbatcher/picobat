@@ -97,7 +97,7 @@ static void pBat_ChoiceWriteMessage(const char* message)
     fflush(fOutput);
 }
 
-static int pBat_ChoiceParseSeconds(const char* arg, double* seconds)
+static int pBat_ChoiceParseSeconds(const char* arg, int* timeout_ms)
 {
     char* endptr;
     long value;
@@ -106,7 +106,7 @@ static int pBat_ChoiceParseSeconds(const char* arg, double* seconds)
     if (endptr == NULL || *endptr || value < 0 || value > 9999)
         return 0;
 
-    *seconds = (double)value;
+    *timeout_ms = (int)(value * 1000);
     return 1;
 }
 
@@ -134,7 +134,7 @@ static int pBat_ChoiceParseDefault(const char* choices, char def, int case_sensi
     return pBat_ChoiceFind(choices, def, case_sensitive);
 }
 
-static int pBat_ChoiceReadWithTimeout(double timeout_seconds)
+static int pBat_ChoiceReadWithTimeout(int timeout_ms)
 {
 #if !defined(WIN32)
     struct termios oldattr, rawattr;
@@ -150,7 +150,7 @@ static int pBat_ChoiceReadWithTimeout(double timeout_seconds)
             restore = 1;
     }
 
-    if (timeout_seconds < 0.0) {
+    if (timeout_ms < 0) {
         for (;;) {
             fd_set rfds;
 
@@ -167,16 +167,16 @@ static int pBat_ChoiceReadWithTimeout(double timeout_seconds)
         }
     }
 
-    while (timeout_seconds > 0.0) {
+    while (timeout_ms > 0) {
         fd_set rfds;
         struct timeval tv;
-        double wait_seconds = timeout_seconds;
+        int wait_ms = timeout_ms;
 
-        if (wait_seconds > (PBAT_CHOICE_SLEEP / 1000.0))
-            wait_seconds = (PBAT_CHOICE_SLEEP / 1000.0);
+        if (wait_ms > PBAT_CHOICE_SLEEP)
+            wait_ms = PBAT_CHOICE_SLEEP;
 
-        tv.tv_sec = (time_t)wait_seconds;
-        tv.tv_usec = (suseconds_t)((wait_seconds - tv.tv_sec) * 1000000.0);
+        tv.tv_sec = wait_ms / 1000;
+        tv.tv_usec = (suseconds_t)((wait_ms % 1000) * 1000);
 
         FD_ZERO(&rfds);
         FD_SET(fd, &rfds);
@@ -189,29 +189,29 @@ static int pBat_ChoiceReadWithTimeout(double timeout_seconds)
             return ch;
         }
 
-        timeout_seconds -= wait_seconds;
+        timeout_ms -= wait_ms;
     }
 
     if (restore)
         tcsetattr(fd, TCSANOW, &oldattr);
     return -1;
 #else
-    if (timeout_seconds < 0.0) {
+    if (timeout_ms < 0) {
         while (!pBat_Kbhit(fInput))
             pBat_Sleep(PBAT_CHOICE_SLEEP);
         return pBat_Getch(fInput);
     }
 
-    while (timeout_seconds > 0.0) {
+    while (timeout_ms > 0) {
         if (pBat_Kbhit(fInput))
             return pBat_Getch(fInput);
 
-        if (timeout_seconds > (PBAT_CHOICE_SLEEP / 1000.0)) {
+        if (timeout_ms > PBAT_CHOICE_SLEEP) {
             pBat_Sleep(PBAT_CHOICE_SLEEP);
-            timeout_seconds -= (PBAT_CHOICE_SLEEP / 1000.0);
+            timeout_ms -= PBAT_CHOICE_SLEEP;
         } else {
-            pBat_Sleep((unsigned int)(timeout_seconds * 1000.0));
-            timeout_seconds = 0.0;
+            pBat_Sleep((unsigned int)timeout_ms);
+            timeout_ms = 0;
         }
     }
 
@@ -229,7 +229,7 @@ int pBat_CmdChoice(char* lpLine)
     int have_default = 0;
     int explicit_default = 0;
     int default_index = 0;
-    double timeout_seconds = -1.0;
+    int timeout_ms = -1;
     char default_choice = '\0';
     const char* choices = "YN";
     const char* prompt = NULL;
@@ -254,6 +254,11 @@ int pBat_CmdChoice(char* lpLine)
             pBat_ShowErrorMessage(PBAT_UNEXPECTED_ELEMENT, param->str, 0);
             status = PBAT_UNEXPECTED_ELEMENT;
             goto end;
+        }
+
+        if (!stricmp(param->str, "/CS")) {
+            case_sensitive = 1;
+            continue;
         }
 
         if (!strnicmp(param->str, "/C", 2)) {
@@ -283,11 +288,6 @@ int pBat_CmdChoice(char* lpLine)
 
         if (!stricmp(param->str, "/N")) {
             hide_prompt = 1;
-            continue;
-        }
-
-        if (!stricmp(param->str, "/CS")) {
-            case_sensitive = 1;
             continue;
         }
 
@@ -363,7 +363,7 @@ int pBat_CmdChoice(char* lpLine)
                 payload += 2;
             }
 
-            if (!pBat_ChoiceParseSeconds(payload, &timeout_seconds)) {
+            if (!pBat_ChoiceParseSeconds(payload, &timeout_ms)) {
                 pBat_ShowErrorMessage(PBAT_UNEXPECTED_ELEMENT, payload, 0);
                 status = PBAT_UNEXPECTED_ELEMENT;
                 goto end;
@@ -420,7 +420,7 @@ int pBat_CmdChoice(char* lpLine)
         pBat_ChoiceWriteMessage(prompt);
 
     for (;;) {
-        int key = pBat_ChoiceReadWithTimeout(have_timeout ? timeout_seconds : -1.0);
+        int key = pBat_ChoiceReadWithTimeout(have_timeout ? timeout_ms : -1);
 
         if (key < 0) {
             choice_index = default_index;
