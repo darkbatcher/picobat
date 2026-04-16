@@ -905,8 +905,8 @@ int pBat_GetFileAttributes(const char* file)
     int ret;
     size_t conv;
 
-    if (!(wfile= libcu8_xconvert(LIBCU8_TO_U16, file,
-                                        strlen(file)+1, &conv)))
+    if (!(wfile=(wchar_t *)libcu8_xconvert(LIBCU8_TO_U16, file,
+                                           strlen(file)+1, &conv)))
         return -1;
 
     ret = GetFileAttributesW(wfile);
