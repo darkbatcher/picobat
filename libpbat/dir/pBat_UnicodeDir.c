@@ -559,8 +559,8 @@ LIBPBAT LPFILELIST  pBat_GetMatchFileList(char* lpPathMatch, int iFlag)
     wchar_t *wpath;
     size_t cvt;
 
-    if (!(wpath = libcu8_xconvert(LIBCU8_TO_U16, lpPathMatch,
-                                        strlen(lpPathMatch)+1, &cvt)))
+    if (!(wpath =(wchar_t *)libcu8_xconvert(LIBCU8_TO_U16, lpPathMatch,
+                                            strlen(lpPathMatch)+1, &cvt)))
         return NULL;
 
 
@@ -593,8 +593,8 @@ LIBPBAT LPFILELIST pBat_GetMatchFileCallback(char* lpPathMatch, int iFlag, void(
     wchar_t *wpath;
     size_t cvt;
 
-    if (!(wpath = libcu8_xconvert(LIBCU8_TO_U16, lpPathMatch,
-                                        strlen(lpPathMatch)+1, &cvt)))
+    if (!(wpath = (wchar_t *)libcu8_xconvert(LIBCU8_TO_U16, lpPathMatch,
+                                             strlen(lpPathMatch)+1, &cvt)))
         return NULL;
 
 
